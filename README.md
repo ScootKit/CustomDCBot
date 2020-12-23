@@ -6,7 +6,7 @@ use it if you have some experience with Javascript, discord.js and JSON files.
 ---
 
 ## Get your own Custom-Bot completely free and with a modern webinterface!
-Go check it out on our [website](htps://partner.sc-netzwerk.de) (currently only german).
+Go check it out on our [website](https://partner.sc-netzwerk.de) (currently only german).
 
 ## Please read the [license](LICENSE) if you use this bot. 
 We really love open-source. Please read the license and follow it.\
