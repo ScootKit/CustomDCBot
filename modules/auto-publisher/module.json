@@ -1,0 +1,9 @@
+{
+  "name": "auto-publisher",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Publish *every* message posted in an announcement channel",
+  "events-dir": "/events"
+}

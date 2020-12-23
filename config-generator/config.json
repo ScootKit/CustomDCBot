@@ -1,0 +1,34 @@
+{
+  "content": [
+    {
+      "field_name": "token",
+      "default": "yourtokengoeshere",
+      "type": "string",
+      "description": "Replace this with your token"
+    },
+    {
+      "field_name": "prefix",
+      "default": "!",
+      "type": "string",
+      "description": "Replace this with your prefix"
+    },
+    {
+      "field_name": "ownerID",
+      "default": "413429490342035466",
+      "type": "string",
+      "description": "Replace this the id of the owner of this bot. IMPORTANT: This user can run code with this token!"
+    },
+    {
+      "field_name": "guildID",
+      "default": "489786377261678592",
+      "type": "guildID",
+      "description": "Replace this the id of the guild the bot should work in."
+    },
+    {
+      "field_name": "user_presence",
+      "default": "You can change this in your config.json btw",
+      "type": "string",
+      "description": "This will show up in Discord as \"Playing <YourValue>\""
+    }
+  ]
+}

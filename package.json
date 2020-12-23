@@ -1,0 +1,27 @@
+{
+  "name": "blacksmilebot",
+  "version": "1.0.0",
+  "description": "Create your own discord bot - Fully customizable and with a lot of features",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SCNetwork/CustomDCBot.git"
+  },
+  "scripts": {
+    "start": "node main.js",
+    "test": "node main.js",
+    "generate-config": "node generate-config.js"
+  },
+  "author": "SC Network Team",
+  "contributors": [
+    "SCDerox <scderox@sc-network.net>"
+  ],
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "fs-extra": "^9.0.1",
+    "json-beautify": "^1.1.1",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0"
+  }
+}

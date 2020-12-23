@@ -1,0 +1,45 @@
+{
+  "filename": "strings.json",
+  "content": [
+    {
+      "field_name": "not-found",
+      "default": ":warning: Seems like you haven't sent a message yet...",
+      "type": "string",
+      "description": "This string gets send when a someone uses !profile when he doesn't have XP yet"
+    },
+    {
+      "field_name": "embed",
+      "type": "keyed",
+      "default": {
+        "title": "Profile of",
+        "description": "You can see your profile here",
+        "messages": "Messages",
+        "xp": "XP",
+        "level": "Your Level"
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "leaderboardEmbed",
+      "type": "keyed",
+      "default": {
+        "title": "Leaderboard",
+        "description": "Here you can see the best players of each level!",
+        "and_x_more_people": "And %count% other members",
+        "more_level": "More Levels",
+        "x_levels_are_not_shown": "And **%count% Level** are not being shown",
+        "your_level": "Your current level",
+        "you_are_level_x_with_x_xp": "You are currently on **level %level%** with **%xp% XP**. For more infos use `!profile`."
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    }
+  ]
+}

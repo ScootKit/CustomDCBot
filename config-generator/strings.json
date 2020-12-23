@@ -1,0 +1,80 @@
+{
+  "content": [
+    {
+      "field_name": "footer",
+      "default": "© SC Network, 2020",
+      "type": "string",
+      "description": "Footer of every embed"
+    },
+    {
+      "field_name": "need_args",
+      "default": "This command needs more arguments",
+      "type": "string",
+      "description": "This message gets send if there are not enough arguments specified"
+    },
+    {
+      "field_name": "not_enough_permissions",
+      "default": "Seems like you don't have enough permissions.",
+      "type": "string",
+      "description": "This message gets send if an user don't hase enough permissions"
+    },
+    {
+      "field_name": "author",
+      "default": {
+        "username": "SC Network",
+        "iconURL": "https://sc-netzwerk.de/img/profile.png"
+      },
+      "type": "keyed",
+      "description": "Author of every embed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "module",
+      "default": {
+        "not_found": "We could not find this module. Maybe it's not enabled in your config file?"
+      },
+      "type": "keyed",
+      "description": "Strings for module command",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "module",
+      "default": {
+        "not_found": "We could not find this module. Maybe it's not enabled in your config file?"
+      },
+      "type": "keyed",
+      "description": "Strings for module command",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "helpembed",
+      "default": {
+        "title": "Help",
+        "description": "You can find every command here",
+        "module": "Module",
+        "module_translation": "%name% by %author%: %description%",
+        "build_in": "Build-In-Commands",
+        "more_information_with": "More information: `%prefix%module %modulename%`"
+      },
+      "type": "keyed",
+      "description": "Strings for help command",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    }
+  ]
+}

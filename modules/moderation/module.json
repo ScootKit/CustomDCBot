@@ -1,0 +1,15 @@
+{
+  "name": "moderation",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Simple moderation-system with a lot of configuration options",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json"
+  ]
+}

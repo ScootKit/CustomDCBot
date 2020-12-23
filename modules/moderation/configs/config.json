@@ -1,0 +1,64 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "logchannel-id",
+      "default": "",
+      "type": "channelID",
+      "description": "Channel-ID of the log channel"
+    },
+    {
+      "field_name": "muterole-id",
+      "default": "",
+      "type": "roleID",
+      "description": "ID of the mute role"
+    },
+    {
+      "field_name": "moderator-roles_level1",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn"
+    },
+    {
+      "field_name": "moderator-roles_level2",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute"
+    },
+    {
+      "field_name": "moderator-roles_level2",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute"
+    },
+    {
+      "field_name": "moderator-roles_level3",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear"
+    },
+    {
+      "field_name": "moderator-roles_level4",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear, Bann, Unbann"
+    },
+    {
+      "field_name": "require_reason",
+      "default": true,
+      "type": "boolean",
+      "description": "Should moderators be required to set a reason?"
+    },
+    {
+      "field_name": "block_invites",
+      "default": true,
+      "type": "boolean",
+      "description": "Should the bot automatically mute members who post an invite link?"
+    }
+  ]
+}
