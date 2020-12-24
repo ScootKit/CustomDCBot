@@ -84,6 +84,7 @@ async function checkAllConfigs() {
                     } else if (typeof moduleConf[f] === 'undefined') needOverwrite = true;
                 });
                 if (needOverwrite) await configChecker.generateModulesConfOverwrite(moduleConf, files);
+                console.log('[INFO] Done with checking.')
                 resolve();
             });
         });
