@@ -59,6 +59,13 @@
       "default": true,
       "type": "boolean",
       "description": "Should the bot automatically mute members who post an invite link?"
+    },
+    {
+      "field_name": "whitelisted_channels_for_invite_blocking",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "ID of channels or categories where invite blocking is disabled"
     }
   ]
 }
