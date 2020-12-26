@@ -1,0 +1,12 @@
+{
+  "name": "welcomer",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Simple module to say \"Hi\" to new members and give them roles automatically",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/config.json"
+  ]
+}

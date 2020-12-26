@@ -1,0 +1,82 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "welcome-new-members",
+      "default": true,
+      "type": "boolean",
+      "description": "Should a welcome message be send if a new member joins?"
+    },
+    {
+      "field_name": "welcome-text",
+      "default": "Welcome %mention% to %servername%!",
+      "type": "string",
+      "description": "Message that gets send if a new member joined (if \"welcome-new-members\" is enabled)",
+      "params": [
+        {
+          "name": "%mention%",
+          "description": "Mentions the user"
+        },
+        {
+          "name": "%servername%",
+          "description": "Name of the guild"
+        },
+        {
+          "name": "%tag%",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "%createdAt%",
+          "description": "Date when account was created"
+        }
+      ]
+    },
+    {
+      "field_name": "welcome-message-channel",
+      "default": "",
+      "type": "channelID",
+      "description": "ChannelID to send welcome-messages in"
+    },
+    {
+      "field_name": "give-roles-on-join",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "IDs of roles to give to a new member"
+    },
+    {
+      "field_name": "not-send-messages-if-member-is-bot",
+      "default": true,
+      "type": "boolean",
+      "description": "Should bots be ignored?"
+    },
+    {
+      "field_name": "leave-message",
+      "default": true,
+      "type": "boolean",
+      "description": "Should a goodbye message be send if a member leaves?"
+    },
+    {
+      "field_name": "leave-text",
+      "default": "Goodbye, %tag%!",
+      "type": "string",
+      "description": "Message that gets send if a new member leaves (if \"leave-message\" is enabled)",
+      "params": [
+        {
+          "name": "%tag%",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "%joinedAt%",
+          "description": "Date when user joined guild"
+        }
+      ]
+    },
+    {
+      "field_name": "goodbye-message-channel",
+      "default": "",
+      "type": "channelID",
+      "description": "ChannelID to send goodbye-messages in"
+    }
+  ]
+}
