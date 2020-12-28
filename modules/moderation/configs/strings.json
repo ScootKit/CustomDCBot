@@ -5,6 +5,7 @@
       "field_name": "no_permissions",
       "default": "You can not do that. You need at least moderator level %required_level% to do this",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send if the user doesn't has the required role and/or has not the required mod-level",
       "params": [
         {
@@ -17,24 +18,28 @@
       "field_name": "user_not_found",
       "default": "I could not find this user - try using an ID or a mention",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send if the user provided an invalid userid"
     },
     {
       "field_name": "missing_reason",
       "default": "Please specify an reason",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send if the user does not provide a reason and 'require reason' is activated"
     },
     {
       "field_name": "this_is_a_mod",
       "default": "You can not perform this action on your college.",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send if the user tries to mute another moderator"
     },
     {
       "field_name": "mute_message",
       "default": "You got muted for **%reason%** by %user%!",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send to a user when they got muted",
       "params": [
         {
@@ -51,6 +56,7 @@
       "field_name": "unmute_message",
       "default": "You got unmuted for **%reason%** by %user%!",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send to a user when they got unmuted",
       "params": [
         {
@@ -67,6 +73,7 @@
       "field_name": "kick_message",
       "default": "You got kicked for **%reason%** by %user%!",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send to a user when they got kicked",
       "params": [
         {
@@ -83,6 +90,7 @@
       "field_name": "ban_message",
       "default": "You got banned for **%reason%** by %user%!",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send to a user when they got banned",
       "params": [
         {
@@ -99,6 +107,7 @@
       "field_name": "warn_message",
       "default": "You got warned for **%reason%** by %user%!",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send to a user when they got warned",
       "params": [
         {

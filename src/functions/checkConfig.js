@@ -27,7 +27,7 @@ module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = n
             exampleFile.content.forEach(async field => {
                 if (!field.field_name) return;
                 if (typeof config[field.field_name] === 'undefined') return config[field.field_name] = field.default;
-                if (!await checkType(field.type, config[field.field_name], field.content)) {
+                if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
                     console.error(`[ERROR] An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
                     process.exit(1); // ToDo Only disable plugin not stop bot
                 }
@@ -74,7 +74,7 @@ module.exports.checkBuildInConfig = async function (configName) {
         exampleFile.content.forEach(async field => {
             if (!field.field_name) return;
             if (!config[field.field_name]) return config[field.field_name] = field.default;
-            if (!await checkType(field.type, config[field.field_name], field.content)) {
+            if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
                 console.error(`[ERROR] An error occurred while checking the content of field ${field.field_name} in config/${configName}`);
                 process.exit(1);
             }
@@ -117,18 +117,19 @@ module.exports.generateModulesConfOverwrite = async function (moduleConf, module
     }));
 };
 
-async function checkType(type, value, contentFormat = null) {
+async function checkType(type, value, contentFormat = null, allowEmbed = false) {
     const {client} = require('../../main');
     switch (type) {
         case 'integer':
             return !!parseInt(value);
         case 'string':
+            if (allowEmbed && typeof value === 'object') return true;
             return typeof value === 'string';
         case 'array':
             if (typeof value !== 'object') return false;
             let errored = true;
             await asyncForEach(value, function (v) {
-                if (errored) errored = checkType(contentFormat, v);
+                if (errored) errored = checkType(contentFormat, v, null, allowEmbed);
             });
             return errored;
         case 'channelID':

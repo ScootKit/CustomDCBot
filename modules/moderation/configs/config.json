@@ -25,13 +25,6 @@
       "default": [],
       "type": "array",
       "content": "roleID",
-      "description": "ID of moderator roles that can perform the following actions: Warn, Mute"
-    },
-    {
-      "field_name": "moderator-roles_level2",
-      "default": [],
-      "type": "array",
-      "content": "roleID",
       "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute"
     },
     {
@@ -46,7 +39,7 @@
       "default": [],
       "type": "array",
       "content": "roleID",
-      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear, Bann, Unbann"
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear, Ban, Unban"
     },
     {
       "field_name": "require_reason",

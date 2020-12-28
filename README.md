@@ -41,6 +41,21 @@ Please read the full [license](LICENSE). This is not legal advice.
 You can find all the configuration-files inside your `config` folder. Every **enabled module** will have their
 own folder with config-files inside them. **These files are generated automatically**. Every module has slightly different 
 configuration options. Every module has example files. Inside these files are more information about every configuration option.  
+Some config values also support [embeds](https://discordjs.guide/popular-topics/embeds.html). This is the case if `allowEmbed` is true.\
+You either input a string (normal discord message), or an embed object with the following values:
+* `title`: Title of the embed
+* `message`: Message outside the embed (optional)  
+* `description`: Description of the embed (optional)
+* `color`: Color of the embed, must be a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable) (optional)
+* `url`: URL of the embed (optional)
+* `image`: Image of the embed, should be an url (optional)
+* `thumbnail`: Thumbnail-Image of the embed, should be an url (optional)
+* `author` (optional): 
+  * `name`: Name of the author
+  * `img`: Image of the author, should be an url
+* `fields`: Fields of the embed, must be an array of [EmbedFieldData](https://discord.js.org/#/docs/main/stable/typedef/EmbedFieldData) (optional)
+
+The footer of the embed is global and is defined in your global `strings.json` file. The timestamp is set automatically to the current time.
 
 ### Modules
 The bot is split in modules. Each module can register their own commands, events and even database models, 
@@ -87,6 +102,7 @@ An example config file should include the following things:
     * `default`: Default value
     * `type`: Can be `channelID`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object) or `string`
     * `description`: Short description of this field
+    * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please use the build-in function in `src/functions/helpers.js`)  
     * `content` (if type === `array`): Type (see `type` above) of every value
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value

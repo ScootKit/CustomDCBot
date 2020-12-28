@@ -1,8 +1,9 @@
+const {embedType} = require('../functions/helpers');
 const {MessageEmbed} = require('discord.js');
 
 module.exports.run = async function (client, msg, args) {
     const module = client.modules[args[0]];
-    if (!module) return msg.channel.send(client.strings.module.not_found);
+    if (!module) return msg.channel.send(...embedType(client.strings.module.not_found));
     const moduleEmbed = new MessageEmbed()
         .setTitle(`${module.config.name.charAt(0).toUpperCase() + module.config.name.slice(1)} by ${module.config.author.name}`)
         .setDescription(module.config.description)

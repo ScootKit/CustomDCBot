@@ -5,6 +5,7 @@
       "field_name": "not-found",
       "default": ":warning: Seems like you haven't sent a message yet...",
       "type": "string",
+      "allowEmbed": true,
       "description": "This string gets send when a someone uses !profile when he doesn't have XP yet"
     },
     {

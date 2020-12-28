@@ -10,27 +10,15 @@
       "field_name": "need_args",
       "default": "This command needs more arguments",
       "type": "string",
-      "description": "This message gets send if there are not enough arguments specified"
+      "description": "This message gets send if there are not enough arguments specified",
+      "allowEmbed": true
     },
     {
       "field_name": "not_enough_permissions",
       "default": "Seems like you don't have enough permissions.",
       "type": "string",
-      "description": "This message gets send if an user don't hase enough permissions"
-    },
-    {
-      "field_name": "author",
-      "default": {
-        "username": "SC Network",
-        "iconURL": "https://sc-netzwerk.de/img/profile.png"
-      },
-      "type": "keyed",
-      "description": "Author of every embed",
-      "content": {
-        "key": "string",
-        "value": "string"
-      },
-      "disableKeyEdits": true
+      "description": "This message gets send if an user don't hase enough permissions",
+      "allowEmbed": true
     },
     {
       "field_name": "module",
@@ -39,19 +27,7 @@
       },
       "type": "keyed",
       "description": "Strings for module command",
-      "content": {
-        "key": "string",
-        "value": "string"
-      },
-      "disableKeyEdits": true
-    },
-    {
-      "field_name": "module",
-      "default": {
-        "not_found": "We could not find this module. Maybe it's not enabled in your config file?"
-      },
-      "type": "keyed",
-      "description": "Strings for module command",
+      "allowEmbed": true,
       "content": {
         "key": "string",
         "value": "string"

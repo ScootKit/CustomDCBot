@@ -24,7 +24,6 @@ module.exports.run = async function (client, msg) {
         );
     });
     const embed = new MessageEmbed()
-        .setAuthor(client.strings.author.username, client.strings.author.iconURL)
         .setFooter(client.strings.footer)
         .setColor('GREEN')
         .setThumbnail(msg.guild.iconURL())

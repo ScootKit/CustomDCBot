@@ -11,6 +11,7 @@
       "field_name": "welcome-text",
       "default": "Welcome %mention% to %servername%!",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send if a new member joined (if \"welcome-new-members\" is enabled)",
       "params": [
         {
@@ -60,6 +61,7 @@
       "field_name": "leave-text",
       "default": "Goodbye, %tag%!",
       "type": "string",
+      "allowEmbed": true,
       "description": "Message that gets send if a new member leaves (if \"leave-message\" is enabled)",
       "params": [
         {

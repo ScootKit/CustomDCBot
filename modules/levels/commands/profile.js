@@ -1,3 +1,4 @@
+const {embedType} = require('../../../src/functions/helpers');
 const {confDir} = require('./../../../main');
 const {MessageEmbed} = require('discord.js');
 
@@ -8,10 +9,9 @@ module.exports.run = async function (client, msg) {
             userID: msg.author.id
         }
     });
-    if (!user) return msg.channel.send(moduleStrings['not-found']);
+    if (!user) return msg.channel.send(...embedType(moduleStrings['not-found']));
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
     const embed = new MessageEmbed()
-        .setAuthor(client.strings.author.username, client.strings.author.iconURL)
         .setFooter(client.strings.footer)
         .setColor('GREEN')
         .setThumbnail(msg.author.avatarURL())

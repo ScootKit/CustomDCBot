@@ -1,11 +1,5 @@
+const {embedType} = require('../../../src/functions/helpers');
 let cooldown = new Set();
-
-function levelUpReplacer(content, userID, newLevel, roleName = 'err') {
-    content = content.split('%mention%').join(`<@${userID}>`);
-    content = content.split('%role%').join(roleName);
-    content = content.split('%newLevel%').join(newLevel);
-    return content;
-}
 
 exports.run = async (client, msg) => {
     const {confDir} = require('./../../../main');
@@ -35,12 +29,34 @@ exports.run = async (client, msg) => {
         const channel = client.channels.cache.find(c => c.id === moduleConfig.level_up_channel_id);
         if (moduleConfig.reward_roles[user.level.toString()]) {
             const role = msg.guild.roles.cache.find(r => r.id === moduleConfig.reward_roles[user.level.toString()]);
-            if (!role) return channel.send(levelUpReplacer(moduleConfig.level_up_message, msg.author.id, user.level) + `\n\nError: Role with ID "${moduleConfig.reward_roles[user.level]}" could not be found.`);
+            if (!role) return channel.send(...embedType(`${moduleConfig.level_up_message}\n\nError: Role with ID "${moduleConfig.reward_roles[user.level]}" could not be found.`, {
+                '%mention%': `<@${msg.author.id}>`,
+                '%newLevel%': user.level,
+                '%tag%': msg.author.tag
+            }));
             await msg.member.roles.add(role);
-            if (channel) channel.send(levelUpReplacer(moduleConfig.level_up_message_with_reward, msg.author.id, user.level, role.name));
-            else msg.channel.send(levelUpReplacer(moduleConfig.level_up_message_with_reward, msg.author.id, user.level, role.name));
-        } else if (channel) channel.send(levelUpReplacer(moduleConfig.level_up_message, msg.author.id, user.level));
-        else msg.channel.send(levelUpReplacer(moduleConfig.level_up_message, msg.author.id, user.level));
+            if (channel) channel.send(...embedType(moduleConfig.level_up_message_with_reward, {
+                '%mention%': `<@${msg.author.id}>`,
+                '%newLevel%': user.level,
+                '%role%': role.name,
+                '%tag%': msg.author.tag
+            }));
+            else msg.channel.send(...embedType(moduleConfig.level_up_message_with_reward, {
+                '%mention%': `<@${msg.author.id}>`,
+                '%newLevel%': user.level,
+                '%role%': role.name,
+                '%tag%': msg.author.tag
+            }));
+        } else if (channel) channel.send(...embedType(moduleConfig.level_up_message, {
+            '%mention%': `<@${msg.author.id}>`,
+            '%newLevel%': user.level,
+            '%tag%': msg.author.tag
+        }));
+        else msg.channel.send(...embedType(moduleConfig.level_up_message, {
+                '%mention%': `<@${msg.author.id}>`,
+                '%newLevel%': user.level,
+                '%tag%': msg.author.tag
+            }));
     }
     cooldown.add(msg.author.id);
     setTimeout(() => {
