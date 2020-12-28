@@ -1,5 +1,4 @@
 const {MessageEmbed} = require('discord.js');
-const strings = require('../../config/strings.json')
 
 module.exports.asyncForEach = async function (array, callback) {
     for (let index = 0; index < array.length; index++) {
@@ -8,7 +7,6 @@ module.exports.asyncForEach = async function (array, callback) {
 };
 
 function inputReplacer(args, input) {
-    console.log(args)
     if (typeof args !== 'object') return input;
     for(const arg in args) {
         input = input.split(arg).join(args[arg])
@@ -17,8 +15,8 @@ function inputReplacer(args, input) {
 }
 
 module.exports.embedType = function (input, args = []) {
-    console.log(args)
     if (typeof input === 'string') return inputReplacer(args, input);
+    const {client} = require('../../main');
     const emb = new MessageEmbed();
     emb.setTitle(inputReplacer(args, input['title']));
     if (input['description']) emb.setDescription(inputReplacer(args, input['title']));
@@ -33,6 +31,6 @@ module.exports.embedType = function (input, args = []) {
         })
     }
     emb.setTimestamp();
-    emb.setFooter(strings.footer);
+    emb.setFooter(client.strings.footer);
     return [input['message'], emb];
 };

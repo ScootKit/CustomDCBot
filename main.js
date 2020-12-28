@@ -1,9 +1,8 @@
 const Discord = require('discord.js');
+const client = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION'], disableMentions: 'everyone'});
 const fs = require('fs');
 const {Sequelize} = require('sequelize');
 const {asyncForEach} = require('./src/functions/helpers');
-
-const client = new Discord.Client({partials: ['MESSAGE', 'CHANNEL', 'REACTION'], disableMentions: 'everyone'});
 
 // Parsing parameters
 let config;
