@@ -19,7 +19,7 @@ module.exports.embedType = function (input, args = []) {
     const {client} = require('../../main');
     const emb = new MessageEmbed();
     emb.setTitle(inputReplacer(args, input['title']));
-    if (input['description']) emb.setDescription(inputReplacer(args, input['title']));
+    if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
     if (input['color']) emb.setColor(input['color']);
     if (input['url']) emb.setURL(input['url']);
     if (input['image']) emb.setImage(input['image']);
