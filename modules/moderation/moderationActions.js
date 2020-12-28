@@ -1,3 +1,4 @@
+const {embedType} = require('../../src/functions/helpers');
 const {confDir} = require('../../main');
 const {MessageEmbed} = require('discord.js');
 
@@ -15,7 +16,10 @@ module.exports.moderationAction = async function (client, type, user, victim, re
         switch (type) {
             case 'mute':
                 await victim.roles.add(muteRole);
-                sendMessage(victim, moduleStrings['mute_message'].split('%reason%').join(reason).split('%user%').join(user.user.tag));
+                sendMessage(victim, embedType(moduleStrings['mute_message'], {
+                    '%reason%': reason,
+                    '%user%': user.user.tag
+                }));
                 break;
             case 'unmute':
                 if (!muteRole) {
@@ -23,18 +27,30 @@ module.exports.moderationAction = async function (client, type, user, victim, re
                     return resolve(false);
                 }
                 await victim.roles.remove(muteRole);
-                sendMessage(victim, moduleStrings['unmute_message'].split('%reason%').join(reason).split('%user%').join(user.user.tag));
+                sendMessage(victim, embedType(moduleStrings['unmute_message'], {
+                    '%reason%': reason,
+                    '%user%': user.user.tag
+                }));
                 break;
             case 'kick':
-                sendMessage(victim, moduleStrings['kick_message'].split('%reason%').join(reason).split('%user%').join(user.user.tag));
+                sendMessage(victim, embedType(moduleStrings['kick_message'], {
+                    '%reason%': reason,
+                    '%user%': user.user.tag
+                }));
                 if (victim.kickable) await victim.kick();
                 break;
             case 'ban':
-                sendMessage(victim, moduleStrings['ban_message'].split('%reason%').join(reason).split('%user%').join(user.user.tag));
+                sendMessage(victim, embedType(moduleStrings['ban_message'], {
+                    '%reason%': reason,
+                    '%user%': user.user.tag
+                }));
                 if (victim.bannable) await victim.ban();
                 break;
             case 'warn':
-                sendMessage(victim, moduleStrings['warn_message'].split('%reason%').join(reason).split('%user%').join(user.user.tag));
+                sendMessage(victim, embedType(moduleStrings['warn_message'], {
+                    '%reason%': reason,
+                    '%user%': user.user.tag
+                }));
                 break;
             case 'unban':
                 await guild.members.unban(victim);
@@ -66,6 +82,5 @@ module.exports.moderationAction = async function (client, type, user, victim, re
 };
 
 function sendMessage(user, content) {
-    user.send(content).catch(reason => {
-    });
+    user.send(...content).catch(console.error);
 }
