@@ -1,0 +1,12 @@
+{
+  "name": "2021-countdown",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "events-dir": "/events",
+  "description": "Creates a countdown in a voice channel",
+  "config-example-files": [
+    "config.json"
+  ]
+}
