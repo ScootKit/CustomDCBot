@@ -32,5 +32,5 @@ module.exports.embedType = function (input, args = []) {
     }
     emb.setTimestamp();
     emb.setFooter(client.strings.footer);
-    return [input['message'], emb];
+    return [inputReplacer(args, input['message']), emb];
 };
