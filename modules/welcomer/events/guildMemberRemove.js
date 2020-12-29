@@ -5,7 +5,7 @@ exports.run = async (client, member) => {
     if (!member.guild.channels.cache.get(moduleConfig['goodbye-message-channel'])) return console.error('Could not found leave channel')
     if (moduleConfig['not-send-messages-if-member-is-bot'] && member.user.bot) return;
     await member.guild.channels.cache.get(moduleConfig['goodbye-message-channel']).send(
-        ...embedType(moduleConfig['welcome-text'],
+        ...embedType(moduleConfig['leave-text'],
             {
                 '%tag%': member.user.tag,
                 '%joinedAt%': `${member.joinedAt.getDate()}.${member.joinedAt.getMonth()}.${member.joinedAt.getFullYear()}`
