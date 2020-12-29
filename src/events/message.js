@@ -2,6 +2,7 @@ const {embedType} = require('../functions/helpers');
 
 exports.run = async (client, msg) => {
     if (msg.author.bot) return;
+    if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
     if (!msg.content.startsWith(client.config.prefix)) return;
     const args = msg.content.split(client.config.prefix).join('').trim().split(/ +/g);

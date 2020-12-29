@@ -8,14 +8,14 @@ module.exports.asyncForEach = async function (array, callback) {
 
 function inputReplacer(args, input) {
     if (typeof args !== 'object') return input;
-    for(const arg in args) {
-        input = input.split(arg).join(args[arg])
+    for (const arg in args) {
+        input = input.split(arg).join(args[arg]);
     }
     return input;
 }
 
 module.exports.embedType = function (input, args = []) {
-    if (typeof input === 'string') return inputReplacer(args, input);
+    if (typeof input === 'string') return [inputReplacer(args, input)];
     const {client} = require('../../main');
     const emb = new MessageEmbed();
     emb.setTitle(inputReplacer(args, input['title']));
@@ -27,8 +27,8 @@ module.exports.embedType = function (input, args = []) {
     if (input['author'] && typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), input['author']['img']);
     if (typeof input['fields'] === 'object') {
         input.fields.forEach(f => {
-            emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline'])
-        })
+            emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);
+        });
     }
     emb.setTimestamp();
     emb.setFooter(client.strings.footer);
