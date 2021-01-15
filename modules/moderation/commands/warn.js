@@ -7,8 +7,8 @@ module.exports.run = async function (client, msg, args) {
     const moduleConfig = require(`${confDir}/moderation/config.json`);
     const moduleStrings = require(`${confDir}/moderation/strings.json`);
     const message = await msg.channel.send('One sec...');
-    if (!msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level2'].includes(r.id) || moduleConfig['moderator-roles_level3'].includes(r.id) || moduleConfig['moderator-roles_level4'].includes(r.id))) return message.edit(message.edit(...embedType(moduleStrings['no_permissions'], {
-        '%required_level%': 4
+    if (!msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level1'].includes(r.id) || moduleConfig['moderator-roles_level2'].includes(r.id) || moduleConfig['moderator-roles_level3'].includes(r.id) || moduleConfig['moderator-roles_level4'].includes(r.id))) return message.edit(message.edit(...embedType(moduleStrings['no_permissions'], {
+        '%required_level%': 1
     })));
     let user;
     if (msg.mentions.members.first()) user = msg.mentions.members.first();
@@ -22,7 +22,7 @@ module.exports.run = async function (client, msg, args) {
         reason = reason + ' ' + a;
     });
     if (reason.length === 0 && moduleConfig['require_reason']) return message.edit(...embedType(moduleStrings['missing_reason']));
-    if (user.roles.cache.find(r => moduleConfig['moderator-roles_level2'].includes(r.id) || moduleConfig['moderator-roles_level3'].includes(r.id) || moduleConfig['moderator-roles_level4'].includes(r.id))) return message.edit(...embedType(moduleStrings['this_is_a_mod']));
+    if (user.roles.cache.find(r => moduleConfig['moderator-roles_level1'].includes(r.id) || moduleConfig['moderator-roles_level2'].includes(r.id) || moduleConfig['moderator-roles_level3'].includes(r.id) || moduleConfig['moderator-roles_level4'].includes(r.id))) return message.edit(...embedType(moduleStrings['this_is_a_mod']));
     moderationAction(client, 'warn', msg.member, user, reason).then(m => {
         if (m) {
             message.edit(`Done. Case-ID: #${m.actionID}`);
