@@ -19,7 +19,7 @@ module.exports.run = async function (client, msg, args) {
     moderationAction(client, 'unban', msg.member, user, reason).then(m => {
         if (m) {
             message.edit(`Done. Case-ID: #${m.actionID}`);
-        } else message.edit('An error occured');
+        } else message.edit('An error occurred');
     });
 };
 
