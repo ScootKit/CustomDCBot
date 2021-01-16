@@ -3,20 +3,27 @@
   "content": [
     {
       "field_name": "not-found",
-      "default": ":warning: Seems like you haven't sent a message yet...",
+      "default": ":warning: Seems this user hasn't sent a message yet...",
       "type": "string",
       "allowEmbed": true,
       "description": "This string gets send when a someone uses !profile when he doesn't have XP yet"
+    },
+    {
+      "field_name": "user_not_found",
+      "default": ":warning: We could not find this user",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets send if a user tries to see a profile of another user who could not be found."
     },
     {
       "field_name": "embed",
       "type": "keyed",
       "default": {
         "title": "Profile of",
-        "description": "You can see your profile here",
+        "description": "You can the profile of this user here.",
         "messages": "Messages",
         "xp": "XP",
-        "level": "Your Level"
+        "level": "Level"
       },
       "content": {
         "key": "string",
