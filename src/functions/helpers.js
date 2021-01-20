@@ -14,7 +14,7 @@ function inputReplacer(args, input) {
     return input;
 }
 
-module.exports.embedType = function (input, args = []) {
+module.exports.embedType = function (input, args = {}) {
     if (typeof input === 'string') return [inputReplacer(args, input)];
     const {client} = require('../../main');
     const emb = new MessageEmbed();
