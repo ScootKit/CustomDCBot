@@ -29,7 +29,11 @@
         {
           "name": "%createdAt%",
           "description": "Date when account was created"
-        }
+        },
+        {
+          "name": "%joinedAt%",
+          "description": "Date when the User was joined the Server"
+        },
       ]
     },
     {
