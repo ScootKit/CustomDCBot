@@ -10,7 +10,8 @@ exports.run = async (client, member) => {
                 '%mention%': `<@${member.id}>`,
                 '%servername%': member.guild.name,
                 '%tag%': member.user.tag,
-                '%createdAt%': `${member.user.createdAt.getDate()}.${member.user.createdAt.getMonth() + 1}.${member.user.createdAt.getFullYear()}`
+                '%createdAt%': `${member.user.createdAt.getDate()}.${member.user.createdAt.getMonth() + 1}.${member.user.createdAt.getFullYear()}`,
+                '%joinedAt%': `${member.user.joinedAt.getDate()}.${member.user.joinedAt.getMonth() + 1}.${member.user.joinedAt.getFullYear()}`
             })
     );
     for (const roleID of moduleConfig['give-roles-on-join']) {
