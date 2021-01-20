@@ -4,7 +4,7 @@ const {confDir} = require('./../../../main');
 const {MessageEmbed} = require('discord.js');
 
 module.exports.run = async function (client, msg, args) {
-    if (!msg.member.permissions.has('ADMINISTRATOR')) return msg.channel.send('You need the permission "ADMINISTRATOR" to do this')
+    if (!msg.member.permissions.has('ADMINISTRATOR')) return msg.channel.send(...embedType(client.strings['not_enough_permissions']))
     if (args[0] && args[0] !== 'confirm') {
         let user = await client.models['levels']['User'].findOne({
             where: {
