@@ -57,7 +57,7 @@ module.exports.run = async function (client, msg) {
 
 module.exports.help = {
     'name': 'gstart',
-    'description': 'See the leaderboard of the server',
+    'description': 'Starts a giveaway',
     'module': 'giveaway',
     'aliases': ['gstart', 'start-giveaway']
 };

@@ -11,5 +11,5 @@ module.exports.run = async (client) => {
         scheduleJob(new Date(parseInt(g.endAt)), async () => {
             await endGiveaway(g.id);
         });
-    })
+    });
 };

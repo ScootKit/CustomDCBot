@@ -19,15 +19,15 @@ module.exports.createGiveaway = async function (organiser, channel, prize, endAt
             messageID: m.id,
             channelID: channel.id
         });
-        scheduleJob(endAt, async () => {
-            await endGiveaway(dbItem.id);
+        const job = scheduleJob(endAt, async () => {
+            await endGiveaway(dbItem.id, job);
         });
         await m.react('🎉');
     });
 
 };
 
-async function endGiveaway(gID) {
+async function endGiveaway(gID, job = null) {
     const {client} = require('../../main');
     const moduleStrings = require(`${confDir}/giveaways/strings.json`);
 
@@ -78,6 +78,8 @@ async function endGiveaway(gID) {
     );
     giveaway.ended = true;
     giveaway.save();
+
+    if (job) job.cancel();
 }
 
 module.exports.endGiveaway = endGiveaway;
