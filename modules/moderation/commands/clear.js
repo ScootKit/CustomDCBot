@@ -6,7 +6,7 @@ const {moderationAction} = require('../moderationActions');
 module.exports.run = async function (client, msg, args) {
     const moduleConfig = require(`${confDir}/moderation/config.json`);
     const moduleStrings = require(`${confDir}/moderation/strings.json`);
-    if (!msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level3'].includes(r.id))) message.edit(...embedType(moduleStrings['no_permissions'], {
+    if (!msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level3'].includes(r.id))) msg.edit(...embedType(moduleStrings['no_permissions'], {
         '%required_level%': 3
     }));
     await msg.channel.bulkDelete((args[0]) ? parseInt(args[0]) : 50, true).then(m => {
