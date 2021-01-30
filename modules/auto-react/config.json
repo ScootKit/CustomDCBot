@@ -1,0 +1,15 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "channels",
+      "default": {},
+      "type": "keyed",
+      "description": "Here you can add channels and the reactions in it (you can add multiple emojis with | between each one)",
+      "content": {
+        "key": "channelID",
+        "value": "string"
+      }
+    }
+  ]
+}
