@@ -53,7 +53,6 @@ const db = new Sequelize({
 
 // Starting bot
 db.authenticate().then(async () => {
-    await loadModelsInDir('./src/models');
     await loadModules();
     await loadCommandsInDir('./src/commands');
     await loadEventsInDir('./src/events');
