@@ -23,6 +23,7 @@
         "description": "You can the profile of this user here.",
         "messages": "Messages",
         "xp": "XP",
+        "joinedAt": "Server beigetreten",
         "level": "Level"
       },
       "content": {

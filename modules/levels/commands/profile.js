@@ -26,7 +26,8 @@ module.exports.run = async function (client, msg, args) {
         .setDescription(moduleStrings.embed.description)
         .addField(moduleStrings.embed.messages, user.messages, true)
         .addField(moduleStrings.embed.xp, `${user.xp}/${nextLevelXp}`, true)
-        .addField(moduleStrings.embed.level, user.level, true);
+        .addField(moduleStrings.embed.level, user.level, true)
+        .addField(moduleStrings.embed.joinedAt, `${new Date(msg.member.joinedAt).getHours()}:${new Date(msg.member.joinedAt).getHours()} ${new Date(msg.member.joinedAt).getDate()}.${new Date(msg.member.joinedAt).getMonth()}.${new Date(msg.member.joinedAt).getFullYear()}`, true)
     await msg.channel.send(embed);
 };
 
