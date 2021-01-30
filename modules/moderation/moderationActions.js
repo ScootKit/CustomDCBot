@@ -82,5 +82,5 @@ module.exports.moderationAction = async function (client, type, user, victim, re
 };
 
 function sendMessage(user, content) {
-    user.send(...content).catch(console.error);
+    user.send(...content).catch(() => {});
 }
