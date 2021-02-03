@@ -5,11 +5,13 @@ exports.run = async (client, msg) => {
 
 function checkMembers(msg) {
     const moduleConfig = require(`${msg.client.configDir}/auto-react/config.json`);
+    if (!msg.mentions.members) return;
     msg.mentions.members.forEach(m => {
-        if (!moduleConfig.members[m.id]) return;
-        moduleConfig.members[m.id].split('|').forEach(emoji => {
-            msg.react(emoji);
-        });
+        if (moduleConfig.members[m.id]) {
+            moduleConfig.members[m.id].split('|').forEach(emoji => {
+                msg.react(emoji);
+            });
+        }
     });
 }
 
