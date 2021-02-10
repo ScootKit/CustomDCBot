@@ -1,7 +1,5 @@
-const durationParser = require('parse-duration');
 const {endGiveaway} = require('../giveaways');
 const {confDir} = require('../../../main');
-const {createGiveaway} = require('../giveaways');
 const {embedType} = require('./../../../src/functions/helpers')
 
 module.exports.run = async function (client, msg, args) {
