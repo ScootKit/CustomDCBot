@@ -1,0 +1,14 @@
+{
+  "name": "birthday",
+  "description": "A",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json"
+  ]
+}
