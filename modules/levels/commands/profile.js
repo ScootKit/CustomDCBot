@@ -18,7 +18,6 @@ module.exports.run = async function (client, msg, args) {
     });
     if (!user) return msg.channel.send(...embedType(moduleStrings['not-found']));
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
-    console.log(member.joinedAt)
     const embed = new MessageEmbed()
         .setFooter(client.strings.footer)
         .setColor('GREEN')
