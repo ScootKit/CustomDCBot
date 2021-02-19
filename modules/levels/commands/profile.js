@@ -5,29 +5,30 @@ const {MessageEmbed} = require('discord.js');
 module.exports.run = async function (client, msg, args) {
     const moduleStrings = require(`${confDir}/levels/strings.json`);
 
-    let member = msg.author;
+    let member = msg.member;
     if (args[0]) {
-        if (msg.mentions.members.first()) member = msg.mentions.members.first().user;
-        else member = await (await msg.guild.members.fetch(args[0])).user;
+        if (msg.mentions.members.first()) member = msg.mentions.members.first();
+        else member = await (await msg.guild.members.fetch(args[0]));
         if (!member) return message.edit(...embedType(moduleStrings['user_not_found']));
     }
     let user = await client.models['levels']['User'].findOne({
         where: {
-            userID: member.id
+            userID: member.user.id
         }
     });
     if (!user) return msg.channel.send(...embedType(moduleStrings['not-found']));
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
+    console.log(member.joinedAt)
     const embed = new MessageEmbed()
         .setFooter(client.strings.footer)
         .setColor('GREEN')
-        .setThumbnail(member.avatarURL())
-        .setTitle(`${moduleStrings.embed.title} ${member.tag}`)
+        .setThumbnail(member.user.avatarURL())
+        .setTitle(`${moduleStrings.embed.title} ${member.user.tag}`)
         .setDescription(moduleStrings.embed.description)
         .addField(moduleStrings.embed.messages, user.messages, true)
         .addField(moduleStrings.embed.xp, `${user.xp}/${nextLevelXp}`, true)
         .addField(moduleStrings.embed.level, user.level, true)
-        .addField(moduleStrings.embed.joinedAt, `${new Date(msg.member.joinedAt).getHours()}:${new Date(msg.member.joinedAt).getMinutes()} ${new Date(msg.member.joinedAt).getDate()}.${new Date(msg.member.joinedAt).getMonth() + 1}.${new Date(msg.member.joinedAt).getFullYear()}`, true)
+        .addField(moduleStrings.embed.joinedAt, `${member.joinedAt.getHours()}:${member.joinedAt.getMinutes()} ${member.joinedAt.getDate()}.${member.joinedAt.getMonth() + 1}.${member.joinedAt.getFullYear()}`, true)
     await msg.channel.send(embed);
 };
 
