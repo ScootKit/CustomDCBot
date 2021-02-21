@@ -166,6 +166,8 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 }
             }
             return returnValue;
+        case 'select':
+            return contentFormat.includes(value)
         case 'boolean':
             return typeof value === 'boolean';
         default:

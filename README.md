@@ -100,10 +100,11 @@ An example config file should include the following things:
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
     * `default`: Default value
-    * `type`: Can be `channelID`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object) or `string`
+    * `type`: Can be `channelID`, `select`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object) or `string`
     * `description`: Short description of this field
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please use the build-in function in `src/functions/helpers.js`)  
     * `content` (if type === `array`): Type (see `type` above) of every value
+    * `content` (if type === `select`): Array of the possible options
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value
         * `value`: Type (see `type` above) of the value of every value
