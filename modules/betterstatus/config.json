@@ -1,0 +1,89 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "enableInterval",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled the bot will change its status every x seconds"
+    },
+    {
+      "field_name": "intervalStatuses",
+      "default": [],
+      "content": "string",
+      "type": "array",
+      "description": "Statuses from which the bot should randomly choose one",
+      "params": [
+        {
+          "name": "%onlineMemberCount%",
+          "description": "Count of online members on your guild (will not work if presence intent not enabled)"
+        },
+        {
+          "name": "%memberCount%",
+          "description": "Count of members on your guild"
+        },
+        {
+          "name": "%randomMemberTag%",
+          "description": "Tag of one random member on your guild"
+        },
+        {
+          "name": "%randomOnlineMemberTag%",
+          "description": "Tag of one random member who is online on your guild"
+        },
+        {
+          "name": "%channelCount%",
+          "description": "Count of channels on your guild"
+        },
+        {
+          "name": "%roleCount%",
+          "description": "Count of roles on your guild"
+        }
+      ]
+    },
+    {
+      "field_name": "activityType",
+      "default": "PLAYING",
+      "type": "select",
+      "content": [
+        "PLAYING",
+        "WATCHING",
+        "STREAMING",
+        "COMPETING",
+        "LISTENING"
+      ],
+      "description": "Type of the user status"
+    },
+    {
+      "field_name": "interval",
+      "default": 15,
+      "type": "integer",
+      "description": "The interval in seconds (at least 5 seconds)"
+    },
+    {
+      "field_name": "changeOnUserJoin",
+      "default": false,
+      "type": "boolean",
+      "description": "If the status should be changed if someone joins your guild"
+    },
+    {
+      "field_name": "userJoinStatus",
+      "default": "Welcome %tag%!",
+      "type": "string",
+      "description": "Status that will be set if a user joins and if changeOnUserJoin is enabled",
+      "params": [
+        {
+          "name": "%tag%",
+          "description": "Tag of the new user"
+        },
+        {
+          "name": "%username%",
+          "description": "Username of the new user"
+        },
+        {
+          "name": "%memberCount%",
+          "description": "New member count of your guild"
+        }
+      ]
+    }
+  ]
+}
