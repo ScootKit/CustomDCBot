@@ -21,9 +21,9 @@ module.exports.run = async function (client) {
         const members = await guild.members.fetch();
         statusString = statusString.split('%memberCount%').join(guild.memberCount);
         statusString = statusString.split('%onlineMemberCount%').join(members.filter(m => m.presence.status !== 'offline').array().length);
-        const randomOnline = members.filter(m => m.presence.status !== 'offline').random();
+        const randomOnline = members.filter(m => m.presence.status !== 'offline' && !m.user.bot).random();
         statusString = statusString.split('%randomOnlineMemberTag%').join(`${randomOnline.user.username}#${randomOnline.user.discriminator}`);
-        const random = members.random();
+        const random = members.filter(m => !m.user.bot).random();
         statusString = statusString.split('%randomMemberTag%').join(`${random.user.username}#${random.user.discriminator}`);
         statusString = statusString.split('%channelCount%').join(guild.channels.cache.array().length);
         statusString = statusString.split('%roleCount%').join((await guild.roles.fetch()).cache.array().length);
