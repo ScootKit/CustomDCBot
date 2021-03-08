@@ -13,6 +13,7 @@ module.exports.run = async function (client, msg, args) {
             suggestion = suggestion.slice(0, -1);
             const channel = await client.channels.fetch(moduleConfig.suggestionChannel);
             let suggestionMsg = await channel.send('Just a sec...');
+            if (moduleConfig.reactions) moduleConfig.reactions.forEach(reaction => suggestionMsg.react(reaction));
             suggestionElement = await client.models['suggestions']['Suggestion'].create({
                 suggestion: suggestion,
                 messageID: suggestionMsg.id,
@@ -20,10 +21,10 @@ module.exports.run = async function (client, msg, args) {
                 comments: []
             });
             await generateSuggestionEmbed(client, suggestionElement);
-            await msg.reply(embedType(moduleConfig.successfullySubmitted, {'%id%': suggestionElement.id}));
+            await msg.reply(...embedType(moduleConfig.successfullySubmitted, {'%id%': suggestionElement.id}));
             break;
         case 'comment':
-            if (!moduleConfig.allowUserComment && !msg.member.roles.cache.find(r => moduleConfig['adminRoles'].includes(r.id))) return msg.channel.send(embedType(client.strings.not_enough_permissions));
+            if (!moduleConfig.allowUserComment && !msg.member.roles.cache.find(r => moduleConfig['adminRoles'].includes(r.id))) return msg.channel.send(...embedType(client.strings.not_enough_permissions));
             suggestionElement = await client.models['suggestions']['Suggestion'].findOne({
                 where: {
                     id: args[1]
@@ -44,11 +45,11 @@ module.exports.run = async function (client, msg, args) {
             suggestionElement.comments = realarray; // Thanks sequelize wtf
             await suggestionElement.save();
             await generateSuggestionEmbed(client, suggestionElement);
-            await msg.channel.send(moduleConfig.successfullyComment);
+            await msg.channel.send(...embedType(moduleConfig.successfullyComment));
             break;
         case 'approve':
         case 'deny':
-            if (!msg.member.roles.cache.find(r => moduleConfig['adminRoles'].includes(r.id))) return msg.channel.send(embedType(client.strings.not_enough_permissions));
+            if (!msg.member.roles.cache.find(r => moduleConfig['adminRoles'].includes(r.id))) return msg.channel.send(...embedType(client.strings.not_enough_permissions));
             suggestionElement = await client.models['suggestions']['Suggestion'].findOne({
                 where: {
                     id: args[1]
@@ -71,7 +72,7 @@ module.exports.run = async function (client, msg, args) {
             await msg.channel.send('Done :smile:');
             break;
         default:
-            msg.channel.send(`Wrong usage. You can choose between these different usages:\n\`${client.config.prefix}suggestion create <Suggestion>\` - Creates a suggestion\n\`${client.config.prefix}suggestion comment <SuggestionID> <Comment>\` - Comments on a suggestion\n\n**Commands for Admins**\n\`${client.config.prefix}suggestion accept <SuggestionID> <Reason>\` - Approves suggestion\n\`${client.config.prefix}suggestion deny <SuggestionID> <Reason>\` - Denys a suggestion`);
+            msg.channel.send(`Wrong usage. You can choose between these different usages:\n\`${client.config.prefix}suggestion create <Suggestion>\` - Creates a suggestion\n\`${client.config.prefix}suggestion comment <SuggestionID> <Comment>\` - Comments on a suggestion\n\n**Commands for Admins**\n\`${client.config.prefix}suggestion approve <SuggestionID> <Reason>\` - Approves suggestion\n\`${client.config.prefix}suggestion deny <SuggestionID> <Reason>\` - Denys a suggestion`);
     }
 };
 
