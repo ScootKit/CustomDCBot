@@ -1,0 +1,61 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "suggestionChannel",
+      "type": "channelID",
+      "default": "",
+      "description": "Channel in which this module should operate"
+    },
+    {
+      "field_name": "adminRoles",
+      "type": "array",
+      "description": "Every role that can approve or deny suggestions",
+      "default": [],
+      "content": "roleID"
+    },
+    {
+      "field_name": "allowUserComment",
+      "type": "boolean",
+      "description": "If enabled users can leave comments on suggestions. (If disabled only admins can do that)",
+      "default": true
+    },
+    {
+      "field_name": "suggestionEmbed",
+      "type": "keyed",
+      "default": {
+        "title": "Suggestion #%id%",
+        "commentsTitle": "\uD83D\uDCAC Comments",
+        "noComment": "No comments yet - Share your thoughts with `!suggestion comment %id% <Your Comment here>`",
+        "awaitingAdminAnswerTitle": "Suggestion-Status",
+        "awaitingAnswer": "No admin answered to this suggestion yet",
+        "adminAnswerTitle": "Suggestion-Status: %status%"
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "successfullySubmitted",
+      "default": "Suggestion %id% submitted successfully.",
+      "description": "This message gets send if a suggestion is submitted successfully.",
+      "allowEmbed": true,
+      "type": "string",
+      "params": [
+        {
+          "name": "%id%",
+          "description": "ID of the suggestion"
+        }
+      ]
+    },
+    {
+      "field_name": "successfullyComment",
+      "default": "Your comment has been added successfully.",
+      "description": "This message gets send if a comment has been added.",
+      "allowEmbed": true,
+      "type": "string"
+    }
+  ]
+}
