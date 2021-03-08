@@ -1,0 +1,13 @@
+{
+  "name": "suggestions",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Advanced module to manage suggestions on your guild",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "config-example-files": [
+    "config.json"
+  ]
+}
