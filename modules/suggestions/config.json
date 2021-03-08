@@ -15,6 +15,13 @@
       "content": "roleID"
     },
     {
+      "field_name": "reactions",
+      "type": "array",
+      "description": "Emojis with which the bot should react to a new suggestion",
+      "default": [],
+      "content": "string"
+    },
+    {
       "field_name": "allowUserComment",
       "type": "boolean",
       "description": "If enabled users can leave comments on suggestions. (If disabled only admins can do that)",

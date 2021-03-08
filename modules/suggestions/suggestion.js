@@ -28,7 +28,7 @@ module.exports.generateSuggestionEmbed = async function (client, suggestion) {
             `${suggestion.adminAnswer.action === 'approve' ? 'Approved' : 'Denied'} by <@${suggestion.adminAnswer.userID}> with the following reason: "${suggestion.adminAnswer.reason}"`);
     } else embed.addField(moduleConfig.suggestionEmbed.awaitingAdminAnswerTitle, moduleConfig.suggestionEmbed.awaitingAnswer);
 
-    await message.edit(embed);
+    await message.edit('', embed);
 
     function replacer(string) {
         return string.split('%id%').join(suggestion.id);
