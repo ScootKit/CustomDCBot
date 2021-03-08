@@ -71,7 +71,7 @@ module.exports.run = async function (client, msg, args) {
             await msg.channel.send('Done :smile:');
             break;
         default:
-            msg.channel.send(`Wrong usage. You can choose between these different usages:\n\`${client.config.prefix}suggestion create <Suggestion>\` - Creates a suggestion\n\`${client.config.prefix}suggestion comment <SuggestionID> <Comment>\` - Comments on a suggestion\n\n**Commands for Admins**\n\`${client.config.prefix}suggestion accept <SuggestionID> <Reason>\` - Nimmt einen Vorschlag an\n\`${client.config.prefix}suggestion deny <SuggestionID> <Reason>\` - Lehnt einen Vorschlag ab`);
+            msg.channel.send(`Wrong usage. You can choose between these different usages:\n\`${client.config.prefix}suggestion create <Suggestion>\` - Creates a suggestion\n\`${client.config.prefix}suggestion comment <SuggestionID> <Comment>\` - Comments on a suggestion\n\n**Commands for Admins**\n\`${client.config.prefix}suggestion accept <SuggestionID> <Reason>\` - Approves suggestion\n\`${client.config.prefix}suggestion deny <SuggestionID> <Reason>\` - Denys a suggestion`);
     }
 };
 
