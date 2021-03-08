@@ -23,6 +23,7 @@ module.exports.run = async function (client, msg, args) {
             await msg.reply(embedType(moduleConfig.successfullySubmitted, {'%id%': suggestionElement.id}));
             break;
         case 'comment':
+            if (!moduleConfig.allowUserComment && !msg.member.roles.cache.find(r => moduleConfig['adminRoles'].includes(r.id))) return msg.channel.send(embedType(client.strings.not_enough_permissions));
             suggestionElement = await client.models['suggestions']['Suggestion'].findOne({
                 where: {
                     id: args[1]
