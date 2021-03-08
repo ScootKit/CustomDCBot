@@ -19,7 +19,7 @@ module.exports.run = async function (client, msg, args) {
 
     if (args[0].includes('.')) args = args[0].split('.'); // Allow users to write !birthday 23.8.2000 instead of !birthday 23 8 2000
     if (!args[1] || args[1] > 12 || args[1] <= 0 || !parseInt(args[1])) return msg.channel.send(`There is an error with your input. Please use the following format: \`${client.config.prefix}birthday <Day> <Month> [Year]\``);
-    if (!args[0] || args[0] > (args[1] % 2 === 0 ? 31 : 30) || args[0] <= 0 || !parseInt(args[0])) return msg.channel.send(`There is an error with your input. Please use the following format: \`${client.config.prefix}birthday <Day> <Month> [Year]\``);
+    if (!args[0] || args[0] > 31 || args[0] <= 0 || !parseInt(args[0])) return msg.channel.send(`There is an error with your input. Please use the following format: \`${client.config.prefix}birthday <Day> <Month> [Year]\``);
     if (args[2] && (!parseInt(args[2]) || args[2] >= new Date().getFullYear() || args[2].length !== 4)) return msg.channel.send(`There is an error with your input. Please use full years (eg. 2021) for the year.`);
 
     if (user) {
