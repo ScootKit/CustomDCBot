@@ -97,16 +97,20 @@ An event file should export the following things:
 
 An example config file should include the following things:
 * `filename`: Name of the generated config file
+* `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
+  content-fields
 * `content`: Array of content fields:
-    * `field_name`: Name of the config field
-    * `default`: Default value
-    * `type`: Can be `channelID`, `select`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object) or `string`
-    * `description`: Short description of this field
-    * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please use the build-in function in `src/functions/helpers.js`)  
-    * `content` (if type === `array`): Type (see `type` above) of every value
-    * `content` (if type === `select`): Array of the possible options
-    * `content` (if type === `keyed`):
-        * `key`: Type (see `type` above) of the index of every value
+  * `field_name`: Name of the config field
+  * `default`: Default value
+  * `type`: Can be `channelID`, `select`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
+    or `string`
+  * `description`: Short description of this field
+  * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please use
+    the build-in function in `src/functions/helpers.js`)
+  * `content` (if type === `array`): Type (see `type` above) of every value
+  * `content` (if type === `select`): Array of the possible options
+  * `content` (if type === `keyed`):
+    * `key`: Type (see `type` above) of the index of every value
         * `value`: Type (see `type` above) of the value of every value
     * `params` (if type === `string`, array, optional)
         * `name`: Name of the parameter (e.g. `%mention%`)

@@ -16,7 +16,7 @@ module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = n
                 process.exit(1);
             }
             if (!exampleFile) return;
-            let config = {};
+            let config = exampleFile.configElements ? [] : {};
             let ow = false;
             try {
                 config = require(`${client.configDir}/${moduleName}/${exampleFile.filename}`);
@@ -24,23 +24,36 @@ module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = n
                 console.log(`[INFO] Config ${moduleName}/${exampleFile.filename} does not exist - I'm going to create it - stand by...`);
                 ow = true;
             }
-            exampleFile.content.forEach(async field => {
+            if (exampleFile.configElements) {
+                exampleFile.content.forEach(async field => {
+                    asyncForEach(config, async (element) => {
+                        config = await checkField(field, element);
+                    });
+                });
+            } else {
+                exampleFile.content.forEach(async field => {
+                    config = await checkField(field, config);
+                });
+            }
+            if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
+
+            async function checkField(field, configElement) {
                 if (!field.field_name) return;
-                if (typeof config[field.field_name] === 'undefined') return config[field.field_name] = field.default;
-                if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
+                if (typeof configElement[field.field_name] === 'undefined') return configElement[field.field_name] = field.default;
+                if (!await checkType(field.type, configElement[field.field_name], field.content, field.allowEmbed)) {
                     console.error(`[ERROR] An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
                     process.exit(1); // ToDo Only disable plugin not stop bot
                 }
                 if (field.disableKeyEdits) {
-                    for (const content in config[field.field_name]) {
+                    for (const content in configElement[field.field_name]) {
                         if (!field.default[content]) {
                             console.error(`[ERROR] Error with ${content} in ${field.field_name} in ${moduleName}/${exampleFile.filename}: Unexpected index ${content}`);
                             process.exit(1); // ToDo Only disable plugin not stop bot
                         }
                     }
                 }
-            });
-            if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
+                return configElement;
+            }
 
             if (ow) {
                 fse.outputFile(`${client.configDir}/${moduleName}/${exampleFile.filename}`, beautify(config, null, 2, 100), (err => {
