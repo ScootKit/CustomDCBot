@@ -1,0 +1,12 @@
+{
+  "name": "suggestions",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Advanced module to give users roles when they react to a message",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/reaction-roles.json"
+  ]
+}
