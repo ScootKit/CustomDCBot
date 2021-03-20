@@ -3,9 +3,7 @@ exports.run = async (client, msg) => {
     if (msg.guild.id !== client.guildID) return;
     if (msg.content.includes(client.config.prefix)) return;
     if (msg.channel.type === 'news') {
-        msg.channel.startTyping();
-        await msg.crosspost();
-        await msg.channel.stopTyping(true);
+        if (msg.crosspostable) await msg.crosspost();
         await msg.react('✅').then((r) => {
             setTimeout(() => {
                 r.remove();
