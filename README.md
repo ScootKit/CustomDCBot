@@ -111,11 +111,11 @@ An example config file should include the following things:
   * `content` (if type === `select`): Array of the possible options
   * `content` (if type === `keyed`):
     * `key`: Type (see `type` above) of the index of every value
-        * `value`: Type (see `type` above) of the value of every value
-    * `params` (if type === `string`, array, optional)
-        * `name`: Name of the parameter (e.g. `%mention%`)
-        * `description`: Description of the parameter (e.g. `Mention of the user`)
-    * `allowNull` (default: `false`, optional): If the value of this field can be empty
+    * `value`: Type (see `type` above) of the value of every value
+  * `params` (if type === `string`, array, optional)
+    * `name`: Name of the parameter (e.g. `%mention%`)
+    * `description`: Description of the parameter (e.g. `Mention of the user`)
+  * `allowNull` (default: `false`, optional): If the value of this field can be empty
     
 © Simon Csaba, 2020
 
