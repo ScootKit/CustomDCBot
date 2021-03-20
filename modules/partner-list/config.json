@@ -1,0 +1,34 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "description": "Channel-ID to run all operations in it"
+    },
+    {
+      "field_name": "adminRoles",
+      "type": "array",
+      "description": "Every role that can add new partners",
+      "default": [],
+      "content": "roleID"
+    },
+    {
+      "field_name": "embed",
+      "type": "keyed",
+      "description": "Configuration of the partnership-embed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "default": {
+        "title": "Our partners",
+        "description": "You can find all of our partners here - If you want to be one of our partners message a staff member!",
+        "partner-string": "#%id%: [%name%](%invite%) (<@%userID%>)",
+        "color": "GREEN"
+      },
+      "disableKeyEdits": true
+    }
+  ]
+}
