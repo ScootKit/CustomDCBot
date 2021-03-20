@@ -116,7 +116,8 @@ An example config file should include the following things:
     * `name`: Name of the parameter (e.g. `%mention%`)
     * `description`: Description of the parameter (e.g. `Mention of the user`)
   * `allowNull` (default: `false`, optional): If the value of this field can be empty
-    
+  * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
+
 © Simon Csaba, 2020
 
 Love ya <3
