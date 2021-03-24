@@ -18,12 +18,22 @@ async function generatePartnerList() {
         .setAuthor(client.user.username, client.user.avatarURL())
         .setColor(moduleConf['embed']['color'])
         .setDescription(moduleConf['embed']['description']);
+    moduleConf['sortCategories'].forEach(category => {
+        if (sortedByCategory[category]) {
+            let string = '';
+            sortedByCategory[category].forEach(partner => {
+                string = string + moduleConf['embed']['partner-string'].split('%invite%').join(partner.invLink).split('%name%').join(partner.name).split('%userID%').join(partner.userID).split('%id%').join(partner.id).split('%teamMemberID%').join(partner.teamUserID) + '\n';
+            });
+            embed.addField(category, string.length >= 1020 ? string.substr(0, 1020) + '...' : string);
+            delete sortedByCategory[category];
+        }
+    });
     for (const category in sortedByCategory) {
         let string = '';
         sortedByCategory[category].forEach(partner => {
             string = string + moduleConf['embed']['partner-string'].split('%invite%').join(partner.invLink).split('%name%').join(partner.name).split('%userID%').join(partner.userID).split('%id%').join(partner.id).split('%teamMemberID%').join(partner.teamUserID) + '\n';
         });
-        embed.addField(category, string);
+        embed.addField(category, string.length >= 1020 ? string.substr(0, 1020) + '...' : string);
     }
     if (messages.last()) await messages.last().edit(embed);
     else channel.send(embed);

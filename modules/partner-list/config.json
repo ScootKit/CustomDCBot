@@ -29,6 +29,13 @@
         "color": "GREEN"
       },
       "disableKeyEdits": true
+    },
+    {
+      "field_name": "sortCategories",
+      "type": "array",
+      "description": "You can change the sequence of the categories here (you don't have to)",
+      "content": "string",
+      "default": []
     }
   ]
 }
