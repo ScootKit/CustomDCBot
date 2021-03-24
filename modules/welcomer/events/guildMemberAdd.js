@@ -13,7 +13,5 @@ exports.run = async (client, member) => {
                 '%createdAt%': `${member.user.createdAt.getDate()}.${member.user.createdAt.getMonth() + 1}.${member.user.createdAt.getFullYear()}`
             })
     );
-    for (const roleID of moduleConfig['give-roles-on-join']) {
-        await member.roles.add(await member.guild.roles.fetch(roleID));
-    }
+    await member.roles.add(moduleConfig['give-roles-on-join']);
 };
