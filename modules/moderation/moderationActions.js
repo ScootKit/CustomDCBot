@@ -2,7 +2,7 @@ const {embedType} = require('../../src/functions/helpers');
 const {confDir} = require('../../main');
 const {MessageEmbed} = require('discord.js');
 
-module.exports.moderationAction = async function (client, type, user, victim, reason) {
+async function moderationAction(client, type, user, victim, reason) {
     const moduleConfig = require(`${confDir}/moderation/config.json`);
     const moduleStrings = require(`${confDir}/moderation/strings.json`);
     if (!reason) reason = 'Not set';
@@ -40,17 +40,31 @@ module.exports.moderationAction = async function (client, type, user, victim, re
                 if (victim.kickable) await victim.kick();
                 break;
             case 'ban':
-                sendMessage(victim, embedType(moduleStrings['ban_message'], {
-                    '%reason%': reason,
-                    '%user%': user.user.tag
-                }));
-                if (victim.bannable) await victim.ban();
+                if (!victim.notFound) {
+                    sendMessage(victim, embedType(moduleStrings['ban_message'], {
+                        '%reason%': reason,
+                        '%user%': user.user.tag
+                    }));
+                    if (victim.bannable) await victim.ban();
+                }
+                await guild.members.ban(victim.id);
                 break;
             case 'warn':
                 sendMessage(victim, embedType(moduleStrings['warn_message'], {
                     '%reason%': reason,
                     '%user%': user.user.tag
                 }));
+                const warns = await client.models['moderation']['ModerationAction'].findAll({
+                    where: {
+                        victimID: victim.id,
+                        type: 'warn'
+                    }
+                });
+                if (moduleConfig['automod'][warns.length + 1]) {
+                    await moderationAction(client, moduleConfig['automod'][warns.length + 1], {user: client.user}, victim, `AUTOMOD: Reached ${warns.length + 1} warn`);
+                }
+                break;
+            case 'unwarn':
                 break;
             case 'unban':
                 await guild.members.unban(victim);
@@ -64,23 +78,26 @@ module.exports.moderationAction = async function (client, type, user, victim, re
             default:
                 return resolve(false);
         }
-        const moderationAction = await client.models['moderation']['ModerationAction'].create({
-            victim: victim.id,
+        const modAction = await client.models['moderation']['ModerationAction'].create({
+            victimID: victim.id,
             memberID: user.id,
-            reason: reason,
+            reason: reason.substring(1), // because i am stupid
             type: type
         });
         const channel = await guild.channels.cache.get(moduleConfig['logchannel-id']);
         if (!channel) {
             console.error('Missing logchannel');
         } else {
-            await channel.send(new MessageEmbed().setColor(0xe67e22).setFooter(client.strings['footer']).setTimestamp().setAuthor(client.user.tag, client.user.avatarURL()).setTitle(`Case #${moderationAction.actionID}`).setThumbnail(client.user.avatarURL()).addField('Victim', `${victim.user.tag}\n\`${victim.user.id}\``, true)
+            await channel.send(new MessageEmbed().setColor(0xe67e22).setFooter(client.strings['footer']).setTimestamp().setAuthor(client.user.tag, client.user.avatarURL()).setTitle(`Case #${modAction.actionID}`).setThumbnail(client.user.avatarURL()).addField('Victim', `${victim.user.tag}\n\`${victim.user.id}\``, true)
                 .addField('User', `${user.user.tag}\n\`${user.user.id}\``, true).addField('Action', type, true).addField('Reason', reason));
         }
-        resolve(moderationAction);
+        resolve(modAction);
     });
-};
+}
+
+module.exports.moderationAction = moderationAction;
 
 function sendMessage(user, content) {
-    user.send(...content).catch(() => {});
+    user.send(...content).catch(() => {
+    });
 }

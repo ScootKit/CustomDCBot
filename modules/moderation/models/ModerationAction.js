@@ -8,13 +8,13 @@ module.exports = class ModerationAction extends Model {
                 type: DataTypes.INTEGER,
                 primaryKey: true
             },
-            victimID:  DataTypes.STRING,
+            victimID: DataTypes.STRING,
             type: DataTypes.INTEGER,
-            memberID: DataTypes.INTEGER,
+            memberID: DataTypes.STRING,
             reason: DataTypes.STRING,
             expiresOn: DataTypes.DATE
         }, {
-            tableName: 'moderation_ModerationActions',
+            tableName: 'moderation_ModerationActions2', // 2 because compatibility with old versions
             timestamps: true,
             sequelize
         });

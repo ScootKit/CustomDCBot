@@ -48,10 +48,17 @@
       "description": "Should moderators be required to set a reason?"
     },
     {
-      "field_name": "block_invites",
-      "default": true,
-      "type": "boolean",
-      "description": "Should the bot automatically mute members who post an invite link?"
+      "field_name": "action_on_invite",
+      "default": "mute",
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "ban"
+      ],
+      "description": "What should the bot do if someone posts an invite link?"
     },
     {
       "field_name": "whitelisted_channels_for_invite_blocking",
@@ -59,6 +66,43 @@
       "type": "array",
       "content": "channelID",
       "description": "ID of channels or categories where invite blocking is disabled"
+    },
+    {
+      "field_name": "whitelisted_roles_for_invite_blocking",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of Roles which are allowed to bypass invite blocking"
+    },
+    {
+      "field_name": "blacklisted_words",
+      "default": [],
+      "type": "array",
+      "content": "string",
+      "description": "Words that are blacklisted"
+    },
+    {
+      "field_name": "action_on_posting_blacklisted_word",
+      "default": "mute",
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "ban"
+      ],
+      "description": "What should the bot do if someone posts a blacklisted word?"
+    },
+    {
+      "field_name": "automod",
+      "default": {},
+      "description": "You can define here what should happen (options: mute, kick, ban) when someone gets x warns",
+      "content": {
+        "key": "integer",
+        "value": "string"
+      },
+      "type": "keyed"
     }
   ]
 }
