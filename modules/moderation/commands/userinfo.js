@@ -21,7 +21,7 @@ module.exports.run = async function (client, msg, args) {
     console.log(actions);
     let content = '';
     actions.forEach(action => {
-        content = content + `#${action.actionID}: **${action.type}**: \`${action.reason}\` (<@${action.memberID}>) [${new Date(action.createdAt).getDate()}.${new Date(action.createdAt).getMonth()}.${new Date(action.createdAt).getFullYear()}]\n`;
+        content = content + `#${action.actionID}: **${action.type}**: \`${action.reason}\` (<@${action.memberID}>) [${new Date(action.createdAt).getDate()}.${new Date(action.createdAt).getMonth() + 1}.${new Date(action.createdAt).getFullYear()}]\n`;
     });
     if (content === '') content = `No actions against ${user.user.tag} found.`;
     const embed = new MessageEmbed()

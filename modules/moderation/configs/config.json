@@ -95,6 +95,18 @@
       "description": "What should the bot do if someone posts a blacklisted word?"
     },
     {
+      "field_name": "changeNicknameOnMute",
+      "default": "%nickname%",
+      "description": "The nickname in which the user should be renamed when they get muted",
+      "type": "string",
+      "params": [
+        {
+          "name": "%nickname%",
+          "description": "Original nickname of the user"
+        }
+      ]
+    },
+    {
       "field_name": "automod",
       "default": {},
       "description": "You can define here what should happen (options: mute, kick, ban) when someone gets x warns",

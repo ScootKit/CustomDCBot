@@ -20,6 +20,8 @@ async function moderationAction(client, type, user, victim, reason) {
                     '%reason%': reason,
                     '%user%': user.user.tag
                 }));
+                await victim.setNickname(moduleConfig['changeNicknameOnMute'] ? moduleConfig['changeNicknameOnMute'].split('%nickname%').join(victim.nickname ? victim.nickname : victim.user.username) : victim.nickname).catch(() => {
+                });
                 break;
             case 'unmute':
                 if (!muteRole) {
@@ -31,6 +33,7 @@ async function moderationAction(client, type, user, victim, reason) {
                     '%reason%': reason,
                     '%user%': user.user.tag
                 }));
+                await victim.setNickname(victim.username);
                 break;
             case 'kick':
                 sendMessage(victim, embedType(moduleStrings['kick_message'], {
