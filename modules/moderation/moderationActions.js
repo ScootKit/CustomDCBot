@@ -49,6 +49,11 @@ async function moderationAction(client, type, user, victim, reason) {
                         '%user%': user.user.tag
                     }));
                     if (victim.bannable) await victim.ban();
+                } else {
+                    victim = {};
+                    victim.user = {};
+                    victim.user.tag = victim.id;
+                    victim.user.id = victim.id;
                 }
                 await guild.members.ban(victim.id);
                 break;
