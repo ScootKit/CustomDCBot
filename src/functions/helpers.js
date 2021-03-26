@@ -22,9 +22,9 @@ module.exports.embedType = function (input, args = {}) {
     if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
     if (input['color']) emb.setColor(input['color']);
     if (input['url']) emb.setURL(input['url']);
-    if (input['image']) emb.setImage(input['image']);
-    if (input['thumbnail']) emb.setThumbnail(input['thumbnail']);
-    if (input['author'] && typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), input['author']['img']);
+    if (input['image']) emb.setImage(inputReplacer(args, input['image']));
+    if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
+    if (input['author'] && typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), inputReplacer(args, input['author']['img']));
     if (typeof input['fields'] === 'object') {
         input.fields.forEach(f => {
             emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);

@@ -10,6 +10,7 @@ exports.run = async (client, member) => {
                 '%mention%': `<@${member.id}>`,
                 '%servername%': member.guild.name,
                 '%tag%': member.user.tag,
+                '%memberProfilePictureUrl%': member.user.avatarURL(),
                 '%createdAt%': `${member.user.createdAt.getDate()}.${member.user.createdAt.getMonth() + 1}.${member.user.createdAt.getFullYear()}`
             })
     );

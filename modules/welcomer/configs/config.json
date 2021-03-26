@@ -19,6 +19,10 @@
           "description": "Mentions the user"
         },
         {
+          "name": "%memberProfilePictureUrl%",
+          "description": "URL of the user's avatar"
+        },
+        {
           "name": "%servername%",
           "description": "Name of the guild"
         },
@@ -67,6 +71,10 @@
         {
           "name": "%tag%",
           "description": "Tag of the user"
+        },
+        {
+          "name": "%memberProfilePictureUrl%",
+          "description": "URL of the user's avatar"
         },
         {
           "name": "%joinedAt%",
