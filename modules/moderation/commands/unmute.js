@@ -6,7 +6,7 @@ module.exports.run = async function (client, msg, args) {
     const moduleConfig = require(`${confDir}/moderation/config.json`);
     const moduleStrings = require(`${confDir}/moderation/strings.json`);
     const message = await msg.channel.send('One sec...');
-    if (!msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level2'].includes(r.id))) return message.edit(message.edit(...embedType(moduleStrings['no_permissions'], {
+    if (!msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level2'].includes(r.id) || moduleConfig['moderator-roles_level3'].includes(r.id) || moduleConfig['moderator-roles_level4'].includes(r.id))) return message.edit(message.edit(...embedType(moduleStrings['no_permissions'], {
         '%required_level%': 2
     })));
     let user;
