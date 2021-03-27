@@ -9,6 +9,8 @@ let config;
 let confDir = `${__dirname}/config`;
 let dataDir = `${__dirname}/data`;
 const args = process.argv.slice(2);
+let scnxSetup = false; // If enabled some other (closed-sourced) files get imported and executed
+if (process.argv.includes('--scnx-enabled')) scnxSetup = true;
 if (args[0] === '--help' || args[0] === '-h') {
     console.log('node main.js <configDir> <dataDir>');
     process.exit();
@@ -63,6 +65,7 @@ db.authenticate().then(async () => {
     client.models = models;
     await checkAllConfigs();
     client.strings = require(`${confDir}/strings.json`);
+    if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
 });
 
 // Checking every (module AND bot) config file.
