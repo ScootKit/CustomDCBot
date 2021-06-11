@@ -34,3 +34,29 @@ module.exports.embedType = function (input, args = {}) {
     emb.setFooter(client.strings.footer);
     return [inputReplacer(args, input['message']), emb];
 };
+
+function formatDate(date) {
+    const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString(),
+        hh = date.getHours().toString(), min = date.getMinutes().toString();
+    return `${(dd[1] ? dd : '0' + dd[0])}.${(mm[1] ? mm : '0' + mm[0])}.${yyyy} at ${(hh[1] ? hh : '0' + hh[0])}:${(min[1] ? min : '0' + min[0])}`;
+}
+
+module.exports.formatDate = formatDate;
+
+function truncate(str, n) {
+    return (str.length > n) ? str.substr(0, n - 3) + '...' : str;
+}
+
+module.exports.truncate = truncate;
+
+function pufferStringToSize(str, size) {
+    if (typeof str !== 'string') str = str.toString();
+    const pufferNeeded = size - str.length;
+    for (let i = 0; i < pufferNeeded; i++) {
+        if (i % 2 === 0) str = '\xa0' + str;
+        else str = str + '\xa0';
+    }
+    return str;
+}
+
+module.exports.pufferStringToSize = pufferStringToSize;
