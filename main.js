@@ -58,12 +58,12 @@ db.authenticate().then(async () => {
     await loadModules();
     await loadCommandsInDir('./src/commands');
     await loadEventsInDir('./src/events');
+	 await checkAllConfigs();
     await client.login(config.token).catch(console.log);
     console.log(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     await db.sync();
     console.log('[DB] Synced db');
     client.models = models;
-    await checkAllConfigs();
     client.strings = require(`${confDir}/strings.json`);
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
 });
