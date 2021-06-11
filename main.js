@@ -58,10 +58,10 @@ db.authenticate().then(async () => {
     await loadModules();
     await loadCommandsInDir('./src/commands');
     await loadEventsInDir('./src/events');
-    await client.login(config.token).catch(console.log);
-    console.log(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     await db.sync();
     console.log('[DB] Synced db');
+    await client.login(config.token).catch(console.log);
+    console.log(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     client.models = models;
     await checkAllConfigs();
     client.strings = require(`${confDir}/strings.json`);
@@ -85,7 +85,7 @@ async function checkAllConfigs() {
                     } else if (typeof moduleConf[f] === 'undefined') needOverwrite = true;
                 });
                 if (needOverwrite) await configChecker.generateModulesConfOverwrite(moduleConf, files);
-                console.log('[INFO] Done with checking.')
+                console.log('[INFO] Done with checking.');
                 resolve();
             });
         });
@@ -94,54 +94,50 @@ async function checkAllConfigs() {
 
 // Load all modules
 async function loadModules() {
-    fs.readdir(`${__dirname}/modules/`, (err, files) => {
-        files.forEach(f => {
-            if (moduleConf[f]) {
-                console.log(`[MODULE] Loading module ${f}`);
-                let moduleConfig = require(`${__dirname}/modules/${f}/module.json`);
-                client.modules[f] = {};
-                client.modules[f]['config'] = moduleConfig;
-                if (moduleConfig['models-dir']) loadModelsInDir(`./modules/${f}${moduleConfig['models-dir']}`, f);
-                if (moduleConfig['commands-dir']) loadCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
-                if (moduleConfig['events-dir']) loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
-                if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client.modules[f]);
-            } else console.log(`[MODULE] Module ${f} is disabled`);
-        });
-    });
+    const files = fs.readdirSync(`${__dirname}/modules/`);
+    for (const f of files) {
+        if (moduleConf[f]) {
+            console.log(`[MODULE] Loading module ${f}`);
+            let moduleConfig = require(`${__dirname}/modules/${f}/module.json`);
+            client.modules[f] = {};
+            client.modules[f]['config'] = moduleConfig;
+            if (moduleConfig['models-dir']) await loadModelsInDir(`./modules/${f}${moduleConfig['models-dir']}`, f);
+            if (moduleConfig['commands-dir']) await loadCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
+            if (moduleConfig['events-dir']) await loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
+            if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client.modules[f]);
+        } else console.log(`[MODULE] Module ${f} is disabled`);
+    }
 }
 
 // Load every command in a dictionary
 async function loadCommandsInDir(dir, moduleName = null) {
-    fs.readdir(`${__dirname}/${dir}`, (err, files) => {
-        if (err) return console.error(err);
-        files.forEach(f => {
-            fs.lstat(`${__dirname}/${dir}/${f}`, async (err, stats) => {
-                if (!stats) return console.error('no stats');
-                if (stats.isFile()) {
-                    let props = require(`${__dirname}/${dir}/${f}`);
-                    console.log(`[COMMANDS] Loaded ${dir}/${f}`);
-                    props.fileName = `${dir}/${f}`;
-                    client.commands.set(props.help.name, props);
-                    props.help.aliases.forEach(alias => {
-                        client.aliases.set(alias, props.help.name);
-                    });
-                    if (moduleName) {
-                        if (client.modules[moduleName]) {
-                            if (!client.modules[moduleName]['aliases']) client.modules[moduleName]['aliases'] = new Discord.Collection();
-                            if (!client.modules[moduleName]['commands']) client.modules[moduleName]['commands'] = [];
-                            client.modules[moduleName]['commands'].push(props.help.name);
-                            props.help.aliases.forEach(alias => {
-                                client.modules[moduleName]['aliases'].set(alias, props.help.name);
-                            });
-                        }
-                    }
-                } else {
-                    console.log(`[COMMANDS] Loading commands in subdir ${dir}/${f}`);
-                    await loadCommandsInDir(`${dir}/${f}`);
-                }
+    const files = fs.readdirSync(`${__dirname}/${dir}`);
+    for (const f of files) {
+        const stats = fs.lstatSync(`${__dirname}/${dir}/${f}`);
+        if (!stats) return console.error('no stats');
+        if (stats.isFile()) {
+            let props = require(`${__dirname}/${dir}/${f}`);
+            console.log(`[COMMANDS] Loaded ${dir}/${f}`);
+            props.fileName = `${dir}/${f}`;
+            client.commands.set(props.help.name, props);
+            props.help.aliases.forEach(alias => {
+                client.aliases.set(alias, props.help.name);
             });
-        });
-    });
+            if (moduleName) {
+                if (client.modules[moduleName]) {
+                    if (!client.modules[moduleName]['aliases']) client.modules[moduleName]['aliases'] = new Discord.Collection();
+                    if (!client.modules[moduleName]['commands']) client.modules[moduleName]['commands'] = [];
+                    client.modules[moduleName]['commands'].push(props.help.name);
+                    props.help.aliases.forEach(alias => {
+                        client.modules[moduleName]['aliases'].set(alias, props.help.name);
+                    });
+                }
+            }
+        } else {
+            console.log(`[COMMANDS] Loading commands in subdir ${dir}/${f}`);
+            await loadCommandsInDir(`${dir}/${f}`);
+        }
+    }
 }
 
 // Loading every event in a dictionary
@@ -192,26 +188,25 @@ async function loadModelsInDir(dir, moduleName = null) {
 // load one database model
 async function loadModule(dir, file, moduleName) {
     return new Promise(async resolve => {
-        await fs.lstat(`${__dirname}/${dir}/${file}`, (async (err, stats) => {
-            if (!stats) return;
-            if (stats.isFile()) {
-                let model = require(`${__dirname}/${dir}/${file}`);
-                await model.init(db);
-                if (moduleName) {
-                    if (client.modules[moduleName]) {
-                        if (!client.modules[moduleName]['models']) client.modules[moduleName]['models'] = [];
-                        client.modules[moduleName]['models'].push(file.split('.js').join(''));
-                        if (!models[moduleName]) models[moduleName] = {};
-                        models[moduleName][model.config.name] = model;
-                    }
-                } else models[model.config.name] = model;
-                console.log(`[DB] Loaded model ${dir}/${file}`);
-                resolve(true);
-            } else {
-                console.log(`[DB] Loading modules in dir ${dir}/${file}`);
-                await loadModules(`${dir}/${file}`);
-            }
-        }));
+        const stats = fs.lstatSync(`${__dirname}/${dir}/${file}`);
+        if (!stats) return;
+        if (stats.isFile()) {
+            let model = require(`${__dirname}/${dir}/${file}`);
+            await model.init(db);
+            if (moduleName) {
+                if (client.modules[moduleName]) {
+                    if (!client.modules[moduleName]['models']) client.modules[moduleName]['models'] = [];
+                    client.modules[moduleName]['models'].push(file.split('.js').join(''));
+                    if (!models[moduleName]) models[moduleName] = {};
+                    models[moduleName][model.config.name] = model;
+                }
+            } else models[model.config.name] = model;
+            console.log(`[DB] Loaded model ${dir}/${file}`);
+            resolve(true);
+        } else {
+            console.log(`[DB] Loading modules in dir ${dir}/${file}`);
+            await loadModules(`${dir}/${file}`);
+        }
     });
 }
 
