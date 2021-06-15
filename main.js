@@ -60,12 +60,15 @@ db.authenticate().then(async () => {
     await loadEventsInDir('./src/events');
     await db.sync();
     console.log('[DB] Synced db');
-    await client.login(config.token).catch(console.log);
+    await client.login(config.token).catch(console.error);
     console.log(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     client.models = models;
     await checkAllConfigs();
     client.strings = require(`${confDir}/strings.json`);
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
+    client.emit('botReady');
+    client.botReadyAt = new Date();
+    console.log('[BOT] The bot initiated successfully and is now listening to commands.')
 });
 
 // Checking every (module AND bot) config file.

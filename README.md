@@ -15,6 +15,10 @@ In short words: You have to
 * State changes (*every* change to the source code must be documented and published)\
 
 Please read the full [license](LICENSE). This is not legal advice. 
+
+## Please read this issue before continuing.
+This repo does not get any new modules currently. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).
+
 ### Table of contents
 
 [Installation](#installation)\
@@ -117,7 +121,9 @@ An example config file should include the following things:
     * `description`: Description of the parameter (e.g. `Mention of the user`)
   * `allowNull` (default: `false`, optional): If the value of this field can be empty
   * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
+  
+If you plan to use the [ready](https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready) event of discord.js to run some action when the client is ready, and you need to load some configuration-files you should use the `botReady`-event instead.
 
-© Simon Csaba, 2020
+© Simon Csaba, 2020-2021
 
 Love ya <3
