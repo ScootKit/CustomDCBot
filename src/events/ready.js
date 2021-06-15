@@ -1,3 +1,3 @@
 exports.run = async (client) => {
-    await client.user.setActivity(client.config.user_presence);
+    await client.user.setActivity('Starting...');
 };

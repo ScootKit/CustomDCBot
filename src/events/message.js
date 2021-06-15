@@ -1,6 +1,7 @@
 const {embedType} = require('../functions/helpers');
 
 exports.run = async (client, msg) => {
+    if (!client.botReadyAt) return; // Check if bot is *really* ready
     if (msg.author.bot) return;
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
