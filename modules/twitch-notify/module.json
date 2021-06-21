@@ -1,0 +1,12 @@
+{
+  "name": "twitch-notify",
+  "author": {
+    "name": "ja.teute",
+    "link": "https://github.com/jateute"
+    },
+  "description": "Module that sends a message to a channel, when a Streamer goes live on Twitch",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/config.json"
+  ]
+}
