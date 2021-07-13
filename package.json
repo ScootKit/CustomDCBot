@@ -18,6 +18,7 @@
   ],
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "centra": "^2.4.2",
     "discord.js": "^12.5.3",
     "fs-extra": "^9.0.1",
     "json-beautify": "^1.1.1",

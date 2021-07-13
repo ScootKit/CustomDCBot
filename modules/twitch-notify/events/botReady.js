@@ -1,20 +1,26 @@
 const {confDir} = require('../../../main');
-const request = require('request');
+const c = require('centra')
 live = false;
 
+/*To do
+
+Use centra
+Check if there are any Bugs*/
+
 async function getToken(ClientID, ClientSecret) {
-  var options = {
+  /*var options = {
     url: 'https://id.twitch.tv/oauth2/token?client_id=' +ClientID+'&client_secret=' +ClientSecret+ '&grant_type=client_credentials',
     method: 'POST'
 };
       
   request(options, function (error, response, body) {
-    var body2 = JSON.parse(body)
+    var body2 = JSON.parse(body);
     return body2['access_token']
-});
+  });*/
+};
 
 async function checkLive (streamer, clientID, token) {
-  var options = {
+  /*var options = {
     url: 'https://api.twitch.tv/helix/streams?user_login='+streamer.toLowerCase(),
     method: 'GET',
     headers: {
@@ -25,21 +31,23 @@ async function checkLive (streamer, clientID, token) {
 
   request(options,(error, response, body) => {
     return body
-  });
+  });*/
 };
+
 async function replacer(msg, username, game) {
   msg = msg.split('%streamer%').join(username)
 			.split('%game%').join(game)
 			.split('%url%').join('https://twitch.tv/' + username.toLowerCase());
-}
+  return msg
+};
 
 async function sendMSG(client) {
   const moduleConf = require(`${confDir}/twitch-notify/config.json`);
   var token = await getToken(moduleConf['Twitch-ClientID'], moduleConf['ClientSecret']);
   var body = await checkLive(moduleConf['streamer'], moduleConf['Twitch-ClientID'], token);
-  var bodyJSON = JSON.parse(body)
+  var bodyJSON = JSON.parse(body);
   var msg = await replacer(moduleConf['live-message'], bodyJSON['data'][0]['user_name'], bodyJSON['data'][0]['game_name']);
-  if ((bodyJSON['data'][0][type] === "live")) {
+  if ((bodyJSON['data'][0]['type'] === "live")) {
     if (live) {
       //pass
     } else {
