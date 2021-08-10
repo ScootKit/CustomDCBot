@@ -28,18 +28,18 @@
         "type": "channelID",
         "description": "ChannelID to send live-messages"
       },
-	{
-		"field_name": "Twitch-ClientID",
-		"default": "",
-		"type": "string",
-		"description": "ID of the Client, which is used to check if the Streamer is live"
-		},
-		{
-		"field_name": "ClientSecret",
-		"default": "",
-		"type": "string",
-		"description": "Secret of the Client, which is used to check if the Streamer is live"
-		},
+      {
+        "field_name": "Twitch-ClientID",
+        "default": "",
+        "type": "string",
+        "description": "ID of the Client, which is used to check if the Streamer is live"
+      },
+      {
+        "field_name": "ClientSecret",
+        "default": "",
+        "type": "string",
+        "description": "Secret of the Twitch-Client, which is used to check if the Streamer is live"
+      },
       {
         "field_name": "streamer",
         "default": "",

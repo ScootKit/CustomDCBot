@@ -1,14 +1,15 @@
 const {confDir} = require('../../../main');
+const config = require(`${confDir}/twitch-notify/config.json`);
+
 const { TwitchApiClient } = require('twitch');
 const { TwitchClientCredentialsAuthProvider } = require('twitch-auth');
 
-const clientId = '84mlld0q4slrppp5a3z2s2eb82l4pf';
-const clientSecret = 'jbzdrayiia45ewssgwcndw5gg1b9vo';
-const authProvider = new TwitchClientCredentialsAuthProvider(clientId, clientSecret);
+const authProvider = new TwitchClientCredentialsAuthProvider(config['Twitch-ClientID'], config['ClientSecret']);
 const ttvApiClient = new TwitchApiClient({ authProvider });
 
-live = false;
-async function twitch_notify(client) {
+let live = false;
+
+function twitch_notify(client) {
   function replacer(msg, username, game) {
     msg = msg.split('%streamer%').join(username)
         .split('%game%').join(game)
@@ -16,17 +17,25 @@ async function twitch_notify(client) {
     return msg
   };
 
-  function isStreamLive(userName) {
-    const user = ttvApiClient.helix.users.getUserByName(userName.toLowerCase());
+  function sendMSG() {
+    const channel = await client.channels.fetch(config['live-message-channel']).catch(e => {
+    });
+    if (!channel) return console.error(`[twitch-notify] Could not find channel with id ${config['live-message-channel']}`);
+    msg = replacer(config['live-message'], config['streamer'], )
+  }
+
+  async function isStreamLive(userName) {
+    const user = await ttvApiClient.helix.users.getUserByName(userName.toLowerCase());
     if (!user) {
       return false;
     }
-    return user.getStream() !== null;
+    return await user.getStream() !== null;
   };
 
-  isStreamLive(confDir['streamer']).then(function (stream) {
-    if(stream) {
-      
+  isStreamLive(config['streamer']).then(function (stream) {
+    if(stream && !live) {
+      let live = true;
+      sendMSG()
     }
   }, function (err) {
     console.error(err)
