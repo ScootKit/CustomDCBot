@@ -1,75 +1,52 @@
 const {confDir} = require('../../../main');
-const c = require('centra')
-live = false;
+const config = require(`${confDir}/twitch-notify/config.json`);
 
-/*To do
+const { ApiClient } = require('twitch');
+const { ClientCredentialsAuthProvider } = require('twitch-auth');
 
-Use centra
-Check if there are any Bugs*/
+const ClientID = config['Twitch-ClientID'];
+const ClientSecret = config['ClientSecret'];
+const authProvider = new ClientCredentialsAuthProvider(ClientID, ClientSecret);
+const apiClient = new ApiClient({ authProvider });
 
-async function getToken(ClientID, ClientSecret) {
-  /*var options = {
-    url: 'https://id.twitch.tv/oauth2/token?client_id=' +ClientID+'&client_secret=' +ClientSecret+ '&grant_type=client_credentials',
-    method: 'POST'
-};
-      
-  request(options, function (error, response, body) {
-    var body2 = JSON.parse(body);
-    return body2['access_token']
-  });*/
-};
+let live = false;
 
-async function checkLive (streamer, clientID, token) {
-  /*var options = {
-    url: 'https://api.twitch.tv/helix/streams?user_login='+streamer.toLowerCase(),
-    method: 'GET',
-    headers: {
-      'Client-ID': clientID,
-      'Authorization': 'Bearer ' + token
-  } 
-};
-
-  request(options,(error, response, body) => {
-    return body
-  });*/
-};
-
-async function replacer(msg, username, game) {
-  msg = msg.split('%streamer%').join(username)
-			.split('%game%').join(game)
-			.split('%url%').join('https://twitch.tv/' + username.toLowerCase());
-  return msg
-};
-
-async function sendMSG(client) {
-  const moduleConf = require(`${confDir}/twitch-notify/config.json`);
-  var token = await getToken(moduleConf['Twitch-ClientID'], moduleConf['ClientSecret']);
-  var body = await checkLive(moduleConf['streamer'], moduleConf['Twitch-ClientID'], token);
-  var bodyJSON = JSON.parse(body);
-  var msg = await replacer(moduleConf['live-message'], bodyJSON['data'][0]['user_name'], bodyJSON['data'][0]['game_name']);
-  if ((bodyJSON['data'][0]['type'] === "live")) {
-    if (live) {
-      //pass
-    } else {
-      live = true
-      //send the Message
-      const channel = await client.channels.fetch(moduleConf['live-message-channel']).catch(e => {
-      });
-      if (!channel) return console.error(`[twitch-notifications] Could not find channel with id ${moduleConfig['live-message-channel']}`);
-      channel.send(msg);
-    };
-  } else {
-    if (live) {
-      live = false;
-    } else {
-      //pass
-    };
+function twitch_notify(client) {
+  function replacer(msg, username, game) {
+    msg = msg.split('%streamer%').join(username)
+        .split('%game%').join(game)
+        .split('%url%').join('https://twitch.tv/' + username.toLowerCase());
+    return msg
   };
+
+  function sendMSG(username, game) {
+    const channel = client.channels.cache.get(config['live-message-channel'])
+    if (!channel) return console.error(`[twitch-notify] Could not find channel with id ${config['live-message-channel']}`);
+    msg = replacer(config['live-message'], username, game);
+    channel.send(msg);
+  }
+
+  async function isStreamLive(userName) {
+    const user = await apiClient.helix.users.getUserByName(userName.toLowerCase());
+    if (!user) {
+      return false;
+    }
+    return await user.getStream();
+  };
+
+  isStreamLive(config['streamer']).then(function (stream) {
+    if(stream !== null && !live) {
+      live = true;
+      sendMSG(stream.userDisplayName, stream.gameName)
+    }
+  }, function (err) {
+    console.error(err)
+  })
 };
 
 exports.run = async (client) => {
-  await sendMSG(client);
+  await twitch_notify(client);
   setInterval(() => {
-    sendMSG(client);
+    twitch_notify(client);
   }, 60000);
-}};
+};
