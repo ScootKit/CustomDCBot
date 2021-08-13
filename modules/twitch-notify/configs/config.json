@@ -3,7 +3,7 @@
     "content": [
       {
         "field_name": "live-message",
-        "default": "Hey, %streamer% is live on Twitch streaming %game%! Check it out at %url%!",
+        "default": "Hey, %streamer% is live on Twitch streaming %game%! Check it out at %url% !",
         "type": "string",
         "allowEmbed": false,
         "description": "Message that gets send if the streamer goes live",
