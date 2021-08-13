@@ -18,7 +18,7 @@ function twitch_notify(client) {
   };
 
   function sendMSG(username, game) {
-    const channel = await client.channels.fetch(config['live-message-channel']).catch(e => {
+    const channel = client.channels.fetch(config['live-message-channel']).catch(e => {
     });
     if (!channel) return console.error(`[twitch-notify] Could not find channel with id ${config['live-message-channel']}`);
     msg = replacer(config['live-message'], username, game);
