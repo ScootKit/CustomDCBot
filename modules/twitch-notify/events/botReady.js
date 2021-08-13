@@ -1,11 +1,13 @@
 const {confDir} = require('../../../main');
 const config = require(`${confDir}/twitch-notify/config.json`);
 
-const { TwitchApiClient } = require('twitch');
-const { TwitchClientCredentialsAuthProvider } = require('twitch-auth');
+const { ApiClient } = require('twitch');
+const { ClientCredentialsAuthProvider } = require('twitch-auth');
 
-const authProvider = new TwitchClientCredentialsAuthProvider(config['Twitch-ClientID'], config['ClientSecret']);
-const ttvApiClient = new TwitchApiClient({ authProvider });
+const ClientID = config['Twitch-ClientID'];
+const ClientSecret = config['ClientSecret'];
+const authProvider = new ClientCredentialsAuthProvider(ClientID, ClientSecret);
+const apiClient = new ApiClient({ authProvider });
 
 let live = false;
 
@@ -26,7 +28,7 @@ function twitch_notify(client) {
   }
 
   async function isStreamLive(userName) {
-    const user = await ttvApiClient.helix.users.getUserByName(userName.toLowerCase());
+    const user = await apiClient.helix.users.getUserByName(userName.toLowerCase());
     if (!user) {
       return false;
     }
