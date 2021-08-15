@@ -30,7 +30,7 @@ function twitchNotify(client) {
   
   config['streamers'].forEach(start)
   
-  function start(value, index) {
+  async function start(value, index) {
     let streamer = await client.models['twitch-notify']['streamer'].findOne({
       where: {
           id: value.toLowerCase()
