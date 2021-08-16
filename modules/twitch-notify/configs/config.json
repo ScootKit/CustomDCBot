@@ -24,8 +24,9 @@
       },
       {
         "field_name": "liveMessageChannels",
-        "default": "",
-        "type": "channelID",
+        "default": [],
+        "type": "array",
+        "content": "channelID",
         "description": "ChannelID to send live-messages"
       },
       {
@@ -42,8 +43,9 @@
       },
       {
         "field_name": "streamers",
-        "default": "",
-        "type": "string",
+        "default": [],
+        "type": "array",
+        "content": "string",
         "description": "Streamer where the notification should notify"
     },
     {
