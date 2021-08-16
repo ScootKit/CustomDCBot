@@ -7,7 +7,7 @@ module.exports = class streamer extends Model {
                 type: DataTypes.STRING,
                 primaryKey: true
             },
-            startedAt: DataTypes.DATE
+            startedAt: DataTypes.STRING
         }, {
             tableName: 'twitch_streamers',
             timestamps: true,

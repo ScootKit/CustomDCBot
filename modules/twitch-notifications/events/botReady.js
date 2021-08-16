@@ -41,11 +41,11 @@ function twitchNotifications(client) {
     if(stream !== null && !streamer) {
       client.models['twitch-notifications']['streamer'].create({
         name: value.toLowerCase(),
-        startedAt: stream.startDate
+        startedAt: stream.startDate.toString()
       });
       sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index])
-    } else if(stream !== null && stream.startDate !== streamer.startedAt) {
-      streamer.startedAt = stream.startDate;
+    } else if(stream !== null && stream.startDate !== streamer.startedAt.toString()) {
+      streamer.startedAt = stream.startDate.toString();
       streamer.save()
       sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index])
     }
