@@ -33,14 +33,14 @@ function twitchNotifications(client) {
   async function start(value, index) {
     let streamer = await client.models['twitch-notifications']['streamer'].findOne({
       where: {
-          id: value.toLowerCase()
+          name: value.toLowerCase()
       }
   });
     const stream = await isStreamLive(value)
 
     if(stream !== null && !streamer) {
       client.models['twitch-notifications']['streamer'].create({
-        id: value,
+        name: value.toLowerCase(),
         startedAt: stream.startDate
       });
       sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index])

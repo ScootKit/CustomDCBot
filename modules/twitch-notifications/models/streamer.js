@@ -3,7 +3,7 @@ const {DataTypes, Model} = require('sequelize');
 module.exports = class streamer extends Model {
     static init(sequelize) {
         return super.init({
-            id: {
+            name: {
                 type: DataTypes.STRING,
                 primaryKey: true
             },
