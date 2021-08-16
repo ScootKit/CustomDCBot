@@ -1,11 +1,12 @@
 {
-  "name": "twitch-notify",
+  "name": "twitch-notifications",
   "author": {
     "name": "ja.teute",
     "link": "https://github.com/jateute"
     },
   "description": "Module that sends a message to a channel, when a Streamer goes live on Twitch",
   "events-dir": "/events",
+  "models-dir": "/models",
   "config-example-files": [
     "configs/config.json"
   ]
