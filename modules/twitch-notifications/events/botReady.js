@@ -1,5 +1,5 @@
 const {confDir} = require('../../../main');
-const config = require(`${confDir}/twitch-notify/config.json`);
+const config = require(`${confDir}/twitch-notifications/config.json`);
 const {embedType} = require('../../../src/functions/helpers');
 
 const {ApiClient} = require('twitch');
@@ -10,10 +10,10 @@ const ClientSecret = config['clientSecret'];
 const authProvider = new ClientCredentialsAuthProvider(ClientID, ClientSecret);
 const apiClient = new ApiClient({authProvider});
 
-function twitchNotify(client) {
+function twitchNotifications(client) {
   function sendMsg(username, game, thumbnailUrl, channelID) {
     const channel = client.channels.cache.get(channelID)
-    if (!channel) return console.error(`[twitch-notify] Could not find channel with id ${channelID}`);
+    if (!channel) return console.error(`[twitch-notifications] Could not find channel with id ${channelID}`);
     channel.send(...embedType(config['liveMessage'], {
       '%streamer%': username,
       '%game%': game,
@@ -31,7 +31,7 @@ function twitchNotify(client) {
   config['streamers'].forEach(start)
   
   async function start(value, index) {
-    let streamer = await client.models['twitch-notify']['streamer'].findOne({
+    let streamer = await client.models['twitch-notifications']['streamer'].findOne({
       where: {
           id: value.toLowerCase()
       }
@@ -39,7 +39,7 @@ function twitchNotify(client) {
     const stream = await isStreamLive(value)
 
     if(stream !== null && !streamer) {
-      client.models['twitch-notify']['streamer'].create({
+      client.models['twitch-notifications']['streamer'].create({
         id: value,
         startedAt: stream.startDate
       });
@@ -53,10 +53,10 @@ function twitchNotify(client) {
 };
 
 exports.run = async (client) => {
-  await twitchNotify(client);
-  if(config['interval'] > 60) return console.error(`[twitch-notify] The value of the interval must be equal or higher than 60`);
+  await twitchNotifications(client);
+  if(config['interval'] > 60) return console.error(`[twitch-notifications] The value of the interval must be equal or higher than 60`);
   interval = config['interval'] * 1000;
   setInterval(() => {
-    twitchNotify(client);
+    twitchNotifications(client);
   }, interval);
 };

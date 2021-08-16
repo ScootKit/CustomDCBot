@@ -18,5 +18,5 @@ module.exports = class streamer extends Model {
 
 module.exports.config = {
     'name': 'streamer',
-    'module': 'twitch-notify'
+    'module': 'twitch-notifications'
 };
