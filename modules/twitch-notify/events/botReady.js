@@ -38,15 +38,15 @@ function twitchNotify(client) {
   });
     const stream = await isStreamLive(value)
 
-    if(stream !== null && stream.startDate !== streamer.startedAt) {
-      streamer.startedAt = stream.startDate;
-      streamer.save()
-      sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index])
-    } else if(stream !== null && !streamer) {
+    if(stream !== null && !streamer) {
       client.models['twitch-notify']['streamer'].create({
         id: value,
         startedAt: stream.startDate
       });
+      sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index])
+    } else if(stream !== null && stream.startDate !== streamer.startedAt) {
+      streamer.startedAt = stream.startDate;
+      streamer.save()
       sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index])
     }
   };
