@@ -3,8 +3,13 @@ const jsonfile = require('jsonfile');
 const fs = require('fs');
 const {logger} = require('../../main');
 
-// Checking every (module AND bot) config file.
-module.exports.checkAllConfigs = async function (client, moduleConf) {
+/**
+ * Check every (including module) configuration and load them
+ * @param  {Object} client The client
+ * @param  {Object} moduleConf Configuration of modules.json
+ * @return {Promise}
+ */
+async function loadAllConfigs(client, moduleConf) {
     logger.info('Checking configs...');
     return new Promise(async resolve => {
         await fs.readdir(`${__dirname}/../../config-generator/`, async (err, files) => {
@@ -51,7 +56,7 @@ function checkModuleConfig (moduleName, afterCheckEventFile = null) {
             }
             if (exampleFile.configElements) {
                 exampleFile.content.forEach(async field => {
-                    asyncForEach(config, async (element) => {
+                    await asyncForEach(config, async (element) => {
                         config = await checkField(field, element);
                     });
                 });
@@ -141,6 +146,7 @@ async function checkBuildInConfig (configName) {
         }
     });
 }
+module.exports.loadAllConfigs = loadAllConfigs;
 
 async function generateModulesConfOverwrite(moduleConf, modules) {
     const {client} = require('../../main');
@@ -216,6 +222,17 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
     }
 }
 
-module.exports.reloadConfig = async function() {
-
+/**
+ * Check every (including module) configuration and load them
+ * @param  {Object} client The client
+ * @return {Promise}
+ */
+module.exports.reloadConfig = async function(client) {
+    client.logger.info('Reloading all configurations...')
+    client.botReadyAt = null;
+    client.emit('configReload')
+    await loadAllConfigs(client, client.modules);
+    client.botReadyAt = new Date();
+    client.emit('botReady')
+    client.logger.info('Configuration reloaded successfully')
 }

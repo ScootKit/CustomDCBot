@@ -82,7 +82,7 @@ db.authenticate().then(async () => {
     await client.login(config.token).catch(() => { logger.fatal('Bot could not log in. Please double-check your token and try again'); process.exit()});
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     client.models = models;
-    await configChecker.checkAllConfigs(client, moduleConf);
+    await configChecker.loadAllConfigs(client, moduleConf);
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     client.emit('botReady');
