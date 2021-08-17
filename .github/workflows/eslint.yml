@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v
+      - uses: actions/checkout@v2
       - name: Install dependencies
         run: npm install
       - name: Run ESLint
