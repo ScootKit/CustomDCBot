@@ -54,7 +54,6 @@ async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
                 logger.info(`Config ${moduleName}/${exampleFile.filename} does not exist - I'm going to create it - stand by...`);
                 ow = true;
             }
-            console.log(config)
             if (exampleFile.configElements) {
                 for (const field of exampleFile.content) {
                     for (const element of config) {
@@ -218,7 +217,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
         case 'boolean':
             return typeof value === 'boolean';
         default:
-            console.error(`Unknown type: ${type}`);
+            logger.error(`Unknown type: ${type}`);
             process.exit(1);
     }
 }
@@ -232,7 +231,6 @@ module.exports.reloadConfig = async function(client) {
     client.logger.info('Reloading all configurations...')
     client.botReadyAt = null;
     client.emit('configReload')
-    console.log(client.moduleConf)
     await loadAllConfigs(client, client.moduleConf);
     client.botReadyAt = new Date();
     client.emit('botReady')
