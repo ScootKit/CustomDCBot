@@ -25,5 +25,8 @@
     "parse-duration": "^0.4.4",
     "sequelize": "^6.3.5",
     "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
   }
 }

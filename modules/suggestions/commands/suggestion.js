@@ -12,7 +12,7 @@ module.exports.run = async function (client, msg, args) {
             args.forEach((arg) => suggestion = suggestion + arg + ' ');
             suggestion = suggestion.slice(0, -1);
             const channel = await client.channels.fetch(moduleConfig.suggestionChannel);
-            let suggestionMsg = await channel.send('Just a sec...');
+            const suggestionMsg = await channel.send('Just a sec...');
             if (moduleConfig.reactions) moduleConfig.reactions.forEach(reaction => suggestionMsg.react(reaction));
             suggestionElement = await client.models['suggestions']['Suggestion'].create({
                 suggestion: suggestion,
@@ -57,7 +57,7 @@ module.exports.run = async function (client, msg, args) {
             });
             if (!suggestionElement) return msg.reply('Suggestion not found');
             let reason = '';
-            let type = args[0];
+            const type = args[0];
             await args.shift();
             await args.shift();
             args.forEach((arg) => reason = reason + arg + ' ');

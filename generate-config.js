@@ -1,6 +1,6 @@
 const exampleFile = require('./config-generator/config.json');
 const fse = require('fs-extra');
-let config = {};
+const config = {};
 const beautify = require('json-beautify');
 let confDir = `${__dirname}/config`;
 const args = process.argv.slice(2);

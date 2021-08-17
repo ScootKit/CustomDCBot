@@ -8,7 +8,7 @@ exports.run = async (client, messageReaction, user) => {
     if (role) {
         const member = await messageReaction.message.channel.guild.members.fetch(user.id);
         await member.roles.add(role);
-        await messageReaction.message.react(messageReaction.emoji.toString().split('<').join('').split('>').join('')).catch(e => {
+        await messageReaction.message.react(messageReaction.emoji.toString().split('<').join('').split('>').join('')).catch(() => {
         });
     }
 };

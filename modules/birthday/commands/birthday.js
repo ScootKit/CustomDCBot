@@ -5,7 +5,7 @@ const {embedType} = require('./../../../src/functions/helpers');
 module.exports.run = async function (client, msg, args) {
     const moduleConf = require(`${confDir}/birthday/config.json`);
 
-    let user = await client.models['birthday']['User'].findOne({
+    const user = await client.models['birthday']['User'].findOne({
         where: {
             id: msg.author.id
         }

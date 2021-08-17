@@ -1,5 +1,5 @@
 const {embedType} = require('../../../src/functions/helpers');
-let cooldown = new Set();
+const cooldown = new Set();
 
 exports.run = async (client, msg) => {
     const {confDir} = require('./../../../main');
@@ -53,10 +53,10 @@ exports.run = async (client, msg) => {
             '%tag%': msg.author.tag
         }));
         else msg.channel.send(...embedType(moduleConfig.level_up_message, {
-                '%mention%': `<@${msg.author.id}>`,
-                '%newLevel%': user.level,
-                '%tag%': msg.author.tag
-            }));
+            '%mention%': `<@${msg.author.id}>`,
+            '%newLevel%': user.level,
+            '%tag%': msg.author.tag
+        }));
     }
     cooldown.add(msg.author.id);
     setTimeout(() => {

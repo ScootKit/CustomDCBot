@@ -1,6 +1,6 @@
 const {embedType} = require('../../../src/functions/helpers');
 
-let cooldown = new Set();
+const cooldown = new Set();
 
 exports.run = async (client, oldState, newState) => {
     const moduleConfig = require(`${client.configDir}/ping-on-vc-join/config.json`);
@@ -33,7 +33,7 @@ exports.run = async (client, oldState, newState) => {
     if (moduleConfig['send_pn_to_member']) {
         await member.send(...embedType(moduleConfig['pn_message'], {
             '%vc%': memberChannel.name
-        })).catch(e => {
+        })).catch(() => {
             console.error(`[Module: ping-on-vc-join] Could not send PN to ${member.user.id}`);
         });
     }

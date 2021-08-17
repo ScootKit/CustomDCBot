@@ -10,7 +10,7 @@ exports.run = async (client) => {
 async function generateEmbed(client) {
     const config = require(`${client.configDir}/serverinfo/config.json`);
     const fieldConfig = require(`${client.configDir}/serverinfo/fields.json`);
-    const channel = await client.channels.fetch(config.channelID).catch(e => {
+    const channel = await client.channels.fetch(config.channelID).catch(() => {
     });
     if (!channel) return console.error(`[serverinfo] Could not find channel with id ${config.channelID}`);
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
