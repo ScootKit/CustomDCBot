@@ -14,7 +14,7 @@ module.exports.run = async function (client, msg) {
     await msg.channel.send('Adding a partner. Please enter the name of the new partner.\n*You have two minutes to complete the whole dialogue. Please keep this in mind. To cancel write "cancel" at any time*');
 
     let step = 0;
-    let data = {};
+    const data = {};
     collector.on('collect', async m => {
         if (m.content === 'cancel') {
             step = 3;

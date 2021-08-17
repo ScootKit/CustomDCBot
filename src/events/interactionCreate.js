@@ -13,4 +13,4 @@ exports.run = async (client, interaction) => {
     }
     const commandFile = require(`./../../${commandElement.fileName}`);
     commandFile.run(client, msg, args);
-}
+};

@@ -14,17 +14,19 @@ async function loadAllConfigs(client, moduleConf) {
     return new Promise(async (resolve, reject) => {
         await fs.readdir(`${__dirname}/../../config-generator/`, async (err, files) => {
             await asyncForEach(files, async f => {
-                await checkBuildInConfig(f).catch((reason) => reject(reason))
+                await checkBuildInConfig(f).catch((reason) => reject(reason));
             });
-            await fs.readdir(`${__dirname}/../../modules/`, async (err, files) => {
+            await fs.readdir(`${__dirname}/../../modules/`, async (err, moduleFiles) => {
                 let needOverwrite = false;
-                await asyncForEach(files, async f => {
+                await asyncForEach(moduleFiles, async f => {
                     if (moduleConf[f]) {
                         if (client.modules[f]['config']['on-checked-config-event']) await checkModuleConfig(f, require(`./modules/${f}/${client.modules[f]['config']['on-checked-config-event']}`));
-                        else await checkModuleConfig(f).catch((reason) => {reject(reason);})
+                        else await checkModuleConfig(f).catch((reason) => {
+                            reject(reason);
+                        });
                     } else if (typeof moduleConf[f] === 'undefined') needOverwrite = true;
                 });
-                if (needOverwrite) await generateModulesConfOverwrite(moduleConf, files);
+                if (needOverwrite) await generateModulesConfOverwrite(moduleConf, moduleFiles);
                 logger.info('Done with checking.');
                 resolve();
             });
@@ -32,7 +34,7 @@ async function loadAllConfigs(client, moduleConf) {
     });
 }
 
-async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
+async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
     return new Promise(async (resolve, reject) => {
         const {client} = require('../../main');
         const moduleConf = require(`../../modules/${moduleName}/module.json`);
@@ -43,7 +45,7 @@ async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
                 exampleFile = require(`../../modules/${moduleName}/${v}`);
             } catch (e) {
                 logger.error(`Not found config example file: ${moduleName}/${v}`);
-                return reject(`Not found config example file: ${moduleName}/${v}`)
+                return reject(`Not found config example file: ${moduleName}/${v}`);
             }
             if (!exampleFile) return;
             let config = exampleFile.configElements ? [] : {};
@@ -57,7 +59,7 @@ async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
             if (exampleFile.configElements) {
                 for (const field of exampleFile.content) {
                     for (const element of config) {
-                        await checkField(field, element)
+                        await checkField(field, element);
                     }
                 }
             } else {
@@ -71,13 +73,13 @@ async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
                 if (typeof configElement[field.field_name] === 'undefined') return configElement[field.field_name] = field.default;
                 if (!await checkType(field.type, configElement[field.field_name], field.content, field.allowEmbed)) {
                     logger.error(`An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
-                    return reject(`An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`)
+                    return reject(`An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
                 }
                 if (field.disableKeyEdits) {
                     for (const content in configElement[field.field_name]) {
                         if (!field.default[content]) {
                             logger.error(`Error with ${content} in ${field.field_name} in ${moduleName}/${exampleFile.filename}: Unexpected index ${content}`);
-                            return reject(`Error with ${content} in ${field.field_name} in ${moduleName}/${exampleFile.filename}: Unexpected index ${content}`)
+                            return reject(`Error with ${content} in ${field.field_name} in ${moduleName}/${exampleFile.filename}: Unexpected index ${content}`);
                         }
                     }
                 }
@@ -85,7 +87,7 @@ async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
             }
 
             if (ow) {
-                if (!fs.existsSync(`${client.configDir}/${moduleName}`)) fs.mkdirSync(`${client.configDir}/${moduleName}`)
+                if (!fs.existsSync(`${client.configDir}/${moduleName}`)) fs.mkdirSync(`${client.configDir}/${moduleName}`);
                 jsonfile.writeFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`, config, {spaces: 2}, (err => {
                     if (err) {
                         logger.error(`An error occurred while saving ${moduleName}/${exampleFile.filename}: ${err}`);
@@ -93,7 +95,7 @@ async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
                         logger.info(`[MODULE: ${moduleName}]: Config ${v} was saved successfully successfully.`);
                     }
                     resolve();
-                }))
+                }));
             } else {
                 resolve();
             }
@@ -103,7 +105,7 @@ async function checkModuleConfig (moduleName, afterCheckEventFile = null) {
     });
 }
 
-async function checkBuildInConfig (configName) {
+async function checkBuildInConfig(configName) {
     return new Promise((resolve, reject) => {
         const {client} = require('../../main');
         const exampleFile = require(`../../config-generator/${configName}`);
@@ -121,13 +123,13 @@ async function checkBuildInConfig (configName) {
             if (!config[field.field_name]) return config[field.field_name] = field.default;
             if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
                 logger.error(`An error occurred while checking the content of field ${field.field_name} in config/${configName}`);
-                return reject(`An error occurred while checking the content of field ${field.field_name} in ${exampleFile.filename}`)
+                return reject(`An error occurred while checking the content of field ${field.field_name} in ${exampleFile.filename}`);
             }
             if (field.disableKeyEdits) {
                 for (const content in config[field.field_name]) {
                     if (!field.default[content]) {
                         logger.error(`Error with ${content} in ${field.field_name} in config/${configName}: Unexpected index ${content}`);
-                        return reject(`An error occurred while checking the content of field ${field.field_name} in ${exampleFile.filename}`)
+                        return reject(`An error occurred while checking the content of field ${field.field_name} in ${exampleFile.filename}`);
                     }
                 }
             }
@@ -140,12 +142,13 @@ async function checkBuildInConfig (configName) {
                     logger.info(`[CONFIG: ${configName}]: Config ${configName} was saved successfully successfully.`);
                 }
                 resolve();
-            }))
+            }));
         } else {
             resolve();
         }
     });
 }
+
 module.exports.loadAllConfigs = loadAllConfigs;
 
 async function generateModulesConfOverwrite(moduleConf, modules) {
@@ -160,7 +163,7 @@ async function generateModulesConfOverwrite(moduleConf, modules) {
         } else {
             logger.info('Saved modules.json successfully');
         }
-    }) )
+    }));
 }
 
 async function checkType(type, value, contentFormat = null, allowEmbed = false) {
@@ -179,13 +182,14 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             });
             return errored;
         case 'channelID':
-            const channel = await client.channels.fetch(value).catch(() => {});
+            const channel = await client.channels.fetch(value).catch(() => {
+            });
             if (!channel) {
-                logger.error(`Channel with ID "${value}" not found.`)
+                logger.error(`Channel with ID "${value}" not found.`);
                 return false;
             }
             if (channel.guild.id !== client.guildID) {
-                logger.error(`Channel with ID "${value}" is not on the guild specified in your configuration file.`)
+                logger.error(`Channel with ID "${value}" is not on the guild specified in your configuration file.`);
                 return false;
             }
             return true;
@@ -193,14 +197,14 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             if (await (await client.guilds.fetch(client.guildID)).roles.fetch(value)) {
                 return true;
             } else {
-                logger.error(`Role with ID "${value}" could not be found.`)
+                logger.error(`Role with ID "${value}" could not be found.`);
                 return false;
             }
         case 'guildID':
             if (client.guilds.cache.find(g => g.id === client.guildID)) {
                 return true;
             } else {
-                logger.error(`Guild with ID "${value}" could not be found - have you invited the bot?`)
+                logger.error(`Guild with ID "${value}" could not be found - have you invited the bot?`);
                 return false;
             }
         case 'keyed':
@@ -227,12 +231,12 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
  * @param  {Object} client The client
  * @return {Promise}
  */
-module.exports.reloadConfig = async function(client) {
-    client.logger.info('Reloading all configurations...')
+module.exports.reloadConfig = async function (client) {
+    client.logger.info('Reloading all configurations...');
     client.botReadyAt = null;
-    client.emit('configReload')
+    client.emit('configReload');
     await loadAllConfigs(client, client.moduleConf);
     client.botReadyAt = new Date();
-    client.emit('botReady')
-    client.logger.info('Configuration reloaded successfully')
-}
+    client.emit('botReady');
+    client.logger.info('Configuration reloaded successfully');
+};

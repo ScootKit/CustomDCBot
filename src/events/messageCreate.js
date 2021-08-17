@@ -17,6 +17,6 @@ exports.run = async (client, msg) => {
         if (!args[0]) return msg.channel.send(...embedType(client.strings.need_args));
     }
     const commandFile = require(`./../../${commandElement.fileName}`);
-    client.logger.debug(`${msg.author.tag} (${msg.author.id}) used command ${client.config.prefix}${command}.`)
+    client.logger.debug(`${msg.author.tag} (${msg.author.id}) used command ${client.config.prefix}${command}.`);
     commandFile.run(client, msg, args);
 };

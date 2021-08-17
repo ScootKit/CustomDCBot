@@ -1,5 +1,5 @@
 const exampleFile = require('./config-generator/config.json');
-let config = {};
+const config = {};
 const jsonfile = require('jsonfile');
 let confDir = `${__dirname}/config`;
 const args = process.argv.slice(2);
@@ -24,5 +24,5 @@ try {
     jsonfile.writeFile(`${confDir}/config.json`, config, {spaces: 2}, (err => {
         if (err) console.error(`[ERROR] An error occurred while saving: ${err}`);
         else console.log('[DONE]: Config was saved successfully successfully. Please edit the config.json file inside your config dictionary and start the bot then with "npm start". Have a great day <3');
-    }))
+    }));
 }

@@ -25,7 +25,7 @@ if (args[0] && args[1]) {
 log4js.configure({
     pm2: process.argv.includes('--pm2-setup'),
     appenders: {
-        out: {type: 'stdout'},
+        out: {type: 'stdout'}
     },
     categories: {
         default: {appenders: ['out'], level: 'debug'}
@@ -41,7 +41,7 @@ try {
     process.exit(1);
 }
 
-let models = {}; // Object with all models
+const models = {}; // Object with all models
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -79,11 +79,16 @@ db.authenticate().then(async () => {
     await loadEventsInDir('./src/events');
     await db.sync();
     logger.info('[DB] Synced db');
-    await client.login(config.token).catch(() => { logger.fatal('Bot could not log in. Please double-check your token and try again'); process.exit()});
+    await client.login(config.token).catch(() => {
+        logger.fatal('Bot could not log in. Please double-check your token and try again');
+        process.exit();
+    });
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     client.models = models;
     client.moduleConf = moduleConf;
-    await configChecker.loadAllConfigs(client, moduleConf).catch(() => {process.exit(1)})
+    await configChecker.loadAllConfigs(client, moduleConf).catch(() => {
+        process.exit(1);
+    });
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     client.emit('botReady');
@@ -97,7 +102,7 @@ async function loadModules() {
     for (const f of files) {
         if (moduleConf[f]) {
             logger.debug(`[MODULE] Loading module ${f}`);
-            let moduleConfig = jsonfile.readFileSync(`${__dirname}/modules/${f}/module.json`);
+            const moduleConfig = jsonfile.readFileSync(`${__dirname}/modules/${f}/module.json`);
             client.modules[f] = {};
             client.modules[f]['config'] = moduleConfig;
             client.configurations[f] = {};
@@ -116,7 +121,7 @@ async function loadMessageCommandsInDir(dir, moduleName = null) {
         const stats = fs.lstatSync(`${__dirname}/${dir}/${f}`);
         if (!stats) return logger.error('No stats returned');
         if (stats.isFile()) {
-            let props = require(`${__dirname}/${dir}/${f}`);
+            const props = require(`${__dirname}/${dir}/${f}`);
             logger.debug(`[COMMANDS] Loaded ${dir}/${f}`);
             props.fileName = `${dir}/${f}`;
             props.help.module = moduleName || 'none';
@@ -149,9 +154,9 @@ async function loadEventsInDir(dir, moduleName = null) {
             fs.lstat(`${__dirname}/${dir}/${f}`, async (err, stats) => {
                 if (!stats) return;
                 if (stats.isFile()) {
-                    let eventFunction = require(`${__dirname}/${dir}/${f}`);
-                    let eventStart = eventFunction.run.bind(null, client);
-                    let eventName = f.split('.')[0];
+                    const eventFunction = require(`${__dirname}/${dir}/${f}`);
+                    const eventStart = eventFunction.run.bind(null, client);
+                    const eventName = f.split('.')[0];
                     client.events.set(eventName, eventStart);
                     if (moduleName) {
                         if (client.modules[moduleName]) {
@@ -159,7 +164,7 @@ async function loadEventsInDir(dir, moduleName = null) {
                             client.modules[moduleName]['events'].push(f.split('.js').join(''));
                         }
                     }
-                    client.on(eventName, (...args) => eventFunction.run(client, ...args));
+                    client.on(eventName, (...cArgs) => eventFunction.run(client, ...cArgs));
                     logger.debug(`[EVENTS] Loaded ${dir}/${f}`);
                 } else {
                     logger.debug(`[EVENTS] Loading events in ${dir}/${f}`);
@@ -192,7 +197,7 @@ async function loadModel(dir, file, moduleName) {
         const stats = fs.lstatSync(`${__dirname}/${dir}/${file}`);
         if (!stats) return;
         if (stats.isFile()) {
-            let model = require(`${__dirname}/${dir}/${file}`);
+            const model = require(`${__dirname}/${dir}/${file}`);
             await model.init(db);
             if (moduleName) {
                 if (client.modules[moduleName]) {

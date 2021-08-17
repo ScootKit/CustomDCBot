@@ -3,7 +3,7 @@ const {MessageEmbed} = require('discord.js');
 
 async function generatePartnerList() {
     const moduleConf = require(`${confDir}/partner-list/config.json`);
-    const channel = await client.channels.fetch(moduleConf['channelID']).catch(e => {
+    const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
     if (!channel) return console.error(`[Partner-List] Could not find channel with ID ${moduleConf['channelID']}.`);
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);

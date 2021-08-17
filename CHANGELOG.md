@@ -13,5 +13,5 @@ This changelog contains mostly API-Changes and changes for developers.
 * Added `sendMultipleSiteButtonMessage` to `/src/functions/helpers.js` to create fancy multiple-site-embed-messages
 * `embedType()` now returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
 * `footer` can now be set for each embed individually
-* `.editorconfig` added - please use this configuration if you create a pullrequest
+* `.eslintrc.js` added - please use this configuration if you create a pullrequest
 * 

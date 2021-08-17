@@ -1,21 +1,21 @@
 const durationParser = require('parse-duration');
 const {confDir} = require('../../../main');
 const {createGiveaway} = require('../giveaways');
-const {embedType} = require('./../../../src/functions/helpers')
+const {embedType} = require('./../../../src/functions/helpers');
 
 module.exports.run = async function (client, msg) {
-    const moduleConfig = require(`${confDir}/giveaways/config.json`)
+    const moduleConfig = require(`${confDir}/giveaways/config.json`);
     let allowed = false;
     for (const roleID of moduleConfig['allowed_roles']) {
         if (msg.member.roles.cache.get(roleID)) allowed = true;
     }
-    if (!allowed) return msg.channel.send(...embedType(client.strings['not_enough_permissions']))
+    if (!allowed) return msg.channel.send(...embedType(client.strings['not_enough_permissions']));
 
     const collector = await msg.channel.createMessageCollector(m => m.author.id === msg.author.id, {time: 60000});
     await msg.channel.send('Starting giveaway. Please mention a channel where the giveaway should take place. *You have one minute to complete the whole dialogue. Please keep this in mind.*');
 
     let step = 0;
-    let data = {};
+    const data = {};
     collector.on('collect', async m => {
         if (m.content === 'cancel') {
             step = 3;

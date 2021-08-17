@@ -32,10 +32,10 @@ module.exports.run = async function (client, msg) {
         name: 'ℹ️ Bot-Info',
         value: 'This [Open-Source-Bot](https://github.com/SCNetwork/CustomDCBot) was developed by the [Contributors](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) and the [SC Network](https://sc-network.net)-Team.'
     },
-        {
-            name: '📊 Stats',
-            value: `Active modules: ${Object.keys(client.modules).length}\nRegistered Commands: ${client.commands.size}\nLast restart: ${formatDate(client.readyAt)}\nLast reload: ${formatDate(client.botReadyAt)}`
-        }], true));
+    {
+        name: '📊 Stats',
+        value: `Active modules: ${Object.keys(client.modules).length}\nRegistered Commands: ${client.commands.size}\nLast restart: ${formatDate(client.readyAt)}\nLast reload: ${formatDate(client.botReadyAt)}`
+    }], true));
 
 
     let fieldCount = 0;
@@ -44,11 +44,11 @@ module.exports.run = async function (client, msg) {
         fieldCount++;
         fieldCache.push(field);
         if (fieldCount % 3 === 0) {
-            addSite(fieldCache)
+            addSite(fieldCache);
             fieldCache = [];
         }
     }
-    if (fieldCache.length !== 0) addSite(fieldCache)
+    if (fieldCache.length !== 0) addSite(fieldCache);
 
     function addSite(fields, atBeginning = false) {
         siteCount++;
