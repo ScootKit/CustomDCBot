@@ -34,7 +34,7 @@ module.exports.run = async function (client, msg) {
     },
         {
             name: '📊 Stats',
-            value: `Active modules: ${Object.keys(client.modules).length}\nRegistered Commands: ${client.commands.size}\nLast Restart: ${formatDate(client.readyAt)}`
+            value: `Active modules: ${Object.keys(client.modules).length}\nRegistered Commands: ${client.commands.size}\nLast restart: ${formatDate(client.readyAt)}\nLast reload: ${formatDate(client.botReadyAt)}`
         }], true));
 
 
