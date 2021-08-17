@@ -1,7 +1,6 @@
 const exampleFile = require('./config-generator/config.json');
-const fse = require('fs-extra');
 let config = {};
-const beautify = require('json-beautify');
+const jsonfile = require('jsonfile');
 let confDir = `${__dirname}/config`;
 const args = process.argv.slice(2);
 if (args[0] === '--help' || args[0] === '-h') {
@@ -22,8 +21,8 @@ try {
         config[field.field_name] = field.default;
     });
 
-    fse.outputFile(`${confDir}/config.json`, beautify(config, null, 2, 100), (err => {
+    jsonfile.writeFile(`${confDir}/config.json`, config, {spaces: 2}, (err => {
         if (err) console.error(`[ERROR] An error occurred while saving: ${err}`);
         else console.log('[DONE]: Config was saved successfully successfully. Please edit the config.json file inside your config dictionary and start the bot then with "npm start". Have a great day <3');
-    }));
+    }))
 }

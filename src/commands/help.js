@@ -1,39 +1,81 @@
+const {sendMultipleSiteButtonMessage, formatDate, truncate} = require('../functions/helpers');
 const {MessageEmbed} = require('discord.js');
+const centra = require('centra');
 
 module.exports.run = async function (client, msg) {
+    await msg.delete();
+
     const modules = {};
     client.commands.forEach(command => {
         if (!modules[command.help['module']]) modules[command.help['module']] = [];
         modules[command.help['module']].push(command.help.name);
     });
-    const helpEmbed = new MessageEmbed().setColor('RANDOM').setTitle(client.strings.helpembed.title).setDescription(client.strings.helpembed.description).setThumbnail(client.user.avatarURL());
+    const sites = [];
+    let siteCount = 0;
+
+    const embedFields = [];
     for (const module in modules) {
-        let content;
-        if (module !== 'none') {
-            content = `${client.strings.helpembed.more_information_with.split('%prefix%').join(client.config.prefix).split('%modulename%').join(module)}\n`;
-        } else {
-            content = '';
-        }
+        let content = '';
+        if (module !== 'none') content = `${client.strings.helpembed.more_information_with.split('%prefix%').join(client.config.prefix).split('%modulename%').join(module)}\n`;
         modules[module].forEach(d => {
             let c = d;
             if (client.commands.get(d).help.params) c = `${d} ${client.commands.get(d).help.params}`;
             content = content + `\n\`${client.config.prefix}${c}\`: ${client.commands.get(d).help.description}`;
         });
-        if (module !== 'none') {
-            helpEmbed.addField(`${client.strings.helpembed.module} ${module}`, content);
-        } else {
-            helpEmbed.addField(client.strings.helpembed.build_in, content);
+        embedFields.push({
+            name: module === 'none' ? client.strings.helpembed.build_in : `${client.strings.helpembed.module} ${module}`,
+            value: truncate(content, 1024)
+        });
+    }
+
+    embedFields.filter(f => f.name === client.strings.helpembed.build_in).forEach(f => addSite([f, {
+        name: '\u200b',
+        value: '\u200b'
+    }, {
+        name: 'ℹ️ Bot-Info',
+        value: 'This [Open-Source-Bot](https://github.com/SCNetwork/CustomDCBot) was developed by the [Contributors](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) and the [SC Network](https://sc-network.net)-Team.'
+    },
+        {
+            name: '📊 Stats',
+            value: `Active modules: ${Object.keys(client.modules).length}\nRegistered Commands: ${client.commands.size}\nLast Restart: ${formatDate(client.readyAt)}`
+        }], true));
+
+
+    let fieldCount = 0;
+    let fieldCache = [];
+    for (const field of embedFields.filter(f => f.name !== client.strings.helpembed.build_in)) {
+        fieldCount++;
+        fieldCache.push(field);
+        if (fieldCount % 3 === 0) {
+            addSite(fieldCache)
+            fieldCache = [];
         }
     }
-    helpEmbed.addField('\u200b', '\u200b');
-    // Play fair and do not remove this. Com'on its only one embed field. Thanks, love you <3
-    helpEmbed.addField('ℹ️ Bot-Info', 'This [Open-Source-Bot](https://github.com/SCNetwork/CustomDCBot) was developed by the [Contributors](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) and the [SC Network](https://sc-network.net)-Team.');
-    await msg.channel.send(helpEmbed);
+    if (fieldCache.length !== 0) addSite(fieldCache)
+
+    function addSite(fields, atBeginning = false) {
+        siteCount++;
+        const embed = new MessageEmbed().setColor('RANDOM')
+            .setDescription(client.strings.helpembed.description)
+            .setThumbnail(client.user.avatarURL())
+            .setAuthor(msg.author.tag, msg.author.avatarURL())
+            .setFooter(client.strings.footer, client.strings.footerImgUrl)
+            .setTitle(client.strings.helpembed.title.split('%site%').join(siteCount))
+            .addFields(fields);
+        if (atBeginning) sites.unshift(embed);
+        else sites.push(embed);
+    }
+
+    await sendMultipleSiteButtonMessage(msg.channel, sites, [msg.author.id]);
+    /*  helpEmbed.addField('\u200b', '\u200b');
+      // Play fair and do not remove this. Com'on its only one embed field. Thanks, love you <3
+      helpEmbed.addField('ℹ️ Bot-Info', 'This [Open-Source-Bot](https://github.com/SCNetwork/CustomDCBot) was developed by the [Contributors](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) and the [SC Network](https://sc-network.net)-Team.');
+      await msg.channel.send(helpEmbed); */
 };
 
 module.exports.help = {
     'name': 'help',
-    'description': 'See all commands and modules',
+    'description': 'You can find every command of every module here',
     'module': 'none',
     'aliases': ['help', 'h']
 };

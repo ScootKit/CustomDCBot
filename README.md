@@ -1,12 +1,26 @@
-# Custom-Bot
+# Custom-Bot v2
 
 Create your own discord bot - Fully customizable and with a lot of features. This bot is for advanced JS-Users, you should only
 use it if you have some experience with Javascript, discord.js and JSON files. 
 
 ---
 
-## Get your own Custom-Bot completely free and with a modern webinterface!
+## VERSION 2 - UNSTABLE
+This branch is an unstable version of the upcoming v2-release. It contains breaking changes as detailed in the [changelog](CHANGELOG.md) (and more are coming). I suggest reading the changelog carefully. Some modules may not be available in this version as I need to rewrite / update them to v2.
+
+## Get your own Custom-Bot completely free and with a modern webinterface and a lot more features!
 Go check it out on our [website](https://partner.sc-netzwerk.de) (currently only german).
+In addition to the here available features we offer:
+* Free hosting
+* Custom-Commands
+* Music
+* Temp-Channels
+* Scheduled messages
+* Info-Commands
+* Embed-Messages
+* and *a lot* more - for free
+
+[Get started now](https://scnx.xyz) - it's free - forever!
 
 ## Please read the [license](LICENSE) if you use this bot. 
 We really love open-source. Please read the license and follow it.\
@@ -16,8 +30,11 @@ In short words: You have to
 
 Please read the full [license](LICENSE). This is not legal advice. 
 
+## Support development
+As mentioned above our buisness model is to host these bots for servers - therfull it does not really make sens to publish our product here - but we do it anyway - but we need your support! Feel free to [contribute](CONTRIBUTING.md) or [donate on Patreon](https://patreon.com/scnetwork). Thank you so much <3 
+
 ## Please read this issue before continuing.
-This repo does not get any new modules currently. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).
+This repo does not get any new modules or features currently. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).
 
 ### Table of contents
 
@@ -58,6 +75,7 @@ You either input a string (normal discord message), or an embed object with the 
   * `name`: Name of the author
   * `img`: Image of the author, should be an url
 * `fields`: Fields of the embed, must be an array of [EmbedFieldData](https://discord.js.org/#/docs/main/stable/typedef/EmbedFieldData) (optional)
+* `footer`:  Footer value (optional, default: global footer value)
 
 The footer of the embed is global and is defined in your global `strings.json` file. The timestamp is set automatically to the current time.
 
@@ -78,19 +96,27 @@ Every module has to contain a `module.json` file with the following content:
     * `name`: Name of the author
     * `link`: Link to the author
 * `description`: Short description of the module
-* `commands-dir` (optional): Directory inside your module folder where all the command-files are in
+* `commands-dir` (optional): Directory inside your module folder where all the interation-command-files are in
+* `message-commands-dir` (optional, not recommended if not necessary): Directory inside your module folder where all the message-command-files are in
 * `on-load-event` (optional): File with exported `onLoad` function in it. Gets executed when your config got checked successfully. 
 * `events-dir` (optional): Directory inside your module folder where all the event-files are in
 * `models-dir` (optional): Directory inside your module folder where all the models-files are in
 * `config-example-files` (optional, seriously leave this out when you don't have config files): Array of config-files inside your module directory.
 
-A command file has to export the following things:
+An interaction-command ("slash command") file has to export the following things:
+* `run`: Function that gets triggered if the interactions is being used (provided arguments: `client`, `interaction)
+* `help`
+* `config` (both for !help and slash-commands)
+  * `name`: Name of the command (should be the same name as the file name)
+  * `description`: Description of the command
+  * `options`: [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
+
+A message-command file has to export the following things:
 * `run`: Function that gets triggered if the command gets executed (provided arguments: `client` (discord.js Client), `msg` (MessageObject), 
   `args` (Array of arguments))
 * `help`
     * `name`: Name of the command (should be the same name as the file name)
     * `description`: Description of the command
-    * `module`: Name of your module
     * `aliases`: Array of all aliases. Should contain the value of `name`.
 * `config`
     * `args`: Does this command need arguments? (boolean)

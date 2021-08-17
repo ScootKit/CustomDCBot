@@ -29,6 +29,13 @@
       "default": "You can change this in your config.json btw",
       "type": "string",
       "description": "This will show up in Discord as \"Playing <YourValue>\""
+    },
+    {
+      "field_name": "logLevel",
+      "default": "debug",
+      "type": "select",
+      "description": "Log-Level of the bot",
+      "content": ["debug","info","warn", "error", "fatal", "off"]
     }
   ]
 }

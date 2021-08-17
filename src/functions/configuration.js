@@ -1,8 +1,33 @@
-const fse = require('fs-extra');
 const {asyncForEach} = require('./helpers');
-const beautify = require('json-beautify');
+const jsonfile = require('jsonfile');
+const fs = require('fs');
+const {logger} = require('../../main');
 
-module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = null) {
+// Checking every (module AND bot) config file.
+module.exports.checkAllConfigs = async function (client, moduleConf) {
+    logger.info('Checking configs...');
+    return new Promise(async resolve => {
+        await fs.readdir(`${__dirname}/../../config-generator/`, async (err, files) => {
+            await asyncForEach(files, async f => {
+                await checkBuildInConfig(f);
+            });
+            await fs.readdir(`${__dirname}/../../modules/`, async (err, files) => {
+                let needOverwrite = false;
+                await asyncForEach(files, async f => {
+                    if (moduleConf[f]) {
+                        if (client.modules[f]['config']['on-checked-config-event']) await checkModuleConfig(f, require(`./modules/${f}/${client.modules[f]['config']['on-checked-config-event']}`));
+                        else await checkModuleConfig(f);
+                    } else if (typeof moduleConf[f] === 'undefined') needOverwrite = true;
+                });
+                if (needOverwrite) await generateModulesConfOverwrite(moduleConf, files);
+                logger.info('Done with checking.');
+                resolve();
+            });
+        });
+    });
+}
+
+function checkModuleConfig (moduleName, afterCheckEventFile = null) {
     return new Promise(resolve => {
         const {client} = require('../../main');
         const moduleConf = require(`../../modules/${moduleName}/module.json`);
@@ -12,7 +37,7 @@ module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = n
             try {
                 exampleFile = require(`../../modules/${moduleName}/${v}`);
             } catch (e) {
-                console.error(`[ERROR] Not found config example file: ${moduleName}/${v}`);
+                logger.error(`Not found config example file: ${moduleName}/${v}`);
                 process.exit(1);
             }
             if (!exampleFile) return;
@@ -21,7 +46,7 @@ module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = n
             try {
                 config = require(`${client.configDir}/${moduleName}/${exampleFile.filename}`);
             } catch (e) {
-                console.log(`[INFO] Config ${moduleName}/${exampleFile.filename} does not exist - I'm going to create it - stand by...`);
+                logger.info(`Config ${moduleName}/${exampleFile.filename} does not exist - I'm going to create it - stand by...`);
                 ow = true;
             }
             if (exampleFile.configElements) {
@@ -35,19 +60,18 @@ module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = n
                     config = await checkField(field, config);
                 });
             }
-            if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
 
             async function checkField(field, configElement) {
                 if (!field.field_name) return;
                 if (typeof configElement[field.field_name] === 'undefined') return configElement[field.field_name] = field.default;
                 if (!await checkType(field.type, configElement[field.field_name], field.content, field.allowEmbed)) {
-                    console.error(`[ERROR] An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
+                    logger.error(`An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
                     process.exit(1); // ToDo Only disable plugin not stop bot
                 }
                 if (field.disableKeyEdits) {
                     for (const content in configElement[field.field_name]) {
                         if (!field.default[content]) {
-                            console.error(`[ERROR] Error with ${content} in ${field.field_name} in ${moduleName}/${exampleFile.filename}: Unexpected index ${content}`);
+                            logger.error(`Error with ${content} in ${field.field_name} in ${moduleName}/${exampleFile.filename}: Unexpected index ${content}`);
                             process.exit(1); // ToDo Only disable plugin not stop bot
                         }
                     }
@@ -56,22 +80,25 @@ module.exports.checkModuleConfig = function (moduleName, afterCheckEventFile = n
             }
 
             if (ow) {
-                fse.outputFile(`${client.configDir}/${moduleName}/${exampleFile.filename}`, beautify(config, null, 2, 100), (err => {
+                if (!fs.existsSync(`${client.configDir}/${moduleName}`)) fs.mkdirSync(`${client.configDir}/${moduleName}`)
+                jsonfile.writeFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`, config, {spaces: 2}, (err=> {
                     if (err) {
-                        console.error(`[ERROR] An error occurred while saving ${moduleName}/${exampleFile.filename}: ${err}`);
+                        logger.error(`An error occurred while saving ${moduleName}/${exampleFile.filename}: ${err}`);
                     } else {
-                        console.log(`[MODULE: ${moduleName}]: Config ${v} was saved successfully successfully.`);
+                        logger.info(`[MODULE: ${moduleName}]: Config ${v} was saved successfully successfully.`);
                     }
                     resolve();
-                }));
+                }))
             } else {
                 resolve();
             }
+            client.configurations[moduleName][exampleFile.filename.split('.json').join('')] = config;
         });
+        if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
     });
 };
 
-module.exports.checkBuildInConfig = async function (configName) {
+async function checkBuildInConfig (configName) {
     return new Promise(resolve => {
         const {client} = require('../../main');
         const exampleFile = require(`../../config-generator/${configName}`);
@@ -81,54 +108,54 @@ module.exports.checkBuildInConfig = async function (configName) {
         try {
             config = require(`${client.configDir}/${configName}`);
         } catch (e) {
-            console.log(`[INFO] Config config/${configName} does not exist - I'm going to create it - stand by...`);
+            logger.log(`Config config/${configName} does not exist - I'm going to create it - stand by...`);
             ow = true;
         }
         exampleFile.content.forEach(async field => {
             if (!field.field_name) return;
             if (!config[field.field_name]) return config[field.field_name] = field.default;
             if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
-                console.error(`[ERROR] An error occurred while checking the content of field ${field.field_name} in config/${configName}`);
+                logger.error(`An error occurred while checking the content of field ${field.field_name} in config/${configName}`);
                 process.exit(1);
             }
             if (field.disableKeyEdits) {
                 for (const content in config[field.field_name]) {
                     if (!field.default[content]) {
-                        console.error(`[ERROR] Error with ${content} in ${field.field_name} in config/${configName}: Unexpected index ${content}`);
+                        logger.error(`Error with ${content} in ${field.field_name} in config/${configName}: Unexpected index ${content}`);
                         process.exit(1);
                     }
                 }
             }
         });
         if (ow) {
-            fse.outputFile(`${client.configDir}/${configName}`, beautify(config, null, 2, 100), (err => {
+            jsonfile.writeFile(`${client.configDir}/${configName}`, config, {spaces: 2}, (err => {
                 if (err) {
-                    console.error(`[ERROR] An error occurred while saving config/${configName}: ${err}`);
+                    logger.error(`An error occurred while saving config/${configName}: ${err}`);
                 } else {
-                    console.log(`[CONFIG: ${configName}]: Config ${configName} was saved successfully successfully.`);
+                    logger.info(`[CONFIG: ${configName}]: Config ${configName} was saved successfully successfully.`);
                 }
                 resolve();
-            }));
+            }))
         } else {
             resolve();
         }
     });
-};
+}
 
-module.exports.generateModulesConfOverwrite = async function (moduleConf, modules) {
+async function generateModulesConfOverwrite(moduleConf, modules) {
     const {client} = require('../../main');
-    console.log('[INFO] Regenerating modules.json. Do not worry, we will not overwrite settings (;');
+    logger.info('Regenerating modules.json. Do not worry, we will not overwrite settings (;');
     await asyncForEach(modules, module => {
         if (typeof moduleConf[module] === 'undefined') moduleConf[module] = false;
     });
-    fse.outputFile(`${client.configDir}/modules.json`, beautify(moduleConf, null, 2, 100), (err => {
+    jsonfile.writeFileSync(`${client.configDir}/modules.json`, moduleConf, {spaces: 2}, (err => {
         if (err) {
-            console.error(`[ERROR] An error occurred while saving modules.json: ${err}`);
+            logger.error(`An error occurred while saving modules.json: ${err}`);
         } else {
-            console.log('[INFO] Saved modules.json successfully');
+            logger.info('Saved modules.json successfully');
         }
-    }));
-};
+    }) )
+}
 
 async function checkType(type, value, contentFormat = null, allowEmbed = false) {
     const {client} = require('../../main');
@@ -146,28 +173,28 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             });
             return errored;
         case 'channelID':
-            return true;
-        /*
-            RETURNING TRUE HERE BECAUSE SOMETIMES THIS FAILS RANDOMLY. WILL RETURN TO THIS LATER
-        const guild = (await client.guilds.fetch(client.guildID)).channels;
-            if (await guild.cache.get(value)) {
-                return true;
-            } else {
-                console.error(`[ERROR] Channel with ID ${value} in Guild-ID ${client.guildID} could not be found`);
+            const channel = await client.channels.fetch(value).catch(() => {});
+            if (!channel) {
+                logger.error(`Channel with ID "${value}" not found.`)
                 return false;
-            }*/
+            }
+            if (channel.guild.id !== client.guildID) {
+                logger.error(`Channel with ID "${value}" is not on the guild specified in your configuration file.`)
+                return false;
+            }
+            return true;
         case 'roleID':
             if (await (await client.guilds.fetch(client.guildID)).roles.fetch(value)) {
                 return true;
             } else {
-                console.error(`[ERROR] Role with ID ${value} in Guild-ID ${client.guildID} could not be found`);
+                logger.error(`Role with ID "${value}" could not be found.`)
                 return false;
             }
         case 'guildID':
             if (client.guilds.cache.find(g => g.id === client.guildID)) {
                 return true;
             } else {
-                console.error(`[ERROR] Guild with ID ${value} could not be found`);
+                logger.error(`Guild with ID "${value}" could not be found - have you invited the bot?`)
                 return false;
             }
         case 'keyed':
@@ -187,4 +214,8 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             console.error(`Unknown type: ${type}`);
             process.exit(1);
     }
+}
+
+module.exports.reloadConfig = async function() {
+
 }

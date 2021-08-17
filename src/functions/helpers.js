@@ -1,5 +1,11 @@
 const {MessageEmbed} = require('discord.js');
 
+/**
+ * Will loop asynchrony through every object in the array
+ * @param  {Array} array Array of objects
+ * @param  {function(object, number, array)} callback Function that gets executed on every array (object, index in the array, array)
+ * @return {Promise}
+ */
 module.exports.asyncForEach = async function (array, callback) {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
@@ -14,8 +20,14 @@ function inputReplacer(args, input) {
     return input;
 }
 
+/**
+ * Will turn an object or string into embeds
+ * @param  {string|array} input Input in the configuration file
+ * @param  {object} args Object of variables to replace
+ * @return {object} Returns MessageOptions (https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
+ */
 module.exports.embedType = function (input, args = {}) {
-    if (typeof input === 'string') return [inputReplacer(args, input)];
+    if (typeof input === 'string') return {content: inputReplacer(args, input)};
     const {client} = require('../../main');
     const emb = new MessageEmbed();
     emb.setTitle(inputReplacer(args, input['title']));
@@ -31,8 +43,8 @@ module.exports.embedType = function (input, args = {}) {
         });
     }
     emb.setTimestamp();
-    emb.setFooter(client.strings.footer);
-    return [inputReplacer(args, input['message']), emb];
+    emb.setFooter(input.footer ? inputReplacer(args, input.footer) : client.strings.footer);
+    return {content: inputReplacer(args, input['message']), embeds: [emb]};
 };
 
 function formatDate(date) {
@@ -60,3 +72,45 @@ function pufferStringToSize(str, size) {
 }
 
 module.exports.pufferStringToSize = pufferStringToSize;
+
+async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null) {
+    if (sites.length === 0) return await channel.send({embeds: [sites[0]]});
+    const m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
+    const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 20000});
+    let currentSite = 1;
+    c.on('collect', async (interaction) => {
+        if (!allowedUserIDs.includes(interaction.user.id)) return interaction.reply({
+            ephemeral: true,
+            content: `:warning: You did not run this command. If you want to use the buttons, try running the command yourself.`
+        });
+        let nextSite = currentSite + 1;
+        if (interaction.customId === 'back') nextSite = currentSite - 1;
+        currentSite = nextSite;
+        await interaction.update({
+            components: [{type: 'ACTION_ROW', components: getButtons(nextSite)}],
+            embeds: [sites[nextSite - 1]]
+        });
+    });
+    c.on('end', () => {
+        console.log(currentSite);
+        m.edit({
+            components: [{type: 'ACTION_ROW', components: getButtons(currentSite, true)}],
+            embeds: [sites[currentSite - 1]]
+        });
+    });
+
+    function getButtons(site, disabled = false) {
+        const btns = [];
+        if (site !== 1) btns.push({type: 'BUTTON', label: '◀ Back', customId: 'back', style: 'PRIMARY', disabled});
+        if (site !== sites.length) btns.push({
+            type: 'BUTTON',
+            label: 'Next ▶',
+            customId: 'next',
+            style: 'PRIMARY',
+            disabled
+        });
+        return btns;
+    }
+}
+
+module.exports.sendMultipleSiteButtonMessage = sendMultipleSiteButtonMessage;
