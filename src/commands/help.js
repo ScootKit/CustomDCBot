@@ -1,10 +1,7 @@
 const {sendMultipleSiteButtonMessage, formatDate, truncate} = require('../functions/helpers');
 const {MessageEmbed} = require('discord.js');
-const centra = require('centra');
 
 module.exports.run = async function (client, msg) {
-    await msg.delete();
-
     const modules = {};
     client.commands.forEach(command => {
         if (!modules[command.help['module']]) modules[command.help['module']] = [];
@@ -66,11 +63,7 @@ module.exports.run = async function (client, msg) {
         else sites.push(embed);
     }
 
-    await sendMultipleSiteButtonMessage(msg.channel, sites, [msg.author.id]);
-    /*  helpEmbed.addField('\u200b', '\u200b');
-      // Play fair and do not remove this. Com'on its only one embed field. Thanks, love you <3
-      helpEmbed.addField('ℹ️ Bot-Info', 'This [Open-Source-Bot](https://github.com/SCNetwork/CustomDCBot) was developed by the [Contributors](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) and the [SC Network](https://sc-network.net)-Team.');
-      await msg.channel.send(helpEmbed); */
+    sendMultipleSiteButtonMessage(msg.channel, sites, [msg.author.id], msg);
 };
 
 module.exports.help = {

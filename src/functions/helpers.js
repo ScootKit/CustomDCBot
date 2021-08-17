@@ -47,6 +47,11 @@ module.exports.embedType = function (input, args = {}) {
     return {content: inputReplacer(args, input['message']), embeds: [emb]};
 };
 
+/**
+ * Makes a Date humanly readable
+ * @param  {Date} date Date to format
+ * @return {string} Returns humanly readable string
+ */
 function formatDate(date) {
     const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString(),
         hh = date.getHours().toString(), min = date.getMinutes().toString();
@@ -55,27 +60,52 @@ function formatDate(date) {
 
 module.exports.formatDate = formatDate;
 
-function truncate(str, n) {
-    return (str.length > n) ? str.substr(0, n - 3) + '...' : str;
+/**
+ * Truncates a string to a specific length
+ * @param  {string} string String to truncate
+ * @param  {number} length Length to truncate to
+ * @return {string} Truncated string
+ */
+function truncate(string, length) {
+    return (string.length > length) ? string.substr(0, length - 3) + '...' : string;
 }
 
 module.exports.truncate = truncate;
 
-function pufferStringToSize(str, size) {
-    if (typeof str !== 'string') str = str.toString();
-    const pufferNeeded = size - str.length;
+/**
+ * Puffers (add empty spaces to center text) a string to a specific size
+ * @param  {string} string String to puffer
+ * @param  {number} size Length to puffer to
+ * @return {string}
+ */
+function pufferStringToSize(string, size) {
+    if (typeof string !== 'string') string = string.toString();
+    const pufferNeeded = size - string.length;
     for (let i = 0; i < pufferNeeded; i++) {
-        if (i % 2 === 0) str = '\xa0' + str;
-        else str = str + '\xa0';
+        if (i % 2 === 0) string = '\xa0' + string;
+        else string = string + '\xa0';
     }
-    return str;
+    return string;
 }
 
 module.exports.pufferStringToSize = pufferStringToSize;
 
+/**
+ * Sends a multiple-site-embed-message
+ * @param  {Object} channel Channel in which to send the message
+ * @param  {Array<object>} sites Array of MessageEmbeds (https://discord.js.org/#/docs/main/stable/class/MessageEmbed)
+ * @param  {Array<string>} allowedUserIDs Array of User-IDs of users allowed to use the pagination
+ * @param {Object} message Message to respond to
+ * @return {string}
+ */
 async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null) {
     if (sites.length === 0) return await channel.send({embeds: [sites[0]]});
-    const m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
+    let m;
+    if (message) m = await message.reply({
+        components: [{type: 'ACTION_ROW', components: getButtons(1)}],
+        embeds: [sites[0]]
+    });
+    else m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
     const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 20000});
     let currentSite = 1;
     c.on('collect', async (interaction) => {
@@ -92,7 +122,6 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
         });
     });
     c.on('end', () => {
-        console.log(currentSite);
         m.edit({
             components: [{type: 'ACTION_ROW', components: getButtons(currentSite, true)}],
             embeds: [sites[currentSite - 1]]
