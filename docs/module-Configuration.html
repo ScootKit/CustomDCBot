@@ -201,37 +201,434 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="index.html">Index</h1>
+        <h1 class="page-title" data-filename="module-Configuration.html">Module: Configuration</h1>
         
 
 
+
+<section>
+    
+<header>
+    <div class="header content-size">
+        <h2>Configuration
+        </h2>
+        
+    </div>
+</header>  
+
+<article class="content-size">
+    
+        <div class="container-overview">
+        
+
+        
+            
+                <div class="description"><p>Handels configuration loading and reloading</p></div>
+            
+
+            
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
+        </ul>
+    </dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+
+            
+        
+        </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="list-methods">
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".reloadConfig">
+            <a class="share-icon" href="#.reloadConfig"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                module:Configuration.reloadConfig
+            </span>
+            <span class="signature">(client)</span><span class="type-signature">Promise</span>
+            
+            <span class="access-signature">static</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check every (including module) configuration and load them</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The client</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>v2</dd>
+    
+    
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
+        </ul>
+    </dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="Client.html#event:configReload">Client#event:configReload</a></li>
+    
+        <li>Client#event:botReady when loaded successfully</li>
+    </ul>
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
     
 
 
-    <h3> </h3>
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~loadAllConfigs">
+            <a class="share-icon" href="#~loadAllConfigs"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                loadAllConfigs
+            </span>
+            <span class="signature">(client, moduleConf)</span><span class="type-signature">Promise</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check every (including module) configuration and load them</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
 
 
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The client</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>moduleConf</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
 
 
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Configuration of modules.json</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
+        </ul>
+    </dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
 
-
-
+    
+    
 
     
 
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
 
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
 
-    <section>
-        <article class="readme content-size"><h1>CustomDCBot Developer Documentation</h1>
-<p>Note: If you are reading this on GitHub, please click <a target="_blank" href="https://custombot-devdocs.sc-network.net/">here</a> to access the generated documentation.</p>
-<p>Welcome to the developer documentation of the <a target="_blank" href="https://gitub.com/SCNetwork/CustomDCBot">CustomDCBot</a> by <a target="_blank" href="https://github.com/SCNetwork">SC Network</a>.</p>
-<p>You can find details about how to use build-in-features here. If you want to learn, how to create your own module read <a target="_blank" href="https://github.com/SCNetwork/CustomDCBot/#add-your-own-modules">this section</a> of the <a target="_blank" href="https://github.com/SCNetwork/CustomDCBot/#custom-bot">README</a> file in the <a target="_blank" href="https://github.com/SCNetwork/CustomDCBot">official repository</a>.</p>
-<p>This site documents how to use features in - for example - <code>/src/functions/helpers.js</code> or <code>/src/functions/configuration.js</code> or of some modules. Please remember to always document functions and classes. A workflow will automatically generate the documentation when pushing to the repo - please do not push your locally generated version, it will be overwritten anyway.</p>
-<p>If you want to learn how to document functions, please look <a target="_blank" href="https://jsdoc.app/index.html#block-tags">here</a>.</p>
-<p>If you have any questions feel free to <a target="_blank" href="https://github.com/SCNetwork/CustomDCBot/discussions/new">create a discussion</a>.</p></article>
-    </section>
+    
+    
+    
+</dd>
 
+        </dl>
+    
+    
+    
+    
+    
+
+    
+</article>
+
+</section>  
 
 
 
