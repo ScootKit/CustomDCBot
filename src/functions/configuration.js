@@ -1,3 +1,8 @@
+/**
+ * Handels configuration loading and reloading
+ * @module Configuration
+ * @author Simon Csaba <mail@scderox.de>
+ */
 const {asyncForEach} = require('./helpers');
 const jsonfile = require('jsonfile');
 const fs = require('fs');
@@ -5,7 +10,8 @@ const {logger} = require('../../main');
 
 /**
  * Check every (including module) configuration and load them
- * @param  {Object} client The client
+ * @author Simon Csaba <mail@scderox.de>
+ * @param  {Client} client The client
  * @param  {Object} moduleConf Configuration of modules.json
  * @return {Promise}
  */
@@ -34,6 +40,13 @@ async function loadAllConfigs(client, moduleConf) {
     });
 }
 
+/**
+ * Checks the build-in-configuration (not modules)
+ * @private
+ * @param {String} moduleName Name of the module to check
+ * @param {FileName<String>} afterCheckEventFile File to execute after config got checked
+ * @returns {Promise<unknown>}
+ */
 async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
     return new Promise(async (resolve, reject) => {
         const {client} = require('../../main');
@@ -68,6 +81,12 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                 }
             }
 
+            /**
+             * Checks the content of a field
+             * @param {Field<Object>} field Field-Object
+             * @param {configElement<Object>} configElement Current config element
+             * @returns {Promise<void|*>}
+             */
             async function checkField(field, configElement) {
                 if (!field.field_name) return;
                 if (typeof configElement[field.field_name] === 'undefined') return configElement[field.field_name] = field.default;
@@ -105,6 +124,12 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
     });
 }
 
+/**
+ * Checks the build-in-configuration (not modules)
+ * @private
+ * @param {String} configName Name of the configuration to check
+ * @returns {Promise<unknown>}
+ */
 async function checkBuildInConfig(configName) {
     return new Promise((resolve, reject) => {
         const {client} = require('../../main');
@@ -113,7 +138,7 @@ async function checkBuildInConfig(configName) {
         let config = {};
         let ow = false;
         try {
-            config = require(`${client.configDir}/${configName}`);
+            config = jsonfile.readFileSync(`${client.configDir}/${configName}`);
         } catch (e) {
             logger.log(`Config config/${configName} does not exist - I'm going to create it - stand by...`);
             ow = true;
@@ -151,6 +176,13 @@ async function checkBuildInConfig(configName) {
 
 module.exports.loadAllConfigs = loadAllConfigs;
 
+/**
+ * Generates module.json overwrite
+ * @param {Object} moduleConf Current module configuration
+ * @param {Array} modules Array of all availible modules
+ * @returns {Promise<void>}
+ * @private
+ */
 async function generateModulesConfOverwrite(moduleConf, modules) {
     const {client} = require('../../main');
     logger.info('Regenerating modules.json. Do not worry, we will not overwrite settings (;');
@@ -166,6 +198,15 @@ async function generateModulesConfOverwrite(moduleConf, modules) {
     }));
 }
 
+/**
+ * Check type of one field
+ * @param {FieldType<String>} type Type of the field
+ * @param {String} value Value in the configuration file
+ * @param {ConfigFormat<Object>} contentFormat Format of the content
+ * @param {Boolean} allowEmbed If embeds are allowed
+ * @returns {Promise<boolean|*>}
+ * @private
+ */
 async function checkType(type, value, contentFormat = null, allowEmbed = false) {
     const {client} = require('../../main');
     switch (type) {
@@ -228,15 +269,31 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
 
 /**
  * Check every (including module) configuration and load them
- * @param  {Object} client The client
+ * @param  {Client} client The client
+ * @fires Client#configReload
+ * @fires Client#botReady when loaded successfully
+ * @since v2
+ * @author Simon Csaba <mail@scderox.de>
  * @return {Promise}
  */
 module.exports.reloadConfig = async function (client) {
     client.logger.info('Reloading all configurations...');
     client.botReadyAt = null;
+
+    /**
+     * Emitted when the configuration gets reloaded, used to disable intervals
+     * @event Client#configReload
+     */
     client.emit('configReload');
+
     await loadAllConfigs(client, client.moduleConf);
     client.botReadyAt = new Date();
+
+    /**
+     * Emitted when the configuration got loaded successfully
+     * @event Client#botReady
+     */
     client.emit('botReady');
+
     client.logger.info('Configuration reloaded successfully');
 };

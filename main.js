@@ -96,7 +96,11 @@ db.authenticate().then(async () => {
     logger.info('[BOT] The bot initiated successfully and is now listening to commands.');
 });
 
-// Load all modules
+/**
+ * Loads all modules
+ * @returns {Promise<void>}
+ * @private
+ */
 async function loadModules() {
     const files = fs.readdirSync(`${__dirname}/modules/`);
     for (const f of files) {
@@ -114,7 +118,13 @@ async function loadModules() {
     }
 }
 
-// Load every command in a dictionary
+/**
+ * Load every message command in a directory
+ * @param {String} dir Directory to load commands from
+ * @param {String} moduleName Name of module currently loading from
+ * @returns {Promise<void>}
+ * @private
+ */
 async function loadMessageCommandsInDir(dir, moduleName = null) {
     const files = fs.readdirSync(`${__dirname}/${dir}`);
     for (const f of files) {
@@ -146,7 +156,13 @@ async function loadMessageCommandsInDir(dir, moduleName = null) {
     }
 }
 
-// Loading every event in a dictionary
+/**
+ * Load all events from a directory
+ * @param {String} dir Directory to load events from
+ * @param {String} moduleName Name of module currently loading from
+ * @returns {Promise<void>}
+ * @private
+ */
 async function loadEventsInDir(dir, moduleName = null) {
     fs.readdir(`${__dirname}/${dir}`, (err, files) => {
         if (err) return logger.error(err);
@@ -175,7 +191,13 @@ async function loadEventsInDir(dir, moduleName = null) {
     });
 }
 
-// load every database model in a dictionary
+/**
+ * Load every database model in a directory
+ * @param {String} dir Directory to load models from
+ * @param {String} moduleName Name of module currently loading from
+ * @returns {Promise<void>}
+ * @private
+ */
 async function loadModelsInDir(dir, moduleName = null) {
     return new Promise(async resolve => {
         await fs.readdir(`${__dirname}/${dir}`, (async (err, files) => {
@@ -191,8 +213,14 @@ async function loadModelsInDir(dir, moduleName = null) {
     });
 }
 
-// load one database model
-async function loadModel(dir, file, moduleName) {
+/**
+ * Loads a database model
+ * @param {String} dir Directory to load models from
+ * @param {String} file File to load model from
+ * @param {String} moduleName Name of module currently loading from
+ * @returns {Promise<void>}
+ * @private
+ */async function loadModel(dir, file, moduleName) {
     return new Promise(async resolve => {
         const stats = fs.lstatSync(`${__dirname}/${dir}/${file}`);
         if (!stats) return;

@@ -50,6 +50,12 @@ module.exports.run = async function (client, msg) {
     }
     if (fieldCache.length !== 0) addSite(fieldCache);
 
+    /**
+     * Adds a site to the embed
+     * @param {Array<Field>} fields Fields to add
+     * @param atBeginning If this site needs to go at the beginning of the array
+     * @private
+     */
     function addSite(fields, atBeginning = false) {
         siteCount++;
         const embed = new MessageEmbed().setColor('RANDOM')

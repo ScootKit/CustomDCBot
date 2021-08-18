@@ -7,7 +7,7 @@ module.exports = {
     'parserOptions': {
         'ecmaVersion': 12
     },
-    'ignorePatterns': ['.eslintrc.js', 'out/'],
+    'ignorePatterns': ['.eslintrc.js', 'docs/', 'gen-doc/'],
     'rules': {
         'no-unused-vars': 'error',
         'accessor-pairs': 'error',

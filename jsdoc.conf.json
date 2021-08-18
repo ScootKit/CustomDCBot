@@ -1,12 +1,22 @@
 {
+  "templates": {
+    "meta": {
+      "title": "CustomBot Developer Docs"
+    },
+    "applicationName": "CustomBot Developer Docs"
+  },
   "source": {
     "include": ["."],
     "includePattern": ".+\\.js(doc|x)?$",
-    "excludePattern": "node_modules"
+    "excludePattern": "(node_modules|docs)"
   },
+  "plugins": ["plugins/markdown"],
   "opts": {
     "encoding": "utf8",
     "destination": "./docs",
-    "recurse": true
+    "recurse": true,
+    "readme": "./docs/README.md",
+    "template": "./node_modules/@pixi/jsdoc-template"
+
   }
 }

@@ -1,3 +1,7 @@
+/**
+ * Functions to make your live easier
+ * @module Helpers
+ */
 const {MessageEmbed} = require('discord.js');
 
 /**
@@ -12,6 +16,13 @@ module.exports.asyncForEach = async function (array, callback) {
     }
 };
 
+/**
+ * Replaces every argument with a string
+ * @param {Object<String>} args Arguments to replace
+ * @param {String} input Input
+ * @returns {String}
+ * @private
+ */
 function inputReplacer(args, input) {
     if (typeof args !== 'object') return input;
     for (const arg in args) {
@@ -24,7 +35,8 @@ function inputReplacer(args, input) {
  * Will turn an object or string into embeds
  * @param  {string|array} input Input in the configuration file
  * @param  {object} args Object of variables to replace
- * @return {object} Returns MessageOptions (https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
+ * @author Simon Csaba <mail@scderox.de>
+ * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
 module.exports.embedType = function (input, args = {}) {
     if (typeof input === 'string') return {content: inputReplacer(args, input)};
@@ -51,6 +63,7 @@ module.exports.embedType = function (input, args = {}) {
  * Makes a Date humanly readable
  * @param  {Date} date Date to format
  * @return {string} Returns humanly readable string
+ * @author Simon Csaba <mail@scderox.de>
  */
 function formatDate(date) {
     const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString(),
@@ -77,6 +90,7 @@ module.exports.truncate = truncate;
  * @param  {string} string String to puffer
  * @param  {number} size Length to puffer to
  * @return {string}
+ * @author Simon Csaba <mail@scderox.de>
  */
 function pufferStringToSize(string, size) {
     if (typeof string !== 'string') string = string.toString();
@@ -97,6 +111,7 @@ module.exports.pufferStringToSize = pufferStringToSize;
  * @param  {Array<string>} allowedUserIDs Array of User-IDs of users allowed to use the pagination
  * @param {Object} message Message to respond to
  * @return {string}
+ * @author Simon Csaba <mail@scderox.de>
  */
 async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null) {
     if (sites.length === 0) return await channel.send({embeds: [sites[0]]});
@@ -128,6 +143,13 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
         });
     });
 
+    /**
+     * Generate the buttons for a specified site
+     * @param {Number} site Site-Number
+     * @param {Boolean} disabled If the buttons should be disabled
+     * @returns {Array}
+     * @private
+     */
     function getButtons(site, disabled = false) {
         const btns = [];
         if (site !== 1) btns.push({type: 'BUTTON', label: '◀ Back', customId: 'back', style: 'PRIMARY', disabled});
