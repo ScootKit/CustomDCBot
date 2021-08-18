@@ -1,6 +1,5 @@
 const {embedType} = require('../../../src/functions/helpers');
 const {confDir} = require('./../../../main');
-const {MessageEmbed} = require('discord.js');
 const {moderationAction} = require('../moderationActions');
 
 module.exports.run = async function (client, msg, args) {

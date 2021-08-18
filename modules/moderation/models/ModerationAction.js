@@ -19,9 +19,9 @@ module.exports = class ModerationAction extends Model {
             sequelize
         });
     }
-}
+};
 
 module.exports.config = {
     'name': 'ModerationAction',
     'module': 'moderation'
-}
+};

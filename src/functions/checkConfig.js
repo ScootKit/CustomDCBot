@@ -147,15 +147,17 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             return errored;
         case 'channelID':
             return true;
+
         /*
-            RETURNING TRUE HERE BECAUSE SOMETIMES THIS FAILS RANDOMLY. WILL RETURN TO THIS LATER
-        const guild = (await client.guilds.fetch(client.guildID)).channels;
-            if (await guild.cache.get(value)) {
-                return true;
-            } else {
-                console.error(`[ERROR] Channel with ID ${value} in Guild-ID ${client.guildID} could not be found`);
-                return false;
-            }*/
+         *RETURNING TRUE HERE BECAUSE SOMETIMES THIS FAILS RANDOMLY. WILL RETURN TO THIS LATER
+         *const guild = (await client.guilds.fetch(client.guildID)).channels;
+         *if (await guild.cache.get(value)) {
+         *    return true;
+         *} else {
+         *    console.error(`[ERROR] Channel with ID ${value} in Guild-ID ${client.guildID} could not be found`);
+         *    return false;
+         *}
+         */
         case 'roleID':
             if (await (await client.guilds.fetch(client.guildID)).roles.fetch(value)) {
                 return true;

@@ -35,7 +35,7 @@ try {
 
 const configChecker = require('./src/functions/checkConfig');
 
-let models = {}; // Object with all models
+const models = {}; // Object with all models
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -68,7 +68,7 @@ db.authenticate().then(async () => {
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     client.emit('botReady');
     client.botReadyAt = new Date();
-    console.log('[BOT] The bot initiated successfully and is now listening to commands.')
+    console.log('[BOT] The bot initiated successfully and is now listening to commands.');
 });
 
 // Checking every (module AND bot) config file.
@@ -79,15 +79,15 @@ async function checkAllConfigs() {
             await asyncForEach(files, async f => {
                 await configChecker.checkBuildInConfig(f);
             });
-            await fs.readdir(`${__dirname}/modules/`, async (err, files) => {
+            await fs.readdir(`${__dirname}/modules/`, async (err, moduleFiles) => {
                 let needOverwrite = false;
-                await asyncForEach(files, async f => {
+                await asyncForEach(moduleFiles, async f => {
                     if (moduleConf[f]) {
                         if (client.modules[f]['config']['on-checked-config-event']) await configChecker.checkModuleConfig(f, require(`./modules/${f}/${client.modules[f]['config']['on-checked-config-event']}`));
                         else await configChecker.checkModuleConfig(f);
                     } else if (typeof moduleConf[f] === 'undefined') needOverwrite = true;
                 });
-                if (needOverwrite) await configChecker.generateModulesConfOverwrite(moduleConf, files);
+                if (needOverwrite) await configChecker.generateModulesConfOverwrite(moduleConf, moduleFiles);
                 console.log('[INFO] Done with checking.');
                 resolve();
             });
@@ -101,7 +101,7 @@ async function loadModules() {
     for (const f of files) {
         if (moduleConf[f]) {
             console.log(`[MODULE] Loading module ${f}`);
-            let moduleConfig = require(`${__dirname}/modules/${f}/module.json`);
+            const moduleConfig = require(`${__dirname}/modules/${f}/module.json`);
             client.modules[f] = {};
             client.modules[f]['config'] = moduleConfig;
             if (moduleConfig['models-dir']) await loadModelsInDir(`./modules/${f}${moduleConfig['models-dir']}`, f);
@@ -119,7 +119,7 @@ async function loadCommandsInDir(dir, moduleName = null) {
         const stats = fs.lstatSync(`${__dirname}/${dir}/${f}`);
         if (!stats) return console.error('no stats');
         if (stats.isFile()) {
-            let props = require(`${__dirname}/${dir}/${f}`);
+            const props = require(`${__dirname}/${dir}/${f}`);
             console.log(`[COMMANDS] Loaded ${dir}/${f}`);
             props.fileName = `${dir}/${f}`;
             client.commands.set(props.help.name, props);
@@ -151,9 +151,9 @@ async function loadEventsInDir(dir, moduleName = null) {
             fs.lstat(`${__dirname}/${dir}/${f}`, async (err, stats) => {
                 if (!stats) return;
                 if (stats.isFile()) {
-                    let eventFunction = require(`${__dirname}/${dir}/${f}`);
-                    let eventStart = eventFunction.run.bind(null, client);
-                    let eventName = f.split('.')[0];
+                    const eventFunction = require(`${__dirname}/${dir}/${f}`);
+                    const eventStart = eventFunction.run.bind(null, client);
+                    const eventName = f.split('.')[0];
                     client.events.set(eventName, eventStart);
                     if (moduleName) {
                         if (client.modules[moduleName]) {
@@ -161,7 +161,7 @@ async function loadEventsInDir(dir, moduleName = null) {
                             client.modules[moduleName]['events'].push(f.split('.js').join(''));
                         }
                     }
-                    client.on(eventName, (...args) => eventFunction.run(client, ...args));
+                    client.on(eventName, (...cArgs) => eventFunction.run(client, ...cArgs));
                     console.log(`[EVENTS] Loaded ${dir}/${f}`);
                 } else {
                     console.log(`[EVENTS] Loading events in ${dir}/${f}`);
@@ -194,7 +194,7 @@ async function loadModule(dir, file, moduleName) {
         const stats = fs.lstatSync(`${__dirname}/${dir}/${file}`);
         if (!stats) return;
         if (stats.isFile()) {
-            let model = require(`${__dirname}/${dir}/${file}`);
+            const model = require(`${__dirname}/${dir}/${file}`);
             await model.init(db);
             if (moduleName) {
                 if (client.modules[moduleName]) {

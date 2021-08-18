@@ -9,7 +9,7 @@ module.exports.run = async function (client, msg, args) {
     if (!msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level4'].includes(r.id))) return message.edit(message.edit(...embedType(moduleStrings['no_permissions'], {
         '%required_level%': 4
     })));
-    let user = args[0];
+    const user = args[0];
     let reason = '';
     await args.shift(); // Removing tag/userid from arguments
     args.forEach(a => {

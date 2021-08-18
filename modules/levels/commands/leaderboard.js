@@ -39,9 +39,9 @@ module.exports.run = async function (client, msg) {
         let content = '';
         let i = 0;
         let y = 0;
-        for (const u in sortedUsersByLevel[l]) {
+        sortedUsersByLevel[l].forEach(() => {
             y = y + 1;
-        }
+        });
         for (const u in sortedUsersByLevel[l]) {
             if (i >= 5) continue;
             i = i + 1;
