@@ -31,7 +31,7 @@ function twitchNotifications(client) {
   config['streamers'].forEach(start)
   
   async function start(value, index) {
-    let streamer = await client.models['twitch-notifications']['streamer'].findOne({
+    const streamer = await client.models['twitch-notifications']['streamer'].findOne({
       where: {
           name: value.toLowerCase()
       }
