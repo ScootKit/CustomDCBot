@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "node main.js",
+    "test": "npx eslint ./",
     "generate-config": "node generate-config.js"
   },
   "author": "SC Network Team",
@@ -31,6 +31,7 @@
     "utf-8-validate": "^5.0.5"
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "jsdoc": "^3.6.7"
   }
 }

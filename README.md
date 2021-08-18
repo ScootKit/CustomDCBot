@@ -31,7 +31,7 @@ In short words: You have to
 Please read the full [license](LICENSE). This is not legal advice. 
 
 ## Support development
-As mentioned above our buisness model is to host these bots for servers - therfull it does not really make sens to publish our product here - but we do it anyway - but we need your support! Feel free to [contribute](CONTRIBUTING.md) or [donate on Patreon](https://patreon.com/scnetwork). Thank you so much <3 
+As mentioned above our buisness model is to host these bots for servers - therfull it does not really make sens to publish our product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md) or [donate on Patreon](https://patreon.com/scnetwork). Thank you so much <3 
 
 ## Please read this issue before continuing.
 This repo does not get any new modules or features currently. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).

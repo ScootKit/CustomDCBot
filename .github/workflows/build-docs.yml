@@ -1,0 +1,21 @@
+name: Build docs
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Build docs
+        run: npx jsdoc -c jsdoc.conf.json
+      - name: Commit & Push
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: generated documentation
+          branch: main

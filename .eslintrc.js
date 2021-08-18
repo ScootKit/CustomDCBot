@@ -7,7 +7,7 @@ module.exports = {
     'parserOptions': {
         'ecmaVersion': 12
     },
-    'ignorePatterns': ['.eslintrc.js'],
+    'ignorePatterns': ['.eslintrc.js', 'out/'],
     'rules': {
         'no-unused-vars': 'error',
         'accessor-pairs': 'error',
@@ -66,6 +66,15 @@ module.exports = {
             'error',
             'property'
         ],
+        "require-jsdoc": ["error", {
+            "require": {
+                "FunctionDeclaration": true,
+                "MethodDefinition": false,
+                "ClassDeclaration": true,
+                "ArrowFunctionExpression": false,
+                "FunctionExpression": false
+            }
+        }],
         'dot-notation': 'off',
         'eol-last': 'off',
         'eqeqeq': 'error',
