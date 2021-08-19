@@ -86,10 +86,11 @@ db.authenticate().then(async () => {
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     client.models = models;
     client.moduleConf = moduleConf;
-    client.logChannel = await client.channels.fetch(config.logChannelID).catch(() => {})
+    client.logChannel = await client.channels.fetch(config.logChannelID).catch(() => {
+    });
     if (!client.logChannel || client.logChannel.type !== 'GUILD_TEXT') logger.warn('LogChannel is not set or wrong type');
     await configChecker.loadAllConfigs(client, moduleConf).catch(async () => {
-        if (client.logChannel) await client.logChannel.send('⚠ Configuration-Checking failed. Find more information in your log. The bot exited.')
+        if (client.logChannel) await client.logChannel.send('⚠ Configuration-Checking failed. Find more information in your log. The bot exited.');
         process.exit(1);
     });
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
@@ -97,7 +98,7 @@ db.authenticate().then(async () => {
     client.emit('botReady');
     client.botReadyAt = new Date();
     logger.info('[BOT] The bot initiated successfully and is now listening to commands.');
-    if (client.logChannel) client.logChannel.send('🚀 The bot initiated successfully and is now listening to commands.')
+    if (client.logChannel) client.logChannel.send('🚀 The bot initiated successfully and is now listening to commands.');
 });
 
 /**
