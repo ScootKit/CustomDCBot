@@ -58,6 +58,7 @@ module.exports = {
         ],
         'consistent-return': 'off',
         'consistent-this': 'error',
+        'no-extra-semi': 'error',
         'curly': 'off',
         'default-case': 'off',
         'default-case-last': 'error',
