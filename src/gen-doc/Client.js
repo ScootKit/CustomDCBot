@@ -9,6 +9,11 @@ class Client {
          */
         this.botReadyAt = null;
         /**
+         * [TextChannel](https://discord.js.org/#/docs/main/stable/class/TextChannel) which should be used as default log-channel and in which some basic information gets send. ⚠️ In some cases this value is `null` so always catch or check the value before any calls on this property.
+         * @type {TextChannel}
+         */
+        this.logChannel = null;
+        /**
          * Object of all models, mapped by module
          * @type {Object}
          */

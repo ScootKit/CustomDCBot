@@ -156,6 +156,7 @@ module.exports = {
         'no-extra-bind': 'error',
         'no-extra-label': 'error',
         'no-extra-parens': 'off',
+        'no-extra-semi': 'always',
         'no-floating-decimal': 'error',
         'no-implicit-globals': 'off',
         'no-implied-eval': 'error',

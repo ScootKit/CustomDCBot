@@ -36,6 +36,12 @@
       "type": "select",
       "description": "Log-Level of the bot",
       "content": ["debug","info","warn", "error", "fatal", "off"]
+    },
+    {
+      "field_name": "logChannelID",
+      "default": "",
+      "type": "channelID",
+      "description": "Default log-channel for most modules and used to log relevant information"
     }
   ]
 }
