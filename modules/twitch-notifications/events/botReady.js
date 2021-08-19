@@ -1,16 +1,11 @@
 const {confDir} = require('../../../main');
-const config = require(`${confDir}/twitch-notifications/config.json`);
 const {embedType} = require('../../../src/functions/helpers');
 
 const {ApiClient} = require('twitch');
 const {ClientCredentialsAuthProvider} = require('twitch-auth');
 
-const ClientID = config['twitchClientID'];
-const ClientSecret = config['clientSecret'];
-const authProvider = new ClientCredentialsAuthProvider(ClientID, ClientSecret);
-const apiClient = new ApiClient({authProvider});
-
-function twitchNotifications(client) {
+function twitchNotifications(client, apiClient) {
+    const config = require(`${confDir}/twitch-notifications/config.json`);
     function sendMsg(username, game, thumbnailUrl, channelID) {
         const channel = client.channels.cache.get(channelID);
         if (!channel) return console.error(`[twitch-notifications] Could not find channel with id ${channelID}`);
@@ -53,10 +48,17 @@ function twitchNotifications(client) {
 }
 
 exports.run = async (client) => {
-    await twitchNotifications(client);
+    const config = require(`${confDir}/twitch-notifications/config.json`);
+
+    const ClientID = config['twitchClientID'];
+    const ClientSecret = config['clientSecret'];
+    const authProvider = new ClientCredentialsAuthProvider(ClientID, ClientSecret);
+    const apiClient = new ApiClient({authProvider});
+
+    await twitchNotifications(client, apiClient);
     if (config['interval'] > 60) return console.error(`[twitch-notifications] The value of the interval must be equal or higher than 60`);
-    interval = config['interval'] * 1000;
+    const interval = config['interval'] * 1000;
     setInterval(() => {
-        twitchNotifications(client);
+        twitchNotifications(client, apiClient);
     }, interval);
 };
