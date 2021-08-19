@@ -49,8 +49,8 @@ function twitchNotifications(client) {
             streamer.save();
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index]);
         }
-    };
-};
+    }
+}
 
 exports.run = async (client) => {
     await twitchNotifications(client);
