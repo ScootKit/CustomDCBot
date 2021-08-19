@@ -59,4 +59,4 @@ exports.run = async (client) => {
     setInterval(() => {
         twitchNotifications(client);
     }, interval);
-}
+};
