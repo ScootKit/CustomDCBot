@@ -46,7 +46,7 @@
         "default": [],
         "type": "array",
         "content": "string",
-        "description": "Streamer where the notification should notify"
+        "description": "Streamers where a notification should send when they start streaming"
     },
     {
       "field_name": "interval",
