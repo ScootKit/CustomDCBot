@@ -131,7 +131,7 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
  * @returns {Promise<unknown>}
  */
 async function checkBuildInConfig(configName) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const {client} = require('../../main');
         const exampleFile = require(`../../config-generator/${configName}`);
         if (!exampleFile) return;
@@ -143,7 +143,7 @@ async function checkBuildInConfig(configName) {
             logger.log(`Config config/${configName} does not exist - I'm going to create it - stand by...`);
             ow = true;
         }
-        exampleFile.content.forEach(async field => {
+        for (const field of exampleFile.content) {
             if (!field.field_name) return;
             if (!config[field.field_name]) return config[field.field_name] = field.default;
             if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
@@ -158,7 +158,7 @@ async function checkBuildInConfig(configName) {
                     }
                 }
             }
-        });
+        }
         if (ow) {
             jsonfile.writeFile(`${client.configDir}/${configName}`, config, {spaces: 2}, (err => {
                 if (err) {
@@ -217,11 +217,11 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             return typeof value === 'string';
         case 'array':
             if (typeof value !== 'object') return false;
-            let errored = true;
-            await asyncForEach(value, function (v) {
-                if (errored) errored = checkType(contentFormat, v, null, allowEmbed);
+            let errored = false;
+            await asyncForEach(value, async function (v) {
+                if (!errored) errored = !(await checkType(contentFormat, v, null, allowEmbed));
             });
-            return errored;
+            return !errored;
         case 'channelID':
             const channel = await client.channels.fetch(value).catch(() => {
             });
