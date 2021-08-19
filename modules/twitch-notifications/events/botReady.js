@@ -26,7 +26,7 @@ function twitchNotifications(client) {
         const user = await apiClient.helix.users.getUserByName(userName.toLowerCase());
         if (!user) return false;
         return await user.getStream();
-    };
+    }
 
     config['streamers'].forEach(start);
 
