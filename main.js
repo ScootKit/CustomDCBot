@@ -26,6 +26,7 @@ rl.on('line', (input) => {
         client,
         cliCommands
     });
+    rl.prompt(true);
 });
 
 // Parsing parameters
@@ -120,6 +121,7 @@ db.authenticate().then(async () => {
     client.botReadyAt = new Date();
     logger.info('[BOT] The bot initiated successfully and is now listening to commands.');
     if (client.logChannel) client.logChannel.send('🚀 The bot initiated successfully and is now listening to commands.');
+    rl.prompt(true);
 });
 
 /**
