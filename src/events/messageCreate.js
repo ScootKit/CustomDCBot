@@ -5,8 +5,10 @@ exports.run = async (client, msg) => {
     if (msg.author.bot) return;
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
-    if (!msg.content.startsWith(client.config.prefix) && !msg.content.startsWith(`<@${client.user.id}> `)  && !msg.content.startsWith(`<@!${client.user.id}> `)) return;
-    const args = msg.content.split(msg.content.startsWith(client.prefix) ? client.config.prefix : msg.content.startsWith(`<@${client.user.id}> `) ? `<@${client.user.id}> ` : `<@!${client.user.id}> `).join('').trim().split(/ +/g);
+    if (!msg.content.startsWith(client.config.prefix) && !msg.content.startsWith(`<@${client.user.id}> `) && !msg.content.startsWith(`<@!${client.user.id}> `)) return;
+    let stringToReplace = client.prefix;
+    if (!msg.content.startsWith(client.prefix)) stringToReplace = msg.content.startsWith(`<@${client.user.id}> `) ? `<@${client.user.id}> ` : `<@!${client.user.id}> `;
+    const args = msg.content.split(stringToReplace).join('').trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     if (!client.aliases.has(command)) {
         if (!client.scnxSetup) return;

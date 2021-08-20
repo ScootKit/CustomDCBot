@@ -115,11 +115,14 @@ module.exports.pufferStringToSize = pufferStringToSize;
  */
 async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null) {
     if (sites.length === 1) {
-        if (message) return message.reply({embeds: [sites[0]]})
+        if (message) return message.reply({embeds: [sites[0]]});
         return await channel.send({embeds: [sites[0]]});
     }
     let m;
-    if (message) m = await message.reply({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
+    if (message) m = await message.reply({
+        components: [{type: 'ACTION_ROW', components: getButtons(1)}],
+        embeds: [sites[0]]
+    });
     else m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
     const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 20000});
     let currentSite = 1;
