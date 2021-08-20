@@ -15,3 +15,4 @@ This changelog contains mostly API-Changes and changes for developers.
 * `footer` can now be set for each embed individually
 * `.eslintrc.js` added - please use this configuration if you create a pullrequest
 * Added `client.logChannel` ([TextChannel](https://discord.js.org/#/docs/main/stable/class/TextChannel)) which should be used as a default for log-channels and in which some relevant information gets sent. ⚠️ In some cases this value is `null` so always catch or check the value before any calls on this property.
+* Forgot the prefix of your bot? You can now use @-mentions instead of your prefix
