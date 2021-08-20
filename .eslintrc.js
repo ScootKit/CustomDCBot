@@ -66,13 +66,13 @@ module.exports = {
             'error',
             'property'
         ],
-        "require-jsdoc": ["error", {
-            "require": {
-                "FunctionDeclaration": true,
-                "MethodDefinition": false,
-                "ClassDeclaration": true,
-                "ArrowFunctionExpression": false,
-                "FunctionExpression": false
+        'require-jsdoc': ['error', {
+            'require': {
+                'FunctionDeclaration': true,
+                'MethodDefinition': false,
+                'ClassDeclaration': true,
+                'ArrowFunctionExpression': false,
+                'FunctionExpression': false
             }
         }],
         'dot-notation': 'off',
@@ -122,7 +122,7 @@ module.exports = {
         'max-classes-per-file': 'error',
         'max-depth': 'off',
         'max-len': 'off',
-        'max-lines': 'error',
+        'max-lines': ['error', {skipComments: true}],
         'max-lines-per-function': 'off',
         'max-nested-callbacks': 'error',
         'max-params': 'off',
