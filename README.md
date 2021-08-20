@@ -90,19 +90,26 @@ As per the [License](LICENSE) you *have* to make *every* of your modules publicl
 **Before you make a module**: Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same thing (;\
 **Submit a module**: Simply create a pullrequest, and we will check your module and merge it then (;
 
+#### module.json
 Every module has to contain a `module.json` file with the following content:
-* `name` of the module. Should be the same as the name of your dictionary. 
-* `author`
-    * `name`: Name of the author
-    * `link`: Link to the author
-* `description`: Short description of the module
-* `commands-dir` (optional): Directory inside your module folder where all the interation-command-files are in
-* `message-commands-dir` (optional, not recommended if not necessary): Directory inside your module folder where all the message-command-files are in
-* `on-load-event` (optional): File with exported `onLoad` function in it. Gets executed when your config got checked successfully. 
-* `events-dir` (optional): Directory inside your module folder where all the event-files are in
-* `models-dir` (optional): Directory inside your module folder where all the models-files are in
-* `config-example-files` (optional, seriously leave this out when you don't have config files): Array of config-files inside your module directory.
 
+* `name` of the module. Should be the same as the name of your dictionary.
+* `author`
+  * `name`: Name of the author
+  * `link`: Link to the author
+* `description`: Short description of the module
+* `commands-dir` (optional): Directory inside your module folder where all
+  the [interaction-command-files](#interaction-command) are in
+* `message-commands-dir` (optional, not recommended if not necessary): Directory inside your module folder where all
+  the [message-command-files](#message-command) are in
+* `on-load-event` (optional): File with exported `onLoad` function in it. Gets executed when your config got checked
+  successfully.
+* `events-dir` (optional): Directory inside your module folder where all the [event-files](#events) are in
+* `models-dir` (optional): Directory inside your module folder where all the models-files are in
+* `config-example-files` (optional, seriously leave this out when you don't have config files): Array
+  of [config-files](#example-config-file) inside your module directory.
+
+#### Interaction-Command
 An interaction-command ("slash command") file has to export the following things:
 * `run`: Function that gets triggered if the interactions is being used (provided arguments: `client`, `interaction)
 * `help`
@@ -111,6 +118,7 @@ An interaction-command ("slash command") file has to export the following things
   * `description`: Description of the command
   * `options`: [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
 
+#### Message-Command
 A message-command file has to export the following things:
 * `run`: Function that gets triggered if the command gets executed (provided arguments: `client` (discord.js Client), `msg` (MessageObject), 
   `args` (Array of arguments))
@@ -123,9 +131,11 @@ A message-command file has to export the following things:
   * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
     boolean)
 
+#### Events
 An event file should export the following things:
 * `run`: Function that gets triggered if the event gets executed (provided arguments: `client` (discord.js Client) and all the arguments that gets past by discord.js for this event)
 
+#### Example config-file
 An example config file should include the following things:
 * `filename`: Name of the generated config file
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
