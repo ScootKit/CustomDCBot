@@ -7,6 +7,26 @@ const fs = require('fs');
 const {Sequelize} = require('sequelize');
 const log4js = require('log4js');
 const jsonfile = require('jsonfile');
+const readline = require('readline');
+const cliCommands = [];
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+rl.on('line', (input) => {
+    if (!client.botReadyAt) return console.error('The bot is not ready yet. Please wait until the bot gets ready to use the cli.');
+    const command = cliCommands.find(c => c.command === input.split(' ')[0].toLowerCase());
+    if (!command) {
+        return console.error('Command not found. Use "help" to see all available commands.');
+    }
+    console.log('\n');
+    command.run({
+        input,
+        args: input.split(' '),
+        client,
+        cliCommands
+    });
+});
 
 // Parsing parameters
 let config;
@@ -84,6 +104,7 @@ db.authenticate().then(async () => {
         process.exit();
     });
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
+    loadCLIFile('/src/cli.js');
     client.models = models;
     client.moduleConf = moduleConf;
     client.logChannel = await client.channels.fetch(config.logChannelID).catch(() => {
@@ -119,6 +140,7 @@ async function loadModules() {
             if (moduleConfig['commands-dir']) await loadMessageCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
             if (moduleConfig['events-dir']) await loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
             if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client.modules[f]);
+            if (moduleConfig['cli']) loadCLIFile(`./modules/${f}/moduleConfig['cli']`, f);
         } else logger.debug(`[MODULE] Module ${f} is disabled`);
     }
 }
@@ -251,6 +273,23 @@ async function loadModelsInDir(dir, moduleName = null) {
             await loadModules(`${dir}/${file}`);
         }
     });
+}
+
+/**
+ * Load a CLI-File
+ * @param {String} path Path to the CLI-File
+ * @param {String} moduleName Name of the module
+ * @returns {void}
+ */
+function loadCLIFile(path, moduleName = null) {
+    const file = require(`${__dirname}/${path}`);
+    for (const command of file.commands) {
+        command.originalName = command.command;
+        command.module = moduleName;
+        cliCommands.push(command);
+        command.command = command.command.toLowerCase();
+        logger.debug(`[CLI] Loaded ${command.command} of ${path}`);
+    }
 }
 
 module.exports.models = models;
