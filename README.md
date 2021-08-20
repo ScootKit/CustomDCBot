@@ -120,7 +120,8 @@ A message-command file has to export the following things:
     * `aliases`: Array of all aliases. Should contain the value of `name`.
 * `config`
   * `args`: How many arguments does this command *at least* need?
-  * `restricted`: Can this command only be run by the bot owner (e.g. change status or something IDK, boolean)
+  * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
+    boolean)
 
 An event file should export the following things:
 * `run`: Function that gets triggered if the event gets executed (provided arguments: `client` (discord.js Client) and all the arguments that gets past by discord.js for this event)

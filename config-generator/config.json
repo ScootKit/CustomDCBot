@@ -13,10 +13,11 @@
       "description": "Replace this with your prefix"
     },
     {
-      "field_name": "ownerID",
-      "default": "413429490342035466",
-      "type": "string",
-      "description": "Replace this the id of the owner of this bot. IMPORTANT: This user can run code with this token!"
+      "field_name": "botOperators",
+      "default": [],
+      "type": "array",
+      "content": "string",
+      "description": "Bot operators can reload the configuration and perform system relevant actions with this bot. Please only add users you really trust (and yourself of course)"
     },
     {
       "field_name": "guildID",

@@ -20,5 +20,5 @@ module.exports.help = {
     'aliases': ['reload', 'r']
 };
 module.exports.config = {
-    'restricted': false
+    'restricted': true
 };
