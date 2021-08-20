@@ -6,8 +6,8 @@ exports.run = async (client, msg) => {
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
     if (!msg.content.startsWith(client.config.prefix) && !msg.content.startsWith(`<@${client.user.id}> `) && !msg.content.startsWith(`<@!${client.user.id}> `)) return;
-    let stringToReplace = client.prefix;
-    if (!msg.content.startsWith(client.prefix)) stringToReplace = msg.content.startsWith(`<@${client.user.id}> `) ? `<@${client.user.id}> ` : `<@!${client.user.id}> `;
+    let stringToReplace = client.config.prefix;
+    if (!msg.content.startsWith(client.config.prefix)) stringToReplace = msg.content.startsWith(`<@${client.user.id}> `) ? `<@${client.user.id}> ` : `<@!${client.user.id}> `;
     const args = msg.content.split(stringToReplace).join('').trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     if (!client.aliases.has(command)) {
@@ -16,7 +16,7 @@ exports.run = async (client, msg) => {
     }
     const commandElement = client.commands.get(client.aliases.get(command));
     if (commandElement.config.restricted === true) {
-        if (msg.author.id !== client.config.ownerID) return msg.channel.send(...embedType(client.strings.not_enough_permissions));
+        if (msg.author.id !== client.config.ownerID) return msg.channel.send(embedType(client.strings.not_enough_permissions));
     }
     if (commandElement.config.args === true) {
         if (!args[0]) return msg.channel.send(...embedType(client.strings.need_args));
