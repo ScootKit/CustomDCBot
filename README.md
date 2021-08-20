@@ -146,6 +146,8 @@ An interaction-command ("slash command") file has to export the following things
 * `config` (both for !help and slash-commands)
     * `name`: Name of the command (should be the same name as the file name)
     * `description`: Description of the command
+    * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
+      boolean)
     * `options`: [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
 
 #### Message-Command

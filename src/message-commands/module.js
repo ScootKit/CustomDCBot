@@ -12,7 +12,7 @@ module.exports.run = async function (client, msg, args) {
         .setFooter(`See all command with "${client.config.prefix}help"`);
     let content = '';
     module.commands.forEach(c => {
-        content = content + `\n\`${client.config.prefix}${c}\`: ${client.commands.get(c).help.description}`;
+        content = content + `\n\`${client.config.prefix}${c}\`: ${client.messageCommands.get(c).help.description}`;
     });
     moduleEmbed.addField('Commands', content);
     await msg.channel.send(moduleEmbed);

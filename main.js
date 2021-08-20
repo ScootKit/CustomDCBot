@@ -64,7 +64,7 @@ try {
 
 const models = {}; // Object with all models
 
-client.commands = new Discord.Collection();
+client.messageCommands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.events = new Discord.Collection();
 client.modules = {};
@@ -93,18 +93,32 @@ const db = new Sequelize({
     logging: false
 });
 
+const commands = [];
+
 // Starting bot
 db.authenticate().then(async () => {
     await loadModules();
-    await loadMessageCommandsInDir('./src/commands');
+    await loadMessageCommandsInDir('./src/message-commands');
     await loadEventsInDir('./src/events');
     await db.sync();
     logger.info('[DB] Synced db');
+    await loadCommandsInDir('./src/commands');
     await client.login(config.token).catch(() => {
         logger.fatal('Bot could not log in. Please double-check your token and try again');
         process.exit();
     });
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
+    let needSync = false;
+    const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch();
+    for (const command of commands) {
+        if (!oldCommands.find(c => c.name === command.name)) needSync = true;
+    }
+    if (oldCommands.size !== commands.length) needSync = true;
+    if (needSync) {
+        await client.application.commands.set(commands, config.guildID);
+        logger.info(`Synced application commands`);
+    } else logger.info('Application commands are up to date - no syncing required');
+    client.commands = commands;
     loadCLIFile('/src/cli.js');
     client.models = models;
     client.moduleConf = moduleConf;
@@ -139,11 +153,38 @@ async function loadModules() {
             client.modules[f]['config'] = moduleConfig;
             client.configurations[f] = {};
             if (moduleConfig['models-dir']) await loadModelsInDir(`./modules/${f}${moduleConfig['models-dir']}`, f);
-            if (moduleConfig['commands-dir']) await loadMessageCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
+            if (moduleConfig['message-commands-dir']) await loadMessageCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
+            if (moduleConfig['commands-dir']) await loadCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
             if (moduleConfig['events-dir']) await loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
             if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client.modules[f]);
             if (moduleConfig['cli']) loadCLIFile(`./modules/${f}/moduleConfig['cli']`, f);
         } else logger.debug(`[MODULE] Module ${f} is disabled`);
+    }
+}
+
+/**
+ * Load every command in a directory
+ * @param {String} dir Directory to load commands from
+ * @param {String} moduleName Name of module currently loading from
+ * @returns {Promise<void>}
+ * @private
+ */
+async function loadCommandsInDir(dir, moduleName = null) {
+    const files = fs.readdirSync(`${__dirname}/${dir}`);
+    for (const f of files) {
+        const stats = fs.lstatSync(`${__dirname}/${dir}/${f}`);
+        if (!stats) return logger.error('No stats returned');
+        if (stats.isFile()) {
+            const props = require(`${__dirname}/${dir}/${f}`);
+            commands.push({
+                name: props.config.name,
+                description: props.config.description,
+                restricted: props.config.restricted,
+                options: props.config.options || [],
+                run: props.run,
+                module: moduleName
+            });
+        }
     }
 }
 
@@ -168,7 +209,7 @@ async function loadMessageCommandsInDir(dir, moduleName = null) {
                 logger.error(`Command ${dir}/${f}: props.config.args can not longer be an integer, please read more in the Changelog (CHANGELOG.md).`);
                 process.exit(1);
             }
-            client.commands.set(props.help.name, props);
+            client.messageCommands.set(props.help.name, props);
             props.help.aliases.forEach(alias => {
                 client.aliases.set(alias, props.help.name);
             });
@@ -253,7 +294,8 @@ async function loadModelsInDir(dir, moduleName = null) {
  * @param {String} moduleName Name of module currently loading from
  * @returns {Promise<void>}
  * @private
- */async function loadModel(dir, file, moduleName) {
+ */
+async function loadModel(dir, file, moduleName) {
     return new Promise(async resolve => {
         const stats = fs.lstatSync(`${__dirname}/${dir}/${file}`);
         if (!stats) return;

@@ -14,7 +14,7 @@ exports.run = async (client, msg) => {
         if (!client.scnxSetup) return;
         return await require('../functions/scnx-integration').commandNotFoundCustomCommandCheck(client, msg, command, args);
     }
-    const commandElement = client.commands.get(client.aliases.get(command));
+    const commandElement = client.messageCommands.get(client.aliases.get(command));
     if (commandElement.config.restricted === true && !client.config.botOperators.includes(msg.author.id)) return msg.reply(embedType(client.strings.not_enough_permissions));
     if ((commandElement.config.args || 0) > args.length) return msg.reply(embedType(client.strings.need_args, {
         '%count%': args.length,

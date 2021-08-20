@@ -34,12 +34,16 @@ function inputReplacer(args, input) {
 /**
  * Will turn an object or string into embeds
  * @param  {string|array} input Input in the configuration file
- * @param  {object} args Object of variables to replace
+ * @param  {Object} args Object of variables to replace
+ * @param  {Object} optionsToKeep [BaseMessageOptions](https://discord.js.org/#/docs/main/stable/typedef/BaseMessageOptions) to keep
  * @author Simon Csaba <mail@scderox.de>
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
-module.exports.embedType = function (input, args = {}) {
-    if (typeof input === 'string') return {content: inputReplacer(args, input)};
+module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
+    if (typeof input === 'string') {
+        optionsToKeep.content = inputReplacer(args, input);
+        return optionsToKeep;
+    }
     const {client} = require('../../main');
     const emb = new MessageEmbed();
     emb.setTitle(inputReplacer(args, input['title']));
@@ -56,7 +60,9 @@ module.exports.embedType = function (input, args = {}) {
     }
     emb.setTimestamp();
     emb.setFooter(input.footer ? inputReplacer(args, input.footer) : client.strings.footer);
-    return {content: inputReplacer(args, input['message']), embeds: [emb]};
+    optionsToKeep.content = inputReplacer(args, input['message']);
+    optionsToKeep.embeds = [emb];
+    return optionsToKeep;
 };
 
 /**
@@ -109,14 +115,14 @@ module.exports.pufferStringToSize = pufferStringToSize;
  * @param  {Object} channel Channel in which to send the message
  * @param  {Array<object>} sites Array of MessageEmbeds (https://discord.js.org/#/docs/main/stable/class/MessageEmbed)
  * @param  {Array<string>} allowedUserIDs Array of User-IDs of users allowed to use the pagination
- * @param {Object} message Message to respond to
+ * @param {Object} message Message or Interaction to respond to
  * @return {string}
  * @author Simon Csaba <mail@scderox.de>
  */
-async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null) {
+async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null, ephemeral = false) {
     if (sites.length === 1) {
-        if (message) return message.reply({embeds: [sites[0]]});
-        return await channel.send({embeds: [sites[0]]});
+        if (message) return message.reply({embeds: [sites[0]], ephemeral});
+        return await channel.send({embeds: [sites[0]], ephemeral});
     }
     let m;
     if (message) m = await message.reply({
