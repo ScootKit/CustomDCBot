@@ -119,8 +119,8 @@ A message-command file has to export the following things:
     * `description`: Description of the command
     * `aliases`: Array of all aliases. Should contain the value of `name`.
 * `config`
-    * `args`: Does this command need arguments? (boolean)
-    * `restricted`: Can this command only be run by the bot owner (e.g. change status or something IDK, boolean) 
+  * `args`: How many arguments does this command *at least* need?
+  * `restricted`: Can this command only be run by the bot owner (e.g. change status or something IDK, boolean)
 
 An event file should export the following things:
 * `run`: Function that gets triggered if the event gets executed (provided arguments: `client` (discord.js Client) and all the arguments that gets past by discord.js for this event)

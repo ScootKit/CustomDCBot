@@ -27,5 +27,5 @@ module.exports.help = {
 };
 module.exports.config = {
     'restricted': false,
-    'args': true
+    'args': 1
 };

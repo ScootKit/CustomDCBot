@@ -140,6 +140,10 @@ async function loadMessageCommandsInDir(dir, moduleName = null) {
             logger.debug(`[COMMANDS] Loaded ${dir}/${f}`);
             props.fileName = `${dir}/${f}`;
             props.help.module = moduleName || 'none';
+            if (props.config.args && typeof props.config.args === 'boolean') {
+                logger.error(`Command ${dir}/${f}: props.config.args can not longer be an integer, please read more in the Changelog (CHANGELOG.md).`);
+                process.exit(1);
+            }
             client.commands.set(props.help.name, props);
             props.help.aliases.forEach(alias => {
                 client.aliases.set(alias, props.help.name);

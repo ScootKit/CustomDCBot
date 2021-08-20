@@ -18,9 +18,10 @@ exports.run = async (client, msg) => {
     if (commandElement.config.restricted === true) {
         if (msg.author.id !== client.config.ownerID) return msg.channel.send(embedType(client.strings.not_enough_permissions));
     }
-    if (commandElement.config.args === true) {
-        if (!args[0]) return msg.channel.send(...embedType(client.strings.need_args));
-    }
+    if ((commandElement.config.args || 0) > args.length) return msg.reply(embedType(client.strings.need_args, {
+        '%count%': args.length,
+        '%neededCount%': commandElement.config.args
+    }));
     const commandFile = require(`./../../${commandElement.fileName}`);
     client.logger.debug(`${msg.author.tag} (${msg.author.id}) used command ${client.config.prefix}${command}.`);
     commandFile.run(client, msg, args);
