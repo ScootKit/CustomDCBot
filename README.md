@@ -122,6 +122,8 @@ Also please read the [Rues for modules](#rules-for-modules).\
 Every module should
 
 * Use Slash-Commands wherever possible
+* Should provide a file with exported functions which other modules can use to manipulate data or perform actions in
+  your module (eg: an economy module should provide a file with exported functions like `User.addToBalance()`)
 * Answer with ephemeral messages wherever it makes sense
 * create as few commands as possible (we have a limit to 100 commands in total), so please try to
   use [Sub-Commands](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups)
