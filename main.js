@@ -14,7 +14,10 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 rl.on('line', (input) => {
-    if (!client.botReadyAt) return console.error('The bot is not ready yet. Please wait until the bot gets ready to use the cli.');
+    if (!client.botReadyAt) {
+        rl.prompt(true);
+        return console.error('The bot is not ready yet. Please wait until the bot gets ready to use the cli.');
+    }
     const command = cliCommands.find(c => c.command === input.split(' ')[0].toLowerCase());
     if (!command) {
         return console.error('Command not found. Use "help" to see all available commands.');
