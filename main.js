@@ -157,7 +157,7 @@ async function loadModules() {
             if (moduleConfig['commands-dir']) await loadCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
             if (moduleConfig['events-dir']) await loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
             if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client.modules[f]);
-            if (moduleConfig['cli']) loadCLIFile(`./modules/${f}/moduleConfig['cli']`, f);
+            if (moduleConfig['cli']) loadCLIFile(`./modules/${f}/${moduleConfig['cli']}`, f);
         } else logger.debug(`[MODULE] Module ${f} is disabled`);
     }
 }
