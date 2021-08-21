@@ -5,7 +5,7 @@ should only use it if you have some experience with Javascript, discord.js and J
 
 ---
 
-## VERSION 2 - UNSTABLE
+## VERSION 2 - BETA
 
 This branch is an unstable version of the upcoming v2-release. It contains breaking changes as detailed in
 the [changelog](CHANGELOG.md) (and more are coming). I suggest reading the changelog carefully. Some modules may not be
