@@ -71,7 +71,7 @@ module.exports.run = async function (client, msg) {
             .setFooter(client.strings.footer, client.strings.footerImgUrl)
             .setTitle(client.strings.helpembed.title.split('%site%').join(siteCount))
             .addFields(fields);
-        embed.addField('ℹ️ Slash-Commands', `You probably miss **${client.commands.length - 1} commands** by using not slash-commands - please use \`/help\` (and select this command) to see all available message-commands.\nHate using slash commands? Most commands (not /help) can still be used with our migration-helper by adding you the prefix ${client.config.prefix} in front of the message command.`);
+        embed.addField('ℹ️ Slash-Commands', `You probably miss **${client.commands.length - 1} commands** by using not slash-commands - please use \`/help\` (and select this command) to see all available message-commands.`);
         if (atBeginning) sites.unshift(embed);
         else sites.push(embed);
     }
