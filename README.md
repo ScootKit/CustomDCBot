@@ -114,7 +114,23 @@ Please read the license for more information.
 
 **Before you make a module**: Please create an issue with your suggestion and claim that you are working on it so nobody
 is working on the same thing (;\
+Also please read the [Rues for modules](#rules-for-modules).\
 **Submit a module**: Simply create a pullrequest, and we will check your module and merge it then (;
+
+#### Rules for modules
+
+Every module should
+
+* Use Slash-Commands wherever possible
+* Answer with ephemeral messages wherever it makes sense
+* create as few commands as possible (we have a limit to 100 commands in total), so please try to
+  use [Sub-Commands](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups)
+  wherever possible (eg: instead of having /ban, /kick, /mute etc, have a /moderate command with sub-commands)
+* Use the newest features of the discord api and discord.js (buttons, selects, etc) if possible
+* process only needed user information and data
+* follow our [terms of service](https://sc-net.work/tos), [Discord's Terms of Service](https://discord.com/tos) and
+  the [Discord Developer Terms of Service](https://discord.com/developers/docs/legal). A module should not allow users
+  to bypass or break the mentioned documents. This includes but is not limited to Nitro-Only-Features.
 
 #### module.json
 
