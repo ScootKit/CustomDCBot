@@ -19,7 +19,7 @@ function twitchNotifications(client, apiClient) {
 
     async function isStreamLive(userName) {
         const user = await apiClient.helix.users.getUserByName(userName.toLowerCase());
-        if (!user) return false;
+        if (!user) return 'userNotFound';
         return await user.getStream();
     }
 
@@ -32,8 +32,9 @@ function twitchNotifications(client, apiClient) {
             }
         });
         const stream = await isStreamLive(value);
-
-        if (stream !== null && !streamer) {
+        if (stream === 'userNotFound'){
+            return console.error(`Cannot find user ${value}`)
+        }   else if (stream !== null && !streamer) {
             client.models['twitch-notifications']['streamer'].create({
                 name: value.toLowerCase(),
                 startedAt: stream.startDate.toString()
