@@ -32,9 +32,9 @@ function twitchNotifications(client, apiClient) {
             }
         });
         const stream = await isStreamLive(value);
-        if (stream === 'userNotFound'){
-            return console.error(`Cannot find user ${value}`)
-        }   else if (stream !== null && !streamer) {
+        if (stream === 'userNotFound') {
+            return console.error(`Cannot find user ${value}`);
+        } else if (stream !== null && !streamer) {
             client.models['twitch-notifications']['streamer'].create({
                 name: value.toLowerCase(),
                 startedAt: stream.startDate.toString()
