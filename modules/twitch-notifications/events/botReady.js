@@ -40,7 +40,7 @@ function twitchNotifications(client, apiClient) {
                 startedAt: stream.startDate.toString()
             });
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index]);
-        } else if (stream !== null && stream.startDate !== streamer.startedAt.toString()) {
+        } else if (stream !== null && stream.startDate.toString() !== streamer.startedAt) {
             streamer.startedAt = stream.startDate.toString();
             streamer.save();
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index]);
