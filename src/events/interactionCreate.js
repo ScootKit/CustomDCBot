@@ -1,6 +1,9 @@
 const {embedType} = require('../functions/helpers');
 exports.run = async (client, interaction) => {
-    if (!client.botReadyAt) return; // Check if bot is *really* ready
+    if (!client.botReadyAt) return interaction.reply({
+        content: ':warning: The bot is currently starting up. Please try again in a few minutes.',
+        ephemeral: true
+    });
     if (!interaction.isCommand()) return;
     const command = client.commands.find(c => c.name.toLowerCase() === interaction.commandName.toLowerCase());
     if (!command) return interaction.reply({content: ':warning: Command not found', ephemeral: true});
