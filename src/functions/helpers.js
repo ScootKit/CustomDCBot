@@ -116,6 +116,7 @@ module.exports.pufferStringToSize = pufferStringToSize;
  * @param  {Array<object>} sites Array of MessageEmbeds (https://discord.js.org/#/docs/main/stable/class/MessageEmbed)
  * @param  {Array<string>} allowedUserIDs Array of User-IDs of users allowed to use the pagination
  * @param {Object} message Message or Interaction to respond to
+ * @param {Boolean} ephemeral If the message should be ephemeral or not
  * @return {string}
  * @author Simon Csaba <mail@scderox.de>
  */
