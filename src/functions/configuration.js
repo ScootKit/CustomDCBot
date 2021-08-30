@@ -144,8 +144,11 @@ async function checkBuildInConfig(configName) {
             ow = true;
         }
         for (const field of exampleFile.content) {
-            if (!field.field_name) return;
-            if (!config[field.field_name]) return config[field.field_name] = field.default;
+            if (!field.field_name) return reject(`One field is missing a name. Please check your config generation files`);
+            if (!config[field.field_name]) {
+                config[field.field_name] = field.default;
+                continue;
+            }
             if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
                 logger.error(`An error occurred while checking the content of field ${field.field_name} in config/${configName}`);
                 return reject(`An error occurred while checking the content of field ${field.field_name} in ${exampleFile.filename}`);
