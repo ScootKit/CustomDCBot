@@ -80,6 +80,7 @@ logger.level = config.logLevel || process.env.LOGLEVEL || 'debug';
 module.exports.logger = logger;
 client.logger = logger;
 const configChecker = require('./src/functions/configuration');
+const {compareArrays} = require('./src/functions/helpers');
 logger.info(`CustomBot v2 - Log-Level: ${logger.level}`);
 
 let moduleConf = {};
@@ -111,16 +112,7 @@ db.authenticate().then(async () => {
         process.exit();
     });
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
-    let needSync = false;
-    const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch();
-    for (const command of commands) {
-        if (!oldCommands.find(c => c.name === command.name)) needSync = true;
-    }
-    if (oldCommands.size !== commands.length) needSync = true;
-    if (needSync) {
-        await client.application.commands.set(commands, config.guildID);
-        logger.info(`Synced application commands`);
-    } else logger.info('Application commands are up to date - no syncing required');
+    await syncCommandsIfNeeded();
     client.commands = commands;
     loadCLIFile('/src/cli.js');
     client.models = models;
@@ -142,12 +134,24 @@ db.authenticate().then(async () => {
 });
 
 /**
+ * Syncs commands if needed
+ * @returns {Promise<void>}
+ */
+async function syncCommandsIfNeeded() {
+    const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch();
+    if (compareArrays(Array.from(oldCommands.values()), commands)) {
+        await client.application.commands.set(commands, config.guildID);
+        logger.info(`Synced application commands`);
+    } else logger.info('Application commands are up to date - no syncing required');
+}
+
+/**
  * Loads all modules
  * @returns {Promise<void>}
  * @private
  */
 async function loadModules() {
-    if (!fs.existsSync(`${__dirname}/modules/`)) fs.mkdirSync(`${__dirname}/modules/`)
+    if (!fs.existsSync(`${__dirname}/modules/`)) fs.mkdirSync(`${__dirname}/modules/`);
     const files = fs.readdirSync(`${__dirname}/modules/`);
     for (const f of files) {
         if (moduleConf[f]) {
