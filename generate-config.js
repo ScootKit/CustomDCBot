@@ -1,6 +1,7 @@
 const exampleFile = require('./config-generator/config.json');
 const config = {};
 const jsonfile = require('jsonfile');
+const fs = require('fs');
 let confDir = `${__dirname}/config`;
 const args = process.argv.slice(2);
 if (args[0] === '--help' || args[0] === '-h') {
@@ -20,6 +21,10 @@ try {
         if (!field.field_name) return;
         config[field.field_name] = field.default;
     });
+
+    if (!fs.existsSync(`${confDir}`)) {
+        fs.mkdirSync(`${confDir}`);
+    }
 
     jsonfile.writeFile(`${confDir}/config.json`, config, {spaces: 2}, (err => {
         if (err) console.error(`[ERROR] An error occurred while saving: ${err}`);
