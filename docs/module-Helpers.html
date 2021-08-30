@@ -115,6 +115,8 @@
             
                 <li class="parent  " data-name="module:Helpers.embedType"><a href="module-Helpers.html#.embedType">embedType</a></li>
             
+                <li class="parent  " data-name="module:Helpers~compareArrays"><a href="module-Helpers.html#~compareArrays">compareArrays</a></li>
+            
                 <li class="parent  " data-name="module:Helpers~formatDate"><a href="module-Helpers.html#~formatDate">formatDate</a></li>
             
                 <li class="parent  " data-name="module:Helpers~pufferStringToSize"><a href="module-Helpers.html#~pufferStringToSize">pufferStringToSize</a></li>
@@ -160,6 +162,8 @@
             <span class="subtitle">Methods</span>
             
                 <li class="parent  " data-name="loadCLIFile"><a href="global.html#loadCLIFile">loadCLIFile</a></li>
+            
+                <li class="parent  " data-name="syncCommandsIfNeeded"><a href="global.html#syncCommandsIfNeeded">syncCommandsIfNeeded</a></li>
             
             </ul>
             
@@ -687,6 +691,175 @@
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="~compareArrays">
+            <a class="share-icon" href="#~compareArrays"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                compareArrays
+            </span>
+            <span class="signature">(array1, array2)</span><span class="type-signature">boolean</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Compares two arrays</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>array1</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>First array</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>array2</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Second array</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">Wherever the arrays are the same</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="~formatDate">
             <a class="share-icon" href="#~formatDate"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
@@ -1021,7 +1194,7 @@
             <span class="">
                 sendMultipleSiteButtonMessage
             </span>
-            <span class="signature">(channel, sites, allowedUserIDs, message)</span><span class="type-signature">string</span>
+            <span class="signature">(channel, sites, allowedUserIDs, message, ephemeral)</span><span class="type-signature">string</span>
             
             <span class="access-signature">async</span><span class="access-signature">inner</span>
             
@@ -1174,6 +1347,35 @@
             <td class="description last">
                 
                 <p>Message or Interaction to respond to</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>ephemeral</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                <p>If the message should be ephemeral or not</p></td>
         </tr>
 	
 	
