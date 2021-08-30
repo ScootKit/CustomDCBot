@@ -147,6 +147,7 @@ db.authenticate().then(async () => {
  * @private
  */
 async function loadModules() {
+    if (!fs.existsSync(`${__dirname}/modules/`)) fs.mkdirSync(`${__dirname}/modules/`)
     const files = fs.readdirSync(`${__dirname}/modules/`);
     for (const f of files) {
         if (moduleConf[f]) {
