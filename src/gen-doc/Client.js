@@ -54,6 +54,11 @@ class Client {
          */
         this.guildID = null;
         /**
+         * The [guild](https://discord.js.org/#/docs/main/stable/class/Guild) the bot should run on
+         * @type {Guild}
+         */
+        this.guild = null;
+        /**
          * Content of `config.json`
          * @type {Object}
          */

@@ -124,6 +124,7 @@ db.authenticate().then(async () => {
         if (client.logChannel) await client.logChannel.send('⚠ Configuration-Checking failed. Find more information in your log. The bot exited.');
         process.exit(1);
     });
+    client.guild = await client.guilds.fetch(config.guildID);
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     client.emit('botReady');
