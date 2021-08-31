@@ -186,7 +186,6 @@ function compareArrays(array1, array2) {
     if (array1.length !== array2.length) return false;
 
     for (let i = 0, l = array1.length; i < l; i++) {
-        console.log(array1[i])
         if (array1[i] instanceof Object) {
             for (const key in array1[i]) {
                 if (array2[key] !== array1[key]) return false;

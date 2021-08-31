@@ -128,7 +128,6 @@ db.authenticate().then(async () => {
         if (client.logChannel) await client.logChannel.send('⚠ Configuration-Checking failed. Find more information in your log. The bot exited.');
         process.exit(1);
     });
-    client.guild = await client.guilds.fetch(config.guildID);
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     client.emit('botReady');
@@ -155,6 +154,11 @@ async function syncCommandsIfNeeded() {
         if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== command.defaultPermission) {
             needSync = true;
             break;
+        }
+
+        if (!compareArrays(await oldCommand.permissions.fetch({guild: client.guild, command: oldCommand}).catch(() => {}) || [], command.permissions)) {
+            await oldCommand.permissions.set({permissions: command.permissions});
+            logger.debug(`Synced permissions for /${command.name}`);
         }
 
         for (const option of (command.options || [])) {
@@ -233,12 +237,22 @@ async function loadCommandsInDir(dir, moduleName = null) {
         if (!stats) return logger.error('No stats returned');
         if (stats.isFile()) {
             const props = require(`${__dirname}/${dir}/${f}`);
+            const permissions = props.config.permissions || [];
+            if (props.config.restricted) for (const botOperatorID of config.botOperators || []) {
+                permissions.push({
+                    id: botOperatorID,
+                    type: 'USER',
+                    permission: true
+                });
+            }
             commands.push({
                 name: props.config.name,
                 description: props.config.description,
                 restricted: props.config.restricted,
                 options: props.config.options || [],
+                permissions,
                 run: props.run,
+                defaultPermission: props.config.restricted ? false : props.config.defaultPermission || true,
                 module: moduleName
             });
         }

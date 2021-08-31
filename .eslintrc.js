@@ -122,7 +122,7 @@ module.exports = {
         'max-classes-per-file': 'error',
         'max-depth': 'off',
         'max-len': 'off',
-        'max-lines': ['error', {skipComments: true}],
+        'max-lines': ['error', {max: 500, skipComments: true}],
         'max-lines-per-function': 'off',
         'max-nested-callbacks': 'error',
         'max-params': 'off',

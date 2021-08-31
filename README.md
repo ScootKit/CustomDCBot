@@ -166,6 +166,8 @@ An interaction-command ("slash command") file has to export the following things
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
+    * `permissions`: Array of [ApplicationCommandPermissions](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions)
+    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command
     * `options`: [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
 
 #### Message-Command
