@@ -186,11 +186,14 @@ function compareArrays(array1, array2) {
     if (array1.length !== array2.length) return false;
 
     for (let i = 0, l = array1.length; i < l; i++) {
-        if (array1[i] instanceof Array && array2[i] instanceof Array) {
-            if (!compareArrays(array1[i], array2[i])) return false;
-        } else if (array1[i] !== array2[i]) {
-            return false;
+        console.log(array1[i])
+        if (array1[i] instanceof Object) {
+            for (const key in array1[i]) {
+                if (array2[key] !== array1[key]) return false;
+            }
+            continue;
         }
+        if (!array2.includes(array1[i])) return false;
     }
     return true;
 }
