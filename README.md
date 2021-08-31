@@ -148,8 +148,8 @@ Every module has to contain a `module.json` file with the following content:
   the [interaction-command-files](#interaction-command) are in
 * `message-commands-dir` (optional, not recommended if not necessary): Directory inside your module folder where all
   the [message-command-files](#message-command) are in
-* `on-load-event` (optional): File with exported `onLoad` function in it. Gets executed when your config got checked
-  successfully.
+* `on-load-event` (optional): File with exported `onLoad` function in it. Gets executed when your commands got loaded
+  successfully; at this point the Client is not logged in yet, so you can't communicate with Discord (yet).
 * `events-dir` (optional): Directory inside your module folder where all the [event-files](#events) are in
 * `models-dir` (optional): Directory inside your module folder where all the models-files are in
 * `config-example-files` (optional, seriously leave this out when you don't have config files): Array
