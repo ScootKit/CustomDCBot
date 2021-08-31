@@ -162,6 +162,8 @@ An interaction-command ("slash command") file has to export the following things
 * `run` (function; provided arguments: `interaction`):
     * Without subcommands: Function that gets triggered if the interactions is being used
     * With subcommands: Optional function that gets triggered after the subcommand functions (if specified) got executed
+* `beforeSubcommand` (optional, only if subcommands exit): Function which gets executed before the function in
+  subcommands gets executed
 * `subcommands` (only required if subcommands exist): Object of functions, sorted by subcommandgroup and subcommand
 * `help`
 * `config` (both for !help and slash-commands)

@@ -19,6 +19,7 @@ exports.run = async (client, interaction) => {
         });
     }
     try {
+        if ((group || subCommand) && command.beforeSubcommand) await command.beforeSubcommand(interaction);
         if (group && subCommand) await command.subcommands[group][subCommand](interaction);
         else if (subCommand) await command.subcommand[subCommand](interaction);
         if (command.run) await command.run(interaction);
