@@ -144,7 +144,51 @@ db.authenticate().then(async () => {
  */
 async function syncCommandsIfNeeded() {
     const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch();
-    if (compareArrays(Array.from(oldCommands.values()), commands)) {
+    let needSync = false;
+    if (oldCommands.size !== commands.length) needSync = true;
+    if (!needSync) for (const command of commands) {
+        const oldCommand = oldCommands.find(c => c.name === command.name);
+        if (!oldCommand) {
+            needSync = true;
+            break;
+        }
+        if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== command.defaultPermission) {
+            needSync = true;
+            break;
+        }
+
+        for (const option of (command.options || [])) {
+            const oldOptionOption = (oldCommand.options || []).find(o => o.name === option.name);
+            if (!oldOptionOption) {
+                needSync = true;
+                break;
+            }
+            if (checkOption(oldOptionOption, option)) {
+                needSync = true;
+                break;
+            }
+        }
+
+        /**
+         * Checks if two command options are identical
+         * @private
+         * @param {Object<ApplicationCommandOptions>} oldOption Old options
+         * @param {Object<ApplicationCommandOptions>} newOption New options
+         * @returns {Boolean} If synchronisation is needed
+         */
+        function checkOption(oldOption, newOption) {
+            if (oldOption.name !== newOption.name || oldOption.description !== newOption.description || oldOption.type !== newOption.type || oldOption.required !== newOption.required) return true;
+            if (!compareArrays(oldOption.choices || [], newOption.choices || [])) return true;
+            if ((oldOption.options || []).length !== (newOption.options || []).length) return true;
+            for (const option of (newOption.options || [])) {
+                const oldOptionOption = (oldOption.options || []).find(o => o.name === option.name);
+                if (!oldOptionOption) return true;
+                if (checkOption(oldOptionOption, option)) return true;
+            }
+            return false;
+        }
+    }
+    if (needSync) {
         await client.application.commands.set(commands, config.guildID);
         logger.info(`Synced application commands`);
     } else logger.info('Application commands are up to date - no syncing required');
