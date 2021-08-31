@@ -22,5 +22,13 @@ exports.run = async (client, msg) => {
     }));
     const commandFile = require(`./../../${commandElement.fileName}`);
     client.logger.debug(`${msg.author.tag} (${msg.author.id}) used command ${client.config.prefix}${command}.`);
-    commandFile.run(client, msg, args);
+    try {
+        commandFile.run(client, msg, args);
+    } catch (e) {
+        client.logger.error(`An error executed when executing ${client.config.prefix}${command}: ${e}`);
+        await msg.reply({
+            content: `**🔴 Command execution failed 🔴**\nThis is not intended and can have multiple reasons. Please check console output for more details.\n\n${commandElement.module ? `This issue occurred in the "${commandElement.module}" module developed by [${msg.client.modules[commandElement.module].author.name}](${msg.client.modules[commandElement.module].author.url}). Please report the issue to them or [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new), attach the logs and steps-to-reproduce and mention the module developer in it.` : `If you think this is a programming issue please [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new) on github with your logs and steps-to-reproduce attached.`}`
+        });
+
+    }
 };

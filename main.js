@@ -156,7 +156,8 @@ async function syncCommandsIfNeeded() {
             break;
         }
 
-        if (!compareArrays(await oldCommand.permissions.fetch({guild: client.guild, command: oldCommand}).catch(() => {}) || [], command.permissions)) {
+        if (!compareArrays(await oldCommand.permissions.fetch({guild: client.guild, command: oldCommand}).catch(() => {
+        }) || [], command.permissions)) {
             await oldCommand.permissions.set({permissions: command.permissions});
             logger.debug(`Synced permissions for /${command.name}`);
         }
@@ -250,6 +251,7 @@ async function loadCommandsInDir(dir, moduleName = null) {
                 description: props.config.description,
                 restricted: props.config.restricted,
                 options: props.config.options || [],
+                subcommands: props.subcommands,
                 permissions,
                 run: props.run,
                 defaultPermission: props.config.restricted ? false : props.config.defaultPermission || true,

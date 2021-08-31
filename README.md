@@ -159,14 +159,18 @@ Every module has to contain a `module.json` file with the following content:
 
 An interaction-command ("slash command") file has to export the following things:
 
-* `run`: Function that gets triggered if the interactions is being used (provided arguments: `client`, `interaction)
+* `run` (function; provided arguments: `interaction`):
+    * Without subcommands: Function that gets triggered if the interactions is being used
+    * With subcommands: Optional function that gets triggered after the subcommand functions (if specified) got executed
+* `subcommands` (only required if subcommands exist): Object of functions, sorted by subcommandgroup and subcommand
 * `help`
 * `config` (both for !help and slash-commands)
     * `name`: Name of the command (should be the same name as the file name)
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
-    * `permissions`: Array of [ApplicationCommandPermissions](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions)
+    * `permissions`: Array
+      of [ApplicationCommandPermissions](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions)
     * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command
     * `options`: [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
 

@@ -25,3 +25,4 @@ This changelog contains mostly API-Changes and changes for developers.
 * Forgot the prefix of your bot? You can now use @-mentions instead of your prefix
 * `mesageCommand.config.args` now only (!) accepts an integer which represents how many arguments are at least needed
 * Slash-Commands are now available and should be used as much as possible
+* Errors in the executing of a command will nun result in a message to the user
