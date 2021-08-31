@@ -111,6 +111,10 @@ db.authenticate().then(async () => {
         logger.fatal('Bot could not log in. Please double-check your token and try again');
         process.exit();
     });
+    client.guild = await client.guilds.fetch(config.guildID).catch(() => {
+        logger.error(`Please invite the bot to your guild before continuing or check your configuration: https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot`);
+        process.exit(1);
+    });
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
     await syncCommandsIfNeeded();
     client.commands = commands;
