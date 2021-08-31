@@ -1,4 +1,5 @@
 const {reloadConfig} = require('../functions/configuration');
+
 module.exports.run = async function (interaction) {
     await interaction.reply({
         ephemeral: true,
@@ -17,5 +18,6 @@ module.exports.run = async function (interaction) {
 
 module.exports.config = {
     name: 'reload',
-    description: 'Reloads the configuration'
+    description: 'Reloads the configuration',
+    restricted: true
 };
