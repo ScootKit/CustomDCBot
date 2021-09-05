@@ -116,8 +116,6 @@ db.authenticate().then(async () => {
         process.exit(1);
     });
     logger.info(`[BOT] Client logged in as ${client.user.tag} and is now online!`);
-    await syncCommandsIfNeeded();
-    client.commands = commands;
     loadCLIFile('/src/cli.js');
     client.models = models;
     client.moduleConf = moduleConf;
@@ -128,6 +126,8 @@ db.authenticate().then(async () => {
         if (client.logChannel) await client.logChannel.send('⚠ Configuration-Checking failed. Find more information in your log. The bot exited.');
         process.exit(1);
     });
+    await syncCommandsIfNeeded();
+    client.commands = commands;
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     client.emit('botReady');
