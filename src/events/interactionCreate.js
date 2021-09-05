@@ -12,6 +12,7 @@ exports.run = async (client, interaction) => {
     if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions));
     client.logger.debug(`${interaction.user.tag} (${interaction.user.id}) used command /${command.name} ${group || ''} ${subCommand || ''}.`);
     if (!command.subcommands) {
+        if (command.options.filter(c => c.type === 'SUB_COMMAND').length === 0) return await command.run(interaction);
         interaction.client.logger.error(`Command ${interaction.commandName} has subcommands but does not use the subcommands handler (required).`);
         return interaction.reply({
             content: ':warning: This command is not configured correctly and can not be executed, please contact the developer.',
