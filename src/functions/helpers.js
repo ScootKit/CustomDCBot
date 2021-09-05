@@ -128,7 +128,8 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
     let m;
     if (message) m = await message.reply({
         components: [{type: 'ACTION_ROW', components: getButtons(1)}],
-        embeds: [sites[0]]
+        embeds: [sites[0]],
+        ephemeral
     });
     else m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
     const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 20000});
