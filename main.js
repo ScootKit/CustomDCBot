@@ -151,6 +151,10 @@ async function syncCommandsIfNeeded() {
             needSync = true;
             break;
         }
+
+        if (typeof command.permissions === 'function') command.permissions = await command.permissions(client);
+        if (typeof command.options === 'function') command.options = await command.options(client);
+
         if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== command.defaultPermission) {
             needSync = true;
             break;
