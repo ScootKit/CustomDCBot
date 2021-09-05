@@ -107,14 +107,9 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
 
             if (ow) {
                 if (!fs.existsSync(`${client.configDir}/${moduleName}`)) fs.mkdirSync(`${client.configDir}/${moduleName}`);
-                jsonfile.writeFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`, config, {spaces: 2}, (err => {
-                    if (err) {
-                        logger.error(`An error occurred while saving ${moduleName}/${exampleFile.filename}: ${err}`);
-                    } else {
-                        logger.info(`[MODULE: ${moduleName}]: Config ${v} was saved successfully successfully.`);
-                    }
-                    resolve();
-                }));
+                jsonfile.writeFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`, config, {spaces: 2});
+                logger.info(`[MODULE: ${moduleName}]: Config ${v} was saved successfully successfully.`);
+                resolve();
             } else {
                 resolve();
             }
