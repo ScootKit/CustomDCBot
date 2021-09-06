@@ -73,7 +73,7 @@ module.exports.run = async function (interaction) {
         else sites.push(embed);
     }
 
-    sendMultipleSiteButtonMessage(interaction.channel, sites, [interaction.user.id], interaction, true);
+    sendMultipleSiteButtonMessage(interaction.channel, sites, [interaction.user.id], interaction);
 };
 
 module.exports.config = {

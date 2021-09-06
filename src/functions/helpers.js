@@ -115,21 +115,20 @@ module.exports.pufferStringToSize = pufferStringToSize;
  * @param  {Object} channel Channel in which to send the message
  * @param  {Array<object>} sites Array of MessageEmbeds (https://discord.js.org/#/docs/main/stable/class/MessageEmbed)
  * @param  {Array<string>} allowedUserIDs Array of User-IDs of users allowed to use the pagination
- * @param {Object} message Message or Interaction to respond to
- * @param {Boolean} ephemeral If the message should be ephemeral or not
+ * @param {Object} messageOrInteraction Message or [CommandInteraction](https://discord.js.org/#/docs/main/stable/class/CommandInteraction) to respond to
  * @return {string}
  * @author Simon Csaba <mail@scderox.de>
  */
-async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null, ephemeral = false) {
+async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], messageOrInteraction = null) {
     if (sites.length === 1) {
-        if (message) return message.reply({embeds: [sites[0]], ephemeral});
-        return await channel.send({embeds: [sites[0]], ephemeral});
+        if (messageOrInteraction) return messageOrInteraction.reply({embeds: [sites[0]]});
+        return await channel.send({embeds: [sites[0]]});
     }
     let m;
-    if (message) m = await message.reply({
+    if (messageOrInteraction) m = await messageOrInteraction.reply({
         components: [{type: 'ACTION_ROW', components: getButtons(1)}],
         embeds: [sites[0]],
-        ephemeral
+        fetchReply: true
     });
     else m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
     const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 20000});
