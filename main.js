@@ -267,7 +267,7 @@ async function loadCommandsInDir(dir, moduleName = null) {
                     permission: true
                 });
             }
-            console.log(props.config, props.config.restricted, props.config.defaultPermission);
+            if (props.config.restricted) props.config.defaultPermission = false;
             commands.push({
                 name: props.config.name,
                 description: props.config.description,
@@ -276,7 +276,7 @@ async function loadCommandsInDir(dir, moduleName = null) {
                 subcommands: props.subcommands,
                 permissions,
                 run: props.run,
-                defaultPermission: props.config.restricted ? false : props.config.defaultPermission || true,
+                defaultPermission: props.config.defaultPermission,
                 module: moduleName
             });
         }
