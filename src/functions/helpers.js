@@ -17,6 +17,24 @@ module.exports.asyncForEach = async function (array, callback) {
 };
 
 /**
+ *
+ * @param inputArray Array of user or role IDs
+ * @param type [ApplicationCommandPermissionType](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissionType)
+ * @param array Base-Array
+ * @returns {array} [ApplicationCommandPermissionType](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions)
+ */
+module.exports.arrayToApplicationCommandPermissions = function (inputArray, type, array = []) {
+    inputArray.forEach((id) => {
+        array.push({
+            type: type,
+            permission: true,
+            id
+        });
+    });
+    return array;
+};
+
+/**
  * Replaces every argument with a string
  * @param {Object<String>} args Arguments to replace
  * @param {String} input Input
