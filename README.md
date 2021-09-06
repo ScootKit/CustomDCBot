@@ -157,6 +157,7 @@ Every module has to contain a `module.json` file with the following content:
 
 #### Interaction-Command
 
+Note: Interaction-Commands get loaded after the configuration got checked.\
 An interaction-command ("slash command") file has to export the following things:
 
 * `run` (function; provided arguments: `interaction`):

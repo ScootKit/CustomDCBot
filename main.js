@@ -102,11 +102,10 @@ const commands = [];
 // Starting bot
 db.authenticate().then(async () => {
     await loadModules();
-    await loadMessageCommandsInDir('./src/message-commands');
     await loadEventsInDir('./src/events');
     await db.sync();
     logger.info('[DB] Synced db');
-    await loadCommandsInDir('./src/commands');
+    await loadMessageCommandsInDir('./src/message-commands');
     await client.login(config.token).catch(() => {
         logger.fatal('Bot could not log in. Please double-check your token and try again');
         process.exit();
@@ -126,6 +125,8 @@ db.authenticate().then(async () => {
         if (client.logChannel) await client.logChannel.send('⚠ Configuration-Checking failed. Find more information in your log. The bot exited.');
         process.exit(1);
     });
+    await loadCommandsInDir('./src/commands');
+    await loadModuleCommands();
     await syncCommandsIfNeeded();
     client.commands = commands;
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
@@ -203,6 +204,8 @@ async function syncCommandsIfNeeded() {
     } else logger.info('Application commands are up to date - no syncing required');
 }
 
+const moduleCommandsToBeLoaded = [];
+
 /**
  * Loads all modules
  * @returns {Promise<void>}
@@ -220,11 +223,25 @@ async function loadModules() {
             client.configurations[f] = {};
             if (moduleConfig['models-dir']) await loadModelsInDir(`./modules/${f}${moduleConfig['models-dir']}`, f);
             if (moduleConfig['message-commands-dir']) await loadMessageCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
-            if (moduleConfig['commands-dir']) await loadCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
+            if (moduleConfig['commands-dir']) moduleCommandsToBeLoaded.push({
+                dir: `./modules/${f}${moduleConfig['commands-dir']}`,
+                moduleName: f
+            });
             if (moduleConfig['events-dir']) await loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
             if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client.modules[f]);
             if (moduleConfig['cli']) loadCLIFile(`./modules/${f}/${moduleConfig['cli']}`, f);
         } else logger.debug(`[MODULE] Module ${f} is disabled`);
+    }
+}
+
+/**
+ * Loads all remaining module commands
+ * @private
+ * @returns {Promise<void>}
+ */
+async function loadModuleCommands() {
+    for (const dir of moduleCommandsToBeLoaded) {
+        await loadCommandsInDir(dir.dir, dir.moduleName);
     }
 }
 
@@ -250,6 +267,7 @@ async function loadCommandsInDir(dir, moduleName = null) {
                     permission: true
                 });
             }
+            console.log(props.config, props.config.restricted, props.config.defaultPermission);
             commands.push({
                 name: props.config.name,
                 description: props.config.description,
