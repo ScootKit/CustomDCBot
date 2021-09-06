@@ -1,4 +1,5 @@
 const {reloadConfig} = require('../functions/configuration');
+const {syncCommandsIfNeeded} = require('../../main');
 
 module.exports.run = async function (interaction) {
     await interaction.reply({
@@ -10,9 +11,11 @@ module.exports.run = async function (interaction) {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`⚠️ Configuration reloaded failed. Bot shutting down`);
         await interaction.editReply({content: `**FAILED**\n\`\`\`${reason}\`\`\`\n**Please read your log to fnd more information**\nThe bot will kill itself now, bye :wave:`});
         process.exit(1);
-    })).then(() => {
+    })).then(async () => {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`✅ Configuration reloaded successfully.`);
-        interaction.editReply('Done :+1:');
+        await interaction.editReply('Configuration reloaded successfully, syncing commands, to make sure permissions are up-to-date...');
+        await syncCommandsIfNeeded();
+        await interaction.editReply('Configuration reloaded successfully and synced commands successfully');
     });
 };
 

@@ -416,4 +416,5 @@ function loadCLIFile(path, moduleName = null) {
 module.exports.models = models;
 module.exports.client = client;
 module.exports.dataDir = dataDir;
+module.exports.syncCommandsIfNeeded = syncCommandsIfNeeded;
 module.exports.confDir = confDir;
