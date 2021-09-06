@@ -256,6 +256,8 @@ async function loadCommandsInDir(dir, moduleName = null) {
         if (!stats) return logger.error('No stats returned');
         if (stats.isFile()) {
             const props = require(`${__dirname}/${dir}/${f}`);
+            if (typeof props.config.permissions === 'function') props.config.permissions = await props.config.permissions(client);
+            if (typeof props.config.options === 'function') props.config.options = await props.config.options(client);
             const permissions = props.config.permissions || [];
 
             if (props.config.restricted) for (const botOperatorID of config.botOperators || []) {
