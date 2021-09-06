@@ -1196,7 +1196,7 @@
             <span class="">
                 sendMultipleSiteButtonMessage
             </span>
-            <span class="signature">(channel, sites, allowedUserIDs, message, ephemeral)</span><span class="type-signature">string</span>
+            <span class="signature">(channel, sites, allowedUserIDs, messageOrInteraction)</span><span class="type-signature">string</span>
             
             <span class="access-signature">async</span><span class="access-signature">inner</span>
             
@@ -1326,7 +1326,7 @@
 	
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>messageOrInteraction</code></td>
             
             
             <td class="type">
@@ -1348,36 +1348,7 @@
             
             <td class="description last">
                 
-                <p>Message or Interaction to respond to</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>ephemeral</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-            
-            <td class="description last">
-                
-                <p>If the message should be ephemeral or not</p></td>
+                <p>Message or <a target="_blank" href="https://discord.js.org/#/docs/main/stable/class/CommandInteraction">CommandInteraction</a> to respond to</p></td>
         </tr>
 	
 	
