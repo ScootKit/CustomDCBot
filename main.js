@@ -153,9 +153,6 @@ async function syncCommandsIfNeeded() {
             break;
         }
 
-        if (typeof command.permissions === 'function') command.permissions = await command.permissions(client);
-        if (typeof command.options === 'function') command.options = await command.options(client);
-
         if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== command.defaultPermission) {
             needSync = true;
             break;
@@ -260,6 +257,10 @@ async function loadCommandsInDir(dir, moduleName = null) {
         if (stats.isFile()) {
             const props = require(`${__dirname}/${dir}/${f}`);
             const permissions = props.config.permissions || [];
+
+            if (typeof props.config.permissions === 'function') props.config.permissions = await props.config.permissions(client);
+            if (typeof props.config.options === 'function') props.config.options = await props.config.options(client);
+
             if (props.config.restricted) for (const botOperatorID of config.botOperators || []) {
                 permissions.push({
                     id: botOperatorID,
