@@ -153,7 +153,7 @@ async function syncCommandsIfNeeded() {
             break;
         }
 
-        if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== (command.defaultPermission === undefined ? true : command.defaultPermission)) {
+        if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== (typeof command.defaultPermission === 'undefined' ? true : command.defaultPermission)) {
             needSync = true;
             break;
         }
