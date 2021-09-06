@@ -1,0 +1,12 @@
+{
+  "name": "admin-tools",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Simple admin-tools to move channels and roles with a command.",
+  "commands-dir": "/commands",
+  "config-example-files": [
+    "config.json"
+  ]
+}

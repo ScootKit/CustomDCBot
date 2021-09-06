@@ -1,0 +1,19 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "admin_allowed_member_ids",
+      "default": [],
+      "type": "array",
+      "content": "integer",
+      "description": "Member-IDs who are allowed to use the /admin command"
+    },
+    {
+      "field_name": "stealemote_allowed_role_ids",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "Member-IDs who are allowed to use the /stealemote command"
+    }
+  ]
+}
