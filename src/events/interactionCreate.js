@@ -27,7 +27,7 @@ exports.run = async (client, interaction) => {
     } catch (e) {
         interaction.client.logger.error(`Execution of command /${command.name} ${group || ''} ${subCommand || ''} failed: ${e}`);
         interaction.reply({
-            content: `**🔴 Command execution failed 🔴**\nThis is not intended and can have multiple reasons. Please check console output for more details.\n\n${command.module ? `This issue occurred in the "${command.module}" module developed by [${interaction.client.modules[command.module].author.name}](${interaction.client.modules[command.module].author.url}). Please report the issue to them or [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new), attach the logs and steps-to-reproduce and mention the module developer in it.` : `If you think this is a programming issue please [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new) on github with your logs and steps-to-reproduce attached.`}`,
+            content: `**🔴 Command execution failed 🔴**\nThis is not intended and can have multiple reasons. Please check console output for more details.\n\n${command.module ? `This issue occurred in the "${command.module}" module developed by [${interaction.client.modules[command.module].config.author.name}](${interaction.client.modules[command.module].config.author.url}). Please report the issue to them or [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new), attach the logs and steps-to-reproduce and mention the module developer in it.` : `If you think this is a programming issue please [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new) on github with your logs and steps-to-reproduce attached.`}`,
             ephemeral: true
         }).catch(() => {
         });
