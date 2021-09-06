@@ -416,6 +416,7 @@ async function loadModel(dir, file, moduleName) {
 
 /**
  * Load a CLI-File
+ * @private
  * @param {String} path Path to the CLI-File
  * @param {String} moduleName Name of the module
  * @returns {void}

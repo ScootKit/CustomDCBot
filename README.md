@@ -252,10 +252,17 @@ An example config file should include the following things:
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
 
+#### `botReady`-Event and Config-Reload
+
 If you plan to use the [ready](https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready) event of
 discord.js to run some action when the client is ready, and you need to load some configuration-files you should use
 the `botReady`-event instead. Please remember that this event gets re-emitted on configuration reloading. If you set
 intervals or similar please remember to remove them on `configReload`.
+
+#### Helper-Functions
+
+The bot includes a lot of functions to make your live easier. Please open
+the [DevDoc](https://custombot-devdocs.sc-network.net/) to see all of them.
 
 © Simon Csaba, 2020-2021
 
