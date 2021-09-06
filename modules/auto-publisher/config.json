@@ -1,0 +1,36 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "mode",
+      "default": "all",
+      "type": "select",
+      "content": [
+        "all",
+        "whitelist",
+        "blacklist"
+      ],
+      "description": "Modus in which this module should operate"
+    },
+    {
+      "field_name": "blacklist",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "Channel to be ignored (only if mode = \"blacklist\")"
+    },
+    {
+      "field_name": "whitelist",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "Channel in which messages should get published (only if mode = \"whitelist\")"
+    },
+    {
+      "field_name": "ignoreBots",
+      "default": true,
+      "type": "boolean",
+      "description": "If activated, bots get ignored"
+    }
+  ]
+}
