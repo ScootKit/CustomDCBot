@@ -8,10 +8,20 @@
     },
     {
       "field_name": "need_args",
-      "default": "This command needs more arguments",
+      "default": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
       "type": "string",
       "description": "This message gets send if there are not enough arguments specified",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "%count%",
+          "description": "Count of arguments provided"
+        },
+        {
+          "name": "%neededCount%",
+          "description": "Count of arguments needed"
+        }
+      ]
     },
     {
       "field_name": "not_enough_permissions",

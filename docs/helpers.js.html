@@ -1,8 +1,32 @@
-/**
- * Functions to make your live easier
- * @module Helpers
- */
-const {MessageEmbed} = require('discord.js');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: helpers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: helpers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const {MessageEmbed} = require('discord.js');
 
 /**
  * Will loop asynchrony through every object in the array
@@ -11,18 +35,11 @@ const {MessageEmbed} = require('discord.js');
  * @return {Promise}
  */
 module.exports.asyncForEach = async function (array, callback) {
-    for (let index = 0; index < array.length; index++) {
+    for (let index = 0; index &lt; array.length; index++) {
         await callback(array[index], index, array);
     }
 };
 
-/**
- * Replaces every argument with a string
- * @param {Object<String>} args Arguments to replace
- * @param {String} input Input
- * @returns {String}
- * @private
- */
 function inputReplacer(args, input) {
     if (typeof args !== 'object') return input;
     for (const arg in args) {
@@ -34,16 +51,11 @@ function inputReplacer(args, input) {
 /**
  * Will turn an object or string into embeds
  * @param  {string|array} input Input in the configuration file
- * @param  {Object} args Object of variables to replace
- * @param  {Object} optionsToKeep [BaseMessageOptions](https://discord.js.org/#/docs/main/stable/typedef/BaseMessageOptions) to keep
- * @author Simon Csaba <mail@scderox.de>
- * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
+ * @param  {object} args Object of variables to replace
+ * @return {object} Returns MessageOptions (https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
-module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
-    if (typeof input === 'string') {
-        optionsToKeep.content = inputReplacer(args, input);
-        return optionsToKeep;
-    }
+module.exports.embedType = function (input, args = {}) {
+    if (typeof input === 'string') return {content: inputReplacer(args, input)};
     const {client} = require('../../main');
     const emb = new MessageEmbed();
     emb.setTitle(inputReplacer(args, input['title']));
@@ -52,7 +64,7 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
     if (input['url']) emb.setURL(input['url']);
     if (input['image']) emb.setImage(inputReplacer(args, input['image']));
     if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
-    if (input['author'] && typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), inputReplacer(args, input['author']['img']));
+    if (input['author'] &amp;&amp; typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), inputReplacer(args, input['author']['img']));
     if (typeof input['fields'] === 'object') {
         input.fields.forEach(f => {
             emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);
@@ -60,16 +72,13 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
     }
     emb.setTimestamp();
     emb.setFooter(input.footer ? inputReplacer(args, input.footer) : client.strings.footer);
-    optionsToKeep.content = inputReplacer(args, input['message']);
-    optionsToKeep.embeds = [emb];
-    return optionsToKeep;
+    return {content: inputReplacer(args, input['message']), embeds: [emb]};
 };
 
 /**
  * Makes a Date humanly readable
  * @param  {Date} date Date to format
  * @return {string} Returns humanly readable string
- * @author Simon Csaba <mail@scderox.de>
  */
 function formatDate(date) {
     const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString(),
@@ -96,12 +105,11 @@ module.exports.truncate = truncate;
  * @param  {string} string String to puffer
  * @param  {number} size Length to puffer to
  * @return {string}
- * @author Simon Csaba <mail@scderox.de>
  */
 function pufferStringToSize(string, size) {
     if (typeof string !== 'string') string = string.toString();
     const pufferNeeded = size - string.length;
-    for (let i = 0; i < pufferNeeded; i++) {
+    for (let i = 0; i &lt; pufferNeeded; i++) {
         if (i % 2 === 0) string = '\xa0' + string;
         else string = string + '\xa0';
     }
@@ -113,22 +121,17 @@ module.exports.pufferStringToSize = pufferStringToSize;
 /**
  * Sends a multiple-site-embed-message
  * @param  {Object} channel Channel in which to send the message
- * @param  {Array<object>} sites Array of MessageEmbeds (https://discord.js.org/#/docs/main/stable/class/MessageEmbed)
- * @param  {Array<string>} allowedUserIDs Array of User-IDs of users allowed to use the pagination
- * @param {Object} messageOrInteraction Message or [CommandInteraction](https://discord.js.org/#/docs/main/stable/class/CommandInteraction) to respond to
+ * @param  {Array&lt;object>} sites Array of MessageEmbeds (https://discord.js.org/#/docs/main/stable/class/MessageEmbed)
+ * @param  {Array&lt;string>} allowedUserIDs Array of User-IDs of users allowed to use the pagination
+ * @param {Object} message Message to respond to
  * @return {string}
- * @author Simon Csaba <mail@scderox.de>
  */
-async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], messageOrInteraction = null) {
-    if (sites.length === 1) {
-        if (messageOrInteraction) return messageOrInteraction.reply({embeds: [sites[0]]});
-        return await channel.send({embeds: [sites[0]]});
-    }
+async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs = [], message = null) {
+    if (sites.length === 0) return await channel.send({embeds: [sites[0]]});
     let m;
-    if (messageOrInteraction) m = await messageOrInteraction.reply({
+    if (message) m = await message.reply({
         components: [{type: 'ACTION_ROW', components: getButtons(1)}],
-        embeds: [sites[0]],
-        fetchReply: true
+        embeds: [sites[0]]
     });
     else m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
     const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 20000});
@@ -153,13 +156,6 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
         });
     });
 
-    /**
-     * Generate the buttons for a specified site
-     * @param {Number} site Site-Number
-     * @param {Boolean} disabled If the buttons should be disabled
-     * @returns {Array}
-     * @private
-     */
     function getButtons(site, disabled = false) {
         const btns = [];
         if (site !== 1) btns.push({type: 'BUTTON', label: '◀ Back', customId: 'back', style: 'PRIMARY', disabled});
@@ -174,27 +170,26 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
     }
 }
 
-module.exports.sendMultipleSiteButtonMessage = sendMultipleSiteButtonMessage;
+module.exports.sendMultipleSiteButtonMessage = sendMultipleSiteButtonMessage;</code></pre>
+        </article>
+    </section>
 
-/**
- * Compares two arrays
- * @param {Array} array1 First array
- * @param {Array} array2 Second array
- * @returns {boolean} Wherever the arrays are the same
- */
-function compareArrays(array1, array2) {
-    if (array1.length !== array2.length) return false;
 
-    for (let i = 0, l = array1.length; i < l; i++) {
-        if (array1[i] instanceof Object) {
-            for (const key in array1[i]) {
-                if (array2[key] !== array1[key]) return false;
-            }
-            continue;
-        }
-        if (!array2.includes(array1[i])) return false;
-    }
-    return true;
-}
 
-module.exports.compareArrays = compareArrays;
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#asyncForEach">asyncForEach</a></li><li><a href="global.html#embedType">embedType</a></li><li><a href="global.html#formatDate">formatDate</a></li><li><a href="global.html#loadAllConfigs">loadAllConfigs</a></li><li><a href="global.html#pufferStringToSize">pufferStringToSize</a></li><li><a href="global.html#reloadConfig">reloadConfig</a></li><li><a href="global.html#sendMultipleSiteButtonMessage">sendMultipleSiteButtonMessage</a></li><li><a href="global.html#truncate">truncate</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Aug 18 2021 10:20:22 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
