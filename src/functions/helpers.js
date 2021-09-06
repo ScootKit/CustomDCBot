@@ -2,7 +2,9 @@
  * Functions to make your live easier
  * @module Helpers
  */
+
 const {MessageEmbed} = require('discord.js');
+const centra = require('centra');
 
 /**
  * Will loop asynchrony through every object in the array
@@ -216,3 +218,40 @@ function compareArrays(array1, array2) {
 }
 
 module.exports.compareArrays = compareArrays;
+
+/**
+ * Check if a new version of CustomDCBot is available in the main branch on github
+ * @param client The Client
+ * @returns {Promise<void>}
+ */
+async function checkForUpdates(client) {
+    const res = await centra('https://raw.githubusercontent.com/SCNetwork/CustomDCBot/main/package.json', 'GET').send();
+    if (res.statusCode !== 200) {
+        if (client.logChannel) client.channel.send(`🔴 Error ${res.statusCode} when trying to fetch for new updates.`);
+        return client.logger.error('Could not check for updates');
+    }
+
+    try {
+        const remoteVersion = JSON.parse(res.body.toString()).version.split(',');
+        const localVersion = require('./../../package.json').version.split(',');
+
+        let newVersionType = null;
+
+        if (remoteVersion[2] > localVersion[2]) newVersionType = 'patch';
+        if (remoteVersion[1] > localVersion[1]) newVersionType = 'minor';
+        if (remoteVersion[0] > localVersion[0]) newVersionType = 'major';
+
+        if (remoteVersion[0] < localVersion[0]) newVersionType = null;
+        if (remoteVersion[1] < localVersion[1]) newVersionType = null;
+
+        if (newVersionType) {
+            if (client.logChannel) client.channel.send(`⚠️ A new ${newVersionType} version of CustomDCBot is available on GitHub (<https://github.com/SCNetwork/CustomDCBot>). Install it by executing \`git pull\` in the folder with the bot code.\n\nUpdating is highly recommendet as a new version may contain bug-fixes, new features and security-relevant fixes. However in some cases (if you changed code or added your module) the update could introduce breaking changes. Please always check the compaibity of the new version with your code-base before updating.`);
+            client.logger.warn(`⚠️ A new ${newVersionType} version of CustomDCBot is available on GitHub (<https://github.com/SCNetwork/CustomDCBot>). Install it by executing \`git pull\` in the folder with the bot code.\n\nUpdating is highly recommendet as a new version may contain bug-fixes, new features and security-relevant fixes. However in some cases (if you changed code or added your module) the update could introduce breaking changes. Please always check the compaibity of the new version with your code-base before updating.`);
+        } else client.logger.info('Your bot is up-to-date 🎉');
+    } catch (e) {
+        if (client.logChannel) client.channel.send(`🔴 Error ${e} when trying to fetch for new updates.`);
+        return client.logger.error('Could not check for updates');
+    }
+}
+
+module.exports.checkForUpdates = checkForUpdates;

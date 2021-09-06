@@ -80,7 +80,7 @@ logger.level = config.logLevel || process.env.LOGLEVEL || 'debug';
 module.exports.logger = logger;
 client.logger = logger;
 const configChecker = require('./src/functions/configuration');
-const {compareArrays} = require('./src/functions/helpers');
+const {compareArrays, checkForUpdates} = require('./src/functions/helpers');
 logger.info(`CustomBot v2 - Log-Level: ${logger.level}`);
 
 let moduleConf = {};
@@ -136,6 +136,7 @@ db.authenticate().then(async () => {
     logger.info('[BOT] The bot initiated successfully and is now listening to commands.');
     if (client.logChannel) client.logChannel.send('🚀 The bot initiated successfully and is now listening to commands.');
     rl.prompt(true);
+    await checkForUpdates(client);
 });
 
 /**
