@@ -277,6 +277,7 @@ async function loadCommandsInDir(dir, moduleName = null) {
                 restricted: props.config.restricted,
                 options: props.config.options || [],
                 subcommands: props.subcommands,
+                beforeSubcommand: props.beforeSubcommand,
                 permissions,
                 run: props.run,
                 defaultPermission: props.config.defaultPermission,
