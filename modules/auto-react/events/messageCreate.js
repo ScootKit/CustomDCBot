@@ -1,4 +1,5 @@
 exports.run = async (client, msg) => {
+    if (msg.interaction || msg.system) return;
     await checkChannel(msg);
     await checkMembers(msg);
 };
@@ -15,7 +16,8 @@ async function checkMembers(msg) {
     msg.mentions.members.forEach(m => {
         if (moduleConfig.members[m.id]) {
             moduleConfig.members[m.id].split('|').forEach(emoji => {
-                msg.react(emoji);
+                msg.react(emoji).catch(() => {
+                });
             });
         }
     });
@@ -31,6 +33,7 @@ async function checkChannel(msg) {
     const moduleConfig = msg.client.configurations['auto-react']['config'];
     if (!moduleConfig.channels[msg.channel.id]) return;
     moduleConfig.channels[msg.channel.id].split('|').forEach(emoji => {
-        msg.react(emoji);
+        msg.react(emoji).catch(() => {
+        });
     });
 }
