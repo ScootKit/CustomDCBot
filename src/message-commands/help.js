@@ -13,7 +13,7 @@ module.exports.run = async function (client, msg) {
     const embedFields = [];
     for (const module in modules) {
         let content = '';
-        if (module !== 'none') content = `${client.strings.helpembed.more_information_with.split('%prefix%').join(client.config.prefix).split('%modulename%').join(module)}\n`;
+        if (module !== 'none') content = `${client.strings.helpembed.more_information_with.replaceAll('%prefix%', client.config.prefix).split('%modulename%').join(module)}\n`;
         modules[module].forEach(d => {
             let c = d;
             if (client.messageCommands.get(d).help.params) c = `${d} ${client.messageCommands.get(d).help.params}`;
@@ -69,7 +69,7 @@ module.exports.run = async function (client, msg) {
             .setThumbnail(client.user.avatarURL())
             .setAuthor(msg.author.tag, msg.author.avatarURL())
             .setFooter(client.strings.footer, client.strings.footerImgUrl)
-            .setTitle(client.strings.helpembed.title.split('%site%').join(siteCount))
+            .setTitle(client.strings.helpembed.title.replaceAll('%site%', siteCount))
             .addFields(fields);
         embed.addField('ℹ️ Slash-Commands', `You probably miss **${client.commands.length - 1} commands** by using not slash-commands - please use \`/help\` (and select this command) to see all available message-commands.`);
         if (atBeginning) sites.unshift(embed);

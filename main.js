@@ -3,6 +3,7 @@ const client = new Discord.Client({
     allowedMentions: {parse: ['users', 'roles']}, // Disables @everyone mentions because everyone hates them
     intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
 });
+client.intervals = [];
 const fs = require('fs');
 const {Sequelize} = require('sequelize');
 const log4js = require('log4js');
@@ -80,7 +81,7 @@ logger.level = config.logLevel || process.env.LOGLEVEL || 'debug';
 module.exports.logger = logger;
 client.logger = logger;
 const configChecker = require('./src/functions/configuration');
-const {compareArrays} = require('./src/functions/helpers');
+const {compareArrays, checkForUpdates} = require('./src/functions/helpers');
 logger.info(`CustomBot v2 - Log-Level: ${logger.level}`);
 
 let moduleConf = {};
@@ -135,6 +136,7 @@ db.authenticate().then(async () => {
     client.botReadyAt = new Date();
     logger.info('[BOT] The bot initiated successfully and is now listening to commands.');
     if (client.logChannel) client.logChannel.send('🚀 The bot initiated successfully and is now listening to commands.');
+    await checkForUpdates(client);
     rl.prompt(true);
 });
 
@@ -153,7 +155,7 @@ async function syncCommandsIfNeeded() {
             break;
         }
 
-        if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== command.defaultPermission) {
+        if (oldCommand.description !== command.description || oldCommand.options.length !== command.options.length || oldCommand.defaultPermission !== (typeof command.defaultPermission === 'undefined' ? true : command.defaultPermission)) {
             needSync = true;
             break;
         }
@@ -256,10 +258,9 @@ async function loadCommandsInDir(dir, moduleName = null) {
         if (!stats) return logger.error('No stats returned');
         if (stats.isFile()) {
             const props = require(`${__dirname}/${dir}/${f}`);
-            const permissions = props.config.permissions || [];
-
             if (typeof props.config.permissions === 'function') props.config.permissions = await props.config.permissions(client);
             if (typeof props.config.options === 'function') props.config.options = await props.config.options(client);
+            const permissions = props.config.permissions || [];
 
             if (props.config.restricted) for (const botOperatorID of config.botOperators || []) {
                 permissions.push({
