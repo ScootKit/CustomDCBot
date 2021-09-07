@@ -49,10 +49,15 @@ class Client {
          */
         this.events = null;
         /**
-         * Array of [Intervals](https://developer.mozilla.org/en-US/docs/Web/API/setInterval)  which get cleared on config-reload to make the live of module-developers easier
+         * Array of [Intervals](https://developer.mozilla.org/en-US/docs/Web/API/setInterval) which get cleared on config-reload to make the live of module-developers easier
          * @type {Array}
          */
         this.intervals = [];
+        /**
+         * Array of [Jobs](https://github.com/node-schedule/node-schedule#handle-jobs-and-job-invocations) which get canceled on config-reload to make the live of module-developers easier
+         * @type {Array}
+         */
+        this.jobs = [];
         /**
          * ID of the guild the bot should run on
          * @type {String}
