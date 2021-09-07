@@ -9,8 +9,8 @@ const {ClientCredentialsAuthProvider} = require('twitch-auth');
  * @param {object} apiClient Twitch API Client
  */
 function twitchNotifications(client, apiClient) {
-    const config = require(`${confDir}/twitch-notifications/config.json`);
-    
+    const config = require(`${confDir}/twitch-notifications/config.json`)
+
     /**
      * Sends the live-message
      * @param {string} username Username of the streamer
@@ -29,7 +29,7 @@ function twitchNotifications(client, apiClient) {
             '%thumbnailUrl': thumbnailUrl
         }));
     }
-    
+
     /**
      * Checks if the streamer is live
      * @param {string} userName Name of the Streamer
@@ -42,7 +42,7 @@ function twitchNotifications(client, apiClient) {
     }
 
     config['streamers'].forEach(start);
-    
+
     /**
      * Starts checking if the streamer is live
      * @param {string} value Current Streamer
