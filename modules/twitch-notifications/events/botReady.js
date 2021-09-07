@@ -3,8 +3,7 @@ const {embedType} = require('../../../src/functions/helpers');
 const {ApiClient} = require('twitch');
 const {ClientCredentialsAuthProvider} = require('twitch-auth');
 /**
- * General Programm
- * @private
+ * General program
  * @param {object} client Discord js Client
  * @param {object} apiClient Twitch API Client
  */
@@ -12,7 +11,6 @@ function twitchNotifications(client, apiClient) {
     const config = require(`${confDir}/twitch-notifications/config.json`);
     /**
      * Sends the live-message
-     * @private
      * @param {string} username Username of the streamer 
      * @param {string} game Game that is streamed
      * @param {string} thumbnailUrl URL of the thumbnail of the stream
@@ -31,7 +29,6 @@ function twitchNotifications(client, apiClient) {
     }
     /**
      * Checks if the streamer is live
-     * @private
      * @param {string} userName Name of the Streamer
      * @returns {object}
      */
@@ -44,7 +41,6 @@ function twitchNotifications(client, apiClient) {
     config['streamers'].forEach(start);
     /**
      * Starts checking if the streamer is live
-     * @private
      * @param {string} value Current Streamer
      * @param {number} index Index of current Streamer
      * @returns {Promise<void>}
@@ -83,11 +79,11 @@ exports.run = async (client) => {
     await twitchNotifications(client, apiClient);
     if (config['interval'] > 60) return console.error(`[twitch-notifications] The value of the interval must be equal or higher than 60`);
     const interval = config['interval'] * 1000;
-    let interval = setInterval(() => {
+    let twitchCheckInterval = setInterval(() => {
         twitchNotifications(client, apiClient);
     }, interval);
 
     client.on('configReload', () => {
-        clearInterval(interval)
+        clearInterval(twitchCheckInterval)
     })
 };
