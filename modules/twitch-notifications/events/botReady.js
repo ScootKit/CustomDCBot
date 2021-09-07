@@ -87,7 +87,5 @@ exports.run = async (client) => {
         twitchNotifications(client, apiClient);
     }, interval);
 
-    client.on('configReload', () => {
-        clearInterval(twitchCheckInterval);
-    });
+    client.intervals.push(twitchCheckInterval);
 };
