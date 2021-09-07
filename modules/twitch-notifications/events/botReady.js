@@ -9,7 +9,7 @@ const {ClientCredentialsAuthProvider} = require('twitch-auth');
  * @param {object} apiClient Twitch API Client
  */
 function twitchNotifications(client, apiClient) {
-    const config = require(`${confDir}/twitch-notifications/config.json`)
+    const config = client.configurations['twitch-notifications']['config'];
 
     /**
      * Sends the live-message
