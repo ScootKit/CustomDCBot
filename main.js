@@ -4,6 +4,7 @@ const client = new Discord.Client({
     intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
 });
 client.intervals = [];
+client.jobs = [];
 const fs = require('fs');
 const {Sequelize} = require('sequelize');
 const log4js = require('log4js');

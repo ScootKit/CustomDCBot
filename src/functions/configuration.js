@@ -288,6 +288,10 @@ module.exports.reloadConfig = async function (client) {
         clearInterval(interval);
     }
     client.intervals = [];
+    for (const job of client.jobs) {
+        job.cancel();
+    }
+    client.intervals = [];
 
     await loadAllConfigs(client, client.moduleConf);
     client.botReadyAt = new Date();
