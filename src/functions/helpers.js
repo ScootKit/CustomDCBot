@@ -46,7 +46,7 @@ module.exports.arrayToApplicationCommandPermissions = function (inputArray, type
 function inputReplacer(args, input) {
     if (typeof args !== 'object') return input;
     for (const arg in args) {
-        input = input.split(arg).join(args[arg]);
+        input = input.replaceAll(arg, args[arg]);
     }
     return input;
 }

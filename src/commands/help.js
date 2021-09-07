@@ -66,7 +66,7 @@ module.exports.run = async function (interaction) {
             .setThumbnail(interaction.client.user.avatarURL())
             .setAuthor(interaction.user.tag, interaction.user.avatarURL())
             .setFooter(interaction.client.strings.footer, interaction.client.strings.footerImgUrl)
-            .setTitle(interaction.client.strings.helpembed.title.split('%site%').join(siteCount))
+            .setTitle(interaction.client.strings.helpembed.title.replaceAll('%site%', siteCount))
             .addFields(fields);
         if (interaction.client.messageCommands.size !== 1) embed.addField('ℹ️ Message-Commands', `You probably miss **${interaction.client.messageCommands.size - 1} commands** by using slash-commands - please use \`${interaction.client.config.prefix}help\` to see all available message-commands`); // There is always one message command: !help
         if (atBeginning) sites.unshift(embed);
