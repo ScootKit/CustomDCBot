@@ -1,0 +1,85 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "description": "Channel-ID to run all operations in it"
+    },
+    {
+      "field_name": "birthday_message",
+      "default": "Happy birthday, %mention%!",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "Message that gets send if the user has not set a birthday",
+      "params": [
+        {
+          "name": "%tag%",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "%mention%",
+          "description": "Mention of the user"
+        }
+      ]
+    },
+    {
+      "field_name": "birthday_message_with_age",
+      "default": "Happy birthday, %mention%! You are now %age% years old!",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "Message that gets send if the user has not set a birthday",
+      "params": [
+        {
+          "name": "%tag%",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "%mention%",
+          "description": "Mention of the user"
+        },
+        {
+          "name": "%age%",
+          "description": "New age of user"
+        }
+      ]
+    },
+    {
+      "field_name": "birthday_role",
+      "description": "Role that is given to users when they have birthday (Leave out to disable)",
+      "default": "",
+      "type": "roleID",
+      "allowNull": true
+    },
+    {
+      "field_name": "successfully_changed",
+      "default": "Successfully changed record!",
+      "allowEmbed": true,
+      "type": "string",
+      "description": "Message that gets send when the bot changes an item"
+    },
+    {
+      "field_name": "birthdayEmbed",
+      "type": "keyed",
+      "default": {
+        "title": "Birthdays",
+        "color": "GREEN",
+        "thumbnail": " ",
+        "image": " ",
+        "description": "Here you can find every birthday - add yours with !birthday <Day> <Month> [Year]"
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "forceSCNetworkSync",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled, users can not set a local birthday on this server, instead they have to use the SC Network Dashboard to set their birthday"
+    }
+  ]
+}
