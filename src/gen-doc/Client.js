@@ -50,7 +50,7 @@ class Client {
         this.events = null;
         /**
          * Array of [Intervals](https://developer.mozilla.org/en-US/docs/Web/API/setInterval)  which get cleared on config-reload to make the live of module-developers easier
-         * @type {*[]}
+         * @type {Array}
          */
         this.intervals = [];
         /**
