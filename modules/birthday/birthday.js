@@ -14,7 +14,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
 
     const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
-    if (!channel) return console.error(`[Birthdays] Der Channel mit der ID ${moduleConf['channelID']} konnte nicht gefunden werden.`);
+    if (!channel) return console.error(`[Birthdays] Channel with ID ${moduleConf['channelID']} could not be found.`);
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     await channel.guild.members.fetch({force: true});
 
