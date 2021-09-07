@@ -284,6 +284,11 @@ module.exports.reloadConfig = async function (client) {
      */
     client.emit('configReload');
 
+    for (const interval of client.intervals) {
+        clearInterval(interval);
+    }
+    client.intervals = [];
+
     await loadAllConfigs(client, client.moduleConf);
     client.botReadyAt = new Date();
 

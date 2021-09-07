@@ -257,7 +257,8 @@ An example config file should include the following things:
 If you plan to use the [ready](https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready) event of
 discord.js to run some action when the client is ready, and you need to load some configuration-files you should use
 the `botReady`-event instead. Please remember that this event gets re-emitted on configuration reloading. If you set
-intervals or similar please remember to remove them on `configReload`.
+callbacks that get executed later or similar please remember to remove them on `configReload`. If you set intervals,
+please push the return value to `client.intervals` to get them removed on `configReload` or do it manually.
 
 #### Helper-Functions
 
