@@ -109,12 +109,10 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                 if (!fs.existsSync(`${client.configDir}/${moduleName}`)) fs.mkdirSync(`${client.configDir}/${moduleName}`);
                 jsonfile.writeFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`, config, {spaces: 2});
                 logger.info(`[MODULE: ${moduleName}]: Config ${v} was saved successfully successfully.`);
-                resolve();
-            } else {
-                resolve();
             }
             client.configurations[moduleName][exampleFile.filename.split('.json').join('')] = config;
         }
+        resolve();
         if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
     });
 }
