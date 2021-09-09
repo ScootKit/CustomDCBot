@@ -208,7 +208,7 @@ module.exports.endGiveaway = endGiveaway;
  * Checks if a [GuildMember](https://discord.js.org/#/docs/main/stable/class/GuildMember) passes the requirements for a giveaway
  * @param {GuildMember} member Guild member
  * @param {Object} giveaway Giveaway in which the user has to pass the requiremetns
- * @returns {Promise<(boolean|string)[]>} Returns array with these values: 1. if the users passes the requirements 2. Which requirements where not passed in a human-readable string
+ * @returns {Promise<Array>} Returns array with these values: 1. if the users passes the requirements 2. Which requirements where not passed in a human-readable string
  */
 async function checkRequirements(member, giveaway) {
     let failedRequirements = false;
