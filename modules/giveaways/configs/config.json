@@ -1,0 +1,60 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "allowed_roles",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of roles that are allowed to create and manage giveaways"
+    },
+    {
+      "field_name": "bypassRoles",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "IDs von Rollen, die an Gewinnspielen teilnehmen können, ohne die Bedingungen erfüllen zu müssen"
+    },
+    {
+      "field_name": "messageCountMode",
+      "default": "all",
+      "type": "select",
+      "content": [
+        "all",
+        "blacklist",
+        "whitelist"
+      ],
+      "description": "Modus in which messages should get counted"
+    },
+    {
+      "field_name": "blacklist",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "Channel in which messages should get ignored (only if messageCountMode = \"blacklist\")"
+    },
+    {
+      "field_name": "whitelist",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "Channel in which messages should get counted (only if messageCountMode = \"whitelist\")"
+    },
+    {
+      "field_name": "multipleEntries",
+      "default": {},
+      "type": "keyed",
+      "description": "Allow certain users to enter multiple times. ⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
+      "content": {
+        "key": "roleID",
+        "value": "integer"
+      }
+    },
+    {
+      "field_name": "sendDMOnWin",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled the bot will send each winner a DM when they win."
+    }
+  ]
+}
