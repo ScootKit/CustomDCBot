@@ -85,6 +85,22 @@
           "description": "Mention of the role (No ping)"
         }
       ]
+    },
+    {
+      "field_name": "liveLeaderBoardEmbed",
+      "type": "keyed",
+      "description": "Embed which gets send to the leaderboard-channel and gets updated",
+      "default": {
+        "title": "Live Leaderboard",
+        "description": "Find all the users levels here. Updated every five minutes.",
+        "color": "GREEN",
+        "button": "\uD83D\uDC64 Show my level"
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
     }
   ]
 }

@@ -1,4 +1,5 @@
 const {embedType, randomIntFromInterval, randomElementFromArray} = require('../../../src/functions/helpers');
+const {registerNeededEdit} = require('../leaderboardChannel');
 const cooldown = new Set();
 
 exports.run = async (client, msg) => {
@@ -65,6 +66,7 @@ exports.run = async (client, msg) => {
     }
 
     cooldown.add(msg.author.id);
+    registerNeededEdit();
     setTimeout(() => {
         cooldown.delete(msg.author.id);
     }, moduleConfig.cooldown);

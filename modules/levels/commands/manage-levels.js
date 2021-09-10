@@ -1,4 +1,5 @@
 const {arrayToApplicationCommandPermissions} = require('../../../src/functions/helpers');
+const {registerNeededEdit} = require('../leaderboardChannel');
 const frontedUsers = []; // Easteregg , just ignore it
 
 module.exports.subcommands = {
@@ -58,6 +59,10 @@ module.exports.subcommands = {
             content: 'Successfully edited the XP of this user. Remember, every change you make destroys the experience of other users on this server as the levelsystem isn\'t fair anymore.'
         });
     }
+};
+
+module.exports.run = function () {
+    registerNeededEdit();
 };
 
 module.exports.config = {

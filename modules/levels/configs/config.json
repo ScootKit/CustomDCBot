@@ -60,6 +60,13 @@
       "description": "If enabled the module will randomly select a messages from random-levelup-messages.json and ignore the one set in strings.json"
     },
     {
+      "field_name": "leaderboard-channel",
+      "default": "",
+      "type": "channelID",
+      "allowNull": true,
+      "description": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes"
+    },
+    {
       "field_name": "allowCheats",
       "default": false,
       "type": "boolean",
