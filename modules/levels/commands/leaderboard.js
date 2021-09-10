@@ -58,9 +58,9 @@ module.exports.run = async function (interaction) {
             let userCount = 0;
             for (const user of levels[level]) {
                 userCount++;
-                if (userCount > 6) userString = userString + `<@${user.userID}>: ${user.xp}\n`;
+                if (userCount < 6) userString = userString + `<@${user.userID}>: ${user.xp}\n`;
             }
-            if (userCount < 5) userString = userString + `and ${userCount - 5} other users`;
+            if (userCount > 5) userString = userString + `and ${userCount - 5} other users`;
             currentSiteFields.push({name: `Level ${level}`, value: userString, inline: true});
             if (i === Object.keys(levels).length || currentSiteFields.length === 6) {
                 addSite(currentSiteFields);
