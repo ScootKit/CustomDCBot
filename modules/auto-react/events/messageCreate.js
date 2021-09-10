@@ -1,4 +1,5 @@
 exports.run = async (client, msg) => {
+    if (!client.botReadyAt) return;
     if (msg.interaction || msg.system) return;
     await checkChannel(msg);
     await checkMembers(msg);
