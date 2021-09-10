@@ -1,4 +1,4 @@
-const {formatDate} = require('../../src/functions/helpers');
+const {formatDate, randomElementFromArray} = require('../../src/functions/helpers');
 const {scheduleJob} = require('node-schedule');
 const {embedType} = require('../../src/functions/helpers');
 const {confDir} = require('../../main');
@@ -129,7 +129,7 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
     if (enteredUsers < giveaway.winnerCount) giveaway.winnerCount = enteredUsers;
 
     for (let winnerCount = 0; winnerCount < giveaway.winnerCount; winnerCount++) {
-        const winner = userEntries[Math.floor(Math.random() * userEntries.length)];
+        const winner = randomElementFromArray(userEntries);
         winners.push(winner);
         userEntries = userEntries.filter(u => u !== winner);
     }

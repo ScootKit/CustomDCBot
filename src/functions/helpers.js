@@ -267,3 +267,16 @@ function randomIntFromInterval(min, max) {
 }
 
 module.exports.randomIntFromInterval = randomIntFromInterval;
+
+/**
+ * Returns a random element from an array
+ * @param {Array} array Array of values
+ * @returns {*}
+ */
+function randomElementFromArray(array) {
+    if (array.length === 0) return null;
+    if (array.length === 1) return array[0];
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+module.exports.randomElementFromArray = randomElementFromArray;
