@@ -90,6 +90,7 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
             async function checkField(field, configElement) {
                 if (!field.field_name) return;
                 if (typeof configElement[field.field_name] === 'undefined') return configElement[field.field_name] = field.default;
+                if (field.allowNull && configElement[field.field_name].replaceAll(' ', '') === '' || typeof configElement[field.field_name] === 'undefined') return configElement;
                 if (!await checkType(field.type, configElement[field.field_name], field.content, field.allowEmbed)) {
                     logger.error(`An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
                     return reject(`An error occurred while checking the content of field ${field.field_name} in ${moduleName}/${exampleFile.filename}`);
