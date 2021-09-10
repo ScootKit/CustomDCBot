@@ -1,0 +1,69 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "min-xp",
+      "default": 15,
+      "type": "integer",
+      "description": "How much XP the user gets at least"
+    },
+    {
+      "field_name": "max-xp",
+      "default": 25,
+      "type": "integer",
+      "description": "How much XP the user gets at most"
+    },
+    {
+      "field_name": "cooldown",
+      "default": 3000,
+      "type": "integer",
+      "description": "In ms. How much cooldown there is between each XP getting"
+    },
+    {
+      "field_name": "level_up_channel_id",
+      "default": "",
+      "type": "channelID",
+      "allowNull": true,
+      "description": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)"
+    },
+    {
+      "field_name": "sortLeaderboardBy",
+      "default": "levels",
+      "type": "select",
+      "content": [
+        "levels",
+        "xp"
+      ],
+      "description": "How the leaderboard should be sorted"
+    },
+    {
+      "field_name": "blacklisted_channels",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "Blacklisted-Channels in which users can not earn XP"
+    },
+    {
+      "field_name": "reward_roles",
+      "default": {},
+      "type": "keyed",
+      "description": "Level at which users should get roles",
+      "content": {
+        "key": "integer",
+        "value": "roleID"
+      }
+    },
+    {
+      "field_name": "randomMessages",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled the module will randomly select a messages from random-levelup-messages.json and ignore the one set in strings.json"
+    },
+    {
+      "field_name": "allowCheats",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))"
+    }
+  ]
+}

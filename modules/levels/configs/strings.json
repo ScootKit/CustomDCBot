@@ -1,0 +1,90 @@
+{
+  "filename": "strings.json",
+  "content": [
+    {
+      "field_name": "user_not_found",
+      "default": ":warning: We do not have any records of this user",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This messages gets send if someone checks a profile of a user when the user never send a message"
+    },
+    {
+      "field_name": "embed",
+      "type": "keyed",
+      "description": "Embed which gets send if !profile gets executed",
+      "default": {
+        "title": "%username%'s Profile",
+        "description": "You can find %username%'s profile here.",
+        "messages": "Message-Count",
+        "xp": "XP",
+        "level": "Level",
+        "joinedAt": "Joined server",
+        "color": "GREEN"
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "leaderboardEmbed",
+      "type": "keyed",
+      "description": "This embed gets send if !leaderboard (!lb) gets executed",
+      "default": {
+        "title": "Leaderboard",
+        "description": "You can find the level of every user here",
+        "and_x_more_people": "And %count% other members",
+        "more_level": "More Levels",
+        "x_levels_are_not_shown": "And **%count% Level** are not being displayed",
+        "your_level": "Your Level",
+        "you_are_level_x_with_x_xp": "You are currently on **Level %level%** with **%xp% XP**. See more with `/profile`.",
+        "joinedAt": "Joined server",
+        "color": "GREEN"
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "level_up_message",
+      "default": "Level Up! Your new level is **%newLevel%**!",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This messages gets send if a user levels up (gets overwritten if randomMessages is enabled)",
+      "params": [
+        {
+          "name": "%mention%",
+          "description": "Mention of the user"
+        },
+        {
+          "name": "%newLevel%",
+          "description": "New level of the user"
+        }
+      ]
+    },
+    {
+      "field_name": "level_up_message_with_reward",
+      "default": "Level Up! Your new level is **%newLevel%**! You received %role%.",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This messages gets send if a user levels up and gets a role (gets overwritten if randomMessages is enabled)",
+      "params": [
+        {
+          "name": "%mention%",
+          "description": "Mention of the user"
+        },
+        {
+          "name": "%newLevel%",
+          "description": "New level of the user"
+        },
+        {
+          "name": "%role%",
+          "description": "Mention of the role (No ping)"
+        }
+      ]
+    }
+  ]
+}

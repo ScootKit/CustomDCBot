@@ -1,0 +1,33 @@
+{
+  "filename": "special-levelup-messages.json",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "level",
+      "default": "",
+      "type": "integer",
+      "description": "Level at which this messages should get send"
+    },
+    {
+      "field_name": "message",
+      "default": "",
+      "allowEmbed": true,
+      "type": "string",
+      "description": "Messages which should be send",
+      "params": [
+        {
+          "name": "%mention%",
+          "description": "Mention of the user"
+        },
+        {
+          "name": "%newLevel%",
+          "description": "New level of the user"
+        },
+        {
+          "name": "%role%",
+          "description": "Mention of the role (No ping, only if level has reward)"
+        }
+      ]
+    }
+  ]
+}
