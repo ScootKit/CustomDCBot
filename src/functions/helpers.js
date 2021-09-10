@@ -255,3 +255,15 @@ async function checkForUpdates(client) {
 }
 
 module.exports.checkForUpdates = checkForUpdates;
+
+/**
+ * Randomly selects a number between min and max
+ * @param {Number} min
+ * @param {Number} max
+ * @returns {number} Random integer
+ */
+function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+module.exports.randomIntFromInterval = randomIntFromInterval;
