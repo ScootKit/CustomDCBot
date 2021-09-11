@@ -200,8 +200,6 @@ async function syncCommandsIfNeeded() {
         }
     }
     if (needSync) {
-        console.log(needSync);
-        return;
         await client.application.commands.set(commands, config.guildID);
         logger.info(`Synced application commands`);
     } else logger.info('Application commands are up to date - no syncing required');
