@@ -16,6 +16,7 @@
   "contributors": [
     "SCDerox <scderox@sc-network.net>"
   ],
+  "funding": "https://github.com/SCNetwork/CustomDCBot?sponsor=1",
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@scnetwork/api": "^1.0.0",

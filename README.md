@@ -41,7 +41,8 @@ Please read the full [license](LICENSE). This is not legal advice.
 
 As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
 product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-or [donate on Patreon](https://patreon.com/scnetwork). Thank you so much <3
+, [donate on Patreon](https://patreon.com/scnetwork)
+or on [any other platform](https://github.com/SCNetwork/CustomDCBot?sponsor=1). Thank you so much <3
 
 ## Please read this issue before continuing.
 
