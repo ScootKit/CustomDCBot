@@ -1,0 +1,14 @@
+{
+  "name": "partner-list",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Manage your partnerships with other guilds easily.",
+  "events-dir": "/events",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "config-example-files": [
+    "config.json"
+  ]
+}
