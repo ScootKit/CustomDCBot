@@ -1,3 +1,8 @@
+/**
+ * Manages giveaways
+ * @module Giveaways
+ * @author Simon Csaba <mail@scderox.de>
+ */
 const {formatDate, randomElementFromArray} = require('../../src/functions/helpers');
 const {scheduleJob} = require('node-schedule');
 const {embedType} = require('../../src/functions/helpers');

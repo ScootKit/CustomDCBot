@@ -1,3 +1,8 @@
+/**
+ * Manages the birthday-embed
+ * @module Birthdays
+ * @author Simon Csaba <mail@scderox.de>
+ */
 const {getUser, getAutoSyncMembers} = require('@scnetwork/api');
 const {embedType} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');

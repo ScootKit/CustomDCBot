@@ -1,3 +1,8 @@
+/**
+ * Manages the live-leaderboard
+ * @module Levels-Leaderboard
+ * @author Simon Csaba <mail@scderox.de>
+ */
 const {MessageEmbed} = require('discord.js');
 let changed = false;
 

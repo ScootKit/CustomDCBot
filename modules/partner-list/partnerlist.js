@@ -1,3 +1,8 @@
+/**
+ * Manages the Partner-List-Embed
+ * @module Partner-List
+ * @author Simon Csaba <mail@scderox.de>
+ */
 const {MessageEmbed} = require('discord.js');
 
 /**
