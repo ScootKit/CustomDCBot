@@ -1,3 +1,8 @@
+/**
+ * Manages the serverinfo-embed
+ * @module Partner-List
+ * @author Simon Csaba <mail@scderox.de>
+ */
 const {formatDate} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 
@@ -9,10 +14,15 @@ exports.run = async (client) => {
     client.intervals.push(interval);
 };
 
+/**
+ * Generates the serverinfo embed
+ * @param {Client} client
+ * @returns {Promise<void>}
+ */
 async function generateEmbed(client) {
     const config = client.configurations['serverinfo']['config'];
     const fieldConfig = client.configurations['serverinfo']['fields'];
-    const channel = await client.channels.fetch(config.channelID).catch(e => {
+    const channel = await client.channels.fetch(config.channelID).catch(() => {
     });
     if (!channel) return client.logger.error(`[serverinfo] Could not find channel with id ${config.channelID}`);
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
@@ -29,6 +39,12 @@ async function generateEmbed(client) {
     const guildCreationDate = new Date(channel.guild.createdAt);
     const guildRoles = await channel.guild.roles.fetch();
 
+    /**
+     * Replaces the content with the variables of this module
+     * @private
+     * @param {String} content Content to replace variables in
+     * @returns {String} String with the variables replaced
+     */
     function replacer(content) {
         content = content.replaceAll('%memberCount%', guildMembers.size)
             .replaceAll('%botCount%', guildMembers.filter(m => m.user.bot).size)
