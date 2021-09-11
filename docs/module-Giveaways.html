@@ -417,7 +417,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="module-Helpers.html">Module: Helpers</h1>
+        <h1 class="page-title" data-filename="module-Giveaways.html">Module: Giveaways</h1>
         
 
 
@@ -426,7 +426,7 @@
     
 <header>
     <div class="header content-size">
-        <h2>Helpers
+        <h2>Giveaways
         </h2>
         
     </div>
@@ -439,7 +439,7 @@
 
         
             
-                <div class="description"><p>Functions to make your live easier</p></div>
+                <div class="description"><p>Manages giveaways</p></div>
             
 
             
@@ -450,6 +450,13 @@
     
     
     
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -492,185 +499,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".arrayToApplicationCommandPermissions">
-            <a class="share-icon" href="#.arrayToApplicationCommandPermissions"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id=".createGiveaway">
+            <a class="share-icon" href="#.createGiveaway"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                module:Helpers.arrayToApplicationCommandPermissions
+                module:Giveaways.createGiveaway
             </span>
-            <span class="signature">(inputArray, type, array)</span><span class="type-signature">array</span>
-            
-            <span class="access-signature">static</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>inputArray</code></td>
-            
-            
-            <td class="type">
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Array of user or role IDs</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-            
-            <td class="type">
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p><a target="_blank" href="https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissionType">ApplicationCommandPermissionType</a></p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>array</code></td>
-            
-            
-            <td class="type">
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Base-Array</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        array
-                        
-                    
-            </td>
-            <td class="description last"><a target="_blank" href="https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions">ApplicationCommandPermissionType</a></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id=".asyncForEach">
-            <a class="share-icon" href="#.asyncForEach"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                module:Helpers.asyncForEach
-            </span>
-            <span class="signature">(array, callback)</span><span class="type-signature">Promise</span>
+            <span class="signature">(organiser, channel, prize, endAt, winners, requirements, sponsorLink)</span><span class="type-signature">Promise.&lt;void></span>
             
             <span class="access-signature">static</span>
             
@@ -686,7 +520,7 @@
     
     
     <div class="description">
-        <p>Will loop asynchrony through every object in the array</p>
+        <p>Create a new giveaway</p>
     </div>
     
 
@@ -717,13 +551,13 @@
 	
         <tr>
             
-                <td class="name"><code>array</code></td>
+                <td class="name"><code>organiser</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">User</span>
 
 
             
@@ -733,20 +567,20 @@
             
             <td class="description last">
                 
-                <p>Array of objects</p></td>
+                <p>User who organized this giveaway</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>channel</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">Channel</span>
 
 
             
@@ -756,146 +590,20 @@
             
             <td class="description last">
                 
-                <p>Function that gets executed on every array (object, index in the array, array)</p></td>
+                <p>Channel in which this giveaway should take place</p></td>
         </tr>
 	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise
-                        
-                    
-            </td>
-            <td class="description last"></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id=".embedType">
-            <a class="share-icon" href="#.embedType"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                module:Helpers.embedType
-            </span>
-            <span class="signature">(input, args, optionsToKeep)</span><span class="type-signature">object</span>
-            
-            <span class="access-signature">static</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Will turn an object or string into embeds</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
 	
 	
         <tr>
             
-                <td class="name"><code>input</code></td>
+                <td class="name"><code>prize</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">array</span>
+<span class="param-type">String</span>
 
 
             
@@ -905,20 +613,20 @@
             
             <td class="description last">
                 
-                <p>Input in the configuration file</p></td>
+                <p>Prize which should be given away</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>args</code></td>
+                <td class="name"><code>endAt</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Date</span>
 
 
             
@@ -928,20 +636,20 @@
             
             <td class="description last">
                 
-                <p>Object of variables to replace</p></td>
+                <p>Date on which the giveaway should end</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>optionsToKeep</code></td>
+                <td class="name"><code>winners</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Number</span>
 
 
             
@@ -951,147 +659,22 @@
             
             <td class="description last">
                 
-                <p><a target="_blank" href="https://discord.js.org/#/docs/main/stable/typedef/BaseMessageOptions">BaseMessageOptions</a> to keep</p></td>
+                <p>Count of winners the bot should select</p></td>
         </tr>
 	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
-        </ul>
-    </dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        object
-                        
-                    
-            </td>
-            <td class="description last">Returns <a target="_blank" href="https://discord.js.org/#/docs/main/stable/typedef/MessageOptions">MessageOptions</a></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~checkForUpdates">
-            <a class="share-icon" href="#~checkForUpdates"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                checkForUpdates
-            </span>
-            <span class="signature">(client)</span><span class="type-signature">Promise.&lt;void></span>
-            
-            <span class="access-signature">async</span><span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Check if a new version of CustomDCBot is available in the main branch on github</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
 	
 	
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>requirements</code></td>
             
             
             <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Object></span>
+
+
             
             </td>
             
@@ -1099,7 +682,30 @@
             
             <td class="description last">
                 
-                <p>The Client</p></td>
+                <p>Array of requirements</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>sponsorLink</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Link to the sponsor's website (if applicable)</p></td>
         </tr>
 	
 	
@@ -1177,12 +783,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="~compareArrays">
-            <a class="share-icon" href="#~compareArrays"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="~calculateUserEntries">
+            <a class="share-icon" href="#~calculateUserEntries"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                compareArrays
+                calculateUserEntries
             </span>
-            <span class="signature">(array1, array2)</span><span class="type-signature">boolean</span>
+            <span class="signature">(member)</span><span class="type-signature">number</span>
             
             <span class="access-signature">inner</span>
             
@@ -1198,7 +804,7 @@
     
     
     <div class="description">
-        <p>Compares two arrays</p>
+        <p>Calculate the entries of a GuildMember</p>
     </div>
     
 
@@ -1229,13 +835,13 @@
 	
         <tr>
             
-                <td class="name"><code>array1</code></td>
+                <td class="name"><code>member</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">GuildMember</span>
 
 
             
@@ -1245,674 +851,7 @@
             
             <td class="description last">
                 
-                <p>First array</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>array2</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Array</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Second array</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        boolean
-                        
-                    
-            </td>
-            <td class="description last">Wherever the arrays are the same</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~formatDate">
-            <a class="share-icon" href="#~formatDate"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                formatDate
-            </span>
-            <span class="signature">(date)</span><span class="type-signature">string</span>
-            
-            <span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Makes a Date humanly readable</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>date</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Date to format</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
-        </ul>
-    </dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        string
-                        
-                    
-            </td>
-            <td class="description last">Returns humanly readable string</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~pufferStringToSize">
-            <a class="share-icon" href="#~pufferStringToSize"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                pufferStringToSize
-            </span>
-            <span class="signature">(string, size)</span><span class="type-signature">string</span>
-            
-            <span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Puffers (add empty spaces to center text) a string to a specific size</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>string</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>String to puffer</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>size</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Length to puffer to</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
-        </ul>
-    </dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        string
-                        
-                    
-            </td>
-            <td class="description last"></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~randomElementFromArray">
-            <a class="share-icon" href="#~randomElementFromArray"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                randomElementFromArray
-            </span>
-            <span class="signature">(array)</span><span class="type-signature">*</span>
-            
-            <span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Returns a random element from an array</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>array</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Array</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Array of values</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        *
-                        
-                    
-            </td>
-            <td class="description last"></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~randomIntFromInterval">
-            <a class="share-icon" href="#~randomIntFromInterval"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                randomIntFromInterval
-            </span>
-            <span class="signature">(min, max)</span><span class="type-signature">number</span>
-            
-            <span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Randomly selects a number between min and max</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>min</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                </td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>max</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                </td>
+                <p><a target="_blank" href="https://discord.js.org/#/docs/main/stable/class/GuildMember">GuildMember</a></p></td>
         </tr>
 	
 	
@@ -1975,7 +914,7 @@
                         
                     
             </td>
-            <td class="description last">Random integer</td>
+            <td class="description last">Entries this user has</td>
         </tr>
     
     </tbody>
@@ -1990,12 +929,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="~sendMultipleSiteButtonMessage">
-            <a class="share-icon" href="#~sendMultipleSiteButtonMessage"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="~checkRequirements">
+            <a class="share-icon" href="#~checkRequirements"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                sendMultipleSiteButtonMessage
+                checkRequirements
             </span>
-            <span class="signature">(channel, sites, allowedUserIDs, messageOrInteraction)</span><span class="type-signature">string</span>
+            <span class="signature">(member, giveaway)</span><span class="type-signature">Promise.&lt;Array></span>
             
             <span class="access-signature">async</span><span class="access-signature">inner</span>
             
@@ -2011,7 +950,176 @@
     
     
     <div class="description">
-        <p>Sends a multiple-site-embed-message</p>
+        <p>Checks if a <a target="_blank" href="https://discord.js.org/#/docs/main/stable/class/GuildMember">GuildMember</a> passes the requirements for a giveaway</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>member</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">GuildMember</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Guild member</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>giveaway</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Giveaway in which the user has to pass the requiremetns</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise.&lt;Array>
+                        
+                    
+            </td>
+            <td class="description last">Returns array with these values: 1. if the users passes the requirements 2. Which requirements where not passed in a human-readable string</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~endGiveaway">
+            <a class="share-icon" href="#~endGiveaway"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                endGiveaway
+            </span>
+            <span class="signature">(gID, job, checkIfGiveawayEnded, maxWinCount)</span><span class="type-signature">Promise.&lt;void></span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Ends a giveaway</p>
     </div>
     
 
@@ -2044,13 +1152,13 @@
 	
         <tr>
             
-                <td class="name"><code>channel</code></td>
+                <td class="name"><code>gID</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Number</span>
 
 
             
@@ -2064,74 +1172,20 @@
             
             <td class="description last">
                 
-                <p>Channel in which to send the message</p></td>
+                <p>ID of the giveaway to end</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>sites</code></td>
+                <td class="name"><code>job</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;object></span>
-
-
-            
-            </td>
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last">
-                
-                <p>Array of MessageEmbeds (https://discord.js.org/#/docs/main/stable/class/MessageEmbed)</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>allowedUserIDs</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-            
-            
-                <td class="default">
-                
-                </td>
-            
-            
-            <td class="description last">
-                
-                <p>Array of User-IDs of users allowed to use the pagination</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>messageOrInteraction</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
+<span class="param-type">Job</span>
 
 
             
@@ -2147,7 +1201,65 @@
             
             <td class="description last">
                 
-                <p>Message or <a target="_blank" href="https://discord.js.org/#/docs/main/stable/class/CommandInteraction">CommandInteraction</a> to respond to</p></td>
+                <p>Job which should get canceled after the giveaway ends</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>checkIfGiveawayEnded</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                <p>If enabled the function will return early when this giveaway already ended</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>maxWinCount</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                <p>Number of persons who can win this giveaway (overwrites Giveaway.winner)</p></td>
         </tr>
 	
 	
@@ -2163,13 +1275,6 @@
     
     
     
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
-        </ul>
-    </dd>
     
     
     
@@ -2213,180 +1318,11 @@
             
             <td class="type">
             
-                        string
+                        Promise.&lt;void>
                         
                     
             </td>
             <td class="description last"></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~truncate">
-            <a class="share-icon" href="#~truncate"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                truncate
-            </span>
-            <span class="signature">(string, length)</span><span class="type-signature">string</span>
-            
-            <span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Truncates a string to a specific length</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>string</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>String to truncate</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>length</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Length to truncate to</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        string
-                        
-                    
-            </td>
-            <td class="description last">Truncated string</td>
         </tr>
     
     </tbody>

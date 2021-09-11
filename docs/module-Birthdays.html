@@ -417,7 +417,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="global.html">Global</h1>
+        <h1 class="page-title" data-filename="module-Birthdays.html">Module: Birthdays</h1>
         
 
 
@@ -426,7 +426,7 @@
     
 <header>
     <div class="header content-size">
-        <h2>Global
+        <h2>Birthdays
         </h2>
         
     </div>
@@ -439,6 +439,8 @@
 
         
             
+                <div class="description"><p>Manages the birthday-embed</p></div>
+            
 
             
 <dl class="details">
@@ -448,6 +450,13 @@
     
     
     
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:mail@scderox.de">Simon Csaba</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -490,14 +499,14 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="syncCommandsIfNeeded">
-            <a class="share-icon" href="#syncCommandsIfNeeded"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="~generateBirthdayEmbed">
+            <a class="share-icon" href="#~generateBirthdayEmbed"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                syncCommandsIfNeeded
+                generateBirthdayEmbed
             </span>
-            <span class="signature">()</span><span class="type-signature">Promise.&lt;void></span>
+            <span class="signature">(client, notifyUsers)</span><span class="type-signature">Promise.&lt;void></span>
             
-            <span class="access-signature">async</span>
+            <span class="access-signature">inner</span>
             
             
         </h4>
@@ -511,7 +520,7 @@
     
     
     <div class="description">
-        <p>Syncs commands if needed</p>
+        <p>Generate the BirthdayEmbed in the configured channel</p>
     </div>
     
 
@@ -519,6 +528,74 @@
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Client</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>notifyUsers</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>If enabled the bot will notify users who have birthday today</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
