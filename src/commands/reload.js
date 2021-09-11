@@ -1,5 +1,5 @@
 const {reloadConfig} = require('../functions/configuration');
-const {reloadCommands} = require('../../main');
+const {syncCommandsIfNeeded} = require('../../main');
 
 module.exports.run = async function (interaction) {
     await interaction.reply({
@@ -14,7 +14,7 @@ module.exports.run = async function (interaction) {
     })).then(async () => {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`✅ Configuration reloaded successfully.`);
         await interaction.editReply('Configuration reloaded successfully, syncing commands, to make sure permissions are up-to-date...');
-        await reloadCommands();
+        await syncCommandsIfNeeded();
         await interaction.editReply('Configuration reloaded successfully and synced commands successfully');
     });
 };
