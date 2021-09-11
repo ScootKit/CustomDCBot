@@ -175,6 +175,7 @@ async function syncCommandsIfNeeded() {
             }
             if (checkOption(oldOptionOption, option)) {
                 needSync = true;
+                console.log(command.name, 'sync');
                 break;
             }
         }
@@ -187,7 +188,7 @@ async function syncCommandsIfNeeded() {
          * @returns {Boolean} If synchronisation is needed
          */
         function checkOption(oldOption, newOption) {
-            if (oldOption.name !== newOption.name || oldOption.description !== newOption.description || oldOption.type !== newOption.type || oldOption.required !== newOption.required) return true;
+            if (oldOption.name !== newOption.name || oldOption.description !== newOption.description || oldOption.type !== newOption.type || (typeof oldOption.required === 'undefined' ? false : oldOption.required) !== (typeof newOption.required === 'undefined' ? false : newOption.required)) return true;
             if (!compareArrays(oldOption.choices || [], newOption.choices || [])) return true;
             if ((oldOption.options || []).length !== (newOption.options || []).length) return true;
             for (const option of (newOption.options || [])) {
@@ -199,6 +200,8 @@ async function syncCommandsIfNeeded() {
         }
     }
     if (needSync) {
+        console.log(needSync);
+        return;
         await client.application.commands.set(commands, config.guildID);
         logger.info(`Synced application commands`);
     } else logger.info('Application commands are up to date - no syncing required');
