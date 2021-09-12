@@ -250,6 +250,8 @@ An example config file should include the following things:
     * `params` (if type === `string`, array, optional)
         * `name`: Name of the parameter (e.g. `%mention%`)
         * `description`: Description of the parameter (e.g. `Mention of the user`)
+        * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
+          is `fieldValue`.
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
 
