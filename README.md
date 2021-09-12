@@ -5,12 +5,6 @@ should only use it if you have some experience with Javascript, discord.js and J
 
 ---
 
-## VERSION 2 - BETA
-
-This branch is an unstable version of the upcoming v2-release. It contains breaking changes as detailed in
-the [changelog](CHANGELOG.md) (and more are coming). I suggest reading the changelog carefully. Some modules may not be
-available in this version as I need to rewrite / update them to v2.
-
 ## Get your own Custom-Bot completely free and with a modern webinterface and a lot more features!
 
 Go check it out on our [website](https://partner.sc-netzwerk.de) (currently only german). In addition to the here
