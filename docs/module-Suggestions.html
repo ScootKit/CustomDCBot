@@ -497,7 +497,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="module-Giveaways.html">Module: Giveaways</h1>
+        <h1 class="page-title" data-filename="module-Suggestions.html">Module: Suggestions</h1>
         
 
 
@@ -506,7 +506,7 @@
     
 <header>
     <div class="header content-size">
-        <h2>Giveaways
+        <h2>Suggestions
         </h2>
         
     </div>
@@ -519,7 +519,7 @@
 
         
             
-                <div class="description"><p>Manages giveaways</p></div>
+                <div class="description"><p>Manages suggestion-embeds</p></div>
             
 
             
@@ -579,12 +579,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id=".createGiveaway">
-            <a class="share-icon" href="#.createGiveaway"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id=".notifyMembers">
+            <a class="share-icon" href="#.notifyMembers"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                module:Giveaways.createGiveaway
+                module:Suggestions.notifyMembers
             </span>
-            <span class="signature">(organiser, channel, prize, endAt, winners, requirements, sponsorLink)</span><span class="type-signature">Promise.&lt;void></span>
+            <span class="signature">(client, suggestion, change, ignoredUserID)</span><span class="type-signature">Promise.&lt;void></span>
             
             <span class="access-signature">static</span>
             
@@ -600,7 +600,7 @@
     
     
     <div class="description">
-        <p>Create a new giveaway</p>
+        <p>Notifies subscribed members of a suggestion about a change</p>
     </div>
     
 
@@ -631,13 +631,13 @@
 	
         <tr>
             
-                <td class="name"><code>organiser</code></td>
+                <td class="name"><code>client</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">User</span>
+<span class="param-type"><a href="Client.html">Client</a></span>
 
 
             
@@ -647,444 +647,14 @@
             
             <td class="description last">
                 
-                <p>User who organized this giveaway</p></td>
+                </td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>channel</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Channel</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Channel in which this giveaway should take place</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>prize</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Prize which should be given away</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>endAt</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Date on which the giveaway should end</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>winners</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Count of winners the bot should select</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>requirements</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;Object></span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Array of requirements</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>sponsorLink</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Link to the sponsor's website (if applicable)</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;void>
-                        
-                    
-            </td>
-            <td class="description last"></td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~calculateUserEntries">
-            <a class="share-icon" href="#~calculateUserEntries"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                calculateUserEntries
-            </span>
-            <span class="signature">(member)</span><span class="type-signature">number</span>
-            
-            <span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Calculate the entries of a GuildMember</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>member</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">GuildMember</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p><a target="_blank" href="https://discord.js.org/#/docs/main/stable/class/GuildMember">GuildMember</a></p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        number
-                        
-                    
-            </td>
-            <td class="description last">Entries this user has</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~checkRequirements">
-            <a class="share-icon" href="#~checkRequirements"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                checkRequirements
-            </span>
-            <span class="signature">(member, giveaway)</span><span class="type-signature">Promise.&lt;Array></span>
-            
-            <span class="access-signature">async</span><span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Checks if a <a target="_blank" href="https://discord.js.org/#/docs/main/stable/class/GuildMember">GuildMember</a> passes the requirements for a giveaway</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>member</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">GuildMember</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>Guild member</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>giveaway</code></td>
+                <td class="name"><code>suggestion</code></td>
             
             
             <td class="type">
@@ -1100,246 +670,53 @@
             
             <td class="description last">
                 
-                <p>Giveaway in which the user has to pass the requiremetns</p></td>
+                <p>Suggestion-Object</p></td>
         </tr>
 	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;Array>
-                        
-                    
-            </td>
-            <td class="description last">Returns array with these values: 1. if the users passes the requirements 2. Which requirements where not passed in a human-readable string</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="~endGiveaway">
-            <a class="share-icon" href="#~endGiveaway"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                endGiveaway
-            </span>
-            <span class="signature">(gID, job, checkIfGiveawayEnded, maxWinCount)</span><span class="type-signature">Promise.&lt;void></span>
-            
-            <span class="access-signature">async</span><span class="access-signature">inner</span>
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Ends a giveaway</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Default</th>
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
 	
 	
         <tr>
             
-                <td class="name"><code>gID</code></td>
+                <td class="name"><code>change</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Number</span>
+<span class="param-type">String</span>
 
 
             
             </td>
             
-            
-                <td class="default">
-                
-                </td>
             
             
             <td class="description last">
                 
-                <p>ID of the giveaway to end</p></td>
+                <p>Type of change</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>job</code></td>
+                <td class="name"><code>ignoredUserID</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Job</span>
+<span class="param-type">String</span>
 
 
             
             </td>
             
             
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
             
             <td class="description last">
                 
-                <p>Job which should get canceled after the giveaway ends</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>checkIfGiveawayEnded</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-            
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-            
-            <td class="description last">
-                
-                <p>If enabled the function will return early when this giveaway already ended</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>maxWinCount</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-            
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-            
-            <td class="description last">
-                
-                <p>Number of persons who can win this giveaway (overwrites Giveaway.winner)</p></td>
+                <p>User-ID of a user who should not get notified (usefully when they trigger the change)</p></td>
         </tr>
 	
 	
