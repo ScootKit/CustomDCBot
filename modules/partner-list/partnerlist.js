@@ -1,8 +1,17 @@
-const {client, confDir} = require('../../main');
+/**
+ * Manages the Partner-List-Embed
+ * @module Partner-List
+ * @author Simon Csaba <mail@scderox.de>
+ */
 const {MessageEmbed} = require('discord.js');
 
-async function generatePartnerList() {
-    const moduleConf = require(`${confDir}/partner-list/config.json`);
+/**
+ * Generate the partner-list embed
+ * @param {Client} client
+ * @returns {Promise<void>}
+ */
+async function generatePartnerList(client) {
+    const moduleConf = client.configurations['partner-list']['config'];
     const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
     if (!channel) return console.error(`[Partner-List] Could not find channel with ID ${moduleConf['channelID']}.`);
@@ -18,7 +27,7 @@ async function generatePartnerList() {
         .setAuthor(client.user.username, client.user.avatarURL())
         .setColor(moduleConf['embed']['color'])
         .setDescription(moduleConf['embed']['description']);
-    moduleConf['sortCategories'].forEach(category => {
+    moduleConf['categories'].forEach(category => {
         if (sortedByCategory[category]) {
             let string = '';
             sortedByCategory[category].forEach(partner => {
@@ -35,8 +44,11 @@ async function generatePartnerList() {
         });
         embed.addField(category, string.length >= 1020 ? string.substr(0, 1020) + '...' : string);
     }
-    if (messages.last()) await messages.last().edit(embed);
-    else channel.send(embed);
+
+    if (partners.length === 0) embed.addField('ℹ Information', 'There are currently no partners. This is odd, but that\'s how it is ¯\\_(ツ)_/¯\n\nTo add a partner, run `/partner add` as a slash-command.');
+
+    if (messages.last()) await messages.last().edit({embeds: [embed]});
+    else channel.send({embeds: [embed]});
 }
 
 module.exports.generatePartnerList = generatePartnerList;

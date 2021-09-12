@@ -1,70 +1,113 @@
-const {confDir} = require('./../../../main');
+const {sendMultipleSiteButtonMessage} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 
-// ToDo Rework this. The code is awful.
+module.exports.run = async function (interaction) {
+    const moduleStrings = interaction.client.configurations['levels']['strings'];
+    const moduleConfig = interaction.client.configurations['levels']['config'];
+    const sortBy = interaction.options.getString('sort-by') || moduleConfig.sortLeaderboardBy;
+    const users = await interaction.client.models['levels']['User'].findAll({
+        order: [
+            ['xp', 'DESC']
+        ]
+    });
+    if (users.length === 0) return interaction.reply({
+        ephemeral: true,
+        content: ':warning: Can\'t generate a leaderboard, because no one has any XP which is odd, but that\'s how it is ¯\\_(ツ)_/¯'
+    });
+    const thisUser = users.find(u => u.userID === interaction.user.id);
 
-module.exports.run = async function (client, msg) {
-    const moduleStrings = require(`${confDir}/levels/strings.json`);
-    const users = await client.models['levels']['User'].findAll();
-    const user = await client.models['levels']['User'].findOne({
-        where: {
-            userID: msg.author.id
-        }
-    });
-    const sortedUsersByLevel = {};
-    const usedLevels = [];
-    users.forEach((u) => {
-        if (!usedLevels.includes(u.dataValues.level)) usedLevels.push(u.dataValues.level);
-        if (!sortedUsersByLevel[u.dataValues.level]) sortedUsersByLevel[u.dataValues.level] = {};
-        sortedUsersByLevel[u.dataValues.level][u.dataValues.userID] = u.dataValues.xp;
-    });
-    usedLevels.forEach(l => {
-        sortedUsersByLevel[l] = Object.fromEntries( // This took fucking forever
-            Object.entries(sortedUsersByLevel[l]).sort(([, a], [, b]) => b - a)
-        );
-    });
-    const embed = new MessageEmbed()
-        .setFooter(client.strings.footer)
-        .setColor('GREEN')
-        .setThumbnail(msg.guild.iconURL())
-        .setTitle(moduleStrings.leaderboardEmbed.title)
-        .setDescription(moduleStrings.leaderboardEmbed.description);
-    usedLevels.sort(function (a, b) {
-        return b - a;
-    });
-    let shownLevels = 0;
-    usedLevels.forEach(l => {
-        shownLevels = shownLevels + 1;
-        if (shownLevels > 6) return;
-        let content = '';
-        let i = 0;
-        let y = 0;
-        sortedUsersByLevel[l].forEach(() => {
-            y = y + 1;
-        });
-        for (const u in sortedUsersByLevel[l]) {
-            if (i >= 5) continue;
-            i = i + 1;
-            content = content + `\n<@${u}>: ${sortedUsersByLevel[l][u]} XP`;
-        }
-        if (i > 5) content = content + '\n\n' + moduleStrings.leaderboardEmbed.and_x_more_people.split('%count%').join(y - 1);
-        if (shownLevels === 4) embed.addField('\u200b', '\u200b');
-        embed.addField(`Level ${l}`, content, true);
-    });
-    if (shownLevels > 6) {
-        embed.addField('\u200b', '\u200b');
-        embed.addField(moduleStrings.leaderboardEmbed.more_level, moduleStrings.leaderboardEmbed.x_levels_are_not_shown.split('%count%').join(shownLevels - 6));
+    const sites = [];
+
+    /**
+     * Adds a site
+     * @private
+     * @param {Array} fields
+     */
+    function addSite(fields) {
+        const embed = new MessageEmbed()
+            .setFooter(interaction.client.strings.footer, interaction.client.strings.footerImgUrl)
+            .setColor('GREEN')
+            .setThumbnail(interaction.guild.iconURL())
+            .setTitle(moduleStrings.leaderboardEmbed.title)
+            .setDescription(moduleStrings.leaderboardEmbed.description)
+            .addField('\u200b', '\u200b')
+            .addFields(fields)
+            .addField('\u200b', '\u200b')
+            .addField(moduleStrings.leaderboardEmbed.your_level, moduleStrings.leaderboardEmbed.you_are_level_x_with_x_xp.split('%level%').join(thisUser['level']).split('%xp%').join(thisUser['xp']));
+        sites.push(embed);
     }
-    embed.addField(moduleStrings.leaderboardEmbed.your_level, moduleStrings.leaderboardEmbed.you_are_level_x_with_x_xp.split('%level%').join(user['level']).split('%xp%').join(user['xp']));
-    await msg.channel.send(embed);
+
+    if (sortBy === 'levels') {
+        const levels = {};
+        const levelArray = [];
+        for (const user of users) {
+            if (!levels[user.level]) {
+                levels[user.level] = [];
+                levelArray.push(user.level);
+            }
+            levels[user.level].push(user);
+        }
+        let currentSiteFields = [];
+        let i = 0;
+        levelArray.sort(function (a, b) {
+            return b - a;
+        });
+        for (const level of levelArray) {
+            i++;
+            let userString = '';
+            let userCount = 0;
+            for (const user of levels[level]) {
+                userCount++;
+                if (userCount < 6) userString = userString + `<@${user.userID}>: ${user.xp}\n`;
+            }
+            if (userCount > 5) userString = userString + `and ${userCount - 5} other users`;
+            currentSiteFields.push({name: `Level ${level}`, value: userString, inline: true});
+            if (i === Object.keys(levels).length || currentSiteFields.length === 6) {
+                addSite(currentSiteFields);
+                currentSiteFields = [];
+            }
+        }
+    } else {
+        let userString = '';
+        let i = 0;
+        let total = 0;
+        for (const user of users) {
+            i++;
+            total++;
+            userString = userString + `**${total}. <@${user.userID}>**: Level ${user.level} - ${user.xp} XP\n`;
+            if (i === users.length || i === 20) {
+                addSite({
+                    name: 'Users',
+                    value: userString
+                });
+                userString = '';
+            }
+        }
+    }
+
+    sendMultipleSiteButtonMessage(interaction.channel, sites, [interaction.user.id], interaction);
 };
 
-module.exports.help = {
-    'name': 'leaderboard',
-    'description': 'See the leaderboard of the server',
-    'module': 'levels',
-    'aliases': ['leaderboard', 'lb']
-};
 module.exports.config = {
-    'restricted': false
+    name: 'leaderboard',
+    description: 'Shows the leaderboard of this guild',
+    options: function (client) {
+        return [
+            {
+                type: 'STRING',
+                name: 'sort-by',
+                description: `How to sort the leaderboard (default: ${client.configurations['levels']['config']['sortLeaderboardBy']})`,
+                required: false,
+                choices: [
+                    {
+                        name: 'levels',
+                        value: 'levels'
+                    }, {
+                        name: 'xp',
+                        value: 'xp'
+                    }
+                ]
+            }
+        ];
+    }
 };

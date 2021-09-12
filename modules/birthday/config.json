@@ -65,8 +65,8 @@
       "default": {
         "title": "Birthdays",
         "color": "GREEN",
-        "thumbnail": "",
-        "image": "",
+        "thumbnail": " ",
+        "image": " ",
         "description": "Here you can find every birthday - add yours with !birthday <Day> <Month> [Year]"
       },
       "content": {
@@ -74,6 +74,12 @@
         "value": "string"
       },
       "disableKeyEdits": true
+    },
+    {
+      "field_name": "forceSCNetworkSync",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled, users can not set a local birthday on this server, instead they have to use the SC Network Dashboard to set their birthday"
     }
   ]
 }

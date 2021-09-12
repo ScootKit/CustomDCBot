@@ -1,47 +1,64 @@
+/**
+ * Manages the serverinfo-embed
+ * @module Partner-List
+ * @author Simon Csaba <mail@scderox.de>
+ */
+const {formatDate} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 
 exports.run = async (client) => {
     await generateEmbed(client);
-    setInterval(() => {
+    const interval = setInterval(() => {
         generateEmbed(client);
     }, 300000);
+    client.intervals.push(interval);
 };
 
+/**
+ * Generates the serverinfo embed
+ * @param {Client} client
+ * @returns {Promise<void>}
+ */
 async function generateEmbed(client) {
-    const config = require(`${client.configDir}/serverinfo/config.json`);
-    const fieldConfig = require(`${client.configDir}/serverinfo/fields.json`);
+    const config = client.configurations['serverinfo']['config'];
+    const fieldConfig = client.configurations['serverinfo']['fields'];
     const channel = await client.channels.fetch(config.channelID).catch(() => {
     });
-    if (!channel) return console.error(`[serverinfo] Could not find channel with id ${config.channelID}`);
+    if (!channel) return client.logger.error(`[serverinfo] Could not find channel with id ${config.channelID}`);
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     const embed = new MessageEmbed()
         .setTitle(config.embed.title)
         .setDescription(config.embed.description)
         .setColor(config.embed.color)
         .setTimestamp()
-        .setFooter(client.strings.footer)
+        .setFooter(client.strings.footer, client.strings.footerImgUrl)
         .setThumbnail(channel.guild.iconURL())
         .setAuthor(client.user.tag, client.user.avatarURL());
 
-    const guildMembers = await channel.guild.members.fetch();
+    const guildMembers = await channel.guild.members.fetch({withPresences: true});
     const guildCreationDate = new Date(channel.guild.createdAt);
     const guildRoles = await channel.guild.roles.fetch();
 
+    /**
+     * Replaces the content with the variables of this module
+     * @private
+     * @param {String} content Content to replace variables in
+     * @returns {String} String with the variables replaced
+     */
     function replacer(content) {
-        content = content.split('%memberCount%').join(guildMembers.size)
-            .split('%botCount%').join(guildMembers.filter(m => m.user.bot).size)
-            .split('%userCount%').join(guildMembers.filter(m => !m.user.bot).size)
-            .split('%onlineMemberCount%').join(guildMembers.filter(m => m.presence.status !== 'offline').size)
-            .split('%daysSinceCreation%').join(((new Date().getTime() - guildCreationDate.getTime()) / 86400000).toFixed(0))
-            .split('%guildCreationTimestamp%').join(`${guildCreationDate.getHours()}:${guildCreationDate.getMinutes()} ${guildCreationDate.getDate()}.${guildCreationDate.getMonth() + 1}.${guildCreationDate.getFullYear()}`)
-            .split('%guildBoosts%').join(channel.guild.premiumSubscriptionCount)
-            .split('%boostLevel%').join(channel.guild.premiumTier)
-            .split('%guildRegion%').join(channel.guild.region)
-            .split('%channelCount%').join(channel.guild.channels.cache.size)
-            .split('%roleCount%').join(guildRoles.cache.size)
-            .split('%emojiCount%').join(channel.guild.emojis.cache.size)
-            .split('%newline%').join('\n')
-            .split('%boosterCount%').join(guildMembers.filter(m => m.premiumSinceTimestamp).size);
+        content = content.replaceAll('%memberCount%', guildMembers.size)
+            .replaceAll('%botCount%', guildMembers.filter(m => m.user.bot).size)
+            .replaceAll('%userCount%', guildMembers.filter(m => !m.user.bot).size)
+            .replaceAll('%onlineMemberCount%', guildMembers.filter(m => m.presence).size)
+            .replaceAll('%daysSinceCreation%', ((new Date().getTime() - guildCreationDate.getTime()) / 86400000).toFixed(0))
+            .replaceAll('%guildCreationTimestamp%', formatDate(guildCreationDate))
+            .replaceAll('%guildBoosts%', channel.guild.premiumSubscriptionCount)
+            .replaceAll('%boostLevel%', channel.guild.premiumTier)
+            .replaceAll('%channelCount%', channel.guild.channels.cache.size)
+            .replaceAll('%roleCount%', guildRoles.size)
+            .replaceAll('%emojiCount%', channel.guild.emojis.cache.size)
+            .replaceAll('%newline%', '\n')
+            .replaceAll('%boosterCount%', guildMembers.filter(m => m.premiumSinceTimestamp).size);
         return content;
     }
 
@@ -49,6 +66,6 @@ async function generateEmbed(client) {
         embed.addField(field.name, replacer(field.content), !!field.inline);
     });
 
-    if (messages.last()) await messages.last().edit(embed);
-    else await channel.send(embed);
+    if (messages.first()) await messages.first().edit({embeds: [embed]});
+    else await channel.send({embeds: [embed]});
 }

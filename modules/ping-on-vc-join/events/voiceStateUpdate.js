@@ -3,38 +3,41 @@ const {embedType} = require('../../../src/functions/helpers');
 const cooldown = new Set();
 
 exports.run = async (client, oldState, newState) => {
-    const moduleConfig = require(`${client.configDir}/ping-on-vc-join/config.json`);
+    if (!client.botReadyAt) return;
+    if (!newState.channel) return;
+    const channel = await client.channels.fetch(newState.channelId);
+    if (channel.guild.id !== client.guild.id) return;
 
-    if (!newState.channelID) return;
-    if (!moduleConfig.channels.includes(newState.channelID)) return;
-
-    const memberChannel = newState.guild.channels.cache.get(newState.channelID);
-    if (!memberChannel) return;
-
-    const member = await newState.guild.members.fetch(newState.id);
-    if (!member) return;
+    const moduleConfig = client.configurations['ping-on-vc-join']['config'];
+    const configElement = moduleConfig.find(e => e.channels.includes(channel.id));
+    if (!configElement) return;
+    const member = await client.guild.members.fetch(newState.id);
 
     if (cooldown.has(member.user.id)) return;
 
-    const notifyChannel = newState.guild.channels.cache.get(moduleConfig['notify_channel_id']);
-    if (!notifyChannel) return console.error(`[Module: ping-on-vc-join] Notify channel not found`);
+    const notifyChannel = newState.guild.channels.cache.get(configElement['notify_channel_id']);
+    if (!notifyChannel) return client.logger.error(`[ping-on-vc-join] Notify channel not found`);
 
-    await notifyChannel.send(...embedType(moduleConfig['message'], {
-        '%vc%': memberChannel.name,
-        '%tag%': member.user.tag,
-        '%mention%': `<@${member.user.id}>`
-    }));
+    setTimeout(async () => { // Wait 3 seconds before pinging a role
+        if (!member.voice) return;
+        if (member.voice.channelId !== channel.id) return;
+        await notifyChannel.send(embedType(configElement['message'], {
+            '%vc%': channel.name,
+            '%tag%': member.user.tag,
+            '%mention%': `<@${member.user.id}>`
+        }));
 
-    cooldown.add(member.user.id);
-    setTimeout(() => {
-        cooldown.delete(member.user.id);
-    }, 300000); // 5 min
+        cooldown.add(member.user.id);
+        setTimeout(() => {
+            cooldown.delete(member.user.id);
+        }, 300000); // 5 min
 
-    if (moduleConfig['send_pn_to_member']) {
-        await member.send(...embedType(moduleConfig['pn_message'], {
-            '%vc%': memberChannel.name
-        })).catch(() => {
-            console.error(`[Module: ping-on-vc-join] Could not send PN to ${member.user.id}`);
-        });
-    }
+        if (configElement['send_pn_to_member']) {
+            await member.send(embedType(configElement['pn_message'], {
+                '%vc%': channel.name
+            })).catch(() => {
+                client.logger.info(`[ping-on-vc-join] Could not send PN to ${member.user.id}`);
+            });
+        }
+    }, 3000);
 };

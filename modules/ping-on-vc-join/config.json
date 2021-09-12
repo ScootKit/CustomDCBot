@@ -1,12 +1,13 @@
 {
   "filename": "config.json",
+  "configElements": true,
   "content": [
     {
       "field_name": "channels",
       "default": [],
       "type": "array",
       "content": "channelID",
-      "description": "Here you can add channels where the bot should react"
+      "description": "Channel-ID in which this messages should get triggered"
     },
     {
       "field_name": "message",
@@ -31,7 +32,7 @@
     },
     {
       "field_name": "notify_channel_id",
-      "default": "false",
+      "default": "",
       "type": "channelID",
       "description": "Channel where the message should be send"
     },

@@ -1,6 +1,6 @@
 {
   "name": "customdcbot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Create your own discord bot - Fully customizable and with a lot of features",
   "main": "main.js",
   "repository": {
@@ -9,24 +9,33 @@
   },
   "scripts": {
     "start": "node main.js",
-    "test": "node main.js",
+    "test": "npx eslint ./",
     "generate-config": "node generate-config.js"
   },
   "author": "SC Network Team",
   "contributors": [
     "SCDerox <scderox@sc-network.net>"
   ],
+  "funding": "https://github.com/SCNetwork/CustomDCBot?sponsor=1",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "discord.js": "^12.5.3",
-    "fs-extra": "^9.0.1",
-    "json-beautify": "^1.1.1",
-    "node-schedule": "^1.3.2",
-    "parse-duration": "^0.4.4",
-    "sequelize": "^6.3.5",
-    "sqlite3": "^5.0.0"
+    "@scnetwork/api": "^1.0.0",
+    "age-calculator": "^1.0.0",
+    "bufferutil": "^4.0.3",
+    "centra": "^2.5.0",
+    "discord.js": "^13.1.0",
+    "fs-extra": "^9.1.0",
+    "jsonfile": "^6.1.0",
+    "log4js": "^6.3.0",
+    "node-schedule": "^2.0.0",
+    "parse-duration": "^1.0.0",
+    "sequelize": "^6.6.5",
+    "sqlite3": "^5.0.2",
+    "utf-8-validate": "^5.0.5"
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "@pixi/jsdoc-template": "^2.6.0",
+    "eslint": "^7.32.0",
+    "jsdoc": "^3.6.7"
   }
 }

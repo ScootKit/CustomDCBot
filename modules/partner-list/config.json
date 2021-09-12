@@ -31,11 +31,65 @@
       "disableKeyEdits": true
     },
     {
-      "field_name": "sortCategories",
+      "field_name": "categories",
       "type": "array",
-      "description": "You can change the sequence of the categories here (you don't have to)",
+      "description": "Please specify each category here",
       "content": "string",
-      "default": []
+      "default": [
+        "Normal Partners",
+        "Kooperation",
+        "Small Partners"
+      ]
+    },
+    {
+      "field_name": "category-roles",
+      "type": "keyed",
+      "description": "(optional) Role which should be given for a partner in a specific category",
+      "content": {
+        "key": "string",
+        "value": "roleID"
+      },
+      "default": {}
+    },
+    {
+      "field_name": "sendNotificationToPartner",
+      "type": "boolean",
+      "default": false,
+      "description": "If enabled, the bot is going to send a DM to the partner when they get added or removed"
+    },
+    {
+      "field_name": "newPartnerDM",
+      "type": "string",
+      "allowEmbed": true,
+      "default": "Hello, Hello! You are now a partner - congratulations",
+      "description": "This message gets send to the partner (if enabled)",
+      "params": [
+        {
+          "name": "%name%",
+          "description": "Name of the added partner"
+        },
+        {
+          "name": "%category%",
+          "description": "Category of the partner"
+        }
+      ]
+    },
+    {
+      "field_name": "byePartnerDM",
+      "type": "string",
+      "allowEmbed": true,
+      "default": "Sorry, but you are no longer a partner ):",
+      "description": "This message gets send to the partner (if enabled)",
+      "params": [
+        {
+          "name": "%name%",
+          "description": "Name of the added partner"
+        },
+        {
+          "name": "%category%",
+          "description": "Category of the partner"
+        }
+      ]
     }
   ]
 }

@@ -4,12 +4,14 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Simple level-system with a lot of configuration options",
+  "description": "Easy to use levelsystem with a lot of customization!",
   "commands-dir": "/commands",
   "events-dir": "/events",
   "models-dir": "/models",
   "config-example-files": [
     "configs/config.json",
-    "configs/strings.json"
+    "configs/strings.json",
+    "configs/random-levelup-messages.json",
+    "configs/special-levelup-messages.json"
   ]
 }

@@ -1,18 +1,40 @@
-const {embedType} = require('../../../src/functions/helpers');
-const {confDir} = require('../../../main');
-exports.run = async (client, member) => {
-    const moduleConfig = require(`${confDir}/welcomer/config.json`);
-    if (!member.guild.channels.cache.get(moduleConfig['welcome-message-channel'])) return console.error('Could not found welcome channel');
-    if (moduleConfig['not-send-messages-if-member-is-bot'] && member.user.bot) return;
-    await member.guild.channels.cache.get(moduleConfig['welcome-message-channel']).send(
-        ...embedType(moduleConfig['welcome-text'],
+const {randomElementFromArray, embedType, formatDate} = require('../../../src/functions/helpers');
+
+module.exports.run = async function (client, guildMember) {
+    if (!client.botReadyAt) return;
+    if (guildMember.guild.id !== client.guild.id) return;
+    const moduleConfig = client.configurations['welcomer']['config'];
+    if (guildMember.user.bot && moduleConfig['not-send-messages-if-member-is-bot']) return;
+
+    const moduleChannels = client.configurations['welcomer']['channels'];
+
+    if (moduleConfig['give-roles-on-join'].length !== 0) {
+        await guildMember.roles.add(moduleConfig['give-roles-on-join']);
+    }
+
+    for (const channelConfig of moduleChannels.filter(c => c.type === 'join')) {
+        const channel = await guildMember.guild.channels.fetch(channelConfig.channelID).catch(() => {
+        });
+        if (!channel) {
+            client.logger.error(`[welcomer] Channel not found: ${channelConfig.channelID}`);
+            continue;
+        }
+        let message;
+        if (channelConfig.randomMessages) {
+            message = (randomElementFromArray(client.configurations['welcomer']['random-messages'].filter(m => m.type === 'join')) || {}).message;
+        }
+        if (!message) message = channelConfig.message;
+
+        await channel.send(embedType(message || 'Message not found',
             {
-                '%mention%': `<@${member.id}>`,
-                '%servername%': member.guild.name,
-                '%tag%': member.user.tag,
-                '%memberProfilePictureUrl%': member.user.avatarURL(),
-                '%createdAt%': `${member.user.createdAt.getDate()}.${member.user.createdAt.getMonth() + 1}.${member.user.createdAt.getFullYear()}`
-            })
-    );
-    await member.roles.add(moduleConfig['give-roles-on-join']);
+                '%mention%': guildMember.toString(),
+                '%servername%': guildMember.guild.name,
+                '%tag%': guildMember.user.tag,
+                '%guildUserCount%': (await client.guild.members.fetch()).size,
+                '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
+                '%memberProfilePictureUrl%': guildMember.user.avatarURL(),
+                '%createdAt%': formatDate(guildMember.user.createdAt)
+            }
+        ));
+    }
 };

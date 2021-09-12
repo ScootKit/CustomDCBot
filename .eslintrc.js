@@ -7,7 +7,7 @@ module.exports = {
     'parserOptions': {
         'ecmaVersion': 12
     },
-    'ignorePatterns': ['.eslintrc.js'],
+    'ignorePatterns': ['.eslintrc.js', 'docs/', 'gen-doc/'],
     'rules': {
         'no-unused-vars': 'error',
         'accessor-pairs': 'error',
@@ -51,7 +51,7 @@ module.exports = {
             'error',
             'last'
         ],
-        'complexity': 'error',
+        'complexity': ['error', 50],
         'computed-property-spacing': [
             'error',
             'never'
@@ -67,6 +67,15 @@ module.exports = {
             'error',
             'property'
         ],
+        'require-jsdoc': ['error', {
+            'require': {
+                'FunctionDeclaration': true,
+                'MethodDefinition': false,
+                'ClassDeclaration': true,
+                'ArrowFunctionExpression': false,
+                'FunctionExpression': false
+            }
+        }],
         'dot-notation': 'off',
         'eol-last': 'off',
         'eqeqeq': 'error',
@@ -114,7 +123,7 @@ module.exports = {
         'max-classes-per-file': 'error',
         'max-depth': 'off',
         'max-len': 'off',
-        'max-lines': 'error',
+        'max-lines': ['error', {max: 500, skipComments: true}],
         'max-lines-per-function': 'off',
         'max-nested-callbacks': 'error',
         'max-params': 'off',
@@ -148,6 +157,7 @@ module.exports = {
         'no-extra-bind': 'error',
         'no-extra-label': 'error',
         'no-extra-parens': 'off',
+        'no-extra-semi': 'error',
         'no-floating-decimal': 'error',
         'no-implicit-globals': 'off',
         'no-implied-eval': 'error',
