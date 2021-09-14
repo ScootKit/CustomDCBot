@@ -1,87 +1,86 @@
 const {embedType} = require('../../../src/functions/helpers');
-const {generateSuggestionEmbed} = require('../suggestion');
-const {confDir} = require('./../../../main');
+const {generateSuggestionEmbed, notifyMembers} = require('../suggestion');
 
-module.exports.run = async function (client, msg, args) {
-    const moduleConfig = require(`${confDir}/suggestions/config.json`);
-    let suggestionElement;
-    switch (args[0]) {
-        case 'create':
-            await args.shift();
-            let suggestion = '';
-            args.forEach((arg) => suggestion = suggestion + arg + ' ');
-            suggestion = suggestion.slice(0, -1);
-            const channel = await client.channels.fetch(moduleConfig.suggestionChannel);
-            const suggestionMsg = await channel.send('Just a sec...');
-            if (moduleConfig.reactions) moduleConfig.reactions.forEach(reaction => suggestionMsg.react(reaction));
-            suggestionElement = await client.models['suggestions']['Suggestion'].create({
-                suggestion: suggestion,
-                messageID: suggestionMsg.id,
-                suggesterID: msg.author.id,
-                comments: []
-            });
-            await generateSuggestionEmbed(client, suggestionElement);
-            await msg.reply(...embedType(moduleConfig.successfullySubmitted, {'%id%': suggestionElement.id}));
-            break;
-        case 'comment':
-            if (!moduleConfig.allowUserComment && !msg.member.roles.cache.find(r => moduleConfig['adminRoles'].includes(r.id))) return msg.channel.send(...embedType(client.strings.not_enough_permissions));
-            suggestionElement = await client.models['suggestions']['Suggestion'].findOne({
-                where: {
-                    id: args[1]
-                }
-            });
-            if (!suggestionElement) return msg.reply('Suggestion not found');
-            let comment = '';
-            await args.shift();
-            await args.shift();
-            args.forEach((arg) => comment = comment + arg + ' ');
-            comment = comment.slice(0, -1);
-            suggestionElement.comments.push({
-                comment: comment,
-                userID: msg.author.id
-            });
-            const realarray = suggestionElement.comments;
-            suggestionElement.comments = null;
-            suggestionElement.comments = realarray; // Thanks sequelize wtf
-            await suggestionElement.save();
-            await generateSuggestionEmbed(client, suggestionElement);
-            await msg.channel.send(...embedType(moduleConfig.successfullyComment));
-            break;
-        case 'approve':
-        case 'deny':
-            if (!msg.member.roles.cache.find(r => moduleConfig['adminRoles'].includes(r.id))) return msg.channel.send(...embedType(client.strings.not_enough_permissions));
-            suggestionElement = await client.models['suggestions']['Suggestion'].findOne({
-                where: {
-                    id: args[1]
-                }
-            });
-            if (!suggestionElement) return msg.reply('Suggestion not found');
-            let reason = '';
-            const type = args[0];
-            await args.shift();
-            await args.shift();
-            args.forEach((arg) => reason = reason + arg + ' ');
-            reason = reason.slice(0, -1);
-            suggestionElement.adminAnswer = {
-                action: type,
-                reason: reason,
-                userID: msg.author.id
-            };
-            await suggestionElement.save();
-            await generateSuggestionEmbed(client, suggestionElement);
-            await msg.channel.send('Done :smile:');
-            break;
-        default:
-            msg.channel.send(`Wrong usage. You can choose between these different usages:\n\`${client.config.prefix}suggestion create <Suggestion>\` - Creates a suggestion\n\`${client.config.prefix}suggestion comment <SuggestionID> <Comment>\` - Comments on a suggestion\n\n**Commands for Admins**\n\`${client.config.prefix}suggestion approve <SuggestionID> <Reason>\` - Approves suggestion\n\`${client.config.prefix}suggestion deny <SuggestionID> <Reason>\` - Denys a suggestion`);
+module.exports.subcommands = {
+    'create': async function (interaction) {
+        await interaction.deferReply({ephemeral: true});
+        const moduleConfig = interaction.client.configurations['suggestions']['config'];
+        const channel = await interaction.guild.channels.fetch(moduleConfig.suggestionChannel);
+        const suggestionMsg = await channel.send(moduleConfig.notifyRole ? `<@&${moduleConfig.notifyRole}> New suggestion, loading..` : 'Loading...');
+        if (moduleConfig.reactions) moduleConfig.reactions.forEach(reaction => suggestionMsg.react(reaction));
+        const suggestionElement = await interaction.client.models['suggestions']['Suggestion'].create({
+            suggestion: interaction.options.getString('suggestion'),
+            messageID: suggestionMsg.id,
+            suggesterID: interaction.user.id,
+            comments: []
+        });
+        await generateSuggestionEmbed(interaction.client, suggestionElement);
+        await interaction.editReply(embedType(moduleConfig.successfullySubmitted, {'%id%': suggestionElement.id}));
+    },
+    'comment': async function (interaction) {
+        const suggestionElement = await interaction.client.models['suggestions']['Suggestion'].findOne({
+            where: {
+                id: interaction.options.getInteger('id')
+            }
+        });
+        if (!suggestionElement) return interaction.reply({
+            ephemeral: true,
+            content: 'Suggestion could not be found'
+        });
+        await interaction.deferReply({ephemeral: true});
+        suggestionElement.comments.push({
+            comment: interaction.options.getString('comment'),
+            userID: interaction.user.id
+        });
+        const realarray = suggestionElement.comments;
+        suggestionElement.comments = null;
+        suggestionElement.comments = realarray; // Thanks sequelize wtf
+        await suggestionElement.save();
+        await generateSuggestionEmbed(interaction.client, suggestionElement);
+        await notifyMembers(interaction.client, suggestionElement, 'comment', interaction.user.id);
+        await interaction.editReply({
+            content: ':+1: Successfully commented'
+        });
     }
 };
 
-module.exports.help = {
-    'name': 'suggestion',
-    'description': 'Creates a suggestions / Comments on a suggestion / Anwser to a suggestion',
-    'module': 'suggestions',
-    'aliases': ['suggest', 'suggestion', 's']
-};
 module.exports.config = {
-    'restricted': false
+    name: 'suggestion',
+    description: 'Create and comment on suggestions',
+    options: function (client) {
+        const array = [{
+            type: 'SUB_COMMAND',
+            name: 'create',
+            description: 'Create a new suggestion',
+            options: [{
+                type: 'STRING',
+                required: true,
+                name: 'suggestion',
+                description: 'Content you want to suggest'
+            }]
+        }];
+        if (client.configurations['suggestions']['config'].allowUserComment) {
+            array.push(
+                {
+                    type: 'SUB_COMMAND',
+                    name: 'comment',
+                    description: 'Comments on a suggestion',
+                    options: [
+                        {
+                            type: 'INTEGER',
+                            required: true,
+                            name: 'id',
+                            description: 'ID of the suggestion'
+                        },
+                        {
+                            type: 'STRING',
+                            required: true,
+                            name: 'comment',
+                            description: 'Your important comment'
+                        }
+                    ]
+                });
+        }
+        return array;
+    }
 };

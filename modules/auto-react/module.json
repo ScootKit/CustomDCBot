@@ -4,7 +4,7 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Automatically reacts with selected emojis in selected channels",
+  "description": "Automatically reacts with selected emojis in selected channels or if a user gets pinged",
   "events-dir": "/events",
   "config-example-files": [
     "config.json"

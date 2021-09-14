@@ -1,0 +1,106 @@
+{
+  "filename": "random-messages.json",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "type",
+      "type": "select",
+      "default": "",
+      "description": "Typ of this message",
+      "content": [
+        "join",
+        "leave",
+        "boost",
+        "unboost"
+      ]
+    },
+    {
+      "field_name": "message",
+      "type": "string",
+      "default": "",
+      "description": "Message that should get send",
+      "params": [
+        {
+          "name": "%mention%",
+          "description": "Mentions the user",
+          "fieldValue": "join"
+        },
+        {
+          "name": "%memberProfilePictureUrl%",
+          "description": "URL of the user's avatar",
+          "fieldValue": "join"
+        },
+        {
+          "name": "%servername%",
+          "description": "Name of the guild",
+          "fieldValue": "join"
+        },
+        {
+          "name": "%tag%",
+          "description": "Tag of the user",
+          "fieldValue": "join"
+        },
+        {
+          "name": "%createdAt%",
+          "description": "Date when account was created",
+          "fieldValue": "join"
+        },
+        {
+          "name": "%tag%",
+          "description": "Tag of the user",
+          "fieldValue": "leave"
+        },
+        {
+          "name": "%memberProfilePictureUrl%",
+          "description": "URL of the user's avatar",
+          "fieldValue": "leave"
+        },
+        {
+          "name": "%joinedAt%",
+          "description": "Date when user joined guild",
+          "fieldValue": "leave"
+        },
+        {
+          "name": "%guildUserCount%",
+          "description": "Count of users on the guild",
+          "fieldValue": "leave"
+        },
+        {
+          "name": "%guildMemberCount%",
+          "description": "Count of members (without bots) on the guild",
+          "fieldValue": "leave"
+        },
+        {
+          "name": "%mention%",
+          "description": "Mention of the user who boosted",
+          "fieldValue": "boost"
+        },
+        {
+          "name": "%boostCount%",
+          "description": "Total count of boosts",
+          "fieldValue": "boost"
+        },
+        {
+          "name": "%guildLevel%",
+          "description": "Boost-Level of the guild after the boost",
+          "fieldValue": "boost"
+        },
+        {
+          "name": "%mention%",
+          "description": "Mention of the user who unboosted",
+          "fieldValue": "unboost"
+        },
+        {
+          "name": "%boostCount%",
+          "description": "Total count of boosts",
+          "fieldValue": "unboost"
+        },
+        {
+          "name": "%guildLevel%",
+          "description": "Boost-Level of the guild after the unboost",
+          "fieldValue": "unboost"
+        }
+      ]
+    }
+  ]
+}

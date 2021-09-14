@@ -9,7 +9,15 @@ module.exports = class BirthdayUser extends Model {
             },
             month: DataTypes.INTEGER,
             day: DataTypes.INTEGER,
-            year: DataTypes.INTEGER
+            year: DataTypes.INTEGER,
+            verified: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
+            },
+            sync: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
+            }
         }, {
             tableName: 'birthday_users',
             timestamps: true,

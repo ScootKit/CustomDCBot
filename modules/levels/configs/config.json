@@ -5,89 +5,72 @@
       "field_name": "min-xp",
       "default": 15,
       "type": "integer",
-      "description": "How much XP an user at least gets"
+      "description": "How much XP the user gets at least"
     },
     {
       "field_name": "max-xp",
       "default": 25,
       "type": "integer",
-      "description": "How much XP an user gets maximally"
+      "description": "How much XP the user gets at most"
     },
     {
       "field_name": "cooldown",
-      "default": 30000,
+      "default": 3000,
       "type": "integer",
-      "description": "How much an user has to wait to get new XP"
+      "description": "In ms. How much cooldown there is between each XP getting"
     },
     {
       "field_name": "level_up_channel_id",
       "default": "",
       "type": "channelID",
       "allowNull": true,
-      "description": "Channel where the level-up-message gets send"
+      "description": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)"
+    },
+    {
+      "field_name": "sortLeaderboardBy",
+      "default": "levels",
+      "type": "select",
+      "content": [
+        "levels",
+        "xp"
+      ],
+      "description": "How the leaderboard should be sorted"
     },
     {
       "field_name": "blacklisted_channels",
       "default": [],
       "type": "array",
       "content": "channelID",
-      "description": "Channel were no XP can be earned"
-    },
-    {
-      "field_name": "level_up_message",
-      "default": "%mention%: Level Up! Your new level is **%newLevel%**!",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that's gets send to the selected channel if an user levels up",
-      "params": [
-        {
-          "name": "%mention%",
-          "description": "Mention of the user"
-        },
-        {
-          "name": "%newLevel%",
-          "description": "New level of the user"
-        },
-        {
-          "name": "%tag%",
-          "description": "Tag of the user"
-        }
-      ]
-    },
-    {
-      "field_name": "level_up_message_with_reward",
-      "default": "%mention%: Level Up! Your new level is **%newLevel%**! As reward you got the role **%role%**",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that's gets send to the selected channel if an user levels up and this level does get an reward",
-      "params": [
-        {
-          "name": "%mention%",
-          "description": "Mention of the user"
-        },
-        {
-          "name": "%newLevel%",
-          "description": "New level of the user"
-        },
-        {
-          "name": "%role%",
-          "description": "Name of the role that the user got"
-        },
-        {
-          "name": "%tag%",
-          "description": "Tag of the user"
-        }
-      ]
+      "description": "Blacklisted-Channels in which users can not earn XP"
     },
     {
       "field_name": "reward_roles",
       "default": {},
       "type": "keyed",
-      "description": "Here you can add reward-roles to certain levels",
+      "description": "Level at which users should get roles",
       "content": {
         "key": "integer",
         "value": "roleID"
       }
+    },
+    {
+      "field_name": "randomMessages",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled the module will randomly select a messages from random-levelup-messages.json and ignore the one set in strings.json"
+    },
+    {
+      "field_name": "leaderboard-channel",
+      "default": "",
+      "type": "channelID",
+      "allowNull": true,
+      "description": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes"
+    },
+    {
+      "field_name": "allowCheats",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))"
     }
   ]
 }

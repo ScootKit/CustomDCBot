@@ -1,5 +1,5 @@
 const {generatePartnerList} = require('../partnerlist');
 
-module.exports.run = async function () {
-    await generatePartnerList();
+module.exports.run = async function (client) {
+    await generatePartnerList(client);
 };
