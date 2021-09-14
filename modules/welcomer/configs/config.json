@@ -1,0 +1,25 @@
+{
+  "filename": "config.json",
+  "content": [
+    {
+      "field_name": "give-roles-on-join",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "IDs of roles to give to a new member"
+    },
+    {
+      "field_name": "not-send-messages-if-member-is-bot",
+      "default": true,
+      "type": "boolean",
+      "description": "Should bots be ignored?"
+    },
+    {
+      "field_name": "give-roles-on-boost",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "IDs of roles to give to a member who boosts the server"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({
     allowedMentions: {parse: ['users', 'roles']}, // Disables @everyone mentions because everyone hates them
-    intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
+    intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
 });
 client.intervals = [];
 client.jobs = [];
@@ -175,6 +175,7 @@ async function syncCommandsIfNeeded() {
             }
             if (checkOption(oldOptionOption, option)) {
                 needSync = true;
+                console.log(command.name, 'sync');
                 break;
             }
         }
@@ -187,7 +188,7 @@ async function syncCommandsIfNeeded() {
          * @returns {Boolean} If synchronisation is needed
          */
         function checkOption(oldOption, newOption) {
-            if (oldOption.name !== newOption.name || oldOption.description !== newOption.description || oldOption.type !== newOption.type || oldOption.required !== newOption.required) return true;
+            if (oldOption.name !== newOption.name || oldOption.description !== newOption.description || oldOption.type !== newOption.type || (typeof oldOption.required === 'undefined' ? false : oldOption.required) !== (typeof newOption.required === 'undefined' ? false : newOption.required)) return true;
             if (!compareArrays(oldOption.choices || [], newOption.choices || [])) return true;
             if ((oldOption.options || []).length !== (newOption.options || []).length) return true;
             for (const option of (newOption.options || [])) {

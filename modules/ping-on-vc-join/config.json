@@ -1,0 +1,58 @@
+{
+  "filename": "config.json",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "channels",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "Channel-ID in which this messages should get triggered"
+    },
+    {
+      "field_name": "message",
+      "default": "The user %tag% joined the voicechat %vc%",
+      "allowEmbed": true,
+      "description": "Here you can set the message that should be send if someone joins a selected voicechat",
+      "type": "string",
+      "parms": [
+        {
+          "name": "%tag%",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "%vc%",
+          "description": "Name of the voicechat"
+        },
+        {
+          "name": "%mention%",
+          "description": "Mention of the user"
+        }
+      ]
+    },
+    {
+      "field_name": "notify_channel_id",
+      "default": "",
+      "type": "channelID",
+      "description": "Channel where the message should be send"
+    },
+    {
+      "field_name": "send_pn_to_member",
+      "default": false,
+      "type": "boolean",
+      "description": "Should the bot send a PN to the member?"
+    },
+    {
+      "field_name": "pn_message",
+      "default": "Hi, I saw you joined the voice chat %vc%. Nice (;",
+      "allowEmbed": true,
+      "type": "string",
+      "parms": [
+        {
+          "name": "%vc%",
+          "description": "Name of the voicechat"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "filename": "fields.json",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "name",
+      "default": "",
+      "description": "Name of this field",
+      "type": "string"
+    },
+    {
+      "field_name": "content",
+      "description": "Content of this field",
+      "default": "",
+      "type": "string",
+      "params": [
+        {
+          "name": "%memberCount%",
+          "description": "Member-Count of this guild"
+        },
+        {
+          "name": "%botCount%",
+          "description": "Bot-Count of this guild"
+        },
+        {
+          "name": "%userCount%",
+          "description": "User-Count of this guild"
+        },
+        {
+          "name": "%onlineMemberCount%",
+          "description": "Count of online members on this guild"
+        },
+        {
+          "name": "%daysSinceCreation%",
+          "description": "Count of days passed since the creation of this guild"
+        },
+        {
+          "name": "%guildCreationTimestamp%",
+          "description": "Show when the guild was created"
+        },
+        {
+          "name": "%guildBoosts%",
+          "description": "Show how often this guild was boosted"
+        },
+        {
+          "name": "%boostLevel%",
+          "description": "Shows the current boost-level of this guild"
+        },
+        {
+          "name": "%boosterCount%",
+          "description": "Count of boosters on this guild"
+        },
+        {
+          "name": "%guildRegion%",
+          "description": "Region of this guild"
+        },
+        {
+          "name": "%channelCount%",
+          "description": "Count of channels on this guild"
+        },
+        {
+          "name": "%roleCount%",
+          "description": "Count of roles on this guild"
+        },
+        {
+          "name": "%emojiCount%",
+          "description": "Count of emojis on this guild"
+        },
+        {
+          "name": "%newline%",
+          "description": "Inserts a new line"
+        }
+      ]
+    },
+    {
+      "field_name": "inline",
+      "description": "If enabled the field will be inlined",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

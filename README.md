@@ -5,12 +5,6 @@ should only use it if you have some experience with Javascript, discord.js and J
 
 ---
 
-## VERSION 2 - BETA
-
-This branch is an unstable version of the upcoming v2-release. It contains breaking changes as detailed in
-the [changelog](CHANGELOG.md) (and more are coming). I suggest reading the changelog carefully. Some modules may not be
-available in this version as I need to rewrite / update them to v2.
-
 ## Get your own Custom-Bot completely free and with a modern webinterface and a lot more features!
 
 Go check it out on our [website](https://partner.sc-netzwerk.de) (currently only german). In addition to the here
@@ -41,7 +35,8 @@ Please read the full [license](LICENSE). This is not legal advice.
 
 As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
 product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-or [donate on Patreon](https://patreon.com/scnetwork). Thank you so much <3
+, [donate on Patreon](https://patreon.com/scnetwork)
+or on [any other platform](https://github.com/SCNetwork/CustomDCBot?sponsor=1). Thank you so much <3
 
 ## Please read this issue before continuing.
 
@@ -249,6 +244,8 @@ An example config file should include the following things:
     * `params` (if type === `string`, array, optional)
         * `name`: Name of the parameter (e.g. `%mention%`)
         * `description`: Description of the parameter (e.g. `Mention of the user`)
+        * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
+          is `fieldValue`.
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
 

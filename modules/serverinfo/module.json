@@ -1,0 +1,13 @@
+{
+  "name": "serverinfo",
+  "author": {
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description": "Simple module to have a channel with a message that shows the users some information about your guild",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/fields.json"
+  ]
+}
