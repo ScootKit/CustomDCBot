@@ -7,6 +7,7 @@ const {ClientCredentialsAuthProvider} = require('twitch-auth');
  * General program
  * @param {object} client Discord js Client
  * @param {object} apiClient Twitch API Client
+ * @private
  */
 function twitchNotifications(client, apiClient) {
     const config = client.configurations['twitch-notifications']['config'];
@@ -18,6 +19,7 @@ function twitchNotifications(client, apiClient) {
      * @param {string} thumbnailUrl URL of the thumbnail of the stream
      * @param {number} channelID ID of the live-message-channel
      * @returns {Promise<void>}
+     * @private
      */
     function sendMsg(username, game, thumbnailUrl, channelID) {
         const channel = client.channels.cache.get(channelID);
@@ -35,6 +37,7 @@ function twitchNotifications(client, apiClient) {
      * Checks if the streamer is live
      * @param {string} userName Name of the Streamer
      * @returns {object}
+     * @private
      */
     async function isStreamLive(userName) {
         const user = await apiClient.helix.users.getUserByName(userName.toLowerCase());
@@ -49,6 +52,7 @@ function twitchNotifications(client, apiClient) {
      * @param {string} value Current Streamer
      * @param {number} index Index of current Streamer
      * @returns {Promise<void>}
+     * @private
      */
     async function start(value, index) {
         const streamer = await client.models['twitch-notifications']['streamer'].findOne({
