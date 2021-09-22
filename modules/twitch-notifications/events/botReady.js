@@ -22,7 +22,7 @@ function twitchNotifications(client, apiClient) {
     function sendMsg(username, game, thumbnailUrl, channelID) {
         const channel = client.channels.cache.get(channelID);
         if (!channel) return client.logger.fatal(`[twitch-notifications] Could not find channel with id ${channelID}`);
-        channel.send(...embedType(config['liveMessage'], {
+        channel.send(embedType(config['liveMessage'], {
             '%streamer%': username,
             '%game%': game,
             '%url%': `https://twitch.tv/${username.toLowerCase()}`,
