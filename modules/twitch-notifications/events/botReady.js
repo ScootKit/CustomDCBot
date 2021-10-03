@@ -80,7 +80,7 @@ function twitchNotifications(client, apiClient) {
     }
 }
 
-exports.run = async (client) => {
+module.exports.run = async (client) => {
     const config = client.configurations['twitch-notifications']['config'];
 
     const ClientID = config['twitchClientID'];
