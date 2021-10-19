@@ -27,7 +27,7 @@
         "default": [],
         "type": "array",
         "content": "channelID",
-        "description": "ChannelID to send live-messages"
+        "description": "ChannelID to send live-messages. The first channel is for the first streamer, the second for the second and so on"
       },
       {
         "field_name": "twitchClientID",
