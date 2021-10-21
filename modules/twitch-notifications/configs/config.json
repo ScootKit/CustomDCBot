@@ -27,7 +27,7 @@
         "default": [],
         "type": "array",
         "content": "channelID",
-        "description": "ChannelID to send live-messages"
+        "description": "ChannelID to send the live-messages. The first channel is to notify when the first streamer goes live, the second is to notify when the second streamer goes live and so on. It's also possible that some or all notifications get send to the same Channel"
       },
       {
         "field_name": "twitchClientID",
