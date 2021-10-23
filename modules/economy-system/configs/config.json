@@ -1,0 +1,11 @@
+{
+    "filename": "config.json",
+    "content": [
+      {
+        "field_name": "startMoney",
+        "default": 500,
+        "type": "integer",
+        "description": "The amount of money that is given to a new user"
+      }
+    ]
+  }
