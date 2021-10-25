@@ -12,7 +12,7 @@ available features we offer:
 
 * Free hosting
 * Custom-Commands
-* Music
+* Music (currently not availible)
 * Temp-Channels
 * Scheduled messages
 * Info-Commands
@@ -27,7 +27,7 @@ We really love open-source. Please read the license and follow it.\
 In short words: You have to
 
 * Disclose the source (Your source code has made available when using this bot)
-* State changes (*every* change to the source code must be documented and published)\
+* State changes (*every* change to the source code must be documented and published)
 
 Please read the full [license](LICENSE). This is not legal advice.
 
@@ -123,7 +123,7 @@ Every module should
 * create as few commands as possible (we have a limit to 100 commands in total), so please try to
   use [Sub-Commands](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups)
   wherever possible (eg: instead of having /ban, /kick, /mute etc, have a /moderate command with sub-commands)
-* Use the newest features of the discord api and discord.js (buttons, selects, etc) if possible
+* Use the newest features of the discord api and discord.js (buttons, selects, etc) if possible and useful
 * process only needed user information and data
 * follow our [terms of service](https://sc-net.work/tos), [Discord's Terms of Service](https://discord.com/tos) and
   the [Discord Developer Terms of Service](https://discord.com/developers/docs/legal). A module should not allow users
