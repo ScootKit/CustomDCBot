@@ -1,0 +1,33 @@
+{
+    "filename": "strings.json",
+    "content": [
+      {
+        "field_name": "notFound",
+        "default": "Cannot find the item",
+        "type": "string",
+        "description": "The message that is send if the item wasn't found"
+      },
+      {
+        "field_name": "notEnoughMoney",
+        "default": "You haven't enough money to by this Item",
+        "type": "string",
+        "description": "The message that is send if the user haven't enough money to buy a item"
+      },
+      {
+        "field_name": "shopEmbed",
+        "type": "keyed",
+        "default": {
+          "title": "Shop",
+          "color": "GREEN",
+          "thumbnail": "",
+          "image": "",
+          "description": ""
+        }
+      },
+      {
+        "field_name": "cooldown",
+        "type": "string",
+        "default": "Please wait before you use this command aigain"
+      }
+    ]
+  }

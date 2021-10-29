@@ -6,6 +6,37 @@
         "default": 500,
         "type": "integer",
         "description": "The amount of money that is given to a new user"
+      },
+      {
+        "field_name": "shopManagers",
+        "default": [],
+        "type": "array",
+        "content": "string",
+        "description": "The Ids of the shop managers"
+      },
+      {
+        "field_name": "currencyName",
+        "default": "",
+        "type": "string",
+        "description": "The name of the currency"
+      },
+      {
+        "field_name": "currencySymbol",
+        "default": "",
+        "type": "string",
+        "description": "The symbol of the currency"
+      },
+      {
+        "field_name": "maxWorkMoney",
+        "default": 1500,
+        "type": "integer",
+        "description": "The higest amount of money you can get for working"
+      },
+      {
+        "field_name": "minWorkMoney",
+        "default": 500,
+        "type": "integer",
+        "description": "The lowest amount of money you can get for working"
       }
     ]
   }

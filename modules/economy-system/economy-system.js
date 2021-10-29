@@ -3,6 +3,7 @@
  * @module economy-system
  * @author jateute
  */
+const {embedType} = require('../../src/functions/helpers');
 
 /**
  * add a User to DB
@@ -60,5 +61,76 @@ balanceFunction = async function (client, id, action, value) {
     }
 };
 
+/**
+ * Function to create a new Item for the shop
+ * @param {string} item The name of the item
+ * @param {number} price The price of the item
+ * @param {Role} role The role which is added to everyone who buys this item
+ * @param {Client} client Client
+ * @returns {Promise}
+ */
+createShopItem = async function (item, price, role, client) {
+    return new Promise(async (resolve, reject) => {
+        const model = client.models['economy-system']['Shop'];
+        if (model.findAll({
+            where: {
+                name: item
+            }
+        })) {
+            reject(`The item ${item} already exists!`);
+        }
+        model.create({
+            name: item,
+            price: price,
+            role: role
+        });
+        resolve(`Created the item ${item} successfully`);
+    });
+};
+
+/**
+ * Function to delete a shop-item
+ * @param {item} item The name of the item
+ * @param {Client} client Client
+ * @returns {Promise}
+ */
+deleteShopItem = async function (item, client) {
+    return new Promise(async (resolve, reject) => {
+        const model = client.models['economy-system']['Shop'].findOne({
+            where: {
+                name: item
+            }
+        });
+        if (!model) {
+            reject(`The item ${item} doesn't exists!`);
+        }
+        model.destroy();
+        resolve(`Deleted the item ${item} successfully`);
+    });
+};
+
+/**
+ * Create the shop embed
+ * @param {Client} client Client
+ * @returns {object} Returns [messageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions) for the shop
+ */
+createShopEmbed = async function (client) {
+    const items = client.models['economy-system']['Shop'].findAll();
+    const moduleStr = client.configurations['economy-system']['strings'];
+    let string = '';
+    for (const item of items) {
+        string = string + `${item.name}: ${item.price}${client.configurations['economy-system']['config']['currencySymbol']}\n`;
+    }
+    shopEmbed = moduleStr['shopEmbed'];
+    shopEmbed['fields'] = {
+        name: 'items:',
+        value: string
+    };
+    return embedType(shopEmbed);
+
+};
 module.exports.balance = balanceFunction;
 module.exports.createUser = createUser;
+module.exports.createShopItem = createShopItem;
+module.exports.deleteShopItem = deleteShopItem;
+module.exports.createShopEmbed = createShopEmbed;
