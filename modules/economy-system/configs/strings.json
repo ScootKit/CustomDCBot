@@ -19,15 +19,73 @@
         "default": {
           "title": "Shop",
           "color": "GREEN",
-          "thumbnail": "",
-          "image": "",
-          "description": ""
-        }
+          "thumbnail": " ",
+          "image": " ",
+          "description": "It's the current shop and nothing else"
+        },
+        "content": {
+          "key": "string",
+          "value": "string"
+        },
+        "disableKeyEdits": true
       },
       {
         "field_name": "cooldown",
         "type": "string",
-        "default": "Please wait before you use this command aigain"
+        "default": "Please wait before you use this command again"
+      },
+      {
+        "field_name": "workSuccess",
+        "type": "string",
+        "default": "You worked and erned **%erned%**",
+        "params": [
+          {
+            "name": "%erned%",
+            "description": "Money that the user had erned"
+          }
+        ]
+      },
+      {
+        "field_name": "crimeSuccess",
+        "type": "string",
+        "default": "You are criminal and erned **%erned%**",
+        "params": [
+          {
+            "name": "%erned%",
+            "description": "Money that the user had erned"
+          }
+        ]
+      },
+      {
+        "field_name": "robSuccess",
+        "type": "string",
+        "default": "You robed %user% erned **%erned%**",
+        "params": [
+          {
+            "name": "%erned%",
+            "description": "Money that the user had erned"
+          },
+          {
+            "name": "%user%",
+            "description": "The user that gets robed by you" 
+          }
+        ]
+      },
+      {
+        "field_name": "leaderboardEmbed",
+        "type": "keyed",
+        "default": {
+          "title": "Leaderboard",
+          "color": "GREEN",
+          "thumbnail": " ",
+          "image": " ",
+          "description": "Here you can see who has the most money"
+        },
+        "content": {
+          "key": "string",
+          "value": "string"
+        },
+        "disableKeyEdits": true
       }
     ]
   }

@@ -1,4 +1,4 @@
-const {createShopItem, balance, createShopEmbed, deleteShopItem} = require('../economy-system');
+const {createShopItem, balance, createShopEmbed, deleteShopItem, createleaderboard} = require('../economy-system');
 
 module.exports.subcommands = {
     'add': async function (interaction) {
@@ -50,6 +50,7 @@ module.exports.subcommands = {
         });
         balance(interaction.client, interaction.user.id, 'remove', item.price, user.balance);
         interaction.user.roles.add(role);
+        createleaderboard(interaction.client);
     },
     'list': async function (interaction) {
         interaction.reply({

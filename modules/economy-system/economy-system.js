@@ -3,6 +3,7 @@
  * @module economy-system
  * @author jateute
  */
+const { MessageEmbed } = require('discord.js');
 const {embedType} = require('../../src/functions/helpers');
 
 /**
@@ -129,8 +130,60 @@ createShopEmbed = async function (client) {
     return embedType(shopEmbed);
 
 };
+
+/**
+ * Gets the ten users with the most money
+ * @param {object} object Objetc of the users
+ * @returns {array}
+ * @private
+ */
+topTen = async function (object) {
+    object.sort(function (x, y) {
+        return y.balance - x.balance;
+    });
+    const retArr = [];
+    for (const i = 0; i < 10; i++) {
+        retArr.push(`<@${object[i].id}>: ${object[i].balance}`);
+    }
+    return retArr;
+};
+
+/**
+ * Create/ update the money Leaderboard
+ * @param {Client} client Client
+ * @returns {promise<void>}
+ */
+leaderboard = async function (client) {
+    const moduleConfig = client.configurations['economy-system']['config'];
+    const moduleStr = client.configurations['economy-system']['strings'];
+    const channel = await client.channels.fetch(moduleConfig['leaderboardChannel']).catch(() => {
+    });
+    if (!channel) return client.logger.fatal(`[economy-system] Can't find the channel with the ID ${moduleConfig['leaderboardChannel']}`);
+
+    const model = client.models['economy-system']['Balance'].findAll();
+
+    const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
+
+    const embed = new MessageEmbed()
+        .setTitle(moduleStr['birthdayEmbed']['title'])
+        .setDescription(moduleStr['birthdayEmbed']['description'])
+        .setTimestamp()
+        .setColor(moduleStr['birthdayEmbed']['color'])
+        .setAuthor(client.user.username, client.user.avatarURL())
+        .setFooter(client.strings.footer, client.strings.footerImgUrl)
+        .addFields(await topTen(model));
+
+    if (moduleStr['birthdayEmbed']['thumbnail']) embed.setThumbnail(moduleStr['birthdayEmbed']['thumbnail']);
+    if (moduleStr['birthdayEmbed']['image']) embed.setImage(moduleStr['birthdayEmbed']['image']);
+
+    if (messages.last()) await messages.last().edit({embeds: [embed]});
+    else channel.send({embeds: [embed]});
+};
+
+
 module.exports.balance = balanceFunction;
 module.exports.createUser = createUser;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItem = deleteShopItem;
 module.exports.createShopEmbed = createShopEmbed;
+module.exports.createleaderboard = leaderboard;

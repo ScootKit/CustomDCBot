@@ -37,6 +37,54 @@
         "default": 500,
         "type": "integer",
         "description": "The lowest amount of money you can get for working"
+      },
+      {
+        "field_name": "workCooldown",
+        "default": 20,
+        "type": "integer",
+        "description": "The amount of time a user needs to wait utill they can use the work command again (in minutes)"
+      },
+      {
+        "field_name": "maxCrimeMoney",
+        "default": 1500,
+        "type": "integer",
+        "description": "The higest amount of money you can get for crime"
+      },
+      {
+        "field_name": "minCrimeMoney",
+        "default": 500,
+        "type": "integer",
+        "description": "The lowest amount of money you can get for crime"
+      },
+      {
+        "field_name": "crimeCooldown",
+        "default": 20,
+        "type": "integer",
+        "description": "The amount of time a user needs to wait utill they can use the crime command again (in minutes)"
+      },
+      {
+        "field_name": "maxRobAmount",
+        "default": 500,
+        "type": "integer",
+        "description": "The higest amount of money that a user can rob"
+      },
+      {
+        "field_name": "robPercent",
+        "default": 10,
+        "type": "integer",
+        "description": "The amount that can get robed in precent"
+      },
+      {
+        "field_name": "robCooldown",
+        "default": 60,
+        "type": "integer",
+        "description": "The amount of time a user needs to wait utill they can use the rob command again (in minutes)"
+      },
+      {
+        "field_name": "leaderboardChannel",
+        "default": "",
+        "type": "channelID",
+        "description": "The ID if the channel for the leaderbord. On this leaderboard everyone can see who has the most money."
       }
     ]
   }
