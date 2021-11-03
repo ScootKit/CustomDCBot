@@ -85,6 +85,24 @@
         "default": "",
         "type": "channelID",
         "description": "The ID if the channel for the leaderbord. On this leaderboard everyone can see who has the most money."
+      },
+      {
+        "field_name": "admins",
+        "default": "",
+        "type": "string",
+        "description": "Users who can perform admin only actions e.g. manage the balance of users"
+      },
+      {
+        "field_name": "allowCheats",
+        "default": false,
+        "type": "boolean",
+        "description": "Allow admins to edit the balance of users (for a fair system not recomended!)"
+      },
+      {
+        "field_name": "selfBalance",
+        "default": false,
+        "type":"boolean",
+        "description": "Allow admins to edit their own balance (for a fair system not recomended! DON'T DO THIS!!!!!)"
       }
     ]
   }

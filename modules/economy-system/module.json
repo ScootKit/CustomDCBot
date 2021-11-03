@@ -7,6 +7,7 @@
     "description": "A simple economy-system, containing a shop system, commands to earn money and minigames",
     "events-dir": "/events",
     "models-dir": "/models",
+    "cli": "/cli.js",
     "config-example-files": [
       "configs/config.json"
     ]
