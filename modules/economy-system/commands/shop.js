@@ -25,6 +25,8 @@ module.exports.subcommands = {
                 });
             }
         );
+        client.logger.info(`[economy-system] The user ${interaction.user.id} has created the shop item ${item}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has created the shop item ${item}}`);
     },
     'buy': async function (interaction) {
         const itemName = interaction.options.get('item');
@@ -51,6 +53,8 @@ module.exports.subcommands = {
         balance(interaction.client, interaction.user.id, 'remove', item.price, user.balance);
         interaction.user.roles.add(role);
         createleaderboard(interaction.client);
+        client.logger.info(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName}}`);
     },
     'list': async function (interaction) {
         interaction.reply({
@@ -65,7 +69,8 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        deleteShopItem(interaction.options.get('item'), interaction.client).then(
+        const item = interaction.options.get('item');
+        deleteShopItem(item, interaction.client).then(
             function (message) {
                 interaction.reply({
                     content: message,
@@ -78,6 +83,8 @@ module.exports.subcommands = {
                     ephemeral: true
                 });
             });
+        client.logger.info(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item}}`);
     }
 };
 

@@ -103,6 +103,26 @@
         "default": false,
         "type":"boolean",
         "description": "Allow admins to edit their own balance (for a fair system not recomended! DON'T DO THIS!!!!!)"
+      },
+      {
+        "field_name": "messageDrops",
+        "default": 10,
+        "type": "integer",
+        "description": "Chance to become money for a message ( Chance: 1/ This value). If 0 this is disabled"
+      },
+      {
+        "field_name": "messageDropsMax",
+        "default": 25,
+        "type": "integer",
+        "description": "The max amount of money in a message Drop",
+        "allowNull": true
+      },
+      {
+        "field_name": "messageDropsMin",
+        "default": 5,
+        "type": "integer",
+        "description": "The min amount of money in a message Drop",
+        "allowNull": true
       }
     ]
   }

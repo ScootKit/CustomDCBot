@@ -36,6 +36,8 @@ module.exports.subcommands = {
             cooldown.destroy();
         }, cooldownTime);
         createleaderboard(interaction.client);
+        client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
     },
     'crime': async function (interaction) {
         const model = interaction.client.models['economy-system']['cooldown'];
@@ -67,6 +69,8 @@ module.exports.subcommands = {
             cooldown.destroy();
         }, cooldownTime);
         createleaderboard(interaction.client);
+        client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
     },
     'rob': async function (interaction) {
         const user = interaction.options.getUser('user');
@@ -97,7 +101,7 @@ module.exports.subcommands = {
         interaction.reply({
             content: embedType(interaction.str['robSuccess'], {
                 '%erned%': `${toRob} ${interaction.config['currencySymbol']}`,
-                'user': `<@${user}>`
+                'user': `<@${user.id}>`
             }),
             ephemeral: true
         });
@@ -106,6 +110,8 @@ module.exports.subcommands = {
             cooldown.destroy();
         }, cooldownTime);
         createleaderboard(interaction.client);
+        client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${toRob} ${config['currencySymbol']} by robbing ${user.id}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${toRob} ${config['currencySymbol']} by robbing ${user.id}`);
     },
     'add': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id)) {
@@ -126,6 +132,8 @@ module.exports.subcommands = {
             });
         }
         balance(interaction.client, interaction.optins.getUser('user').id, 'add', parseInt(interaction.optins.get('amount')));
+        client.logger.info(`[economy-system] The user ${interaction.optins.getUser('user').id} gets added ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.optins.getUser('user').id} gets added ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
     },
     'remove': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id)) {
@@ -146,6 +154,8 @@ module.exports.subcommands = {
             });
         }
         balance(interaction.client, interaction.optins.getUser('user').id, 'remove', parseInt(interaction.optins.get('amount')));
+        client.logger.info(`[economy-system] The user ${interaction.optins.getUser('user').id} gets removed ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.optins.getUser('user').id} gets removed ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
     },
     'set': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id)) {
@@ -166,6 +176,8 @@ module.exports.subcommands = {
             });
         }
         balance(interaction.client, interaction.optins.getUser('user').id, 'set', parseInt(interaction.optins.get('balance')));
+        client.logger.info(`[economy-system] The balance of the user ${interaction.optins.getUser('user').id} gets set to ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The balance of the user ${interaction.optins.getUser('user').id} gets set to ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
     }
 };
 
