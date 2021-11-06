@@ -123,6 +123,18 @@
         "type": "integer",
         "description": "The min amount of money in a message Drop",
         "allowNull": true
+      },
+      {
+        "field_name": "dailyReward",
+        "default": 50,
+        "type": "integer",
+        "description": "The daily reward"
+      },
+      {
+        "field_name": "weeklyReward",
+        "default": 400,
+        "type": "integer",
+        "description": "The weekly reward"
       }
     ]
   }

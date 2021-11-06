@@ -178,6 +178,56 @@ module.exports.subcommands = {
         balance(interaction.client, interaction.optins.getUser('user').id, 'set', parseInt(interaction.optins.get('balance')));
         client.logger.info(`[economy-system] The balance of the user ${interaction.optins.getUser('user').id} gets set to ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The balance of the user ${interaction.optins.getUser('user').id} gets set to ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
+    },
+    'daily': async function (interaction) {
+        if (model.findOne({
+            where: {
+                id: interaction.user.id,
+                command: 'daily'
+            }
+        })) {
+            return interaction.reply({
+                content: interaction.strings['cooldown'],
+                ephemeral: true
+            });
+        }
+        const cooldown = model.create({
+            id: interaction.user.id,
+            command: 'daily'
+        });
+        balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['dailyReward']);
+        interaction.reply({
+            content: `You erned ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming your daily reward`,
+            ephemeral: true
+        });
+        setInterval(() => {
+            cooldown.destroy();
+        }, 86400000);
+    },
+    'weekly': async function (interaction) {
+        if (model.findOne({
+            where: {
+                id: interaction.user.id,
+                command: 'weekly'
+            }
+        })) {
+            return interaction.reply({
+                content: interaction.strings['cooldown'],
+                ephemeral: true
+            });
+        }
+        const cooldown = model.create({
+            id: interaction.user.id,
+            command: 'weekly'
+        });
+        balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['weeklyReward']);
+        interaction.reply({
+            content: `You erned ${interaction.client.configurations['economy-system']['config']['weeklyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming your weekly reward`,
+            ephemeral: true
+        });
+        setInterval(() => {
+            cooldown.destroy();
+        }, 604800000);
     }
 };
 
@@ -265,6 +315,16 @@ module.exports.config = {
                     description: 'The new balance of the User'
                 }
             ]
+        },
+        {
+            type: 'SUB_COMMAND',
+            name: 'daily',
+            description: 'Get your daily reward'
+        },
+        {
+            type: 'SUB_COMMAND',
+            name: 'weekly',
+            description: 'Get your weekly reward'
         }
     ]
 };
