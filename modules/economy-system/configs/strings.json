@@ -5,13 +5,15 @@
         "field_name": "notFound",
         "default": "Cannot find the item",
         "type": "string",
-        "description": "The message that is send if the item wasn't found"
+        "description": "The message that is send if the item wasn't found",
+        "allowEmbed": false
       },
       {
         "field_name": "notEnoughMoney",
         "default": "You haven't enough money to by this Item",
         "type": "string",
-        "description": "The message that is send if the user haven't enough money to buy a item"
+        "description": "The message that is send if the user haven't enough money to buy a item",
+        "allowEmbed": false
       },
       {
         "field_name": "shopEmbed",
@@ -32,7 +34,8 @@
       {
         "field_name": "cooldown",
         "type": "string",
-        "default": "Please wait before you use this command again"
+        "default": "Please wait before you use this command again",
+        "allowEmbed": false
       },
       {
         "field_name": "workSuccess",
@@ -43,7 +46,8 @@
             "name": "%erned%",
             "description": "Money that the user had erned"
           }
-        ]
+        ],
+        "allowEmbed": false
       },
       {
         "field_name": "crimeSuccess",
@@ -54,7 +58,8 @@
             "name": "%erned%",
             "description": "Money that the user had erned"
           }
-        ]
+        ],
+        "allowEmbed": false
       },
       {
         "field_name": "robSuccess",
@@ -69,7 +74,8 @@
             "name": "%user%",
             "description": "The user that gets robed by you" 
           }
-        ]
+        ],
+        "allowEmbed": false
       },
       {
         "field_name": "leaderboardEmbed",

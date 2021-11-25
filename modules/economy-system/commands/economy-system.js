@@ -73,6 +73,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
     },
     'rob': async function (interaction) {
+        const model = interaction.client.models['economy-system']['cooldown'];
         const user = interaction.options.getUser('user');
         if (model.findOne({
             where: {
@@ -114,7 +115,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${toRob} ${config['currencySymbol']} by robbing ${user.id}`);
     },
     'add': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id)) {
+        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
             return await interaction.reply({
                 content: interaction.client.strings['not_enough_permissions'],
                 ephemeral: true
@@ -136,7 +137,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.optins.getUser('user').id} gets added ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
     },
     'remove': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id)) {
+        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
             return await interaction.reply({
                 content: interaction.client.strings['not_enough_permissions'],
                 ephemeral: true
@@ -158,7 +159,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.optins.getUser('user').id} gets removed ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
     },
     'set': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id)) {
+        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
             return await interaction.reply({
                 content: interaction.client.strings['not_enough_permissions'],
                 ephemeral: true
@@ -180,6 +181,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The balance of the user ${interaction.optins.getUser('user').id} gets set to ${interaction.optins.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
     },
     'daily': async function (interaction) {
+        const model = interaction.client.models['economy-system']['cooldown'];
         if (model.findOne({
             where: {
                 id: interaction.user.id,
@@ -205,6 +207,7 @@ module.exports.subcommands = {
         }, 86400000);
     },
     'weekly': async function (interaction) {
+        const model = interaction.client.models['economy-system']['cooldown'];
         if (model.findOne({
             where: {
                 id: interaction.user.id,

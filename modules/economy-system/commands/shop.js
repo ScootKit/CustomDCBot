@@ -2,7 +2,7 @@ const {createShopItem, balance, createShopEmbed, deleteShopItem, createleaderboa
 
 module.exports.subcommands = {
     'add': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id)) {
+        if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
             return await interaction.reply({
                 content: interaction.client.strings['not_enough_permissions'],
                 ephemeral: true
@@ -63,7 +63,7 @@ module.exports.subcommands = {
         });
     },
     'delete': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id)) {
+        if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
             return await interaction.reply({
                 content: interaction.client.strings['not_enough_permissions'],
                 ephemeral: true

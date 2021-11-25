@@ -12,19 +12,22 @@
         "default": [],
         "type": "array",
         "content": "string",
-        "description": "The Ids of the shop managers"
+        "description": "The Ids of the shop managers (Bot Operators have this permission always)",
+        "allowEmbed": false
       },
       {
         "field_name": "currencyName",
         "default": "",
         "type": "string",
-        "description": "The name of the currency"
+        "description": "The name of the currency",
+        "allowEmbed": false
       },
       {
         "field_name": "currencySymbol",
         "default": "",
         "type": "string",
-        "description": "The symbol of the currency"
+        "description": "The symbol of the currency",
+        "allowEmbed": false
       },
       {
         "field_name": "maxWorkMoney",
@@ -90,7 +93,8 @@
         "field_name": "admins",
         "default": "",
         "type": "string",
-        "description": "Users who can perform admin only actions e.g. manage the balance of users"
+        "description": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators have this permission always)",
+        "allowEmbed": false
       },
       {
         "field_name": "allowCheats",
