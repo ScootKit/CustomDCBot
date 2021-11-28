@@ -147,14 +147,12 @@ topTen = async function (object) {
     object.sort(function (x, y) {
         return y.dataValues.balance - x.dataValues.balance;
     });
-    console.log(object[0].dataValues);
     let retStr = '';
     let items = 10;
     if (object.length < items) items = object.length;
     for (let i = 0; i < items; i++) {
         retStr = `${retStr}<@!${object[i].dataValues.id}>: ${object[i].dataValues.balance}\n`;
     }
-    console.log(retStr);
     return retStr;
 };
 
