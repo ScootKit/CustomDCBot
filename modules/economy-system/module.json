@@ -4,11 +4,13 @@
       "name": "jateute",
       "link": "https://github.com/jateute"
       },
-    "description": "A simple economy-system, containing a shop system, commands to earn money and minigames",
+    "description": "A simple economy-system, containing a shop system and commands to earn money",
+    "commands-dir": "/commands",
     "events-dir": "/events",
     "models-dir": "/models",
     "cli": "/cli.js",
     "config-example-files": [
-      "configs/config.json"
+      "configs/config.json",
+      "configs/strings.json"
     ]
   }

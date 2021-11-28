@@ -11,7 +11,7 @@
         "field_name": "shopManagers",
         "default": [],
         "type": "array",
-        "content": "string",
+        "content": "integer",
         "description": "The Ids of the shop managers (Bot Operators have this permission always)",
         "allowEmbed": false
       },
@@ -91,8 +91,9 @@
       },
       {
         "field_name": "admins",
-        "default": "",
-        "type": "string",
+        "default": [],
+        "type": "array",
+        "content": "integer",
         "description": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators have this permission always)",
         "allowEmbed": false
       },
@@ -118,15 +119,13 @@
         "field_name": "messageDropsMax",
         "default": 25,
         "type": "integer",
-        "description": "The max amount of money in a message Drop",
-        "allowNull": true
+        "description": "The max amount of money in a message Drop"
       },
       {
         "field_name": "messageDropsMin",
         "default": 5,
         "type": "integer",
-        "description": "The min amount of money in a message Drop",
-        "allowNull": true
+        "description": "The min amount of money in a message Drop"
       },
       {
         "field_name": "dailyReward",

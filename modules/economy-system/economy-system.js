@@ -14,7 +14,7 @@ const {embedType} = require('../../src/functions/helpers');
  */
 createUser = async function (client, id) {
     const moduleConfig = client.configurations['economy-system']['config'];
-    client.models['economy-system']['Balace'].create({
+    client.models['economy-system']['Balance'].create({
         id: id,
         balance: moduleConfig['startMoney']
     });
@@ -30,13 +30,18 @@ createUser = async function (client, id) {
  * @returns {Promise<void>}
  */
 balanceFunction = async function (client, id, action, value) {
-    const user = client.models['economy-system']['Balance'].findOne({
+    let user = await client.models['economy-system']['Balance'].findOne({
         where: {
             id: id
         }
     });
     if (!user) {
         createUser(client, id);
+        user = await client.models['economy-system']['Balance'].findOne({
+            where: {
+                id: id
+            }
+        });
     }
     switch (action) {
         case 'add':
@@ -138,14 +143,19 @@ createShopEmbed = async function (client) {
  * @private
  */
 topTen = async function (object) {
+    if (object.length === 0) return;
     object.sort(function (x, y) {
-        return y.balance - x.balance;
+        return y.dataValues.balance - x.dataValues.balance;
     });
-    const retArr = [];
-    for (const i = 0; i < 10; i++) {
-        retArr.push(`<@${object[i].id}>: ${object[i].balance}`);
+    console.log(object[0].dataValues);
+    let retStr = '';
+    let items = 10;
+    if (object.length < items) items = object.length;
+    for (let i = 0; i < items; i++) {
+        retStr = `${retStr}<@!${object[i].dataValues.id}>: ${object[i].dataValues.balance}\n`;
     }
-    return retArr;
+    console.log(retStr);
+    return retStr;
 };
 
 /**
@@ -160,21 +170,21 @@ leaderboard = async function (client) {
     });
     if (!channel) return client.logger.fatal(`[economy-system] Can't find the channel with the ID ${moduleConfig['leaderboardChannel']}`);
 
-    const model = client.models['economy-system']['Balance'].findAll();
+    const model = await client.models['economy-system']['Balance'].findAll();
 
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
 
     const embed = new MessageEmbed()
-        .setTitle(moduleStr['birthdayEmbed']['title'])
-        .setDescription(moduleStr['birthdayEmbed']['description'])
+        .setTitle(moduleStr['leaderboardEmbed']['title'])
+        .setDescription(moduleStr['leaderboardEmbed']['description'])
         .setTimestamp()
-        .setColor(moduleStr['birthdayEmbed']['color'])
+        .setColor(moduleStr['leaderboardEmbed']['color'])
         .setAuthor(client.user.username, client.user.avatarURL())
-        .setFooter(client.strings.footer, client.strings.footerImgUrl)
-        .addFields(await topTen(model));
+        .setFooter(client.strings.footer, client.strings.footerImgUrl);
 
-    if (moduleStr['birthdayEmbed']['thumbnail']) embed.setThumbnail(moduleStr['birthdayEmbed']['thumbnail']);
-    if (moduleStr['birthdayEmbed']['image']) embed.setImage(moduleStr['birthdayEmbed']['image']);
+    if (model.length !== 0) embed.addField('Leaderboard:', await topTen(model));
+    if (moduleStr['leaderboardEmbed']['thumbnail']) embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
+    if (moduleStr['leaderboardEmbed']['image']) embed.setImage(moduleStr['leaderboardEmbed']['image']);
 
     if (messages.last()) await messages.last().edit({embeds: [embed]});
     else channel.send({embeds: [embed]});
