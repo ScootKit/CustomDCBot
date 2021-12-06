@@ -109,7 +109,7 @@ Please read the license for more information.
 
 **Before you make a module**: Please create an issue with your suggestion and claim that you are working on it so nobody
 is working on the same thing (;\
-Also please read the [Rues for modules](#rules-for-modules).\
+Also please read the [Rules for modules](#rules-for-modules).\
 **Submit a module**: Simply create a pullrequest, and we will check your module and merge it then (;
 
 #### Rules for modules
