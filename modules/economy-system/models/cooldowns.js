@@ -3,10 +3,7 @@ const {DataTypes, Model} = require('sequelize');
 module.exports = class EconomyCooldown extends Model {
     static init(sequelize) {
         return super.init({
-            id: {
-                type: DataTypes.STRING,
-                primaryKey: true
-            },
+            userId: DataTypes.STRING,
             command: DataTypes.STRING
         }, {
             tableName: 'economy_cooldowns',

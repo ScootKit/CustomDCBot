@@ -26,8 +26,12 @@ module.exports.run = async function(client) {
     await checkReady(client).then(() => {
         client.logger.debug('[economy-system] Exited from loop');
     });
-    const model = await client.models['economy-system']['cooldown'].findAll();
-    if (model.length !== 0) await model.destroy();
+    const models = await client.models['economy-system']['cooldown'].findAll();
+    if (models.length !== 0) {
+        models.forEach(async (element) => {
+            await element.destroy();
+        });
+    }
     client.logger.debug('[economy-system] Reseted all cooldowns');
     if (client.logChannel) client.logChannel.send('[economy-system] Reseted all cooldowns');
 };

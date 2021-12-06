@@ -47,18 +47,18 @@ balanceFunction = async function (client, id, action, value) {
         case 'add':
             newBalance = parseInt(user.balance) + parseInt(value);
             user.balance = newBalance;
-            user.save();
+            await user.save();
             break;
 
         case 'remove':
             newBalance = parseInt(user.balance) - parseInt(value);
             user.balance = newBalance;
-            user.save();
+            await user.save();
             break;
 
         case 'set':
             user.balace = parseInt(value);
-            user.save();
+            await user.save();
             break;
 
         default:
