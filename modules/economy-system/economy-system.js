@@ -4,7 +4,6 @@
  * @author jateute
  */
 const { MessageEmbed } = require('discord.js');
-const {embedType} = require('../../src/functions/helpers');
 
 /**
  * add a User to DB
@@ -78,14 +77,14 @@ balanceFunction = async function (client, id, action, value) {
 createShopItem = async function (item, price, role, client) {
     return new Promise(async (resolve, reject) => {
         const model = client.models['economy-system']['Shop'];
-        if (model.findAll({
+        if (await model.findAll({
             where: {
                 name: item
             }
         })) {
             reject(`The item ${item} already exists!`);
         }
-        model.create({
+        await model.create({
             name: item,
             price: price,
             role: role
@@ -101,38 +100,34 @@ createShopItem = async function (item, price, role, client) {
  * @returns {Promise}
  */
 deleteShopItem = async function (item, client) {
-    return new Promise(async (resolve, reject) => {
-        const model = client.models['economy-system']['Shop'].findOne({
+    return new Promise(async (resolve) => {
+        const model = await client.models['economy-system']['Shop'].findOne({
             where: {
                 name: item
             }
         });
         if (!model) {
-            reject(`The item ${item} doesn't exists!`);
+            resolve(`The item ${item} doesn't exists!`);
+        } else {
+            model.destroy();
+            resolve(`Deleted the item ${item} successfully`);
         }
-        model.destroy();
-        resolve(`Deleted the item ${item} successfully`);
     });
 };
 
 /**
- * Create the shop embed
+ * Create the shop message
  * @param {Client} client Client
- * @returns {object} Returns [messageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions) for the shop
+ * @returns {string}
  */
-createShopEmbed = async function (client) {
-    const items = client.models['economy-system']['Shop'].findAll();
+createShopMsg = async function (client) {
+    const items = await client.models['economy-system']['Shop'].findAll();
     const moduleStr = client.configurations['economy-system']['strings'];
-    let string = '';
-    for (const item of items) {
-        string = string + `${item.name}: ${item.price}${client.configurations['economy-system']['config']['currencySymbol']}\n`;
+    let string = moduleStr['shopMsg'];
+    for (let i = 0; i < items.length; i++) {
+        string = `${string}\n**${items[i].dataValues.name}**: ${items[i].dataValues.price}${client.configurations['economy-system']['config']['currencySymbol']}`;
     }
-    shopEmbed = moduleStr['shopEmbed'];
-    shopEmbed['fields'] = {
-        name: 'items:',
-        value: string
-    };
-    return embedType(shopEmbed);
+    return string;
 
 };
 
@@ -193,5 +188,5 @@ module.exports.balance = balanceFunction;
 module.exports.createUser = createUser;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItem = deleteShopItem;
-module.exports.createShopEmbed = createShopEmbed;
+module.exports.createShopMsg = createShopMsg;
 module.exports.createleaderboard = leaderboard;

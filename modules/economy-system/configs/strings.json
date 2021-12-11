@@ -16,20 +16,11 @@
         "allowEmbed": false
       },
       {
-        "field_name": "shopEmbed",
-        "type": "keyed",
-        "default": {
-          "title": "Shop",
-          "color": "GREEN",
-          "thumbnail": " ",
-          "image": " ",
-          "description": "It's the current shop and nothing else"
-        },
-        "content": {
-          "key": "string",
-          "value": "string"
-        },
-        "disableKeyEdits": true
+        "field_name": "shopMsg",
+        "type": "string",
+        "default": "Current Shop: \n",
+        "allowEmbed": false,
+        "description": "Message for the shop. The Items gets added at the end"
       },
       {
         "field_name": "cooldown",

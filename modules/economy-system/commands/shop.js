@@ -1,4 +1,4 @@
-const {createShopItem, balance, createShopEmbed, deleteShopItem, createleaderboard} = require('../economy-system');
+const {createShopItem, balance, createShopMsg, deleteShopItem, createleaderboard} = require('../economy-system');
 
 module.exports.subcommands = {
     'add': async function (interaction) {
@@ -8,10 +8,10 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        const item = interaction.options.get('item');
-        const price = interaction.options.getInteger('price');
-        const role = interaction.options.getRole('role', true);
-        createShopItem(item, price, role, interaction.client).then(
+        const item = await interaction.options.get('item');
+        const price = await interaction.options.getInteger('price');
+        const role = await interaction.options.getRole('role', true);
+        await createShopItem(item['value'], price, role.id, interaction.client).then(
             async function (message) {
                 await interaction.reply({
                     content: message,
@@ -25,14 +25,14 @@ module.exports.subcommands = {
                 });
             }
         );
-        client.logger.info(`[economy-system] The user ${interaction.user.id} has created the shop item ${item}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has created the shop item ${item}}`);
+        client.logger.info(`[economy-system] The user ${interaction.user.id} has created the shop item ${item['value']}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has created the shop item ${item['value']}}`);
     },
     'buy': async function (interaction) {
-        const itemName = interaction.options.get('item');
-        const item = interaction.client.models['economy-system']['Shop'].findOne({
+        const itemName = await interaction.options.get('item');
+        const item = await interaction.client.models['economy-system']['Shop'].findOne({
             where: {
-                name: itemName
+                name: itemName['value']
             }
         });
         if (!item) {
@@ -41,24 +41,29 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        const user = interaction.client.models['economy-system']['Balance'].findOne({
+        const user = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
-                id: id
+                id: interaction.user.id
             }
         });
         if (user.balance < item.price) return interaction.reply({
             content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
             ephemeral: true
         });
-        balance(interaction.client, interaction.user.id, 'remove', item.price, user.balance);
-        interaction.user.roles.add(role);
+        balance(interaction.client, interaction.user.id, 'remove', item.price);
+        await interaction.member.roles.add(item.role);
         createleaderboard(interaction.client);
-        client.logger.info(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName}}`);
+        interaction.reply({
+            content: `You got the item ${itemName['value']}`,
+            ephemeral: true
+        });
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName['value']}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName['value']}}`);
     },
     'list': async function (interaction) {
+        const msg = await createShopMsg(interaction.client);
         interaction.reply({
-            content: await createShopEmbed(interaction.client),
+            content: msg,
             ephemeral: true
         });
     },
@@ -70,21 +75,13 @@ module.exports.subcommands = {
             });
         }
         const item = interaction.options.get('item');
-        deleteShopItem(item, interaction.client).then(
-            function (message) {
-                interaction.reply({
-                    content: message,
-                    ephemeral: true
-                });
-            },
-            function (error) {
-                interaction.reply({
-                    content: error,
-                    ephemeral: true
-                });
-            });
-        client.logger.info(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item}}`);
+        const msg = await deleteShopItem(item['value'], interaction.client);
+        interaction.reply({
+            content: msg,
+            ephemeral: true
+        });
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item['value']}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item['value']}}`);
     }
 };
 
