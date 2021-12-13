@@ -45,7 +45,6 @@ module.exports.commands = [
         description: 'Show all balances from the DataBase',
         run: async function (input) {
             const balances = await input.client.models['economy-system']['Balance'].findAll();
-            console.log(balances);
             const balanceArr = [];
             if (balances.length !== 0) {
                 balances.sort(function (x, y) {

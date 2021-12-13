@@ -35,7 +35,7 @@ balanceFunction = async function (client, id, action, value) {
         }
     });
     if (!user) {
-        createUser(client, id);
+        await createUser(client, id);
         user = await client.models['economy-system']['Balance'].findOne({
             where: {
                 id: id
