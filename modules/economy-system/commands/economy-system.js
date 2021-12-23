@@ -30,13 +30,13 @@ module.exports.subcommands = {
             content: interaction.str['workSuccess'].split('%erned%').join(`${moneyToAdd} ${interaction.config['currencySymbol']}`),
             ephemeral: true
         });
-        const cooldownTime = interaction.config['workCooldown'] * 60000; // change to 60000
+        const cooldownTime = interaction.config['workCooldown'] * 60000;
         setTimeout(async () => {
             await cooldown.destroy();
         }, cooldownTime);
         createleaderboard(interaction.client);
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
     },
     'crime': async function (interaction) {
         const model = interaction.client.models['economy-system']['cooldown'];
@@ -67,8 +67,8 @@ module.exports.subcommands = {
             await cooldown.destroy();
         }, cooldownTime);
         createleaderboard(interaction.client);
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
     },
     'rob': async function (interaction) {
         const model = interaction.client.models['economy-system']['cooldown'];
@@ -107,8 +107,9 @@ module.exports.subcommands = {
             await cooldown.destroy();
         }, cooldownTime);
         createleaderboard(interaction.client);
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${toRob} ${config['currencySymbol']} by robbing ${user.id}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${toRob} ${config['currencySymbol']} by robbing ${user.id}`);
+        const member = await interaction.client.users.fetch(user.id);
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${toRob} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by robbing ${member.username}#${member.discriminator}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${toRob} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by robbing ${member.username}#${member.discriminator}`);
     },
     'add': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
@@ -122,15 +123,19 @@ module.exports.subcommands = {
             ephemeral: true
         });
         if (interaction.options.getUser('user').id === interaction.user.id && !interaction.client.configurations['economy-system']['config']['selfBalance']) {
-            if (interaction.client.logChannel) interaction.client.logChannel.send(`The admin ${interaction.user.name} wanted to abuse the permissions. This can't be ignored!`);
+            if (interaction.client.logChannel) interaction.client.logChannel.send(`The admin ${interaction.user.username} wanted to abuse the permissions. This can't be ignored!`);
             return interaction.reply({
-                content: `What a bad admin you are, ${interaction.user.name}. I'm disappointed with you! I need to report this. If I could i would ban you!`,
+                content: `What a bad admin you are, ${interaction.user.username}. I'm disappointed with you! I need to report this. If I could i would ban you!`,
                 ephemeral: true
             });
         }
-        balance(interaction.client, interaction.options.getUser('user').id, 'add', parseInt(interaction.options.get('amount')));
-        interaction.client.logger.info(`[economy-system] The user ${interaction.options.getUser('user').id} gets added ${interaction.options.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.options.getUser('user').id} gets added ${interaction.options.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
+        balance(interaction.client, await interaction.options.getUser('user').id, 'add', parseInt(interaction.options.get('amount')['value']));
+        interaction.reply({
+            content: `${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} has been added to the balance of ${interaction.options.getUser('user').username}`,
+            ephemeral: true
+        });
+        interaction.client.logger.info(`[economy-system] The user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets added ${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets added ${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
     },
     'remove': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
@@ -150,9 +155,13 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        balance(interaction.client, interaction.options.getUser('user').id, 'remove', parseInt(interaction.options.get('amount')));
-        interaction.client.logger.info(`[economy-system] The user ${interaction.options.getUser('user').id} gets removed ${interaction.options.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.options.getUser('user').id} gets removed ${interaction.options.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
+        balance(interaction.client, interaction.options.getUser('user').id, 'remove', parseInt(interaction.options.get('amount')['value']));
+        interaction.reply({
+            content: `${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} has been removed from the balance of ${interaction.options.getUser('user').username}`,
+            ephemeral: true
+        });
+        interaction.client.logger.info(`[economy-system] The user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets removed ${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets removed ${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
     },
     'set': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
@@ -172,9 +181,13 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        balance(interaction.client, interaction.options.getUser('user').id, 'set', parseInt(interaction.options.get('balance')));
-        interaction.client.logger.info(`[economy-system] The balance of the user ${interaction.options.getUser('user').id} gets set to ${interaction.options.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The balance of the user ${interaction.options.getUser('user').id} gets set to ${interaction.options.get('amount')} ${config['currencySymbol']} by ${interaction.user.id}`);
+        balance(interaction.client, interaction.options.getUser('user').id, 'set', parseInt(interaction.options.get('balance')['value']));
+        interaction.reply({
+            content: `The balance of the user ${interaction.options.getUser('user').username} has been set to ${interaction.options.get('balance')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`,
+            ephemeral: true
+        });
+        interaction.client.logger.info(`[economy-system] The balance of the user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets set to ${interaction.options.get('balance')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The balance of the user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets set to ${interaction.options.get('balance')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
     },
     'daily': async function (interaction) {
         const model = interaction.client.models['economy-system']['cooldown'];
@@ -202,8 +215,8 @@ module.exports.subcommands = {
         setTimeout(async () => {
             await cooldown.destroy();
         }, 86400000);
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
     },
     'weekly': async function (interaction) {
         const model = interaction.client.models['economy-system']['cooldown'];
@@ -231,8 +244,25 @@ module.exports.subcommands = {
         setTimeout(async () => {
             await cooldown.destroy();
         }, 604800000);
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
+    },
+    'balance': async function (interaction) {
+        let user = interaction.options.getUser('user');
+        if (!user) user = interaction.user;
+        const balanceV = await interaction.client.models['economy-system']['Balance'].findOne({
+            where: {
+                id: user.id
+            }
+        });
+        if (!balanceV) return interaction.reply({
+            content: `I can't find the user ${user.username}`,
+            ephemeral: true
+        });
+        interaction.reply({
+            content: `The user ${user.username}#${user.discriminator} has currently **${balanceV['dataValues']['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}**.`,
+            ephemeral: true
+        });
     }
 };
 
@@ -330,6 +360,19 @@ module.exports.config = {
             type: 'SUB_COMMAND',
             name: 'weekly',
             description: 'Get your weekly reward'
+        },
+        {
+            type: 'SUB_COMMAND',
+            name: 'balance',
+            description: 'Show the balance of yourself and other users',
+            options: [
+                {
+                    type: 'USER',
+                    required: false,
+                    name: 'user',
+                    description: 'User to show the balance of. (Leave empty to show your own)'
+                }
+            ]
         }
     ]
 };

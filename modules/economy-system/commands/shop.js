@@ -11,22 +11,13 @@ module.exports.subcommands = {
         const item = await interaction.options.get('item');
         const price = await interaction.options.getInteger('price');
         const role = await interaction.options.getRole('role', true);
-        await createShopItem(item['value'], price, role.id, interaction.client).then(
-            async function (message) {
-                await interaction.reply({
-                    content: message,
-                    ephemeral: true
-                });
-            },
-            async function (error) {
-                await interaction.reply({
-                    content: error,
-                    ephemeral: true
-                });
-            }
-        );
-        client.logger.info(`[economy-system] The user ${interaction.user.id} has created the shop item ${item['value']}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has created the shop item ${item['value']}}`);
+        const msg = await createShopItem(item['value'], price, role.id, interaction.client);
+        interaction.reply({
+            content: msg,
+            ephemeral: true
+        });
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has created the shop item ${item['value']}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has created the shop item ${item['value']}`);
     },
     'buy': async function (interaction) {
         const itemName = await interaction.options.get('item');
@@ -57,8 +48,8 @@ module.exports.subcommands = {
             content: `You got the item ${itemName['value']}`,
             ephemeral: true
         });
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName['value']}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has buyed the shop item ${itemName['value']}}`);
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has buyed the shop item ${itemName['value']}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has buyed the shop item ${itemName['value']}`);
     },
     'list': async function (interaction) {
         const msg = await createShopMsg(interaction.client);
@@ -80,8 +71,8 @@ module.exports.subcommands = {
             content: msg,
             ephemeral: true
         });
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item['value']}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.id} has deleted the shop item ${item['value']}}`);
+        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has deleted the shop item ${item['value']}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has deleted the shop item ${item['value']}}`);
     }
 };
 

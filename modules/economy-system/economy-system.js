@@ -42,22 +42,27 @@ balanceFunction = async function (client, id, action, value) {
             }
         });
     }
+    let newBalance = 0;
     switch (action) {
         case 'add':
             newBalance = parseInt(user.balance) + parseInt(value);
             user.balance = newBalance;
             await user.save();
+            await leaderboard(client);
             break;
 
         case 'remove':
             newBalance = parseInt(user.balance) - parseInt(value);
+            if (newBalance <= 0) newBalance = 0;
             user.balance = newBalance;
             await user.save();
+            await leaderboard(client);
             break;
 
         case 'set':
-            user.balace = parseInt(value);
+            user.balance = parseInt(value);
             await user.save();
+            await leaderboard(client);
             break;
 
         default:
@@ -75,21 +80,23 @@ balanceFunction = async function (client, id, action, value) {
  * @returns {Promise}
  */
 createShopItem = async function (item, price, role, client) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const model = client.models['economy-system']['Shop'];
-        if (await model.findAll({
+        const itemModel = await model.findOne({
             where: {
                 name: item
             }
-        })) {
-            reject(`The item ${item} already exists!`);
-        }
-        await model.create({
-            name: item,
-            price: price,
-            role: role
         });
-        resolve(`Created the item ${item} successfully`);
+        if (itemModel) {
+            resolve(`The item ${item} already exists!`);
+        } else {
+            await model.create({
+                name: item,
+                price: price,
+                role: role
+            });
+            resolve(`Created the item ${item} successfully`);
+        }
     });
 };
 
@@ -109,7 +116,7 @@ deleteShopItem = async function (item, client) {
         if (!model) {
             resolve(`The item ${item} doesn't exists!`);
         } else {
-            model.destroy();
+            await model.destroy();
             resolve(`Deleted the item ${item} successfully`);
         }
     });
