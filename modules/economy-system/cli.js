@@ -64,7 +64,7 @@ module.exports.commands = [
         run: async function (input) {
             const client = input.client;
             const args = input.args;
-            await createShopItem(args[1], args[2], client.roles.fetch(args[3]), client).then(
+            await createShopItem(args[1], args[2], args[3], client).then(
                 async function (message) {
                     client.logger.debug(message);
                 },

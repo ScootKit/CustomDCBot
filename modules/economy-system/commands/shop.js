@@ -72,7 +72,7 @@ module.exports.subcommands = {
             ephemeral: true
         });
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has deleted the shop item ${item['value']}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has deleted the shop item ${item['value']}}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has deleted the shop item ${item['value']}`);
     }
 };
 
