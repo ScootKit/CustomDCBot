@@ -1,94 +1,66 @@
 const {balance, createleaderboard} = require('../economy-system');
+const {embedType} = require('../../../src/functions/helpers');
 
 module.exports.beforeSubcommand = async function (interaction) {
     interaction.str = interaction.client.configurations['economy-system']['strings'];
     interaction.config = interaction.client.configurations['economy-system']['config'];
 };
 
+/**
+ * Function to handle the cooldown stuff
+ * @private
+ * @param {string} command The command
+ * @param {integer} duration The duration of the cooldown (in ms)
+ * @param {userId} userId Id of the User
+ * @returns {Promise<boolean>}
+ */
+function cooldown (command, duration, userId) {
+    const model = interaction.client.models['economy-system']['cooldown'];
+    const cooldownModel = model.findOne({
+        where: {
+            userId: userId,
+            command: command
+        }
+    });
+    if (cooldownModel) {
+        // check cooldown duration
+        if (cooldownModel.timestamp.getTime() + duration > Date.now()) return false;
+        cooldownModel.timestamp = new Date();
+        cooldownModel.save();
+        return true;
+    } else {
+        // create the model
+        model.create({
+            userId: userId,
+            command: command,
+            timestamp: new Date()
+        });
+        return true;
+    }
+}
+
 module.exports.subcommands = {
     'work': async function (interaction) {
-        const model = interaction.client.models['economy-system']['cooldown'];
-        const cooldownModel = await model.findOne({
-            where: {
-                userId: interaction.user.id,
-                command: 'work'
-            }
-        });
-        if (cooldownModel) {
-            return interaction.reply({
-                content: interaction.str['cooldown'],
-                ephemeral: true
-            });
-        }
-        const cooldown = await model.create({
-            userId: interaction.user.id,
-            command: 'work'
-        });
+        if (!cooldown('work', interaction.config['workCooldown'] * 60000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const moneyToAdd = Math.floor(Math.random() * (interaction.config['maxWorkMoney'] - interaction.config['minWorkMoney'])) + interaction.config['minWorkMoney'];
         balance(interaction.client, interaction.user.id, 'add', moneyToAdd);
-        interaction.reply({
-            content: interaction.str['workSuccess'].split('%erned%').join(`${moneyToAdd} ${interaction.config['currencySymbol']}`),
-            ephemeral: true
-        });
-        const cooldownTime = interaction.config['workCooldown'] * 60000;
-        setTimeout(async () => {
-            await cooldown.destroy();
-        }, cooldownTime);
+        interaction.reply(embedType(interaction.str['workSuccess'], {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
         createleaderboard(interaction.client);
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
     },
     'crime': async function (interaction) {
-        const model = interaction.client.models['economy-system']['cooldown'];
-        const cooldownModel = await model.findOne({
-            where: {
-                userId: interaction.user.id,
-                command: 'crime'
-            }
-        });
-        if (cooldownModel) {
-            return interaction.reply({
-                content: interaction.str['cooldown'],
-                ephemeral: true
-            });
-        }
-        const cooldown = await model.create({
-            userId: interaction.user.id,
-            command: 'crime'
-        });
+        if (!cooldown('work', interaction.config['crimeCooldown'] * 60000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const moneyToAdd = Math.floor(Math.random() * (interaction.config['maxCrimeMoney'] - interaction.config['minCrimeMoney'])) + interaction.config['minCrimeMoney'];
         balance(interaction.client, interaction.user.id, 'add', moneyToAdd);
-        interaction.reply({
-            content: interaction.str['crimeSuccess'].split('%erned%').join(`${moneyToAdd} ${interaction.config['currencySymbol']}`),
-            ephemeral: true
-        });
-        const cooldownTime = interaction.config['crimeCooldown'] * 60000;
-        setTimeout(async () => {
-            await cooldown.destroy();
-        }, cooldownTime);
+        interaction.reply(embedType(interaction.str['crimeSuccess'], {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
         createleaderboard(interaction.client);
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
     },
     'rob': async function (interaction) {
-        const model = interaction.client.models['economy-system']['cooldown'];
+        if (!cooldown('work', interaction.config['robCooldown'] * 60000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const user = await interaction.options.getUser('user');
-        const cooldownModel = await model.findOne({
-            where: {
-                userId: interaction.user.id,
-                command: 'rob'
-            }
-        });
-        if (cooldownModel) {
-            return interaction.reply({
-                content: interaction.strings['cooldown'],
-                ephemeral: true
-            });
-        }
-        const cooldown = await model.create({
-            userId: interaction.user.id,
-            command: 'rob'
-        });
         const robbedUser = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: user.id
@@ -98,14 +70,7 @@ module.exports.subcommands = {
         if (toRob >= interaction.config['maxRobAmount']) toRob = interaction.config['maxRobAmount'];
         balance(interaction.client, interaction.user.id, 'add', toRob);
         balance(interaction.client, user.id, 'remove', toRob);
-        interaction.reply({
-            content: interaction.str['robSuccess'].split('%erned%').join(`${toRob} ${interaction.config['currencySymbol']}`).split('%user%').join(`<@${user.id}>`),
-            ephemeral: true
-        });
-        const cooldownTime = interaction.config['robCooldown'] * 60000;
-        setTimeout(async () => {
-            await cooldown.destroy();
-        }, cooldownTime);
+        interaction.reply(embedType(interaction.str['robSuccess'], {'%earned%': `${toRob} ${interaction.config['currencySymbol']}`, '%user%': `<@${user.id}>`}, { ephemeral: true }));
         createleaderboard(interaction.client);
         const member = await interaction.client.users.fetch(user.id);
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${toRob} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by robbing ${member.username}#${member.discriminator}`);
@@ -190,60 +155,16 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The balance of the user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets set to ${interaction.options.get('balance')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
     },
     'daily': async function (interaction) {
-        const model = interaction.client.models['economy-system']['cooldown'];
-        const cooldownModel = await model.findOne({
-            where: {
-                userId: interaction.user.id,
-                command: 'daily'
-            }
-        });
-        if (cooldownModel) {
-            return interaction.reply({
-                content: interaction.strings['cooldown'],
-                ephemeral: true
-            });
-        }
-        const cooldown = await model.create({
-            userId: interaction.user.id,
-            command: 'daily'
-        });
+        if (!cooldown('work', 86400000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['dailyReward']);
-        interaction.reply({
-            content: `You erned ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming your daily reward`,
-            ephemeral: true
-        });
-        setTimeout(async () => {
-            await cooldown.destroy();
-        }, 86400000);
+        interaction.reply(embedType(interaction.str['dailyReward'], {'%earned%': `${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
     },
     'weekly': async function (interaction) {
-        const model = interaction.client.models['economy-system']['cooldown'];
-        const cooldownModel = await model.findOne({
-            where: {
-                userId: interaction.user.id,
-                command: 'weekly'
-            }
-        });
-        if (cooldownModel) {
-            return interaction.reply({
-                content: interaction.strings['cooldown'],
-                ephemeral: true
-            });
-        }
-        const cooldown = await model.create({
-            userId: interaction.user.id,
-            command: 'weekly'
-        });
+        if (!cooldown('work', 604800000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['weeklyReward']);
-        interaction.reply({
-            content: `You erned ${interaction.client.configurations['economy-system']['config']['weeklyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming your weekly reward`,
-            ephemeral: true
-        });
-        setTimeout(async () => {
-            await cooldown.destroy();
-        }, 604800000);
+        interaction.reply(embedType(interaction.str['weeklyReward'], {'%earned%': `${interaction.client.configurations['economy-system']['config']['weeklyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
     },
@@ -259,10 +180,7 @@ module.exports.subcommands = {
             content: `I can't find the user ${user.username}`,
             ephemeral: true
         });
-        interaction.reply({
-            content: `The user ${user.username}#${user.discriminator} has currently **${balanceV['dataValues']['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}**.`,
-            ephemeral: true
-        });
+        interaction.reply(embedType(interaction.str['balanceReply'], {'%user%': `${user.username}#${user.discriminator}`, '%balance%': `${balanceV['dataValues']['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
     }
 };
 
@@ -270,8 +188,8 @@ module.exports.config = {
     name: 'economy-system',
     description: 'general economy-system',
     defaultPermission: true,
-    options: [
-        {
+    options: function (client) {
+        const array = [{
             type: 'SUB_COMMAND',
             name: 'work',
             description: 'Work to earn money'
@@ -291,63 +209,6 @@ module.exports.config = {
                     required: true,
                     name: 'user',
                     description: 'User to rob the money from'
-                }
-            ]
-        },
-        {
-            type: 'SUB_COMMAND',
-            name: 'add',
-            description: 'Add xyz to the balance of a User',
-            options: [
-                {
-                    type: 'USER',
-                    required: true,
-                    name: 'user',
-                    description: 'User to rob the money from'
-                },
-                {
-                    type: 'INTEGER',
-                    required: true,
-                    name: 'amount',
-                    description: 'The amount of money to add'
-                }
-            ]
-        },
-        {
-            type: 'SUB_COMMAND',
-            name: 'remove',
-            description: 'Remove xyz from the balance of a User',
-            options: [
-                {
-                    type: 'USER',
-                    required: true,
-                    name: 'user',
-                    description: 'User to rob the money from'
-                },
-                {
-                    type: 'INTEGER',
-                    required: true,
-                    name: 'amount',
-                    description: 'The amount of money to remove'
-                }
-            ]
-        },
-        {
-            type: 'SUB_COMMAND',
-            name: 'set',
-            description: 'Set the balance of a User to xyz',
-            options: [
-                {
-                    type: 'USER',
-                    required: true,
-                    name: 'user',
-                    description: 'User to rob the money from'
-                },
-                {
-                    type: 'INTEGER',
-                    required: true,
-                    name: 'balance',
-                    description: 'The new balance of the User'
                 }
             ]
         },
@@ -373,6 +234,65 @@ module.exports.config = {
                     description: 'User to show the balance of. (Leave empty to show your own)'
                 }
             ]
+        }];
+        if (client.configurations['economy-system']['config']['allowCheats']) {
+            array.push({
+                type: 'SUB_COMMAND',
+                name: 'add',
+                description: 'Add xyz to the balance of a User',
+                options: [
+                    {
+                        type: 'USER',
+                        required: true,
+                        name: 'user',
+                        description: 'User to rob the money from'
+                    },
+                    {
+                        type: 'INTEGER',
+                        required: true,
+                        name: 'amount',
+                        description: 'The amount of money to add'
+                    }
+                ]
+            });
+            array.push({
+                type: 'SUB_COMMAND',
+                name: 'remove',
+                description: 'Remove xyz from the balance of a User',
+                options: [
+                    {
+                        type: 'USER',
+                        required: true,
+                        name: 'user',
+                        description: 'User to rob the money from'
+                    },
+                    {
+                        type: 'INTEGER',
+                        required: true,
+                        name: 'amount',
+                        description: 'The amount of money to remove'
+                    }
+                ]
+            });
+            array.push({
+                type: 'SUB_COMMAND',
+                name: 'set',
+                description: 'Set the balance of a User to xyz',
+                options: [
+                    {
+                        type: 'USER',
+                        required: true,
+                        name: 'user',
+                        description: 'User to rob the money from'
+                    },
+                    {
+                        type: 'INTEGER',
+                        required: true,
+                        name: 'balance',
+                        description: 'The new balance of the User'
+                    }
+                ]
+            });
         }
-    ]
+    }
 };

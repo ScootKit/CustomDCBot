@@ -4,6 +4,7 @@
  * @author jateute
  */
 const { MessageEmbed } = require('discord.js');
+const {embedType} = require('../../src/functions/helpers');
 
 /**
  * add a User to DB
@@ -28,7 +29,7 @@ createUser = async function (client, id) {
  * @param {number} value The value which is added/ removed to/ from the balance/ to which the balance gets set
  * @returns {Promise<void>}
  */
-balanceFunction = async function (client, id, action, value) {
+editBalance = async function (client, id, action, value) {
     let user = await client.models['economy-system']['Balance'].findOne({
         where: {
             id: id
@@ -129,12 +130,11 @@ deleteShopItem = async function (item, client) {
  */
 createShopMsg = async function (client) {
     const items = await client.models['economy-system']['Shop'].findAll();
-    const moduleStr = client.configurations['economy-system']['strings'];
-    let string = moduleStr['shopMsg'];
+    let string = '';
     for (let i = 0; i < items.length; i++) {
-        string = `${string}\n**${items[i].dataValues.name}**: ${items[i].dataValues.price}${client.configurations['economy-system']['config']['currencySymbol']}`;
+        string = `${string}**${items[i].dataValues.name}**: ${items[i].dataValues.price}${client.configurations['economy-system']['config']['currencySymbol']}\n`;
     }
-    return string;
+    return await embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string});
 
 };
 
@@ -191,7 +191,7 @@ leaderboard = async function (client) {
 };
 
 
-module.exports.balance = balanceFunction;
+module.exports.balance = editBalance;
 module.exports.createUser = createUser;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItem = deleteShopItem;

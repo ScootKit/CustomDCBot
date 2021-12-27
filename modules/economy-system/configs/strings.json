@@ -5,68 +5,61 @@
         "field_name": "notFound",
         "default": "Cannot find the item",
         "type": "string",
-        "description": "The message that is send if the item wasn't found",
-        "allowEmbed": false
+        "description": "The message that is send if the item wasn't found"
       },
       {
         "field_name": "notEnoughMoney",
         "default": "You haven't enough money to by this Item",
         "type": "string",
-        "description": "The message that is send if the user haven't enough money to buy a item",
-        "allowEmbed": false
+        "description": "The message that is send if the user haven't enough money to buy a item"
       },
       {
         "field_name": "shopMsg",
         "type": "string",
-        "default": "Current Shop: \n",
-        "allowEmbed": false,
+        "default": "Current Shop: \n\n",
         "description": "Message for the shop. The Items gets added at the end"
       },
       {
         "field_name": "cooldown",
         "type": "string",
-        "default": "Please wait before you use this command again",
-        "allowEmbed": false
+        "default": "Please wait before you use this command again"
       },
       {
         "field_name": "workSuccess",
         "type": "string",
-        "default": "You worked and erned **%erned%**",
+        "default": "You worked and earned **%earned%**",
         "params": [
           {
-            "name": "%erned%",
-            "description": "Money that the user had erned"
+            "name": "%earned%",
+            "description": "Money that the user had earned"
           }
-        ],
-        "allowEmbed": false
+        ]
       },
       {
         "field_name": "crimeSuccess",
         "type": "string",
-        "default": "You are criminal and erned **%erned%**",
+        "default": "You are criminal and earned **%earned%**",
         "params": [
           {
-            "name": "%erned%",
-            "description": "Money that the user had erned"
+            "name": "%earned%",
+            "description": "Money that the user had earned"
           }
-        ],
-        "allowEmbed": false
+        ]
       },
       {
         "field_name": "robSuccess",
         "type": "string",
-        "default": "You robed %user% erned **%erned%**",
+        "default": "You robed %user% earned **%earned%**",
         "params": [
           {
-            "name": "%erned%",
-            "description": "Money that the user had erned"
+            "name": "%earned%",
+            "description": "Money that the user had earned"
           },
           {
             "name": "%user%",
             "description": "The user that gets robed by you" 
           }
-        ],
-        "allowEmbed": false
+        ]
       },
       {
         "field_name": "leaderboardEmbed",
@@ -83,6 +76,45 @@
           "value": "string"
         },
         "disableKeyEdits": true
+      },
+      {
+        "field_name": "dailyReward",
+        "type": "string",
+        "default": "You earned **%earned%** by collecting your daily reward",
+        "description": "Message that gets send after the user has claimed the daily reward",
+        "params": [
+          {
+            "name": "%earned%",
+            "description": "Money that the user had earned"
+          }
+        ]
+      },
+      {
+        "field_name": "weeklyReward",
+        "type": "string",
+        "default": "You earned **%earned%** by collecting your weekly reward",
+        "description": "Message that gets send after the user has claimed the weekly reward",
+        "params": [
+          {
+            "name": "%earned%",
+            "description": "Money that the user had earned"
+          }
+        ]
+      },
+      {
+        "field_name": "balanceReply",
+        "type": "string",
+        "default": "The User %user% has currently **%balance%**",
+        "params": [
+          {
+            "name": "%balance%",
+            "description": "Current balance of the user"
+          },
+          {
+            "name": "%user%",
+            "description": "Username and discriminator of the User"
+          }
+        ]
       }
     ]
   }
