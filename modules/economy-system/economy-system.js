@@ -168,7 +168,7 @@ leaderboard = async function (client) {
     const moduleStr = client.configurations['economy-system']['strings'];
     const channel = await client.channels.fetch(moduleConfig['leaderboardChannel']).catch(() => {
     });
-    if (!channel) return client.logger.fatal(`[economy-system] Can't find the channel with the ID ${moduleConfig['leaderboardChannel']}`);
+    if (!channel) return client.logger.fatal(`[economy-system] Can't find the leaderboard channel with the ID ${moduleConfig['leaderboardChannel']}`);
 
     const model = await client.models['economy-system']['Balance'].findAll();
 

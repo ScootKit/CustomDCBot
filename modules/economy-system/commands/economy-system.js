@@ -14,9 +14,9 @@ module.exports.beforeSubcommand = async function (interaction) {
  * @param {userId} userId Id of the User
  * @returns {Promise<boolean>}
  */
-function cooldown (command, duration, userId) {
-    const model = interaction.client.models['economy-system']['cooldown'];
-    const cooldownModel = model.findOne({
+async function cooldown (command, duration, userId, client) {
+    const model = client.models['economy-system']['cooldown'];
+    const cooldownModel = await model.findOne({
         where: {
             userId: userId,
             command: command
@@ -26,11 +26,11 @@ function cooldown (command, duration, userId) {
         // check cooldown duration
         if (cooldownModel.timestamp.getTime() + duration > Date.now()) return false;
         cooldownModel.timestamp = new Date();
-        cooldownModel.save();
+        await cooldownModel.save();
         return true;
     } else {
         // create the model
-        model.create({
+        await model.create({
             userId: userId,
             command: command,
             timestamp: new Date()
@@ -41,25 +41,25 @@ function cooldown (command, duration, userId) {
 
 module.exports.subcommands = {
     'work': async function (interaction) {
-        if (!cooldown('work', interaction.config['workCooldown'] * 60000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
+        if (!await cooldown('work', interaction.config['workCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const moneyToAdd = Math.floor(Math.random() * (interaction.config['maxWorkMoney'] - interaction.config['minWorkMoney'])) + interaction.config['minWorkMoney'];
-        balance(interaction.client, interaction.user.id, 'add', moneyToAdd);
+        await balance(interaction.client, interaction.user.id, 'add', moneyToAdd);
         interaction.reply(embedType(interaction.str['workSuccess'], {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
         createleaderboard(interaction.client);
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by working`);
     },
     'crime': async function (interaction) {
-        if (!cooldown('work', interaction.config['crimeCooldown'] * 60000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
+        if (!await cooldown('crime', interaction.config['crimeCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const moneyToAdd = Math.floor(Math.random() * (interaction.config['maxCrimeMoney'] - interaction.config['minCrimeMoney'])) + interaction.config['minCrimeMoney'];
-        balance(interaction.client, interaction.user.id, 'add', moneyToAdd);
+        await balance(interaction.client, interaction.user.id, 'add', moneyToAdd);
         interaction.reply(embedType(interaction.str['crimeSuccess'], {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
         createleaderboard(interaction.client);
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
     },
     'rob': async function (interaction) {
-        if (!cooldown('work', interaction.config['robCooldown'] * 60000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
+        if (!await cooldown('rob', interaction.config['robCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const user = await interaction.options.getUser('user');
         const robbedUser = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
@@ -68,8 +68,8 @@ module.exports.subcommands = {
         });
         let toRob = robbedUser.balance * (interaction.config['robPercent'] / 100);
         if (toRob >= interaction.config['maxRobAmount']) toRob = interaction.config['maxRobAmount'];
-        balance(interaction.client, interaction.user.id, 'add', toRob);
-        balance(interaction.client, user.id, 'remove', toRob);
+        await balance(interaction.client, interaction.user.id, 'add', toRob);
+        await balance(interaction.client, user.id, 'remove', toRob);
         interaction.reply(embedType(interaction.str['robSuccess'], {'%earned%': `${toRob} ${interaction.config['currencySymbol']}`, '%user%': `<@${user.id}>`}, { ephemeral: true }));
         createleaderboard(interaction.client);
         const member = await interaction.client.users.fetch(user.id);
@@ -89,7 +89,7 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        balance(interaction.client, await interaction.options.getUser('user').id, 'add', parseInt(interaction.options.get('amount')['value']));
+        await balance(interaction.client, await interaction.options.getUser('user').id, 'add', parseInt(interaction.options.get('amount')['value']));
         interaction.reply({
             content: `${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} has been added to the balance of ${interaction.options.getUser('user').username}`,
             ephemeral: true
@@ -110,7 +110,7 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        balance(interaction.client, interaction.options.getUser('user').id, 'remove', parseInt(interaction.options.get('amount')['value']));
+        await balance(interaction.client, interaction.options.getUser('user').id, 'remove', parseInt(interaction.options.get('amount')['value']));
         interaction.reply({
             content: `${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} has been removed from the balance of ${interaction.options.getUser('user').username}`,
             ephemeral: true
@@ -131,7 +131,7 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        balance(interaction.client, interaction.options.getUser('user').id, 'set', parseInt(interaction.options.get('balance')['value']));
+        await balance(interaction.client, interaction.options.getUser('user').id, 'set', parseInt(interaction.options.get('balance')['value']));
         interaction.reply({
             content: `The balance of the user ${interaction.options.getUser('user').username} has been set to ${interaction.options.get('balance')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`,
             ephemeral: true
@@ -140,15 +140,15 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The balance of the user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets set to ${interaction.options.get('balance')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
     },
     'daily': async function (interaction) {
-        if (!cooldown('work', 86400000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
-        balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['dailyReward']);
+        if (!await cooldown('daily', 86400000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
+        await balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['dailyReward']);
         interaction.reply(embedType(interaction.str['dailyReward'], {'%earned%': `${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the daily reward`);
     },
     'weekly': async function (interaction) {
-        if (!cooldown('work', 604800000, interaction.user.id)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
-        balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['weeklyReward']);
+        if (!await cooldown('weekly', 604800000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
+        await balance(interaction.client, interaction.user.id, 'add', interaction.client.configurations['economy-system']['config']['weeklyReward']);
         interaction.reply(embedType(interaction.str['weeklyReward'], {'%earned%': `${interaction.client.configurations['economy-system']['config']['weeklyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
         interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by claiming the weekly reward`);
@@ -276,5 +276,6 @@ module.exports.config = {
                 ]
             });
         }
+        return array;
     }
 };
