@@ -105,6 +105,7 @@
         "field_name": "balanceReply",
         "type": "string",
         "default": "The User %user% has currently **%balance%**",
+        "description": "Reply for the balance command",
         "params": [
           {
             "name": "%balance%",
@@ -113,6 +114,62 @@
           {
             "name": "%user%",
             "description": "Username and discriminator of the User"
+          }
+        ]
+      },
+      {
+        "field_name": "userNotFound",
+        "type": "string",
+        "description": "The message that gets sent when the bot can't find a user",
+        "default": "I can't find the user **%user%**",
+        "params": [
+          {
+          "name": "%user%",
+          "description": "User that can't been found"
+          }
+        ]
+      },
+      {
+        "field_name": "buyMsg",
+        "type": "string",
+        "description": "Message that gets send when a user buys somesthig in the shop",
+        "default": "You got the item **%item%**",
+        "params": [
+          {
+            "name": "%item%",
+            "description": "Name of the item"
+          }
+        ]
+      },
+      {
+        "field_name": "itemCreate",
+        "type": "string",
+        "description": "Message that gets send when a new shop item gets created",
+        "default": "Successfully created the item %item%. It costs %price% and you get the role %role%",
+        "params": [
+          {
+            "name": "%item%",
+            "description": "Name of the created item"
+          },
+          {
+            "name": "%price%",
+            "description": "Price of the created item"
+          },
+          {
+            "name": "%role%",
+            "description": "Role that everyone gets who buys the item"
+          }
+        ]
+      },
+      {
+        "field_name": "itemDelete",
+        "type": "string",
+        "description": "Message that gets send when a new shop item gets deleted",
+        "default": "Successfully deleted the item %item%.",
+        "params": [
+          {
+            "name": "%item%",
+            "description": "Name of the deleted item"
           }
         ]
       }

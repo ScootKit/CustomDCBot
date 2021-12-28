@@ -77,12 +77,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${toRob} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by robbing ${member.username}#${member.discriminator}`);
     },
     'add': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
-            return await interaction.reply({
-                content: interaction.client.strings['not_enough_permissions'],
-                ephemeral: true
-            });
-        }
+        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) return interaction.reply(embedType(interaction.client.strings['not_enough_permissions'], {}, { ephemeral: true }));
         if (!interaction.client.configurations['economy-system']['config']['allowCheats']) return interaction.reply({
             content: 'This command isn`t enabled',
             ephemeral: true
@@ -103,12 +98,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets added ${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
     },
     'remove': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
-            return await interaction.reply({
-                content: interaction.client.strings['not_enough_permissions'],
-                ephemeral: true
-            });
-        }
+        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) return interaction.reply(embedType(interaction.client.strings['not_enough_permissions'], {}, { ephemeral: true }));
         if (!interaction.client.configurations['economy-system']['config']['allowCheats']) return interaction.reply({
             content: 'This command isn`t enabled',
             ephemeral: true
@@ -129,12 +119,7 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.options.getUser('user').username}#${interaction.options.getUser('user').discriminator} gets removed ${interaction.options.get('amount')['value']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']} by ${interaction.user.username}#${interaction.user.discriminator}`);
     },
     'set': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
-            return interaction.reply({
-                content: interaction.client.strings['not_enough_permissions'],
-                ephemeral: true
-            });
-        }
+        if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) return interaction.reply(embedType(interaction.client.strings['not_enough_permissions'], {}, { ephemeral: true }));
         if (!interaction.client.configurations['economy-system']['config']['allowCheats']) return interaction.reply({
             content: 'This command isn`t enabled',
             ephemeral: true
@@ -176,10 +161,7 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!balanceV) return interaction.reply({
-            content: `I can't find the user ${user.username}`,
-            ephemeral: true
-        });
+        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`});
         interaction.reply(embedType(interaction.str['balanceReply'], {'%user%': `${user.username}#${user.discriminator}`, '%balance%': `${balanceV['dataValues']['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
     }
 };
