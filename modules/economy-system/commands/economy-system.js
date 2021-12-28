@@ -12,6 +12,7 @@ module.exports.beforeSubcommand = async function (interaction) {
  * @param {string} command The command
  * @param {integer} duration The duration of the cooldown (in ms)
  * @param {userId} userId Id of the User
+ * @param {Client} client Client
  * @returns {Promise<boolean>}
  */
 async function cooldown (command, duration, userId, client) {
