@@ -66,7 +66,7 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!robbedUser) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, { ephemeral: true });
+        if (!robbedUser) return interaction.reply(embedType(interaction.str['userNotFound'], {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, { ephemeral: true }));
         if (!await cooldown('rob', interaction.config['robCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         let toRob = robbedUser.balance * (interaction.config['robPercent'] / 100);
         if (toRob >= interaction.config['maxRobAmount']) toRob = interaction.config['maxRobAmount'];
