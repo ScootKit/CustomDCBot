@@ -1,0 +1,143 @@
+{
+    "filename": "config.json",
+    "content": [
+      {
+        "field_name": "startMoney",
+        "default": 500,
+        "type": "integer",
+        "description": "The amount of money that is given to a new user"
+      },
+      {
+        "field_name": "shopManagers",
+        "default": [],
+        "type": "array",
+        "content": "integer",
+        "description": "The Ids of the shop managers (Bot Operators have this permission always)",
+        "allowEmbed": false
+      },
+      {
+        "field_name": "currencyName",
+        "default": "",
+        "type": "string",
+        "description": "The name of the currency",
+        "allowEmbed": false
+      },
+      {
+        "field_name": "currencySymbol",
+        "default": "",
+        "type": "string",
+        "description": "The symbol of the currency",
+        "allowEmbed": false
+      },
+      {
+        "field_name": "maxWorkMoney",
+        "default": 1500,
+        "type": "integer",
+        "description": "The higest amount of money you can get for working"
+      },
+      {
+        "field_name": "minWorkMoney",
+        "default": 500,
+        "type": "integer",
+        "description": "The lowest amount of money you can get for working"
+      },
+      {
+        "field_name": "workCooldown",
+        "default": 20,
+        "type": "integer",
+        "description": "The amount of time a user needs to wait utill they can use the work command again (in minutes)"
+      },
+      {
+        "field_name": "maxCrimeMoney",
+        "default": 1500,
+        "type": "integer",
+        "description": "The higest amount of money you can get for crime"
+      },
+      {
+        "field_name": "minCrimeMoney",
+        "default": 500,
+        "type": "integer",
+        "description": "The lowest amount of money you can get for crime"
+      },
+      {
+        "field_name": "crimeCooldown",
+        "default": 20,
+        "type": "integer",
+        "description": "The amount of time a user needs to wait utill they can use the crime command again (in minutes)"
+      },
+      {
+        "field_name": "maxRobAmount",
+        "default": 500,
+        "type": "integer",
+        "description": "The higest amount of money that a user can rob"
+      },
+      {
+        "field_name": "robPercent",
+        "default": 10,
+        "type": "integer",
+        "description": "The amount that can get robed in precent"
+      },
+      {
+        "field_name": "robCooldown",
+        "default": 60,
+        "type": "integer",
+        "description": "The amount of time a user needs to wait utill they can use the rob command again (in minutes)"
+      },
+      {
+        "field_name": "leaderboardChannel",
+        "default": "",
+        "type": "channelID",
+        "description": "The ID if the channel for the leaderbord. On this leaderboard everyone can see who has the most money."
+      },
+      {
+        "field_name": "admins",
+        "default": [],
+        "type": "array",
+        "content": "integer",
+        "description": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators have this permission always)",
+        "allowEmbed": false
+      },
+      {
+        "field_name": "allowCheats",
+        "default": false,
+        "type": "boolean",
+        "description": "Allow admins to edit the balance of users (for a fair system not recomended!)"
+      },
+      {
+        "field_name": "selfBalance",
+        "default": false,
+        "type":"boolean",
+        "description": "Allow admins to edit their own balance (for a fair system not recomended! DON'T DO THIS!!!!!)"
+      },
+      {
+        "field_name": "messageDrops",
+        "default": 10,
+        "type": "integer",
+        "description": "Chance to become money for a message ( Chance: 1/ This value). If 0 this is disabled"
+      },
+      {
+        "field_name": "messageDropsMax",
+        "default": 25,
+        "type": "integer",
+        "description": "The max amount of money in a message Drop"
+      },
+      {
+        "field_name": "messageDropsMin",
+        "default": 5,
+        "type": "integer",
+        "description": "The min amount of money in a message Drop"
+      },
+      {
+        "field_name": "dailyReward",
+        "default": 50,
+        "type": "integer",
+        "description": "The daily reward"
+      },
+      {
+        "field_name": "weeklyReward",
+        "default": 400,
+        "type": "integer",
+        "description": "The weekly reward"
+      }
+    ]
+  }
