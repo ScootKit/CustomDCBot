@@ -60,13 +60,14 @@ module.exports.subcommands = {
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} gained ${moneyToAdd} ${interaction.config['currencySymbol']} by doing crime`);
     },
     'rob': async function (interaction) {
-        if (!await cooldown('rob', interaction.config['robCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const user = await interaction.options.getUser('user');
         const robbedUser = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: user.id
             }
         });
+        if (!robbedUser) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, { ephemeral: true });
+        if (!await cooldown('rob', interaction.config['robCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         let toRob = robbedUser.balance * (interaction.config['robPercent'] / 100);
         if (toRob >= interaction.config['maxRobAmount']) toRob = interaction.config['maxRobAmount'];
         await balance(interaction.client, interaction.user.id, 'add', toRob);
@@ -162,13 +163,13 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`});
+        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, { ephemeral: true });
         interaction.reply(embedType(interaction.str['balanceReply'], {'%user%': `${user.username}#${user.discriminator}`, '%balance%': `${balanceV['dataValues']['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
     }
 };
 
 module.exports.config = {
-    name: 'economy-system',
+    name: 'economy',
     description: 'general economy-system',
     defaultPermission: true,
     options: function (client) {

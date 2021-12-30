@@ -48,10 +48,7 @@ module.exports.subcommands = {
     },
     'list': async function (interaction) {
         const msg = await createShopMsg(interaction.client);
-        interaction.reply({
-            content: msg,
-            ephemeral: true
-        });
+        interaction.reply(msg);
     },
     'delete': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {

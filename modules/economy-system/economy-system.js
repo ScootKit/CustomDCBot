@@ -134,7 +134,7 @@ createShopMsg = async function (client) {
     for (let i = 0; i < items.length; i++) {
         string = `${string}**${items[i].dataValues.name}**: ${items[i].dataValues.price}${client.configurations['economy-system']['config']['currencySymbol']}\n`;
     }
-    return await embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string});
+    return await embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: true });
 
 };
 
