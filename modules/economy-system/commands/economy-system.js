@@ -163,7 +163,7 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, { ephemeral: true });
+        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound'], {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, { ephemeral: true }));
         interaction.reply(embedType(interaction.str['balanceReply'], {'%user%': `${user.username}#${user.discriminator}`, '%balance%': `${balanceV['dataValues']['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, { ephemeral: true }));
     }
 };
