@@ -1,19 +1,21 @@
 const {arrayToApplicationCommandPermissions} = require('../../../src/functions/helpers');
 const {generateSuggestionEmbed, notifyMembers} = require('../suggestion');
+const {localize} = require('../../../src/functions/localize');
+const {autoCompleteSuggestionID} = require('./suggestion');
 
 module.exports.beforeSubcommand = async function (interaction) {
     interaction.suggestion = await interaction.client.models['suggestions']['Suggestion'].findOne({
         where: {
-            id: interaction.options.getInteger('id')
+            id: interaction.options.getString('id')
         }
     });
     if (!interaction.suggestion) {
-        interaction.reply({
+        await interaction.reply({
             ephemeral: true,
-            content: ':warning: Suggestion not found.'
+            content: '⚠ ' + localize('suggestions', 'suggestion-not-found')
         });
         interaction.returnEarly = true;
-    } else interaction.deferReply({ephemeral: true});
+    } else await interaction.deferReply({ephemeral: true});
 };
 
 module.exports.subcommands = {
@@ -35,12 +37,22 @@ module.exports.run = async function (interaction) {
     await interaction.suggestion.save();
     await generateSuggestionEmbed(interaction.client, interaction.suggestion);
     await notifyMembers(interaction.client, interaction.suggestion, 'team', interaction.user.id);
-    await interaction.editReply({content: 'Successfully updated suggestion'});
+    await interaction.editReply({content: '✅ ' + localize('suggestions', 'updated-suggestion')});
 };
+
+module.exports.autoComplete = {
+    'accept': {
+        'id': autoCompleteSuggestionID
+    },
+    'deny': {
+        'id': autoCompleteSuggestionID
+    }
+};
+
 
 module.exports.config = {
     name: 'manage-suggestion',
-    description: 'Manage suggestions as an admin',
+    description: localize('suggestions', 'manage-suggestion-command-description'),
     defaultPermission: false,
     permissions: function (client) {
         return arrayToApplicationCommandPermissions(client.configurations['suggestions']['config'].adminRoles, 'ROLE');
@@ -49,38 +61,40 @@ module.exports.config = {
         {
             type: 'SUB_COMMAND',
             name: 'accept',
-            description: 'Accepts a suggestion',
+            description: localize('suggestions', 'manage-suggestion-accept-description'),
             options: [
                 {
-                    type: 'INTEGER',
+                    type: 'STRING',
                     name: 'id',
                     required: true,
-                    description: 'ID of the suggestion'
+                    autocomplete: true,
+                    description: localize('suggestions', 'manage-suggestion-id-description')
                 },
                 {
                     type: 'STRING',
                     name: 'comment',
                     required: true,
-                    description: 'Explain why you made this choice'
+                    description: localize('suggestions', 'manage-suggestion-comment-description')
                 }
             ]
         },
         {
             type: 'SUB_COMMAND',
             name: 'deny',
-            description: 'Denies a suggestion',
+            description: localize('suggestions', 'manage-suggestion-deny-description'),
             options: [
                 {
-                    type: 'INTEGER',
+                    type: 'STRING',
                     name: 'id',
                     required: true,
-                    description: 'ID of the suggestion'
+                    autocomplete: true,
+                    description: localize('suggestions', 'manage-suggestion-id-description')
                 },
                 {
                     type: 'STRING',
                     name: 'comment',
                     required: true,
-                    description: 'Explain why you made this choice'
+                    description: localize('suggestions', 'manage-suggestion-comment-description')
                 }
             ]
         }

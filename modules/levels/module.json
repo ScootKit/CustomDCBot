@@ -1,10 +1,12 @@
 {
   "name": "levels",
+  "humanReadableName": "Level-System",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Easy to use levelsystem with a lot of customization!",
+  "description-en": "Easy to use levelsystem with a lot of customization!",
+  "description-de": "Einfaches Level-System mit vielen Anpassungsmöglichkeiten!",
   "commands-dir": "/commands",
   "events-dir": "/events",
   "models-dir": "/models",
@@ -13,5 +15,6 @@
     "configs/strings.json",
     "configs/random-levelup-messages.json",
     "configs/special-levelup-messages.json"
-  ]
+  ],
+  "fa-icon": "far fa-comments"
 }

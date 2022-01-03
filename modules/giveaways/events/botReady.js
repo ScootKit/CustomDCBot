@@ -1,7 +1,17 @@
 const {endGiveaway} = require('../giveaways');
 const {scheduleJob} = require('node-schedule');
+const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async (client) => {
+    // Migration
+    const dbVersion = await client.models['DatabaseSchemeVersion'].findOne({where: {model: 'giveaways_Giveaway'}});
+    if (!dbVersion) {
+        client.logger.info('[giveaways] ' + localize('giveaways', 'migration-happening'));
+        await client.models['giveaways']['Giveaway'].sync({force: true});
+        client.logger.info('[giveaways] ' + localize('giveaways', 'migration-done'));
+        await client.models['DatabaseSchemeVersion'].create({model: 'giveaways_Giveaway', version: 'V1'});
+    }
+
     const giveaways = await client.models['giveaways']['Giveaway'].findAll({
         where: {
             ended: false

@@ -1,13 +1,21 @@
 {
   "filename": "strings.json",
+  "humanname-de": "Nachrichten",
+  "humanname-en": "Nachrichten",
+  "description-en": "Edit the messages and strings of the module here",
+  "description-de": "Stelle hier die Nachrichten des Modules ein",
   "content": [
     {
       "field_name": "giveaway_message",
-      "default": "**NEW GIVEAWAY :tada:**\n\nPrize: %prize%\nEnds at: %endAtDiscordFormation%\nWinners: %winners%\nOrganiser: %organiser%\nCurrently valid entries: %entryCount% (%enteredCount% users)\nSponsor-Website: %sponsorLink%\n\nPress the big button below to participate!",
+      "humanname-en": "Giveaway-Message",
+      "humanname-de": "Gewinnspiel-Nachricht",
+      "default-en": "**NEW GIVEAWAY :tada:**\\n\\nPrize: %prize%\\nEnds at: %endAtDiscordFormation%\\nWinners: %winners%\\nOrganiser: %organiser%\\nCurrently valid entries: %entryCount% (%enteredCount% users)\\nSponsor-Website: %sponsorLink%\\n\\nPress the big button below to participate!",
+      "default-de": "**NEUES GEWINNSPIEL :tada:**\\n\\nPreis: %prize%\\nLäuft bis: %endAtDiscordFormation%\\\nAnzahl Gewinner: %winners%\\nVeranstalter: %organiser%\\nSponsor-Website: %sponsorLink%\nGültige Teilnahmen: %entryCount% (von %enteredCount% Teilnehmern)\\n\\nKlicke den großen Knopf unten, um teilzunehmen!",
       "type": "string",
-      "description": "Message that gets send in the giveaway channel if a new giveaway gets created",
+      "description-en": "Message that gets send in the giveaway channel if a new giveaway gets created",
+      "description-de": "Diese Nachricht wird verschickt, wenn ein Gewinnspiel gestartet wird.",
       "allowEmbed": true,
-      "params": [
+      "params-en": [
         {
           "name": "%prize%",
           "description": "Prize of the giveaway"
@@ -39,16 +47,54 @@
         {
           "name": "%entryCount%",
           "description": "Count of valid entries"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%prize%",
+          "description": "Preis des Gewinnspiels"
+        },
+        {
+          "name": "%endAt%",
+          "description": "Datum und Uhrzeit, wenn das Gewinnspiel endet"
+        },
+        {
+          "name": "%endAtDiscordFormation%",
+          "description": "Beim Nutzen dieser Variable wird Discord direkt beim Nutzer die Zeit rendern (Beispiel: \"In 4 Stunden\")"
+        },
+        {
+          "name": "%winners%",
+          "description": "Anzahl möglicher Gewinner"
+        },
+        {
+          "name": "%sponsorLink%",
+          "description": "Link des Sponsoren, wenn angegeben."
+        },
+        {
+          "name": "%organiser%",
+          "description": "Erwähnung des Veranstalters des Gewinnspieles"
+        },
+        {
+          "name": "%enteredCount%",
+          "description": "Anzahl an Teilnehmern am Gewinnspiel"
+        },
+        {
+          "name": "%entryCount%",
+          "description": "Anzahl von gültigen Teilnahmen"
         }
       ]
     },
     {
       "field_name": "giveaway_message_with_requirements",
-      "default": "**NEW GIVEAWAY :tada:**\n\nPrize: %prize%\nEnds at: %endAtDiscordFormation%\nWinners: %winners%\nOrganiser: %organiser%\nSponsor-Website: %sponsorLink%\n\n__Requirements__\n%requirements%\n\nCurrently valid entries: %entryCount% (%enteredCount% users)\nPress the big button under this message to join the giveaway!",
+      "humanname-en": "Giveaway-Message with requirements",
+      "humanname-de": "Gewinnspiel-Nachricht mit Voraussetzungen",
+      "default-en": "**NEW GIVEAWAY :tada:**\\n\\nPrize: %prize%\\nEnds at: %endAtDiscordFormation%\\nWinners: %winners%\\nOrganiser: %organiser%\\nSponsor-Website: %sponsorLink%\\n\\n__Requirements__\\n%requirements%\\n\\nCurrently valid entries: %entryCount% (%enteredCount% users)\\nPress the big button under this message to join the giveaway!",
+      "default-de": "**NEUES GEWINNSPIEL :tada:**\n\nPreis: %prize%\nLäuft bis: %endAtDiscordFormation%\nAnzahl Gewinner: %winners%\nVeranstalter: %organiser%\nSponsor-Website: %sponsorLink%\n__Voraussetzungen__\n%requirements%\nGültige Teilnahmen: %entryCount% (von %enteredCount% Teilnehmern)\n\nDrücke auf den großen Knopf unten, um teilzunehmen.",
       "type": "string",
-      "description": "Message that gets send in the giveaway channel if a new giveaway gets created",
+      "description-en": "Message that gets send in the giveaway channel if a new giveaway gets created",
+      "description-de": "Diese Nachricht wird in den Gewinnspiel-Channel versendet, wenn ein Gewinnspiel mit Voraussetzungen gestartet wird",
       "allowEmbed": true,
-      "params": [
+      "params-en": [
         {
           "name": "%prize%",
           "description": "Prize of the giveaway"
@@ -74,25 +120,72 @@
           "description": "Mention of the organiser of the giveaway"
         },
         {
-          "name": "%requirements%",
-          "description": "Requirements of this giveaway"
-        },
-        {
           "name": "%enteredCount%",
           "description": "Count of users who entered this giveaway already"
         },
         {
           "name": "%entryCount%",
           "description": "Count of valid entries"
+        },
+        {
+          "name": "%requirements%",
+          "description": "Requirements for this giveaway"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%prize%",
+          "description": "Preis des Gewinnspiels"
+        },
+        {
+          "name": "%endAt%",
+          "description": "Datum und Uhrzeit, wenn das Gewinnspiel endet"
+        },
+        {
+          "name": "%endAtDiscordFormation%",
+          "description": "Beim Nutzen dieser Variable wird Discord direkt beim Nutzer die Zeit rendern (Beispiel: \"In 4 Stunden\")"
+        },
+        {
+          "name": "%winners%",
+          "description": "Anzahl möglicher Gewinner"
+        },
+        {
+          "name": "%sponsorLink%",
+          "description": "Link des Sponsoren, wenn angegeben."
+        },
+        {
+          "name": "%organiser%",
+          "description": "Erwähnung des Veranstalters des Gewinnspieles"
+        },
+        {
+          "name": "%enteredCount%",
+          "description": "Anzahl an Teilnehmern am Gewinnspiel"
+        },
+        {
+          "name": "%entryCount%",
+          "description": "Anzahl von gültigen Teilnahmen"
+        },
+        {
+          "name": "%requirements%",
+          "description": "Voraussetzungen für dieses Gewinnspiel"
         }
       ]
     },
     {
       "field_name": "requirementsNotPassed",
-      "default": "I am sorry but you did not pass the requirement-check for this giveaway.\nYou need to fulfill these requirements:\n%requirements%",
+      "humanname-en": "Requirement-Not-Passed-Message",
+      "humanname-de": "Gewinnspiel-Voraussetzungen-Nicht-Erfüllt-Nachricht",
+      "default-en": "I am sorry but you did not pass the requirement-check for this giveaway.\\nYou need to fulfill these requirements:\\n%requirements%",
+      "default-de": "Huch, scheint als würdest du die Voraussetzungen für dieses Gewinnspiel nicht erfüllen.\nDu musst folgende Voraussetzungen noch erfüllen:\n%requirements%",
       "type": "string",
       "allowEmbed": "true",
-      "params": [
+      "params-de": [
+        {
+          "name": "%requirements%",
+          "description": "Voraussetzungen des Gewinnspieles, die der Nutzer noch erfüllen muss"
+        }
+      ],
+      "params-en": [
         {
           "name": "%requirements%",
           "description": "Requirements of this giveaway"
@@ -101,11 +194,15 @@
     },
     {
       "field_name": "giveaway_message_edit_after_winning",
-      "default": "**GIVEAWAY ENDED**\n\nPrize: %prize%\nEnded at: %endAtDiscordFormation%\nWinners: %winners%\nCurrently valid entries: %entryCount% (%enteredCount% users)\nOrganiser: %organiser%\nSponsor-Website: %sponsorLink%",
+      "humanname-de": "Gewinnspiel-Nachricht nach Beendung des Gewinnspiels",
+      "humanname-en": "Giveaway-Message after message ended",
+      "default-en": "**GIVEAWAY ENDED**\\n\\nPrize: %prize%\\nEnded at: %endAtDiscordFormation%\\nWinners: %winners%\\nCurrently valid entries: %entryCount% (%enteredCount% users)\\nOrganiser: %organiser%\\nSponsor-Website: %sponsorLink%",
+      "default-de": "**GEWINNSPIEL BEENDET**\n\nPreis: %prize%\\nEnddatum: %endAtDiscordFormation%\\nGewinner: %winners%\\nVeranstalter: %organiser%\\nGültige Teilnahmen: %entryCount% (von %enteredCount% Nutzern)\\nSponsor-Website: %sponsorLink",
       "type": "string",
-      "description": "Message that gets send after a giveaway ended",
+      "description-en": "Message that gets send after a giveaway ended",
+      "description-de": "Wenn ein Gewinnspiel endet wird die Gewinnspiel-Nachricht zu dieser Nachricht editiert.",
       "allowEmbed": true,
-      "params": [
+      "params-en": [
         {
           "name": "%prize%",
           "description": "Prize of the giveaway"
@@ -138,15 +235,53 @@
           "name": "%entryCount%",
           "description": "Count of valid entries"
         }
+      ],
+      "params-de": [
+        {
+          "name": "%prize%",
+          "description": "Preis des Gewinnspieles"
+        },
+        {
+          "name": "%endAt%",
+          "description": "End-Datum des Gewinnspieles"
+        },
+        {
+          "name": "%endAtDiscordFormation%",
+          "description": "Beim Nutzen dieser Variable wird Discord direkt beim Nutzer die Zeit rendern (Beispiel: \"In 4 Stunden\")"
+        },
+        {
+          "name": "%winners%",
+          "description": "Gewinner des Gewinnspieles"
+        },
+        {
+          "name": "%sponsorLink%",
+          "description": "Link des Sponsoren, wenn angegeben."
+        },
+        {
+          "name": "%organiser%",
+          "description": "Erwähnung des Veranstalters"
+        },
+        {
+          "name": "%enteredCount%",
+          "description": "Anzahl von Teilnahmen"
+        },
+        {
+          "name": "%entryCount%",
+          "description": "Anzahl von Teilnehmern"
+        }
       ]
     },
     {
       "field_name": "winner_message",
-      "default": "%winners% won this giveaway. Shoot a DM at %organiser% to claim your prize!",
+      "humanname-de": "Gewinn-Nachricht",
+      "humanname-en": "Win-Message",
+      "default-en": "%winners% won this giveaway. Shoot a DM at %organiser% to claim your prize!",
+      "default-de": "%winners% haben **%prize%** in folgendem Gewinnspiel gewonnen: %url%. Schreib %organiser% eine PN, um den Preis zu erhalten!",
       "type": "string",
-      "description": "Message that gets send when the giveaway ends.",
+      "description-en": "Message that gets send when the giveaway ends.",
+      "description-de": "Diese Nachricht wird verschickt, wenn das Gewinnspiel endet",
       "allowEmbed": true,
-      "params": [
+      "params-en": [
         {
           "name": "%winners",
           "description": "Winners of the giveaway"
@@ -163,15 +298,41 @@
           "name": "%prize%",
           "description": "Prize of the giveaway"
         }
+      ],
+      "params-de": [
+        {
+          "name": "%winners%",
+          "description": "Gewinner des Gewinnspieles"
+        },
+        {
+          "name": "%sponsorLink%",
+          "description": "Link des Sponsoren, wenn angegeben."
+        },
+        {
+          "name": "%url%",
+          "description": "URL zum Gewinnspiel"
+        },
+        {
+          "name": "%organiser%",
+          "description": "Erwähnung des Veranstalters des Gewinnspieles"
+        },
+        {
+          "name": "%prize%",
+          "description": "Preis des Gewinnspieles"
+        }
       ]
     },
     {
       "field_name": "no_winner_message",
-      "default": "No winner could be determined for this giveaway ):",
+      "humanname-de": "Kein-Gewinner-Nachricht",
+      "humanname-en": "No-Winner-Message",
+      "default-en": "No winner could be determined for this giveaway ):",
+      "default-de": "Dieses Gewinnspiel hatte keinen Gewinner ): ):",
       "type": "string",
-      "description": "Message that gets send when the giveaway ends and no winner could be determined.",
+      "description-en": "Message that gets send when the giveaway ends and no winner could be determined.",
+      "description-de": "Diese Nachricht wird gesendet, wenn ein Gewinnspiel endet, aber kein Gewinner gefunden wurde",
       "allowEmbed": true,
-      "params": [
+      "params-en": [
         {
           "name": "%sponsorLink%",
           "description": "Link of the sponsor, if specified."
@@ -184,15 +345,33 @@
           "name": "%prize%",
           "description": "Prize of the giveaway"
         }
+      ],
+      "params-de": [
+        {
+          "name": "%sponsorLink%",
+          "description": "Link zum Sponsor, falls angeben"
+        },
+        {
+          "name": "%organiser%",
+          "description": "Erwähnung des Veranstalters"
+        },
+        {
+          "name": "%prize%",
+          "description": "Preis des Gewinnspiels"
+        }
       ]
     },
     {
       "field_name": "confirmationMessage",
+      "humanname-de": "Teilnahme-Bestätigung-Nachricht",
+      "humanname-en": "Confirmation-Message",
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets shown to the user after they enter the giveaway successfully.",
-      "default": "Giveaway entered successfully with **%entries% entry(s)**.",
-      "params": [
+      "description-en": "Message that gets shown to the user after they enter the giveaway successfully.",
+      "description-de": "Nachricht die angezeigt wird, wenn ein Nutzer teilnimmt",
+      "default-en": "Giveaway entered successfully with **%entries% entry(s)**.",
+      "default-de": "Gewinnspiel mit **%entries% Teilnahmen(s)** beigetreten.",
+      "params-en": [
         {
           "name": "%price%",
           "description": "Price of the giveaway"
@@ -201,15 +380,29 @@
           "name": "%entries%",
           "description": "Count of entries the user has to this giveaway"
         }
+      ],
+      "params-de": [
+        {
+          "name": "%price%",
+          "description": "Preis des Gewinnspiels"
+        },
+        {
+          "name": "%entries%",
+          "description": "Anzahl an Teilnahmen am Gewinnspiel"
+        }
       ]
     },
     {
       "field_name": "alreadyEnteredMessage",
+      "humanname-de": "Bereits teilgenommen-Nachricht",
+      "humanname-en": "Already-Entered-Message",
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets shown to the user when someone tries to enter when they already are in",
-      "default": "You are already in this giveaway with **%entries% entry(s)**.",
-      "params": [
+      "description-en": "Message that gets shown to the user when someone tries to enter when they already are in",
+      "description-de": "Nachricht, die angezeigt wird, wenn ein Nutzer teilnehmen will, obwohl er bereits teilgenommen hat",
+      "default-en": "You are already in this giveaway with **%entries% entry(s)**.",
+      "default-de": "Du nimmst bereits mit **%entries% Teilnahmen** teil.",
+      "params-en": [
         {
           "name": "%price%",
           "description": "Price of the giveaway"
@@ -217,22 +410,40 @@
         {
           "name": "%entries%",
           "description": "Count of entries the user has to this giveaway"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%price%",
+          "description": "Preis des Gewinnspiels"
+        },
+        {
+          "name": "%entries%",
+          "description": "Anzahl an Teilnahmen am Gewinnspiel"
         }
       ]
     },
     {
       "type": "string",
       "field_name": "buttonContent",
-      "description": "Content of the button under giveaways",
-      "default": "Join giveaway \uD83C\uDF89"
+      "humanname-de": "Knopf-Inhalt",
+      "humanname-en": "Button-Content",
+      "description-de": "Inhalt des Teilnehmen-Knopfes",
+      "description-en": "Content of the button under giveaways",
+      "default-en": "Join giveaway \uD83C\uDF89",
+      "default-de": "Gewinnspiel beitreten \uD83C\uDF89"
     },
     {
       "field_name": "winner_DM_message",
-      "default": "Congrats, you won this giveaway: %url%",
+      "humanname-de": "Gewinner-PN-Nachricht",
+      "humanname-en": "Winner-DM-Message",
+      "default-en": "Congrats, you won this giveaway: %url%",
+      "default-de": "Herzlichen Glückwunsch, du hast folgendes Gewinnspiel gewonnen: %url%",
       "type": "string",
-      "description": "Message that gets send when to the winner when they win (if enabled).",
+      "description-de": "Message that gets send when to the winner when they win (if enabled).",
+      "description-en": "Nachricht, die an den Nutzer gesendet wird, wenn er gewinnt (wenn aktiviert).",
       "allowEmbed": true,
-      "params": [
+      "params-en": [
         {
           "name": "%sponsorLink%",
           "description": "Link of the sponsor, if specified."
@@ -248,6 +459,24 @@
         {
           "name": "%url%",
           "description": "Url to the giveaway"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%sponsorLink%",
+          "description": "Link des Sponsoren, wenn angegeben."
+        },
+        {
+          "name": "%organiser%",
+          "description": "Erwähnung des Veranstalters des Gewinnspieles"
+        },
+        {
+          "name": "%prize%",
+          "description": "Preis des Gewinnspiels"
+        },
+        {
+          "name": "%url%",
+          "description": "Url zum Gewinnspiel"
         }
       ]
     }

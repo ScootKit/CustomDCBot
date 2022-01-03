@@ -1,4 +1,4 @@
-exports.run = async (client, msg) => {
+module.exports.run = async (client, msg) => {
     if (!msg.guild) return;
     if (!client.botReadyAt) return;
     if (msg.guild.id !== client.guildID) return;

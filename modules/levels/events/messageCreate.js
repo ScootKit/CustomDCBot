@@ -1,5 +1,6 @@
 const {embedType, randomIntFromInterval, randomElementFromArray} = require('../../../src/functions/helpers');
 const {registerNeededEdit} = require('../leaderboardChannel');
+const {localize} = require('../../../src/functions/localize');
 const cooldown = new Set();
 
 exports.run = async (client, msg) => {
@@ -42,15 +43,25 @@ exports.run = async (client, msg) => {
         let messageToSend = moduleStrings.level_up_message;
         if (isRewardMessage) messageToSend = moduleStrings.level_up_message_with_reward;
 
-        if (moduleConfig.randomMessages) messageToSend = randomElementFromArray(randomMessages).message;
+        if (moduleConfig.randomMessages) {
+            if (moduleConfig.randomMessages.length === 0) client.warn('[levels] ' + localize('levels', 'random-messages-enabled-but-non-configured'));
+            else if (randomMessages.length !== 0) messageToSend = randomElementFromArray(randomMessages).message;
+        }
 
-        if (isRewardMessage) await msg.member.roles.add(moduleConfig.reward_roles[user.level.toString()]).catch();
+        if (isRewardMessage) {
+            if (moduleConfig.onlyTopLevelRole) {
+                for (const role of Object.values(moduleConfig.reward_roles)) {
+                    if (msg.member.roles.cache.has(role)) await msg.member.roles.remove(role, '[levels] ' + localize('levels', 'granted-rewards-audit-log')).catch();
+                }
+            }
+            await msg.member.roles.add(moduleConfig.reward_roles[user.level.toString()], '[levels]' + localize('levels', 'granted-rewards-audit-log')).catch();
+        }
         if (specialMessage) messageToSend = specialMessage.message;
 
         await sendLevelUpMessage(embedType(messageToSend, {
             '%mention%': `<@${msg.author.id}>`,
             '%newLevel%': user.level,
-            '%role%': isRewardMessage ? `<@&${moduleConfig.reward_roles[user.level.toString()]}>` : 'None',
+            '%role%': isRewardMessage ? `<@&${moduleConfig.reward_roles[user.level.toString()]}>` : localize('levels', 'no-role'),
             '%tag%': msg.author.tag
         }, {allowedMentions: {parse: []}}));
 

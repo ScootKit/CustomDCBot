@@ -5,6 +5,7 @@
  */
 const { MessageEmbed } = require('discord.js');
 const {embedType} = require('../../src/functions/helpers');
+const {localize} = require('../../src/functions/localize');
 
 /**
  * add a User to DB
@@ -18,7 +19,6 @@ createUser = async function (client, id) {
         id: id,
         balance: moduleConfig['startMoney']
     });
-    client.logger.debug(`[economy-system] Created model for the user with the Id ${id}`);
 };
 
 /**
@@ -89,14 +89,14 @@ createShopItem = async function (item, price, role, client) {
             }
         });
         if (itemModel) {
-            resolve(`The item ${item} already exists!`);
+            resolve(localize('economy-system', 'item-duplicate'));
         } else {
             await model.create({
                 name: item,
                 price: price,
                 role: role
             });
-            resolve(`Created the item ${item} successfully`);
+            resolve(localize('economy-system', 'item-created'));
         }
     });
 };
@@ -132,10 +132,9 @@ createShopMsg = async function (client) {
     const items = await client.models['economy-system']['Shop'].findAll();
     let string = '';
     for (let i = 0; i < items.length; i++) {
-        string = `${string}**${items[i].dataValues.name}**: ${items[i].dataValues.price}${client.configurations['economy-system']['config']['currencySymbol']}\n`;
+        string = `${string}**${items[i].dataValues.name}**: ${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}\n`;
     }
-    return await embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: true });
-
+    return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: true });
 };
 
 /**
@@ -168,7 +167,7 @@ leaderboard = async function (client) {
     const moduleStr = client.configurations['economy-system']['strings'];
     const channel = await client.channels.fetch(moduleConfig['leaderboardChannel']).catch(() => {
     });
-    if (!channel) return client.logger.fatal(`[economy-system] Can't find the leaderboard channel with the ID ${moduleConfig['leaderboardChannel']}`);
+    if (!channel) return client.logger.fatal(`[economy-system] ` + localize('economy-system', 'channel-not-found'));
 
     const model = await client.models['economy-system']['Balance'].findAll();
 

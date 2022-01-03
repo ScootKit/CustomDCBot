@@ -1,5 +1,6 @@
 const {createShopItem, balance, createShopMsg, deleteShopItem, createleaderboard} = require('../economy-system');
 const {embedType} = require('../../../src/functions/helpers');
+const {localize} = require('../../../src/functions/localize');
 
 module.exports.subcommands = {
     'add': async function (interaction) {
@@ -13,9 +14,19 @@ module.exports.subcommands = {
         const price = await interaction.options.getInteger('price');
         const role = await interaction.options.getRole('role', true);
         await createShopItem(item['value'], price, role.id, interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {'%item%': item['value'], '%price%': price, '%role%': role.name}, { ephemeral: true }));
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has created the shop item ${item['value']}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has created the shop item ${item['value']}`);
+        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {
+            '%item%': item['value'],
+            '%price%': price,
+            '%role%': role.name
+        }, {ephemeral: true}));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
+            u: interaction.user.tag,
+            i: item['value']
+        }));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'created-item', {
+            u: interaction.user.tag,
+            i: item['value']
+        }));
     },
     'buy': async function (interaction) {
         const itemName = await interaction.options.get('item');
@@ -42,9 +53,17 @@ module.exports.subcommands = {
         balance(interaction.client, interaction.user.id, 'remove', item.price);
         await interaction.member.roles.add(item.role);
         createleaderboard(interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': itemName['value']}, { ephemeral: true }));
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has buyed the shop item ${itemName['value']}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has buyed the shop item ${itemName['value']}`);
+        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': itemName['value']}, {ephemeral: true}));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'user-purchase', {
+            u: interaction.user.tag,
+            i: item['value'],
+            p: item['price']
+        }));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'user-purchase', {
+            u: interaction.user.tag,
+            i: item['value'],
+            p: item['price']
+        }));
     },
     'list': async function (interaction) {
         const msg = await createShopMsg(interaction.client);
@@ -59,70 +78,76 @@ module.exports.subcommands = {
         }
         const item = interaction.options.get('item');
         await deleteShopItem(item['value'], interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%item%': item['value']}, { ephemeral: true }));
-        interaction.client.logger.info(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has deleted the shop item ${item['value']}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] The user ${interaction.user.username}#${interaction.user.discriminator} has deleted the shop item ${item['value']}`);
+        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%item%': item['value']}, {ephemeral: true}));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
+            u: interaction.user.tag,
+            i: item['value']
+        }));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'delete-item', {
+            u: interaction.user.tag,
+            i: item['value']
+        }));
     }
 };
 
 module.exports.config = {
     name: 'shop',
-    description: 'The general shop-system',
+    description: localize('economy-system', 'shop-command-description'),
     defaultPermission: true,
     options: [
         {
             type: 'SUB_COMMAND',
             name: 'add',
-            description: 'Add an item to the shop (admin only)',
+            description: localize('economy-system', 'shop-command-description-add'),
             options: [
                 {
                     type: 'STRING',
                     required: true,
                     name: 'item',
-                    description: 'Name of the item'
+                    description: localize('economy-system', 'shop-option-description-item')
                 },
                 {
                     type: 'INTEGER',
                     required: true,
                     name: 'price',
-                    description: 'Price of the item'
+                    description: localize('economy-system', 'shop-option-description-price')
                 },
                 {
                     type: 'ROLE',
                     required: true,
                     name: 'role',
-                    description: 'Role which is added to each user who buys this item'
+                    description: localize('economy-system', 'shop-option-description-role')
                 }
             ]
         },
         {
             type: 'SUB_COMMAND',
             name: 'buy',
-            description: 'Buy the specified item',
+            description: localize('economy-system', 'shop-command-description-buy'),
             options: [
                 {
                     type: 'STRING',
                     required: true,
                     name: 'item',
-                    description: 'Name of the item'
+                    description: localize('economy-system', 'shop-option-description-item')
                 }
             ]
         },
         {
             type: 'SUB_COMMAND',
             name: 'list',
-            description: 'Show a list of all Items'
+            description: localize('economy-system', 'shop-command-description-list')
         },
         {
             type: 'SUB_COMMAND',
             name: 'delete',
-            description: 'Delete the specified item (admin only)',
+            description: localize('economy-system', 'shop-command-description-delete'),
             options: [
                 {
                     type: 'STRING',
                     required: true,
                     name: 'item',
-                    description: 'Name of the item'
+                    description: localize('economy-system', 'shop-option-description-item')
                 }
             ]
         }

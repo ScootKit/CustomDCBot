@@ -1,177 +1,208 @@
 {
-    "filename": "strings.json",
-    "content": [
-      {
-        "field_name": "notFound",
-        "default": "Cannot find the item",
-        "type": "string",
-        "description": "The message that is send if the item wasn't found"
+  "filename": "strings.json",
+  "humanname-de": "Nachrichten",
+  "humanname-en": "Messages",
+  "description-en": "Configure messages of this module here",
+  "description-de": "Passe hier die Nachrichten des Modules an",
+  "content": [
+    {
+      "field_name": "notFound",
+      "default": "This item could not be found",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "The message that is send if the item wasn't found"
+    },
+    {
+      "field_name": "notEnoughMoney",
+      "default": "You haven't enough money to buy this Item",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "The message that is send if the user haven't enough money to buy an item"
+    },
+    {
+      "field_name": "shopMsg",
+      "type": "string",
+      "allowEmbed": true,
+      "default": {
+        "title": "Shop",
+        "description": "%shopItems%"
       },
-      {
-        "field_name": "notEnoughMoney",
-        "default": "You haven't enough money to by this Item",
-        "type": "string",
-        "description": "The message that is send if the user haven't enough money to buy a item"
-      },
-      {
-        "field_name": "shopMsg",
-        "type": "string",
-        "default": "Current Shop: \n\n",
-        "description": "Message for the shop. The Items gets added at the end"
-      },
-      {
-        "field_name": "cooldown",
-        "type": "string",
-        "default": "Please wait before you use this command again"
-      },
-      {
-        "field_name": "workSuccess",
-        "type": "string",
-        "default": "You worked and earned **%earned%**",
-        "params": [
-          {
-            "name": "%earned%",
-            "description": "Money that the user had earned"
-          }
-        ]
-      },
-      {
-        "field_name": "crimeSuccess",
-        "type": "string",
-        "default": "You are criminal and earned **%earned%**",
-        "params": [
-          {
-            "name": "%earned%",
-            "description": "Money that the user had earned"
-          }
-        ]
-      },
-      {
-        "field_name": "robSuccess",
-        "type": "string",
-        "default": "You robed %user% earned **%earned%**",
-        "params": [
-          {
-            "name": "%earned%",
-            "description": "Money that the user had earned"
-          },
-          {
-            "name": "%user%",
-            "description": "The user that gets robed by you" 
-          }
-        ]
-      },
-      {
-        "field_name": "leaderboardEmbed",
-        "type": "keyed",
-        "default": {
-          "title": "Leaderboard",
-          "color": "GREEN",
-          "thumbnail": " ",
-          "image": " ",
-          "description": "Here you can see who has the most money"
+      "params": [{
+        "name": "%shopItems%",
+        "description": "Current items in the shop"
+      }],
+      "description": "Message for the shop. The Items gets added at the end"
+    },
+    {
+      "field_name": "cooldown",
+      "type": "string",
+      "description": "This message gets send when a user is currently in cooldown",
+      "allowEmbed": true,
+      "default": "Please wait before using this command again"
+    },
+    {
+      "field_name": "workSuccess",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets send when a user works successfully",
+      "default": "You worked and earned **%earned%**",
+      "params": [
+        {
+          "name": "%earned%",
+          "description": "Money that the user had earned"
+        }
+      ]
+    },
+    {
+      "field_name": "crimeSuccess",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets send when a user commits a crime successfully",
+      "default": "You are criminal and earned **%earned%**",
+      "params": [
+        {
+          "name": "%earned%",
+          "description": "Money that the user had earned"
+        }
+      ]
+    },
+    {
+      "field_name": "robSuccess",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets send when a user robs another user successfully",
+      "default": "You robed %user% earned **%earned%**",
+      "params": [
+        {
+          "name": "%earned%",
+          "description": "Money that the user had earned"
         },
-        "content": {
-          "key": "string",
-          "value": "string"
+        {
+          "name": "%user%",
+          "description": "The user that gets robed by you"
+        }
+      ]
+    },
+    {
+      "field_name": "leaderboardEmbed",
+      "description": "Configure the leaderboard embed here",
+      "allowEmbed": true,
+      "type": "keyed",
+      "default": {
+        "title": "Leaderboard",
+        "color": "GREEN",
+        "thumbnail": " ",
+        "image": " ",
+        "description": "Here you can see who has the most money"
+      },
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "field_name": "dailyReward",
+      "allowEmbed": true,
+      "type": "string",
+      "default": "You earned **%earned%** by collecting your daily reward",
+      "description": "Message that gets send after the user has claimed the daily reward",
+      "params": [
+        {
+          "name": "%earned%",
+          "description": "Money that the user had earned"
+        }
+      ]
+    },
+    {
+      "field_name": "weeklyReward",
+      "allowEmbed": true,
+      "type": "string",
+      "default": "You earned **%earned%** by collecting your weekly reward",
+      "description": "Message that gets send after the user has claimed the weekly reward",
+      "params": [
+        {
+          "name": "%earned%",
+          "description": "Money that the user had earned"
+        }
+      ]
+    },
+    {
+      "field_name": "balanceReply",
+      "allowEmbed": true,
+      "type": "string",
+      "default": "The User %user% has currently **%balance%**",
+      "description": "Reply for the balance command",
+      "params": [
+        {
+          "name": "%balance%",
+          "description": "Current balance of the user"
         },
-        "disableKeyEdits": true
-      },
-      {
-        "field_name": "dailyReward",
-        "type": "string",
-        "default": "You earned **%earned%** by collecting your daily reward",
-        "description": "Message that gets send after the user has claimed the daily reward",
-        "params": [
-          {
-            "name": "%earned%",
-            "description": "Money that the user had earned"
-          }
-        ]
-      },
-      {
-        "field_name": "weeklyReward",
-        "type": "string",
-        "default": "You earned **%earned%** by collecting your weekly reward",
-        "description": "Message that gets send after the user has claimed the weekly reward",
-        "params": [
-          {
-            "name": "%earned%",
-            "description": "Money that the user had earned"
-          }
-        ]
-      },
-      {
-        "field_name": "balanceReply",
-        "type": "string",
-        "default": "The User %user% has currently **%balance%**",
-        "description": "Reply for the balance command",
-        "params": [
-          {
-            "name": "%balance%",
-            "description": "Current balance of the user"
-          },
-          {
-            "name": "%user%",
-            "description": "Username and discriminator of the User"
-          }
-        ]
-      },
-      {
-        "field_name": "userNotFound",
-        "type": "string",
-        "description": "The message that gets sent when the bot can't find a user",
-        "default": "I can't find the user **%user%**",
-        "params": [
-          {
+        {
+          "name": "%user%",
+          "description": "Username and discriminator of the User"
+        }
+      ]
+    },
+    {
+      "field_name": "userNotFound",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "The message that gets sent when the bot can't find a user",
+      "default": "I can't find the user **%user%**",
+      "params": [
+        {
           "name": "%user%",
           "description": "User that can't been found"
-          }
-        ]
-      },
-      {
-        "field_name": "buyMsg",
-        "type": "string",
-        "description": "Message that gets send when a user buys somesthig in the shop",
-        "default": "You got the item **%item%**",
-        "params": [
-          {
-            "name": "%item%",
-            "description": "Name of the item"
-          }
-        ]
-      },
-      {
-        "field_name": "itemCreate",
-        "type": "string",
-        "description": "Message that gets send when a new shop item gets created",
-        "default": "Successfully created the item %item%. It costs %price% and you get the role %role%",
-        "params": [
-          {
-            "name": "%item%",
-            "description": "Name of the created item"
-          },
-          {
-            "name": "%price%",
-            "description": "Price of the created item"
-          },
-          {
-            "name": "%role%",
-            "description": "Role that everyone gets who buys the item"
-          }
-        ]
-      },
-      {
-        "field_name": "itemDelete",
-        "type": "string",
-        "description": "Message that gets send when a new shop item gets deleted",
-        "default": "Successfully deleted the item %item%.",
-        "params": [
-          {
-            "name": "%item%",
-            "description": "Name of the deleted item"
-          }
-        ]
-      }
-    ]
-  }
+        }
+      ]
+    },
+    {
+      "field_name": "buyMsg",
+      "allowEmbed": true,
+      "type": "string",
+      "description": "Message that gets send when a user buys something in the shop",
+      "default": "You got the item **%item%**",
+      "params": [
+        {
+          "name": "%item%",
+          "description": "Name of the item"
+        }
+      ]
+    },
+    {
+      "field_name": "itemCreate",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "Message that gets send when a new shop item gets created",
+      "default": "Successfully created the item %item%. It costs %price% and you get the role %role%",
+      "params": [
+        {
+          "name": "%item%",
+          "description": "Name of the created item"
+        },
+        {
+          "name": "%price%",
+          "description": "Price of the created item"
+        },
+        {
+          "name": "%role%",
+          "description": "Role that everyone gets who buys the item"
+        }
+      ]
+    },
+    {
+      "field_name": "itemDelete",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "Message that gets send when a new shop item gets deleted",
+      "default": "Successfully deleted the item %item%.",
+      "params": [
+        {
+          "name": "%item%",
+          "description": "Name of the deleted item"
+        }
+      ]
+    }
+  ]
+}

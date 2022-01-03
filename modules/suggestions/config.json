@@ -1,38 +1,62 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "description-en": "Configure the function of the module here",
+  "description-de": "Stelle hier die Funktionen des Modules ein",
   "content": [
     {
       "field_name": "suggestionChannel",
       "type": "channelID",
       "default": "",
-      "description": "Channel in which this module should operate"
+      "description": "Channel in which this module should operate",
+      "humanname-de": "Vorschlagskanal",
+      "description-de": "Kanal in dem dieses Modul arbeiten soll",
+      "params-de": {}
     },
     {
       "field_name": "adminRoles",
       "type": "array",
       "description": "Every role that can approve or deny suggestions",
       "default": [],
-      "content": "roleID"
+      "content": "roleID",
+      "humanname-de": "Adminrollen",
+      "description-de": "Rollen die Vorschläge Akzeptieren oder Ablehnen können",
+      "params-de": {},
+      "default-de": []
     },
     {
       "field_name": "reactions",
       "type": "array",
       "description": "Emojis with which the bot should react to a new suggestion",
       "default": [],
-      "content": "string"
+      "content": "string",
+      "humanname-de": "Reaktionen",
+      "description-de": "Emojis mit denen der Bot auf neue Vorschläge reagieren soll",
+      "params-de": {},
+      "default-de": []
     },
     {
-      "field_name": "allowUserComment",
-      "type": "boolean",
-      "description": "If enabled users can leave comments on suggestions. (If disabled only admins can do that)",
-      "default": true
+      "field_name": "commentType",
+      "type": "select",
+      "content": ["none","thread", "command"],
+      "humanname": "Comment-Type",
+      "description": "Select, how users can leave comments under their suggestions",
+      "default": "thread"
+    },
+    {
+      "field_name": "threadName",
+      "type": "string",
+      "humanname": "Thread-Name",
+      "description": "Only if \"Comment-Type\" = select; Name of the thread",
+      "default": "Comments"
     },
     {
       "field_name": "suggestionEmbed",
       "type": "keyed",
       "default": {
         "title": "Suggestion #%id%",
-        "commentsTitle": "\uD83D\uDCAC Comments",
+        "commentsTitle": "💬 Comments",
         "noComment": "No comments yet - Share your thoughts with `/suggestion comment id:%id%`",
         "awaitingAdminAnswerTitle": "Suggestion-Status",
         "awaitingAnswer": "No admin answered to this suggestion yet",
@@ -42,7 +66,18 @@
         "key": "string",
         "value": "string"
       },
-      "disableKeyEdits": true
+      "disableKeyEdits": true,
+      "humanname-de": "Vorschlagsembed",
+      "description-de": "Lege hier den Aufbau der Embeds für neue Vorschläge fest",
+      "params-de": {},
+      "default-de": {
+        "title": "Vorschlag #%id%",
+        "commentsTitle": "💬 Kommentare",
+        "noComment": "Noch keine Kommentare - Telile deine Gedanken mit `/suggestion comment id:%id%`",
+        "awaitingAdminAnswerTitle": "Vorschlagsstatus",
+        "awaitingAnswer": "Es hat noch kein Admin auf diesen Vorschlag geantwortet",
+        "adminAnswerTitle": "Vorschlagssatus: %status%"
+      }
     },
     {
       "field_name": "successfullySubmitted",
@@ -55,27 +90,48 @@
           "name": "%id%",
           "description": "ID of the suggestion"
         }
-      ]
+      ],
+      "humanname-de": "Erfolgreich eingereicht",
+      "description-de": "Diese Nachricht wird gesendet, wenn ein Vorschlag erfolgreich eingereicht wurde",
+      "params-de": [
+        {
+          "name": "%id%",
+          "description": "ID des Vorschlags"
+        }
+      ],
+      "default-de": "Vorschlag %id% erfolgreich eingereicht."
     },
     {
       "field_name": "successfullyComment",
       "default": "Your comment has been added successfully.",
       "description": "This message gets send if a comment has been added.",
       "allowEmbed": true,
-      "type": "string"
+      "type": "string",
+      "humanname-de": "Erfolgreich kommentiert",
+      "description-de": "Diese Nachricht wird gesendet, wenn ein Kommentar hinzugefügt wurde.",
+      "params-de": {},
+      "default-de": "Dein Kommentar wurde erfolgreich hinzugefügt."
     },
     {
       "field_name": "notifyRole",
       "default": "",
       "allowNull": true,
       "type": "roleID",
-      "description": "If set, this role gets pinged when a new suggestion gets created"
+      "description": "If set, this role gets pinged when a new suggestion gets created",
+      "humanname-de": "Benachrichtigungsrolle",
+      "description-de": "Wenn eine Rolle gesetzt ist, wird diese gepingt wenn ein neuer Vorschlag erstellt wird",
+      "params-de": {},
+      "default-de": ""
     },
     {
       "field_name": "sendPNNotifications",
       "default": true,
       "type": "boolean",
-      "description": "If enabled the creator and all commentators get a notification when something changes on a suggestion"
+      "description": "If enabled the creator and all commentators get a notification when something changes on a suggestion",
+      "humanname-de": "PN-Benachrichtigungen senden",
+      "description-de": "Wenn diese Option aktiviert ist, wird der Ersteller und alle Nutzer, die einen Kommentar geschrieben haben, benachrichtigt, wenn sich etwas an einem Vorschlag ändert",
+      "params-de": {},
+      "default-de": true
     },
     {
       "field_name": "newCommentNotification",
@@ -92,7 +148,20 @@
           "description": "Title of the suggestion"
         }
       ],
-      "type": "string"
+      "type": "string",
+      "humanname-de": "Kommentarbenachrichtgung",
+      "description-de": "Diese Nachricht wird an den Ersteller und alle Nutzer, die einen Kommentar geschrieben haben, gesendet, wenn ein neuer Kommentar hinzugefügt wird und \"PN-Benachrichtigungen senden\" aktiviert ist",
+      "params-de": [
+        {
+          "name": "%url%",
+          "description": "URL zum Vorschlag"
+        },
+        {
+          "name": "%title%",
+          "description": "Titel des Vorschlags"
+        }
+      ],
+      "default-de": "Hi, ein von dir abonnierter Vorschlag hat einen neuen Kommentar erhalten - lese ihn hier %url%"
     },
     {
       "field_name": "teamChange",
@@ -109,7 +178,20 @@
           "description": "Title of the suggestion"
         }
       ],
-      "type": "string"
+      "type": "string",
+      "humanname-de": "Statusbenachrichtigung",
+      "description-de": "Diese Nachricht wird an den Ersteller und alle Nutzer, die einen Kommentar geschrieben haben, gesendet, wenn ein Vorschlag aktualisiert wird und \"PN-Benachrichtigungen senden\" aktiviert ist",
+      "params-de": [
+        {
+          "name": "%url%",
+          "description": "URL zum Vorschlag"
+        },
+        {
+          "name": "%title%",
+          "description": "Titel des Vorschlags"
+        }
+      ],
+      "default-de": "Hi, ein von dir abonnierter Vorschlag wurde von einem Teammitglied beantwortet - lese ihn hier %url%"
     }
   ]
 }

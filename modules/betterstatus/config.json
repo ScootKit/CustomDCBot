@@ -1,18 +1,26 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
   "content": [
     {
       "field_name": "enableInterval",
+      "humanname-en": "Enable interval?",
+      "humanname-de": "Interval aktivieren?",
       "default": false,
       "type": "boolean",
-      "description": "If enabled the bot will change its status every x seconds"
+      "description-en": "If enabled the bot will change its status every x seconds",
+      "description-de": "Wenn aktiviert wird sich der Status des Bots alle x Sekunden ändern"
     },
     {
       "field_name": "intervalStatuses",
+      "humanname-en": "Interval-Statuses",
+      "humanname-de": "Interval-Status",
       "default": [],
       "content": "string",
       "type": "array",
-      "description": "Statuses from which the bot should randomly choose one",
+      "description-en": "Statuses from which the bot should randomly choose one",
+      "description-de": "Die Status von denen der Bot einen zufällig wählen soll",
       "params": [
         {
           "name": "%onlineMemberCount%",
@@ -38,10 +46,38 @@
           "name": "%roleCount%",
           "description": "Count of roles on your guild"
         }
+      ],
+      "params-de": [
+        {
+          "name": "%onlineMemberCount%",
+          "description": "Anzahl der Online-Mitglieder auf deinem Server"
+        },
+        {
+          "name": "%memberCount%",
+          "description": "Anzahl der Mitglieder auf deinem Server"
+        },
+        {
+          "name": "%randomMemberTag%",
+          "description": "Erwähnung eines zufälligen Nutzern auf deinem Server"
+        },
+        {
+          "name": "%randomOnlineMemberTag%",
+          "description": "Erwähnung eines zufälligen online Nutzern auf deinem Server"
+        },
+        {
+          "name": "%channelCount%",
+          "description": "Anzahl Channel auf deinem Server"
+        },
+        {
+          "name": "%roleCount%",
+          "description": "Anzahl Rollen auf deinem Server"
+        }
       ]
     },
     {
       "field_name": "activityType",
+      "humanname-en": "Activity-Type",
+      "humanname-de": "Aktivität-Typ",
       "default": "PLAYING",
       "type": "select",
       "content": [
@@ -51,26 +87,36 @@
         "COMPETING",
         "LISTENING"
       ],
-      "description": "Type of the user status"
+      "description-de": "Typ aller Status",
+      "description-en": "Type of the user status"
     },
     {
       "field_name": "interval",
+      "humanname-de": "Statusänderung-Interval",
+      "humanname-en": "Status-Interval",
       "default": 15,
       "type": "integer",
-      "description": "The interval in seconds (at least 5 seconds)"
+      "description-de": "Das Intervall der Statusänderungen in Sekunden (mindestens 10 Sekunden)",
+      "description-en": "The interval in seconds (at least 10 seconds)"
     },
     {
       "field_name": "changeOnUserJoin",
+      "humanname-de": "Beim Beitreten Status ändern?",
+      "humanname-en": "Change status on user join?",
       "default": false,
       "type": "boolean",
-      "description": "If the status should be changed if someone joins your guild"
+      "description-en": "If the status should be changed if someone joins your guild",
+      "description-de": "Wenn aktiviert wird sich der Status des Bots ändern, wenn jemand deinem Server beitritt"
     },
     {
       "field_name": "userJoinStatus",
+      "humanname-de": "Nutzer-Join-Status",
+      "humanname-en": "User-Join-Status",
       "default": "Welcome %tag%!",
       "type": "string",
-      "description": "Status that will be set if a user joins and if changeOnUserJoin is enabled",
-      "params": [
+      "description-en": "Status that will be set if a user joins and if changeOnUserJoin is enabled",
+      "description-de": "Dieser Status wird gesetzt, wenn jemand deinem Server beitritt und changeOnUserJoin aktiviert ist",
+      "params-en": [
         {
           "name": "%tag%",
           "description": "Tag of the new user"
@@ -82,6 +128,20 @@
         {
           "name": "%memberCount%",
           "description": "New member count of your guild"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%tag%",
+          "description": "Tag des Nutzers"
+        },
+        {
+          "name": "%username%",
+          "description": "Nutzername des Nutzers"
+        },
+        {
+          "name": "%memberCount%",
+          "description": "Anzahl der Mitglieder auf deinem Server"
         }
       ]
     }

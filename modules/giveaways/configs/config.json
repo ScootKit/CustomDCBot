@@ -1,22 +1,34 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "description-en": "Configure the function of the module here",
+  "description-de": "Stelle hier die Funktionen des Modules ein",
   "content": [
     {
       "field_name": "allowed_roles",
+      "humanname-en": "Allowed roles",
+      "humanname-de": "Erlaubte Rollen",
       "default": [],
       "type": "array",
       "content": "roleID",
-      "description": "ID of roles that are allowed to create and manage giveaways"
+      "description-en": "ID of roles that are allowed to create and manage giveaways",
+      "description-de": "Rollen, die Gewinnspiele erstellen und verwalten können"
     },
     {
       "field_name": "bypassRoles",
+      "humanname-en": "Giveaway-Requirement-Bypass-Roles",
+      "humanname-de": "Gewinnspiel-Voraussetzungen-Ignorierung-Rollen",
       "default": [],
       "type": "array",
       "content": "roleID",
-      "description": "IDs von Rollen, die an Gewinnspielen teilnehmen können, ohne die Bedingungen erfüllen zu müssen"
+      "description-de": "Rollen, die an Gewinnspielen teilnehmen können, ohne die Bedingungen erfüllen zu müssen",
+      "description-en": "Roles who can participate in giveaways even if they don't meet the requirements"
     },
     {
       "field_name": "messageCountMode",
+      "humanname-en": "Message-Count-Mode",
+      "humanname-de": "Nachrichten-Zähl-Modus",
       "default": "all",
       "type": "select",
       "content": [
@@ -24,27 +36,35 @@
         "blacklist",
         "whitelist"
       ],
-      "description": "Modus in which messages should get counted"
+      "description-en": "Modus in which messages should get counted",
+      "description-de": "Modus, in welchem Nachrichten gezählt werden sollen"
     },
     {
       "field_name": "blacklist",
+      "humanname": "Blacklist",
       "default": [],
       "type": "array",
       "content": "channelID",
-      "description": "Channel in which messages should get ignored (only if messageCountMode = \"blacklist\")"
+      "description-en": "Channel in which messages should get ignored (only if messageCountMode = \"blacklist\")",
+      "description-de": "Channel in welchen Nachrichten nicht gezählt werden sollen (nur wenn messageCountMode = \"blacklist\")"
     },
     {
       "field_name": "whitelist",
+      "humanname": "Whitelist",
       "default": [],
       "type": "array",
       "content": "channelID",
-      "description": "Channel in which messages should get counted (only if messageCountMode = \"whitelist\")"
+      "description-en": "Channel in which messages should get counted (only if messageCountMode = \"whitelist\")",
+      "description-de": "Channel in welchen Nachrichten gezählt werden sollen (nur wenn messageCountMode = \"whitelist\")"
     },
     {
       "field_name": "multipleEntries",
+      "humanname-en": "Multiple Entries",
+      "humanname-de": "Zusätzliche Gewinnchancen",
       "default": {},
       "type": "keyed",
-      "description": "Allow certain users to enter multiple times. ⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
+      "description-en": "Allow certain users with a specified role to enter multiple times.\n⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
+      "description-de": "Erlaubt es, Nutzern mit einer bestimmten Rollen mehre Gewinnchancen zu geben.\n⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
       "content": {
         "key": "roleID",
         "value": "integer"
@@ -52,9 +72,12 @@
     },
     {
       "field_name": "sendDMOnWin",
+      "humanname-en": "Send DM-message to winner",
+      "humanname-de": "PN-Nachricht an Gewinner senden",
       "default": false,
       "type": "boolean",
-      "description": "If enabled the bot will send each winner a DM when they win."
+      "description-en": "If enabled the bot will send each winner a DM when they win.",
+      "description-de": "Wenn aktiviert wird der Bot eine Nachricht an den Gewinner senden, wenn diese gewinnen."
     }
   ]
 }

@@ -1,8 +1,12 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
   "content": [
     {
       "field_name": "mode",
+      "humanname-en": "Message-Publishing-Mode",
+      "humanname-de": "Nachrichten-Veröffentlichung-Modus",
       "default": "all",
       "type": "select",
       "content": [
@@ -10,24 +14,33 @@
         "whitelist",
         "blacklist"
       ],
-      "description": "Modus in which this module should operate"
+      "description-en": "Modus in which this module should operate",
+      "description-de": "Modus in welchem dieses Modul arbeiten sollte"
     },
     {
       "field_name": "blacklist",
+      "humanname-en": "Blacklist",
       "default": [],
       "type": "array",
       "content": "channelID",
-      "description": "Channel to be ignored (only if mode = \"blacklist\")"
+      "description-en": "Channel to be ignored (only if Message-Publishing-Mode = \"blacklist\")",
+      "description-de": "Kanäle, die ignoriert werden sollen (nur wenn Nachrichten-Veröffentlichung-Modus = \"blacklist\")"
     },
     {
       "field_name": "whitelist",
+      "humanname-en": "Whitelist",
       "default": [],
       "type": "array",
       "content": "channelID",
-      "description": "Channel in which messages should get published (only if mode = \"whitelist\")"
+      "description-en": "Channel in which messages should get published (only if Message-Publishing-Mode = \"whitelist\")",
+      "description-de": "Kanäle, in denen Nachrichten veröffentlicht werden sollen (nur wenn Message-Publishing-Mode = \"whitelist\")"
     },
     {
       "field_name": "ignoreBots",
+      "humanname-en": "Ignore bots?",
+      "humanname-de": "Bots ignorieren?",
+      "description-en": "Should bots get ignored when they post a message",
+      "description-de": "Sollen Bots ignoriert werden, wenn sie eine Nachricht senden",
       "default": true,
       "type": "boolean",
       "description": "If activated, bots get ignored"

@@ -1,10 +1,14 @@
 {
   "name": "welcomer",
+  "humanReadableName-de": "Willkommen und Boosts",
+  "humanReadableName-en": "Welcome and Boosts",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Simple module to say \"Hi\" to new members and give them roles automatically",
+  "fa-icon": "fas fa-door-open",
+  "description-en": "Simple module to say \"Hi\" to new members, give them roles automatically and say \"thanks\" to users who boosted",
+  "description-de": "Einfaches Modul zum Begrüßen von neuen Usern, zum automatischen Vergeben von Rollen beim Joinen und zum Bedanken bei Boosts.",
   "events-dir": "/events",
   "config-example-files": [
     "configs/channels.json",

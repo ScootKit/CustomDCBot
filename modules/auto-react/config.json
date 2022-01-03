@@ -1,11 +1,16 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
   "content": [
     {
       "field_name": "channels",
+      "humanname-de": "Kanäle",
+      "humanname-en": "Channels",
       "default": {},
       "type": "keyed",
-      "description": "Here you can add channels and the reactions in it (you can add multiple emojis with | between each one)",
+      "description-en": "Here you can add channels and the reactions in it (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier Kanal-IDs und die dazugehörigen Emojis eintragen (mehrere Emojis müssen mit einem | getrennt werden)",
       "content": {
         "key": "channelID",
         "value": "string"
@@ -14,8 +19,11 @@
     {
       "field_name": "members",
       "default": {},
+      "humanname-de": "Mitglieder",
+      "humanname-en": "Members",
       "type": "keyed",
-      "description": "Here you can add members and the reactions in it (you can add multiple emojis with | between each one)",
+      "description-en": "Here you can add members and the reactions in it (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier NutzerIDs und die dazugehörigen Emojis eintragen (mehrere Emojis müssen mit einem | getrennt werden",
       "content": {
         "key": "integer",
         "value": "string"

@@ -1,6 +1,7 @@
 const {embedType} = require('../functions/helpers');
+const {localize} = require('../functions/localize');
 
-exports.run = async (client, msg) => {
+module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return; // Check if bot is *really* ready
     if (msg.author.bot) return;
     if (!msg.guild) return;
@@ -8,7 +9,7 @@ exports.run = async (client, msg) => {
     if (!msg.content.startsWith(client.config.prefix) && !msg.content.startsWith(`<@${client.user.id}> `) && !msg.content.startsWith(`<@!${client.user.id}> `)) return;
     let stringToReplace = client.config.prefix;
     if (!msg.content.startsWith(client.config.prefix)) stringToReplace = msg.content.startsWith(`<@${client.user.id}> `) ? `<@${client.user.id}> ` : `<@!${client.user.id}> `;
-    const args = msg.content.split(stringToReplace).join('').trim().split(/ +/g);
+    const args = msg.content.replace(stringToReplace, '').split(' ');
     const command = args.shift().toLowerCase();
     if (!client.aliases.has(command)) {
         if (!client.scnxSetup) return;
@@ -21,7 +22,7 @@ exports.run = async (client, msg) => {
         '%neededCount%': commandElement.config.args
     }));
     const commandFile = require(`./../../${commandElement.fileName}`);
-    client.logger.debug(`${msg.author.tag} (${msg.author.id}) used command ${client.config.prefix}${command}.`);
+    client.logger.debug(localize('command', 'message-used', {p: client.config.prefix, c: command}));
     try {
         commandFile.run(client, msg, args);
     } catch (e) {

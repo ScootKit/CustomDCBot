@@ -1,15 +1,16 @@
 const {DataTypes, Model} = require('sequelize');
 
-module.exports = class TwitchStreamer extends Model {
+module.exports = class ChannelLock extends Model {
     static init(sequelize) {
         return super.init({
-            name: {
+            id: {
                 type: DataTypes.STRING,
                 primaryKey: true
             },
-            startedAt: DataTypes.STRING
+            permissions: DataTypes.JSON,
+            lockReason: DataTypes.STRING
         }, {
-            tableName: 'twitch_streamers',
+            tableName: 'system_ChannelLock',
             timestamps: true,
             sequelize
         });
@@ -17,6 +18,5 @@ module.exports = class TwitchStreamer extends Model {
 };
 
 module.exports.config = {
-    'name': 'streamer',
-    'module': 'twitch-notifications'
+    'name': 'ChannelLock'
 };

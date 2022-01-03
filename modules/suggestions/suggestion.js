@@ -5,6 +5,7 @@
  */
 const {MessageEmbed} = require('discord.js');
 const {embedType} = require('../../src/functions/helpers');
+const {localize} = require('../../src/functions/localize');
 
 module.exports.generateSuggestionEmbed = async function (client, suggestion) {
     const moduleConfig = client.configurations['suggestions']['config'];
@@ -29,19 +30,24 @@ module.exports.generateSuggestionEmbed = async function (client, suggestion) {
         .setThumbnail(member.user.avatarURL())
         .setDescription(suggestion.suggestion)
         .addField('\u200b', '\u200b');
-    let comments = '';
-    suggestion.comments.forEach(comment => {
-        comments = comments + `"${comment.comment}" ~ <@${comment.userID}>\n`;
-    });
-    if (comments === '') comments = replacer(moduleConfig.suggestionEmbed.noComment);
-    embed.addField(moduleConfig.suggestionEmbed.commentsTitle, comments);
+
+    if (moduleConfig['commentType'] === 'command') {
+        let comments = '';
+        suggestion.comments.forEach(comment => {
+            comments = comments + `"${comment.comment}" ~ <@${comment.userID}>\n`;
+        });
+        if (comments === '') comments = replacer(moduleConfig.suggestionEmbed.noComment);
+        embed.addField(moduleConfig.suggestionEmbed.commentsTitle, comments);
+    }
 
     embed.setColor('YELLOW');
 
     if (suggestion.adminAnswer) {
         embed.setColor(suggestion.adminAnswer.action === 'approve' ? 'GREEN' : 'RED');
-        embed.addField(moduleConfig.suggestionEmbed.adminAnswerTitle.split('%status%').join(suggestion.adminAnswer.action === 'approve' ? 'Approved' : 'Denied'),
-            `${suggestion.adminAnswer.action === 'approve' ? 'Approved' : 'Denied'} by <@${suggestion.adminAnswer.userID}> with the following reason: "${suggestion.adminAnswer.reason}"`);
+        embed.addField(moduleConfig.suggestionEmbed.adminAnswerTitle.replaceAll('%status%', suggestion.adminAnswer.action === 'approve' ? localize('suggestions', 'approved') : localize('suggestions', 'denied')),
+            localize('suggestions', 'admin-answer', {status: suggestion.adminAnswer.action === 'approve' ? localize('suggestions', 'approved') : localize('suggestions', 'denied'),
+                u: `<@${suggestion.adminAnswer.userID}>`,
+                r: suggestion.adminAnswer.reason}));
     } else embed.addField(moduleConfig.suggestionEmbed.awaitingAdminAnswerTitle, moduleConfig.suggestionEmbed.awaitingAnswer);
 
     await message.edit({content: '\u200b', embeds: [embed]});
