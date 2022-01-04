@@ -1,48 +1,73 @@
 {
+  "description-en": "Configure the basic features of the bot here",
+  "description-de": "Generelle Konfiguration deines Bots",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
   "content": [
     {
       "field_name": "token",
       "default": "yourtokengoeshere",
       "type": "string",
-      "description": "Replace this with your token"
+      "description": "Replace this with your token",
+      "hidden": true
     },
     {
       "field_name": "prefix",
+      "humanname-de": "Prefix deines Botes",
+      "humanname-en": "Prefix of your bot",
       "default": "!",
       "type": "string",
-      "description": "Replace this with your prefix"
+      "description-en": "Set the prefix of your bot here",
+      "description-de": "Dein eigener Prefix - Wir empfehlen ihn einfach bei ! zu belassen."
     },
     {
       "field_name": "botOperators",
       "default": [],
       "type": "array",
       "content": "string",
+      "hidden": true,
       "description": "Bot operators can reload the configuration and perform system relevant actions with this bot. Please only add users you really trust (and yourself of course)"
     },
     {
       "field_name": "guildID",
       "default": "489786377261678592",
       "type": "guildID",
+      "hidden": true,
       "description": "Replace this the id of the guild the bot should work in."
     },
     {
       "field_name": "user_presence",
+      "humanname-en": "Bot-Status",
       "default": "You can change this in your config.json btw",
       "type": "string",
-      "description": "This will show up in Discord as \"Playing <YourValue>\""
+      "description-en": "This will show up in Discord as \"Playing <YourValue>\"",
+      "description-de": "Das wird in Discord als \"Spielt <Hier der Wert>\" angezeigt"
     },
     {
       "field_name": "logLevel",
+      "humanname-en": "Logging-Level",
       "default": "debug",
       "type": "select",
-      "description": "Log-Level of the bot",
-      "content": ["debug","info","warn", "error", "fatal", "off"]
+      "description-en": "Log-Level of the bot. Leave it as it is, if you don't know what this means",
+      "description-de": "Log-Level des Bots. Belasse es wie es ist, wenn du nicht weißt, was das bedeutet.",
+      "content": [
+        "debug",
+        "info",
+        "warn",
+        "error",
+        "fatal",
+        "off"
+      ]
     },
     {
       "field_name": "logChannelID",
+      "allowNull": true,
+      "humanname-en": "Log-Channel",
+      "humanname-de": "Log-Kanal",
       "default": "",
       "type": "channelID",
-      "description": "Default log-channel for most modules and used to log relevant information"
+      "description-en": "Default log-channel for most modules and used to log relevant information",
+      "description-de": "Standard Log-Kanal für viele Module. Wird außerdem genutzt, um wesentliche Bot-Informationen zu senden"
     }
   ]
 }

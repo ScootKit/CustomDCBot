@@ -1,11 +1,15 @@
 {
   "name": "giveaways",
+  "humanReadableName-en": "Giveaways",
+  "humanReadableName-de": "Gewinnspiele",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Easily create a giveaway in your server",
+  "description-en": "Easily create a giveaway in your server",
+  "description-de": "Erstelle einfach Gewinnspiele auf deinem Server",
   "commands-dir": "/commands",
+  "fa-icon": "fas fa-gift",
   "models-dir": "/models",
   "events-dir": "/events",
   "config-example-files": [

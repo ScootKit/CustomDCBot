@@ -1,13 +1,14 @@
-const {arrayToApplicationCommandPermissions} = require('../../../src/functions/helpers');
 const {registerNeededEdit} = require('../leaderboardChannel');
-const frontedUsers = []; // Easteregg , just ignore it
+const {localize} = require('../../../src/functions/localize');
+const frontedUsers = []; // Easteregg, just ignore it
 
 module.exports.subcommands = {
     'reset-xp': async function (interaction) {
         const type = interaction.options.getUser('user') ? 'user' : 'server';
         if (!interaction.options.getBoolean('confirm')) return interaction.reply({
             ephemeral: 'true',
-            content: type === 'user' ? `Okay, do you really want to screw with ${interaction.options.getUser('user').toString()}? If you hate them so much, feel free to run \`/manage-levels reset-xp confirm:True user:${interaction.options.getUser('user').tag}\` to run this irreversible action.` : 'Do you really want to delete all XP and Levels from this server? This action is irreversible and everyone on this server will hate you. Decided that it\'s worth it? Enter `/manage-levels reset-xp confirm:True` (as a slash command obviously)'
+            content: type === 'user' ? localize('levels', 'are-you-sure-you-want-to-delete-user-xp', {u: interaction.options.getUser('user').toString(), ut: interaction.options.getUser('user').tag})
+                : localize('levels', 'are-you-sure-you-want-to-delete-server-xp')
         });
         await interaction.deferReply();
         if (type === 'user') {
@@ -16,17 +17,17 @@ module.exports.subcommands = {
                     userID: interaction.options.getUser('user').id
                 }
             });
-            if (!user) return interaction.editReply(':warning: User not found.');
-            interaction.client.logger.info(`${interaction.user.tag} deleted the XP of the user with id ${user.userID}`);
-            if (interaction.client.logChannel) await interaction.client.logChannel.send(`${interaction.user.tag} deleted the XP of the user with id ${user.userID}`);
+            if (!user) return interaction.editReply(':warning: ' + localize('levels', 'user-not-found'));
+            interaction.client.logger.info(localize('levels', 'user-deleted-users-xp', {t: interaction.user.tag, u: user.userID}));
+            if (interaction.client.logChannel) await interaction.client.logChannel.send(localize('levels', 'user-deleted-users-xp', {t: interaction.user.tag, u: user.userID}));
             await user.destroy();
-            await interaction.editReply(`Removed ${interaction.options.getUser('user').toString()}'s XP and level successfully.`);
+            await interaction.editReply(localize('levels', 'removed-xp-successfully'));
         } else {
             const users = await interaction.client.models['levels']['User'].findAll();
             for (const user of users) await user.destroy();
-            interaction.client.logger.info(`${interaction.user.tag} deleted the XP of all users`);
-            if (interaction.client.logChannel) await interaction.client.logChannel.send(`${interaction.user.tag} deleted the XP of all users`);
-            await interaction.editReply('Successfully deleted all the XP of all users');
+            interaction.client.logger.info(localize('levels', 'deleted-server-xp', {u: interaction.user.tag}));
+            if (interaction.client.logChannel) await interaction.client.logChannel.send(localize('levels', 'deleted-server-xp', {u: interaction.user.tag}));
+            await interaction.editReply(localize('levels', 'successfully-deleted-all-xp-of-users'));
         }
     },
     'edit-xp': async function (interaction) {
@@ -38,25 +39,25 @@ module.exports.subcommands = {
         });
         if (!user) return interaction.reply({
             ephemeral: true,
-            content: ':warning: This user doesn\'t have a profile (yet), please force them to write a message before trying to betrayal your community by manipulating level scores.'
+            content: ':warning: ' + localize('levels', 'cheat-no-profile')
         });
         if (dcUser.id === interaction.user.id) {
-            interaction.client.logger.info(`${interaction.user.tag} wanted to use their privileges to their own benefit by manipulating their own XP. This is obviously abuse, I expect disciplinary measures to be taken against this user.`);
-            if (interaction.client.logChannel) await interaction.client.logChannel.send(`${interaction.user.tag} wanted to use their privileges to their own benefit by manipulating their own XP. This is obviously abuse, I expect disciplinary measures to be taken against this user.`);
+            interaction.client.logger.info(localize('levels', 'abuse-detected', {u: interaction.user.tag}));
+            if (interaction.client.logChannel) await interaction.client.logChannel.send(localize('levels', 'abuse-detected', {u: interaction.user.tag}));
             interaction.reply({
                 ephemeral: true,
-                content: frontedUsers.includes(interaction.user.id) ? 'And you are trying again... This is very very sad, I am going to report you another time and want to stretch again that this is obviously abuse of your privileges. Have a nice day.' : `Wait... you are joking right? You aren't, right? You are serious... I am very disappointed of you, ${interaction.user.username}... I though you were a honest and fair admin, but as I can see today, you aren't. You wanted to use this command for your own benefit and betray all users on your server. I am honestly very very disappointed of you, I was expecting more from you. I will have to report this incidence to your supervisor and - as I said - I am very disappointed and frankly - if I had had the permission to - would have banned you from this server, because this incident proves that you wanted to abuse your privileges for your own benefit. `
+                content: frontedUsers.includes(interaction.user.id) ? localize('levels', 'cant-change-your-level-2', {un: interaction.user.username}) : localize('levels', 'cant-change-your-level-1', {un: interaction.user.username})
             });
             if (!frontedUsers.includes(interaction.user.id)) frontedUsers.push(interaction.user.id);
             return;
         }
         user.xp = interaction.options.getNumber('value');
         await user.save();
-        interaction.client.logger.info(`${interaction.user.tag} manipulated the XP of ${user.userID} to ${interaction.options.getNumber('value')}.`);
-        if (interaction.client.logChannel) await interaction.client.logChannel.send(`${interaction.user.tag} manipulated the XP of ${user.userID} to ${interaction.options.getNumber('value')}.`);
+        interaction.client.logger.info(localize('levels', 'manipulated', {u: interaction.user.tag, ui: user.userID, v: interaction.options.getNumber('value')}));
+        if (interaction.client.logChannel) await interaction.client.logChannel.send(localize('levels', 'manipulated', {u: interaction.user.tag, ui: user.userID, v: interaction.options.getNumber('value')}));
         await interaction.reply({
             ephemeral: true,
-            content: 'Successfully edited the XP of this user. Remember, every change you make destroys the experience of other users on this server as the levelsystem isn\'t fair anymore.'
+            content: localize('levels', 'successfully-changed')
         });
     }
 };
@@ -67,47 +68,45 @@ module.exports.run = function () {
 
 module.exports.config = {
     name: 'manage-levels',
-    description: 'Manage the levels of your server',
+    description: localize('levels', 'edit-xp-command-description'),
     defaultPermission: false,
-    permissions: function (client) {
-        return arrayToApplicationCommandPermissions(Array.from(client.guild.roles.cache.filter(r => r.permissions.has('ADMINISTRATOR')).keys()), 'ROLE');
-    },
+    restricted: true,
     options: function (client) {
         const array = [{
             type: 'SUB_COMMAND',
             name: 'reset-xp',
-            description: 'Reset the XP of a user or of the whole server',
+            description: localize('levels', 'reset-xp-description'),
             options: [
                 {
                     type: 'USER',
                     required: false,
                     name: 'user',
-                    description: 'User to reset the XP from (default: whole server)'
+                    description: localize('levels', 'reset-xp-user-description')
                 },
                 {
                     type: 'BOOLEAN',
                     required: false,
                     name: 'confirm',
-                    description: 'Do you really want to delete the data?'
+                    description: localize('levels', 'reset-xp-confirm-description')
                 }
             ]
         }];
         if (client.configurations['levels']['config']['allowCheats']) array.push({
             type: 'SUB_COMMAND',
             name: 'edit-xp',
-            description: 'Betrays your community and edits a user\'s XP',
+            description: localize('levels', 'edit-xp-description'),
             options: [
                 {
                     type: 'USER',
                     required: true,
                     name: 'user',
-                    description: 'User to be edited (can *not* be you!)'
+                    description: localize('levels', 'edit-xp-user-description')
                 },
                 {
                     type: 'NUMBER',
                     required: true,
                     name: 'value',
-                    description: 'New XP value of the user'
+                    description: localize('levels', 'edit-xp-value-description')
                 }
             ]
         });

@@ -1,15 +1,15 @@
 const {DataTypes, Model} = require('sequelize');
 
-module.exports = class TwitchStreamer extends Model {
+module.exports = class DatabaseSchemeVersion extends Model {
     static init(sequelize) {
         return super.init({
-            name: {
+            model: {
                 type: DataTypes.STRING,
                 primaryKey: true
             },
-            startedAt: DataTypes.STRING
+            version: DataTypes.STRING
         }, {
-            tableName: 'twitch_streamers',
+            tableName: 'system_DatabaseSchemeVersion',
             timestamps: true,
             sequelize
         });
@@ -17,6 +17,5 @@ module.exports = class TwitchStreamer extends Model {
 };
 
 module.exports.config = {
-    'name': 'streamer',
-    'module': 'twitch-notifications'
+    'name': 'DatabaseSchemeVersion'
 };

@@ -1,12 +1,16 @@
 {
   "name": "suggestions",
+  "humanReadableName-de": "Vorschläge",
+  "humanReadableName-en": "Suggestions",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Advanced module to manage suggestions on your guild",
+  "description-en": "Advanced module to manage suggestions on your guild",
+  "description-de": "Modul mit vielen Funktionen, um Vorschläge auf deinem Discord zu managen",
   "commands-dir": "/commands",
   "models-dir": "/models",
+  "fa-icon": "far fa-lightbulb",
   "config-example-files": [
     "config.json"
   ]

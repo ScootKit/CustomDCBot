@@ -1,5 +1,7 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
   "configElements": true,
   "content": [
     {
@@ -7,7 +9,11 @@
       "default": [],
       "type": "array",
       "content": "channelID",
-      "description": "Channel-ID in which this messages should get triggered"
+      "description": "Channel-ID in which this messages should get triggered",
+      "humanname-de": "Auslöserkanal",
+      "description-de": "Kanäle, bei denen der Bot reagieren soll, wenn ein Nutzer joint",
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "message",
@@ -28,19 +34,44 @@
           "name": "%mention%",
           "description": "Mention of the user"
         }
-      ]
+      ],
+      "humanname-de": "Nachricht",
+      "description-de": "Hier kannst du die Nachricht einstellen, die gesendet werden soll, wenn jemand dem Sprachkanal beitritt",
+      "params-de": [
+        {
+          "name": "%tag%",
+          "description": "Tag des Nutzers"
+        },
+        {
+          "name": "%vc%",
+          "description": "Name des Sprackkanals"
+        },
+        {
+          "name": "%mention%",
+          "description": "Erwähnung des Nutzers"
+        }
+      ],
+      "default-de": "Der Nutzer %tag% ist dem Voicechat %vc% beigetreten.n"
     },
     {
       "field_name": "notify_channel_id",
       "default": "",
       "type": "channelID",
-      "description": "Channel where the message should be send"
+      "description": "Channel where the message should be send",
+      "humanname-de": "Benachrichtigungskanal",
+      "description-de": "Kanal, in welchen die Nachricht gesendet werden soll",
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "send_pn_to_member",
       "default": false,
       "type": "boolean",
-      "description": "Should the bot send a PN to the member?"
+      "description": "Should the bot send a PN to the member?",
+      "humanname-de": "Join-PN",
+      "description-de": "Soll der Bot eine PN an den Nutzer schicken?",
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "pn_message",
@@ -52,7 +83,16 @@
           "name": "%vc%",
           "description": "Name of the voicechat"
         }
-      ]
+      ],
+      "humanname-de": "Join-PN-Nachricht",
+      "description-de": "Diese Nachricht wird an den Nutzer versandt, wenn er einem Voicechat beitritt (wenn \"Join-PN\" aktiviert ist).",
+      "params-de": [
+        {
+          "name": "%vc%",
+          "description": "Name des Sprachkanals"
+        }
+      ],
+      "default-de": "Hi, ich habe gesehen, dass du %vc% beigetreten bist. Nice (;"
     }
   ]
 }

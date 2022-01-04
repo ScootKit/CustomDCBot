@@ -1,18 +1,28 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
   "content": [
     {
       "field_name": "channelID",
       "default": "",
       "type": "channelID",
-      "description": "Channel-ID to run all operations in it"
+      "description": "Channel-ID to run all operations in it",
+      "humanname-de": "Kanal-ID",
+      "description-de": "Kanal-ID, in welchem alle Aktionen ausgeführt werden",
+      "params-de": {},
+      "default-de": ""
     },
     {
       "field_name": "adminRoles",
       "type": "array",
       "description": "Every role that can add new partners",
       "default": [],
-      "content": "roleID"
+      "content": "roleID",
+      "humanname-de": "Partnerschafts-Manager-Rollen",
+      "description-de": "Jede Rolle, die neue Partner hinzufügen kann",
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "embed",
@@ -28,7 +38,16 @@
         "partner-string": "#%id%: [%name%](%invite%) (<@%userID%>)",
         "color": "GREEN"
       },
-      "disableKeyEdits": true
+      "disableKeyEdits": true,
+      "humanname-de": "Partner-Embed",
+      "description-de": "Konfiguration des Partner-Embeds",
+      "params-de": {},
+      "default-de": {
+        "title": "Unsere Partner",
+        "description": "Hier findest du alles über unsere Partner - Wenn du selbst Partner werden möchtest kontaktiere eins unserer Teammitglieder!",
+        "partner-string": "#%id%: [%name%](%invite%) (<@%userID%>)",
+        "color": "GREEN"
+      }
     },
     {
       "field_name": "categories",
@@ -39,6 +58,14 @@
         "Normal Partners",
         "Kooperation",
         "Small Partners"
+      ],
+      "humanname-de": "Kategorien",
+      "description-de": "Bitte liste jede Kategorie hier auf",
+      "params-de": {},
+      "default-de": [
+        "Normale Partner",
+        "Kooperation",
+        "Kleine Partner"
       ]
     },
     {
@@ -49,13 +76,21 @@
         "key": "string",
         "value": "roleID"
       },
-      "default": {}
+      "default": {},
+      "humanname-de": "Kategorie-Rollen",
+      "description-de": "(optional) Rolle welche Partner in einer bestimmten Kategorie gegeben werden soll",
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "sendNotificationToPartner",
       "type": "boolean",
       "default": false,
-      "description": "If enabled, the bot is going to send a DM to the partner when they get added or removed"
+      "description": "If enabled, the bot is going to send a DM to the partner when they get added or removed",
+      "humanname-de": "Partner-Benachrichtigung",
+      "description-de": "Wenn aktiviert, sendet der Bot eine PN an Partner, wenn sie hinzugefügt oder entfernt werden",
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "newPartnerDM",
@@ -72,7 +107,20 @@
           "name": "%category%",
           "description": "Category of the partner"
         }
-      ]
+      ],
+      "humanname-de": "Partner-Hinzufügungs-PN",
+      "description-de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)",
+      "params-de": [
+        {
+          "name": "%name%",
+          "description": "Name des hinzugefügten Partners"
+        },
+        {
+          "name": "%category%",
+          "description": "Kategorie des Partners"
+        }
+      ],
+      "default-de": "Hi. Du bist jetzt Partner - Herzlichen Glückwunsch"
     },
     {
       "field_name": "byePartnerDM",
@@ -89,7 +137,20 @@
           "name": "%category%",
           "description": "Category of the partner"
         }
-      ]
+      ],
+      "humanname-de": "Partner-Entfernungs-PN",
+      "description-de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)",
+      "params-de": [
+        {
+          "name": "%name%",
+          "description": "Name des hinzugefügten Partners"
+        },
+        {
+          "name": "%category%",
+          "description": "Kategorie des Partners"
+        }
+      ],
+      "default-de": "Leider bist du nicht länger Partner ):"
     }
   ]
 }

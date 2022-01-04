@@ -1,4 +1,5 @@
 const {randomElementFromArray, embedType, formatDate} = require('../../../src/functions/helpers');
+const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (client, guildMember) {
     if (!client.botReadyAt) return;
@@ -8,7 +9,7 @@ module.exports.run = async function (client, guildMember) {
 
     const moduleChannels = client.configurations['welcomer']['channels'];
 
-    if (moduleConfig['give-roles-on-join'].length !== 0) {
+    if (!guildMember.pending && moduleConfig['give-roles-on-join'].length !== 0) {
         await guildMember.roles.add(moduleConfig['give-roles-on-join']);
     }
 
@@ -16,7 +17,7 @@ module.exports.run = async function (client, guildMember) {
         const channel = await guildMember.guild.channels.fetch(channelConfig.channelID).catch(() => {
         });
         if (!channel) {
-            client.logger.error(`[welcomer] Channel not found: ${channelConfig.channelID}`);
+            client.logger.error(localize('welcomer', 'channel-not-found', {c: channelConfig.channelID}));
             continue;
         }
         let message;

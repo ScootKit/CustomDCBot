@@ -24,7 +24,7 @@ async function generateEmbed(client) {
     const fieldConfig = client.configurations['serverinfo']['fields'];
     const channel = await client.channels.fetch(config.channelID).catch(() => {
     });
-    if (!channel) return client.logger.error(`[serverinfo] Could not find channel with id ${config.channelID}`);
+    if (!channel && (channel || {}).type !== 'GUILD_TEXT') return client.logger.error(`[serverinfo] Could not find channel with id ${config.channelID}`);
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     const embed = new MessageEmbed()
         .setTitle(config.embed.title)

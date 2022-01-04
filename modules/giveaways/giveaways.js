@@ -7,6 +7,7 @@ const {formatDate, randomElementFromArray} = require('../../src/functions/helper
 const {scheduleJob} = require('node-schedule');
 const {embedType} = require('../../src/functions/helpers');
 const {confDir} = require('../../main');
+const {localize} = require('../../src/functions/localize');
 
 /**
  * Create a new giveaway
@@ -31,31 +32,31 @@ module.exports.createGiveaway = async function (organiser, channel, prize, endAt
         '%winners%': winners,
         '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
         '%endAt%': formatDate(endAt),
-        '%sponsorLink%': sponsorLink || 'None',
+        '%sponsorLink%': sponsorLink || localize('giveaways', 'no-link'),
         '%organiser%': `<@${organiser.id}>`,
-        '%entryCount%': channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : 0,
-        '%enteredCount%': channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : 0
+        '%entryCount%': channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : 0,
+        '%enteredCount%': channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : 0
     }, {components}));
     else {
         let requirementString = '';
         requirements.forEach((r) => {
-            if (r.type === 'messages') requirementString = requirementString + `• Must have ${r.messageCount} new messages (check with \`/gmessages\`)\n`;
+            if (r.type === 'messages') requirementString = requirementString + `• ${localize('giveaways', 'required-messages', {mc: r.messageCount})}\n`;
             if (r.type === 'roles') {
                 let rolesString = ''; // Surely there is a better way to to this kind of stuff, but I am to stupid to find it
                 r.roles.forEach(rID => rolesString = rolesString + `<@&${rID}> `);
-                requirementString = rolesString + `• Must have one of this roles to enter: ${rolesString}\n`;
+                requirementString = rolesString + `• ${localize('giveaways', 'roles-required', {r: rolesString})}\n`;
             }
         });
         m = await channel.send(await embedType(moduleStrings['giveaway_message_with_requirements'], {
             '%prize%': prize,
             '%winners%': winners,
             '%requirements%': requirementString,
-            '%sponsorLink%': sponsorLink || 'None',
+            '%sponsorLink%': sponsorLink || localize('giveaways', 'no-link'),
             '%endAt%': formatDate(endAt),
             '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
             '%organiser%': `<@${organiser.id}>`,
-            '%entryCount%': channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : 0,
-            '%enteredCount%': channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : 0
+            '%entryCount%': channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : 0,
+            '%enteredCount%': channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : 0
         }, {components}));
     }
     const dbItem = await channel.client.models['giveaways']['Giveaway'].create({
@@ -104,6 +105,9 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
     const message = await channel.messages.fetch(giveaway.messageID).catch(() => {
     });
     if (!message) return;
+    giveaway.ended = true;
+    await giveaway.save();
+    if (job) job.cancel();
 
     const winners = [];
     let userEntries = [];
@@ -121,10 +125,10 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
 
     const entries = userEntries.length;
     if (userEntries.length === 0) {
-        await editMessage('None');
+        await editMessage(localize('giveaways', 'no-winners'));
         return await message.reply(embedType(moduleStrings['no_winner_message'], {
             '%prize%': giveaway.prize,
-            '%sponsorLink%': giveaway.sponsorWebsite || 'None',
+            '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
             '%organiser%': `<@${giveaway.organiser}>`
         }, {}));
     }
@@ -148,7 +152,7 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
     await message.reply(await embedType(moduleStrings['winner_message'], {
         '%prize%': giveaway.prize,
         '%winners%': winnersstring,
-        '%sponsorLink%': giveaway.sponsorWebsite || 'None',
+        '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
         '%organiser%': `<@${giveaway.organiser}>`
     }));
 
@@ -160,7 +164,7 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
             if (member) member.send(await embedType(moduleStrings['winner_DM_message'], {
                 '%prize%': giveaway.prize,
                 '%winners%': winnersstring,
-                '%sponsorLink%': giveaway.sponsorWebsite || 'None',
+                '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
                 '%organiser%': `<@${giveaway.organiser}>`,
                 '%url%': message.url
             })).catch(() => {
@@ -193,18 +197,14 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
                     '%endAt%': formatDate(endAt),
                     '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
                     '%winners%': winnerString,
-                    '%sponsorLink%': giveaway.sponsorWebsite || 'None',
+                    '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
                     '%organiser%': `<@${giveaway.organiser}>`,
                     '%entryCount%': entries,
                     '%enteredCount%': enteredUsers
                 }, {components})
             );
-            giveaway.ended = true;
-            giveaway.save();
         }
     }
-
-    if (job) job.cancel();
 }
 
 module.exports.endGiveaway = endGiveaway;
@@ -232,14 +232,14 @@ async function checkRequirements(member, giveaway) {
                     if (member.roles.cache.get(r)) passedRoleRequirement = true;
                 }
                 if (!passedRoleRequirement) {
-                    notPassedRequirementsString = notPassedRequirementsString + `\t• Have one of these roles: ${rolesString}\n`;
+                    notPassedRequirementsString = notPassedRequirementsString + `\t• ${localize('giveaways', 'roles-required', {r: rolesString})}\n`;
                     failedRequirements = true;
                 }
                 break;
             case 'messages':
                 if (!giveaway.messageCount[member.user.id]) giveaway.messageCount[member.user.id] = 0;
                 if (parseInt(giveaway.messageCount[member.user.id]) < parseInt(requirement.messageCount)) {
-                    notPassedRequirementsString = notPassedRequirementsString + `\t• Have at least ${requirement.messageCount} new messages (${giveaway.messageCount[member.user.id]}/${requirement.messageCount})\n`;
+                    notPassedRequirementsString = notPassedRequirementsString + `\t• ${localize('giveaways', 'required-messages-user', {um: giveaway.messageCount[member.user.id], mc: requirement.messageCount})}\n`;
                     failedRequirements = true;
                 }
                 break;

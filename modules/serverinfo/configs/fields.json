@@ -1,19 +1,87 @@
 {
   "filename": "fields.json",
   "configElements": true,
+  "humanname-de": "Embed-Felder",
+  "humanname-en": "Embed-Fields",
+  "description-de": "Stelle hier die Felder des Serverinfo-Embeds ein",
+  "description-en": "Change the Embed-Fields of the serverinfo-embed here",
   "content": [
     {
       "field_name": "name",
       "default": "",
-      "description": "Name of this field",
+      "humanname-de": "Feldname",
+      "humanname-en": "Feld-Name",
+      "description-de": "Name des Feldes",
+      "description-en": "Name of the field",
       "type": "string"
     },
     {
       "field_name": "content",
-      "description": "Content of this field",
+      "humanname-de": "Feldinhalt",
+      "humanname-en": "Field-Content",
+      "description-en": "Content of this field",
+      "description-de": "Inhalt dieses Feldes",
       "default": "",
       "type": "string",
-      "params": [
+      "params-de": [
+        {
+          "name": "%memberCount%",
+          "description": "Anzahl von Mitgliedern auf deinem Server"
+        },
+        {
+          "name": "%botCount%",
+          "description": "Anzahl von Bots auf deinem Server"
+        },
+        {
+          "name": "%userCount%",
+          "description": "Anzahl von Nutzern auf deinem Server"
+        },
+        {
+          "name": "%onlineMemberCount%",
+          "description": "Anzahl von online Mitgliern auf deinem Server"
+        },
+        {
+          "name": "%daysSinceCreation%",
+          "description": "Anzahl von vergangenen Tagen seit Erstellung deines Servers"
+        },
+        {
+          "name": "%guildCreationTimestamp%",
+          "description": "Datum und Uhrzeit, wenn der Server erstellt wurde"
+        },
+        {
+          "name": "%guildBoosts%",
+          "description": "Zeigt die Anzahl von Boots auf dem Server an"
+        },
+        {
+          "name": "%boostLevel%",
+          "description": "Zeigt das aktuelle Boost-Level des Servers an"
+        },
+        {
+          "name": "%boosterCount%",
+          "description": "Anzahl von Boostern auf deinem Server"
+        },
+        {
+          "name": "%guildRegion%",
+          "description": "Discord-Region deines Servers"
+        },
+        {
+          "name": "%channelCount%",
+          "description": "Anzahl von Channeln auf deinem Server"
+        },
+        {
+          "name": "%roleCount%",
+          "description": "Anzahl von Rollen auf deinem Server"
+        },
+        {
+          "name": "%emojiCount%",
+          "description": "Anzahl von Emojis auf deinem Server"
+        },
+        {
+          "name": "%newline%",
+          "description": "Fügt eine neue Zeile ein (wie der Name schon sagt)"
+        }
+      ],
+      "params-en": [
         {
           "name": "%memberCount%",
           "description": "Member-Count of this guild"
@@ -74,7 +142,10 @@
     },
     {
       "field_name": "inline",
-      "description": "If enabled the field will be inlined",
+      "humanname-de": "In-Zeilen-Feld?",
+      "humanname-en": "Inline Field?",
+      "description-en": "If enabled the field will be inlined",
+      "description-de": "Wenn aktiviert wird das Feld bei Discord in einer Zeile mit anderen Feldern angezeigt",
       "type": "boolean",
       "default": false
     }

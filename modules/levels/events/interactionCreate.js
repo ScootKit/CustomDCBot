@@ -1,3 +1,5 @@
+const {localize} = require('../../../src/functions/localize');
+
 module.exports.run = async function (client, interaction) {
     if (!interaction.client.botReadyAt) return;
     if (!interaction.isButton()) return;
@@ -9,11 +11,11 @@ module.exports.run = async function (client, interaction) {
     });
     if (!user) return interaction.reply({
         ephemeral: true,
-        content: 'Please send some messages before I can show you some data'
+        content: localize('levels', 'please-send-a-message')
     });
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
     interaction.reply({
         ephemeral: true,
-        content: `Hi, ${interaction.user.username}, you are currently on **Level ${user.level}** with **${user.xp}**/${nextLevelXp} **XP**. Learn more with \`/profile\`.`
+        content: localize('levels', 'leaderboard-button-answer', {name: interaction.user.username, l: user.level, ux: user.xp, nx: nextLevelXp})
     });
 };

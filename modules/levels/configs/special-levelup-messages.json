@@ -1,12 +1,20 @@
 {
   "filename": "special-levelup-messages.json",
+  "humanname-de": "Bestimmte Nachrichten",
+  "humanname-en": "Selected messages",
+  "description-en": "If enabled, the bot will randomly select a message from here",
+  "description-de": "Wenn aktiviert, wird der Bot zufällige eine Nachricht von hier auswählen",
   "configElements": true,
   "content": [
     {
       "field_name": "level",
       "default": "",
       "type": "integer",
-      "description": "Level at which this messages should get send"
+      "description": "Level at which this messages should get send",
+      "humanname-de": "Level",
+      "description-de": "Level, bei welchem diese Nachricht gesendet werden soll",
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "message",
@@ -27,7 +35,24 @@
           "name": "%role%",
           "description": "Mention of the role (No ping, only if level has reward)"
         }
-      ]
+      ],
+      "humanname-de": "Nachricht",
+      "description-de": "Nachricht, die gesendet werden soll",
+      "params-de": [
+        {
+          "name": "%mention%",
+          "description": "Erwähnung des Nutzers"
+        },
+        {
+          "name": "%newLevel%",
+          "description": "Neues Level des Nutzers"
+        },
+        {
+          "name": "%role%",
+          "description": "Erwähnung der Rolle (Kein \"Ping\", nur, wenn das Level eine Belohnung hat)"
+        }
+      ],
+      "default-de": {}
     }
   ]
 }
