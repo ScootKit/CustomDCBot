@@ -7,98 +7,142 @@
   "content": [
     {
       "field_name": "startMoney",
+      "humanname-en": "Start Money",
+      "humanname-de": "Start Geld",
       "default": 100,
       "type": "integer",
-      "description": "The amount of money that is given to a new user"
+      "description-en": "The amount of money that is given to a new user",
+      "description-de": "Das Geld, welches einem neuen Benutzer gegeben wird"
     },
     {
       "field_name": "shopManagers",
+      "humanname-en": "shop-managers",
+      "humanname-de": "Shop-Verwaltung",
       "default": [],
       "type": "array",
       "content": "integer",
-      "description": "The Ids of the shop managers (Bot Operators have this permission always)",
-      "allowEmbed": false
+      "description-en": "The Ids of the shop managers (Bot Operators have this permission always)",
+      "description-de": "Die Benutzer-IDs der Shopverwaltung (Bot-Operatoren haben immer diese Berechtigung)"
     },
     {
       "field_name": "currencyName",
+      "humanname-en": "currency name",
+      "humanname-de": "Währungsbezeichnung",
       "default": "",
       "type": "string",
-      "description": "The name of the currency",
+      "description-en": "The name of the currency",
+      "description-de": "Der Name der Währung",
       "allowEmbed": false
     },
     {
       "field_name": "currencySymbol",
+      "humanname-en": "Symbol of the currency",
+      "humanname-de": "Symbol der Währung",
       "default": "\uD83D\uDCB0",
       "type": "string",
-      "description": "The symbol of the currency",
+      "description-en": "The symbol of the currency",
+      "description-de": "Das Symbol der Währung",
       "allowEmbed": false
     },
     {
       "field_name": "maxWorkMoney",
+      "humanname-en": "max work money",
+      "humanname-de": "Maximaler Arbeits Lohn",
       "default": 100,
       "type": "integer",
-      "description-en": "The highest amount of money you can get for working"
+      "description-en": "The highest amount of money you can get for working",
+      "description-de": "Der höchte Betrag, den man fürs Arbeiten bekommen kann"
     },
     {
       "field_name": "minWorkMoney",
+      "humanname-en": "min work money",
+      "humanname-de": "Mainimaler Arbeits Lohn",
       "default": 20,
       "type": "integer",
-      "description": "The lowest amount of money you can get for working"
+      "description-en": "The lowest amount of money you can get for working",
+      "description-de": "Der niedrigste Betrag, den man fürs Arbeiten bekommen kann"
     },
     {
       "field_name": "workCooldown",
+      "humanname-en": "work cooldown",
+      "humanname-de": "Arbeits Cooldown",
       "default": 20,
       "type": "integer",
-      "description": "The amount of time a user needs to wait util they can use the work command again (in minutes)"
+      "description-en": "The amount of time a user needs to wait util they can use the work command again (in minutes)",
+      "description-de": "Die Dauer, die Benutzer*innen warten müssen, bevor der Arbeits-Command wieder ausgeführt werden kann (in Minuten)"
     },
     {
       "field_name": "maxCrimeMoney",
-      "default": 200,
+      "humanname-en": "max crime money",
+      "humanname-de": "Maximales Verbrechens Geld",
+      "default": 1000,
       "type": "integer",
-      "description": "The highest amount of money you can get for crime"
+      "description-en": "The highest amount of money you can get for crime",
+      "description-de": "Das maximale Geld, was man dafür bekommen kann, ein Verbrechen zu begehen"
     },
     {
       "field_name": "minCrimeMoney",
-      "default": 30,
+      "humanname-en": "min crime money",
+      "humanname-de": "Minimales Verbrechens Geld",
+      "default": 100,
       "type": "integer",
-      "description": "The lowest amount of money you can get for crime"
+      "description-en": "The lowest amount of money you can get for crime",
+      "description-de": "Das minimale Geld, was man dafür bekommen kann, ein Verbrechen zu begehen"
     },
     {
       "field_name": "crimeCooldown",
+      "humanname-en":"crime cooldown",
+      "humanname-de": "Verbrechens Cooldown",
       "default": 30,
       "type": "integer",
-      "description": "The amount of time a user needs to wait util they can use the crime command again (in minutes)"
+      "description-en": "The amount of time a user needs to wait util they can use the crime command again (in minutes)",
+      "description-de": "Die Dauer, die Benutzer*innen warten müssen, bevor der Verbrechens-Command wieder ausgeführt werden kann (in Minuten)"
     },
     {
       "field_name": "maxRobAmount",
+      "humanname-en": "max rob amount",
+      "humanname-de": "Maximale Raub Beute",
       "default": 400,
       "type": "integer",
-      "description": "The highest amount of money that a user can rob"
+      "description-en": "The highest amount of money that a user can rob",
+      "description-de": "Das maximale Geld, was man durch Rauben bekommen kann"
     },
     {
       "field_name": "robPercent",
+      "humanname-en": "rob percent",
+      "humanname-de": "Raub Prozent",
       "default": 10,
       "type": "integer",
-      "description": "The amount that can get robed in percent"
+      "description-en": "The amount that can get robed in percent",
+      "description-de": "Das maximale Geld, was bei einem Raub erbeutet werden kann, in Prozent"
     },
     {
       "field_name": "robCooldown",
+      "humanname-en": "rob cooldown",
+      "humanname-de": "Raub Cooldown",
       "default": 60,
       "type": "integer",
-      "description": "The amount of time a user needs to wait util they can use the rob command again (in minutes)"
+      "description-en": "The amount of time a user needs to wait util they can use the rob command again (in minutes)",
+      "description-de": "Die Zeit die Benutzer warten müssen, bis sie den Raub-Command nochmal ausführen können (in Minuten)"
     },
     {
       "field_name": "leaderboardChannel",
+      "humanname-en": "leaderboard-channel",
+      "humanname-de": "Leaderboard-Kanal",
       "default": "",
       "type": "channelID",
-      "description": "The ID if the channel for the leaderboard. On this leaderboard everyone can see who has the most money."
+      "description-en": "The ID if the channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
+      "description-de": "Die ID des Kanals für das Leaderboard. Hier kann jeder sehen, wer das meiste Geld hat"
     },
     {
       "field_name": "admins",
+      "humanname-en": "Administrators",
+      "humanname-de": "Administartoren",
       "default": [],
       "type": "array",
       "content": "integer",
-      "description": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
+      "description-en": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
+      "description-de": "Benuter*innen die Admin only Aktionen ausführen können, wie z.B. die Balance von Benutzern ändern (Bot-Operatoren haben immer diese Berrechtigung)",
       "allowEmbed": false
     },
     {

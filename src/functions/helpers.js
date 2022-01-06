@@ -5,7 +5,6 @@
 
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('./localize');
-const {client} = require('../../main');
 
 /**
  * Will loop asynchrony through every object in the array
@@ -341,3 +340,24 @@ async function unlockChannel(channel, reason = localize('main', 'channel-unlock'
 
 module.exports.lockChannel = lockChannel;
 module.exports.unlockChannel = unlockChannel;
+
+/**
+ * Function to migrate Database models
+ * @param {string} module Name of the Module
+ * @param {string} oldModel Name of the old Model
+ * @param {string} newModel Name of the new Model
+ * @param {Client} client Client
+ * @returns {Promise<void>}
+ * @author jateute
+ */
+async function migrate(module, oldModel, newModel, client) {
+    client.logger.debug(`Starting migrating the model ${oldModel} by the module ${module}. Please don't stop the Bot`);
+    const old = client.models[module][oldModel].findAll();
+    old.forEach(async (model) => {
+        client.models[module][newModel].create(model.dataValues);
+        // await model.destroy();
+    });
+    client.logger.debug(`Successfully migrated the model ${oldModel} into the new model ${newModel}`);
+}
+
+module.exports.migrate = migrate;
