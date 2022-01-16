@@ -10,6 +10,7 @@ module.exports.run = async function (client, message) {
     const config = client.configurations['economy-system']['config'];
 
     if (config['messageDrops'] === 0) return;
+    if (config['msgDropsIgnoredChannels'].includes(message.channel.id)) return;
     if (Math.floor(Math.random() * config['messageDrops']) !== 1) return;
     const toAdd = Math.floor(Math.random() * (config['messageDropsMax'] - config['messageDropsMin'])) + config['messageDropsMin'];
     await balance(client, message.author.id, 'add', toAdd);

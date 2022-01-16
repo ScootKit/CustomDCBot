@@ -351,13 +351,16 @@ module.exports.unlockChannel = unlockChannel;
  * @author jateute
  */
 async function migrate(module, oldModel, newModel, client) {
-    client.logger.debug(`Starting migrating the model ${oldModel} by the module ${module}. Please don't stop the Bot`);
-    const old = client.models[module][oldModel].findAll();
-    old.forEach(async (model) => {
-        client.models[module][newModel].create(model.dataValues);
-        // await model.destroy();
+    const old = await client.models[module][oldModel].findAll();
+    if (old.length === 0) return;
+    client.logger.info(localize('main', 'migrate-start', {o: oldModel, m: module}));
+    await old.forEach(async (model) => {
+        delete model.dataValues.updatedAt;
+        delete model.dataValues.createdAt;
+        await client.models[module][newModel].create(model.dataValues);
+        await model.destroy();
     });
-    client.logger.debug(`Successfully migrated the model ${oldModel} into the new model ${newModel}`);
+    client.logger.info(localize('main', 'migrate-success', {o: oldModel, n: newModel}));
 }
 
 module.exports.migrate = migrate;

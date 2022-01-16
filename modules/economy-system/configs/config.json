@@ -158,6 +158,16 @@
       "description": "Allow admins to edit their own balance (for a fair system not recommended! DON'T DO THIS!!!!!)"
     },
     {
+      "field_name": "msgDropsIgnoredChannels",
+      "humanname-en": "message-drops ignored channels",
+      "humanname-de": "Ignorierte Message-Drop Kanäle",
+      "default": [],
+      "type": "array",
+      "content": "string",
+      "description-en": "List of Channels where Users can't get message-drops",
+      "description-de": "Liste an Kanälen, in denen Benutzer keine Message-Drops bekommen können"
+    },
+    {
       "field_name": "messageDrops",
       "default": 25,
       "type": "integer",

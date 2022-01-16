@@ -1,4 +1,4 @@
-const {balance, createShopItem, deleteShopItem} = require('../economy-system/economy-system');
+const {editBalance, createShopItem, deleteShopItem} = require('../economy-system/economy-system');
 
 module.exports.commands = [
     {
@@ -8,7 +8,7 @@ module.exports.commands = [
             const client = input.client;
             const args = input.args;
             if (!client.configurations['economy-system']['config']['allowCheats']) return console.log('This command isn`t activated.');
-            balance(client, args[1], 'add', parseInt(args[2]));
+            editBalance(client, args[1], 'add', parseInt(args[2]));
             client.logger.debug(`Receved CLI Command: ${input}`);
             client.logger.info(`[economy-system] ${args[2]} has been added to the balance of the user ${args[1]}`);
             if (client.logChannel) client.logChannel.send(`[economy-system] ${args[2]} has been added to the balance of the user ${args[1]}`);
@@ -21,7 +21,7 @@ module.exports.commands = [
             const client = input.client;
             const args = input.args;
             if (!client.configurations['economy-system']['config']['allowCheats']) return console.log('This command isn`t activated.');
-            balance(client, args[1], 'remove', parseInt(args[2]));
+            editBalance(client, args[1], 'remove', parseInt(args[2]));
             client.logger.debug(`Receved CLI Command: ${input}`);
             client.logger.info(`[economy-system] ${args[2]} has been removed from the balance of the user ${args[1]}`);
             if (client.logChannel) client.logChannel.send(`[economy-system] ${args[2]} has been removed from the balance of the user ${args[1]}`);
@@ -34,7 +34,7 @@ module.exports.commands = [
             const client = input.client;
             const args = input.args;
             if (!client.configurations['economy-system']['config']['allowCheats']) return console.log('This command isn`t activated.');
-            balance(client, args[1], 'set', parseInt(args[2]));
+            editBalance(client, args[1], 'set', parseInt(args[2]));
             client.logger.debug(`Receved CLI Command: ${input}`);
             client.logger.info(`[economy-system] The balance of the user ${args[1]} has been set to ${args[2]}`);
             if (client.logChannel) client.logChannel.send(`[economy-system] The balance of the user ${args[1]} has been set to ${args[2]}`);
@@ -44,7 +44,7 @@ module.exports.commands = [
         command: 'balance',
         description: 'Show all balances from the DataBase',
         run: async function (input) {
-            const balances = await input.client.models['economy-system']['Balance'].findAll();
+            const balances = await input.client.models['economy-system']['NewBalance'].findAll();
             const balanceArr = [];
             if (balances.length !== 0) {
                 balances.sort(function (x, y) {

@@ -41,7 +41,7 @@ module.exports.subcommands = {
                 ephemeral: true
             });
         }
-        const user = await interaction.client.models['economy-system']['Balance'].findOne({
+        const user = await interaction.client.models['economy-system']['NewBalance'].findOne({
             where: {
                 id: interaction.user.id
             }

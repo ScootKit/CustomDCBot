@@ -1,6 +1,6 @@
 const {DataTypes, Model} = require('sequelize');
 
-module.exports = class EconomyUser extends Model {
+module.exports = class NewEconomyUser extends Model {
     static init(sequelize) {
         return super.init({
             id: {
@@ -10,7 +10,7 @@ module.exports = class EconomyUser extends Model {
             balance: DataTypes.INTEGER,
             bank: DataTypes.INTEGER
         }, {
-            tableName: 'economy_user',
+            tableName: 'balance',
             timestamps: true,
             sequelize
         });
