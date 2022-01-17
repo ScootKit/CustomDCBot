@@ -1,5 +1,5 @@
 const {editBalance, editBank, createleaderboard} = require('../economy-system');
-const {embedType, randomIntFromInterval} = require('../../../src/functions/helpers');
+const {embedType, randomIntFromInterval, randomElementFromArray} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.beforeSubcommand = async function (interaction) {
@@ -46,23 +46,36 @@ module.exports.subcommands = {
         if (!await cooldown('work', interaction.config['workCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
         const moneyToAdd = randomIntFromInterval(parseInt(interaction.config['maxWorkMoney']), parseInt(interaction.config['minWorkMoney']));
         await editBalance(interaction.client, interaction.user.id, 'add', moneyToAdd);
-        interaction.reply(embedType(interaction.str['workSuccess'], {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
+        interaction.reply(embedType(randomElementFromArray(interaction.str['workSuccess']), {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
         createleaderboard(interaction.client);
         interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'work-earned-money', {u: interaction.user.tag, m: moneyToAdd, c: interaction.config['currencySymbol']}));
         if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'work-earned-money', {u: interaction.user.tag, m: moneyToAdd, c: interaction.config['currencySymbol']}));
     },
     'crime': async function (interaction) {
         if (!await cooldown('crime', interaction.config['crimeCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, { ephemeral: true }));
-        const moneyToAdd = randomIntFromInterval(parseInt(interaction.config['maxCrimeMoney']), parseInt(interaction.config['minCrimeMoney']));
-        await editBalance(interaction.client, interaction.user.id, 'add', moneyToAdd);
-        interaction.reply(embedType(interaction.str['crimeSuccess'], {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
-        createleaderboard(interaction.client);
-        interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {u: interaction.user.tag, m: moneyToAdd, c: interaction.config['currencySymbol']}));
-        if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-earned-money', {u: interaction.user.tag, m: moneyToAdd, c: interaction.config['currencySymbol']}));
+        if (Math.floor(Math.random() * 2) === 0) {
+            const user = await interaction.client.models['economy-system']['Balance'].findOne({
+                where: {
+                    id: interaction.user.id
+                }
+            });
+            money = user.balance / 2;
+            await editBalance(interaction.client, interaction.user.id, 'remove', money);
+            interaction.reply(embedType(randomElementFromArray(interaction.str['crimeFail']), {'%loose%': `${money} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
+            interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-loose-money', {u: interaction.user.tag, m: money, c: interaction.config['currencySymbol']}));
+            if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-loose-money', {u: interaction.user.tag, m: money, c: interaction.config['currencySymbol']}));
+        } else {
+            const money = randomIntFromInterval(parseInt(interaction.config['maxCrimeMoney']), parseInt(interaction.config['minCrimeMoney']));
+            await editBalance(interaction.client, interaction.user.id, 'add', money);
+            interaction.reply(embedType(randomElementFromArray(interaction.str['crimeSuccess']), {'%earned%': `${money} ${interaction.config['currencySymbol']}`}, { ephemeral: true }));
+            createleaderboard(interaction.client);
+            interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {u: interaction.user.tag, m: money, c: interaction.config['currencySymbol']}));
+            if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-earned-money', {u: interaction.user.tag, m: money, c: interaction.config['currencySymbol']}));
+        }
     },
     'rob': async function (interaction) {
         const user = await interaction.options.getUser('user');
-        const robbedUser = await interaction.client.models['economy-system']['NewBalance'].findOne({
+        const robbedUser = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: user.id
             }
@@ -147,7 +160,7 @@ module.exports.subcommands = {
     'balance': async function (interaction) {
         let user = interaction.options.getUser('user');
         if (!user) user = interaction.user;
-        const balanceV = await interaction.client.models['economy-system']['NewBalance'].findOne({
+        const balanceV = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: user.id
             }
@@ -157,7 +170,7 @@ module.exports.subcommands = {
     },
     'deposit': async function (interaction) {
         let amount = interaction.options.get('amount')['value'];
-        const user = await interaction.client.models['economy-system']['NewBalance'].findOne({
+        const user = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: interaction.user.id
             }
@@ -169,7 +182,7 @@ module.exports.subcommands = {
     },
     'withdraw': async function (interaction) {
         let amount = interaction.options.get('amount')['value'];
-        const user = await interaction.client.models['economy-system']['NewBalance'].findOne({
+        const user = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: interaction.user.id
             }
@@ -233,7 +246,7 @@ module.exports.subcommands = {
                 await element.destroy();
             });
         }
-        const userModels = await interaction.client.models['economy-system']['NewBalance'].findAll();
+        const userModels = await interaction.client.models['economy-system']['Balance'].findAll();
         if (userModels.length !== 0) {
             userModels.forEach(async (element) => {
                 await element.destroy();

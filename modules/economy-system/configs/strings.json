@@ -7,8 +7,8 @@
   "content": [
     {
       "field_name": "notFound",
-      "humanname-en": "not found",
-      "humanname-de": "Nicht Gefunden",
+      "humanname-en": "not found message",
+      "humanname-de": "Nicht gefunden Nachricht",
       "default-en": "This item could not be found",
       "default-de": "Dieses Item konnte nicht gefunden werden",
       "type": "string",
@@ -56,10 +56,11 @@
     },
     {
       "field_name": "workSuccess",
-      "type": "string",
+      "type": "array",
+      "content": "string",
       "allowEmbed": true,
-      "description": "This message gets send when a user works successfully",
-      "default": "You worked and earned **%earned%**",
+      "description": "Array of messages from which one random gets send when a user works successfully",
+      "default": ["You worked and earned **%earned%**"],
       "params": [
         {
           "name": "%earned%",
@@ -69,14 +70,29 @@
     },
     {
       "field_name": "crimeSuccess",
-      "type": "string",
+      "type": "array",
+      "content": "string",
       "allowEmbed": true,
-      "description": "This message gets send when a user commits a crime successfully",
-      "default": "You are criminal and earned **%earned%**",
+      "description": "Array of messages from which one random gets send when a user commits a crime successfully",
+      "default": ["You stole a wallet and earned **%earned%**"],
       "params": [
         {
           "name": "%earned%",
           "description": "Money that the user had earned"
+        }
+      ]
+    },
+    {
+      "field_name": "crimeFail",
+      "type": "array",
+      "content": "string",
+      "allowEmbed": true,
+      "description": "Array of messages from which one random gets send when a user fails to do some crime",
+      "default": ["You've stolen a wallet and get caught.You loose **%loose%**"],
+      "params": [
+        {
+          "name": "%loose%",
+          "description": "Money that the user looses"
         }
       ]
     },

@@ -18,6 +18,6 @@ module.exports = class NewEconomyUser extends Model {
 };
 
 module.exports.config = {
-    'name': 'NewBalance',
+    'name': 'Balance',
     'module': 'economy-system'
 };

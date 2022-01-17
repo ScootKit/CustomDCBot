@@ -27,8 +27,8 @@
       "channel-lock": "Locked channel",
       "channel-unlock": "Unlocked channel",
       "channel-unlock-data-not-found": "Unlocking channel with ID %c failed because it was never locked (which is weird to beginn with).",
-      "migrate-start": "Starting migrating the model %o by the module %m. Please don't stop the Bot",
-      "migrate-success": "Successfully migrated the model %o into the new model %n"
+      "migrate-start": "Starting migration of the model %o to the model %m. Please don't stop the Bot",
+      "migrate-success": "Successfully migrated the model %o into the new model %m"
     },
     "reload": {
       "reloading-config": "Reloading configuration...",
@@ -295,6 +295,7 @@
     "economy-system": {
       "work-earned-money": "The user %u gained %m %c by working",
       "crime-earned-money": "The user %u gained %m %c by committing a crime",
+      "crime-loose-money": "The user %u loosed %m %c by failing to do crime",
       "message-drop-earned-money": "The user %u gained %m %c by getting a message drop",
       "rob-earned-money": "The user %u gained %m %c by robbing from %v",
       "weekly-earned-money": "The user %u gained %m %c by cashing in their weekly reward",

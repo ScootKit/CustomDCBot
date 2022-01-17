@@ -15,7 +15,7 @@ const {localize} = require('../../src/functions/localize');
  */
 async function createUser(client, id) {
     const moduleConfig = client.configurations['economy-system']['config'];
-    client.models['economy-system']['NewBalance'].create({
+    client.models['economy-system']['Balance'].create({
         id: id,
         balance: 0,
         bank: moduleConfig['startMoney']
@@ -31,14 +31,14 @@ async function createUser(client, id) {
  * @returns {Promise<void>}
  */
 async function editBalance(client, id, action, value) {
-    let user = await client.models['economy-system']['NewBalance'].findOne({
+    let user = await client.models['economy-system']['Balance'].findOne({
         where: {
             id: id
         }
     });
     if (!user) {
         await createUser(client, id);
-        user = await client.models['economy-system']['NewBalance'].findOne({
+        user = await client.models['economy-system']['Balance'].findOne({
             where: {
                 id: id
             }
@@ -82,14 +82,14 @@ async function editBalance(client, id, action, value) {
  * @returns {Promise<void>}
  */
 async function editBank(client, id, action, value) {
-    let user = await client.models['economy-system']['NewBalance'].findOne({
+    let user = await client.models['economy-system']['Balance'].findOne({
         where: {
             id: id
         }
     });
     if (!user) {
         await createUser(client, id);
-        user = await client.models['economy-system']['NewBalance'].findOne({
+        user = await client.models['economy-system']['Balance'].findOne({
             where: {
                 id: id
             }
@@ -220,7 +220,7 @@ async function leaderboard(client) {
     });
     if (!channel) return client.logger.fatal(`[economy-system] ` + localize('economy-system', 'channel-not-found'));
 
-    const model = await client.models['economy-system']['NewBalance'].findAll();
+    const model = await client.models['economy-system']['Balance'].findAll();
 
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
 

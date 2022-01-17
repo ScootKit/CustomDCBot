@@ -353,14 +353,14 @@ module.exports.unlockChannel = unlockChannel;
 async function migrate(module, oldModel, newModel, client) {
     const old = await client.models[module][oldModel].findAll();
     if (old.length === 0) return;
-    client.logger.info(localize('main', 'migrate-start', {o: oldModel, m: module}));
+    client.logger.info(localize('main', 'migrate-start', {o: oldModel, m: newModel}));
     await old.forEach(async (model) => {
         delete model.dataValues.updatedAt;
         delete model.dataValues.createdAt;
         await client.models[module][newModel].create(model.dataValues);
         await model.destroy();
     });
-    client.logger.info(localize('main', 'migrate-success', {o: oldModel, n: newModel}));
+    client.logger.info(localize('main', 'migrate-success', {o: oldModel, m: newModel}));
 }
 
 module.exports.migrate = migrate;
