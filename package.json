@@ -1,6 +1,6 @@
 {
   "name": "customdcbot",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Create your own discord bot - Fully customizable and with a lot of features",
   "main": "main.js",
   "repository": {
@@ -19,21 +19,25 @@
   "funding": "https://github.com/SCNetwork/CustomDCBot?sponsor=1",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@androz2091/discord-invites-tracker": "^1.1.0",
     "@scnetwork/api": "^1.0.0",
     "age-calculator": "^1.0.0",
-    "bufferutil": "^4.0.3",
+    "bs58": "^4.0.1",
+    "bufferutil": "^4.0.5",
     "centra": "^2.5.0",
-    "discord.js": "^13.1.0",
+    "discord.js": "^13.5.0",
+    "erlpack": "github:discord/erlpack",
     "fs-extra": "^9.1.0",
     "jsonfile": "^6.1.0",
     "log4js": "^6.3.0",
     "node-schedule": "^2.0.0",
     "parse-duration": "^1.0.0",
-    "sequelize": "^6.6.5",
-    "sqlite3": "^4.2.0",
-    "twitch": "^4.6.5",
-    "twitch-auth": "^4.6.5",
-    "utf-8-validate": "^5.0.5"
+    "sequelize": "^6.12.4",
+    "sqlite3": "^5.0.2",
+    "twitch": "^4.6.7",
+    "twitch-auth": "^4.6.7",
+    "utf-8-validate": "^5.0.7",
+    "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
     "@pixi/jsdoc-template": "^2.6.0",

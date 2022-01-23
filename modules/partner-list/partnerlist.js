@@ -4,6 +4,7 @@
  * @author Simon Csaba <mail@scderox.de>
  */
 const {MessageEmbed} = require('discord.js');
+const {localize} = require('../../src/functions/localize');
 
 /**
  * Generate the partner-list embed
@@ -14,7 +15,7 @@ async function generatePartnerList(client) {
     const moduleConf = client.configurations['partner-list']['config'];
     const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
-    if (!channel) return console.error(`[Partner-List] Could not find channel with ID ${moduleConf['channelID']}.`);
+    if (!channel) return client.logger.error('[Partner-List] ' + localize('partner-list', 'channel-not-found', {c: moduleConf['channelID']}));
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     const partners = await client.models['partner-list']['Partner'].findAll({});
     const sortedByCategory = {};
@@ -45,7 +46,7 @@ async function generatePartnerList(client) {
         embed.addField(category, string.length >= 1020 ? string.substr(0, 1020) + '...' : string);
     }
 
-    if (partners.length === 0) embed.addField('ℹ Information', 'There are currently no partners. This is odd, but that\'s how it is ¯\\_(ツ)_/¯\n\nTo add a partner, run `/partner add` as a slash-command.');
+    if (partners.length === 0) embed.addField('ℹ ' + localize('partner-list', 'information'), localize('partner-list', 'no-partners'));
 
     if (messages.last()) await messages.last().edit({embeds: [embed]});
     else channel.send({embeds: [embed]});

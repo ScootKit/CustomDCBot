@@ -1,4 +1,5 @@
 const {embedType} = require('../../../src/functions/helpers');
+const {localize} = require('../../../src/functions/localize');
 
 const cooldown = new Set();
 
@@ -16,7 +17,7 @@ exports.run = async (client, oldState, newState) => {
     if (cooldown.has(member.user.id)) return;
 
     const notifyChannel = newState.guild.channels.cache.get(configElement['notify_channel_id']);
-    if (!notifyChannel) return client.logger.error(`[ping-on-vc-join] Notify channel not found`);
+    if (!notifyChannel) return client.logger.error(`[ping-on-vc-join] ` + localize('ping-on-vc-join', 'channel-bot-found', {c: configElement['notify_channel_id']}));
 
     setTimeout(async () => { // Wait 3 seconds before pinging a role
         if (!member.voice) return;
@@ -36,7 +37,7 @@ exports.run = async (client, oldState, newState) => {
             await member.send(embedType(configElement['pn_message'], {
                 '%vc%': channel.name
             })).catch(() => {
-                client.logger.info(`[ping-on-vc-join] Could not send PN to ${member.user.id}`);
+                client.logger.info(`[ping-on-vc-join] ` + localize('ping-on-vc-join', 'could-not-send-pn', {m: member.user.id}));
             });
         }
     }, 3000);

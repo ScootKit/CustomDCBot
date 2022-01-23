@@ -4,7 +4,8 @@
  */
 
 const {MessageEmbed} = require('discord.js');
-const centra = require('centra');
+const {localize} = require('./localize');
+const {client} = require('../../main');
 
 /**
  * Will loop asynchrony through every object in the array
@@ -20,18 +21,24 @@ module.exports.asyncForEach = async function (array, callback) {
 
 /**
  *
- * @param inputArray Array of user or role IDs
- * @param type [ApplicationCommandPermissionType](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissionType)
- * @param array Base-Array
+ * @param {Array} inputArray Array of user or role IDs
+ * @param {String} type [ApplicationCommandPermissionType](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissionType)
+ * @param {Array} array Base-Array
+ * @param {Boolean} skipOwnerAdding If enabled, the bot won't add the guild owner as allowed user
  * @returns {array} [ApplicationCommandPermissionType](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions)
  */
-module.exports.arrayToApplicationCommandPermissions = function (inputArray, type, array = []) {
+module.exports.arrayToApplicationCommandPermissions = function (inputArray, type, array = [], skipOwnerAdding = false) {
     inputArray.forEach((id) => {
         array.push({
             type: type,
             permission: true,
             id
         });
+    });
+    if (!skipOwnerAdding) array.push({
+        type: 'USER',
+        permission: true,
+        id: client.guild.ownerId
     });
     return array;
 };
@@ -64,24 +71,25 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
         optionsToKeep.content = inputReplacer(args, input);
         return optionsToKeep;
     }
-    const {client} = require('../../main');
-    const emb = new MessageEmbed();
-    emb.setTitle(inputReplacer(args, input['title']));
-    if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
-    if (input['color']) emb.setColor(input['color']);
-    if (input['url']) emb.setURL(input['url']);
-    if (input['image']) emb.setImage(inputReplacer(args, input['image']));
-    if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
-    if (input['author'] && typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), inputReplacer(args, input['author']['img']));
-    if (typeof input['fields'] === 'object') {
-        input.fields.forEach(f => {
-            emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);
-        });
+    if (!input.skipEmbed) {
+        const emb = new MessageEmbed();
+        emb.setTitle(inputReplacer(args, input['title']));
+        if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
+        if (input['color']) emb.setColor(input['color']);
+        if (input['url']) emb.setURL(input['url']);
+        if (input['image']) emb.setImage(inputReplacer(args, input['image']));
+        if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
+        if (input['author'] && typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), inputReplacer(args, input['author']['img']));
+        if (typeof input['fields'] === 'object') {
+            input.fields.forEach(f => {
+                emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);
+            });
+        }
+        emb.setTimestamp();
+        emb.setFooter(input.footer ? inputReplacer(args, input.footer) : client.strings.footer, (input.footerImgUrl || client.strings.footerImgUrl));
+        optionsToKeep.embeds = [emb];
     }
-    emb.setTimestamp();
-    emb.setFooter(input.footer ? inputReplacer(args, input.footer) : client.strings.footer);
-    optionsToKeep.content = inputReplacer(args, input['message']);
-    optionsToKeep.embeds = [emb];
+    if (input['message']) optionsToKeep.content = inputReplacer(args, input['message']);
     return optionsToKeep;
 };
 
@@ -94,7 +102,13 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
 function formatDate(date) {
     const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString(),
         hh = date.getHours().toString(), min = date.getMinutes().toString();
-    return `${(dd[1] ? dd : '0' + dd[0])}.${(mm[1] ? mm : '0' + mm[0])}.${yyyy} at ${(hh[1] ? hh : '0' + hh[0])}:${(min[1] ? min : '0' + min[0])}`;
+    return localize('helpers', 'timestamp', {
+        dd: dd[1] ? dd : '0' + dd[0],
+        mm: mm[1] ? mm : '0' + mm[0],
+        yyyy,
+        hh: hh[1] ? hh : '0' + hh[0],
+        min: min[1] ? min : '0' + min[0]
+    });
 }
 
 module.exports.formatDate = formatDate;
@@ -156,7 +170,7 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
     c.on('collect', async (interaction) => {
         if (!allowedUserIDs.includes(interaction.user.id)) return interaction.reply({
             ephemeral: true,
-            content: `:warning: You did not run this command. If you want to use the buttons, try running the command yourself.`
+            content: '⚠ ' + localize('helpers', 'you-did-not-run-this-command')
         });
         let nextSite = currentSite + 1;
         if (interaction.customId === 'back') nextSite = currentSite - 1;
@@ -182,10 +196,10 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
      */
     function getButtons(site, disabled = false) {
         const btns = [];
-        if (site !== 1) btns.push({type: 'BUTTON', label: '◀ Back', customId: 'back', style: 'PRIMARY', disabled});
+        if (site !== 1) btns.push({type: 'BUTTON', label: '◀ ' + localize('helpers', 'back'), customId: 'back', style: 'PRIMARY', disabled});
         if (site !== sites.length) btns.push({
             type: 'BUTTON',
-            label: 'Next ▶',
+            label: localize('helpers', 'next') + ' ▶',
             customId: 'next',
             style: 'PRIMARY',
             disabled
@@ -221,37 +235,9 @@ module.exports.compareArrays = compareArrays;
 
 /**
  * Check if a new version of CustomDCBot is available in the main branch on github
- * @param client The Client
  * @returns {Promise<void>}
  */
-async function checkForUpdates(client) {
-    const res = await centra('https://raw.githubusercontent.com/SCNetwork/CustomDCBot/main/package.json', 'GET').send();
-    if (res.statusCode !== 200) {
-        if (client.logChannel) client.channel.send(`🔴 Error ${res.statusCode} when trying to fetch for new updates.`);
-        return client.logger.error('Could not check for updates');
-    }
-
-    try {
-        const remoteVersion = JSON.parse(res.body.toString()).version.split(',');
-        const localVersion = require('./../../package.json').version.split(',');
-
-        let newVersionType = null;
-
-        if (remoteVersion[2] > localVersion[2]) newVersionType = 'patch';
-        if (remoteVersion[1] > localVersion[1]) newVersionType = 'minor';
-        if (remoteVersion[0] > localVersion[0]) newVersionType = 'major';
-
-        if (remoteVersion[0] < localVersion[0]) newVersionType = null;
-        if (remoteVersion[1] < localVersion[1]) newVersionType = null;
-
-        if (newVersionType) {
-            if (client.logChannel) client.channel.send(`⚠️ A new ${newVersionType} version of CustomDCBot is available on GitHub (<https://github.com/SCNetwork/CustomDCBot>). Install it by executing \`git pull\` in the folder with the bot code.\n\nUpdating is highly recommendet as a new version may contain bug-fixes, new features and security-relevant fixes. However in some cases (if you changed code or added your module) the update could introduce breaking changes. Please always check the compaibity of the new version with your code-base before updating.`);
-            client.logger.warn(`⚠️ A new ${newVersionType} version of CustomDCBot is available on GitHub (<https://github.com/SCNetwork/CustomDCBot>). Install it by executing \`git pull\` in the folder with the bot code.\n\nUpdating is highly recommendet as a new version may contain bug-fixes, new features and security-relevant fixes. However in some cases (if you changed code or added your module) the update could introduce breaking changes. Please always check the compaibity of the new version with your code-base before updating.`);
-        } else client.logger.info('Your bot is up-to-date 🎉');
-    } catch (e) {
-        if (client.logChannel) client.channel.send(`🔴 Error ${e} when trying to fetch for new updates.`);
-        return client.logger.error('Could not check for updates');
-    }
+async function checkForUpdates() {
 }
 
 module.exports.checkForUpdates = checkForUpdates;
@@ -280,3 +266,78 @@ function randomElementFromArray(array) {
 }
 
 module.exports.randomElementFromArray = randomElementFromArray;
+
+/**
+ * Returns a string (progressbar) to visualize a progress in percentage
+ * @param {Number} percentage Percentage of progress
+ * @param {Number} length Length of the whole progressbar
+ * @return {string} Progressbar
+ */
+function renderProgressbar(percentage, length = 20) {
+    let s = '';
+    for (let i = 1; i <= length; i++) {
+        if (percentage >= 5 * i) s = s + '█';
+        else s = s + '░';
+    }
+    return s;
+}
+module.exports.renderProgressbar = renderProgressbar;
+
+/**
+ * Formats a Date to a discord timestamp
+ * @param {Date} date Date to convert
+ * @param {String} timeStampStyle [Timestamp Style](https://discord.com/developers/docs/reference#message-formatting-timestamp-styles) in which this timeStamp should be
+ * @return {string} Discord-Timestamp
+ */
+function dateToDiscordTimestamp(date, timeStampStyle = null) {
+    return `<t:${(date.getTime() / 1000).toFixed(0)}${timeStampStyle ? ':' + timeStampStyle : ''}>`;
+}
+module.exports.dateToDiscordTimestamp = dateToDiscordTimestamp;
+
+/**
+ * Locks a Guild-Channel for everyone except roles specified in allowedRoles
+ * @param {GuildChannel} channel Channel to lock
+ * @param {Array<Role>} allowedRoles Array of roles who can talk in the channel
+ * @param {String} reason Reason for the channel lock
+ * @return {Promise<void>}
+ */
+async function lockChannel(channel, allowedRoles = [], reason = localize('main', 'channel-lock')) {
+    const dup = await channel.client.models['ChannelLock'].findOne({where: {id: channel.id}});
+    if (dup) await dup.destroy();
+    await channel.client.models['ChannelLock'].create({
+        id: channel.id,
+        lockReason: reason,
+        permissions: Array.from(channel.permissionOverwrites.cache.values())
+    });
+
+    for (const overwrite of channel.permissionOverwrites.cache.filter(e => e.allow.has('SEND_MESSAGES')).values()) {
+        await overwrite.edit({
+            SEND_MESSAGES: false,
+            SEND_MESSAGES_IN_THREADS: false
+        }, reason);
+    }
+    await channel.permissionOverwrites.create(await channel.guild.roles.cache.find(r => r.name === '@everyone'), {
+        SEND_MESSAGES: false,
+        SEND_MESSAGES_IN_THREADS: false
+    }, {reason});
+    for (const roleID of allowedRoles) {
+        await channel.permissionOverwrites.create(roleID, {
+            SEND_MESSAGES: true
+        }, {reason});
+    }
+}
+
+/**
+ * Unlocks a previously locked channel
+ * @param {GuildChannel} channel Channel to unlock
+ * @param {String} reason Reason for this unlock
+ * @return {Promise<void>}
+ */
+async function unlockChannel(channel, reason = localize('main', 'channel-unlock')) {
+    const item = await channel.client.models['ChannelLock'].findOne({where: {id: channel.id}});
+    if (item && (item || {}).permissions) await channel.permissionOverwrites.set(item.permissions, reason);
+    else channel.client.logger.error(localize('main', 'channel-unlock-data-not-found', {c: channel.id}));
+}
+
+module.exports.lockChannel = lockChannel;
+module.exports.unlockChannel = unlockChannel;

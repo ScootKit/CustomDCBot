@@ -1,26 +1,27 @@
 const {reloadConfig} = require('../functions/configuration');
 const {syncCommandsIfNeeded} = require('../../main');
+const {localize} = require('../functions/localize');
 
 module.exports.run = async function (interaction) {
     await interaction.reply({
         ephemeral: true,
-        content: 'Reloading your configuration... This could take a while...'
+        content: localize('reload', 'reloading-config')
     });
-    if (interaction.client.logChannel) interaction.client.logChannel.send(`🔄 ${interaction.user.tag} is reloading the configuration...`);
+    if (interaction.client.logChannel) interaction.client.logChannel.send('🔄 ' + localize('reload', 'reloading-config-with-name', {tag: interaction.user.tag}));
     await reloadConfig(interaction.client).catch((async reason => {
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`⚠️ Configuration reloaded failed. Bot shutting down`);
-        await interaction.editReply({content: `**FAILED**\n\`\`\`${reason}\`\`\`\n**Please read your log to fnd more information**\nThe bot will kill itself now, bye :wave:`});
+        if (interaction.client.logChannel) interaction.client.logChannel.send('⚠️ ' + localize('reload', 'reload-failed'));
+        await interaction.editReply({content: localize('reload', 'reload-failed-message', {reason})});
         process.exit(1);
     })).then(async () => {
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`✅ Configuration reloaded successfully.`);
-        await interaction.editReply('Configuration reloaded successfully, syncing commands, to make sure permissions are up-to-date...');
+        if (interaction.client.logChannel) interaction.client.logChannel.send('✅ ' + localize('reload', 'reloaded-config'));
+        await interaction.editReply(localize('reload', 'reload-successful-syncing-commands'));
         await syncCommandsIfNeeded();
-        await interaction.editReply('Configuration reloaded successfully and synced commands successfully');
+        await interaction.editReply(localize('reload', 'reloaded-config'));
     });
 };
 
 module.exports.config = {
     name: 'reload',
-    description: 'Reloads the configuration',
+    description: localize('reload', 'command-description'),
     restricted: true
 };

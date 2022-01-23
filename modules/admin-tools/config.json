@@ -1,19 +1,27 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
   "content": [
     {
       "field_name": "admin_allowed_member_ids",
+      "humanname-en": "Allowed Members for the /admin-Command",
+      "humanname-de": "Erlaubte Nutzer für den /admin-Command",
       "default": [],
       "type": "array",
       "content": "integer",
-      "description": "Member-IDs who are allowed to use the /admin command"
+      "description-en": "Member-IDs who are allowed to use the /admin command",
+      "description-de": "Nutzer-IDs, die erlaubt sind /admin zu nutzen"
     },
     {
       "field_name": "stealemote_allowed_role_ids",
+      "humanname-en": "Allowed /stealemote-Roles",
+      "humanname-de": "Erlaubte Rollen für den /stealemote",
       "default": [],
       "type": "array",
       "content": "roleID",
-      "description": "Member-IDs who are allowed to use the /stealemote command"
+      "description-en": "Roles which are allowed to use the /stealemote command",
+      "description-de": "Rollen die /stealemote nutzen dürfen"
     }
   ]
 }

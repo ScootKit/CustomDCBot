@@ -4,6 +4,7 @@
  * @author Simon Csaba <mail@scderox.de>
  */
 const {MessageEmbed} = require('discord.js');
+const {localize} = require('../../src/functions/localize');
 let changed = false;
 
 /**
@@ -18,22 +19,23 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
     const moduleStrings = client.configurations['levels']['strings'];
     const channel = await client.channels.fetch(client.configurations['levels']['config']['leaderboard-channel']).catch(() => {
     });
-    if (!channel || channel.type !== 'GUILD_TEXT') return client.logger.error('[levels] Leaderboard-Channel not found or wrong type');
+    if (!channel || channel.type !== 'GUILD_TEXT') return client.logger.error('[levels] ' + localize('levels', 'leaderboard-channel-not-found'));
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
 
     const users = await client.models['levels']['User'].findAll({
         order: [
             ['xp', 'DESC']
         ],
-        limit: 25
+        limit: 15
     });
 
     let leaderboardString = '';
     let i = 0;
     for (const user of users) {
         i++;
-        leaderboardString = leaderboardString + `**${i}. <@${user.userID}>**: Level ${user.level} - ${user.xp} XP\n`;
+        leaderboardString = leaderboardString + localize('levels', 'leaderboard-notation', {p: i, ui: user.userID, l: user.level, xp: user.xp}) + '\n';
     }
+    if (leaderboardString.length === 0) leaderboardString = localize('levels', 'no-user-on-leaderboard');
 
     const embed = new MessageEmbed()
         .setTitle(moduleStrings.liveLeaderBoardEmbed.title)
@@ -41,7 +43,7 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
         .setColor(moduleStrings.liveLeaderBoardEmbed.color)
         .setFooter(client.strings.footer, client.strings.footerImgUrl)
         .setThumbnail(channel.guild.iconURL())
-        .addField('Leaderboard', leaderboardString)
+        .addField(localize('levels', 'leaderboard'), leaderboardString)
         .setTimestamp();
 
     const components = [{

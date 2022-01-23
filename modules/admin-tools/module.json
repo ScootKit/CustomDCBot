@@ -1,12 +1,15 @@
 {
   "name": "admin-tools",
+  "humanReadableName-en": "Admin-Tools",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Simple admin-tools to move channels and roles with a command.",
+  "description-en": "Simple admin-tools to move channels and roles with a command and to \"borrow\" emotes.",
+  "description-de": "Einfache Tools für Admins, um Channel und Rollen per Command zu verschieben und Emojis zu leihen.",
   "commands-dir": "/commands",
   "config-example-files": [
     "config.json"
-  ]
+  ],
+  "fa-icon": "fas fa-tools"
 }

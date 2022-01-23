@@ -1,13 +1,9 @@
-const {calculateUserEntries, checkRequirements, endGiveaway} = require('../giveaways');
+const {calculateUserEntries, checkRequirements} = require('../giveaways');
 const {embedType, formatDate} = require('../../../src/functions/helpers');
+const {localize} = require('../../../src/functions/localize');
 
 exports.run = async (client, interaction) => {
     if (!interaction.client.botReadyAt) return;
-    if (interaction.isSelectMenu()) {
-        if (interaction.customId !== 'end-giveaway') return;
-        await endGiveaway(interaction.values[0], null, true);
-        await interaction.update({content: 'Giveaway ended successfully.', components: []});
-    }
     if (!interaction.isButton()) return;
     if (interaction.customId !== 'giveaway') return;
     const moduleStrings = interaction.client.configurations['giveaways']['strings'];
@@ -62,11 +58,11 @@ exports.run = async (client, interaction) => {
         if (giveaway.requirements.length !== 0) {
             let requirementString = '';
             giveaway.requirements.forEach((r) => {
-                if (r.type === 'messages') requirementString = requirementString + `• Must have ${r.messageCount} new messages (check with \`/gmessages\`)\n`;
+                if (r.type === 'messages') requirementString = requirementString + `• ${localize('giveaways', 'required-message', {mc: r.messageCount})}\n`;
                 if (r.type === 'roles') {
                     let rolesString = ''; // Surely there is a better way to to this kind of stuff, but I am to stupid to find it
                     r.roles.forEach(rID => rolesString = rolesString + `<@&${rID}> `);
-                    requirementString = requirementString + `• Must have one of this roles to enter: ${rolesString}\n`;
+                    requirementString = rolesString + `• ${localize('giveaways', 'roles-required', {r: rolesString})}\n`;
                 }
             });
 
@@ -74,12 +70,12 @@ exports.run = async (client, interaction) => {
                 '%prize%': giveaway.prize,
                 '%winners%': giveaway.winnerCount,
                 '%requirements%': requirementString,
-                '%sponsorLink%': giveaway.sponsorWebsite || 'None',
+                '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
                 '%endAt%': formatDate(endAt),
                 '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
                 '%organiser%': `<@${giveaway.organiser}>`,
-                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : totalEntries,
-                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : enteredUsers.length
+                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : totalEntries,
+                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : enteredUsers.length
             }, {components}));
         } else {
             await interaction.message.edit(await embedType(moduleStrings['giveaway_message'], {
@@ -87,10 +83,10 @@ exports.run = async (client, interaction) => {
                 '%winners%': giveaway.winnerCount,
                 '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
                 '%endAt%': formatDate(endAt),
-                '%sponsorLink%': giveaway.sponsorWebsite || 'None',
+                '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
                 '%organiser%': `<@${giveaway.organiser}>`,
-                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : totalEntries,
-                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? 'Not supported for news-channels' : enteredUsers.length
+                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : totalEntries,
+                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : enteredUsers.length
             }, {components}));
         }
     }

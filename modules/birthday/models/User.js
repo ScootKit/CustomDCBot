@@ -19,7 +19,7 @@ module.exports = class BirthdayUser extends Model {
                 defaultValue: false
             }
         }, {
-            tableName: 'birthday_users',
+            tableName: 'birthday_usersV2',
             timestamps: true,
             sequelize
         });

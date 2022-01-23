@@ -1,10 +1,14 @@
 {
   "name": "auto-publisher",
+  "humanReadableName-en": "Automatic Publishing",
+  "humanReadableName-de": "Automatische Veröffentlichung",
+  "fa-icon": "fas fa-bullhorn",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Automatically publish messages in announcement-channels-",
+  "description-de": "Veröffentlicht Nachrichten in Ankündigungskanälen",
+  "description-en": "Publishes messages in announcement channels",
   "events-dir": "/events",
   "config-example-files": [
     "config.json"
