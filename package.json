@@ -29,7 +29,7 @@
     "erlpack": "github:discord/erlpack",
     "fs-extra": "^9.1.0",
     "jsonfile": "^6.1.0",
-    "log4js": "^6.3.0",
+    "log4js": "^6.4.0",
     "node-schedule": "^2.0.0",
     "parse-duration": "^1.0.0",
     "sequelize": "^6.12.4",
