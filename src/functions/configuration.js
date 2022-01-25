@@ -98,7 +98,7 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
             /**
              * Checks the content of a field
              * @param {Field<Object>} field Field-Object
-             * @param {*[]} configElement Current config element
+             * @param {Array} configElement Current config element
              * @returns {Promise<void|*>}
              */
             async function checkField(field, configElement) {
