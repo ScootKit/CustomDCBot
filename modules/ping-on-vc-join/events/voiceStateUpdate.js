@@ -1,4 +1,4 @@
-const {embedType} = require('../../../src/functions/helpers');
+const {embedType, disableModule} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 const cooldown = new Set();
@@ -17,7 +17,7 @@ exports.run = async (client, oldState, newState) => {
     if (cooldown.has(member.user.id)) return;
 
     const notifyChannel = newState.guild.channels.cache.get(configElement['notify_channel_id']);
-    if (!notifyChannel) return client.logger.error(`[ping-on-vc-join] ` + localize('ping-on-vc-join', 'channel-bot-found', {c: configElement['notify_channel_id']}));
+    if (!notifyChannel) return disableModule('partner-list', localize('ping-on-vc-join', 'channel-bot-found', {c: configElement['notify_channel_id']}));
 
     setTimeout(async () => { // Wait 3 seconds before pinging a role
         if (!member.voice) return;

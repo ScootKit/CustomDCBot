@@ -1,5 +1,6 @@
 const {embedType} = require('../functions/helpers');
 const {localize} = require('../functions/localize');
+const {trackCommand, trackMessageComponent, trackError} = require('../functions/science');
 
 module.exports.run = async (client, interaction) => {
     if (!client.botReadyAt) {
@@ -9,8 +10,28 @@ module.exports.run = async (client, interaction) => {
             ephemeral: true
         });
     }
+    if (interaction.type === 'MESSAGE_COMPONENT') await trackMessageComponent(interaction);
+    if (interaction.isSelectMenu()) {
+        if (interaction.customId === 'select-roles') {
+            try {
+                for (const option of interaction.component.options) {
+                    if (interaction.values.includes(option.value) && !interaction.member.roles.cache.get(option.value)) await interaction.member.roles.add(option.value);
+                    else if (!interaction.values.includes(option.value) && interaction.member.roles.cache.get(option.value)) await interaction.member.roles.remove(option.value);
+                }
+                return await interaction.reply(embedType(client.strings['updated_roles'] || `⚠ Error: Missing string. Please set a string [here](<https://scnx.xyz/guild/${client.guild.id}/bot/config#strings>) under "Roles updated successfully"`, {}, {ephemeral: true}));
+            } catch (e) {
+                client.logger.error('Could not give roles: ' + e);
+                await trackError(interaction.client, {err: 'selectRolesFailed', exception: e, options: interaction.component.options});
+                return interaction.reply({content: '⚠ ' + localize('command', 'error-giving-role'), ephemeral: true});
+            }
+        }
+    }
     if (!interaction.commandName) return;
     const command = client.commands.find(c => c.name.toLowerCase() === interaction.commandName.toLowerCase());
+    if (command.module && !client.modules[command.module].enabled) return interaction.reply({
+        ephemeral: true,
+        content: '⚠ ' + localize('command', 'module-disabled', {m: module})
+    });
     if (command && typeof (command || {}).options === 'function') command.options = await command.options(interaction.client);
     const group = interaction.options['_group'];
     const subCommand = interaction.options['_subcommand'];
@@ -25,6 +46,8 @@ module.exports.run = async (client, interaction) => {
             if (group) return await command.autoComplete[group][subCommand][focusedOption](interaction);
             else return await command.autoComplete[subCommand][focusedOption](interaction);
         } catch (e) {
+            trackError(interaction.client, {err: 'autCompleteFailed', exception: e, command}).then(() => {
+            });
             interaction.client.logger.error(localize('command', 'autcomplete-execution-failed', {
                 e,
                 f: focusedOption,
@@ -37,6 +60,8 @@ module.exports.run = async (client, interaction) => {
     }
     if (!interaction.isCommand()) return;
     if (!command) return interaction.reply({content: '⚠ ' + localize('command', 'not-found'), ephemeral: true});
+    trackCommand(interaction).then(() => {
+    });
     if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions));
     client.logger.debug(localize('command', 'used', {
         tag: interaction.user.tag,
@@ -60,6 +85,8 @@ module.exports.run = async (client, interaction) => {
         else await command.subcommands[subCommand](interaction);
         if (command.run) await command.run(interaction);
     } catch (e) {
+        trackError(interaction.client, {err: 'commandExecutionFailed', exception: e, command}).then(() => {
+        });
         interaction.client.logger.error(localize('command', 'execution-failed', {
             e,
             c: command.name,

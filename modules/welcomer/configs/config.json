@@ -13,7 +13,9 @@
       "type": "array",
       "content": "roleID",
       "description-en": "Roles to give to a new member",
-      "description-de": "Rollen, die neuen Mitgliedern gegeben werden sollen"
+      "description-de": "Rollen, die neuen Mitgliedern gegeben werden sollen",
+      "params-de": {},
+      "default-de": []
     },
     {
       "field_name": "not-send-messages-if-member-is-bot",
@@ -22,7 +24,9 @@
       "humanname-en": "Ignore bots?",
       "humanname-de": "Bots ignorieren?",
       "description-en": "Should bots get ignored when they join (or leave) the server",
-      "description-de": "Sollen Bots ignoriert werden, wenn sie den Server beitreten (oder diesen verlassen)"
+      "description-de": "Sollen Bots ignoriert werden, wenn sie den Server beitreten (oder diesen verlassen)",
+      "params-de": {},
+      "default-de": true
     },
     {
       "field_name": "give-roles-on-boost",
@@ -32,7 +36,9 @@
       "type": "array",
       "content": "roleID",
       "description-en": "Roles to give to members who boosts the server",
-      "description-de": "Rollen, die Booster haben sollen"
+      "description-de": "Rollen, die Booster haben sollen",
+      "params-de": {},
+      "default-de": []
     }
   ]
 }

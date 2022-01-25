@@ -5,6 +5,7 @@
  */
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../src/functions/localize');
+const {disableModule} = require('../../src/functions/helpers');
 
 /**
  * Generate the partner-list embed
@@ -15,7 +16,7 @@ async function generatePartnerList(client) {
     const moduleConf = client.configurations['partner-list']['config'];
     const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
-    if (!channel) return client.logger.error('[Partner-List] ' + localize('partner-list', 'channel-not-found', {c: moduleConf['channelID']}));
+    if (!channel) return disableModule('partner-list', localize('partner-list', 'channel-not-found', {c: moduleConf['channelID']}));
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     const partners = await client.models['partner-list']['Partner'].findAll({});
     const sortedByCategory = {};
@@ -25,7 +26,8 @@ async function generatePartnerList(client) {
     });
     const embed = new MessageEmbed()
         .setTitle(moduleConf['embed']['title'])
-        .setAuthor(client.user.username, client.user.avatarURL())
+        .setAuthor({name: client.user.username, iconURL: client.user.avatarURL()})
+        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setColor(moduleConf['embed']['color'])
         .setDescription(moduleConf['embed']['description']);
     moduleConf['categories'].forEach(category => {

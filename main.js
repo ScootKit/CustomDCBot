@@ -10,27 +10,6 @@ const {Sequelize} = require('sequelize');
 const log4js = require('log4js');
 const jsonfile = require('jsonfile');
 const readline = require('readline');
-const cliCommands = [];
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-rl.on('line', (input) => {
-    if (!client.botReadyAt) {
-        return console.error('The bot is not ready yet. Please wait until the bot gets ready to use the cli.');
-    }
-    const command = cliCommands.find(c => c.command === input.split(' ')[0].toLowerCase());
-    if (!command) {
-        return console.error('Command not found. Use "help" to see all available commands.');
-    }
-    console.log('\n');
-    command.run({
-        input,
-        args: input.split(' '),
-        client,
-        cliCommands
-    });
-});
 
 // Parsing parameters
 let config;
@@ -47,24 +26,41 @@ if (args[0] && args[1]) {
     confDir = args[0];
     dataDir = args[1];
 }
-client.locale = process.argv.find(a => a.startsWith('--lang')) ? (process.argv.find(a => a.startsWith('--lang')).split('--lang=')[1] || 'en') : 'en';
+client.locale = process.argv.find(a => a.startsWith('--lang')) ? (process.argv.find(a => a.startsWith('--lang')).split('--lang=')[1] || 'de') : 'en';
 module.exports.client = client;
 log4js.configure({
     pm2: process.argv.includes('--pm2-setup'),
     appenders: {
-        out: {type: 'stdout'}
+        out: {
+            type: 'logLevelFilter',
+            appender: 'output',
+            maxLevel: 'error',
+            level: 'debug'
+        },
+        output: {
+            type: 'stdout', layout: {
+                type: 'pattern',
+                pattern: '[%p] %m'
+            }
+        },
+        err: {
+            type: 'logLevelFilter',
+            appender: 'erroutput',
+            level: 'error'
+        },
+        erroutput: {
+            type: 'stderr', layout: {
+                type: 'pattern',
+                pattern: '[%p] %m'
+            }
+        }
     },
     categories: {
-        default: {appenders: ['out'], level: 'debug'}
+        default: {appenders: ['out', 'err'], level: 'debug'}
     }
 });
 const logger = log4js.getLogger();
 logger.level = process.env.LOGLEVEL || 'debug';
-
-process.on('uncaughtException', async e => {
-    console.error(e);
-    process.exit(1);
-});
 
 // Loading config
 try {
@@ -76,14 +72,10 @@ try {
 
 const models = {}; // Object with all models
 
-client.messageCommands = new Discord.Collection();
-client.aliases = new Discord.Collection();
-client.events = new Discord.Collection();
 client.modules = {};
 client.guildID = config['guildID'];
 client.config = config;
 client.configDir = confDir;
-client.setMaxListeners(50);
 client.dataDir = dataDir;
 client.configurations = {};
 logger.level = config.logLevel || process.env.LOGLEVEL || 'debug';
@@ -91,9 +83,11 @@ client.logger = logger;
 module.exports.logger = logger;
 const configChecker = require('./src/functions/configuration');
 const {compareArrays, checkForUpdates} = require('./src/functions/helpers');
-const {localize} = require('./src/functions/localize');
+const {localize, updateLocales} = require('./src/functions/localize');
+const {trackError, trackConfigError} = require('./src/functions/science');
 logger.info(localize('main', 'startup-info', {l: logger.level}));
-
+updateLocales().then(() => {
+});
 
 let moduleConf = {};
 try {
@@ -119,9 +113,10 @@ db.authenticate().then(async () => {
     await loadEventsInDir('./src/events');
     await db.sync();
     logger.info(localize('main', 'sync-db'));
-    await loadMessageCommandsInDir('./src/message-commands');
-    await client.login(config.token).catch(() => {
-        logger.fatal(localize('main', 'login-error'));
+    await client.login(config.token).catch((e) => {
+        if (e.code === 'TOKEN_INVALID') logger.fatal(localize('main', 'login-error-token'));
+        else if (e.code === 'DISALLOWED_INTENTS') logger.fatal(localize('main', 'login-error-intents', {url: `https://discord.com/developers/applications/`}));
+        else logger.fatal(localize('main', 'login-error', {e}));
         process.exit();
     });
     client.guild = await client.guilds.fetch(config.guildID).catch(() => {
@@ -138,13 +133,13 @@ db.authenticate().then(async () => {
         logger.warn(localize('main', 'logchannel-wrong-type'));
         client.logChannel = null;
     }
-    await configChecker.loadAllConfigs(client, moduleConf).catch(async () => {
+    await configChecker.loadAllConfigs(client).catch(async (err) => {
         if (client.logChannel) await client.logChannel.send('⚠ ' + localize('main', 'config-check-failed'));
+        await trackConfigError(client, err);
         process.exit(1);
     });
     if (scnxSetup) await require('./src/functions/scnx-integration').beforeInit(client);
     await loadCommandsInDir('./src/commands');
-    await loadModuleCommands();
     await syncCommandsIfNeeded();
     client.commands = commands;
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
@@ -154,7 +149,30 @@ db.authenticate().then(async () => {
     logger.info(localize('main', 'bot-ready'));
     if (client.logChannel) client.logChannel.send('🚀 ' + localize('main', 'bot-ready'));
     await checkForUpdates(client);
-    rl.prompt(true);
+});
+
+// CLI-COMMANDS
+const cliCommands = [];
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+rl.on('line', (input) => {
+    if (!client.botReadyAt) {
+        return console.error('The bot is not ready yet. Please wait until the bot gets ready to use the cli.');
+    }
+    const command = cliCommands.find(c => c.command === input.split(' ')[0].toLowerCase());
+    if (!command) return console.error(`Command "${command}" not found. See all commands with "help".`);
+    if (command.module && !(client.modules[command.module] || {}).enabled) return console.error(`${command.command} belongs to the module ${command.module}, which is disabled. Enable the module in modules.json and reload the configuration to use this command.`);
+    if (!command) return console.error('Command not found. Use "help" to see all available commands.');
+
+    console.log('\n');
+    command.run({
+        input,
+        args: input.split(' '),
+        client,
+        cliCommands
+    });
 });
 
 /**
@@ -162,14 +180,18 @@ db.authenticate().then(async () => {
  * @returns {Promise<void>}
  */
 async function syncCommandsIfNeeded() {
+    const enabledCommands = commands.filter(c => {
+        if (!c.module) return true;
+        return client.modules[c.module].enabled;
+    });
     const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch().catch(() => {
         logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
         process.exit(1);
     });
     let needSync = false;
-    if (oldCommands.size !== commands.length) needSync = true;
+    if (oldCommands.size !== enabledCommands.length) needSync = true;
     const ranCommands = []; // Commands with all functions run
-    for (const orgCmd of commands) {
+    for (const orgCmd of enabledCommands) {
         const command = {...orgCmd};
         if (typeof command.permissions === 'function') command.permissions = await command.permissions(client);
         if (typeof command.options === 'function') command.options = await command.options(client);
@@ -239,52 +261,109 @@ async function syncCommandsIfNeeded() {
 
     if (needSync) {
         await client.application.commands.set(ranCommands, config.guildID).catch(async (e) => {
-            logger.debug(JSON.stringify(commands), e);
+            logger.debug(JSON.stringify(enabledCommands), e);
+            console.log(e);
+            await trackError(client, {err: 'Command sync fail', exception: e, commands: ranCommands});
             logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
             process.exit(1);
         });
         logger.info(localize('main', 'command-sync'));
     } else logger.info(localize('main', 'command-no-sync-required'));
 }
-
-const moduleCommandsToBeLoaded = [];
+module.exports.syncCommandsIfNeeded = syncCommandsIfNeeded;
 
 /**
- * Loads all modules
+ * Load every database model in a directory
+ * @param {String} dir Directory to load models from
+ * @param {String} moduleName Name of module currently loading from
  * @returns {Promise<void>}
  * @private
  */
-async function loadModules() {
-    if (!fs.existsSync(`${__dirname}/modules/`)) fs.mkdirSync(`${__dirname}/modules/`);
-    const files = fs.readdirSync(`${__dirname}/modules/`);
-    for (const f of files) {
-        if (moduleConf[f]) {
-            logger.debug(localize('main', 'loading-module', {m: f}));
-            const moduleConfig = jsonfile.readFileSync(`${__dirname}/modules/${f}/module.json`);
-            client.modules[f] = {};
-            client.modules[f]['config'] = moduleConfig;
-            client.configurations[f] = {};
-            if (moduleConfig['models-dir']) await loadModelsInDir(`./modules/${f}${moduleConfig['models-dir']}`, f);
-            if (moduleConfig['message-commands-dir']) await loadMessageCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
-            if (moduleConfig['commands-dir']) moduleCommandsToBeLoaded.push({
-                dir: `./modules/${f}${moduleConfig['commands-dir']}`,
-                moduleName: f
+async function loadModelsInDir(dir, moduleName = null) {
+    return new Promise(async resolve => {
+        await fs.readdir(`${__dirname}/${dir}`, (async (err, files) => {
+            if (err) {
+                logger.fatal(err);
+                process.exit(1);
+            }
+            for await (const file of files) {
+                const model = require(`${__dirname}/${dir}/${file}`);
+                await model.init(db);
+                if (moduleName) {
+                    if (!models[moduleName]) models[moduleName] = {};
+                    models[moduleName][model.config.name] = model;
+                } else models[model.config.name] = model;
+                logger.debug(localize('main', 'model-loaded', {d: dir, f: file}));
+            }
+            resolve();
+        }));
+    });
+}
+
+
+const events = {};
+
+/**
+ * Load all events from a directory
+ * @param {String} dir Directory to load events from
+ * @param {String} moduleName Name of module currently loading from
+ * @returns {Promise<void>}
+ * @private
+ */
+async function loadEventsInDir(dir, moduleName = null) {
+    fs.readdir(`${__dirname}/${dir}`, (err, files) => {
+        if (err) return logger.error(err);
+        files.forEach(f => {
+            fs.lstat(`${__dirname}/${dir}/${f}`, async (err, stats) => {
+                if (!stats) return;
+                if (stats.isFile()) {
+                    const eventFunction = require(`${__dirname}/${dir}/${f}`);
+                    const eventName = f.split('.')[0];
+                    if (moduleName) {
+                        if (client.modules[moduleName]) {
+                            if (!client.modules[moduleName]['events']) client.modules[moduleName]['events'] = [];
+                            client.modules[moduleName]['events'].push(f.split('.js').join(''));
+                        }
+                    }
+                    if (!events[eventName]) {
+                        events[eventName] = [];
+                        client.on(eventName, (...cArgs) => {
+                            for (const eData of events[eventName]) {
+                                try {
+                                    if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
+                                    if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
+                                } catch (e) {
+                                    client.logger.error(`Error on event ${(eData.moduleName ? eData.moduleName + '/' : '') + eventName}: ${e}`);
+                                }
+                            }
+                        });
+                    }
+                    events[eventName].push({eventFunction, moduleName});
+                    logger.debug(localize('main', 'event-loaded', {d: dir, f: f}));
+                } else {
+                    logger.debug(localize('main', 'event-dir', {d: dir, f: f}));
+                    await loadEventsInDir(`${dir}/${f}/`);
+                }
             });
-            if (moduleConfig['events-dir']) await loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
-            if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client);
-            if (moduleConfig['cli']) loadCLIFile(`./modules/${f}/${moduleConfig['cli']}`, f);
-        } else logger.debug(localize('main', 'module-disabled', {m: f}));
-    }
+        });
+    });
 }
 
 /**
- * Loads all remaining module commands
+ * Load a CLI-File
  * @private
- * @returns {Promise<void>}
+ * @param {String} path Path to the CLI-File
+ * @param {String} moduleName Name of the module
+ * @returns {void}
  */
-async function loadModuleCommands() {
-    for (const dir of moduleCommandsToBeLoaded) {
-        await loadCommandsInDir(dir.dir, dir.moduleName);
+function loadCLIFile(path, moduleName = null) {
+    const file = require(`${__dirname}/${path}`);
+    for (const command of file.commands) {
+        command.originalName = command.command;
+        command.module = moduleName;
+        cliCommands.push(command);
+        command.command = command.command.toLowerCase();
+        logger.debug(localize('main', 'loaded-cli', {c: command.command, p: path}));
     }
 }
 
@@ -330,161 +409,36 @@ async function loadCommandsInDir(dir, moduleName = null) {
 }
 
 /**
- * Load every message command in a directory
- * @param {String} dir Directory to load commands from
- * @param {String} moduleName Name of module currently loading from
+ * Load all modules
  * @returns {Promise<void>}
- * @private
  */
-async function loadMessageCommandsInDir(dir, moduleName = null) {
-    const files = fs.readdirSync(`${__dirname}/${dir}`);
+async function loadModules() {
+    if (!fs.existsSync(`${__dirname}/modules/`)) fs.mkdirSync(`${__dirname}/modules/`);
+    const files = fs.readdirSync(`${__dirname}/modules/`);
+    const missingModules = [];
     for (const f of files) {
-        const stats = fs.lstatSync(`${__dirname}/${dir}/${f}`);
-        if (!stats) return logger.error('No stats returned');
-        if (stats.isFile()) {
-            const props = require(`${__dirname}/${dir}/${f}`);
-            props.fileName = `${dir}/${f}`;
-            props.help.module = moduleName || 'none';
-            if (props.config.args && typeof props.config.args === 'boolean') {
-                logger.error(`Command ${dir}/${f}: props.config.args can not longer be an integer, please read more in the Changelog (CHANGELOG.md).`);
-                process.exit(1);
-            }
-            client.messageCommands.set(props.help.name, props);
-            props.help.aliases.forEach(alias => {
-                client.aliases.set(alias, props.help.name);
-            });
-            if (moduleName) {
-                if (client.modules[moduleName]) {
-                    if (!client.modules[moduleName]['aliases']) client.modules[moduleName]['aliases'] = new Discord.Collection();
-                    if (!client.modules[moduleName]['commands']) client.modules[moduleName]['commands'] = [];
-                    client.modules[moduleName]['commands'].push(props.help.name);
-                    props.help.aliases.forEach(alias => {
-                        client.modules[moduleName]['aliases'].set(alias, props.help.name);
-                    });
-                }
-            }
-            logger.debug(localize('main', 'command-loaded', {d: dir, f: f}));
-        } else {
-            logger.debug(localize('main', 'command-dir', {d: dir, f: f}));
-            await loadMessageCommandsInDir(`${dir}/${f}`);
+        logger.debug(localize('main', 'loading-module', {m: f}));
+        const moduleConfig = jsonfile.readFileSync(`${__dirname}/modules/${f}/module.json`);
+        client.modules[f] = {};
+        if (typeof moduleConf[f] === 'undefined') {
+            missingModules.push(f);
         }
+        client.modules[f].enabled = !!moduleConf[f];
+        client.modules[f].userEnabled = !!moduleConf[f];
+        client.modules[f].config = moduleConfig;
+        client.configurations[f] = {};
+        if (moduleConfig['models-dir']) await loadModelsInDir(`./modules/${f}${moduleConfig['models-dir']}`, f);
+        if (moduleConfig['commands-dir']) await loadCommandsInDir(`./modules/${f}${moduleConfig['commands-dir']}`, f);
+        if (moduleConfig['events-dir']) await loadEventsInDir(`./modules/${f}${moduleConfig['events-dir']}`, f);
+        if (moduleConfig['on-load-event']) require(`./modules/${f}/${moduleConfig['on-load-event']}`).onLoad(client);
+        if (moduleConfig['cli']) loadCLIFile(`./modules/${f}/${moduleConfig['cli']}`, f);
+    }
+    if (missingModules.length !== 0) {
+        logger.info(localize('config', 'moduleconf-regeneration'));
+        for (const moduleName of missingModules) {
+            moduleConf[moduleName] = false;
+        }
+        jsonfile.writeFileSync(`${confDir}/modules.json`, moduleConf, {spaces: 2});
+        logger.info(localize('config', 'moduleconf-regeneration-success'));
     }
 }
-
-/**
- * Load all events from a directory
- * @param {String} dir Directory to load events from
- * @param {String} moduleName Name of module currently loading from
- * @returns {Promise<void>}
- * @private
- */
-async function loadEventsInDir(dir, moduleName = null) {
-    fs.readdir(`${__dirname}/${dir}`, (err, files) => {
-        if (err) return logger.error(err);
-        files.forEach(f => {
-            fs.lstat(`${__dirname}/${dir}/${f}`, async (err, stats) => {
-                if (!stats) return;
-                if (stats.isFile()) {
-                    const eventFunction = require(`${__dirname}/${dir}/${f}`);
-                    const eventStart = eventFunction.run.bind(null, client);
-                    const eventName = f.split('.')[0];
-                    client.events.set(eventName, eventStart);
-                    if (moduleName) {
-                        if (client.modules[moduleName]) {
-                            if (!client.modules[moduleName]['events']) client.modules[moduleName]['events'] = [];
-                            client.modules[moduleName]['events'].push(f.split('.js').join(''));
-                        }
-                    }
-                    client.on(eventName, (...cArgs) => {
-                        try {
-                            eventFunction.run(client, ...cArgs);
-                        } catch (e) {
-                            client.logger.error(`Error on event ${(moduleName ? moduleName + '/' : '') + eventName}: ${e}`);
-                        }
-                    });
-                    logger.debug(localize('main', 'event-loaded', {d: dir, f: f}));
-                } else {
-                    logger.debug(localize('main', 'event-dir', {d: dir, f: f}));
-                    await loadEventsInDir(`${dir}/${f}/`);
-                }
-            });
-        });
-    });
-}
-
-/**
- * Load every database model in a directory
- * @param {String} dir Directory to load models from
- * @param {String} moduleName Name of module currently loading from
- * @returns {Promise<void>}
- * @private
- */
-async function loadModelsInDir(dir, moduleName = null) {
-    return new Promise(async resolve => {
-        await fs.readdir(`${__dirname}/${dir}`, (async (err, files) => {
-            if (err) {
-                logger.fatal(err);
-                process.exit(1);
-            }
-            for await (const file of files) {
-                await loadModel(dir, file, moduleName);
-            }
-            resolve();
-        }));
-    });
-}
-
-/**
- * Loads a database model
- * @param {String} dir Directory to load models from
- * @param {String} file File to load model from
- * @param {String} moduleName Name of module currently loading from
- * @returns {Promise<void>}
- * @private
- */
-async function loadModel(dir, file, moduleName) {
-    return new Promise(async resolve => {
-        const stats = fs.lstatSync(`${__dirname}/${dir}/${file}`);
-        if (!stats) return;
-        if (stats.isFile()) {
-            const model = require(`${__dirname}/${dir}/${file}`);
-            await model.init(db);
-            if (moduleName) {
-                if (client.modules[moduleName]) {
-                    if (!client.modules[moduleName]['models']) client.modules[moduleName]['models'] = [];
-                    client.modules[moduleName]['models'].push(file.split('.js').join(''));
-                    if (!models[moduleName]) models[moduleName] = {};
-                    models[moduleName][model.config.name] = model;
-                }
-            } else models[model.config.name] = model;
-            logger.debug(localize('main', 'model-loaded', {d: dir, f: file}));
-            resolve(true);
-        } else {
-            logger.debug(localize('main', 'model-dir', {d: dir, f: file}));
-            await loadModel(`${dir}/${file}`);
-        }
-    });
-}
-
-/**
- * Load a CLI-File
- * @private
- * @param {String} path Path to the CLI-File
- * @param {String} moduleName Name of the module
- * @returns {void}
- */
-function loadCLIFile(path, moduleName = null) {
-    const file = require(`${__dirname}/${path}`);
-    for (const command of file.commands) {
-        command.originalName = command.command;
-        command.module = moduleName;
-        cliCommands.push(command);
-        command.command = command.command.toLowerCase();
-        logger.debug(localize('main', 'loaded-cli', {c: command.command, p: path}));
-    }
-}
-
-module.exports.models = models;
-module.exports.dataDir = dataDir;
-module.exports.syncCommandsIfNeeded = syncCommandsIfNeeded;
-module.exports.confDir = confDir;

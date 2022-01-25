@@ -13,7 +13,9 @@
       "default": "",
       "description-en": "Channel in which the message should get send",
       "description-de": "Kanal in welchen die Nachricht gesendet werden soll",
-      "field_name": "channelID"
+      "field_name": "channelID",
+      "params-de": {},
+      "default-de": ""
     },
     {
       "humanname-en": "Channel-Type",
@@ -28,7 +30,9 @@
         "leave",
         "boost",
         "unboost"
-      ]
+      ],
+      "params-de": {},
+      "default-de": ""
     },
     {
       "humanname-en": "Random messages?",
@@ -37,7 +41,9 @@
       "description-en": "If enabled the bot will randomly pick a messages instead of using the message option below",
       "field_name": "randomMessages",
       "type": "boolean",
-      "default": false
+      "default": false,
+      "params-de": {},
+      "default-de": false
     },
     {
       "field_name": "message",
@@ -208,7 +214,10 @@
           "description": "Boost-Level nach der Entfernung des Boosts",
           "fieldValue": "type.unboost"
         }
-      ]
+      ],
+      "humanname-de": "",
+      "description-de": "",
+      "default-de": ""
     }
   ]
 }

@@ -19,7 +19,9 @@
         "leave",
         "boost",
         "unboost"
-      ]
+      ],
+      "params-de": {},
+      "default-de": ""
     },
     {
       "humanname-de": "Nachricht",
@@ -193,7 +195,8 @@
           "description": "Boost-Level nach der Entfernung des Boosts",
           "fieldValue": "type.unboost"
         }
-      ]
+      ],
+      "default-de": ""
     }
   ]
 }

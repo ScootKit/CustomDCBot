@@ -13,13 +13,14 @@ const {localize} = require('../../src/functions/localize');
  * @param {string} id Id of the user
  * @returns {promise<void>}
  */
-createUser = async function (client, id) {
+async function createUser(client, id) {
     const moduleConfig = client.configurations['economy-system']['config'];
     client.models['economy-system']['Balance'].create({
         id: id,
-        balance: moduleConfig['startMoney']
+        balance: 0,
+        bank: moduleConfig['startMoney']
     });
-};
+}
 
 /**
  * Add/ Remove xyz from balance/ set balance to
@@ -29,7 +30,7 @@ createUser = async function (client, id) {
  * @param {number} value The value which is added/ removed to/ from the balance/ to which the balance gets set
  * @returns {Promise<void>}
  */
-editBalance = async function (client, id, action, value) {
+async function editBalance(client, id, action, value) {
     let user = await client.models['economy-system']['Balance'].findOne({
         where: {
             id: id
@@ -70,7 +71,56 @@ editBalance = async function (client, id, action, value) {
             client.logger.error(`[economy-system] ${action} This action is invalid`);
             break;
     }
-};
+}
+
+/**
+ * Function to edit the amount on the Bank of a user
+ * @param {Client} client Client
+ * @param {string} id UserId of the user which is effected
+ * @param {string} action The action which is should be performed (deposit/ withdraw)
+ * @param {number} value The value which is added/ removed to/ from the balance/ to which the balance gets set
+ * @returns {Promise<void>}
+ */
+async function editBank(client, id, action, value) {
+    let user = await client.models['economy-system']['Balance'].findOne({
+        where: {
+            id: id
+        }
+    });
+    if (!user) {
+        await createUser(client, id);
+        user = await client.models['economy-system']['Balance'].findOne({
+            where: {
+                id: id
+            }
+        });
+    }
+    let newBank = 0;
+    switch (action) {
+        case 'deposit':
+            if (parseInt(user.balance) <= parseInt(value)) value = user.balance;
+            newBank = parseInt(user.bank) + parseInt(value);
+            user.bank = newBank;
+            await user.save();
+            editBalance(client, id, 'remove', value);
+            await leaderboard(client);
+            break;
+
+        case 'withdraw':
+            if (parseInt(value) >= parseInt(user.bank)) value = user.bank;
+            newBank = parseInt(user.bank) - parseInt(value);
+            if (newBank <= 0) newBank = 0;
+            user.bank = newBank;
+            await user.save();
+            await editBalance(client, id, 'add', value);
+            await leaderboard(client);
+            break;
+
+        default:
+            client.logger.error(`[economy-system] ${action} This action is invalid`);
+            break;
+    }
+}
 
 /**
  * Function to create a new Item for the shop
@@ -80,7 +130,7 @@ editBalance = async function (client, id, action, value) {
  * @param {Client} client Client
  * @returns {Promise}
  */
-createShopItem = async function (item, price, role, client) {
+async function createShopItem(item, price, role, client) {
     return new Promise(async (resolve) => {
         const model = client.models['economy-system']['Shop'];
         const itemModel = await model.findOne({
@@ -99,7 +149,7 @@ createShopItem = async function (item, price, role, client) {
             resolve(localize('economy-system', 'item-created'));
         }
     });
-};
+}
 
 /**
  * Function to delete a shop-item
@@ -107,7 +157,7 @@ createShopItem = async function (item, price, role, client) {
  * @param {Client} client Client
  * @returns {Promise}
  */
-deleteShopItem = async function (item, client) {
+async function deleteShopItem(item, client) {
     return new Promise(async (resolve) => {
         const model = await client.models['economy-system']['Shop'].findOne({
             where: {
@@ -121,29 +171,30 @@ deleteShopItem = async function (item, client) {
             resolve(`Deleted the item ${item} successfully`);
         }
     });
-};
+}
 
 /**
  * Create the shop message
  * @param {Client} client Client
  * @returns {string}
  */
-createShopMsg = async function (client) {
+async function createShopMsg(client) {
     const items = await client.models['economy-system']['Shop'].findAll();
     let string = '';
     for (let i = 0; i < items.length; i++) {
         string = `${string}**${items[i].dataValues.name}**: ${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}\n`;
     }
     return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: true });
-};
+}
 
 /**
  * Gets the ten users with the most money
  * @param {object} object Objetc of the users
+ * @param {Client} client Client
  * @returns {array}
  * @private
  */
-topTen = async function (object) {
+async function topTen(object, client) {
     if (object.length === 0) return;
     object.sort(function (x, y) {
         return y.dataValues.balance - x.dataValues.balance;
@@ -152,17 +203,17 @@ topTen = async function (object) {
     let items = 10;
     if (object.length < items) items = object.length;
     for (let i = 0; i < items; i++) {
-        retStr = `${retStr}<@!${object[i].dataValues.id}>: ${object[i].dataValues.balance}\n`;
+        retStr = `${retStr}<@!${object[i].dataValues.id}>: ${object[i].dataValues.balance} ${client.configurations['economy-system']['config']['currencySymbol']}\n`;
     }
     return retStr;
-};
+}
 
 /**
  * Create/ update the money Leaderboard
  * @param {Client} client Client
  * @returns {promise<void>}
  */
-leaderboard = async function (client) {
+async function leaderboard(client) {
     const moduleConfig = client.configurations['economy-system']['config'];
     const moduleStr = client.configurations['economy-system']['strings'];
     const channel = await client.channels.fetch(moduleConfig['leaderboardChannel']).catch(() => {
@@ -178,19 +229,20 @@ leaderboard = async function (client) {
         .setDescription(moduleStr['leaderboardEmbed']['description'])
         .setTimestamp()
         .setColor(moduleStr['leaderboardEmbed']['color'])
-        .setAuthor(client.user.username, client.user.avatarURL())
-        .setFooter(client.strings.footer, client.strings.footerImgUrl);
+        .setAuthor({name: client.user.username, iconURL: client.user.avatarURL()})
+        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
 
-    if (model.length !== 0) embed.addField('Leaderboard:', await topTen(model));
+    if (model.length !== 0) embed.addField('Leaderboard:', await topTen(model, client));
     if (moduleStr['leaderboardEmbed']['thumbnail']) embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
     if (moduleStr['leaderboardEmbed']['image']) embed.setImage(moduleStr['leaderboardEmbed']['image']);
 
     if (messages.last()) await messages.last().edit({embeds: [embed]});
     else channel.send({embeds: [embed]});
-};
+}
 
 
-module.exports.balance = editBalance;
+module.exports.editBalance = editBalance;
+module.exports.editBank = editBank;
 module.exports.createUser = createUser;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItem = deleteShopItem;

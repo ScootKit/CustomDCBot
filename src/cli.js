@@ -1,5 +1,6 @@
 const fs = require('fs');
 const {reloadConfig} = require('./functions/configuration');
+const {syncCommandsIfNeeded} = require('../main');
 
 module.exports.commands = [
     {
@@ -29,12 +30,25 @@ module.exports.commands = [
             if (inputElement.client.logChannel) await inputElement.client.logChannel.send('🔄 Reloading configuration because CLI said so');
             reloadConfig(inputElement.client).then(async () => {
                 if (inputElement.client.logChannel) await inputElement.client.logChannel.send('✅ Configuration reloaded successfully.');
-                console.log('Reloaded successfully');
+                console.log('Reloaded successfully, syncing commands...');
+                await syncCommandsIfNeeded();
+                console.log('Synced commands, configuration reloaded.');
             }).catch(async () => {
                 if (inputElement.client.logChannel) await inputElement.client.logChannel.send('⚠️ Configuration reloaded failed. Bot shutting down');
                 console.log('Reload failed. Exiting');
                 process.exit(1);
             });
+        }
+    },
+    {
+        command: 'modules',
+        description: 'Shows all modules of the bot',
+        run: async function (inputElement) {
+            let message = '=== MODULES ===';
+            for (const moduleName in inputElement.client.modules) {
+                message = message + `\n• ${moduleName}: ${inputElement.client.modules[moduleName].enabled ? 'Enabled' : 'Disabled'}`;
+            }
+            console.log(message);
         }
     }
 ];

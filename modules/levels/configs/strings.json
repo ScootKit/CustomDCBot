@@ -163,12 +163,6 @@
         "color": "GREEN",
         "button": "👤 Show my level"
       },
-      "default-en": {
-        "title": "Live Leaderboard",
-        "description": "Find all the users levels here. Updated every five minutes.",
-        "color": "GREEN",
-        "button": "👤 Show my level"
-      },
       "content": {
         "key": "string",
         "value": "string"

@@ -26,8 +26,9 @@ module.exports.generateSuggestionEmbed = async function (client, suggestion) {
 
     const embed = new MessageEmbed()
         .setTitle(replacer(moduleConfig.suggestionEmbed.title))
-        .setAuthor(member.user.tag, member.user.avatarURL())
+        .setAuthor({name: member.user.tag, iconURL: member.user.avatarURL()})
         .setThumbnail(member.user.avatarURL())
+        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setDescription(suggestion.suggestion)
         .addField('\u200b', '\u200b');
 

@@ -22,7 +22,7 @@ module.exports.run = async function (interaction) {
     if (!(scnUser || {}).bio) scnUser = {bio: interaction.user.id === member.user.id ? localize('levels', 'no-bio-author') : localize('levels', 'no-bio')};
 
     const embed = new MessageEmbed()
-        .setFooter(interaction.client.strings.footer, interaction.client.strings.footerImgUrl)
+        .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
         .setColor(moduleStrings.embed.color || 'GREEN')
         .setThumbnail(member.user.avatarURL({dynamic: true}))
         .setTitle(moduleStrings.embed.title.replaceAll('%username%', member.user.username))

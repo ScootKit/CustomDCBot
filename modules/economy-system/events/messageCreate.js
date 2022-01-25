@@ -1,4 +1,4 @@
-const {balance} = require('../economy-system');
+const {editBalance} = require('../economy-system');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (client, message) {
@@ -10,9 +10,10 @@ module.exports.run = async function (client, message) {
     const config = client.configurations['economy-system']['config'];
 
     if (config['messageDrops'] === 0) return;
+    if (config['msgDropsIgnoredChannels'].includes(message.channel.id)) return;
     if (Math.floor(Math.random() * config['messageDrops']) !== 1) return;
     const toAdd = Math.floor(Math.random() * (config['messageDropsMax'] - config['messageDropsMin'])) + config['messageDropsMin'];
-    await balance(client, message.author.id, 'add', toAdd);
+    await editBalance(client, message.author.id, 'add', toAdd);
     await message.reply({content: localize('economy-system', 'message-drop', {m: toAdd, c: config['currencySymbol']})});
     client.logger.info(`[economy-system] ` + localize('economy-system', 'message-drop-earned-money', {
         m: toAdd,

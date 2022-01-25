@@ -13,7 +13,9 @@
       "type": "array",
       "content": "roleID",
       "description-en": "ID of roles that are allowed to create and manage giveaways",
-      "description-de": "Rollen, die Gewinnspiele erstellen und verwalten können"
+      "description-de": "Rollen, die Gewinnspiele erstellen und verwalten können",
+      "params-de": {},
+      "default-de": []
     },
     {
       "field_name": "bypassRoles",
@@ -23,7 +25,9 @@
       "type": "array",
       "content": "roleID",
       "description-de": "Rollen, die an Gewinnspielen teilnehmen können, ohne die Bedingungen erfüllen zu müssen",
-      "description-en": "Roles who can participate in giveaways even if they don't meet the requirements"
+      "description-en": "Roles who can participate in giveaways even if they don't meet the requirements",
+      "params-de": {},
+      "default-de": []
     },
     {
       "field_name": "messageCountMode",
@@ -37,7 +41,9 @@
         "whitelist"
       ],
       "description-en": "Modus in which messages should get counted",
-      "description-de": "Modus, in welchem Nachrichten gezählt werden sollen"
+      "description-de": "Modus, in welchem Nachrichten gezählt werden sollen",
+      "params-de": {},
+      "default-de": "all"
     },
     {
       "field_name": "blacklist",
@@ -46,7 +52,10 @@
       "type": "array",
       "content": "channelID",
       "description-en": "Channel in which messages should get ignored (only if messageCountMode = \"blacklist\")",
-      "description-de": "Channel in welchen Nachrichten nicht gezählt werden sollen (nur wenn messageCountMode = \"blacklist\")"
+      "description-de": "Channel in welchen Nachrichten nicht gezählt werden sollen (nur wenn messageCountMode = \"blacklist\")",
+      "humanname-de": "",
+      "params-de": {},
+      "default-de": []
     },
     {
       "field_name": "whitelist",
@@ -55,7 +64,10 @@
       "type": "array",
       "content": "channelID",
       "description-en": "Channel in which messages should get counted (only if messageCountMode = \"whitelist\")",
-      "description-de": "Channel in welchen Nachrichten gezählt werden sollen (nur wenn messageCountMode = \"whitelist\")"
+      "description-de": "Channel in welchen Nachrichten gezählt werden sollen (nur wenn messageCountMode = \"whitelist\")",
+      "humanname-de": "",
+      "params-de": {},
+      "default-de": []
     },
     {
       "field_name": "multipleEntries",
@@ -68,7 +80,9 @@
       "content": {
         "key": "roleID",
         "value": "integer"
-      }
+      },
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "sendDMOnWin",
@@ -77,7 +91,9 @@
       "default": false,
       "type": "boolean",
       "description-en": "If enabled the bot will send each winner a DM when they win.",
-      "description-de": "Wenn aktiviert wird der Bot eine Nachricht an den Gewinner senden, wenn diese gewinnen."
+      "description-de": "Wenn aktiviert wird der Bot eine Nachricht an den Gewinner senden, wenn diese gewinnen.",
+      "params-de": {},
+      "default-de": false
     }
   ]
 }
