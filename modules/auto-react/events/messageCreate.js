@@ -1,4 +1,4 @@
-exports.run = async (client, msg) => {
+module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
     if (msg.interaction || msg.system) return;
     await checkChannel(msg);

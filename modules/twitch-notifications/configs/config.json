@@ -1,56 +1,84 @@
 {
-    "filename": "config.json",
-    "content": [
-      {
-        "field_name": "liveMessage",
-        "default": "Hey, %streamer% is live on Twitch streaming %game%! Check it out at %url% !",
-        "type": "string",
-        "allowEmbed": true,
-        "description": "Message that gets send if the streamer goes live",
-        "params": [
-          {
-            "name": "%streamer%",
-            "description": "Name of the Streamer"
-          },
-          {
-            "name": "%game%",
-            "description": "Game which is streamed"
-          },
-          {
-            "name": "%url%",
-            "description": "Link to the stream"
-          }
-        ]
-      },
-      {
-        "field_name": "liveMessageChannels",
-        "default": [],
-        "type": "array",
-        "content": "channelID",
-        "description": "ChannelID to send live-messages. The first channel is for the first streamer, the second for the second and so on"
-      },
-      {
-        "field_name": "twitchClientID",
-        "default": "",
-        "type": "string",
-        "description": "ID of the Client, which is used to check if the Streamer is live"
-      },
-      {
-        "field_name": "clientSecret",
-        "default": "",
-        "type": "string",
-        "description": "Secret of the Twitch-Client, which is used to check if the Streamer is live"
-      },
-      {
-        "field_name": "streamers",
-        "default": [],
-        "type": "array",
-        "content": "string",
-        "description": "Streamers where a notification should send when they start streaming"
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "content": [
+    {
+      "field_name": "liveMessage",
+      "humanname-de": "Live-Nachricht",
+      "humanname-en": "Live-Messages",
+      "default-en": "Hey, %streamer% is live on Twitch streaming %game%! Check it out: %url%",
+      "default-de": "Hi, %streamer% ist Live auf Twitch und streamt %game%! Jetzt anschauen: %url%",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "Message that gets send if the streamer goes live",
+      "description-de": "Nachricht, die gesendet wird, wenn ein Streamer anfängt zu streamen",
+      "params-en": [
+        {
+          "name": "%streamer%",
+          "description": "Name of the Streamer"
+        },
+        {
+          "name": "%game%",
+          "description": "Game which is streamed"
+        },
+        {
+          "name": "%url%",
+          "description": "Link to the stream"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%streamer%",
+          "description": "Name des Streamers"
+        },
+        {
+          "name": "%game%",
+          "description": "Spiel, welches gestreamt wird"
+        },
+        {
+          "name": "%url%",
+          "description": "Link zum Twitch-Stream"
+        }
+      ]
+    },
+    {
+      "field_name": "liveMessageChannels",
+      "humanname-en": "Channel",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description-en": "Channel in which live-messages should get sent",
+      "description-de": "Kanal, in welchen Benachrichtigungen gesendet werden sollen"
+    },
+    {
+      "field_name": "twitchClientID",
+      "default": "",
+      "hidden": true,
+      "type": "string",
+      "description": "ID of the Client, which is used to check if the Streamer is live"
+    },
+    {
+      "field_name": "clientSecret",
+      "default": "",
+      "hidden": true,
+      "type": "string",
+      "description": "Secret of the Twitch-Client, which is used to check if the Streamer is live"
+    },
+    {
+      "field_name": "streamers",
+      "humanname-en": "Streamers",
+      "humanname-de": "Streamer",
+      "default": [],
+      "type": "array",
+      "content": "string",
+      "description-en": "Streamers where a notification should send when they start streaming",
+      "description-de": "Steamer, bei denen eine Benachrichtigung gesendet werden soll, wenn sie anfangen, zu streamen"
     },
     {
       "field_name": "interval",
-      "default": 60,
+      "default": 180,
+      "hidden": true,
       "type": "integer",
       "description": "Interval (in seconds) in which it is tested whether the streamer is live. This value must be higher than 60"
     }

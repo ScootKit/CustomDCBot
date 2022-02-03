@@ -2,6 +2,12 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v2.1.0
+* Added new concept of localization
+* Updated modules to the newest version, including new features, localization and bug-fixes
+* Introduced new helper-functions and database-schemes (including channelLock, DatabaseSchemeVerison)
+* Introduced autocomplete
+
 ## v2.0.0
 
 * Added new configuration-option `logLevel`

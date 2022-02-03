@@ -1,18 +1,29 @@
 {
+  "description-de": "Passe die Nachrichten deines Botes an",
+  "description-en": "Configure strings & messages of your bot here",
+  "humanname-de": "Nachrichten",
+  "humanname-en": "Messages",
   "content": [
     {
       "field_name": "footer",
-      "default": "© SC Network, 2020",
+      "humanname-en": "Embed-Footer",
+      "default": "© SC Network, 2022",
       "type": "string",
-      "description": "Footer of every embed"
+      "description-en": "Footer of every embed",
+      "description-de": "Footer jedes Embeds",
+      "pro": true
     },
     {
       "field_name": "need_args",
-      "default": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
+      "humanname-en": "More arguments are needed",
+      "humanname-de": "Mehr Argumente werden benötigt",
+      "default-en": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
+      "default-de": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
       "type": "string",
-      "description": "This message gets send if there are not enough arguments specified",
+      "description-en": "This message gets send if there are not enough arguments specified",
+      "description-de": "Diese Nachricht wird versendet, wenn eine oder mehrere Argumente für einen Befehl fehlen",
       "allowEmbed": true,
-      "params": [
+      "params-en": [
         {
           "name": "%count%",
           "description": "Count of arguments provided"
@@ -21,39 +32,45 @@
           "name": "%neededCount%",
           "description": "Count of arguments needed"
         }
+      ],
+      "params-de": [
+        {
+          "name": "%count%",
+          "description": "Anzahl von angegebenen Parameter"
+        },
+        {
+          "name": "%neededCount%",
+          "description": "Anzahl von benötigten Argumenten"
+        }
       ]
     },
     {
       "field_name": "not_enough_permissions",
-      "default": "Seems like you don't have enough permissions.",
+      "humanname-en": "Not enough permissions",
+      "humanname-de": "Nicht genügend Rechte",
+      "default-en": "Seems like you don't have enough permissions.",
+      "default-de": "Scheint als hättest du nicht genügend Rechte.",
       "type": "string",
-      "description": "This message gets send if an user don't hase enough permissions",
+      "description-en": "This message gets send if an user don't hase enough permissions",
+      "description-de": "Diese Nachricht wird versendet, wenn der Nutzer nicht genügen Rechte hat",
       "allowEmbed": true
     },
     {
-      "field_name": "module",
-      "default": {
-        "not_found": "We could not find this module. Maybe it's not enabled in your config file?"
-      },
-      "type": "keyed",
-      "description": "Strings for module command",
-      "allowEmbed": true,
-      "content": {
-        "key": "string",
-        "value": "string"
-      },
-      "disableKeyEdits": true
-    },
-    {
       "field_name": "helpembed",
-      "default": {
+      "default-en": {
         "title": "Help",
         "description": "You can find every command here",
-        "module": "Module",
         "module_translation": "%name% by %author%: %description%",
-        "build_in": "Build-In-Commands",
-        "more_information_with": "More information: `%prefix%module %modulename%`"
+        "build_in": "Build-In-Commands"
       },
+      "default-de": {
+        "title": "Help",
+        "description": "Alle Commands findest du hier",
+        "module_translation": "%name% by %author%: %description%",
+        "build_in": "Build-In-Commands"
+      },
+      "humanname-en": "Help-Message",
+      "humanname-de": "Hilfe-Nachricht",
       "type": "keyed",
       "description": "Strings for help command",
       "content": {

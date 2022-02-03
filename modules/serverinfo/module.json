@@ -1,10 +1,14 @@
 {
   "name": "serverinfo",
+  "humanReadableName-de": "Serverinformationen",
+  "humanReadableName-en": "Server-Information-Channel",
+  "fa-icon": "fas fa-info-circle",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Simple module to have a channel with a message that shows the users some information about your guild",
+  "description-en": "Simple module to have a channel with a message that shows the users some information about your guild",
+  "description-de": "Fortgeschrittenes Modul, um einen Channel zu erstellen, in dem Server-Informationen als Embed angezeigt werden",
   "events-dir": "/events",
   "config-example-files": [
     "configs/config.json",

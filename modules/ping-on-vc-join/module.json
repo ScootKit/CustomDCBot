@@ -1,10 +1,13 @@
 {
   "name": "ping-on-vc-join",
+  "humanReadableName-en": "Ping-On-VC-Join",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Sends a message when someone joins a voicechat",
+  "description-en": "Sends a message when someone joins a voicechat",
+  "description-de": "Sendet eine PN an den Nutzer und/oder informiert das Team, wenn ein Nutzer einem bestimmten Voicechat beitritt",
+  "fa-icon": "fas fa-sign-in-alt",
   "events-dir": "/events",
   "config-example-files": [
     "config.json"

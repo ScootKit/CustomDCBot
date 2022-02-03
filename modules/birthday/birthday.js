@@ -7,6 +7,7 @@ const {getUser, getAutoSyncMembers} = require('@scnetwork/api');
 const {embedType} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {AgeFromDateString} = require('age-calculator');
+const {localize} = require('../../src/functions/localize');
 
 /**
  * Generate the BirthdayEmbed in the configured channel
@@ -19,12 +20,12 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
 
     const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
-    if (!channel) return console.error(`[Birthdays] Channel with ID ${moduleConf['channelID']} could not be found.`);
+    if (!channel) return client.logger.error(localize('birthdays', 'channel-not-found', {c: moduleConf.channelID}));
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     await channel.guild.members.fetch({force: true});
 
     if (notifyUsers) {
-        for (const m of messages.filter(msg => msg.id !== messages.last().id).array()) {
+        for (const m of messages.filter(msg => msg.id !== messages.last().id)) {
             if (m.deletable) await m.delete(); // Removing old messages
         }
     }
@@ -39,7 +40,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
         const u = await getUser(user.id).catch(() => {
         });
         if (!u) {
-            console.log(`[birthday] ${user.id}'s state was set to "sync", but there was no syncing candidate, so I disabled the synchronization.`);
+            client.logger.debug(localize('birthdays', 'sync-error', {u: user.id}));
             user.sync = false;
         }
         if (typeof u === 'object' && u.birthday && u.birthday.day) {
@@ -78,81 +79,85 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
         }
     }
 
-    const embed = new MessageEmbed()
-        .setTitle(moduleConf['birthdayEmbed']['title'])
-        .setDescription(moduleConf['birthdayEmbed']['description'])
-        .setTimestamp()
-        .setColor(moduleConf['birthdayEmbed']['color'])
-        .setAuthor(client.user.username, client.user.avatarURL())
-        .setFooter(client.strings.footer, client.strings.footerImgUrl)
-        .addFields([
-            {
-                name: 'January',
-                value: await getUserStringForMonth(client, channel, 1),
-                inline: true
-            },
-            {
-                name: 'February',
-                value: await getUserStringForMonth(client, channel, 2),
-                inline: true
-            },
-            {
-                name: 'March',
-                value: await getUserStringForMonth(client, channel, 3),
-                inline: true
-            },
-            {
-                name: 'April',
-                value: await getUserStringForMonth(client, channel, 4),
-                inline: true
-            },
-            {
-                name: 'May',
-                value: await getUserStringForMonth(client, channel, 5),
-                inline: true
-            },
-            {
-                name: 'June',
-                value: await getUserStringForMonth(client, channel, 6),
-                inline: true
-            },
-            {
-                name: 'July',
+    const embeds = [
+        new MessageEmbed()
+            .setTitle(moduleConf['birthdayEmbed']['title'])
+            .setDescription(moduleConf['birthdayEmbed']['description'])
+            .setTimestamp()
+            .setColor(moduleConf['birthdayEmbed']['color'])
+            .setAuthor(client.user.username, client.user.avatarURL())
+            .setFooter(client.strings.footer, client.strings.footerImgUrl)
+            .addFields([
+                {
+                    name: localize('months', '1'),
+                    value: await getUserStringForMonth(client, channel, 1),
+                    inline: true
+                },
+                {
+                    name: localize('months', '2'),
+                    value: await getUserStringForMonth(client, channel, 2),
+                    inline: true
+                },
+                {
+                    name: localize('months', '3'),
+                    value: await getUserStringForMonth(client, channel, 3),
+                    inline: true
+                },
+                {
+                    name: localize('months', '4'),
+                    value: await getUserStringForMonth(client, channel, 4),
+                    inline: true
+                },
+                {
+                    name: localize('months', '5'),
+                    value: await getUserStringForMonth(client, channel, 5),
+                    inline: true
+                },
+                {
+                    name: localize('months', '6'),
+                    value: await getUserStringForMonth(client, channel, 6),
+                    inline: true
+                }
+            ]),
+        new MessageEmbed()
+            .setColor(moduleConf['birthdayEmbed']['color'])
+            .setFooter(client.strings.footer, client.strings.footerImgUrl)
+            .addFields([{
+                name: localize('months', '7'),
                 value: await getUserStringForMonth(client, channel, 7),
                 inline: true
             },
             {
-                name: 'August',
+                name: localize('months', '8'),
                 value: await getUserStringForMonth(client, channel, 8),
                 inline: true
             },
             {
-                name: 'September',
+                name: localize('months', '9'),
                 value: await getUserStringForMonth(client, channel, 9),
                 inline: true
             },
             {
-                name: 'October',
+                name: localize('months', '10'),
                 value: await getUserStringForMonth(client, channel, 10),
                 inline: true
             },
             {
-                name: 'November',
+                name: localize('months', '11'),
                 value: await getUserStringForMonth(client, channel, 11),
                 inline: true
             },
             {
-                name: 'December',
+                name: localize('months', '12'),
                 value: await getUserStringForMonth(client, channel, 12),
                 inline: true
-            }
-        ]);
+            }])
+    ];
 
-    if (moduleConf['birthdayEmbed']['thumbnail']) embed.setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
-    if (moduleConf['birthdayEmbed']['thumbnail']) embed.setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
+    if (moduleConf['birthdayEmbed']['thumbnail']) embeds[0].setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
 
-    if (messages.last()) await messages.last().edit({embeds: [embed]});
-    else channel.send({embeds: [embed]});
+    if (messages.last()) await messages.last().edit({embeds});
+    else channel.send({embeds});
 
     if (notifyUsers) {
         const birthdayUsers = await client.models['birthday']['User'].findAll({
@@ -164,8 +169,8 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
         if (!birthdayUsers) return;
 
         if (moduleConf['birthday_role']) {
-            const guildMembers = await channel.guild.members.cache;
-            for (const member of guildMembers.array()) {
+            const guildMembers = await channel.guild.members.fetch();
+            for (const member of guildMembers.values()) {
                 if (!member) return;
                 if (member.roles.cache.has(moduleConf['birthday_role'])) {
                     await member.roles.remove(moduleConf['birthday_role']);
@@ -177,13 +182,13 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
             const member = channel.guild.members.cache.get(user.id);
             if (!member) return;
             if (user.year) {
-                channel.send(...await embedType(moduleConf['birthday_message_with_age'], {
+                channel.send(embedType(moduleConf['birthday_message_with_age'], {
                     '%age%': new Date().getFullYear() - user.year,
                     '%tag%': member.user.tag,
                     '%mention%': `<@${user.id}>`
                 }));
             } else {
-                channel.send(...await embedType(moduleConf['birthday_message'], {
+                channel.send(embedType(moduleConf['birthday_message'], {
                     '%tag%': member.user.tag,
                     '%mention%': `<@${user.id}>`
                 }));
@@ -192,13 +197,14 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
         }
     }
 };
+
 module.exports.generateBirthdayEmbed = generateBirthdayEmbed;
 
 /**
  * Get UserString for a month
  * @private
  * @param {Client} client Client
- * @param {GuildTextChannel} channel Channel to send embed in
+ * @param {Channel} channel Channel to send embed in
  * @param {Number} month Month to render results from
  * @returns {Promise<string>}
  */
@@ -220,10 +226,10 @@ async function getUserStringForMonth(client, channel, month) {
                 await user.destroy();
                 continue;
             }
-            dateString = `[${dateString}](https://sc-network.net/age?age=${age} "${age} years old")`;
+            dateString = `[${dateString}](https://sc-network.net/age?age=${age} "${localize('birthdays', 'age-hover', {a: age})}")`;
         }
         if (channel.guild.members.cache.get(user.id)) string = string + `${dateString}: <@${user.id}> ${user.sync ? '[🗘](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "Birthday synchronized with SC Network Account")' : ''}${user.sync && user.verified ? '[✓](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "Verified by SC Network Team")' : ''}\n`;
     }
-    if (string.length === 0) string = 'No one has birthday in this month.';
+    if (string.length === 0) string = localize('birthdays', 'no-bd-this-month');
     return string;
 }

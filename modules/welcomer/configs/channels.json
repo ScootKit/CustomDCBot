@@ -1,18 +1,28 @@
 {
   "filename": "channels.json",
+  "humanname-en": "Channel",
+  "humanname-de": "Kanäle",
+  "description-de": "Passe hier an, in welchen Kanälen welche Nachricht gesendet werden soll",
+  "description-en": "Configure here in which channel which message should get send",
   "configElements": true,
   "content": [
     {
+      "humanname-de": "Channel",
+      "humanname-en": "Channel",
       "type": "channelID",
       "default": "",
-      "description": "ID of the channel",
+      "description-en": "Channel in which the message should get send",
+      "description-de": "Kanal in welchen die Nachricht gesendet werden soll",
       "field_name": "channelID"
     },
     {
+      "humanname-en": "Channel-Type",
+      "humanname-de": "Kanal-Type",
       "field_name": "type",
       "type": "select",
       "default": "",
-      "description": "Typ of this message",
+      "description-de": "Dies gibt an, in welchem Kontext dieser Kanal verwendet werden soll",
+      "description-en": "This sets in which content the channel should get used",
       "content": [
         "join",
         "leave",
@@ -21,106 +31,182 @@
       ]
     },
     {
+      "humanname-en": "Random messages?",
+      "humanname-de": "Zufällige Nachrichten?",
+      "description-de": "Wenn aktiviert wird der Bot eine zufällige Nachricht aus deiner Konfiguration wählen, anstatt die unten",
+      "description-en": "If enabled the bot will randomly pick a messages instead of using the message option below",
       "field_name": "randomMessages",
       "type": "boolean",
-      "default": false,
-      "description": "If enabled the bot will randomly pick a messages instead of using the message option below"
+      "default": false
     },
     {
       "field_name": "message",
       "type": "string",
       "default": "",
+      "allowEmbed": true,
       "description": "Message that should get send",
-      "params": [
+      "params-en": [
         {
           "name": "%mention%",
           "description": "Mentions the user",
-          "fieldValue": "join"
+          "fieldValue": "type.join"
         },
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL of the user's avatar",
-          "fieldValue": "join"
+          "fieldValue": "type.join"
         },
         {
           "name": "%servername%",
           "description": "Name of the guild",
-          "fieldValue": "join"
+          "fieldValue": "type.join"
         },
         {
           "name": "%tag%",
           "description": "Tag of the user",
-          "fieldValue": "join"
+          "fieldValue": "type.join"
         },
         {
           "name": "%createdAt%",
           "description": "Date when account was created",
-          "fieldValue": "join"
+          "fieldValue": "type.join"
         },
         {
           "name": "%tag%",
           "description": "Tag of the user",
-          "fieldValue": "leave"
+          "fieldValue": "type.leave"
         },
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL of the user's avatar",
-          "fieldValue": "leave"
+          "fieldValue": "type.leave"
         },
         {
           "name": "%joinedAt%",
           "description": "Date when user joined guild",
-          "fieldValue": "leave"
+          "fieldValue": "type.leave"
         },
         {
           "name": "%guildUserCount%",
           "description": "Count of users on the guild",
-          "fieldValue": "leave"
+          "fieldValue": "type.leave"
         },
         {
           "name": "%guildMemberCount%",
           "description": "Count of members (without bots) on the guild",
-          "fieldValue": "leave"
+          "fieldValue": "type.leave"
         },
         {
           "name": "%mention%",
           "description": "Mention of the user who boosted",
-          "fieldValue": "boost"
+          "fieldValue": "type.boost"
         },
         {
           "name": "%boostCount%",
           "description": "Total count of boosts",
-          "fieldValue": "boost"
+          "fieldValue": "type.boost"
         },
         {
           "name": "%guildLevel%",
           "description": "Boost-Level of the guild after the boost",
-          "fieldValue": "boost"
+          "fieldValue": "type.boost"
         },
         {
           "name": "%mention%",
           "description": "Mention of the user who unboosted",
-          "fieldValue": "unboost"
+          "fieldValue": "type.unboost"
         },
         {
           "name": "%boostCount%",
           "description": "Total count of boosts",
-          "fieldValue": "unboost"
+          "fieldValue": "type.unboost"
         },
         {
           "name": "%guildLevel%",
           "description": "Boost-Level of the guild after the unboost",
-          "fieldValue": "unboost"
+          "fieldValue": "type.unboost"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%mention%",
+          "description": "Erwähnung des Nutzers",
+          "fieldValue": "type.join"
         },
         {
           "name": "%memberProfilePictureUrl%",
-          "description": "URL of the user's avatar",
-          "fieldValue": "unboost"
+          "description": "URL zum Avatar des Nutzers",
+          "fieldValue": "type.join"
+        },
+        {
+          "name": "%servername%",
+          "description": "Servername",
+          "fieldValue": "type.join"
+        },
+        {
+          "name": "%tag%",
+          "description": "Tag des Nutzers",
+          "fieldValue": "type.join"
+        },
+        {
+          "name": "%createdAt%",
+          "description": "Datum an dem der Account erstellt wurde",
+          "fieldValue": "type.join"
+        },
+        {
+          "name": "%tag%",
+          "description": "Tag des Nutzers",
+          "fieldValue": "leave"
         },
         {
           "name": "%memberProfilePictureUrl%",
-          "description": "URL of the user's avatar",
-          "fieldValue": "boost"
+          "description": "URL zum Avatar des Nutzers",
+          "fieldValue": "type.leave"
+        },
+        {
+          "name": "%joinedAt%",
+          "description": "Datum, an dem der Nutzer den Server betreten hat",
+          "fieldValue": "type.leave"
+        },
+        {
+          "name": "%guildUserCount%",
+          "description": "Anzahl von Nutzern auf dem Server",
+          "fieldValue": "type.leave"
+        },
+        {
+          "name": "%guildMemberCount%",
+          "description": "Anzahl von Nutzern auf dem Server",
+          "fieldValue": "type.leave"
+        },
+        {
+          "name": "%mention%",
+          "description": "Erwähnung des Nutzers",
+          "fieldValue": "type.boost"
+        },
+        {
+          "name": "%boostCount%",
+          "description": "Gesamte Anzahl an Boosts",
+          "fieldValue": "type.boost"
+        },
+        {
+          "name": "%guildLevel%",
+          "description": "Boost-Level nach dem Boost",
+          "fieldValue": "type.boost"
+        },
+        {
+          "name": "%mention%",
+          "description": "Erwähnung des Nutzers, der aufgehört hat zu boosten",
+          "fieldValue": "type.unboost"
+        },
+        {
+          "name": "%boostCount%",
+          "description": "Gesamte Anzahl aller Boosts",
+          "fieldValue": "type.unboost"
+        },
+        {
+          "name": "%guildLevel%",
+          "description": "Boost-Level nach der Entfernung des Boosts",
+          "fieldValue": "type.unboost"
         }
       ]
     }

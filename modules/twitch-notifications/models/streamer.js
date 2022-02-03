@@ -1,6 +1,6 @@
 const {DataTypes, Model} = require('sequelize');
 
-module.exports = class streamer extends Model {
+module.exports = class TwitchStreamer extends Model {
     static init(sequelize) {
         return super.init({
             name: {

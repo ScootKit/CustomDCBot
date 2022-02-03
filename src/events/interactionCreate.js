@@ -1,16 +1,50 @@
 const {embedType} = require('../functions/helpers');
-exports.run = async (client, interaction) => {
-    if (!client.botReadyAt) return interaction.reply({
-        content: ':warning: The bot is currently starting up. Please try again in a few minutes.',
-        ephemeral: true
-    });
-    if (!interaction.isCommand()) return;
+const {localize} = require('../functions/localize');
+
+module.exports.run = async (client, interaction) => {
+    if (!client.botReadyAt) {
+        if (interaction.isAutocomplete()) return interaction.respond({});
+        return interaction.reply({
+            content: '⚠ ' + localize('command', 'startup'),
+            ephemeral: true
+        });
+    }
+    if (!interaction.commandName) return;
     const command = client.commands.find(c => c.name.toLowerCase() === interaction.commandName.toLowerCase());
-    if (!command) return interaction.reply({content: ':warning: Command not found', ephemeral: true});
+    if (command && typeof (command || {}).options === 'function') command.options = await command.options(interaction.client);
     const group = interaction.options['_group'];
     const subCommand = interaction.options['_subcommand'];
+    if (interaction.isAutocomplete()) {
+        let focusedOption = interaction.options['_hoistedOptions'].find(h => h.focused);
+        interaction.value = (focusedOption || {}).value;
+        focusedOption = (focusedOption || {}).name;
+        if (!focusedOption) return interaction.respond({});
+        try {
+            if (!command) return interaction.respond({});
+            if (command.options.filter(c => c.type === 'SUB_COMMAND').length === 0) return await command.autoComplete[focusedOption](interaction);
+            if (group) return await command.autoComplete[group][subCommand][focusedOption](interaction);
+            else return await command.autoComplete[subCommand][focusedOption](interaction);
+        } catch (e) {
+            interaction.client.logger.error(localize('command', 'autcomplete-execution-failed', {
+                e,
+                f: focusedOption,
+                c: command.name,
+                g: group || '',
+                s: subCommand || ''
+            }));
+            interaction.respond({});
+        }
+    }
+    if (!interaction.isCommand()) return;
+    if (!command) return interaction.reply({content: '⚠ ' + localize('command', 'not-found'), ephemeral: true});
     if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions));
-    client.logger.debug(`${interaction.user.tag} (${interaction.user.id}) used command /${command.name}${' ' + group || ''}${' ' + subCommand || ''}.`);
+    client.logger.debug(localize('command', 'used', {
+        tag: interaction.user.tag,
+        id: interaction.user.id,
+        c: command.name,
+        g: group || '',
+        s: subCommand || ''
+    }));
 
     try {
         if (command.options.filter(c => c.type === 'SUB_COMMAND').length === 0) return await command.run(interaction);
@@ -26,11 +60,19 @@ exports.run = async (client, interaction) => {
         else await command.subcommands[subCommand](interaction);
         if (command.run) await command.run(interaction);
     } catch (e) {
-        interaction.client.logger.error(`Execution of command /${command.name}${group || ''}${subCommand || ''} failed: ${e}`);
-        interaction.reply({
-            content: `**🔴 Command execution failed 🔴**\nThis is not intended and can have multiple reasons. Please check console output for more details.\n\n${command.module ? `This issue occurred in the "${command.module}" module developed by [${interaction.client.modules[command.module].config.author.name}](${interaction.client.modules[command.module].config.author.url}). Please report the issue to them or [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new), attach the logs and steps-to-reproduce and mention the module developer in it.` : `If you think this is a programming issue please [open an issue](https://github.com/SCNetwork/CustomDCBot/issues/new) on github with your logs and steps-to-reproduce attached.`}`,
-            ephemeral: true
-        }).catch(() => {
+        interaction.client.logger.error(localize('command', 'execution-failed', {
+            e,
+            c: command.name,
+            g: group || '',
+            s: subCommand || ''
+        }));
+        if (!interaction.deferred) {
+            interaction.reply({
+                content: localize('command', 'execution-failed-message'),
+                ephemeral: true
+            }).catch(() => {
+            });
+        } else await interaction.editReply(localize('command', 'execution-failed-message')).catch(() => {
         });
     }
 };

@@ -1,5 +1,6 @@
 const {sendMultipleSiteButtonMessage} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
+const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (interaction) {
     const moduleStrings = interaction.client.configurations['levels']['strings'];
@@ -12,7 +13,7 @@ module.exports.run = async function (interaction) {
     });
     if (users.length === 0) return interaction.reply({
         ephemeral: true,
-        content: ':warning: Can\'t generate a leaderboard, because no one has any XP which is odd, but that\'s how it is ¯\\_(ツ)_/¯'
+        content: ':warning: ' + localize('levels', 'no-user-on-leaderboard')
     });
     const thisUser = users.find(u => u.userID === interaction.user.id);
 
@@ -60,8 +61,8 @@ module.exports.run = async function (interaction) {
                 userCount++;
                 if (userCount < 6) userString = userString + `<@${user.userID}>: ${user.xp}\n`;
             }
-            if (userCount > 5) userString = userString + `and ${userCount - 5} other users`;
-            currentSiteFields.push({name: `Level ${level}`, value: userString, inline: true});
+            if (userCount > 5) userString = userString + localize('levels', 'and-x-other-users', {uc: userCount - 5});
+            currentSiteFields.push({name: localize('levels', 'level', {l: level}), value: userString, inline: true});
             if (i === Object.keys(levels).length || currentSiteFields.length === 6) {
                 addSite(currentSiteFields);
                 currentSiteFields = [];
@@ -74,10 +75,10 @@ module.exports.run = async function (interaction) {
         for (const user of users) {
             i++;
             total++;
-            userString = userString + `**${total}. <@${user.userID}>**: Level ${user.level} - ${user.xp} XP\n`;
+            userString = userString + localize('levels', 'leaderboard-notation', {i: total, ui: user.userID, l: user.level, xp: user.xp}) + '\n';
             if (i === users.length || i === 20) {
                 addSite({
-                    name: 'Users',
+                    name: localize('levels', 'users'),
                     value: userString
                 });
                 userString = '';
@@ -90,13 +91,13 @@ module.exports.run = async function (interaction) {
 
 module.exports.config = {
     name: 'leaderboard',
-    description: 'Shows the leaderboard of this guild',
+    description: localize('levels', 'leaderboard-command-description'),
     options: function (client) {
         return [
             {
                 type: 'STRING',
                 name: 'sort-by',
-                description: `How to sort the leaderboard (default: ${client.configurations['levels']['config']['sortLeaderboardBy']})`,
+                description: localize('levels', 'leaderboard-sortby-description', {d: client.configurations['levels']['config']['sortLeaderboardBy']}),
                 required: false,
                 choices: [
                     {

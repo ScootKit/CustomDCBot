@@ -1,21 +1,34 @@
 {
   "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "description-en": "Configure the function of the module here",
+  "description-de": "Stelle hier die Funktionen des Modules ein",
   "content": [
     {
       "field_name": "channelID",
+      "humanname-en": "Channel",
       "default": "",
       "type": "channelID",
-      "description": "ID of the channel this module should operate in"
+      "description-en": "ID of the channel this module should operate in",
+      "description-de": "ID des Channels, in welchem die Nachricht gesendet und bearbeitet werden soll"
     },
     {
       "field_name": "embed",
-      "default": {
+      "humanname-en": "Embed",
+      "default-en": {
         "title": "Information about this guild",
         "description": "You can find some basic information about our guild here",
         "color": "GREEN"
       },
+      "default-de": {
+        "title": "Informationen über diesen Server",
+        "description": "Hier kannst du alle Informationen über unseren Server finden",
+        "color": "GREEN"
+      },
       "type": "keyed",
-      "description": "You can configure some of the parameters of the embed here",
+      "description-de": "Du kannst hier einige Teile des Embeds anpassen",
+      "description-en": "You can configure some of the parameters of the embed here",
       "disableKeyEdits": true,
       "content": {
         "key": "string",

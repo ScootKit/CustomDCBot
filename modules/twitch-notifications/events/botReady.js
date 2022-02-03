@@ -1,7 +1,11 @@
+/**
+ * @module twitch-notifications
+ */
 const {embedType} = require('../../../src/functions/helpers');
 
 const {ApiClient} = require('twitch');
 const {ClientCredentialsAuthProvider} = require('twitch-auth');
+const {localize} = require('../../../src/functions/localize');
 
 /**
  * General program
@@ -18,19 +22,18 @@ function twitchNotifications(client, apiClient) {
      * @param {string} game Game that is streamed
      * @param {string} thumbnailUrl URL of the thumbnail of the stream
      * @param {number} channelID ID of the live-message-channel
-     * @returns {Promise<void>}
+     * @returns {*}
      * @private
      */
     function sendMsg(username, game, thumbnailUrl, channelID) {
         const channel = client.channels.cache.get(channelID);
-        if (!channel) return client.logger.fatal(`[twitch-notifications] Could not find channel with id ${channelID}`);
+        if (!channel) return client.logger.fatal(`[twitch-notifications] ` + localize('twitch-notifications', 'channel-not-found', {c: channelID}));
         channel.send(embedType(config['liveMessage'], {
             '%streamer%': username,
             '%game%': game,
             '%url%': `https://twitch.tv/${username.toLowerCase()}`,
             '%thumbnailUrl': thumbnailUrl
         }));
-        client.logger.debug(`[twitch-notifications] sended the live-message for ${username} successfully in ${channel.name}`);
     }
 
     /**
@@ -62,19 +65,16 @@ function twitchNotifications(client, apiClient) {
         });
         const stream = await isStreamLive(value);
         if (stream === 'userNotFound') {
-            return client.logger.error(`Cannot find user ${value} on Twitch`);
+            return client.logger.error(`[twitch-notifications] ` + localize('twitch-notifications', 'user-not-on-twitch', {u: value}));
         } else if (stream !== null && !streamer) {
             client.models['twitch-notifications']['streamer'].create({
                 name: value.toLowerCase(),
                 startedAt: stream.startDate.toString()
             });
-            client.logger.debug(`[twitch-notifications] Created database-model for streamer ${stream.userDisplayName} with starting-date ${stream.startDate.toString()}`);
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index]);
         } else if (stream !== null && stream.startDate.toString() !== streamer.startedAt) {
-            const oldStartingDate = streamer.startedAt;
             streamer.startedAt = stream.startDate.toString();
             streamer.save();
-            client.logger.debug(`[twitch-notifications] Updated starting-date from ${oldStartingDate} to ${stream.startDate.toString()}`);
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index]);
         }
     }
@@ -89,7 +89,6 @@ module.exports.run = async (client) => {
     const apiClient = new ApiClient({authProvider});
 
     await twitchNotifications(client, apiClient);
-    if (config['interval'] > 60) return client.logger.fatal(`[twitch-notifications] The value of the interval must be equal or higher than 60`);
     const interval = config['interval'] * 1000;
     const twitchCheckInterval = setInterval(() => {
         twitchNotifications(client, apiClient);

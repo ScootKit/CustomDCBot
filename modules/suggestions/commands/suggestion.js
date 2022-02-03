@@ -1,5 +1,6 @@
-const {embedType} = require('../../../src/functions/helpers');
+const {embedType, truncate} = require('../../../src/functions/helpers');
 const {generateSuggestionEmbed, notifyMembers} = require('../suggestion');
+const {localize} = require('../../../src/functions/localize');
 
 module.exports.subcommands = {
     'create': async function (interaction) {
@@ -7,6 +8,7 @@ module.exports.subcommands = {
         const moduleConfig = interaction.client.configurations['suggestions']['config'];
         const channel = await interaction.guild.channels.fetch(moduleConfig.suggestionChannel);
         const suggestionMsg = await channel.send(moduleConfig.notifyRole ? `<@&${moduleConfig.notifyRole}> New suggestion, loading..` : 'Loading...');
+        if (moduleConfig.commentType === 'thread') await suggestionMsg.startThread({name: moduleConfig.threadName});
         if (moduleConfig.reactions) moduleConfig.reactions.forEach(reaction => suggestionMsg.react(reaction));
         const suggestionElement = await interaction.client.models['suggestions']['Suggestion'].create({
             suggestion: interaction.options.getString('suggestion'),
@@ -20,12 +22,12 @@ module.exports.subcommands = {
     'comment': async function (interaction) {
         const suggestionElement = await interaction.client.models['suggestions']['Suggestion'].findOne({
             where: {
-                id: interaction.options.getInteger('id')
+                id: interaction.options.getString('id')
             }
         });
         if (!suggestionElement) return interaction.reply({
             ephemeral: true,
-            content: 'Suggestion could not be found'
+            content: '⚠ ' + localize('suggestions', 'suggestion-not-found')
         });
         await interaction.deferReply({ephemeral: true});
         suggestionElement.comments.push({
@@ -44,6 +46,31 @@ module.exports.subcommands = {
     }
 };
 
+module.exports.autoComplete = {
+    'comment': {
+        'id': autoCompleteSuggestionID
+    }
+};
+
+/**
+ * Auto-Completes a suggestion id
+ * @param {Interaction} interaction Interaction to auto-complete up on
+ * @return {Promise<void>}
+ */
+async function autoCompleteSuggestionID(interaction) {
+    const suggestions = await interaction.client.models['suggestions']['Suggestion'].findAll();
+    const returnValue = [];
+    interaction.value = interaction.value.toLowerCase();
+    for (const suggestion of suggestions.filter(s => (interaction.client.guild.members.cache.get(s.suggesterID) || {user: {tag: s.suggesterID}}).user.tag.toLowerCase().includes(interaction.value) || s.suggestion.toLowerCase().includes(interaction.value) || s.id.toString().includes(interaction.value) || s.messageID.includes(interaction.value))) {
+        if (returnValue.length !== 25) returnValue.push({
+            value: suggestion.id.toString(),
+            name: truncate(`${(interaction.client.guild.members.cache.get(suggestion.suggesterID) || {user: {tag: suggestion.suggesterID}}).user.tag}: ${suggestion.suggestion}`, 100)
+        });
+    }
+    interaction.respond(returnValue);
+}
+module.exports.autoCompleteSuggestionID = autoCompleteSuggestionID;
+
 module.exports.config = {
     name: 'suggestion',
     description: 'Create and comment on suggestions',
@@ -59,7 +86,7 @@ module.exports.config = {
                 description: 'Content you want to suggest'
             }]
         }];
-        if (client.configurations['suggestions']['config'].allowUserComment) {
+        if (client.configurations['suggestions']['config'].commentType === 'command') {
             array.push(
                 {
                     type: 'SUB_COMMAND',
@@ -67,9 +94,10 @@ module.exports.config = {
                     description: 'Comments on a suggestion',
                     options: [
                         {
-                            type: 'INTEGER',
+                            type: 'STRING',
                             required: true,
                             name: 'id',
+                            autocomplete: true,
                             description: 'ID of the suggestion'
                         },
                         {

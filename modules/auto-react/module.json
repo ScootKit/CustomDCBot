@@ -1,10 +1,14 @@
 {
   "name": "auto-react",
+  "humanReadableName-de": "Automatisches Reagieren",
+  "humanReadableName-en": "Automatic reactions",
+  "fa-icon": "far fa-smile",
   "author": {
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": "Automatically reacts with selected emojis in selected channels or if a user gets pinged",
+  "description-en": "Automatically reacts with selected emojis in selected channels or if a user gets pinged",
+  "description-de": "Reagiert automatisch mit ausgewählten Emojs in einem ausgewählten Channel und bei Pings",
   "events-dir": "/events",
   "config-example-files": [
     "config.json"
