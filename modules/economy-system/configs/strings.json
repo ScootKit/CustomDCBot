@@ -161,7 +161,7 @@
       "field_name": "balanceReply",
       "allowEmbed": true,
       "type": "string",
-      "default": "The User %user% has currently **%balance%**",
+      "default": "Balance of the user **%user%**: \n Balance: **%balance%** \n Bank: **%bank%** \n Total: **%total%**",
       "description": "Reply for the balance command",
       "params": [
         {
@@ -171,6 +171,14 @@
         {
           "name": "%user%",
           "description": "Username and discriminator of the User"
+        },
+        {
+          "name": "%bank%",
+          "description": "Money which tha user has currently on the bank"
+        },
+        {
+          "name": "%total%",
+          "description": "Total balance of the User"
         }
       ]
     },
@@ -314,6 +322,23 @@
       "type": "string",
       "description-en": "Message that gets send when a User disables the Message-Drop message",
       "default-en": "Successfully disabled the Message-Drop message"
+    },
+    {
+      "field_name": "adminEditDM",
+      "humanname-en": "admin edit DM",
+      "type": "string",
+      "description-en": "The direct-message, which gets send to an user, when an admin edits their balance",
+      "default-en": "The admin %admin% edited your balance. Your new balance ist **%balance%%**",
+      "params": [
+        {
+          "name": "%balance%",
+          "description": "New balance of the user"
+        },
+        {
+          "name": "%admin%",
+          "description": "Name of the admin who edited the balance"
+        }
+      ]
     }
   ]
 }

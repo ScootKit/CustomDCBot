@@ -307,7 +307,7 @@
       "set-money": "The balance of %v has been set to %i.",
       "added-money-log": "The user %u added %i %c to the balance of %v",
       "removed-money-log": "The user %u removed %i %c from the balance of %v",
-      "set-money-log": "The user %u set the %u's balance to %i %c",
+      "set-money-log": "The user %u set the %v's balance to %i %c",
       "command-description-main": "Use the economy-system",
       "command-description-work": "Earn some cash by working",
       "command-description-crime": "Earn some cash by committing a crime",
