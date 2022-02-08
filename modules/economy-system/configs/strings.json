@@ -7,20 +7,30 @@
   "content": [
     {
       "field_name": "notFound",
-      "default": "This item could not be found",
+      "humanname-en": "not found message",
+      "humanname-de": "Nicht gefunden Nachricht",
+      "default-en": "This item could not be found",
+      "default-de": "Dieses Item konnte nicht gefunden werden",
       "type": "string",
       "allowEmbed": true,
-      "description": "The message that is send if the item wasn't found"
+      "description-en": "The message that is send if the item wasn't found",
+      "description-de": "Die Nachricht, die gesendet wird, wenn das Item nicht gefunden wird"
     },
     {
       "field_name": "notEnoughMoney",
-      "default": "You haven't enough money to buy this Item",
+      "humanname-en": "not enough money",
+      "humanname-de": "Nicht genug Geld",
+      "default-en": "You haven't enough money to buy this Item",
+      "default-de": "Du hast nicht genug Geld, um dieses Item zu kaufen",
       "type": "string",
       "allowEmbed": true,
-      "description": "The message that is send if the user haven't enough money to buy an item"
+      "description-en": "The message that is send if the user haven't enough money to buy an item",
+      "description-de": "Die Nachricht, die gesendet wird, wenn ein Benutzer nicht genug geld hat, um ein Item zu kaufen"
     },
     {
       "field_name": "shopMsg",
+      "humanname-en": "shop message",
+      "humanname-de": "Shop-Nachricht",
       "type": "string",
       "allowEmbed": true,
       "default": {
@@ -29,12 +39,16 @@
       },
       "params": [{
         "name": "%shopItems%",
-        "description": "Current items in the shop"
+        "description-en": "Current items in the shop",
+        "description-de": "Items die aktuell im Shop verfügbar sind"
       }],
-      "description": "Message for the shop. The Items gets added at the end"
+      "description-en": "Message for the shop. The Items gets added at the end",
+      "description-de": "Die Nachricht, die den aktuellen Shop anzeigt"
     },
     {
       "field_name": "cooldown",
+      "humanname-en": "cooldown",
+      "humanname-de": "Cooldown",
       "type": "string",
       "description": "This message gets send when a user is currently in cooldown",
       "allowEmbed": true,
@@ -42,10 +56,11 @@
     },
     {
       "field_name": "workSuccess",
-      "type": "string",
+      "type": "array",
+      "content": "string",
       "allowEmbed": true,
-      "description": "This message gets send when a user works successfully",
-      "default": "You worked and earned **%earned%**",
+      "description": "Array of messages from which one random gets send when a user works successfully",
+      "default": ["You worked and earned **%earned%**"],
       "params": [
         {
           "name": "%earned%",
@@ -55,14 +70,29 @@
     },
     {
       "field_name": "crimeSuccess",
-      "type": "string",
+      "type": "array",
+      "content": "string",
       "allowEmbed": true,
-      "description": "This message gets send when a user commits a crime successfully",
-      "default": "You are criminal and earned **%earned%**",
+      "description": "Array of messages from which one random gets send when a user commits a crime successfully",
+      "default": ["You stole a wallet and earned **%earned%**"],
       "params": [
         {
           "name": "%earned%",
           "description": "Money that the user had earned"
+        }
+      ]
+    },
+    {
+      "field_name": "crimeFail",
+      "type": "array",
+      "content": "string",
+      "allowEmbed": true,
+      "description": "Array of messages from which one random gets send when a user fails to do some crime",
+      "default": ["You've stolen a wallet and get caught.You loose **%loose%**"],
+      "params": [
+        {
+          "name": "%loose%",
+          "description": "Money that the user looses"
         }
       ]
     },
@@ -131,7 +161,7 @@
       "field_name": "balanceReply",
       "allowEmbed": true,
       "type": "string",
-      "default": "The User %user% has currently **%balance%**",
+      "default": "Balance of the user **%user%**: \n Balance: **%balance%** \n Bank: **%bank%** \n Total: **%total%**",
       "description": "Reply for the balance command",
       "params": [
         {
@@ -141,6 +171,14 @@
         {
           "name": "%user%",
           "description": "Username and discriminator of the User"
+        },
+        {
+          "name": "%bank%",
+          "description": "Money which tha user has currently on the bank"
+        },
+        {
+          "name": "%total%",
+          "description": "Total balance of the User"
         }
       ]
     },
@@ -201,6 +239,104 @@
         {
           "name": "%item%",
           "description": "Name of the deleted item"
+        }
+      ]
+    },
+    {
+      "field_name": "depositMsg",
+      "humanname-en": "deposit message",
+      "type": "string",
+      "description-en": "The reply when a user deposits money to the bank",
+      "default-en": "Successfully deposited **%amount%** to your bank",
+      "params": [
+        {
+          "name": "%amount%",
+          "description-en": "Amount that is deposited"
+        }
+      ]
+    },
+    {
+      "field_name": "withdrawMsg",
+      "humanname-en": "withdraw message",
+      "type": "string",
+      "description-en": "The reply when a user withdraws money from the bank",
+      "default-en": "Successfully withdrew **%amount%** from your bank",
+      "params": [
+        {
+          "name": "%amount%",
+          "description-en": "Amount that is withdrew"
+        }
+      ]
+    },
+    {
+      "field_name": "msgDropMsg",
+      "humanname-en": "message drop message",
+      "type": "array",
+      "content": "string",
+      "description-en": "The message that gets sent on a message-drop",
+      "default-en": ["Message-Drop: You earned %earned% simply by chatting!"],
+      "params": [
+        {
+          "name": "%erned%",
+          "description-en": "Amount of money that the user had erned"
+        }
+      ]
+    },
+    {
+      "field_name": "NaN",
+      "humanname-en": "not a number",
+      "type": "string",
+      "description-en": "Message that gets send if the bot needs a number but gets something different",
+      "default-en": "**%input%** isn't a number",
+      "params": [
+        {
+          "name": "%input%",
+          "description-en": "False input"
+        }
+      ]
+    },
+    {
+      "field_name": "msgDropAlreadyEnabled",
+      "humanname-en": "message-drop already enabled",
+      "type": "string",
+      "description-en": "Message that gets send if a User trys to enable the Message-Drop message, but it's already enabled",
+      "default-en": "The Mesage-Drop message is already enabled!"
+    },
+    {
+      "field_name": "msgDropEnabled",
+      "humanname-en": "message-drop enabled",
+      "type": "string",
+      "description-en": "Message that gets send when a User enables the Message-Drop message",
+      "default-en": "Successfully enabled the Message-Drop message"
+    },
+    {
+      "field_name": "msgDropAlreadyDisabled",
+      "humanname-en": "message-drop already disabled",
+      "type": "string",
+      "description-en": "Message that gets send if a User trys to disable the Message-Drop message, but it's already disabled",
+      "default-en": "The Mesage-Drop message is already disabled!"
+    },
+    {
+      "field_name": "msgDropEnabled",
+      "humanname-en": "message-drop disabled",
+      "type": "string",
+      "description-en": "Message that gets send when a User disables the Message-Drop message",
+      "default-en": "Successfully disabled the Message-Drop message"
+    },
+    {
+      "field_name": "adminEditDM",
+      "humanname-en": "admin edit DM",
+      "type": "string",
+      "description-en": "The direct-message, which gets send to an user, when an admin edits their balance",
+      "default-en": "The admin %admin% edited your balance. Your new balance ist **%balance%%**",
+      "params": [
+        {
+          "name": "%balance%",
+          "description": "New balance of the user"
+        },
+        {
+          "name": "%admin%",
+          "description": "Name of the admin who edited the balance"
         }
       ]
     }

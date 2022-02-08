@@ -26,7 +26,9 @@
       "loaded-cli": "Loaded API-Action %c in %p",
       "channel-lock": "Locked channel",
       "channel-unlock": "Unlocked channel",
-      "channel-unlock-data-not-found": "Unlocking channel with ID %c failed because it was never locked (which is weird to beginn with)."
+      "channel-unlock-data-not-found": "Unlocking channel with ID %c failed because it was never locked (which is weird to beginn with).",
+      "migrate-start": "Starting migration of the model %o to the model %m. Please don't stop the Bot",
+      "migrate-success": "Successfully migrated the model %o into the new model %m"
     },
     "reload": {
       "reloading-config": "Reloading configuration...",
@@ -293,6 +295,7 @@
     "economy-system": {
       "work-earned-money": "The user %u gained %m %c by working",
       "crime-earned-money": "The user %u gained %m %c by committing a crime",
+      "crime-loose-money": "The user %u loosed %m %c by failing to do crime",
       "message-drop-earned-money": "The user %u gained %m %c by getting a message drop",
       "rob-earned-money": "The user %u gained %m %c by robbing from %v",
       "weekly-earned-money": "The user %u gained %m %c by cashing in their weekly reward",
@@ -304,7 +307,7 @@
       "set-money": "The balance of %v has been set to %i.",
       "added-money-log": "The user %u added %i %c to the balance of %v",
       "removed-money-log": "The user %u removed %i %c from the balance of %v",
-      "set-money-log": "The user %u set the %u's balance to %i %c",
+      "set-money-log": "The user %u set the %v's balance to %i %c",
       "command-description-main": "Use the economy-system",
       "command-description-work": "Earn some cash by working",
       "command-description-crime": "Earn some cash by committing a crime",
@@ -331,7 +334,19 @@
       "shop-command-description-buy": "Buy an item",
       "shop-command-description-list": "List all items in the shop",
       "shop-command-description-delete": "Remove an item from the shop",
-      "channel-not-found": "Can't find the leaderboard channel with the ID %c"
+      "channel-not-found": "Can't find the leaderboard channel with the ID %c",
+      "command-description-deposit": "Deposit xyz to the bank",
+      "option-description-amount-deposit": "Amount to deposit (can be all or a number)",
+      "command-description-withdraw": "Withdraw xyz from the bank",
+      "option-description-amount-withdraw": "Amount to withdraw (can be all or a number)",
+      "command-group-description-msg-drop-msg": "Options about the Message-Drop message",
+      "command-description-msg-drop-msg-enable": "Enables the Message-Drop message",
+      "command-description-msg-drop-msg-disable": "Disables the Message-Drop message",
+      "command-description-destroy": "Destroy the whole economy",
+      "option-description-confirm": "Confirm, that you really want to do this",
+      "destroy-cancel-reply": "Ok, I won't destroy the economy",
+      "destroy-reply": "Destroying the econmoy. Stand by...",
+      "destroy": "The whole economy is now destroyed, as requested by %u"
     }
   }
 }
