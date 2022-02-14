@@ -12,7 +12,8 @@
       "description": "Channel in which this module should operate",
       "humanname-de": "Vorschlagskanal",
       "description-de": "Kanal in dem dieses Modul arbeiten soll",
-      "params-de": {}
+      "params-de": {},
+      "default-de": ""
     },
     {
       "field_name": "adminRoles",
@@ -37,19 +38,14 @@
       "default-de": []
     },
     {
-      "field_name": "commentType",
-      "type": "select",
-      "content": ["none","thread", "command"],
-      "humanname": "Comment-Type",
-      "description": "Select, how users can leave comments under their suggestions",
-      "default": "thread"
-    },
-    {
-      "field_name": "threadName",
-      "type": "string",
-      "humanname": "Thread-Name",
-      "description": "Only if \"Comment-Type\" = select; Name of the thread",
-      "default": "Comments"
+      "field_name": "allowUserComment",
+      "type": "boolean",
+      "description": "If enabled users can leave comments on suggestions. (If disabled only admins can do that)",
+      "default": true,
+      "humanname-de": "Nutzerkommentare",
+      "description-de": "Wenn diese Option aktiviert ist, können Nutzer Kommentare zu Vorschlägen abgeben. (Wenn nicht, können dies nur Admins)",
+      "params-de": {},
+      "default-de": true
     },
     {
       "field_name": "suggestionEmbed",

@@ -26,7 +26,7 @@ module.exports.run = async function (interaction) {
      */
     function addSite(fields) {
         const embed = new MessageEmbed()
-            .setFooter(interaction.client.strings.footer, interaction.client.strings.footerImgUrl)
+            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .setColor('GREEN')
             .setThumbnail(interaction.guild.iconURL())
             .setTitle(moduleStrings.leaderboardEmbed.title)

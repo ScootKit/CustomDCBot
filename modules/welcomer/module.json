@@ -14,5 +14,6 @@
     "configs/channels.json",
     "configs/random-messages.json",
     "configs/config.json"
-  ]
+  ],
+  "tags": ["administrator"]
 }

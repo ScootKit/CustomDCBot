@@ -190,7 +190,8 @@
           "name": "%requirements%",
           "description": "Requirements of this giveaway"
         }
-      ]
+      ],
+      "description-de": ""
     },
     {
       "field_name": "giveaway_message_edit_after_winning",
@@ -430,8 +431,9 @@
       "humanname-en": "Button-Content",
       "description-de": "Inhalt des Teilnehmen-Knopfes",
       "description-en": "Content of the button under giveaways",
-      "default-en": "Join giveaway \uD83C\uDF89",
-      "default-de": "Gewinnspiel beitreten \uD83C\uDF89"
+      "default-en": "Join giveaway 🎉",
+      "default-de": "Gewinnspiel beitreten 🎉",
+      "params-de": {}
     },
     {
       "field_name": "winner_DM_message",

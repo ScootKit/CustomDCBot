@@ -16,5 +16,6 @@
     "configs/random-levelup-messages.json",
     "configs/special-levelup-messages.json"
   ],
-  "fa-icon": "far fa-comments"
+  "fa-icon": "far fa-comments",
+  "tags": ["community"]
 }

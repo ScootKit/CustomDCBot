@@ -14,7 +14,7 @@
       "humanname-de": "Level",
       "description-de": "Level, bei welchem diese Nachricht gesendet werden soll",
       "params-de": {},
-      "default-de": {}
+      "default-de": ""
     },
     {
       "field_name": "message",
@@ -52,7 +52,7 @@
           "description": "Erwähnung der Rolle (Kein \"Ping\", nur, wenn das Level eine Belohnung hat)"
         }
       ],
-      "default-de": {}
+      "default-de": ""
     }
   ]
 }

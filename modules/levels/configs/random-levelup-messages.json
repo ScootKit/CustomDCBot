@@ -56,7 +56,7 @@
           "description": "Erwähnung der Rolle (Kein \"Ping\", nur, wenn Nachrichtentyp = with-reward)"
         }
       ],
-      "default-de": {}
+      "default-de": ""
     }
   ]
 }

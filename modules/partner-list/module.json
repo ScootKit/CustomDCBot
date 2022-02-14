@@ -14,5 +14,6 @@
   "models-dir": "/models",
   "config-example-files": [
     "config.json"
-  ]
+  ],
+  "tags": ["administration"]
 }

@@ -2,12 +2,23 @@
   "filename": "config.json",
   "humanname-de": "Konfiguration",
   "humanname-en": "Configuration",
+  "categories": [
+    {
+      "name": "interval",
+      "humanname-de": "Intervalle",
+      "humanname-en": "Intervall",
+      "description-de": "Intervalle erlauben es dir, den Status des Bots alle paar Sekunden automatisch zu ändern!",
+      "description-en": "You can use intervalls to automatically change the Status of the bot",
+      "categoryToggle": "enableInterval"
+    }
+  ],
   "content": [
     {
       "field_name": "enableInterval",
       "humanname-en": "Enable interval?",
       "humanname-de": "Interval aktivieren?",
       "default": false,
+      "category": "interval",
       "type": "boolean",
       "description-en": "If enabled the bot will change its status every x seconds",
       "description-de": "Wenn aktiviert wird sich der Status des Bots alle x Sekunden ändern"
@@ -17,6 +28,7 @@
       "humanname-en": "Interval-Statuses",
       "humanname-de": "Interval-Status",
       "default": [],
+      "category": "interval",
       "content": "string",
       "type": "array",
       "description-en": "Statuses from which the bot should randomly choose one",
@@ -94,6 +106,7 @@
       "field_name": "interval",
       "humanname-de": "Statusänderung-Interval",
       "humanname-en": "Status-Interval",
+      "category": "interval",
       "default": 15,
       "type": "integer",
       "description-de": "Das Intervall der Statusänderungen in Sekunden (mindestens 10 Sekunden)",

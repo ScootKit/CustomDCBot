@@ -22,7 +22,7 @@
       "humanname-de": "Partnerschafts-Manager-Rollen",
       "description-de": "Jede Rolle, die neue Partner hinzufügen kann",
       "params-de": {},
-      "default-de": {}
+      "default-de": []
     },
     {
       "field_name": "embed",
@@ -90,7 +90,7 @@
       "humanname-de": "Partner-Benachrichtigung",
       "description-de": "Wenn aktiviert, sendet der Bot eine PN an Partner, wenn sie hinzugefügt oder entfernt werden",
       "params-de": {},
-      "default-de": {}
+      "default-de": false
     },
     {
       "field_name": "newPartnerDM",

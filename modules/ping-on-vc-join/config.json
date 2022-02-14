@@ -13,7 +13,7 @@
       "humanname-de": "Auslöserkanal",
       "description-de": "Kanäle, bei denen der Bot reagieren soll, wenn ein Nutzer joint",
       "params-de": {},
-      "default-de": {}
+      "default-de": []
     },
     {
       "field_name": "message",
@@ -61,7 +61,7 @@
       "humanname-de": "Benachrichtigungskanal",
       "description-de": "Kanal, in welchen die Nachricht gesendet werden soll",
       "params-de": {},
-      "default-de": {}
+      "default-de": ""
     },
     {
       "field_name": "send_pn_to_member",
@@ -71,7 +71,7 @@
       "humanname-de": "Join-PN",
       "description-de": "Soll der Bot eine PN an den Nutzer schicken?",
       "params-de": {},
-      "default-de": {}
+      "default-de": false
     },
     {
       "field_name": "pn_message",

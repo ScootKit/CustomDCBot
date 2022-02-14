@@ -13,5 +13,6 @@
   "fa-icon": "far fa-lightbulb",
   "config-example-files": [
     "config.json"
-  ]
+  ],
+  "tags": ["administration"]
 }

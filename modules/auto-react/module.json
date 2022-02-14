@@ -12,5 +12,6 @@
   "events-dir": "/events",
   "config-example-files": [
     "config.json"
-  ]
+  ],
+  "tags": ["fun"]
 }

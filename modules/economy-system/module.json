@@ -1,5 +1,6 @@
 {
   "name": "economy-system",
+  "beta": true,
   "humanReadableName-en": "Economy",
   "author": {
     "name": "jateute",
@@ -14,5 +15,6 @@
   "config-example-files": [
     "configs/config.json",
     "configs/strings.json"
-  ]
+  ],
+  "tags": ["community"]
 }

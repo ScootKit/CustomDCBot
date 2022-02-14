@@ -35,12 +35,13 @@ Please read the full [license](LICENSE). This is not legal advice.
 
 As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
 product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-, [donate on Patreon](https://patreon.com/scnetwork), [subscribe to a membership](https://membership.sc-network.net),
+, [donate on Patreon](https://patreon.com/scnetwork)
 or on [any other platform](https://github.com/SCNetwork/CustomDCBot?sponsor=1). Thank you so much <3
 
 ## Please read this issue before continuing.
 
-This repo does not get any new modules, but will get updates regarding core-functionality. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).
+This repo does not get any new modules or features
+currently. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).
 
 ### Table of contents
 
@@ -59,6 +60,11 @@ This repo does not get any new modules, but will get updates regarding core-func
 5. Start the bot with `npm start`
 6. The bot is now generating a `modules.json` and a `strings.json` file inside your `config` directory. You
    can [change](#configuration) them.
+
+When reading thought the code, you may encounter code "tracking" parts of the bot.
+This part is only enabled in the SCNX-Version (and users can opt-out there if the want to).
+This open-source-version won't contact SCNX, SC Network and won't share any information with us, don't worry. You
+can verify this by looking at the source code, [science.js](src/functions/science.js) looks like a great start-point.
 
 ### Features
 
@@ -108,7 +114,7 @@ Please read the license for more information.
 
 **Before you make a module**: Please create an issue with your suggestion and claim that you are working on it so nobody
 is working on the same thing (;\
-Also please read the [Rules for modules](#rules-for-modules).\
+Also please read the [Rues for modules](#rules-for-modules).\
 **Submit a module**: Simply create a pullrequest, and we will check your module and merge it then (;
 
 #### Rules for modules
@@ -122,34 +128,31 @@ Every module should
 * create as few commands as possible (we have a limit to 100 commands in total), so please try to
   use [Sub-Commands](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups)
   wherever possible (eg: instead of having /ban, /kick, /mute etc, have a /moderate command with sub-commands)
-* Use the newest features of the discord api and discord.js (buttons, selects, auto-complete, etc) if possible
-* process and save only needed user information and data. If sensitive data (for example message content) gets stored (should not be needed), it has to be encrypted according to [Discord'S Developers Terms of Service](https://discord.com/developers/docs/legal)
+* Use the newest features of the discord api and discord.js (buttons, selects, etc) if possible
+* process only needed user information and data
 * follow our [terms of service](https://sc-net.work/tos), [Discord's Terms of Service](https://discord.com/tos) and
   the [Discord Developer Terms of Service](https://discord.com/developers/docs/legal). A module should not allow users
   to bypass or break the mentioned documents. This includes but is not limited to Nitro-Only-Features.
-* should support [localization](#localization) fully, it's enough to translate to english, our volunteers are happy to translate it to german
 
 #### module.json
 
 Every module has to contain a `module.json` file with the following content:
 
 * `name` of the module. Should be the same as the name of your dictionary.
-* `humanReadableName`: Name shown to users (Supports [localization](#localization-in-configuration-files))
 * `author`
     * `name`: Name of the author
     * `link`: Link to the author
-* `description`: Short description of the module (Supports [localization](#localization-in-configuration-files))
+* `description`: Short description of the module
 * `cli` (optional): [CLI-File](#cli-files) of your module
 * `commands-dir` (optional): Directory inside your module folder where all
   the [interaction-command-files](#interaction-command) are in
-* `message-commands-dir` (optional, not recommended if not necessary): Directory inside your module folder where all
-  the [message-command-files](#message-command) are in
 * `on-load-event` (optional): File with exported `onLoad` function in it. Gets executed when your commands got loaded
   successfully; at this point the Client is not logged in yet, so you can't communicate with Discord (yet).
 * `events-dir` (optional): Directory inside your module folder where all the [event-files](#events) are in
 * `models-dir` (optional): Directory inside your module folder where all the models-files are in
 * `config-example-files` (optional, seriously leave this out when you don't have config files): Array
   of [config-files](#example-config-file) inside your module directory.
+* `tags` (optional): Array of tags. 
 
 #### Interaction-Command
 
@@ -186,19 +189,8 @@ An interaction-command ("slash command") file has to export the following things
 
 #### Message-Command
 
-A message-command file has to export the following things:
-
-* `run`: Function that gets triggered if the command gets executed (provided arguments: `client` (discord.js Client)
-  , `msg` (MessageObject),
-  `args` (Array of arguments))
-* `help`
-    * `name`: Name of the command (should be the same name as the file name)
-    * `description`: Description of the command
-    * `aliases`: Array of all aliases. Should contain the value of `name`.
-* `config`
-    * `args`: How many arguments does this command *at least* need?
-    * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
-      boolean)
+Starting V3, message-commands are no longer supported. Please use [Interaction-Commands](#interaction-command)
+instead. Read more in [CHANGELOG.md](CHANGELOG.md).
 
 #### Events
 
@@ -227,18 +219,15 @@ Note: All you CLI-Commands can also get executed via the API.
 
 An example config file should include the following things:
 
-* `filename`: Name of the generated config file 
-* `humanname`: Name shown to users of the configuration file (Supports [localization](#localization-in-configuration-files))
-* `description`: Description of the configuration file (Supports [localization](#localization-in-configuration-files))
+* `filename`: Name of the generated config file
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
-    * `humanname`: Name of the configuration field, shown to users (Supports [localization](#localization-in-configuration-files))
-    * `default`: Default value (Supports [localization](#localization-in-configuration-files))
+    * `default`: Default value
     * `type`: Can be `channelID`, `select`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
-    * `description`: Short description of this field (Supports [localization](#localization-in-configuration-files))
+    * `description`: Short description of this field
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please
       use the build-in function in `src/functions/helpers.js`)
     * `content` (if type === `array`): Type (see `type` above) of every value
@@ -246,7 +235,7 @@ An example config file should include the following things:
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value
         * `value`: Type (see `type` above) of the value of every value
-    * `params` (if type === `string`, array, optional, Supports [localization](#localization-in-configuration-files))
+    * `params` (if type === `string`, array, optional)
         * `name`: Name of the parameter (e.g. `%mention%`)
         * `description`: Description of the parameter (e.g. `Mention of the user`)
         * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
@@ -264,21 +253,9 @@ please push the return value to `client.intervals` to get them removed on `confi
 
 #### Helper-Functions
 
-The bot includes a lot of functions to make your live easier™. Please open
+The bot includes a lot of functions to make your live easier. Please open
 the [DevDoc](https://custombot-devdocs.sc-network.net/) to see all of them.
 
-#### Localization
-
-We support localization for multiple languages. Developers can use `localize(moduleName, StringName, {replaceOption: replaceOptionValue}` to 
-use localized value, to add new strings, add it under the language key (we only publish the english translation at the moment, so `en`) and
-under the module- / part-name. Please see [Localization in configuration files](#localization-in-configuration-files) to learn about localization in configuration files - I promise, it's stupidly easy.
-
-#### Localization in configuration files
-It's stupidly easy - you just put the locale string after the key, for example:
-The key `description` becomes `description-en` to localize in the english language.
-Fallback-Patern: `description-[userLanguage]` -> `description-en` -> `description`, which means that
-you don't have to change anything ^^
-
-© Simon Csaba, 2020-2022 (wow that's long)
+© Simon Csaba, 2020-2021
 
 Love ya <3

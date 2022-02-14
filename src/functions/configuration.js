@@ -3,7 +3,6 @@
  * @module Configuration
  * @author Simon Csaba <mail@scderox.de>
  */
-const {asyncForEach} = require('./helpers');
 const jsonfile = require('jsonfile');
 const fs = require('fs');
 const {logger} = require('../../main');
@@ -16,27 +15,29 @@ const {localize} = require('./localize');
  * @param  {Object} moduleConf Configuration of modules.json
  * @return {Promise}
  */
-async function loadAllConfigs(client, moduleConf) {
+async function loadAllConfigs(client) {
     logger.info(localize('config', 'checking-config'));
     return new Promise(async (resolve, reject) => {
         await fs.readdir(`${__dirname}/../../config-generator/`, async (err, files) => {
-            await asyncForEach(files, async f => {
+            for (const f of files) {
                 await checkBuildInConfig(f).catch((reason) => reject(reason));
-            });
-            await fs.readdir(`${__dirname}/../../modules/`, async (err, moduleFiles) => {
-                let needOverwrite = false;
-                await asyncForEach(moduleFiles, async f => {
-                    if (moduleConf[f]) {
-                        if (client.modules[f]['config']['on-checked-config-event']) await checkModuleConfig(f, require(`./modules/${f}/${client.modules[f]['config']['on-checked-config-event']}`));
-                        else await checkModuleConfig(f).catch((reason) => {
-                            reject(reason);
-                        });
-                    } else if (typeof moduleConf[f] === 'undefined') needOverwrite = true;
+            }
+
+            for (const moduleName in client.modules) {
+                if (!client.modules[moduleName].userEnabled) continue;
+                await checkModuleConfig(moduleName, client.modules[moduleName]['config']['on-checked-config-event'] ? require(`./modules/${moduleName}/${client.modules[moduleName]['config']['on-checked-config-event']}`) : null).catch((e) => {
+                    client.modules[moduleName].enabled = false;
+                    client.logger.error(`[CONFIGURATION] ERROR CHECKING ${moduleName}. Module disabled internally. Error: ${e}`);
                 });
-                if (needOverwrite) await generateModulesConfOverwrite(moduleConf, moduleFiles);
-                logger.info(localize('config', 'done-with-checking'));
-                resolve();
-            });
+            }
+            const data = {
+                totalModules: Object.keys(client.modules).length,
+                enabled: Object.values(client.modules).filter(m => m.enabled).length,
+                configDisabled: Object.values(client.modules).filter(m => m.userEnabled && !m.enabled).length,
+                userEnabled: Object.values(client.modules).filter(m => m.userEnabled && !m.enabled).length
+            };
+            logger.info(localize('config', 'done-with-checking', data));
+            resolve(data);
         });
     });
 }
@@ -96,7 +97,6 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
 
             /**
              * Checks the content of a field
-             * @private
              * @param {Field<Object>} field Field-Object
              * @param {Array} configElement Current config element
              * @returns {Promise<void|*>}
@@ -152,7 +152,6 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
         if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
     }
     );
-
 }
 
 /**
@@ -224,25 +223,6 @@ async function checkBuildInConfig(configName) {
 module.exports.loadAllConfigs = loadAllConfigs;
 
 /**
- * Generates module.json overwrite
- * @param {Object} moduleConf Current module configuration
- * @param {Array} modules Array of all available modules
- * @returns {Promise<void>}
- * @private
- */
-async function generateModulesConfOverwrite(moduleConf, modules) {
-    const {client} = require('../../main');
-    logger.info(localize('config', 'moduleconf-regeneration'));
-    await asyncForEach(modules, module => {
-        if (typeof moduleConf[module] === 'undefined') moduleConf[module] = false;
-    });
-    jsonfile.writeFileSync(`${client.configDir}/modules.json`, moduleConf, {spaces: 2}, (err => {
-        if (err) logger.error(`An error occurred while saving modules.json: ${err}`);
-        else logger.info(localize('config', 'moduleconf-regeneration-success'));
-    }));
-}
-
-/**
  * Check type of one field
  * @param {FieldType<String>} type Type of the field
  * @param {String} value Value in the configuration file
@@ -262,9 +242,9 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
         case 'array':
             if (typeof value !== 'object') return false;
             let errored = false;
-            await asyncForEach(value, async function (v) {
+            for (const v of value) {
                 if (!errored) errored = !(await checkType(contentFormat, v, null, allowEmbed));
-            });
+            }
             return !errored;
         case 'channelID':
             const channel = await client.channels.fetch(value).catch(() => {
@@ -293,6 +273,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 return false;
             }
         case 'keyed':
+            if (typeof value !== 'object') return false;
             let returnValue = true;
             for (const v in value) {
                 if (returnValue) {
@@ -339,7 +320,14 @@ module.exports.reloadConfig = async function (client) {
     }
     client.jobs = [];
 
-    await loadAllConfigs(client, client.moduleConf);
+    // Reload module configuration
+    const moduleConf = jsonfile.readFileSync(`${client.configDir}/modules.json`);
+    for (const moduleName in client.modules) {
+        client.modules[moduleName].enabled = !!moduleConf[moduleName];
+        client.modules[moduleName].userEnabled = !!moduleConf[moduleName];
+    }
+
+    const res = await loadAllConfigs(client);
     client.botReadyAt = new Date();
 
     /**
@@ -347,4 +335,6 @@ module.exports.reloadConfig = async function (client) {
      * @event Client#botReady
      */
     client.emit('botReady');
+
+    return res;
 };

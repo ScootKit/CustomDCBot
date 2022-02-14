@@ -2,7 +2,28 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.0.0
+
+* Dropped support for message commands
+* Module-Database-Models now always get loaded, even if module is not enabled (this allows to enable/disable modules on the fly)
+* Database-Models can not be nested (because no one did that)
+* CLI-Commands, Application-Commands, Events and other relevant data will now always get loaded, even if the module is
+  not enabled (this allows to enable/disable modules on the fly)
+* Every time an event or CLI-Command gets executed, the bot will check if that module is enabled and will return if not
+* Every time application commands need to get synced, the bot will check if the corresponding module is enabled.
+  [To ensure the safe performance of all authorized activities](https://soundcloud.com/gamequotes/glados-to-ensure-the-safe), this check will also get executed when a command gets executed.
+* Errors in module configuration will only disable the module, not stop the bot.
+  * 💡 Errors in the built-in-configuration will still shut down the bot
+* Module-Configuration will now only be generated on startup, not if configuration gets reloaded
+* Added `disableModule` to helpers.js
+* Improved `embedType` function
+* `asyncForEach` is now deprecated, will be removed in v3.1.0
+* Performance: To reduce the number of event listeners on `command`, every event used by every module will only once register an
+  event listener. When an event gets invoked, the bot will run every registered module-event. To ensure fast reaction-times, this will get done synchronously.
+
+
 ## v2.1.0
+
 * Added new concept of localization
 * Updated modules to the newest version, including new features, localization and bug-fixes
 * Introduced new helper-functions and database-schemes (including channelLock, DatabaseSchemeVerison)

@@ -5,10 +5,15 @@
 
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('./localize');
+const {PrivatebinClient} = require('@pixelfactory/privatebin');
+const privatebin = new PrivatebinClient('https://paste.sc-network.net');
+const crypto = require('isomorphic-webcrypto');
+const {encode} = require('bs58');
 const {client} = require('../../main');
 
 /**
  * Will loop asynchrony through every object in the array
+ * @deprecated Since version v3.0.0. Will be deleted in v3.1.0. Use for(const value of array) instead.
  * @param  {Array} array Array of objects
  * @param  {function(object, number, array)} callback Function that gets executed on every array (object, index in the array, array)
  * @return {Promise}
@@ -67,7 +72,7 @@ function inputReplacer(args, input) {
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
 module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
-    if (typeof input === 'string') {
+    if (typeof input === 'string' || (!input.title && !input.description && !(value.author || {}).name)) {
         optionsToKeep.content = inputReplacer(args, input);
         return optionsToKeep;
     }
@@ -79,14 +84,20 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
         if (input['url']) emb.setURL(input['url']);
         if (input['image']) emb.setImage(inputReplacer(args, input['image']));
         if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
-        if (input['author'] && typeof input['author'] === 'object') emb.setAuthor(inputReplacer(args, input['author']['name']), inputReplacer(args, input['author']['img']));
+        if (input['author'] && typeof input['author'] === 'object') emb.setAuthor({
+            name: inputReplacer(args, input['author']['name']),
+            iconURL: inputReplacer(args, input['author']['img'])
+        });
         if (typeof input['fields'] === 'object') {
             input.fields.forEach(f => {
                 emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);
             });
         }
         emb.setTimestamp();
-        emb.setFooter(input.footer ? inputReplacer(args, input.footer) : client.strings.footer, (input.footerImgUrl || client.strings.footerImgUrl));
+        emb.setFooter({
+            text: input.footer ? inputReplacer(args, input.footer) : client.strings.footer,
+            iconURL: (input.footerImgUrl || client.strings.footerImgUrl)
+        });
         optionsToKeep.embeds = [emb];
     }
     if (input['message']) optionsToKeep.content = inputReplacer(args, input['message']);
@@ -112,6 +123,53 @@ function formatDate(date) {
 }
 
 module.exports.formatDate = formatDate;
+
+/**
+ * Posts (encrypted) content to SC Network Paste
+ * @param {String} content Content to post
+ * @param {Object} opts Configuration of upload entry
+ * @return {Promise<string>} URL to document
+ */
+async function postToSCNetworkPaste(content, opts = {
+    expire: '1month',
+    burnafterreading: 0,
+    opendiscussion: 1,
+    textformat: 'plaintext',
+    output: 'text',
+    compression: 'zlib'
+}) {
+    const key = crypto.getRandomValues(new Uint8Array(32));
+    const res = await privatebin.sendText(content, key, opts);
+    return `https://paste.sc-network.net${res.url}#${encode(key)}`;
+}
+
+module.exports.postToSCNetworkPaste = postToSCNetworkPaste;
+
+/**
+ * Creates a paste from the messages in a channel.
+ * @param {Channel} channel Channel to create log from
+ * @param {Number} limit Number of messages to include
+ * @param {String} expire Time after with paste expires
+ * @return {Promise<string>}
+ */
+async function messageLogToStringToPaste(channel, limit = 100, expire = '1month') {
+    let messages = '';
+    (await channel.messages.fetch({limit})).forEach(m => {
+        messages = `[${m.id}] ${m.author.bot ? '[BOT] ' : ''}${m.author.tag}  (${m.author.id}): ${m.content}\n` + messages;
+    });
+    messages = `=== CHANNEL-LOG OF ${channel.name} (${channel.id}): Last messages before report ${formatDate(new Date())} ===\n` + messages;
+    return await postToSCNetworkPaste(messages,
+        {
+            expire,
+            burnafterreading: 0,
+            opendiscussion: 0,
+            textformat: 'plaintext',
+            output: 'text',
+            compression: 'zlib'
+        });
+}
+
+module.exports.messageLogToStringToPaste = messageLogToStringToPaste;
 
 /**
  * Truncates a string to a specific length
@@ -196,7 +254,13 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
      */
     function getButtons(site, disabled = false) {
         const btns = [];
-        if (site !== 1) btns.push({type: 'BUTTON', label: '◀ ' + localize('helpers', 'back'), customId: 'back', style: 'PRIMARY', disabled});
+        if (site !== 1) btns.push({
+            type: 'BUTTON',
+            label: '◀ ' + localize('helpers', 'back'),
+            customId: 'back',
+            style: 'PRIMARY',
+            disabled
+        });
         if (site !== sites.length) btns.push({
             type: 'BUTTON',
             label: localize('helpers', 'next') + ' ▶',
@@ -281,6 +345,7 @@ function renderProgressbar(percentage, length = 20) {
     }
     return s;
 }
+
 module.exports.renderProgressbar = renderProgressbar;
 
 /**
@@ -292,6 +357,7 @@ module.exports.renderProgressbar = renderProgressbar;
 function dateToDiscordTimestamp(date, timeStampStyle = null) {
     return `<t:${(date.getTime() / 1000).toFixed(0)}${timeStampStyle ? ':' + timeStampStyle : ''}>`;
 }
+
 module.exports.dateToDiscordTimestamp = dateToDiscordTimestamp;
 
 /**
@@ -341,3 +407,41 @@ async function unlockChannel(channel, reason = localize('main', 'channel-unlock'
 
 module.exports.lockChannel = lockChannel;
 module.exports.unlockChannel = unlockChannel;
+
+/**
+ * Function to migrate Database models
+ * @param {string} module Name of the Module
+ * @param {string} oldModel Name of the old Model
+ * @param {string} newModel Name of the new Model
+ * @returns {Promise<void>}
+ * @author jateute
+ */
+async function migrate(module, oldModel, newModel) {
+    const old = await client.models[module][oldModel].findAll();
+    if (old.length === 0) return;
+    client.logger.info(localize('main', 'migrate-start', {o: oldModel, m: newModel}));
+    for (const model of old) {
+        delete model.dataValues.updatedAt;
+        delete model.dataValues.createdAt;
+        await client.models[module][newModel].create(model.dataValues);
+        await model.destroy();
+    }
+    client.logger.info(localize('main', 'migrate-success', {o: oldModel, m: newModel}));
+}
+
+module.exports.migrate = migrate;
+
+/**
+ * Disables a module. NOTE: This can't and won't clear any set intervals or jobs
+ * @param {String} module Name of the module to disable
+ * @param {String} reason Reason why module should gets disabled.
+ */
+function disableModule(module, reason = null) {
+    if (!client.modules[module]) throw new Error(`${module} got never loaded`);
+    client.modules[module].enabled = false;
+    client.logger.error(localize('main', 'module-disable', {r: reason}));
+    if (client.logChannel) client.logChannel.send(localize('main', 'module-disable', {r: reason})).then(() => {
+    });
+}
+
+module.exports.disableModule = disableModule;

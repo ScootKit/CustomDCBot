@@ -15,5 +15,6 @@
   "config-example-files": [
     "configs/strings.json",
     "configs/config.json"
-  ]
+  ],
+  "tags": ["community"]
 }

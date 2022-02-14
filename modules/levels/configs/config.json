@@ -12,7 +12,9 @@
       "default": 25,
       "type": "integer",
       "description-en": "How much XP the user gets at least",
-      "description-de": "So viel XP bekommt ein Benutzer mindestens"
+      "description-de": "So viel XP bekommt ein Benutzer mindestens",
+      "params-de": {},
+      "default-de": 25
     },
     {
       "field_name": "max-xp",
@@ -21,7 +23,9 @@
       "default": 65,
       "type": "integer",
       "description-en": "How much XP the user gets at most",
-      "description-de": "So viel XP bekommt ein Benutzer maximal"
+      "description-de": "So viel XP bekommt ein Benutzer maximal",
+      "params-de": {},
+      "default-de": 65
     },
     {
       "field_name": "cooldown",
@@ -29,7 +33,10 @@
       "default": 1500,
       "type": "integer",
       "description-en": "In ms. How much cooldown there is between each XP getting",
-      "description-de": "In Millisekunden! So viel Zeit muss ein Nutzer zwischen jeder Nachricht mit XP warten"
+      "description-de": "In Millisekunden! So viel Zeit muss ein Nutzer zwischen jeder Nachricht mit XP warten",
+      "humanname-de": "",
+      "params-de": {},
+      "default-de": 1500
     },
     {
       "field_name": "level_up_channel_id",
@@ -38,7 +45,10 @@
       "type": "channelID",
       "allowNull": true,
       "description-en": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)",
-      "description-de": "Channel, in den die Level-Up-Nachrichten gesendet werden. (Leerlassen, um sie einfach in den aktuellen Channel zu schicken))"
+      "description-de": "Channel, in den die Level-Up-Nachrichten gesendet werden. (Leerlassen, um sie einfach in den aktuellen Channel zu schicken))",
+      "humanname-de": "",
+      "params-de": {},
+      "default-de": ""
     },
     {
       "field_name": "sortLeaderboardBy",
@@ -51,7 +61,9 @@
         "xp"
       ],
       "description-en": "How the leaderboard should be sorted",
-      "description-de": "Wähle aus, wie der /leaderboard-command aussehen werden soll"
+      "description-de": "Wähle aus, wie der /leaderboard-command aussehen werden soll",
+      "params-de": {},
+      "default-de": "levels"
     },
     {
       "field_name": "blacklisted_channels",
@@ -61,7 +73,9 @@
       "type": "array",
       "content": "channelID",
       "description-en": "Blacklisted-Channels in which users can not earn XP",
-      "description-de": "Channel, in denen kein XP gesammelt werden kann"
+      "description-de": "Channel, in denen kein XP gesammelt werden kann",
+      "params-de": {},
+      "default-de": []
     },
     {
       "field_name": "reward_roles",
@@ -74,16 +88,9 @@
       "content": {
         "key": "integer",
         "value": "roleID"
-      }
-    },
-    {
-      "field_name": "onlyTopLevelRole",
-      "hummanname-de": "Nur die höchste Level-Rolle geben",
-      "hummanname-en": "Users only can have their highest level role",
-      "default": false,
-      "type": "boolean",
-      "description-en": "If enabled, all previous level roles a user had will get removed, when they advance to a new level.",
-      "description-de": "Wenn aktiviert, werden alle vorherigen Level-Rollen, die ein Nutzer hatte, entfernt, wenn dieser ein neues Level erreicht."
+      },
+      "params-de": {},
+      "default-de": {}
     },
     {
       "field_name": "randomMessages",
@@ -92,7 +99,9 @@
       "default": false,
       "type": "boolean",
       "description-de": "If enabled the module will randomly select a messages from random-levelup-messages and ignore the one set in strings",
-      "description-en": "Wenn aktiviert wird das Modul die Level-Up-Nachricht zufällig auswählen und nicht die in Nachrichten angegebene verwenden"
+      "description-en": "Wenn aktiviert wird das Modul die Level-Up-Nachricht zufällig auswählen und nicht die in Nachrichten angegebene verwenden",
+      "params-de": {},
+      "default-de": false
     },
     {
       "field_name": "leaderboard-channel",
@@ -102,7 +111,9 @@
       "type": "channelID",
       "allowNull": true,
       "description-de": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes",
-      "description-en": "Wenn gesetzt wird der Bot in diesen Channel eine Nachricht senden, welche die aktuellen Level der Nutzern enthält"
+      "description-en": "Wenn gesetzt wird der Bot in diesen Channel eine Nachricht senden, welche die aktuellen Level der Nutzern enthält",
+      "params-de": {},
+      "default-de": ""
     },
     {
       "field_name": "allowCheats",
@@ -110,7 +121,10 @@
       "default": false,
       "type": "boolean",
       "description-de": "Wenn aktiviert können Administratoren die XP von anderen Nutzern editieren (nicht empfohlen, wenn du einen coolen, fairen Server haben willst (wirklich nicht!!!)))",
-      "description-en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))"
+      "description-en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))",
+      "humanname-de": "",
+      "params-de": {},
+      "default-de": false
     }
   ]
 }
