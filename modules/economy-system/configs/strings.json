@@ -309,7 +309,7 @@
       "default-en": "The Mesage-Drop message is already disabled!"
     },
     {
-      "field_name": "msgDropEnabled",
+      "field_name": "msgDropDisabled",
       "humanname-en": "message-drop disabled",
       "type": "string",
       "description-en": "Message that gets send when a User disables the Message-Drop message",

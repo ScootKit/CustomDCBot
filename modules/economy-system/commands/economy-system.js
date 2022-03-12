@@ -213,7 +213,7 @@ module.exports.subcommands = {
             await interaction.client.models['economy-system']['dropMsg'].create({
                 id: interaction.user.id
             });
-            interaction.reply(embedType(interaction.str['msgDropEnabled'], {}, { ephemeral: true }));
+            interaction.reply(embedType(interaction.str['msgDropDisabled'], {}, { ephemeral: true }));
         }
     },
     'destroy': async function (interaction) {

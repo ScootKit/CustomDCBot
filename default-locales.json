@@ -334,7 +334,9 @@
       "shop-command-description-buy": "Buy an item",
       "shop-command-description-list": "List all items in the shop",
       "shop-command-description-delete": "Remove an item from the shop",
-      "channel-not-found": "Can't find the leaderboard channel with the ID %c"
+      "channel-not-found": "Can't find the leaderboard channel with the ID %c",
+      "migration-happening": "Database not up-to-date. Migrating database...",
+      "migration-done": "Migrated database successfully."
     }
   }
 }

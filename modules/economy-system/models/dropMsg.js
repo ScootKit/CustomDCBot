@@ -1,16 +1,14 @@
 const {DataTypes, Model} = require('sequelize');
 
-module.exports = class EconomyUser extends Model {
+module.exports = class DropMsg extends Model {
     static init(sequelize) {
         return super.init({
             id: {
                 type: DataTypes.STRING,
                 primaryKey: true
-            },
-            balance: DataTypes.INTEGER,
-            bank: DataTypes.INTEGER
+            }
         }, {
-            tableName: 'economy_user',
+            tableName: 'economy_dropMsg',
             timestamps: true,
             sequelize
         });
@@ -18,6 +16,6 @@ module.exports = class EconomyUser extends Model {
 };
 
 module.exports.config = {
-    'name': 'Balance',
+    'name': 'dropMsg',
     'module': 'economy-system'
 };
