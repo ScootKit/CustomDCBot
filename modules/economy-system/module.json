@@ -4,8 +4,10 @@
   "humanReadableName-en": "Economy",
   "author": {
     "name": "jateute",
-    "link": "https://github.com/jateute"
+    "link": "https://github.com/jateute",
+    "scnxOrgID": "4"
   },
+  "openSourceURL": "https://github.com/jateute/CustomDCBot/tree/main/modules/economy-system",
   "description-en": "A simple economy-system, containing a shop system, message-drops and commands to earn money",
   "description-de": "Ein einfaches economy-system mit einem Shop, Nachrichten-Drops und Befehlen, um Geld zu verdienen",
   "commands-dir": "/commands",

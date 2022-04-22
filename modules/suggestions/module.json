@@ -4,8 +4,10 @@
   "humanReadableName-en": "Suggestions",
   "author": {
     "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox"
+    "link": "https://github.com/SCDerox",
+    "scnxOrgID": "1"
   },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/suggestions",
   "description-en": "Advanced module to manage suggestions on your guild",
   "description-de": "Modul mit vielen Funktionen, um Vorschläge auf deinem Discord zu managen",
   "commands-dir": "/commands",

@@ -2,8 +2,10 @@
   "name": "twitch-notifications",
   "author": {
     "name": "ja.teute",
-    "link": "https://github.com/jateute"
-    },
+    "link": "https://github.com/jateute",
+    "scnxOrgID": "4"
+  },
+  "openSourceURL": "https://github.com/jateute/CustomDCBot/tree/main/modules/twitch-notifications",
   "description": "Module that sends a message to a channel, when a streamer goes live on Twitch",
   "events-dir": "/events",
   "models-dir": "/models",

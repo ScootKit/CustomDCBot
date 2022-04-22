@@ -2,9 +2,11 @@
   "name": "admin-tools",
   "humanReadableName-en": "Admin-Tools",
   "author": {
+    "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/admin-tools",
   "description-en": "Simple admin-tools to move channels and roles with a command and to \"borrow\" emotes.",
   "description-de": "Einfache Tools für Admins, um Channel und Rollen per Command zu verschieben und Emojis zu leihen.",
   "commands-dir": "/commands",

@@ -3,8 +3,10 @@
   "humanReadableName": "Level-System",
   "author": {
     "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox"
+    "link": "https://github.com/SCDerox",
+    "scnxOrgID": "1"
   },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/levels",
   "description-en": "Easy to use levelsystem with a lot of customization!",
   "description-de": "Einfaches Level-System mit vielen Anpassungsmöglichkeiten!",
   "commands-dir": "/commands",
