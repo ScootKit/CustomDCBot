@@ -1,12 +1,13 @@
 {
   "en": {
     "main": {
-      "startup-info": "CustomBot v2 (https://github.com/SCNetwork/CustomDCBot) - Log-Level: %l",
+      "startup-info": "SCNX-CustomBot v2 - Log-Level: %l",
       "missing-moduleconf": "Missing moduleConfig-file. Automatically disabling all modules and overwriting modules.json later",
       "sync-db": "Synced database",
       "login-error": "Bot could not log in. Error: %e",
       "login-error-token": "Bot could not log in because the provided token is invalid. Please update your token.",
-      "login-error-intents": "Bot could not log in because the intents were not enabled correctly. Please enable \"PRESENCE INTENT\", \"SERVER MEMBERS INTENT\" and \"MESSAGE CONTENT INTENT\" in your Discord-Developer-Dashboard: %url",      "not-invited": "Please invite the bot to your guild before continuing: %inv",
+      "login-error-intents": "Bot could not log in because the intents were not enabled correctly. Please enable \"PRESENCE INTENT\", \"SERVER MEMBERS INTENT\" and \"MESSAGE CONTENT INTENT\" in your Discord-Developer-Dashboard: %url",
+      "not-invited": "Please invite the bot to your guild before continuing: %inv",
       "logged-in": "Bot logged in as %tag and is now online.",
       "logchannel-wrong-type": "There is no Log-Channel set or it has the wrong type (only text-channels are supported).",
       "config-check-failed": "Configuration-Check failed. You can find more information in your log. The bot exited.",
@@ -29,7 +30,16 @@
       "channel-unlock": "Unlocked channel",
       "channel-unlock-data-not-found": "Unlocking channel with ID %c failed because it was never locked (which is weird to beginn with).",
       "module-disable": "Module %m got disabled because %r",
-      "migrate-success": "Migration from %o to %m finished successfully."
+      "migrate-success": "Migration from %o to %m finished successfully.",
+      "migrate-start": "Migration from %o to %m started... Please do not stop the bot"
+    },
+    "help": {
+      "bot-info-titel": "ℹ️ Bot-Info",
+      "bot-info-description": "This Bot was developed by the [SC Network](https://sc-network.net)-Team and some [Open-Source-Contributors](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) and self-hosted by the end-user.",
+      "stats-title": "📊 Stats",
+      "stats-content": "Active modules: %am\nRegistered commands: %rc\nLast restart: %lr\nLast reload: %lrl",
+      "command-description": "Show every commands",
+      "slash-commands-title": "Slash-Commands"
     },
     "reload": {
       "reloading-config": "Reloading configuration...",
@@ -57,7 +67,9 @@
       "timestamp": "%dd.%mm.%yyyy at %hh:%min",
       "you-did-not-run-this-command": "You did not run this command. If you want to use the buttons, try running the command yourself",
       "next": "Next",
-      "back": "Back"
+      "back": "Back",
+      "toggle-data-fetch-error": "SC Network Release: Toggle-Data could not be fetched",
+      "toggle-data-fetch": "SC Network Release: Toggle-Data fetched successfully"
     },
     "command": {
       "startup": "The bot is currently starting up. Please try again in a few minutes",
@@ -67,7 +79,9 @@
       "execution-failed": "Execution of command /%c %g %s failed: %e",
       "message-execution-failed": "Execution of command %p%c failed: %e",
       "autcomplete-execution-failed": "Execution of auto-complete on command /%c %g %s with option %f failed: %e",
-      "execution-failed-message": "**🔴 Command execution failed 🔴**\nThis is not intended and can have multiple reasons. Please check your logs for more details.\n\nPlease report this issue in the [repository](https://github.com/SCNetwork/CustomDCBot/issues)). Thanks for your cooperation!"
+      "execution-failed-message": "**🔴 Command execution failed 🔴**\nThis is not intended and can have multiple reasons.\n\nThe bot reported this issue, if this feature isn't disabled in the configuration, to the bot-developer. No further actions are required from your part. If the developer has some follow-up-questions and you are a member of the [SC Network Discord](<https://sc-net.work/dc>), the may reach out to you.",
+      "error-giving-role": "An error occurred when trying to giving to give your your roles ):",
+      "module-disabled": "This command is part of the \"%m\" which is disabled. This can either be intended by the server-admins (and slash-commands haven't synced yet) or this could be caused by a configuration error. Please check (or ask the admins) to check the bot's configuration and logs for details."
     },
     "admin-tools": {
       "position": "%i has the position %p.",

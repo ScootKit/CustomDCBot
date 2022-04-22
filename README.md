@@ -7,7 +7,8 @@ should only use it if you have some experience with Javascript, discord.js and J
 
 ## Get your own Custom-Bot completely free and with a modern webinterface and a lot more features!
 
-Go check it out on our [website](https://partner.sc-netzwerk.de) (currently only german). In addition to the here
+Go check it out on our [website](https://scnx.xyz) (currently only german; the [dashboard](https://scnx.app) and bot are
+fully translated). In addition to the here
 available features we offer:
 
 * Free hosting
@@ -17,6 +18,9 @@ available features we offer:
 * Scheduled messages
 * Info-Commands
 * Embed-Messages
+* Tickets
+* Mini-Games
+* and a modern dashboard
 * and *a lot* more - for free
 
 [Get started now](https://scnx.xyz) - it's free - forever!
@@ -30,6 +34,9 @@ In short words: You have to
 * State changes (*every* change to the source code must be documented and published)\
 
 Please read the full [license](LICENSE). This is not legal advice.
+
+You may ask yourself, how this could align with our closed-source-version at [SCNX](https://scnx.xyz), you can find more
+information about that in [this issue](https://github.com/SCNetwork/CustomDCBot/issues/13).
 
 ## Support development
 
@@ -61,10 +68,13 @@ currently. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).
 6. The bot is now generating a `modules.json` and a `strings.json` file inside your `config` directory. You
    can [change](#configuration) them.
 
-When reading thought the code, you may encounter code "tracking" parts of the bot.
-This part is only enabled in the SCNX-Version (and users can opt-out there if the want to).
+When reading thought the code, you may encounter code "tracking" / "issue reporting" parts of the bot.
+This part is only enabled in the SCNX-Version and only used to allow users to see (configuration) issues of their bot
+and to allow our team to detect bugs more easily (users can opt-out of that if they want to; we use the sentry-sdk for
+that, but don't actually send any data to them, instead to our glitchtip instance - the open-source-version does neither
+of that).
 This open-source-version won't contact SCNX, SC Network and won't share any information with us, don't worry. You
-can verify this by looking at the source code, [science.js](src/functions/science.js) looks like a great start-point.
+can verify this by looking at the source code, which you should do before executing any code from the internet.
 
 ### Features
 
@@ -142,6 +152,11 @@ Every module has to contain a `module.json` file with the following content:
 * `author`
     * `name`: Name of the author
     * `link`: Link to the author
+    * `scnxOrgID`:   [SCNX](https://scnx.xyz)-Organisation-ID of the developer (allows you to accept donations in the
+      dashboard and will show up to users in the dashboard)
+* `openSourceURL`: URL to the Source-Code of the module licensed under an Open-Source-License (will show
+  donation-banners in the SCNX Dashboard (if orgID is set) and qualifies (qualified) developers for financial support
+  from the Open-Source-Pool of SCNX)
 * `description`: Short description of the module
 * `cli` (optional): [CLI-File](#cli-files) of your module
 * `commands-dir` (optional): Directory inside your module folder where all
@@ -152,7 +167,7 @@ Every module has to contain a `module.json` file with the following content:
 * `models-dir` (optional): Directory inside your module folder where all the models-files are in
 * `config-example-files` (optional, seriously leave this out when you don't have config files): Array
   of [config-files](#example-config-file) inside your module directory.
-* `tags` (optional): Array of tags. 
+* `tags` (optional): Array of tags.
 
 #### Interaction-Command
 
@@ -164,7 +179,8 @@ An interaction-command ("slash command") file has to export the following things
     * With subcommands: Optional function that gets triggered after the subcommand functions (if specified) got executed
 * `beforeSubcommand` (optional, only if subcommands exit): Function which gets executed before the function in
   subcommands gets executed
-* `autoComplete` (only required if any of your options use `autocomplete`): Object of functions, sorted by subcommandgroup, subcommand and option name
+* `autoComplete` (only required if any of your options use `autocomplete`): Object of functions, sorted by
+  subcommandgroup, subcommand and option name
 * `subcommands` (only required if subcommands exist): Object of functions, sorted by subcommandgroup and subcommand
 * `help`
 * `config` (both for !help and slash-commands)

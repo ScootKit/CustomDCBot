@@ -8,8 +8,7 @@
       "field_name": "token",
       "default": "yourtokengoeshere",
       "type": "string",
-      "description": "Replace this with your token",
-      "hidden": true
+      "description": "Replace this with your token"
     },
     {
       "field_name": "prefix",
@@ -25,15 +24,22 @@
       "default": [],
       "type": "array",
       "content": "string",
-      "hidden": true,
       "description": "Bot operators can reload the configuration and perform system relevant actions with this bot. Please only add users you really trust (and yourself of course)"
     },
     {
       "field_name": "guildID",
       "default": "489786377261678592",
       "type": "guildID",
-      "hidden": true,
       "description": "Replace this the id of the guild the bot should work in."
+    },
+    {
+      "field_name": "disableStatus",
+      "humanname-en": "Disable Bot-Status",
+      "humanname-de": "Bot-Status deaktivieren",
+      "default": false,
+      "type": "boolean",
+      "description-en": "If enabled, the bot won't have a status in discord",
+      "description-de": "Wenn aktiviert wird der Bot keinen Status in Discord haben"
     },
     {
       "field_name": "user_presence",
