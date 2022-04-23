@@ -47,31 +47,36 @@ module.exports.run = async function (interaction) {
         });
     }
 
-    embedFields.filter(f => f.name === interaction.client.strings.helpembed.build_in).forEach(f => addSite(
-        [
-            f,
-            {
+    embedFields.filter(f => f.name === interaction.client.strings.helpembed.build_in).forEach(f => {
+        const fields = [
+            f
+        ];
+        if (!interaction.client.strings['putBotInfoOnLastSite']) {
+            fields.push({
                 name: '\u200b',
                 value: '\u200b'
-            },
-            {
+            });
+            fields.push({
                 name: localize('help', 'bot-info-titel'),
                 value: localize('help', 'bot-info-description', {g: interaction.guild.name})
-            },
-            {
-                name: localize('help', 'stats-title'),
-                value: localize('help', 'stats-content', {
-                    am: Object.keys(interaction.client.modules).length,
-                    rc: interaction.client.commands.length,
-                    v: interaction.client.scnxSetup ? interaction.client.scnxData.bot.version : null,
-                    si: interaction.client.scnxSetup ? interaction.client.scnxData.bot.instanceID : null,
-                    pl: interaction.client.scnxSetup ? interaction.client.scnxData.plan : null,
-                    lr: formatDate(interaction.client.readyAt),
-                    lrl: formatDate(interaction.client.botReadyAt)
-                })
-            }
-        ],
-        true));
+            });
+        }
+        if (!interaction.client.strings['disableHelpEmbedStats']) fields.push({
+            name: localize('help', 'stats-title'),
+            value: localize('help', 'stats-content', {
+                am: Object.keys(interaction.client.modules).length,
+                rc: interaction.client.commands.length,
+                v: interaction.client.scnxSetup ? interaction.client.scnxData.bot.version : null,
+                si: interaction.client.scnxSetup ? interaction.client.scnxData.bot.instanceID : null,
+                pl: interaction.client.scnxSetup ? interaction.client.scnxData.plan : null,
+                lr: formatDate(interaction.client.readyAt),
+                lrl: formatDate(interaction.client.botReadyAt)
+            })
+        });
+        addSite(
+            fields,
+            true);
+    });
 
 
     let fieldCount = 0;
@@ -104,6 +109,14 @@ module.exports.run = async function (interaction) {
         if (atBeginning) sites.unshift(embed);
         else sites.push(embed);
     }
+
+    if (interaction.client.strings['putBotInfoOnLastSite']) sites[sites.length - 1].setFields(...sites[sites.length - 1].fields, {
+        name: '\u200b',
+        value: '\u200b'
+    }, {
+        name: localize('help', 'bot-info-titel'),
+        value: localize('help', 'bot-info-description', {g: interaction.guild.name})
+    });
 
     sendMultipleSiteButtonMessage(interaction.channel, sites, [interaction.user.id], interaction);
 };

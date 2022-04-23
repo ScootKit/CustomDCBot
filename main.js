@@ -83,11 +83,8 @@ client.logger = logger;
 module.exports.logger = logger;
 const configChecker = require('./src/functions/configuration');
 const {compareArrays, checkForUpdates} = require('./src/functions/helpers');
-const {localize, updateLocales} = require('./src/functions/localize');
-const {trackError, trackConfigError} = require('./src/functions/science');
+const {localize} = require('./src/functions/localize');
 logger.info(localize('main', 'startup-info', {l: logger.level}));
-updateLocales().then(() => {
-});
 
 let moduleConf = {};
 try {
@@ -107,19 +104,29 @@ const commands = [];
 
 // Starting bot
 db.authenticate().then(async () => {
-    if (scnxSetup) client.scnxHost = client.config.scnxHostOverwirde || 'https://scnx.xyz';
+    if (scnxSetup) client.scnxHost = client.config.scnxHostOverwirde || 'https://scnx.app';
     await loadModelsInDir('/src/models');
     await loadModules();
     await loadEventsInDir('./src/events');
     await db.sync();
     logger.info(localize('main', 'sync-db'));
-    await client.login(config.token).catch((e) => {
-        if (e.code === 'TOKEN_INVALID') logger.fatal(localize('main', 'login-error-token'));
-        else if (e.code === 'DISALLOWED_INTENTS') logger.fatal(localize('main', 'login-error-intents', {url: `https://discord.com/developers/applications/`}));
-        else logger.fatal(localize('main', 'login-error', {e}));
+    if (scnxSetup) await require('./src/functions/scnx-integration').beforeInit(client);
+    await client.login(config.token).catch(async (e) => {
+        if (e.code === 'TOKEN_INVALID') {
+            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'invalid_token'});
+            logger.fatal(localize('main', 'login-error-token'));
+        } else if (e.code === 'DISALLOWED_INTENTS') {
+            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'disallowed_intents'});
+            logger.fatal(localize('main', 'login-error-intents', {url: `https://discord.com/developers/applications/`}));
+        } else logger.fatal(localize('main', 'login-error', {e}));
         process.exit();
     });
-    client.guild = await client.guilds.fetch(config.guildID).catch(() => {
+    client.guild = await client.guilds.fetch(config.guildID).catch(async () => {
+        if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+            type: 'CORE_FAILURE',
+            errorDescription: 'bot_not_on_guild',
+            errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
+        });
         logger.error(localize('main', 'not-invited', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
         process.exit(1);
     });
@@ -132,19 +139,22 @@ db.authenticate().then(async () => {
     if (!client.logChannel || client.logChannel.type !== 'GUILD_TEXT') {
         logger.warn(localize('main', 'logchannel-wrong-type'));
         client.logChannel = null;
+        if (scnxSetup) {
+            const {reportIssue} = require('./src/functions/scnx-integration');
+            await reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'log_channel_not_set_or_wrong_type'});
+        }
     }
-    await configChecker.loadAllConfigs(client).catch(async (err) => {
+    await configChecker.loadAllConfigs(client).catch(async () => {
         if (client.logChannel) await client.logChannel.send('⚠ ' + localize('main', 'config-check-failed'));
-        await trackConfigError(client, err);
+        logger.fatal(localize('main', 'config-check-failed'));
         process.exit(1);
     });
-    if (scnxSetup) await require('./src/functions/scnx-integration').beforeInit(client);
     await loadCommandsInDir('./src/commands');
     await syncCommandsIfNeeded();
     client.commands = commands;
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
-    client.emit('botReady');
     client.botReadyAt = new Date();
+    client.emit('botReady');
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     logger.info(localize('main', 'bot-ready'));
     if (client.logChannel) client.logChannel.send('🚀 ' + localize('main', 'bot-ready'));
@@ -184,7 +194,12 @@ async function syncCommandsIfNeeded() {
         if (!c.module) return true;
         return client.modules[c.module].enabled;
     });
-    const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch().catch(() => {
+    const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch().catch(async () => {
+        if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+            type: 'CORE_FAILURE',
+            errorDescription: 'commands_sync_failed',
+            errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
+        });
         logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
         process.exit(1);
     });
@@ -195,6 +210,18 @@ async function syncCommandsIfNeeded() {
         const command = {...orgCmd};
         if (typeof command.permissions === 'function') command.permissions = await command.permissions(client);
         if (typeof command.options === 'function') command.options = await command.options(client);
+        if (command.restricted) {
+            command.permissions = [];
+            for (const botOperatorID of config.botOperators || []) {
+                command.permissions.push({
+                    id: botOperatorID,
+                    type: 'USER',
+                    permission: true
+                });
+            }
+        }
+        if (!command.permissions) command.permissions = [];
+
         if (command.options) {
             const options = [];
             for (const option of command.options) {
@@ -263,13 +290,18 @@ async function syncCommandsIfNeeded() {
         await client.application.commands.set(ranCommands, config.guildID).catch(async (e) => {
             logger.debug(JSON.stringify(enabledCommands), e);
             console.log(e);
-            await trackError(client, {err: 'Command sync fail', exception: e, commands: ranCommands});
+            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+                type: 'CORE_FAILURE',
+                errorDescription: 'commands_sync_failed',
+                errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
+            });
             logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
             process.exit(1);
         });
         logger.info(localize('main', 'command-sync'));
     } else logger.info(localize('main', 'command-no-sync-required'));
 }
+
 module.exports.syncCommandsIfNeeded = syncCommandsIfNeeded;
 
 /**
@@ -328,11 +360,13 @@ async function loadEventsInDir(dir, moduleName = null) {
                     if (!events[eventName]) {
                         events[eventName] = [];
                         client.on(eventName, (...cArgs) => {
+                            if (!client.botReadyAt) return;
                             for (const eData of events[eventName]) {
                                 try {
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {
+                                    if (client.captureException) client.captureException(e, {module: eData.moduleName, event: eventName});
                                     client.logger.error(`Error on event ${(eData.moduleName ? eData.moduleName + '/' : '') + eventName}: ${e}`);
                                 }
                             }
@@ -381,15 +415,6 @@ async function loadCommandsInDir(dir, moduleName = null) {
         if (!stats) return logger.error('No stats returned');
         if (stats.isFile()) {
             const props = require(`${__dirname}/${dir}/${f}`);
-            const permissions = props.config.permissions || [];
-
-            if (props.config.restricted) for (const botOperatorID of config.botOperators || []) {
-                permissions.push({
-                    id: botOperatorID,
-                    type: 'USER',
-                    permission: true
-                });
-            }
             if (props.config.restricted) props.config.defaultPermission = false;
             commands.push({
                 name: props.config.name,
@@ -398,7 +423,7 @@ async function loadCommandsInDir(dir, moduleName = null) {
                 options: props.config.options || [],
                 subcommands: props.subcommands,
                 beforeSubcommand: props.beforeSubcommand,
-                permissions,
+                permissions: props.config.permissions,
                 run: props.run,
                 defaultPermission: props.config.defaultPermission,
                 autoComplete: props.autoComplete,

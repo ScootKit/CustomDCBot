@@ -2,25 +2,40 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.1.0
+
+* Made the bot actually work
+* Code-Improvements, Bug-Fixes and clarification
+* Added support for new module.json fields
+    * `author.scnxOrgID`: Support for SCNX-Organisation-IDs (allows developers to accept donations and will show up to
+      users in the dashboard)
+    * `openSourceURL`: URL to the Source-Code of a module (licenced under an Open-Source-Licence; will show
+      donation-banners in the SCNX Dashboard (if orgID is set) and qualifies (qualified) developers for financial
+      support from the Open-Source-Pool of SCNX)
+* No Developer-API for modules (apart from mentioned above) should have been changed
+
 ## v3.0.0
 
 * Dropped support for message commands
-* Module-Database-Models now always get loaded, even if module is not enabled (this allows to enable/disable modules on the fly)
+* Module-Database-Models now always get loaded, even if module is not enabled (this allows to enable/disable modules on
+  the fly)
 * Database-Models can not be nested (because no one did that)
 * CLI-Commands, Application-Commands, Events and other relevant data will now always get loaded, even if the module is
   not enabled (this allows to enable/disable modules on the fly)
 * Every time an event or CLI-Command gets executed, the bot will check if that module is enabled and will return if not
 * Every time application commands need to get synced, the bot will check if the corresponding module is enabled.
-  [To ensure the safe performance of all authorized activities](https://soundcloud.com/gamequotes/glados-to-ensure-the-safe), this check will also get executed when a command gets executed.
+  [To ensure the safe performance of all authorized activities](https://soundcloud.com/gamequotes/glados-to-ensure-the-safe)
+  , this check will also get executed when a command gets executed.
 * Errors in module configuration will only disable the module, not stop the bot.
-  * 💡 Errors in the built-in-configuration will still shut down the bot
+    * 💡 Errors in the built-in-configuration will still shut down the bot
 * Module-Configuration will now only be generated on startup, not if configuration gets reloaded
 * Added `disableModule` to helpers.js
 * Improved `embedType` function
 * `asyncForEach` is now deprecated, will be removed in v3.1.0
-* Performance: To reduce the number of event listeners on `command`, every event used by every module will only once register an
-  event listener. When an event gets invoked, the bot will run every registered module-event. To ensure fast reaction-times, this will get done synchronously.
-
+* Performance: To reduce the number of event listeners on `command`, every event used by every module will only once
+  register an
+  event listener. When an event gets invoked, the bot will run every registered module-event. To ensure fast
+  reaction-times, this will get done synchronously.
 
 ## v2.1.0
 

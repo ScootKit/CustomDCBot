@@ -25,10 +25,17 @@ async function loadAllConfigs(client) {
 
             for (const moduleName in client.modules) {
                 if (!client.modules[moduleName].userEnabled) continue;
-                await checkModuleConfig(moduleName, client.modules[moduleName]['config']['on-checked-config-event'] ? require(`./modules/${moduleName}/${client.modules[moduleName]['config']['on-checked-config-event']}`) : null).catch((e) => {
-                    client.modules[moduleName].enabled = false;
-                    client.logger.error(`[CONFIGURATION] ERROR CHECKING ${moduleName}. Module disabled internally. Error: ${e}`);
-                });
+                await checkModuleConfig(moduleName, client.modules[moduleName]['config']['on-checked-config-event'] ? require(`./modules/${moduleName}/${client.modules[moduleName]['config']['on-checked-config-event']}`) : null)
+                    .catch(async (e) => {
+                        client.modules[moduleName].enabled = false;
+                        client.logger.error(`[CONFIGURATION] ERROR CHECKING ${moduleName}. Module disabled internally. Error: ${e}`);
+                        if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
+                            type: 'MODULE_FAILURE',
+                            errorDescription: 'module_disabled',
+                            module: moduleName,
+                            errorData: {reason: 'Invalid configuration: ' + e}
+                        });
+                    });
             }
             const data = {
                 totalModules: Object.keys(client.modules).length,
@@ -68,7 +75,10 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
             try {
                 config = jsonfile.readFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`);
             } catch (e) {
-                logger.info(localize('config', 'creating-file', {m: moduleName, f: exampleFile.filename}));
+                logger.info(localize('config', 'creating-file', {
+                    m: moduleName,
+                    f: exampleFile.filename
+                }));
                 ow = true;
             }
             if (exampleFile.configElements) {
@@ -81,8 +91,12 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                         if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
                         else if (field[`default-en`]) field.default = field[`default-en`];
                     }
-                    for (const element of config) {
-                        await checkField(field, element);
+                    for (const i in config) {
+                        try {
+                            config[i] = await checkField(field, config[i]);
+                        } catch (e) {
+                            return reject(e);
+                        }
                     }
                 }
             } else {
@@ -91,60 +105,78 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                         if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
                         else if (field[`default-en`]) field.default = field[`default-en`];
                     }
-                    await checkField(field, config);
+                    try {
+                        config = await checkField(field, config);
+                    } catch (e) {
+                        return reject(e);
+                    }
                 }
             }
 
             /**
              * Checks the content of a field
              * @param {Field<Object>} field Field-Object
-             * @param {Array} configElement Current config element
+             * @param {*[]} configElement Current config element
              * @returns {Promise<void|*>}
              */
-            async function checkField(field, configElement) {
-                if (!field.field_name) return;
-                if (client.locale) {
-                    if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
-                    else if (field[`default-en`]) field.default = field[`default-en`];
-                }
-                if (typeof configElement[field.field_name] === 'undefined') return configElement[field.field_name] = field.default;
-                else if (field.type === 'keyed' && field.disableKeyEdits) {
-                    for (const key in field.default) {
-                        if (!configElement[field.field_name][key]) {
-                            ow = true;
-                            configElement[field.field_name][key] = field.default[key];
+            function checkField(field, configElement) {
+                return new Promise(async (res, rej) => {
+                    if (!field.field_name) return rej('missing fieldname.');
+                    if (client.locale) {
+                        if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
+                        else if (field[`default-en`]) field.default = field[`default-en`];
+                    }
+                    if (typeof configElement[field.field_name] === 'undefined') {
+                        configElement[field.field_name] = field.default;
+                        return res(configElement);
+                    } else if (field.type === 'keyed' && field.disableKeyEdits) {
+                        for (const key in field.default) {
+                            if (!configElement[field.field_name][key]) {
+                                ow = true;
+                                configElement[field.field_name][key] = field.default[key];
+                            }
                         }
                     }
-                }
-                if (field.allowNull && (configElement[field.field_name] || '').toString().replaceAll(' ', '') === '' || typeof configElement[field.field_name] === 'undefined') return configElement;
-                if (!await checkType(field.type, configElement[field.field_name], field.content, field.allowEmbed)) {
-                    logger.error(localize('config', 'checking-of-field-failed', {
-                        fieldName: field.field_name,
-                        m: moduleName,
-                        f: exampleFile.filename
-                    }));
-                    return reject(localize('config', 'checking-of-field-failed', {
-                        fieldName: field.field_name,
-                        m: moduleName,
-                        f: exampleFile.filename
-                    }));
-                }
-                if (field.disableKeyEdits) {
-                    for (const content in configElement[field.field_name]) {
-                        if (!field.default[content]) {
-                            delete configElement[field.field_name][content];
-                            ow = true;
+                    if (field.allowNull && (configElement[field.field_name] || '').toString().replaceAll(' ', '') === '' || typeof configElement[field.field_name] === 'undefined') return res(configElement);
+                    if (!await checkType(field.type, configElement[field.field_name], field.content, field.allowEmbed)) {
+                        if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
+                            type: 'CONFIGURATION_ISSUE',
+                            module: moduleName,
+                            field: field.field_name,
+                            configFile: exampleFile.filename.replaceAll('.json', ''),
+                            errorDescription: 'field_check_failed'
+                        });
+                        logger.error(localize('config', 'checking-of-field-failed', {
+                            fieldName: field.field_name,
+                            m: moduleName,
+                            f: exampleFile.filename
+                        }));
+                        rej(localize('config', 'checking-of-field-failed', {
+                            fieldName: field.field_name,
+                            m: moduleName,
+                            f: exampleFile.filename
+                        }));
+                    }
+                    if (field.disableKeyEdits) {
+                        for (const content in configElement[field.field_name]) {
+                            if (!field.default[content]) {
+                                delete configElement[field.field_name][content];
+                                ow = true;
+                            }
                         }
                     }
-                }
-
-                return configElement;
+                    if (client.scnxSetup) configElement[field.field_name] = require('./scnx-integration').setFieldValue(client, field, configElement[field.field_name]);
+                    res(configElement);
+                });
             }
 
             if (ow) {
                 if (!fs.existsSync(`${client.configDir}/${moduleName}`)) fs.mkdirSync(`${client.configDir}/${moduleName}`);
                 jsonfile.writeFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`, config, {spaces: 2});
-                logger.info(localize('config', 'saved-file', {f: v, m: moduleName}));
+                logger.info(localize('config', 'saved-file', {
+                    f: v,
+                    m: moduleName
+                }));
             }
             client.configurations[moduleName][exampleFile.filename.split('.json').join('')] = config;
         }
@@ -170,7 +202,10 @@ async function checkBuildInConfig(configName) {
         try {
             config = jsonfile.readFileSync(`${client.configDir}/${configName}`);
         } catch (e) {
-            logger.log(localize('config', 'creating-file', {m: 'config', f: configName}));
+            logger.log(localize('config', 'creating-file', {
+                m: 'config',
+                f: configName
+            }));
             ow = true;
         }
         for (const field of exampleFile.content) {
@@ -184,6 +219,12 @@ async function checkBuildInConfig(configName) {
                 continue;
             }
             if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
+                if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
+                    type: 'CONFIGURATION_ISSUE',
+                    field: field.field_name,
+                    configFile: exampleFile.filename.replaceAll('.json', ''),
+                    errorDescription: 'field_check_failed'
+                });
                 logger.error(localize('config', 'checking-of-field-failed', {
                     fieldName: field.field_name,
                     m: 'config',
@@ -210,7 +251,10 @@ async function checkBuildInConfig(configName) {
                 if (err) {
                     logger.error(`An error occurred while saving config/${configName}: ${err}`);
                 } else {
-                    logger.info(localize('config', 'saved-file', {f: configName, m: 'config'}));
+                    logger.info(localize('config', 'saved-file', {
+                        f: configName,
+                        m: 'config'
+                    }));
                 }
                 resolve();
             }));
@@ -240,7 +284,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             if (allowEmbed && typeof value === 'object') return true;
             return typeof value === 'string';
         case 'array':
-            if (typeof value !== 'object') return false;
+            if (!Array.isArray(value)) return false;
             let errored = false;
             for (const v of value) {
                 if (!errored) errored = !(await checkType(contentFormat, v, null, allowEmbed));
@@ -303,6 +347,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
  */
 module.exports.reloadConfig = async function (client) {
     client.logger.info(localize('config', 'config-reload'));
+    if (client.scnxSetup) await require('./scnx-integration').beforeInit(client);
     client.botReadyAt = null;
 
     /**
@@ -329,6 +374,8 @@ module.exports.reloadConfig = async function (client) {
 
     const res = await loadAllConfigs(client);
     client.botReadyAt = new Date();
+
+    if (client.scnxSetup) await require('./scnx-integration').init(client, true);
 
     /**
      * Emitted when the configuration got loaded successfully

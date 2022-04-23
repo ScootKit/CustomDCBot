@@ -5,8 +5,10 @@
   "fa-icon": "fas fa-list-ul",
   "author": {
     "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox"
+    "link": "https://github.com/SCDerox",
+    "scnxOrgID": "1"
   },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/partnerlist",
   "description-en": "Manage your partnerships with other guilds easily.",
   "description-de": "Erstelle eine Liste mit allen Partnern deines Servers - nach Kategorie sortiert.",
   "events-dir": "/events",

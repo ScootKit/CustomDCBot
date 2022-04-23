@@ -58,7 +58,7 @@ module.exports.arrayToApplicationCommandPermissions = function (inputArray, type
 function inputReplacer(args, input) {
     if (typeof args !== 'object') return input;
     for (const arg in args) {
-        input = input.replaceAll(arg, args[arg]);
+        input = (input || '').replaceAll(arg, args[arg]);
     }
     return input;
 }
@@ -72,19 +72,22 @@ function inputReplacer(args, input) {
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
 module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
-    if (typeof input === 'string' || (!input.title && !input.description && !(value.author || {}).name)) {
+    optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
+    if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
+    if (typeof input === 'string') {
         optionsToKeep.content = inputReplacer(args, input);
+        optionsToKeep.embeds = [];
         return optionsToKeep;
     }
-    if (!input.skipEmbed) {
+    if (input.title || input.description || (input.author || {}).name) {
         const emb = new MessageEmbed();
-        emb.setTitle(inputReplacer(args, input['title']));
+        if (input['title']) emb.setTitle(inputReplacer(args, input['title']));
         if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
         if (input['color']) emb.setColor(input['color']);
         if (input['url']) emb.setURL(input['url']);
         if (input['image']) emb.setImage(inputReplacer(args, input['image']));
         if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
-        if (input['author'] && typeof input['author'] === 'object') emb.setAuthor({
+        if (input['author'] && typeof input['author'] === 'object' && (input['author'] || {}).name) emb.setAuthor({
             name: inputReplacer(args, input['author']['name']),
             iconURL: inputReplacer(args, input['author']['img'])
         });
@@ -93,13 +96,14 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
                 emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);
             });
         }
-        emb.setTimestamp();
+        if (!client.strings.disableFooterTimestamp && !input.embedTimestamp) emb.setTimestamp();
+        if (input.embedTimestamp) emb.setTimestamp(input.embedTimestamp);
         emb.setFooter({
             text: input.footer ? inputReplacer(args, input.footer) : client.strings.footer,
             iconURL: (input.footerImgUrl || client.strings.footerImgUrl)
         });
         optionsToKeep.embeds = [emb];
-    }
+    } else optionsToKeep.embeds = [];
     if (input['message']) optionsToKeep.content = inputReplacer(args, input['message']);
     return optionsToKeep;
 };
@@ -107,10 +111,12 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
 /**
  * Makes a Date humanly readable
  * @param  {Date} date Date to format
+ * @param  {Boolean} skipDiscordFormat If enabled, the time will be returned in a real string, not using discord's message attachments
  * @return {string} Returns humanly readable string
  * @author Simon Csaba <mail@scderox.de>
  */
-function formatDate(date) {
+function formatDate(date, skipDiscordFormat = false) {
+    if (!skipDiscordFormat) return `${dateToDiscordTimestamp(date)} (${dateToDiscordTimestamp(date, 'R')})`;
     const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString(),
         hh = date.getHours().toString(), min = date.getMinutes().toString();
     return localize('helpers', 'timestamp', {
@@ -382,10 +388,13 @@ async function lockChannel(channel, allowedRoles = [], reason = localize('main',
             SEND_MESSAGES_IN_THREADS: false
         }, reason);
     }
-    await channel.permissionOverwrites.create(await channel.guild.roles.cache.find(r => r.name === '@everyone'), {
+
+    const everyoneRole = await channel.guild.roles.cache.find(r => r.name === '@everyone');
+    if (channel.permissionsFor(everyoneRole).has('VIEW_CHANNEL')) await channel.permissionOverwrites.create(everyoneRole, {
         SEND_MESSAGES: false,
         SEND_MESSAGES_IN_THREADS: false
     }, {reason});
+
     for (const roleID of allowedRoles) {
         await channel.permissionOverwrites.create(roleID, {
             SEND_MESSAGES: true
@@ -441,6 +450,13 @@ function disableModule(module, reason = null) {
     client.modules[module].enabled = false;
     client.logger.error(localize('main', 'module-disable', {r: reason}));
     if (client.logChannel) client.logChannel.send(localize('main', 'module-disable', {r: reason})).then(() => {
+    });
+    if (client.scnxSetup) require('./scnx-integration').reportIssue(client, {
+        type: 'MODULE_FAILURE',
+        errorDescription: 'module_disabled',
+        errorData: {reason},
+        module
+    }).then(() => {
     });
 }
 

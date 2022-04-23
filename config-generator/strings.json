@@ -7,11 +7,19 @@
     {
       "field_name": "footer",
       "humanname-en": "Embed-Footer",
-      "default": "© SC Network, 2022",
+      "default": "Powered by scnx.xyz ⚡",
       "type": "string",
       "description-en": "Footer of every embed",
-      "description-de": "Footer jedes Embeds",
-      "pro": true
+      "description-de": "Footer jedes Embeds"
+    },
+    {
+      "field_name": "footerImgUrl",
+      "humanname-en": "Embed-Footer-Image-URL",
+      "humanname-de": "Embed-Footer-Bild-URL",
+      "default": "https://scnx.xyz/img/favicon.png",
+      "type": "string",
+      "description-de": "Footer-Bild von jedem Embed",
+      "description-en": "Footer-Image of every embed"
     },
     {
       "field_name": "need_args",
@@ -43,6 +51,17 @@
           "description": "Anzahl von benötigten Argumenten"
         }
       ]
+    },
+    {
+      "field_name": "updated_roles",
+      "humanname-en": "Roles updated",
+      "humanname-de": "Rollen erfolgreich geupdated",
+      "default-en": "✅ Updated roles according to your settings",
+      "default-de": "✅ Rollen-Änderungen übernommen",
+      "type": "string",
+      "description-en": "This message gets send after a user selects self-roles on a self-role-element.",
+      "description-de": "Diese Nachricht wird gesendet, wenn ein Nutzer eine Self-Rolle auswählt.",
+      "allowEmbed": true
     },
     {
       "field_name": "not_enough_permissions",
@@ -78,6 +97,33 @@
         "value": "string"
       },
       "disableKeyEdits": true
+    },
+    {
+      "field_name": "disableHelpEmbedStats",
+      "humanname-en": "Disable Stats in Help-Embed",
+      "humanname-de": "Deaktiviere Stats im Hilfe-Embed",
+      "type": "boolean",
+      "default": false,
+      "description-de": "Wenn aktiviert, wird der Stats-Bereich im Help-Embed verborgen",
+      "description-en": "If enabled, the stats-field in the Help-Embed will get hidden"
+    },
+    {
+      "field_name": "disableFooterTimestamp",
+      "humanname-en": "Disable default Timestamp in footer",
+      "humanname-de": "Standard-Timestamp im Footer deaktivieren",
+      "type": "boolean",
+      "default": false,
+      "description-de": "Wenn aktiviert, wird die Aktuelle Uhrzeit nicht im Footer angezeigt",
+      "description-en": "If enabled, the current time will not be displayed in the embed footer"
+    },
+    {
+      "field_name": "putBotInfoOnLastSite",
+      "humanname-en": "Put Bot-Info on the last site of the Help-Embed",
+      "humanname-de": "Verschiebt die Bot-Info auf die letzte Seite im Hilfe-Embed",
+      "type": "boolean",
+      "default": false,
+      "description-de": "Wenn aktiviert, wird der Bot-Info-Bereich im Help-Embed auf die letzte Seite verschoben",
+      "description-en": "If enabled, the Bot-Info-Section of the Help-Embed will be moved to the last site"
     }
   ]
 }
