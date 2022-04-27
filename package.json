@@ -40,8 +40,7 @@
     "sqlite3": "^5.0.2",
     "twitch": "^4.6.7",
     "twitch-auth": "^4.6.7",
-    "utf-8-validate": "^5.0.8",
-    "zlib-sync": "^0.1.7"
+    "utf-8-validate": "^5.0.8"
   },
   "devDependencies": {
     "@pixi/jsdoc-template": "^2.6.0",
