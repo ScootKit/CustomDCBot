@@ -37,7 +37,7 @@
     "node-schedule": "^2.1.0",
     "parse-duration": "^1.0.2",
     "sequelize": "^6.14.0",
-    "sqlite3": "^5.0.2",
+    "sqlite3": "^5.0.6",
     "twitch": "^4.6.7",
     "twitch-auth": "^4.6.7",
     "utf-8-validate": "^5.0.8"
