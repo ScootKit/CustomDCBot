@@ -10,9 +10,9 @@
   "description-en": "Simple module to manage the roles of many members at once!",
   "description-de": "Einfaches Modul, um die Rollen vieler Nutzer gleichzeitig zu verwalten!",
   "commands-dir": "/commands",
-  "events-dir": "/events",
   "config-example-files": [
-    "configs/strings.json"
+    "configs/strings.json",
+    "configs/config.json"
   ],
   "tags": ["administration"]
 }

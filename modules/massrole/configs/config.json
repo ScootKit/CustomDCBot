@@ -1,0 +1,17 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "content": [
+    {
+      "field_name": "allowed_member_ids",
+      "humanname-en": "Allowed Members for the /massrole-Command",
+      "humanname-de": "Erlaubte Nutzer für den /massrole-Command",
+      "default": [],
+      "type": "array",
+      "content": "integer",
+      "description-en": "Member-IDs who are allowed to use the /massrole command",
+      "description-de": "Nutzer-IDs, die erlaubt sind /massrole zu nutzen"
+    }
+  ]
+}
