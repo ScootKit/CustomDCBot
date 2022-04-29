@@ -1,4 +1,3 @@
-const {arrayToApplicationCommandPermissions} = require('../../../src/functions/helpers');
 const {generateSuggestionEmbed, notifyMembers} = require('../suggestion');
 const {localize} = require('../../../src/functions/localize');
 const {autoCompleteSuggestionID} = require('./suggestion');
@@ -54,9 +53,6 @@ module.exports.config = {
     name: 'manage-suggestion',
     description: localize('suggestions', 'manage-suggestion-command-description'),
     defaultPermission: false,
-    permissions: function (client) {
-        return arrayToApplicationCommandPermissions(client.configurations['suggestions']['config'].adminRoles, 'ROLE');
-    },
     options: [
         {
             type: 'SUB_COMMAND',

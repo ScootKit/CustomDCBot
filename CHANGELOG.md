@@ -2,6 +2,14 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.1.1
+* Discord released their new way of editing slash-command-permissions ([read their blog](https://discord.com/blog/slash-commands-permissions-discord-apps-bots)), which made  a lot of features basiclly usless:
+  * Commands can now only set a `defaultPermission` value
+  * Commands can not set a `permission` field anymore, as it can't be synced with Discord's API
+  * Removed the `arrayToApplicationCommandPermissions` helper function as it's not needed anymore
+  * Removed the auto-generated documentation, as it was never really useful and didn't work
+  * Bumped dependencies
+
 ## v3.1.0
 
 * Made the bot actually work

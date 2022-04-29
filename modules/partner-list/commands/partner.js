@@ -1,4 +1,4 @@
-const {arrayToApplicationCommandPermissions, embedType, truncate} = require('../../../src/functions/helpers');
+const {embedType, truncate} = require('../../../src/functions/helpers');
 const {generatePartnerList} = require('../partnerlist');
 const {localize} = require('../../../src/functions/localize');
 
@@ -129,9 +129,6 @@ module.exports.config = {
     name: 'partner',
     description: localize('partner-list', 'command-description'),
     defaultPermission: false,
-    permissions: function (client) {
-        return arrayToApplicationCommandPermissions(client.configurations['partner-list']['config']['adminRoles'], 'ROLE');
-    },
     options: function (client) {
         const cats = [];
         for (const category of client.configurations['partner-list']['config']['categories']) {
