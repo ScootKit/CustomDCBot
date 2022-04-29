@@ -1,7 +1,7 @@
 const {arrayToApplicationCommandPermissions} = require("../../../src/functions/helpers");
 module.exports.subcommands = {
     'add': async function (interaction) {
-        //TODO: targets 'bots' and 'humans'; clean up; check for perms
+        //TODO: targets 'bots' and 'humans'; clean up
         if (!interaction.options.getString('target') || interaction.options.getString('target') === 'all') {
             await interaction.deferReply({ ephemeral: true });
                 interaction.guild.members.cache.forEach(member => {
@@ -13,7 +13,7 @@ module.exports.subcommands = {
         }
     },
     'remove': async function (interaction) {
-        //TODO: targets 'bots' and 'humans'; clean up; check for perms
+        //TODO: targets 'bots' and 'humans'; clean up
         if (!interaction.options.getString('target') || interaction.options.getString('target') === 'all') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
@@ -25,12 +25,12 @@ module.exports.subcommands = {
         }
     },
     'remove-all': async function (interaction) {
-        //TODO: targets 'bots' and 'humans'; clean up; check for perms
+        //TODO: targets 'bots' and 'humans'; clean up
         if (!interaction.options.getString('target') || interaction.options.getString('target') === 'all') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
                 if (member.manageable){
-                    member.roles.remove(member.roles.cache.filter(role => role !== member.roles.botRole && role !== member.roles.premiumSubscriberRole));
+                    member.roles.remove(member.roles.cache.filter(role => role !role.managed));
                 }
             });
             await interaction.editReply('Done!'); //TODO: Use strings.json
