@@ -11,8 +11,7 @@
   "description-de": "Einfaches Modul, um die Rollen vieler Nutzer gleichzeitig zu verwalten!",
   "commands-dir": "/commands",
   "config-example-files": [
-    "configs/strings.json",
-    "configs/config.json"
+    "configs/strings.json"
   ],
   "tags": ["administration"]
 }
