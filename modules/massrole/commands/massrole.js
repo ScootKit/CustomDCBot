@@ -1,3 +1,4 @@
+//TODO: Autocomplete
 const {arrayToApplicationCommandPermissions} = require("../../../src/functions/helpers");
 module.exports.subcommands = {
     'add': async function (interaction) {
@@ -30,7 +31,7 @@ module.exports.subcommands = {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
                 if (member.manageable){
-                    member.roles.remove(member.roles.cache.filter(role => role !role.managed));
+                    member.roles.remove(member.roles.cache.filter(role => !role.managed));
                 }
             });
             await interaction.editReply('Done!'); //TODO: Use strings.json
