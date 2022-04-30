@@ -1,4 +1,3 @@
-const {arrayToApplicationCommandPermissions} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.subcommands = {
@@ -49,9 +48,6 @@ module.exports.config = {
     name: 'admin',
     description: localize('admin-tools', 'command-description'),
     defaultPermission: false,
-    permissions: async function (client) {
-        return arrayToApplicationCommandPermissions(client.configurations['admin-tools']['config']['admin_allowed_member_ids'], 'ROLE');
-    },
     options: [
         {
             type: 'SUB_COMMAND',

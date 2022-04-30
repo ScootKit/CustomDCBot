@@ -1,4 +1,4 @@
-const {arrayToApplicationCommandPermissions, truncate} = require('../../../src/functions/helpers');
+const {truncate} = require('../../../src/functions/helpers');
 const {createGiveaway, endGiveaway} = require('../giveaways');
 const durationParser = require('parse-duration');
 const {localize} = require('../../../src/functions/localize');
@@ -100,9 +100,6 @@ module.exports.config = {
     name: 'gmanage',
     description: localize('giveaways', 'gmanage-description'),
     defaultPermission: false,
-    permissions: function (client) {
-        return arrayToApplicationCommandPermissions(client.configurations['giveaways']['config']['allowed_roles'], 'ROLE');
-    },
     options: [
         {
             type: 'SUB_COMMAND',

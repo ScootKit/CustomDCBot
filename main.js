@@ -208,20 +208,7 @@ async function syncCommandsIfNeeded() {
     const ranCommands = []; // Commands with all functions run
     for (const orgCmd of enabledCommands) {
         const command = {...orgCmd};
-        if (typeof command.permissions === 'function') command.permissions = await command.permissions(client);
         if (typeof command.options === 'function') command.options = await command.options(client);
-        if (command.restricted) {
-            command.permissions = [];
-            for (const botOperatorID of config.botOperators || []) {
-                command.permissions.push({
-                    id: botOperatorID,
-                    type: 'USER',
-                    permission: true
-                });
-            }
-        }
-        if (!command.permissions) command.permissions = [];
-
         if (command.options) {
             const options = [];
             for (const option of command.options) {
@@ -243,15 +230,6 @@ async function syncCommandsIfNeeded() {
         if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length || oldCommand.defaultPermission !== (typeof command.defaultPermission === 'undefined' ? true : command.defaultPermission)) {
             needSync = true;
             break;
-        }
-
-        if (!compareArrays(await oldCommand.permissions.fetch({guild: client.guild, command: oldCommand}).catch(() => {
-        }) || [], command.permissions)) {
-            await oldCommand.permissions.set({permissions: command.permissions}).catch((e) => {
-                logger.error(localize('main', 'perm-sync-failed', {c: command.name, e}));
-            }).then(() => {
-                logger.debug(localize('main', 'perm-sync', {c: command.name}));
-            });
         }
 
         for (const option of (command.options || [])) {
@@ -423,7 +401,6 @@ async function loadCommandsInDir(dir, moduleName = null) {
                 options: props.config.options || [],
                 subcommands: props.subcommands,
                 beforeSubcommand: props.beforeSubcommand,
-                permissions: props.config.permissions,
                 run: props.run,
                 defaultPermission: props.config.defaultPermission,
                 autoComplete: props.autoComplete,

@@ -14,17 +14,6 @@
       "default-de": ""
     },
     {
-      "field_name": "adminRoles",
-      "type": "array",
-      "description": "Every role that can add new partners",
-      "default": [],
-      "content": "roleID",
-      "humanname-de": "Partnerschafts-Manager-Rollen",
-      "description-de": "Jede Rolle, die neue Partner hinzufügen kann",
-      "params-de": {},
-      "default-de": []
-    },
-    {
       "field_name": "embed",
       "type": "keyed",
       "description": "Configuration of the partnership-embed",

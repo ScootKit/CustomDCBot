@@ -16,17 +16,6 @@
       "default-de": ""
     },
     {
-      "field_name": "adminRoles",
-      "type": "array",
-      "description": "Every role that can approve or deny suggestions",
-      "default": [],
-      "content": "roleID",
-      "humanname-de": "Adminrollen",
-      "description-de": "Rollen die Vorschläge Akzeptieren oder Ablehnen können",
-      "params-de": {},
-      "default-de": []
-    },
-    {
       "field_name": "reactions",
       "type": "array",
       "description": "Emojis with which the bot should react to a new suggestion",
