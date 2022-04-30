@@ -1,3 +1,4 @@
+const {localize} = require("../../../src/functions/localize");
 let target;
 
 module.exports.subcommands = {
@@ -8,7 +9,7 @@ module.exports.subcommands = {
                 interaction.guild.members.cache.forEach(member => {
                         member.roles.add(interaction.options.getRole('role'));
                 });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
         else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
@@ -17,7 +18,7 @@ module.exports.subcommands = {
                     member.roles.add(interaction.options.getRole('role'));
                 }
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
         else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
@@ -28,7 +29,7 @@ module.exports.subcommands = {
                     }
                 }
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
     },
     'remove': async function (interaction) {
@@ -38,7 +39,7 @@ module.exports.subcommands = {
             interaction.guild.members.cache.forEach(member => {
                     member.roles.remove(interaction.options.getRole('role'));
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
         if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
@@ -47,7 +48,7 @@ module.exports.subcommands = {
                         member.roles.remove(interaction.options.getRole('role'));
                 }
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
         if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
@@ -58,7 +59,7 @@ module.exports.subcommands = {
                     }
                 }
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
     },
     'remove-all': async function (interaction) {
@@ -68,7 +69,7 @@ module.exports.subcommands = {
             interaction.guild.members.cache.forEach(member => {
                     member.roles.remove(member.roles.cache.filter(role => !role.managed));
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
         else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
@@ -79,7 +80,7 @@ module.exports.subcommands = {
                     }
                 }
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
         else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
@@ -90,7 +91,7 @@ module.exports.subcommands = {
                     }
                 }
             });
-            await interaction.editReply('Done!'); //TODO: Use strings.json
+            await interaction.editReply(localize('massrole', 'done'));
         }
     }
 };
@@ -109,15 +110,15 @@ function checkTarget(interaction) {
 function autoCompleteTarget(interaction) {
     interaction.respond([
         {
-            name: 'All users', //TODO: Use strings.json
+            name: localize('massrole', 'all-users'),
             value: 'all'
         },
         {
-            name: 'Bots', //TODO: Use strings.json
+            name: localize('massrole', 'bots'),
             value: 'bots'
         },
         {
-            name: 'Humans', //TODO: Use strings.json
+            name: localize('massrole', 'humans'),
             value: 'humans'
         },
     ])
@@ -125,60 +126,60 @@ function autoCompleteTarget(interaction) {
 
 module.exports.config = {
     name: 'massrole',
-    description: 'Manage roles for all members',
+    description: localize('massrole', 'command-description'),
     defaultPermission: false,
     options: [
         {
             type: 'SUB_COMMAND',
             name: 'add',
-            description: 'Add a role to all members',
+            description: localize('massrole', 'add-subcommand-description'),
             options: [
                 {
                     type: 'ROLE',
                     required: true,
                     name: 'role',
-                    description: 'The role, that will be given to all users'
+                    description: localize('massrole', 'role-option-add-description'),
                 },
                 {
                     type: 'STRING',
                     required: false,
                     name: 'target',
                     autocomplete: true,
-                    description: 'Determines whether bots should be included or not'
+                    description: localize('massrole', 'target-option-description'),
                 }
             ]
         },
         {
             type: 'SUB_COMMAND',
             name: 'remove',
-            description: 'Remove a role from all members',
+            description: localize('massrole', 'remove-subcommand-description'),
             options: [
                 {
                     type: 'ROLE',
                     required: true,
                     name: 'role',
-                    description: 'The role, that will be removed from all users',
+                    description: localize('massrole', 'role-option-remove-description'),
                 },
                 {
                     type: 'STRING',
                     required: false,
                     name: 'target',
                     autocomplete: true,
-                    description: 'Determines whether bots should be included or not',
+                    description: localize('massrole', 'target-option-description'),
                 }
             ]
         },
         {
             type: 'SUB_COMMAND',
             name: 'remove-all',
-            description: 'Remove all roles from all members',
+            description: localize('massrole', 'remove-all-subcommand-description'),
             options: [
                 {
                     type: 'STRING',
                     required: false,
                     name: 'target',
                     autocomplete: true,
-                    description: 'Determines whether bots should be included or not'
+                    description: localize('massrole', 'target-option-description'),
                 }
             ]
         }
