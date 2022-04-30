@@ -1,4 +1,4 @@
-const {localize} = require("../../../src/functions/localize");
+const {localize} = require('../../../src/functions/localize');
 let target;
 
 module.exports.subcommands = {
@@ -6,15 +6,15 @@ module.exports.subcommands = {
         await checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
-                interaction.guild.members.cache.forEach(member => {
-                        member.roles.add(interaction.options.getRole('role'));
-                });
+            interaction.guild.members.cache.forEach(member => {
+                    member.roles.add(interaction.options.getRole('role'));
+            });
             await interaction.editReply(localize('massrole', 'done'));
         }
         else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
-                    if (member.user.bot) {
+                if (member.user.bot) {
                     member.roles.add(interaction.options.getRole('role'));
                 }
             });
@@ -37,15 +37,15 @@ module.exports.subcommands = {
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
-                    member.roles.remove(interaction.options.getRole('role'));
+                member.roles.remove(interaction.options.getRole('role'));
             });
             await interaction.editReply(localize('massrole', 'done'));
         }
         if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
-                    if (member.user.bot) {
-                        member.roles.remove(interaction.options.getRole('role'));
+                if (member.user.bot) {
+                    member.roles.remove(interaction.options.getRole('role'));
                 }
             });
             await interaction.editReply(localize('massrole', 'done'));
@@ -67,7 +67,7 @@ module.exports.subcommands = {
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
-                    member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                member.roles.remove(member.roles.cache.filter(role => !role.managed));
             });
             await interaction.editReply(localize('massrole', 'done'));
         }
@@ -120,7 +120,7 @@ function autoCompleteTarget(interaction) {
         {
             name: localize('massrole', 'humans'),
             value: 'humans'
-        },
+        };
     ])
 }
 
@@ -138,14 +138,14 @@ module.exports.config = {
                     type: 'ROLE',
                     required: true,
                     name: 'role',
-                    description: localize('massrole', 'role-option-add-description'),
+                    description: localize('massrole', 'role-option-add-description')
                 },
                 {
                     type: 'STRING',
                     required: false,
                     name: 'target',
                     autocomplete: true,
-                    description: localize('massrole', 'target-option-description'),
+                    description: localize('massrole', 'target-option-description')
                 }
             ]
         },
@@ -158,14 +158,14 @@ module.exports.config = {
                     type: 'ROLE',
                     required: true,
                     name: 'role',
-                    description: localize('massrole', 'role-option-remove-description'),
+                    description: localize('massrole', 'role-option-remove-description')
                 },
                 {
                     type: 'STRING',
                     required: false,
                     name: 'target',
                     autocomplete: true,
-                    description: localize('massrole', 'target-option-description'),
+                    description: localize('massrole', 'target-option-description')
                 }
             ]
         },
@@ -179,7 +179,7 @@ module.exports.config = {
                     required: false,
                     name: 'target',
                     autocomplete: true,
-                    description: localize('massrole', 'target-option-description'),
+                    description: localize('massrole', 'target-option-description')
                 }
             ]
         }
