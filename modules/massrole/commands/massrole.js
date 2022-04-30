@@ -1,5 +1,5 @@
-//TODO: Autocomplete
 let target;
+
 module.exports.subcommands = {
     'add': async function (interaction) {
         await checkTarget(interaction);
@@ -106,10 +106,26 @@ function checkTarget(interaction) {
         target = 'humans';
     }
 }
+function autoCompleteTarget(interaction) {
+    interaction.respond([
+        {
+            name: 'All users', //TODO: Use strings.json
+            value: 'all'
+        },
+        {
+            name: 'Bots', //TODO: Use strings.json
+            value: 'bots'
+        },
+        {
+            name: 'Humans', //TODO: Use strings.json
+            value: 'humans'
+        },
+    ])
+}
 
 module.exports.config = {
     name: 'massrole',
-    description: 'manages roles for all members',
+    description: 'Manage roles for all members',
     defaultPermission: false,
     options: [
         {
@@ -127,6 +143,7 @@ module.exports.config = {
                     type: 'STRING',
                     required: false,
                     name: 'target',
+                    autocomplete: true,
                     description: 'Determines whether bots should be included or not'
                 }
             ]
@@ -140,13 +157,14 @@ module.exports.config = {
                     type: 'ROLE',
                     required: true,
                     name: 'role',
-                    description: 'The role, that will be removed from all users'
+                    description: 'The role, that will be removed from all users',
                 },
                 {
                     type: 'STRING',
                     required: false,
                     name: 'target',
-                    description: 'Determines whether bots should be included or not'
+                    autocomplete: true,
+                    description: 'Determines whether bots should be included or not',
                 }
             ]
         },
@@ -159,9 +177,22 @@ module.exports.config = {
                     type: 'STRING',
                     required: false,
                     name: 'target',
+                    autocomplete: true,
                     description: 'Determines whether bots should be included or not'
                 }
             ]
         }
     ]
+};
+
+module.exports.autoComplete = {
+    'add': {
+        'target': autoCompleteTarget
+    },
+    'remove': {
+        'target': autoCompleteTarget
+    },
+    'remove-all': {
+        'target': autoCompleteTarget
+    }
 };
