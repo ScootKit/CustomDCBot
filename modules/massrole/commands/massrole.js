@@ -120,7 +120,7 @@ function autoCompleteTarget(interaction) {
         {
             name: localize('massrole', 'humans'),
             value: 'humans'
-        };
+        }
     ])
 }
 
