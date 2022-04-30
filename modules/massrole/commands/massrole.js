@@ -110,15 +110,15 @@ function checkTarget(interaction) {
 function autoCompleteTarget(interaction) {
     interaction.respond([
         {
-            name: localize('massrole', 'all-users'),
+            name: 'All Users',
             value: 'all'
         },
         {
-            name: localize('massrole', 'bots'),
+            name: 'Bots',
             value: 'bots'
         },
         {
-            name: localize('massrole', 'humans'),
+            name: 'Humans',
             value: 'humans'
         },
     ])
