@@ -349,6 +349,20 @@
       "shop-command-description-list": "List all items in the shop",
       "shop-command-description-delete": "Remove an item from the shop",
       "channel-not-found": "Can't find the leaderboard channel with the ID %c"
+    },
+    "massrole": {
+      "command-description":  "Manage roles for all members",
+      "add-subcommand-description":  "Add a role to all members",
+      "remove-subcommand-description":  "Remove a role from all members",
+      "remove-all-subcommand-description":  "Remove all roles from all members",
+      "role-option-add-description": "The role, that will be given to all members",
+      "role-option-remove-description": "The role, that will be removed from all members",
+      "target-option-description": "Determines whether bots should be included or not",
+      "all-users": "All Users",
+      "bots": "Bots",
+      "humans": "Humans",
+      "done": "Action executed",
+      "not-done": "Action couldn't be executed because the bot has not enough permissions."
     }
   }
 }

@@ -1,0 +1,14 @@
+{
+  "name": "massrole",
+  "humanReadableName": "Massrole",
+  "author": {
+    "name": "hfgd",
+    "link": "https://github.com/hfgd123",
+    "scnxOrgID": "2"
+  },
+  "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/massrole",
+  "description-en": "Simple module to manage the roles of many members at once!",
+  "description-de": "Einfaches Modul, um die Rollen vieler Nutzer gleichzeitig zu verwalten!",
+  "commands-dir": "/commands",
+  "tags": ["administration"]
+}
