@@ -106,26 +106,6 @@ function checkTarget(interaction) {
     }
 }
 
-/**
- * Make autocomplete for "target"-option in commands
- *
- */
-function autoCompleteTarget(interaction) {
-    interaction.respond([
-        {
-            name: localize('massrole', 'all-users'),
-            value: 'all'
-        },
-        {
-            name: localize('massrole', 'bots'),
-            value: 'bots'
-        },
-        {
-            name: localize('massrole', 'humans'),
-            value: 'humans'
-        }
-    ]);
-}
 
 module.exports.config = {
     name: 'massrole',
@@ -147,7 +127,20 @@ module.exports.config = {
                     type: 'STRING',
                     required: false,
                     name: 'target',
-                    autocomplete: true,
+                    choices: [
+                        {
+                            name: localize('massrole', 'all-users'),
+                            value: 'all'
+                        },
+                        {
+                            name: localize('massrole', 'bots'),
+                            value: 'bots'
+                        },
+                        {
+                            name: localize('massrole', 'humans'),
+                            value: 'humans'
+                        }
+                    ],
                     description: localize('massrole', 'target-option-description')
                 }
             ]
@@ -167,7 +160,20 @@ module.exports.config = {
                     type: 'STRING',
                     required: false,
                     name: 'target',
-                    autocomplete: true,
+                    choices: [
+                        {
+                            name: localize('massrole', 'all-users'),
+                            value: 'all'
+                        },
+                        {
+                            name: localize('massrole', 'bots'),
+                            value: 'bots'
+                        },
+                        {
+                            name: localize('massrole', 'humans'),
+                            value: 'humans'
+                        }
+                    ],
                     description: localize('massrole', 'target-option-description')
                 }
             ]
@@ -181,7 +187,20 @@ module.exports.config = {
                     type: 'STRING',
                     required: false,
                     name: 'target',
-                    autocomplete: true,
+                    choices: [
+                        {
+                            name: localize('massrole', 'all-users'),
+                            value: 'all'
+                        },
+                        {
+                            name: localize('massrole', 'bots'),
+                            value: 'bots'
+                        },
+                        {
+                            name: localize('massrole', 'humans'),
+                            value: 'humans'
+                        }
+                    ],
                     description: localize('massrole', 'target-option-description')
                 }
             ]
