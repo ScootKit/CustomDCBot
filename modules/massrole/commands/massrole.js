@@ -7,14 +7,14 @@ module.exports.subcommands = {
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for(const member of interaction.guild.members.cache.values()) {
-                member.roles.add(interaction.options.getRole('role'));
+                await member.roles.add(interaction.options.getRole('role'));
             }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             for(const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
-                    member.roles.add(interaction.options.getRole('role'));
+                    await member.roles.add(interaction.options.getRole('role'));
                 }
             }
             await interaction.editReply(localize('massrole', 'done'));
@@ -23,7 +23,7 @@ module.exports.subcommands = {
             for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
-                        member.roles.add(interaction.options.getRole('role'));
+                        await member.roles.add(interaction.options.getRole('role'));
                     }
                 }
             }
@@ -31,11 +31,11 @@ module.exports.subcommands = {
         }
     },
     'remove': async function (interaction) {
-        await checkTarget(interaction);
+        checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for(const member of interaction.guild.members.cache.values()) {
-                member.roles.remove(interaction.options.getRole('role'));
+                await member.roles.remove(interaction.options.getRole('role'));
             }
             await interaction.editReply(localize('massrole', 'done'));
         }
@@ -43,7 +43,7 @@ module.exports.subcommands = {
             await interaction.deferReply({ ephemeral: true });
             for(const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
-                    member.roles.remove(interaction.options.getRole('role'));
+                    await member.roles.remove(interaction.options.getRole('role'));
                 }
             }
             await interaction.editReply(localize('massrole', 'done'));
@@ -53,7 +53,7 @@ module.exports.subcommands = {
             for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
-                        member.roles.remove(interaction.options.getRole('role'));
+                        await member.roles.remove(interaction.options.getRole('role'));
                     }
                 }
             }
@@ -61,11 +61,11 @@ module.exports.subcommands = {
         }
     },
     'remove-all': async function (interaction) {
-        await checkTarget(interaction);
+        checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for(const member of interaction.guild.members.cache.values()) {
-                member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                await member.roles.remove(member.roles.cache.filter(role => !role.managed));
             }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'bots') {
@@ -73,7 +73,7 @@ module.exports.subcommands = {
             for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (member.user.bot) {
-                        member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                        await member.roles.remove(member.roles.cache.filter(role => !role.managed));
                     }
                 }
             }
@@ -83,7 +83,7 @@ module.exports.subcommands = {
             for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
-                        member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                        await member.roles.remove(member.roles.cache.filter(role => !role.managed));
                     }
                 }
             }
@@ -206,16 +206,4 @@ module.exports.config = {
             ]
         }
     ]
-};
-
-module.exports.autoComplete = {
-    'add': {
-        'target': autoCompleteTarget
-    },
-    'remove': {
-        'target': autoCompleteTarget
-    },
-    'remove-all': {
-        'target': autoCompleteTarget
-    }
 };
