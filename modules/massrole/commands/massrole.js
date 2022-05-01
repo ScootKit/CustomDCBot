@@ -6,27 +6,27 @@ module.exports.subcommands = {
         await checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 member.roles.add(interaction.options.getRole('role'));
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
                     member.roles.add(interaction.options.getRole('role'));
                 }
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         member.roles.add(interaction.options.getRole('role'));
                     }
                 }
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         }
     },
@@ -34,29 +34,29 @@ module.exports.subcommands = {
         await checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 member.roles.remove(interaction.options.getRole('role'));
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         }
         if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
                     member.roles.remove(interaction.options.getRole('role'));
                 }
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         }
         if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         member.roles.remove(interaction.options.getRole('role'));
                     }
                 }
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         }
     },
@@ -64,29 +64,29 @@ module.exports.subcommands = {
         await checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 member.roles.remove(member.roles.cache.filter(role => !role.managed));
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (member.user.bot) {
                         member.roles.remove(member.roles.cache.filter(role => !role.managed));
                     }
                 }
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
-            interaction.guild.members.cache.forEach(member => {
+            for(const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         member.roles.remove(member.roles.cache.filter(role => !role.managed));
                     }
                 }
-            });
+            }
             await interaction.editReply(localize('massrole', 'done'));
         }
     }
