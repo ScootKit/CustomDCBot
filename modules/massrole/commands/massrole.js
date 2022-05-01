@@ -14,7 +14,7 @@ module.exports.subcommands = {
                     failed++;
                 }
             }
-            if (failed === 0){
+            if (failed === 0) {
                 await interaction.editReply(localize('massrole', 'done'));
             } else {
                 await interaction.editReply(localize('massrole', 'not-done'));
@@ -31,7 +31,7 @@ module.exports.subcommands = {
                     }
                 }
             }
-            if (failed === 0){
+            if (failed === 0) {
                 await interaction.editReply(localize('massrole', 'done'));
             } else {
                 await interaction.editReply(localize('massrole', 'not-done'));
@@ -149,12 +149,12 @@ module.exports.subcommands = {
                     }
                 }
             }
-                if (failed === 0) {
-                    await interaction.editReply(localize('massrole', 'done'));
-                } else {
-                    await interaction.editReply(localize('massrole', 'not-done'));
-                    failed = 0;
-                }
+            if (failed === 0) {
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
         } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
@@ -168,12 +168,12 @@ module.exports.subcommands = {
                     }
                 }
             }
-                    if (failed === 0) {
-                        await interaction.editReply(localize('massrole', 'done'));
-                    } else {
-                        await interaction.editReply(localize('massrole', 'not-done'));
-                        failed = 0;
-                    }
+            if (failed === 0) {
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
         }
     }
 };
