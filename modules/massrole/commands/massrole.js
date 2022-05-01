@@ -1,5 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 let target;
+let failed;
 
 module.exports.subcommands = {
     'add': async function (interaction) {
@@ -7,27 +8,55 @@ module.exports.subcommands = {
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
-                await member.roles.add(interaction.options.getRole('role'));
+                try {
+                    await member.roles.add(interaction.options.getRole('role'));
+                } catch (e) {
+                    failed++;
+                }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+            if (failed === 0){
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
         } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
-                    await member.roles.add(interaction.options.getRole('role'));
-                }
-            }
-            await interaction.editReply(localize('massrole', 'done'));
-        } else if (target === 'humans') {
-            await interaction.deferReply({ ephemeral: true });
-            for (const member of interaction.guild.members.cache.values()) {
-                if (member.manageable) {
-                    if (!member.user.bot) {
+                    try {
                         await member.roles.add(interaction.options.getRole('role'));
+                    } catch (e) {
+                        failed++;
                     }
                 }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+            if (failed === 0){
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
+        } else if (target === 'humans') {
+            await interaction.deferReply({ephemeral: true});
+            for (const member of interaction.guild.members.cache.values()) {
+                if (member.manageable) {
+                    if (!member.user.bot) {
+                        try {
+
+                            await member.roles.add(interaction.options.getRole('role'));
+                        } catch (e) {
+                            failed++;
+                        }
+                    }
+                }
+            }
+            if (failed === 0) {
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
         }
     },
     'remove': async function (interaction) {
@@ -35,29 +64,59 @@ module.exports.subcommands = {
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
-                await member.roles.remove(interaction.options.getRole('role'));
+                try {
+                    await member.roles.remove(interaction.options.getRole('role'));
+                } catch (e) {
+                    failed++;
+                }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+            if (failed === 0) {
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
+
         }
         if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
-                    await member.roles.remove(interaction.options.getRole('role'));
+                    try {
+                        await member.roles.remove(interaction.options.getRole('role'));
+                    } catch (e) {
+                        failed++;
+                    }
                 }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+            if (failed === 0) {
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
+
         }
         if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
-                        await member.roles.remove(interaction.options.getRole('role'));
+                        try {
+                            await member.roles.remove(interaction.options.getRole('role'));
+                        } catch (e) {
+                            failed++;
+                        }
                     }
                 }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+            if (failed === 0) {
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
+
         }
     },
     'remove-all': async function (interaction) {
@@ -65,29 +124,56 @@ module.exports.subcommands = {
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
-                await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                try {
+                    await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                } catch (e) {
+                    failed++;
+                }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+            if (failed === 0) {
+                await interaction.editReply(localize('massrole', 'done'));
+            } else {
+                await interaction.editReply(localize('massrole', 'not-done'));
+                failed = 0;
+            }
         } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (member.user.bot) {
-                        await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                        try {
+                            await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                        } catch (e) {
+                            failed++;
+                        }
                     }
                 }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+                if (failed === 0) {
+                    await interaction.editReply(localize('massrole', 'done'));
+                } else {
+                    await interaction.editReply(localize('massrole', 'not-done'));
+                    failed = 0;
+                }
         } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
-                        await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                        try {
+                            await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                        } catch (e) {
+                            failed++;
+                        }
                     }
                 }
             }
-            await interaction.editReply(localize('massrole', 'done'));
+                    if (failed === 0) {
+                        await interaction.editReply(localize('massrole', 'done'));
+                    } else {
+                        await interaction.editReply(localize('massrole', 'not-done'));
+                        failed = 0;
+                    }
         }
     }
 };
