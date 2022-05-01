@@ -1,5 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
-const {embedType} = require("../../../src/functions/helpers");
+const {embedType} = require('../../../src/functions/helpers');
 let target;
 let failed;
 
