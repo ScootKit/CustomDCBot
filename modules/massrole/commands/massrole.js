@@ -7,11 +7,10 @@ module.exports.subcommands = {
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
-                    member.roles.add(interaction.options.getRole('role'));
+                member.roles.add(interaction.options.getRole('role'));
             });
             await interaction.editReply(localize('massrole', 'done'));
-        }
-        else if (target === 'bots') {
+        } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
                 if (member.user.bot) {
@@ -19,8 +18,7 @@ module.exports.subcommands = {
                 }
             });
             await interaction.editReply(localize('massrole', 'done'));
-        }
-        else if (target === 'humans') {
+        } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
                 if (member.manageable) {
@@ -70,8 +68,7 @@ module.exports.subcommands = {
                 member.roles.remove(member.roles.cache.filter(role => !role.managed));
             });
             await interaction.editReply(localize('massrole', 'done'));
-        }
-        else if (target === 'bots') {
+        } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
                 if (member.manageable) {
@@ -81,8 +78,7 @@ module.exports.subcommands = {
                 }
             });
             await interaction.editReply(localize('massrole', 'done'));
-        }
-        else if (target === 'humans') {
+        } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
             interaction.guild.members.cache.forEach(member => {
                 if (member.manageable) {
@@ -96,17 +92,24 @@ module.exports.subcommands = {
     }
 };
 
+/**
+ * Read content of "target"-option
+ *
+ */
 function checkTarget(interaction) {
     if (!interaction.options.getString('target') || interaction.options.getString('target') === 'all') {
         target = 'all';
-    }
-    else if (interaction.options.getString('target') === 'bots') {
+    } else if (interaction.options.getString('target') === 'bots') {
         target = 'bots';
-    }
-    else if (interaction.options.getString('target') === 'humans') {
+    } else if (interaction.options.getString('target') === 'humans') {
         target = 'humans';
     }
 }
+
+/**
+ * Make autocomplete for "target"-option in commands
+ *
+ */
 function autoCompleteTarget(interaction) {
     interaction.respond([
         {
@@ -121,7 +124,7 @@ function autoCompleteTarget(interaction) {
             name: localize('massrole', 'humans'),
             value: 'humans'
         }
-    ])
+    ]);
 }
 
 module.exports.config = {
