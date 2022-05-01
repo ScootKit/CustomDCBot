@@ -6,13 +6,13 @@ module.exports.subcommands = {
         checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 await member.roles.add(interaction.options.getRole('role'));
             }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
                     await member.roles.add(interaction.options.getRole('role'));
                 }
@@ -20,7 +20,7 @@ module.exports.subcommands = {
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         await member.roles.add(interaction.options.getRole('role'));
@@ -34,14 +34,14 @@ module.exports.subcommands = {
         checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 await member.roles.remove(interaction.options.getRole('role'));
             }
             await interaction.editReply(localize('massrole', 'done'));
         }
         if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
                     await member.roles.remove(interaction.options.getRole('role'));
                 }
@@ -50,7 +50,7 @@ module.exports.subcommands = {
         }
         if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         await member.roles.remove(interaction.options.getRole('role'));
@@ -64,13 +64,13 @@ module.exports.subcommands = {
         checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 await member.roles.remove(member.roles.cache.filter(role => !role.managed));
             }
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'bots') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (member.user.bot) {
                         await member.roles.remove(member.roles.cache.filter(role => !role.managed));
@@ -80,7 +80,7 @@ module.exports.subcommands = {
             await interaction.editReply(localize('massrole', 'done'));
         } else if (target === 'humans') {
             await interaction.deferReply({ ephemeral: true });
-            for(const member of interaction.guild.members.cache.values()) {
+            for (const member of interaction.guild.members.cache.values()) {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         await member.roles.remove(member.roles.cache.filter(role => !role.managed));
