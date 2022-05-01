@@ -362,7 +362,7 @@
       "bots": "Bots",
       "humans": "Humans",
       "done": "Action executed",
-      "not-done": "Action couldn't be executed because the bot has not enough permissons."
+      "not-done": "Action couldn't be executed because the bot has not enough permissions."
     }
   }
 }
