@@ -3,7 +3,7 @@ let target;
 
 module.exports.subcommands = {
     'add': async function (interaction) {
-        await checkTarget(interaction);
+        checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for(const member of interaction.guild.members.cache.values()) {
