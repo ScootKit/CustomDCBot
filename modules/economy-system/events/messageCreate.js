@@ -14,7 +14,17 @@ module.exports.run = async function (client, message) {
     if (Math.floor(Math.random() * config['messageDrops']) !== 1) return;
     const toAdd = Math.floor(Math.random() * (config['messageDropsMax'] - config['messageDropsMin'])) + config['messageDropsMin'];
     await editBalance(client, message.author.id, 'add', toAdd);
-    await message.reply({content: localize('economy-system', 'message-drop', {m: toAdd, c: config['currencySymbol']})});
+    const sendMsg = await client.models['economy-system']['dropMsg'].findOne({
+        where: {
+            id: message.author.id
+        }
+    });
+    if (!sendMsg) {
+        const msg = await message.reply({content: localize('economy-system', 'message-drop', {m: toAdd, c: config['currencySymbol']})});
+        setTimeout(() => {
+            msg.delete();
+        }, 5000);
+    }
     client.logger.info(`[economy-system] ` + localize('economy-system', 'message-drop-earned-money', {
         m: toAdd,
         u: message.author.tag,
