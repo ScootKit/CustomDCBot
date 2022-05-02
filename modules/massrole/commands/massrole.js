@@ -1,9 +1,12 @@
 const {localize} = require('../../../src/functions/localize');
+const {embedType} = require('../../../src/functions/helpers');
 let target;
 let failed;
 
+
 module.exports.subcommands = {
     'add': async function (interaction) {
+        const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
@@ -15,9 +18,9 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
         } else if (target === 'bots') {
@@ -32,9 +35,9 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
         } else if (target === 'humans') {
@@ -52,14 +55,15 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
         }
     },
     'remove': async function (interaction) {
+        const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
@@ -71,9 +75,9 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
 
@@ -90,9 +94,9 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
 
@@ -111,15 +115,16 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
 
         }
     },
     'remove-all': async function (interaction) {
+        const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
@@ -131,9 +136,9 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
         } else if (target === 'bots') {
@@ -150,9 +155,9 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
         } else if (target === 'humans') {
@@ -169,9 +174,9 @@ module.exports.subcommands = {
                 }
             }
             if (failed === 0) {
-                await interaction.editReply(localize('massrole', 'done'));
+                await interaction.editReply(embedType(moduleStrings.done, {}));
             } else {
-                await interaction.editReply(localize('massrole', 'not-done'));
+                await interaction.editReply(embedType(moduleStrings.notDone, {}));
                 failed = 0;
             }
         }
