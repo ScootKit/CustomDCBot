@@ -1,4 +1,3 @@
-const {arrayToApplicationCommandPermissions} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (interaction) {
@@ -20,9 +19,6 @@ module.exports.config = {
     name: 'stealemote',
     description: localize('admin-tools', 'stealemote-description'),
     defaultPermission: false,
-    permissions: async function (client) {
-        return arrayToApplicationCommandPermissions(client.configurations['admin-tools']['config']['stealemote_allowed_role_ids'], 'USER');
-    },
     options: [
         {
             type: 'STRING',

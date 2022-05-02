@@ -6,18 +6,6 @@
   "description-de": "Stelle hier die Funktionen des Modules ein",
   "content": [
     {
-      "field_name": "allowed_roles",
-      "humanname-en": "Allowed roles",
-      "humanname-de": "Erlaubte Rollen",
-      "default": [],
-      "type": "array",
-      "content": "roleID",
-      "description-en": "ID of roles that are allowed to create and manage giveaways",
-      "description-de": "Rollen, die Gewinnspiele erstellen und verwalten können",
-      "params-de": {},
-      "default-de": []
-    },
-    {
       "field_name": "bypassRoles",
       "humanname-en": "Giveaway-Requirement-Bypass-Roles",
       "humanname-de": "Gewinnspiel-Voraussetzungen-Ignorierung-Rollen",

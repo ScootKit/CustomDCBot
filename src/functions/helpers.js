@@ -25,30 +25,6 @@ module.exports.asyncForEach = async function (array, callback) {
 };
 
 /**
- *
- * @param {Array} inputArray Array of user or role IDs
- * @param {String} type [ApplicationCommandPermissionType](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissionType)
- * @param {Array} array Base-Array
- * @param {Boolean} skipOwnerAdding If enabled, the bot won't add the guild owner as allowed user
- * @returns {array} [ApplicationCommandPermissionType](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions)
- */
-module.exports.arrayToApplicationCommandPermissions = function (inputArray, type, array = [], skipOwnerAdding = false) {
-    inputArray.forEach((id) => {
-        array.push({
-            type: type,
-            permission: true,
-            id
-        });
-    });
-    if (!skipOwnerAdding) array.push({
-        type: 'USER',
-        permission: true,
-        id: client.guild.ownerId
-    });
-    return array;
-};
-
-/**
  * Replaces every argument with a string
  * @param {Object<String>} args Arguments to replace
  * @param {String} input Input

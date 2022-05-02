@@ -1,4 +1,4 @@
-# Custom-Bot v2
+# Custom-Bot v3
 
 Create your own discord bot - Fully customizable and with a lot of features. This bot is for advanced JS-Users, you
 should only use it if you have some experience with Javascript, discord.js and JSON files.
@@ -172,6 +172,7 @@ Every module has to contain a `module.json` file with the following content:
 #### Interaction-Command
 
 Note: Interaction-Commands get loaded after the configuration got checked.\
+Note: Permissions for Slash-Commands have to be configured in the Server-Settings and will be checked by Discord.\
 An interaction-command ("slash command") file has to export the following things:
 
 * `run` (function; provided arguments: `interaction`):
@@ -188,14 +189,7 @@ An interaction-command ("slash command") file has to export the following things
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
-    * `permissions`:
-        * Array
-          of [ApplicationCommandPermissions](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions)
-          OR
-        * Async function
-          returning [ApplicationCommandPermissions](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandPermissions) (
-          gets called with `client` as argument. Commands are not synced at this point, but configuration is checked)
-    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command
+    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command and your command's permissions can not be synced
     * `options`:
         * [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
           OR
