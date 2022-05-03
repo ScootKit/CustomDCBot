@@ -361,6 +361,10 @@
       "all-users": "All Users",
       "bots": "Bots",
       "humans": "Humans"
+    },
+    "status-role": {
+      "fulfilled": "Status-role condition is fulfilled",
+      "not-fulfilled": "Status-role condition is no longer fulfilled"
     }
   }
 }
