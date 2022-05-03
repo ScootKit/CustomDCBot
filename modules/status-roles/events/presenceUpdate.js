@@ -1,4 +1,4 @@
-const {localize} = require("../../../src/functions/localize");
+const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (client, newPresence) {
 
@@ -19,4 +19,4 @@ module.exports.run = async function (client, newPresence) {
             }
         }
     }
-}
+};
