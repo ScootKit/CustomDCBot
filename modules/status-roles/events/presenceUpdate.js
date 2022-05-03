@@ -20,7 +20,7 @@ module.exports.run = async function (client, oldPresence, newPresence) {
                     }
                 }
             }
-        }  else {
+        } else {
             for (let i = 0; i < roles.length; i++) {
                 if (member.roles.cache.has(roles[i])) {
                     member.roles.remove(roles[i], localize('status-role', 'not-fulfilled'));
