@@ -161,12 +161,34 @@
       "field_name": "balanceReply",
       "allowEmbed": true,
       "type": "string",
-      "default": "The User %user% has currently **%balance%**",
+      "default": {
+        "title": "Balance of %user%",
+        "description": "%shopItems%",
+        "fields": [{
+          "name": "Balance:",
+          "value": "%balance%"
+        },
+        {
+          "name": "Bank:",
+          "value": "%bank%"
+        },{
+          "name": "Total:",
+          "value": "%total%"
+        }]
+      },
       "description": "Reply for the balance command",
       "params": [
         {
           "name": "%balance%",
           "description": "Current balance of the user"
+        },
+        {
+          "name": "%bank%",
+          "description": "Current value that the user has on the bank"
+        },
+        {
+          "name": "%total%",
+          "description": "Total balance of the user"
         },
         {
           "name": "%user%",
@@ -309,7 +331,7 @@
       "default-en": "The Mesage-Drop message is already disabled!"
     },
     {
-      "field_name": "msgDropEnabled",
+      "field_name": "msgDropDisabled",
       "humanname-en": "message-drop disabled",
       "type": "string",
       "description-en": "Message that gets send when a User disables the Message-Drop message",
