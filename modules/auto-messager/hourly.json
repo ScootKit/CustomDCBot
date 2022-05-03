@@ -1,0 +1,42 @@
+{
+  "filename": "hourly.json",
+  "humanname-de": "Stündliche Basis",
+  "description-de": "Hier kannst du Nachrichten auf stündlicher Basis schicken lassen - das kann alles von 1-24x pro Tag sein",
+  "humanname-en": "Hourly basic",
+  "description-en": "You can send messages on an hourly basic here - this can be once or 24 times a day",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "description": "ID of the channel in which the message should be send",
+      "humanname-de": "Kanal",
+      "description-de": "ID des Kanals, in welchen die Nachricht gesendet werden soll",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "message",
+      "type": "string",
+      "default": "",
+      "description": "Message that should be send",
+      "allowEmbed": true,
+      "humanname-de": "Nachricht",
+      "description-de": "Nachricht, die gesendet werden soll",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "limitHoursTo",
+      "type": "array",
+      "default": [],
+      "content": "integer",
+      "description": "If one or more values are set, the message will only get send when the current hour is included in this array",
+      "humanname-de": "Stunden begrenzen auf",
+      "description-de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn die aktuelle Stunde hier enthalten ist",
+      "params-de": {},
+      "default-de": []
+    }
+  ]
+}

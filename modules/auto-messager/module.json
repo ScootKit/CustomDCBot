@@ -1,0 +1,22 @@
+{
+  "name": "auto-messager",
+  "humanReadableName-en": "Automatic Messages",
+  "humanReadableName-de": "Automatische Nachrichten",
+  "description-de": "Dieses Modul erlaubt dir es dir, automatisch versenden zu lassen",
+  "description-en": "You can - with this module - send automatic messages",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-messager",
+  "events-dir": "/events",
+  "config-example-files": [
+    "hourly.json",
+    "daily.json",
+    "cronjob.json"
+  ],
+  "tags": [
+    "administration"
+  ]
+}

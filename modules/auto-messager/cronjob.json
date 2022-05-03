@@ -1,0 +1,41 @@
+{
+  "filename": "cronjob.json",
+  "humanname-de": "Cronjobs (fortgeschritten)",
+  "description-de": "Nur für fortgeschrittene Nutzer - mit cronjob's kannst hast du die volle Kontrolle über die Nachrichten",
+  "humanname-en": "Cronjob (advanced)",
+  "description-en": "Advanced users can unleash the full potential of automatic message with cronejobs",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "description": "ID of the channel in which the message should be send",
+      "humanname-de": "Kanal",
+      "description-de": "ID des Kanals, in welchen die Nachricht gesendet werden soll",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "message",
+      "type": "string",
+      "default": "",
+      "description": "Message that should be send",
+      "allowEmbed": true,
+      "humanname-de": "Nachricht",
+      "description-de": "Nachricht, die gesendet werden soll",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "expression",
+      "type": "string",
+      "default": "1 6 1-31 * *",
+      "description": "The message gets scheduled for this expression",
+      "humanname-de": "Ausdruck",
+      "description-de": "Die Nachricht wird für diesen Ausdruck geplant",
+      "params-de": {},
+      "default-de": "1 6 1-31 * *"
+    }
+  ]
+}
