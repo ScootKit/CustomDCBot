@@ -22,6 +22,10 @@ module.exports.run = async function (client, oldPresence, newPresence) {
     } else {
         removeRoles();
     }
+
+    /**
+     * Removes the roles of an user who no longer fulfills the criteria
+     */
     function removeRoles() {
         for (let i = 0; i < roles.length; i++) {
             if (member.roles.cache.has(roles[i])) {
