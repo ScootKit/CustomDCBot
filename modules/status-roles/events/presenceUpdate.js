@@ -14,17 +14,18 @@ module.exports.run = async function (client, oldPresence, newPresence) {
             if (status.some(word => newPresence.activities[0].state.toLowerCase().includes(word.toLowerCase()))) {
                 return member.roles.add(roles, localize('status-role', 'fulfilled'));
             } else {
-                for (const key in roles) {
-                    if (member.roles.cache.has(roles[key])) {
-                        member.roles.remove(roles[key], localize('status-role', 'not-fulfilled'));
-                    }
-                }
+                removeRoles();
             }
         } else {
-            for (let i = 0; i < roles.length; i++) {
-                if (member.roles.cache.has(roles[i])) {
-                    member.roles.remove(roles[i], localize('status-role', 'not-fulfilled'));
-                }
+            removeRoles();
+        }
+    } else {
+        removeRoles();
+    }
+    function removeRoles() {
+        for (let i = 0; i < roles.length; i++) {
+            if (member.roles.cache.has(roles[i])) {
+                member.roles.remove(roles[i], localize('status-role', 'not-fulfilled'));
             }
         }
     }
