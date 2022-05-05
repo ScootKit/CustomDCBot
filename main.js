@@ -104,6 +104,10 @@ const commands = [];
 
 // Starting bot
 db.authenticate().then(async () => {
+    if (config.timezone !== process.env.TZ) {
+        process.env.TZ = config.timezone;
+        logger.info(`Successfully set timezone to ${config.timezone}. The time is ${new Date().toLocaleString(client.locale)}.`);
+    }
     if (scnxSetup) client.scnxHost = client.config.scnxHostOverwirde || 'https://scnx.app';
     await loadModelsInDir('/src/models');
     await loadModules();

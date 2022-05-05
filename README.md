@@ -172,7 +172,6 @@ Every module has to contain a `module.json` file with the following content:
 #### Interaction-Command
 
 Note: Interaction-Commands get loaded after the configuration got checked.\
-Note: Permissions for Slash-Commands have to be configured in the Server-Settings and will be checked by Discord.\
 An interaction-command ("slash command") file has to export the following things:
 
 * `run` (function; provided arguments: `interaction`):
@@ -235,7 +234,7 @@ An example config file should include the following things:
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
     * `default`: Default value
-    * `type`: Can be `channelID`, `select`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
+    * `type`: Can be `channelID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
     * `description`: Short description of this field
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please

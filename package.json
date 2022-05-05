@@ -1,6 +1,6 @@
 {
   "name": "customdcbot",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Create your own discord bot - Fully customizable and with a lot of features",
   "main": "main.js",
   "repository": {
@@ -22,7 +22,7 @@
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.1.0",
     "@pixelfactory/privatebin": "^2.6.1",
-    "@scnetwork/api": "^1.0.0",
+    "@scnetwork/api": "^1.0.1",
     "age-calculator": "^1.0.0",
     "bs58": "^4.0.1",
     "bufferutil": "^4.0.6",
@@ -33,14 +33,14 @@
     "is-equal": "^1.6.4",
     "isomorphic-webcrypto": "^2.3.8",
     "jsonfile": "^6.1.0",
-    "log4js": "^6.4.1",
+    "log4js": "^6.4.6",
     "node-schedule": "^2.1.0",
     "parse-duration": "^1.0.2",
-    "sequelize": "^6.14.0",
-    "sqlite3": "^5.0.6",
+    "sequelize": "^6.19.0",
+    "sqlite3": "^5.0.7",
     "twitch": "^4.6.7",
     "twitch-auth": "^4.6.7",
-    "utf-8-validate": "^5.0.8",
+    "utf-8-validate": "^5.0.9",
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
