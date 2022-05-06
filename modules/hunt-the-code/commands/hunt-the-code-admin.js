@@ -43,6 +43,11 @@ module.exports.subcommands = {
     }
 };
 
+/**
+ * Generate a report of the current Code-Hunt-Session
+ * @param {Client} client Client
+ * @returns {Promise<string>} URL to Report
+ */
 async function generateReport(client) {
     let reportString = `# ${localize('hunt-the-code', 'report-header', {s: client.guild.name})}\n`;
     const codes = await client.models['hunt-the-code']['Code'].findAll({
@@ -66,7 +71,7 @@ async function generateReport(client) {
         const code = codes[i];
         reportString = reportString + `| ${parseInt(i) + 1}. | ${code.code} | ${code.displayName} | ${code.foundCount} |\n`;
     }
-    reportString = reportString + `\n<br><br><br><hr>Generated at ${new Date().toLocaleString(client.locale)}.`
+    reportString = reportString + `\n<br><br><br><hr>Generated at ${new Date().toLocaleString(client.locale)}.`;
     return await postToSCNetworkPaste(reportString, {
         expire: '1month',
         burnafterreading: 0,
@@ -74,7 +79,7 @@ async function generateReport(client) {
         textformat: 'markdown',
         output: 'text',
         compression: 'zlib'
-    })
+    });
 }
 
 module.exports.config = {

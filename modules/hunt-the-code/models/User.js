@@ -8,8 +8,8 @@ module.exports = class HuntTheCodeUser extends Model {
                 primaryKey: true
             },
             foundCount: {
-              type: DataTypes.INTEGER,
-              defaultValue: 0
+                type: DataTypes.INTEGER,
+                defaultValue: 0
             },
             foundCodes: {
                 type: DataTypes.JSON,

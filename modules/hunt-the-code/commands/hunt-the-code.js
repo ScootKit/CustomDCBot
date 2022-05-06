@@ -45,9 +45,9 @@ module.exports.subcommands = {
         for (const code of user.foundCodes) {
             const codeObject = codes.find(c => c.code === code);
             if (!codeObject) continue;
-            foundCodes = foundCodes + `\n• ${codeObject.displayName}`
+            foundCodes = foundCodes + `\n• ${codeObject.displayName}`;
         }
-        if (!foundCodes) foundCodes = localize('hunt-the-code', 'no-codes-found')
+        if (!foundCodes) foundCodes = localize('hunt-the-code', 'no-codes-found');
         interaction.reply(embedType(interaction.client.configurations['hunt-the-code']['strings'].profileMessage, {
             '%username%': interaction.user.username,
             '%foundCount%': user.foundCount,
@@ -66,9 +66,9 @@ module.exports.subcommands = {
         });
         let userString = '';
         for (const user of users) {
-            userString = userString + `\n<@${user.id}>: ${user.foundCount}`
+            userString = userString + `\n<@${user.id}>: ${user.foundCount}`;
         }
-        if (userString === '') userString = localize('hunt-the-code', 'no-users')
+        if (userString === '') userString = localize('hunt-the-code', 'no-users');
         const embed = new MessageEmbed()
             .setDescription(userString)
             .setTitle(moduleStrings.leaderboardMessage.title)
@@ -78,7 +78,7 @@ module.exports.subcommands = {
         interaction.reply({
             ephemeral: true,
             embeds: [embed]
-        })
+        });
     }
 };
 
