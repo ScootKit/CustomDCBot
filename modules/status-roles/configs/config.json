@@ -32,7 +32,7 @@
     {
       "field_name": "remove",
       "humanname-en": "Remove all other roles",
-      "humanname-de": "Entferne alle anderen Rolen",
+      "humanname-de": "Entferne alle anderen Rollen",
       "default": false,
       "type": "boolean",
       "description-en": "Remove all other roles from users with one of the words in their status",
