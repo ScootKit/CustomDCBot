@@ -28,6 +28,17 @@
       "description-de": "Rollen, die an Nutzer mit einem der Wörter im Status vergeben werden sollen",
       "params-de": {},
       "default-de": []
+    },
+    {
+      "field_name": "remove",
+      "humanname-en": "Remove all other roles",
+      "humanname-de": "Entferne alle anderen Rolen",
+      "default": false,
+      "type": "boolean",
+      "description-en": "Remove all other roles from users with one of the words in their status",
+      "description-de": "Entferne alle anderen Rollen von Nutzern mit einem der Wörter im Status",
+      "params-de": {},
+      "default-de": []
     }
   ]
 }
