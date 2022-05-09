@@ -12,9 +12,7 @@ module.exports.run = async function (client, oldPresence, newPresence) {
     if (newPresence.activities.length > 0) {
         if (newPresence.activities[0].state) {
             if (status.some(word => newPresence.activities[0].state.toLowerCase().includes(word.toLowerCase()))) {
-                if (moduleConfig.remove) {
-                    await member.roles.remove(member.roles.cache.filter(role => !role.managed));
-                }
+                if (moduleConfig.remove) await member.roles.remove(member.roles.cache.filter(role => !role.managed));
                 return member.roles.add(roles, localize('status-role', 'fulfilled'));
             } else {
                 removeRoles();
