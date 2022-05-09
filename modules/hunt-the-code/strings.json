@@ -1,0 +1,190 @@
+{
+  "filename": "strings.json",
+  "humanname-de": "Nachrichten",
+  "humanname-en": "Messages",
+  "description-en": "Edit the messages and strings of the module here",
+  "description-de": "Stelle hier die Nachrichten des Modules ein",
+  "content": [
+    {
+      "field_name": "codeNotFoundMessage",
+      "humanname-en": "Code-not-found Message",
+      "humanname-de": "Code-nicht-gefunden Nachricht",
+      "default-en": "⚠ Sorry, this code is invalid ):",
+      "default-de": "⚠ Dieser Code ist leider ungültig",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This message gets send, when an invalid code is being redeemed",
+      "description-de": "Diese Nachricht wird verschickt, wenn ein ungültiger Code eingelöst wird"
+    },
+    {
+      "field_name": "codeAlreadyRedeemed",
+      "humanname-en": "Code-already-Redeemed Message",
+      "humanname-de": "Code-bereits-eingelöst Nachricht",
+      "default-en": "Good news, you have already redeemed this code",
+      "default-de": "Gute Nachrichten, du hast diesen Code bereits eingelöst",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This message gets send, when a user tries to redeem a code that is already in their inventory",
+      "description-de": "Diese Nachricht wird verschickt, wenn ein Nutzer einen Code einlösen will, den er bereits eingelöst hat",
+      "params-en": [
+        {
+          "name": "%displayName%",
+          "description": "Display-Name of the code that the user wants to redeem"
+        },
+        {
+          "name": "%codeUseCount%",
+          "description": "Count of times this code has already been redeemed"
+        },
+        {
+          "name": "%userCodesCount%",
+          "description": "Count of codes this user already has redeemed"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%displayName%",
+          "description": "Anzeige-Name des Codes, denn der Nutzer einlösen möchte"
+        },
+        {
+          "name": "%userCodesCount%",
+          "description": "Anzahl der Codes, die dieser Nutzer bereits eingelöst hat"
+        },
+        {
+          "name": "%codeUseCount%",
+          "description": "Anzahl von Nutzer, die diesen Code bereits eingelöst haben"
+        }
+      ]
+    },
+    {
+      "field_name": "codeRedeemed",
+      "humanname-en": "Code-Redeemed Message",
+      "humanname-de": "Code-eingelöst Nachricht",
+      "default-en": "Good job, you have successfully redeemed the code **%displayName%**",
+      "default-de": "Gute Arbeit, du hast erfolgreich den Code **%displayName%** eingelöst.",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This message gets send, when a user tries redeems a code",
+      "description-de": "Diese Nachricht wird verschickt, wenn ein Nutzer einen Code einlöst",
+      "params-en": [
+        {
+          "name": "%displayName%",
+          "description": "Display-Name of the code"
+        },
+        {
+          "name": "%codeUseCount%",
+          "description": "Count of times this code has already been redeemed"
+        },
+        {
+          "name": "%userCodesCount%",
+          "description": "Count of codes this user already has redeemed"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%displayName%",
+          "description": "Anzeige-Name des Codes, denn der Nutzer einlöst"
+        },
+        {
+          "name": "%userCodesCount%",
+          "description": "Anzahl der Codes, die dieser Nutzer bereits eingelöst hat"
+        },
+        {
+          "name": "%codeUseCount%",
+          "description": "Anzahl von Nutzer, die diesen Code bereits eingelöst haben"
+        }
+      ]
+    },
+    {
+      "field_name": "profileMessage",
+      "humanname-en": "Profile-Message",
+      "humanname-de": "Profil-Nachricht",
+      "default-en": {
+        "title": "Your profile, %username%!",
+        "fields": [
+          {
+            "name": "Found codes",
+            "value": "%foundCodes%",
+            "inline": true
+          },
+          {
+            "name": "Progress",
+            "value": "%foundCount%/%allCodesCount% found",
+            "inline": true
+          }
+        ]
+      },
+      "default-de": {
+        "title": "Dein Profil %username%!",
+        "fields": [
+          {
+            "name": "Gefunde Codes",
+            "value": "%foundCodes%",
+            "inline": true
+          },
+          {
+            "name": "Fortschritt",
+            "value": "%foundCount%/%allCodesCount% gefunden",
+            "inline": true
+          }
+        ]
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This message gets send, when a user opens their profile",
+      "description-de": "Diese Nachricht wird versendet, wenn ein Nutzer sein Profil öffnet",
+      "params-en": [
+        {
+          "name": "%foundCodes%",
+          "description": "All codes that this user has found"
+        },
+        {
+          "name": "%username%",
+          "description": "Username of the user running the command"
+        },
+        {
+          "name": "%foundCount%",
+          "description": "Count of found codes"
+        },
+        {
+          "name": "%allCodesCount%",
+          "description": "Count of all available codes"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%foundCodes%",
+          "description": "Alle Codes, die der Nutzer gefunden hat"
+        },
+        {
+          "name": "%foundCount%",
+          "description": "Anzahl aller gefunden Codes"
+        },
+        {
+          "name": "%username%",
+          "description": "Nutzername des Nutzers, der den Befehl ausführt"
+        },
+        {
+          "name": "%allCodesCount%",
+          "description": "Anzahl aller verfügbaren Codes"
+        }
+      ]
+    },
+    {
+      "field_name": "leaderboardMessage",
+      "humanname-en": "Leaderboard-Message",
+      "humanname-de": "Leaderboard-Nachricht",
+      "type": "keyed",
+      "disableKeyEdits": true,
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "default": {
+        "title": "Leaderboard",
+        "color": "GREEN",
+        "thumbnail": "",
+        "image": ""
+      }
+    }
+  ]
+}
