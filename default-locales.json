@@ -400,6 +400,18 @@
     "status-role": {
       "fulfilled": "Status-role condition is fulfilled",
       "not-fulfilled": "Status-role condition is no longer fulfilled"
+    },
+    "color-me": {
+      "create-log-reason": "%user redeemed their boosting-rewards by requesting the creation of this role",
+      "edit-log-reason": "%user edited their boosting-reward-role",
+      "delete-unboost-log-reason": "%user stopped boosting, so their role got deleted",
+      "delete-manual-log-reason": "%user deleted their role manually",
+      "command-description": "Request a Custom role as a reward for boosting. This has a cooldown of 24 hours",
+      "manage-subcommand-description": "Create or edit your custom role",
+      "name-option-description": "The name of your custom role",
+      "color-option-description": "The color of your custom role",
+      "remove-subcommand-description": "Remove your custom role",
+      "confirm-option-remove-description": "Do you really want to delete your custom role? This will not reset any running cooldowns"
     }
   }
 }

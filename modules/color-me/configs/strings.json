@@ -1,0 +1,69 @@
+{
+  "filename": "strings.json",
+  "humanname-de": "Nachrichten",
+  "humanname-en": "Messages",
+  "description-en": "Edit the messages and strings of the module here",
+  "description-de": "Stelle hier die Nachrichten des Modules ein",
+  "content": [
+    {
+      "field_name": "created",
+      "humanname-en": "Role created",
+      "humanname-de": "Rolle erstellt",
+      "default-en": "Your role was created successfully.",
+      "default-de": "Deine Rolle wurde erfolgreich erstellt.",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This messages gets send when a booster sucessfully created their custom role",
+      "description-de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle erstellt hat",
+      "params-de": {}
+    },
+    {
+      "field_name": "updated",
+      "humanname-en": "Role updated",
+      "humanname-de": "Rolle aktualisiert",
+      "default-en": "Your role was updated successfully.",
+      "default-de": "Deine Rolle wurde erfolgreich aktualisiert.",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This messages gets send when a booster sucessfully updates their custom role",
+      "description-de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle aktualisiert hat",
+      "params-de": {}
+    },
+    {
+      "field_name": "removed",
+      "humanname-en": "Role removed",
+      "humanname-de": "Rolle entfernt",
+      "default-en": "Your role was removed successfully.",
+      "default-de": "Deine Rolle wurde erfolgreich entfernt.",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This messages gets send when a booster deleted their custom role",
+      "description-de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle entfernt hat",
+      "params-de": {}
+    },
+    {
+      "field_name": "roleLimit",
+      "humanname-en": "Role-limit reached",
+      "humanname-de": "Rollenlimit erreicht",
+      "default-en": "Your role couldn't be created. This could be, because this server has reached the maximum of roles set by Discord. Ask the staff to delete an unnecessary role to make space for your role or try again later.",
+      "default-de": "Deine Rolle konnte nicht erstellt werden. Das kann daran liegen, dass dieser Server die von Discord vorgegebene maximale Rollenzahl erreicht hat. Frag das Team nach der Löschung einer überflüssigen Rolle um Platz zu machen, oder versuche es später erneut.",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This messages gets send when a booster-role couldn't be created",
+      "description-de": "Diese Nachricht wird verschickt, wenn eine Booster-Rolle nicht erstellt werden konnte",
+      "params-de": {}
+    },
+    {
+      "field_name": "cooldown",
+      "humanname-en": "Cooldown",
+      "humanname-de": "Cooldown",
+      "default-en": "Your role couldn't be edited, since you have to wait for the cooldown to expire.",
+      "default-de": "Deine Rolle konnte nicht bearbeitet werden, da du warten musst, bis der Cooldown abgelaufen ist.",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This messages gets send when a booster-role couldn't be edited, since the user is on cooldown",
+      "description-de": "Diese Nachricht wird verschickt, wenn eine Booster-Rolle nicht bearbeitet werden konnte, da der Nutzer den Cooldown abwarten muss",
+      "params-de": {}
+    }
+  ]
+}
