@@ -1,4 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
+let pos;
 
 module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
@@ -6,6 +7,11 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     if (newGuildMember.guild.id !== client.guild.id) return;
 
     const moduleConf = client.configurations['color-me']['config'];
+    if (moduleConf.rolePosition) {
+        pos = newGuildMember.guild.roles.resolve(moduleConf.rolePosition).position;
+    } else {
+        pos = 0;
+    }
 
     if (moduleConf.removeOnUnboost) {
         if (oldGuildMember.premiumSince && !newGuildMember.premiumSince) {
@@ -46,7 +52,7 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
                             name: name,
                             color: color,
                             hoist: moduleConf.listRoles,
-                            position: 0,
+                            position: pos,
                             permissions: '',
                             mentionable: false,
                             reason: localize('color-me', 'create-log-reason', {

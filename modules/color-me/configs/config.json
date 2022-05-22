@@ -40,6 +40,15 @@
       "description-de": "Die Dauer, die Benutzer*innen warten müssen, bevor ihre Rolle wieder bearbeitet werden kann (in Stunden)",
       "type": "integer",
       "default": 24
+    },
+    {
+      "field_name": "rolePosition",
+      "humanname-en": "Role position",
+      "humanname-de": "Rollenposition",
+      "description-en": "The role, beneath which the custom-roles should be created",
+      "description-de": "Die Rolle unter welcher die Custom-Rollen erstellt werden sollen",
+      "type": "roleID",
+      "default": ""
     }
   ]
 }

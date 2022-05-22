@@ -1,6 +1,7 @@
 const {localize} = require('../../../src/functions/localize');
 const {client} = require('../../../main');
 let roleColor;
+let pos;
 
 module.exports.beforeSubcommand = async function (interaction) {
     await interaction.deferReply({ephemeral: true});
@@ -10,6 +11,11 @@ module.exports.subcommands = {
     'manage': async function (interaction) {
         const moduleConf = interaction.client.configurations['color-me']['config'];
         const moduleStrings = interaction.client.configurations['color-me']['strings'];
+        if (moduleConf.rolePosition) {
+            pos = interaction.guild.roles.resolve(moduleConf.rolePosition).position;
+        } else {
+            pos = 0;
+        }
         if (await cooldown(moduleConf['updateCooldown'] * 3600000, interaction.user.id)) {
             let role = await interaction.client.models['color-me']['Role'].findOne({
                 attributes: ['roleID'],
@@ -42,7 +48,7 @@ module.exports.subcommands = {
                                 color: roleColor,
                                 hoist: moduleConf.listRoles,
                                 permissions: '',
-                                position: 0,
+                                position: pos,
                                 mentionable: false,
                                 reason: localize('color-me', 'create-log-reason', {
                                     user: interaction.user.username
@@ -77,7 +83,7 @@ module.exports.subcommands = {
                             color: roleColor,
                             hoist: moduleConf.listRoles,
                             permissions: '',
-                            position: 0,
+                            position: pos,
                             mentionable: false,
                             reason: localize('color-me', 'create-log-reason', {
                                 user: interaction.user.username
