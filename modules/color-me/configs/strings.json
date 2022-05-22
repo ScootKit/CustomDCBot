@@ -57,13 +57,18 @@
       "field_name": "cooldown",
       "humanname-en": "Cooldown",
       "humanname-de": "Cooldown",
-      "default-en": "Your role couldn't be edited, since you have to wait for the cooldown to expire.",
-      "default-de": "Deine Rolle konnte nicht bearbeitet werden, da du warten musst, bis der Cooldown abgelaufen ist.",
+      "default-en": "Your role couldn't be edited, since you have to wait until %cooldown% for the cooldown to expire.",
+      "default-de": "Deine Rolle konnte nicht bearbeitet werden, da du bis %cooldown% warten musst, dass der Cooldown abläuft.",
       "type": "string",
       "allowEmbed": true,
       "description-en": "This messages gets send when a booster-role couldn't be edited, since the user is on cooldown",
       "description-de": "Diese Nachricht wird verschickt, wenn eine Booster-Rolle nicht bearbeitet werden konnte, da der Nutzer den Cooldown abwarten muss",
-      "params-de": {}
+      "params-de": [
+        {
+      "name": "%cooldown%",
+      "description": "Timestamp the cooldown expires at"
+    }
+      ]
     }
   ]
 }

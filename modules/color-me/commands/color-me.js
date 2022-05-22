@@ -1,7 +1,9 @@
 const {localize} = require('../../../src/functions/localize');
 const {client} = require('../../../main');
+const {embedType, dateToDiscordTimestamp} = require('../../../src/functions/helpers');
 let roleColor;
 let pos;
+let cooldownModel;
 
 module.exports.beforeSubcommand = async function (interaction) {
     await interaction.deferReply({ephemeral: true});
@@ -11,13 +13,15 @@ module.exports.subcommands = {
     'manage': async function (interaction) {
         const moduleConf = interaction.client.configurations['color-me']['config'];
         const moduleStrings = interaction.client.configurations['color-me']['strings'];
+        const moduleModel = interaction.client.models['color-me']['Role'];
+
         if (moduleConf.rolePosition) {
             pos = interaction.guild.roles.resolve(moduleConf.rolePosition).position;
         } else {
             pos = 0;
         }
         if (await cooldown(moduleConf['updateCooldown'] * 3600000, interaction.user.id)) {
-            let role = await interaction.client.models['color-me']['Role'].findOne({
+            let role = await moduleModel.findOne({
                 attributes: ['roleID'],
                 raw: true,
                 where: {
@@ -58,7 +62,7 @@ module.exports.subcommands = {
                     } else {
                         await interaction.editReply(moduleStrings.roleLimit);
                     }
-                    await interaction.client.models['color-me']['Role'].update({
+                    await moduleModel.update({
                         userID: interaction.user.id,
                         roleID: role.id,
                         name: role.name,
@@ -90,7 +94,7 @@ module.exports.subcommands = {
                             })
                         }
                     );
-                    await interaction.client.models['color-me']['Role'].create({
+                    await moduleModel.create({
                         userID: interaction.user.id,
                         roleID: role.id,
                         name: role.name,
@@ -105,14 +109,22 @@ module.exports.subcommands = {
 
             }
         } else {
-            await interaction.editReply(moduleStrings.cooldown);
+            cooldownModel = await moduleModel.findOne({
+                where: {
+                    userId: interaction.member.id
+                }
+            });
+            await interaction.editReply((await embedType(moduleStrings['cooldown'], {
+                '%cooldown%': dateToDiscordTimestamp(new Date(cooldownModel.timestamp.getTime() + moduleConf['updateCooldown'] * 3600000), 'R')
+            })));
         }
     },
 
 
     'remove': async function (interaction) {
         const moduleStrings = interaction.client.configurations['color-me']['strings'];
-        let role = await interaction.client.models['color-me']['Role'].findOne({
+        const moduleModel = interaction.client.models['color-me']['Role'];
+        let role = await moduleModel.findOne({
             attributes: ['roleID'],
             raw: true,
             where: {
@@ -195,7 +207,7 @@ function color(interaction) {
  */
 async function cooldown (duration, userId) {
     const model = client.models['color-me']['Role'];
-    const cooldownModel = await model.findOne({
+    cooldownModel = await model.findOne({
         where: {
             userId: userId
         }
