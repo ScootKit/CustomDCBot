@@ -67,8 +67,20 @@
         {
       "name": "%cooldown%",
       "description": "Timestamp the cooldown expires at"
-    }
+        }
       ]
+    },
+    {
+      "field_name": "invalidColor",
+      "humanname-en": "Invalid Color",
+      "humanname-de": "Falsche Farbe",
+      "default-en": "The color you provided is not a valid HEX-Code.",
+      "default-de": "Die angegebene Farbe ist kein gültiger HEX-Code.",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "This messages gets send when the user provides a wrong color code",
+      "description-de": "Diese Nachricht wird verschickt, wenn der Nutzer einen falschen Farbcode angibt",
+      "params-de": {}
     }
   ]
 }

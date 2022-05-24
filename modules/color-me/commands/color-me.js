@@ -4,6 +4,7 @@ const {embedType, dateToDiscordTimestamp} = require('../../../src/functions/help
 let roleColor;
 let pos;
 let cooldownModel;
+let cancel = false;
 
 module.exports.beforeSubcommand = async function (interaction) {
     await interaction.deferReply({ephemeral: true});
@@ -30,7 +31,8 @@ module.exports.subcommands = {
             });
             if (role) {
                 role = role.roleID;
-                color(interaction);
+                await color(interaction, moduleStrings);
+                if (cancel) return;
                 if (interaction.guild.roles.cache.find(r => r.id === role)) {
                     role = interaction.guild.roles.resolve(role);
                     role.edit(
@@ -42,7 +44,7 @@ module.exports.subcommands = {
                             })
                         }
                     );
-                    await interaction.editReply(moduleStrings.updated);
+                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, { ephemeral: true }));
                 } else {
                     if (interaction.guild.roles.cache.size < 250) {
 
@@ -60,7 +62,7 @@ module.exports.subcommands = {
                             }
                         );
                     } else {
-                        await interaction.editReply(moduleStrings.roleLimit);
+                        await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, { ephemeral: true }));
                     }
                     await moduleModel.update({
                         userID: interaction.user.id,
@@ -76,10 +78,11 @@ module.exports.subcommands = {
                     if (!interaction.member.roles.cache.has(role)) {
                         await interaction.member.roles.add(role);
                     }
-                    await interaction.editReply(moduleStrings.updated);
+                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, { ephemeral: true }));
                 }
             } else {
-                color(interaction);
+                await color(interaction, moduleStrings);
+                if (cancel) return;
                 try {
                     role = await interaction.guild.roles.create(
                         {
@@ -102,9 +105,9 @@ module.exports.subcommands = {
                         timestamp: new Date()
                     });
                     await interaction.member.roles.add(role);
-                    await interaction.editReply(moduleStrings.created);
+                    await interaction.editReply(await embedType(moduleStrings['created'], {}, { ephemeral: true }));
                 } catch (e) {
-                    await interaction.editReply(moduleStrings.roleLimit);
+                    await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, { ephemeral: true }));
                 }
 
             }
@@ -116,7 +119,7 @@ module.exports.subcommands = {
             });
             await interaction.editReply((await embedType(moduleStrings['cooldown'], {
                 '%cooldown%': dateToDiscordTimestamp(new Date(cooldownModel.timestamp.getTime() + moduleConf['updateCooldown'] * 3600000), 'R')
-            })));
+            }, { ephemeral: true })));
         }
     },
 
@@ -138,7 +141,7 @@ module.exports.subcommands = {
                 role.delete(localize('color-me', 'delete-manual-log-reason', {
                     user: interaction.member.user.username
                 }));
-                await interaction.editReply(moduleStrings.removed);
+                await interaction.editReply(await embedType(moduleStrings['removed'], {}, { ephemeral: true }));
             }
         }
     }
@@ -187,11 +190,15 @@ module.exports.config = {
 /**
  * Gets a color from the String of a command option
  */
-function color(interaction) {
+async function color(interaction, moduleStrings) {
     if (interaction.options.getString('color')) {
         roleColor = interaction.options.getString('color');
         if (!roleColor.startsWith('#')) {
             roleColor = '#' + roleColor;
+        }
+        if (!(/^#[0-9A-F]{6}$/i).test(roleColor)) {
+            await interaction.editReply(await embedType(moduleStrings['invalidColor'], {}, { ephemeral: true }));
+            cancel = true;
         }
     } else {
         roleColor = 'DEFAULT';
@@ -199,13 +206,13 @@ function color(interaction) {
 }
 
 /**
- * Function to handle the cooldown stuff
+ ** Function to handle the cooldown stuff
  * @private
  * @param {integer} duration The duration of the cooldown (in ms)
  * @param {userId} userId Id of the User
  * @returns {Promise<boolean>}
  */
-async function cooldown (duration, userId) {
+async function cooldown(duration, userId) {
     const model = client.models['color-me']['Role'];
     cooldownModel = await model.findOne({
         where: {
