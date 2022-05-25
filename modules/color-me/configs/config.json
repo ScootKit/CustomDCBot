@@ -1,0 +1,54 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "description-en": "Configure the function of the module here",
+  "description-de": "Stelle hier die Funktionen des Modules ein",
+  "content": [
+    {
+      "field_name": "recreateRole",
+      "humanname-en": "Recreate roles",
+      "humanname-de": "Rollen wiederherstellen",
+      "description-en": "Should the role be created again if the user boosts again?",
+      "description-de": "Soll die Rolle wiederhergestellt werden, wenn ein Nutzer erneut boostet?",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "field_name": "listRoles",
+      "humanname-en": "Separate roles in member-list",
+      "humanname-de": "Rollen in Mitgliederliste separieren",
+      "description-en": "Should the role be listed separately in the member-list?",
+      "description-de": "Soll die Rolle in der Mitgliederliste separat gelistet werden?",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "field_name": "removeOnUnboost",
+      "humanname-en": "Remove role on unboost",
+      "humanname-de": "Rolle bei Unboost entfernen",
+      "description-en": "Should the role be deleted automatically, if the user stops boosting your server? (disable, if also non-boosters should be able to use this command)",
+      "description-de": "Soll die Rolle automatisch gelöscht werden, wenn der Nutzer den Server nicht mehr boostet? (deaktivieren, wenn auch nicht-Booster den Befehl verwenden können sollen)",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "field_name": "updateCooldown",
+      "humanname-en": "Role update cooldown",
+      "humanname-de": "Rollenbearbeitungscooldown",
+      "description-en": "The amount of time a user needs to wait util they can edit their role again (in hours)",
+      "description-de": "Die Dauer, die Benutzer*innen warten müssen, bevor ihre Rolle wieder bearbeitet werden kann (in Stunden)",
+      "type": "integer",
+      "default": 24
+    },
+    {
+      "field_name": "rolePosition",
+      "humanname-en": "Role position",
+      "humanname-de": "Rollenposition",
+      "description-en": "The role, beneath which the custom-roles should be created",
+      "description-de": "Die Rolle unter welcher die Custom-Rollen erstellt werden sollen",
+      "type": "roleID",
+      "default": ""
+    }
+  ]
+}
