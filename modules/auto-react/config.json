@@ -41,6 +41,19 @@
         "key": "integer",
         "value": "string"
       }
+    },
+    {
+      "field_name": "categories",
+      "humanname-de": "Kategorien",
+      "humanname-en": "Categories",
+      "default": {},
+      "type": "keyed",
+      "description-en": "Here you can add categories and the reactions in it (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier Kategorien und die dazugehörigen Emojis eintragen (mehrere Emojis müssen mit einem | getrennt werden)",
+      "content": {
+        "key": "channelID",
+        "value": "string"
+      }
     }
   ]
 }
