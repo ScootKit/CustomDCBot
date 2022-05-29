@@ -22,21 +22,8 @@
       "humanname-de": "Erwähnungen",
       "humanname-en": "Mentions",
       "type": "keyed",
-      "description-en": "Here you can add members and the reactions on mentions of them (you can add multiple emojis with | between each one)",
-      "description-de": "Du kannst hier NutzerIDs und die dazugehörigen Emojis auf Erwähnungen dieser eintragen (mehrere Emojis müssen mit einem | getrennt werden)",
-      "content": {
-        "key": "integer",
-        "value": "string"
-      }
-    },
-    {
-      "field_name": "membersReply",
-      "default": {},
-      "humanname-de": "Erwähnungsantworten",
-      "humanname-en": "Mention-replys",
-      "type": "keyed",
-      "description-en": "Here you can add members and the reply on mentions of them",
-      "description-de": "Du kannst hier NutzerIDs und die Antwort auf Erwähnungen dieser eintragen",
+      "description-en": "Here you can add members and the reactions on their mentions of them (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier NutzerIDs und die dazugehörigen Emojis auf Erwähnungen dieser eintragen (mehrere Emojis müssen mit einem | getrennt werden",
       "content": {
         "key": "integer",
         "value": "string"
