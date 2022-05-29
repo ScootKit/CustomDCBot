@@ -2,6 +2,18 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.3.0
+* Bumped and fixed dependencies
+* Added code-hunt-module ([#60](https://github.com/SCNetwork/CustomDCBot/pull/60))
+* Remove-Feature for status-roles module ([#61](https://github.com/SCNetwork/CustomDCBot/pull/61))
+* Added color-me module ([#62](https://github.com/SCNetwork/CustomDCBot/pull/62))
+* Added auto react for message authors ([#63](https://github.com/SCNetwork/CustomDCBot/pull/63))
+* Added auto react for category-reactions
+* Few new improvements, support for `commandsWarnings` config parameter
+
+Contributors: [hfgd123](https://github.com/hfgd123), [scderox](https://github.com/scderox)
+
+
 ## v3.2.0
 * Added support for timezone-config-parameter
 * Bumped dependencies
