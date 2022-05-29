@@ -1,3 +1,5 @@
+const {embedType} = require('../../../src/functions/helpers');
+
 module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
     if (msg.interaction || msg.system || !msg.guild || msg.guild.id !== client.config.guildID) return;
@@ -38,7 +40,7 @@ async function checkMembersReply(msg) {
     if (!msg.mentions.members) return;
     msg.mentions.members.forEach(m => {
         if (moduleConfig.membersReply[m.id]) {
-            msg.reply(moduleConfig.membersReply[m.id]).catch(() => {
+            msg.reply(embedType(moduleConfig.membersReply[m.id], {}, {ephemeral: true})).catch(() => {
             });
         }
     });
