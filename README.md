@@ -224,6 +224,11 @@ An CLI-File should export the following things:
 
 Note: All you CLI-Commands can also get executed via the API.
 
+#### Config-Elements
+Certain configuration may contain an array of multiple objects with different values - these are called "Config-Elements".
+
+To add a new Config-Element to your configuration use `node add-config-element-object.js <Path to example config file> <Path to your config-file>`.
+
 #### Example config-file
 
 An example config file should include the following things:
