@@ -48,7 +48,7 @@ function inputReplacer(args, input) {
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
 module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
-    optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
+    if (!optionsToKeep.allowedMentions) optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
     if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
     if (typeof input === 'string') {
         optionsToKeep.content = inputReplacer(args, input);
@@ -80,7 +80,7 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
         });
         optionsToKeep.embeds = [emb];
     } else optionsToKeep.embeds = [];
-    if (input['message']) optionsToKeep.content = inputReplacer(args, input['message']);
+    optionsToKeep.content = input['message'] ? inputReplacer(args, input['message']) : null;
     return optionsToKeep;
 };
 
