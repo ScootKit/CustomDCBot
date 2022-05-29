@@ -46,12 +46,14 @@ module.exports.run = async function (client, guildMember) {
         });
         if (memberModel) {
             await memberModel.update({
+                channelID: sentMessage.channelId,
                 messageID: sentMessage.id,
                 timestamp: new Date()
             });
         } else {
             await moduleModel.create({
                 userID: guildMember.id,
+                channelID: sentMessage.channelId,
                 messageID: sentMessage.id,
                 timestamp: new Date()
             });

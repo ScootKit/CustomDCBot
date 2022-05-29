@@ -34,27 +34,25 @@ module.exports.run = async function (client, guildMember) {
             }
         ));
     }
-
     const memberModel = await moduleModel.findOne({
         where: {
             userId: guildMember.id
         }
     });
     if (memberModel && moduleConfig['delete-welcome-message']) {
-        for (const channelConfig of moduleChannels.filter(c => c.type === 'join')) {
-            const channel = await guildMember.guild.channels.fetch(channelConfig.channelID).catch(() => {
-            });
-            if (await timer(client, guildMember.id)) {
-                try {
-                    await (await channel.messages.fetch(memberModel.messageID)).delete();
-                } catch (e) {}
-            }
+        const channel = await guildMember.guild.channels.fetch(memberModel.channelID).catch(() => {});
+        if (await timer(client, guildMember.id)) {
+            try {
+                await (await channel.messages.fetch(memberModel.messageID)).delete();
+            } catch (e) {}
         }
         await moduleModel.destroy({
             where: {
                 userId: guildMember.id
             }
         });
+
+
     }
 };
 

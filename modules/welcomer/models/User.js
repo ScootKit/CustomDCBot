@@ -9,6 +9,7 @@ module.exports = class User extends Model {
                 primaryKey: true
             },
             userID: DataTypes.STRING,
+            channelID: DataTypes.STRING,
             messageID: DataTypes.STRING,
             timestamp: DataTypes.DATE
         }, {
