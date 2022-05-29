@@ -249,6 +249,7 @@ An example config file should include the following things:
         * `description`: Description of the parameter (e.g. `Mention of the user`)
         * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
           is `fieldValue`.
+        * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
 
