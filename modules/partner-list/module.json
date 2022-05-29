@@ -2,11 +2,10 @@
   "name": "partner-list",
   "humanReadableName-de": "Partner-Liste",
   "humanReadableName-en": "Partner-List",
-  "fa-icon": "fas fa-list-ul",
   "author": {
+    "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox",
-    "scnxOrgID": "1"
+    "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/partnerlist",
   "description-en": "Manage your partnerships with other guilds easily.",
@@ -17,5 +16,7 @@
   "config-example-files": [
     "config.json"
   ],
-  "tags": ["administration"]
+  "tags": [
+    "administration"
+  ]
 }

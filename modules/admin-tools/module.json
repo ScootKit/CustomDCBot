@@ -13,5 +13,7 @@
   "config-example-files": [
     "config.json"
   ],
-  "fa-icon": "fas fa-tools"
+  "tags": [
+    "administration"
+  ]
 }

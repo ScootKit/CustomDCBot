@@ -4,6 +4,11 @@
   "humanname-en": "Configuration",
   "description-en": "Configure the function of the module here",
   "description-de": "Stelle hier die Funktionen des Modules ein",
+  "commandsWarnings": {
+    "normal": [
+      "/manage-levels"
+    ]
+  },
   "content": [
     {
       "field_name": "min-xp",
@@ -93,6 +98,15 @@
       "default-de": {}
     },
     {
+      "field_name": "onlyTopLevelRole",
+      "hummanname-de": "Nur die höchste Level-Rolle geben",
+      "hummanname-en": "Users only can have their highest level role",
+      "default": false,
+      "type": "boolean",
+      "description-en": "If enabled, all previous level roles a user had will get removed, when they advance to a new level.",
+      "description-de": "Wenn aktiviert, werden alle vorherigen Level-Rollen, die ein Nutzer hatte, entfernt, wenn dieser ein neues Level erreicht."
+    },
+    {
       "field_name": "randomMessages",
       "humanname-de": "Zufällige Nachrichten",
       "humanname-en": "Random messages",
@@ -116,6 +130,15 @@
       "default-de": ""
     },
     {
+      "field_name": "useTags",
+      "humanname-en": "Use User's Tags instead of their Mention in the Leaderboard-Channel-Embed",
+      "humanname-de": "Nutze den Tag der Nutzer, anstatt eine Erwähnung im Ranglisten-Channel-Embed",
+      "default": false,
+      "type": "boolean",
+      "description-de": "Wenn aktiviert, wird im Ranglisten-Channel-Embed der Tag des Nutzers angezeigt und nicht eine Erwähnung (bei großen Servern empfohlen)",
+      "description-en": "If enabled, the bot will use the tag of users in the Leaderboard-Channel-Embed instead of their mention."
+    },
+    {
       "field_name": "allowCheats",
       "humanname-en": "Cheats",
       "default": false,
@@ -124,6 +147,18 @@
       "description-en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))",
       "humanname-de": "",
       "params-de": {},
+      "default-de": false
+    },
+    {
+      "field_name": "disableSCNetworkProfile",
+      "humanname-en": "Disable SC Network Profiles",
+      "humanname-de": "Deaktiviert SC Network Profile",
+      "default": false,
+      "type": "boolean",
+      "description-de": "Wenn aktiviert können Administratoren die XP von anderen Nutzern editieren (nicht empfohlen, wenn du einen coolen, fairen Server haben willst (wirklich nicht!!!)))",
+      "description-en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))",
+      "params-de": {},
+      "pro": true,
       "default-de": false
     }
   ]

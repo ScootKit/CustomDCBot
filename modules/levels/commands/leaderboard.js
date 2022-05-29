@@ -58,11 +58,13 @@ module.exports.run = async function (interaction) {
             let userString = '';
             let userCount = 0;
             for (const user of levels[level]) {
+                const member = interaction.guild.members.cache.get(user.userID);
+                if (!member) continue;
                 userCount++;
-                if (userCount < 6) userString = userString + `<@${user.userID}>: ${user.xp}\n`;
+                if (userCount < 6) userString = userString + `${moduleConfig['useTags'] ? member.user.tag : member.user.toString()}: ${user.xp}\n`;
             }
             if (userCount > 5) userString = userString + localize('levels', 'and-x-other-users', {uc: userCount - 5});
-            currentSiteFields.push({name: localize('levels', 'level', {l: level}), value: userString, inline: true});
+            if (userCount !== 0) currentSiteFields.push({name: localize('levels', 'level', {l: level}), value: userString, inline: true});
             if (i === Object.keys(levels).length || currentSiteFields.length === 6) {
                 addSite(currentSiteFields);
                 currentSiteFields = [];
@@ -73,10 +75,17 @@ module.exports.run = async function (interaction) {
         let i = 0;
         let total = 0;
         for (const user of users) {
-            i++;
+            const member = interaction.guild.members.cache.get(user.userID);
+            if (!member) continue;
             total++;
-            userString = userString + localize('levels', 'leaderboard-notation', {i: total, ui: user.userID, l: user.level, xp: user.xp}) + '\n';
-            if (i === users.length || i === 20) {
+            i++;
+            userString = userString + localize('levels', 'leaderboard-notation', {
+                p: i,
+                u: moduleConfig['useTags'] ? member.user.tag : member.user.toString(),
+                l: user.level,
+                xp: user.xp
+            }) + '\n';
+            if (i === total || i === 20) {
                 addSite({
                     name: localize('levels', 'users'),
                     value: userString

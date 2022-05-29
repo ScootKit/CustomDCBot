@@ -31,24 +31,16 @@ module.exports.generateSuggestionEmbed = async function (client, suggestion) {
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setDescription(suggestion.suggestion)
         .addField('\u200b', '\u200b');
-
-    if (moduleConfig['commentType'] === 'command') {
-        let comments = '';
-        suggestion.comments.forEach(comment => {
-            comments = comments + `"${comment.comment}" ~ <@${comment.userID}>\n`;
-        });
-        if (comments === '') comments = replacer(moduleConfig.suggestionEmbed.noComment);
-        embed.addField(moduleConfig.suggestionEmbed.commentsTitle, comments);
-    }
-
     embed.setColor('YELLOW');
 
     if (suggestion.adminAnswer) {
         embed.setColor(suggestion.adminAnswer.action === 'approve' ? 'GREEN' : 'RED');
         embed.addField(moduleConfig.suggestionEmbed.adminAnswerTitle.replaceAll('%status%', suggestion.adminAnswer.action === 'approve' ? localize('suggestions', 'approved') : localize('suggestions', 'denied')),
-            localize('suggestions', 'admin-answer', {status: suggestion.adminAnswer.action === 'approve' ? localize('suggestions', 'approved') : localize('suggestions', 'denied'),
+            localize('suggestions', 'admin-answer', {
+                status: suggestion.adminAnswer.action === 'approve' ? localize('suggestions', 'approved') : localize('suggestions', 'denied'),
                 u: `<@${suggestion.adminAnswer.userID}>`,
-                r: suggestion.adminAnswer.reason}));
+                r: suggestion.adminAnswer.reason
+            }));
     } else embed.addField(moduleConfig.suggestionEmbed.awaitingAdminAnswerTitle, moduleConfig.suggestionEmbed.awaitingAnswer);
 
     await message.edit({content: '\u200b', embeds: [embed]});
@@ -76,9 +68,6 @@ module.exports.notifyMembers = async function (client, suggestion, change, ignor
     const moduleConfig = client.configurations['suggestions']['config'];
     if (!moduleConfig['sendPNNotifications']) return;
     const subscribedMembers = [suggestion.suggesterID];
-    suggestion.comments.forEach(c => {
-        if (!subscribedMembers.includes(c.userID)) subscribedMembers.push(c.userID);
-    });
     if (suggestion.adminAnswer) {
         if (!subscribedMembers.includes(suggestion.adminAnswer.userID)) subscribedMembers.push(suggestion.adminAnswer.userID);
     }
@@ -87,11 +76,6 @@ module.exports.notifyMembers = async function (client, suggestion, change, ignor
         user = await client.users.fetch(user).catch(() => {
         });
         if (user) {
-            if (change === 'comment') await user.send(embedType(moduleConfig['newCommentNotification'], {
-                '%title%': suggestion.suggestion,
-                '%url%': `https://discord.com/channels/${client.guild.id}/${moduleConfig.suggestionChannel}/${suggestion.messageID}`
-            })).catch(() => {
-            });
             if (change === 'team') await user.send(embedType(moduleConfig['teamChange'], {
                 '%title%': suggestion.suggestion,
                 '%url%': `https://discord.com/channels/${client.guild.id}/${moduleConfig.suggestionChannel}/${suggestion.messageID}`

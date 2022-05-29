@@ -236,6 +236,11 @@ An example config file should include the following things:
 * `filename`: Name of the generated config file
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
+* `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in their discord-server-settings
+  * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
+  * `special`: Array of commands that need special configuration in addition to editing the permissions in the server-settings
+    * `name`: Name of the command
+    * `info`: Key by language; Information about the command; used to explain users what exactly they should do
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
     * `default`: Default value

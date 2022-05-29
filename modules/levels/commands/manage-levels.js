@@ -70,7 +70,6 @@ module.exports.config = {
     name: 'manage-levels',
     description: localize('levels', 'edit-xp-command-description'),
     defaultPermission: false,
-    restricted: true,
     options: function (client) {
         const array = [{
             type: 'SUB_COMMAND',

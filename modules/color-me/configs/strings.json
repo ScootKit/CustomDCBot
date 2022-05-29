@@ -65,8 +65,8 @@
       "description-de": "Diese Nachricht wird verschickt, wenn eine Booster-Rolle nicht bearbeitet werden konnte, da der Nutzer den Cooldown abwarten muss",
       "params-de": [
         {
-      "name": "%cooldown%",
-      "description": "Timestamp the cooldown expires at"
+          "name": "%cooldown%",
+          "description": "Timestamp the cooldown expires at"
         }
       ]
     },

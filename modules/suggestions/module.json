@@ -3,18 +3,19 @@
   "humanReadableName-de": "Vorschläge",
   "humanReadableName-en": "Suggestions",
   "author": {
+    "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox",
-    "scnxOrgID": "1"
+    "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/suggestions",
   "description-en": "Advanced module to manage suggestions on your guild",
   "description-de": "Modul mit vielen Funktionen, um Vorschläge auf deinem Discord zu managen",
   "commands-dir": "/commands",
   "models-dir": "/models",
-  "fa-icon": "far fa-lightbulb",
   "config-example-files": [
     "config.json"
   ],
-  "tags": ["administration"]
+  "tags": [
+    "administration"
+  ]
 }

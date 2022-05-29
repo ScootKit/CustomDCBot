@@ -4,7 +4,7 @@
  * @author Simon Csaba <mail@scderox.de>
  */
 const {getUser, getAutoSyncMembers} = require('@scnetwork/api');
-const {embedType} = require('../../src/functions/helpers');
+const {embedType, disableModule} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {AgeFromDateString} = require('age-calculator');
 const {localize} = require('../../src/functions/localize');
@@ -20,7 +20,11 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
 
     const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
-    if (!channel) return client.logger.error(localize('birthdays', 'channel-not-found', {c: moduleConf.channelID}));
+    if (!channel) return disableModule('birthdays', localize('birthday', 'channel-not-found', {c: moduleConf.channelID}));
+    if (!moduleConf.enableBirthdayEmbed) {
+        if (notifyUsers) await notifyBirthdayUsers();
+        return;
+    }
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     await channel.guild.members.fetch({force: true});
 
@@ -30,7 +34,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
         }
     }
 
-    const syncUsers = await client.models['birthday']['User'].findAll({
+    const syncUsers = moduleConf.disableSync ? [] : await client.models['birthday']['User'].findAll({
         where: {
             sync: true
         }
@@ -52,7 +56,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
         await user.save();
     }
 
-    const autoSyncUsers = await getAutoSyncMembers();
+    const autoSyncUsers = moduleConf.disableSync ? [] : await getAutoSyncMembers();
     for (const au of autoSyncUsers) {
         if (!channel.guild.members.cache.get(au.id)) continue;
         if (syncUsers.find(u => u.id === au.id)) continue;
@@ -83,10 +87,9 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
         new MessageEmbed()
             .setTitle(moduleConf['birthdayEmbed']['title'])
             .setDescription(moduleConf['birthdayEmbed']['description'])
-            .setTimestamp()
             .setColor(moduleConf['birthdayEmbed']['color'])
-            .setAuthor(client.user.username, client.user.avatarURL())
-            .setFooter(client.strings.footer, client.strings.footerImgUrl)
+            .setAuthor({name: client.user.username, iconURL: client.user.avatarURL()})
+            .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
             .addFields([
                 {
                     name: localize('months', '1'),
@@ -117,49 +120,52 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
                     name: localize('months', '6'),
                     value: await getUserStringForMonth(client, channel, 6),
                     inline: true
-                }
-            ]),
-        new MessageEmbed()
-            .setColor(moduleConf['birthdayEmbed']['color'])
-            .setFooter(client.strings.footer, client.strings.footerImgUrl)
-            .addFields([{
-                name: localize('months', '7'),
-                value: await getUserStringForMonth(client, channel, 7),
-                inline: true
-            },
-            {
-                name: localize('months', '8'),
-                value: await getUserStringForMonth(client, channel, 8),
-                inline: true
-            },
-            {
-                name: localize('months', '9'),
-                value: await getUserStringForMonth(client, channel, 9),
-                inline: true
-            },
-            {
-                name: localize('months', '10'),
-                value: await getUserStringForMonth(client, channel, 10),
-                inline: true
-            },
-            {
-                name: localize('months', '11'),
-                value: await getUserStringForMonth(client, channel, 11),
-                inline: true
-            },
-            {
-                name: localize('months', '12'),
-                value: await getUserStringForMonth(client, channel, 12),
-                inline: true
-            }])
+                },
+                {
+                    name: localize('months', '7'),
+                    value: await getUserStringForMonth(client, channel, 7),
+                    inline: true
+                },
+                {
+                    name: localize('months', '8'),
+                    value: await getUserStringForMonth(client, channel, 8),
+                    inline: true
+                },
+                {
+                    name: localize('months', '9'),
+                    value: await getUserStringForMonth(client, channel, 9),
+                    inline: true
+                },
+                {
+                    name: localize('months', '10'),
+                    value: await getUserStringForMonth(client, channel, 10),
+                    inline: true
+                },
+                {
+                    name: localize('months', '11'),
+                    value: await getUserStringForMonth(client, channel, 11),
+                    inline: true
+                },
+                {
+                    name: localize('months', '12'),
+                    value: await getUserStringForMonth(client, channel, 12),
+                    inline: true
+                }])
     ];
 
     if (moduleConf['birthdayEmbed']['thumbnail']) embeds[0].setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
+    if (!client.strings.disableFooterTimestamp) embeds[0].setTimestamp();
 
     if (messages.last()) await messages.last().edit({embeds});
     else channel.send({embeds});
 
-    if (notifyUsers) {
+    if (notifyUsers) await notifyBirthdayUsers();
+
+    /**
+     * Notifies users who have birthday
+     * @returns {Promise<void>}
+     */
+    async function notifyBirthdayUsers() {
         const birthdayUsers = await client.models['birthday']['User'].findAll({
             where: {
                 month: new Date().getMonth() + 1,
@@ -219,8 +225,13 @@ async function getUserStringForMonth(client, channel, month) {
     });
     let string = '';
     for (const user of monthData) {
+        if (user.sync && client.configurations['birthday']['config'].disableSync) {
+            user.sync = false;
+            user.save().then(() => {
+            });
+        }
         let dateString = `${user.day}.${month}${user.year ? `.${user.year}` : ''}`;
-        if (user.year) {
+        if (user.year && !client.configurations['birthday']['config'].disableSync) {
             const age = new AgeFromDateString(`${user.year}-${month - 1}-${user.day}`).age;
             if (age < 13 || age > 125) {
                 await user.destroy();
@@ -228,7 +239,9 @@ async function getUserStringForMonth(client, channel, month) {
             }
             dateString = `[${dateString}](https://sc-network.net/age?age=${age} "${localize('birthdays', 'age-hover', {a: age})}")`;
         }
-        if (channel.guild.members.cache.get(user.id)) string = string + `${dateString}: <@${user.id}> ${user.sync ? '[🗘](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "Birthday synchronized with SC Network Account")' : ''}${user.sync && user.verified ? '[✓](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "Verified by SC Network Team")' : ''}\n`;
+        const showVerifiedItem = !client.configurations['birthday']['config'].disableSync && client.toogles.getToggleValue('birthdayVerificationSymbol');
+        const birthdaySyncSymbol = !client.configurations['birthday']['config'].disableSync && client.toogles.getToggleValue('birthdaySyncSymbol');
+        if (channel.guild.members.cache.get(user.id)) string = string + `${dateString}: ${client.configurations['birthday']['config'].useTags ? channel.guild.members.cache.get(user.id).user.tag : channel.guild.members.cache.get(user.id).user.toString()} ${user.sync && birthdaySyncSymbol ? `[🗘](https://sc-net.work/sy "${localize('birthdays', 'sync-enabled-hover')}")` : ''}${user.sync && user.verified && showVerifiedItem ? `[✓](https://sc-net.work/OMLDj "${localize('birthdays', 'verified-hover')}")` : ''}\n`;
     }
     if (string.length === 0) string = localize('birthdays', 'no-bd-this-month');
     return string;

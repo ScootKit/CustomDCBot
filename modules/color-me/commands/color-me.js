@@ -44,7 +44,7 @@ module.exports.subcommands = {
                             })
                         }
                     );
-                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, { ephemeral: true }));
+                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, {ephemeral: true}));
                 } else {
                     if (interaction.guild.roles.cache.size < 250) {
 
@@ -62,7 +62,7 @@ module.exports.subcommands = {
                             }
                         );
                     } else {
-                        await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, { ephemeral: true }));
+                        await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
                     }
                     await moduleModel.update({
                         userID: interaction.user.id,
@@ -78,7 +78,7 @@ module.exports.subcommands = {
                     if (!interaction.member.roles.cache.has(role)) {
                         await interaction.member.roles.add(role);
                     }
-                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, { ephemeral: true }));
+                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, {ephemeral: true}));
                 }
             } else {
                 await color(interaction, moduleStrings);
@@ -105,9 +105,9 @@ module.exports.subcommands = {
                         timestamp: new Date()
                     });
                     await interaction.member.roles.add(role);
-                    await interaction.editReply(await embedType(moduleStrings['created'], {}, { ephemeral: true }));
+                    await interaction.editReply(await embedType(moduleStrings['created'], {}, {ephemeral: true}));
                 } catch (e) {
-                    await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, { ephemeral: true }));
+                    await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
                 }
 
             }
@@ -119,7 +119,7 @@ module.exports.subcommands = {
             });
             await interaction.editReply((await embedType(moduleStrings['cooldown'], {
                 '%cooldown%': dateToDiscordTimestamp(new Date(cooldownModel.timestamp.getTime() + moduleConf['updateCooldown'] * 3600000), 'R')
-            }, { ephemeral: true })));
+            }, {ephemeral: true})));
         }
     },
 
@@ -141,7 +141,7 @@ module.exports.subcommands = {
                 role.delete(localize('color-me', 'delete-manual-log-reason', {
                     user: interaction.member.user.username
                 }));
-                await interaction.editReply(await embedType(moduleStrings['removed'], {}, { ephemeral: true }));
+                await interaction.editReply(await embedType(moduleStrings['removed'], {}, {ephemeral: true}));
             }
         }
     }
@@ -197,7 +197,7 @@ async function color(interaction, moduleStrings) {
             roleColor = '#' + roleColor;
         }
         if (!(/^#[0-9A-F]{6}$/i).test(roleColor)) {
-            await interaction.editReply(await embedType(moduleStrings['invalidColor'], {}, { ephemeral: true }));
+            await interaction.editReply(await embedType(moduleStrings['invalidColor'], {}, {ephemeral: true}));
             cancel = true;
         }
     } else {
@@ -219,7 +219,7 @@ async function cooldown(duration, userId) {
             userId: userId
         }
     });
-    if (cooldownModel) {
+    if (cooldownModel && cooldownModel.timestamp) {
         // check cooldown duration
         return cooldownModel.timestamp.getTime() + duration <= Date.now();
     } else {

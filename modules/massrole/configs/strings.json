@@ -15,7 +15,9 @@
       "allowEmbed": true,
       "description-en": "This messages gets send when a action was executed successfully",
       "description-de": "Diese Nachricht wird verschickt, wenn eine Akton erfolgreich ausgeführt wurde",
-      "params-de": {}
+      "params-de": {
+
+      }
     },
     {
       "field_name": "notDone",
@@ -27,7 +29,9 @@
       "allowEmbed": true,
       "description-en": "This messages gets send when a action was not executed successfully",
       "description-de": "Diese Nachricht wird verschickt, wenn eine Aktion nicht erfolgreich ausgeführt wurde",
-      "params-de": {}
+      "params-de": {
+
+      }
     }
   ]
 }
