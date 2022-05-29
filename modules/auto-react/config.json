@@ -30,6 +30,19 @@
       }
     },
     {
+      "field_name": "membersReply",
+      "default": {},
+      "humanname-de": "Erwähnungsantworten",
+      "humanname-en": "Mention-replys",
+      "type": "keyed",
+      "description-en": "Here you can add members and the reply on mentions of them",
+      "description-de": "Du kannst hier NutzerIDs und die Antwort auf Erwähnungen dieser eintragen",
+      "content": {
+        "key": "integer",
+        "value": "string"
+      }
+    },
+    {
       "field_name": "authors",
       "default": {},
       "humanname-de": "Autoren",
