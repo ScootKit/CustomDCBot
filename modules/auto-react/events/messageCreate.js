@@ -5,6 +5,7 @@ module.exports.run = async (client, msg) => {
     await checkMembers(msg);
     await checkCategory(msg);
     await checkAuthor(msg);
+    await checkMembersReply(msg);
 };
 
 /**
