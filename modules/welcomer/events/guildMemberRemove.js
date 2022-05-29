@@ -25,11 +25,16 @@ module.exports.run = async function (client, guildMember) {
 
         await channel.send(embedType(message || 'Message not found',
             {
+                '%mention%': guildMember.toString(),
+                '%servername%': guildMember.guild.name,
                 '%tag%': guildMember.user.tag,
-                '%memberProfilePictureUrl%': guildMember.user.avatarURL({dynamic: true}),
-                '%joinedAt%': formatDate(guildMember.joinedAt),
                 '%guildUserCount%': (await client.guild.members.fetch()).size,
-                '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size
+                '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
+                '%memberProfilePictureUrl%': guildMember.user.avatarURL(),
+                '%createdAt%': formatDate(guildMember.user.createdAt),
+                '%guildLevel%': client.guild.premiumTier,
+                '%boostCount%%': client.guild.premiumSubscriptionCount,
+                '%joinedAt%': formatDate(guildMember.joinedAt)
             }
         ));
     }

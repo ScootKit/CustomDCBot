@@ -19,7 +19,7 @@
     },
     {
       "humanname-en": "Channel-Type",
-      "humanname-de": "Kanal-Type",
+      "humanname-de": "Kanal-Typ",
       "field_name": "type",
       "type": "select",
       "default": "",
@@ -60,7 +60,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL of the user's avatar",
-          "fieldValue": "type.join"
+          "fieldValue": "type.join",
+          "isImage": true
         },
         {
           "name": "%servername%",
@@ -85,7 +86,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL of the user's avatar",
-          "fieldValue": "type.leave"
+          "fieldValue": "type.leave",
+          "isImage": true
         },
         {
           "name": "%joinedAt%",
@@ -142,7 +144,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL zum Avatar des Nutzers",
-          "fieldValue": "type.join"
+          "fieldValue": "type.join",
+          "isImage": true
         },
         {
           "name": "%servername%",
@@ -167,7 +170,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL zum Avatar des Nutzers",
-          "fieldValue": "type.leave"
+          "fieldValue": "type.leave",
+          "isImage": true
         },
         {
           "name": "%joinedAt%",
@@ -215,8 +219,8 @@
           "fieldValue": "type.unboost"
         }
       ],
-      "humanname-de": "",
-      "description-de": "",
+      "humanname-de": "Nachricht",
+      "description-de": "Nachricht, die gesendet wird",
       "default-de": ""
     }
   ]

@@ -41,7 +41,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL of the user's avatar",
-          "fieldValue": "type.join"
+          "fieldValue": "type.join",
+          "isImage": true
         },
         {
           "name": "%servername%",
@@ -66,7 +67,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL of the user's avatar",
-          "fieldValue": "type.leave"
+          "fieldValue": "type.leave",
+          "isImage": true
         },
         {
           "name": "%joinedAt%",
@@ -123,7 +125,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL zum Avatar des Nutzers",
-          "fieldValue": "type.join"
+          "fieldValue": "type.join",
+          "isImage": true
         },
         {
           "name": "%servername%",
@@ -148,7 +151,8 @@
         {
           "name": "%memberProfilePictureUrl%",
           "description": "URL zum Avatar des Nutzers",
-          "fieldValue": "type.leave"
+          "fieldValue": "type.leave",
+          "isImage": true
         },
         {
           "name": "%joinedAt%",

@@ -1,4 +1,4 @@
-const {randomElementFromArray, embedType} = require('../../../src/functions/helpers');
+const {randomElementFromArray, embedType, formatDate} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     const moduleConfig = client.configurations['welcomer']['config'];
@@ -28,7 +28,7 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
         const moduleChannels = client.configurations['welcomer']['channels'];
 
         for (const channelConfig of moduleChannels.filter(c => c.type === type)) {
-            const channel = await guildMember.guild.channels.fetch(channelConfig.channelID).catch(() => {
+            const channel = await newGuildMember.guild.channels.fetch(channelConfig.channelID).catch(() => {
             });
             if (!channel) {
                 client.logger.error(localize('welcomer', 'channel-not-found', {c: channelConfig.channelID}));
@@ -43,9 +43,15 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
             await channel.send(embedType(message || 'Message not found',
                 {
                     '%mention%': newGuildMember.toString(),
+                    '%servername%': newGuildMember.guild.name,
+                    '%tag%': newGuildMember.user.tag,
+                    '%guildUserCount%': (await client.guild.members.fetch()).size,
+                    '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
                     '%memberProfilePictureUrl%': newGuildMember.user.avatarURL(),
+                    '%createdAt%': formatDate(newGuildMember.user.createdAt),
                     '%guildLevel%': client.guild.premiumTier,
-                    '%boostCount%%': client.guild.premiumSubscriptionCount
+                    '%boostCount%%': client.guild.premiumSubscriptionCount,
+                    '%joinedAt%': formatDate(newGuildMember.joinedAt)
                 }
             ));
 
