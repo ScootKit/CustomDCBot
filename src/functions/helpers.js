@@ -128,6 +128,22 @@ async function postToSCNetworkPaste(content, opts = {
 module.exports.postToSCNetworkPaste = postToSCNetworkPaste;
 
 /**
+ * Genrate a random string (cryptographically unsafe)
+ * @param {Number} length Length of the generated string
+ * @param {String} characters String of characters to choose from
+ * @returns {string} Random string
+ */
+module.exports.randomString = function (length, characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result = result + characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+};
+
+/**
  * Creates a paste from the messages in a channel.
  * @param {Channel} channel Channel to create log from
  * @param {Number} limit Number of messages to include
