@@ -5,6 +5,7 @@ module.exports.run = async function (client, guildMember) {
     if (!client.botReadyAt) return;
     if (guildMember.guild.id !== client.guild.id) return;
     const moduleConfig = client.configurations['welcomer']['config'];
+    const moduleModel = client.models['welcomer']['User'];
     if (guildMember.user.bot && moduleConfig['not-send-messages-if-member-is-bot']) return;
 
     const moduleChannels = client.configurations['welcomer']['channels'];
@@ -26,7 +27,7 @@ module.exports.run = async function (client, guildMember) {
         }
         if (!message) message = channelConfig.message;
 
-        await channel.send(embedType(message || 'Message not found',
+        const sentMessage = await channel.send(embedType(message || 'Message not found',
             {
                 '%mention%': guildMember.toString(),
                 '%servername%': guildMember.guild.name,
@@ -40,5 +41,25 @@ module.exports.run = async function (client, guildMember) {
                 '%joinedAt%': formatDate(guildMember.joinedAt)
             }
         ));
+
+        const memberModel = await moduleModel.findOne({
+            where: {
+                userId: guildMember.id
+            }
+        });
+        if (memberModel) {
+            await memberModel.update({
+                channelID: sentMessage.channelId,
+                messageID: sentMessage.id,
+                timestamp: new Date()
+            });
+        } else {
+            await moduleModel.create({
+                userID: guildMember.id,
+                channelID: sentMessage.channelId,
+                messageID: sentMessage.id,
+                timestamp: new Date()
+            });
+        }
     }
 };

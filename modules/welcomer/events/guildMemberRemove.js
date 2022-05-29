@@ -5,6 +5,7 @@ module.exports.run = async function (client, guildMember) {
     if (!client.botReadyAt) return;
     if (guildMember.guild.id !== client.guild.id) return;
     const moduleConfig = client.configurations['welcomer']['config'];
+    const moduleModel = client.models['welcomer']['User'];
     if (guildMember.user.bot && moduleConfig['not-send-messages-if-member-is-bot']) return;
 
     const moduleChannels = client.configurations['welcomer']['channels'];
@@ -38,4 +39,44 @@ module.exports.run = async function (client, guildMember) {
             }
         ));
     }
+    const memberModel = await moduleModel.findOne({
+        where: {
+            userId: guildMember.id
+        }
+    });
+    if (memberModel && moduleConfig['delete-welcome-message']) {
+        const channel = await guildMember.guild.channels.fetch(memberModel.channelID).catch(() => {});
+        if (await timer(client, guildMember.id)) {
+            try {
+                await (await channel.messages.fetch(memberModel.messageID)).delete();
+            } catch (e) {}
+        }
+        await moduleModel.destroy({
+            where: {
+                userId: guildMember.id
+            }
+        });
+
+
+    }
 };
+
+/**
+ ** Function to handle the time stuff
+ * @private
+ * @param client Client of the bot
+ * @param {userId} userId Id of the User
+ * @returns {Promise<boolean>}
+ */
+async function timer(client, userId) {
+    const model = client.models['welcomer']['User'];
+    const timeModel = await model.findOne({
+        where: {
+            userId: userId
+        }
+    });
+    if (timeModel) {
+        // check timer duration
+        return timeModel.timestamp.getTime() + 604800000 >= Date.now();
+    }
+}
