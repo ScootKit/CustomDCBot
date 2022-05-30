@@ -36,12 +36,16 @@ async function checkMembers(msg) {
  * @returns {Promise<void>}
  */
 async function checkMembersReply(msg) {
-    const moduleConfig = msg.client.configurations['auto-react']['config'];
+    const moduleConfig = msg.client.configurations['auto-react']['replys'];
     if (!msg.mentions.members) return;
+    if (msg.author === client.user) return;
     msg.mentions.members.forEach(m => {
-        if (moduleConfig.membersReply[m.id]) {
-            msg.reply(embedType(moduleConfig.membersReply[m.id], {}, {ephemeral: true})).catch(() => {
-            });
+        console.log(moduleConfig);
+        for (const element of moduleConfig) {
+            if (element.member === m.id) {
+                msg.reply(embedType(element.reply, {}, {ephemeral: true})).catch(() => {
+                });
+            }
         }
     });
 }
