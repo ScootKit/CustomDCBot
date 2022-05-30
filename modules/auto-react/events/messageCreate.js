@@ -36,7 +36,7 @@ async function checkMembers(msg) {
  * @returns {Promise<void>}
  */
 async function checkMembersReply(msg) {
-    const moduleConfig = msg.client.configurations['auto-react']['replys'];
+    const moduleConfig = msg.client.configurations['auto-react']['replies'];
     if (!msg.mentions.members) return;
     if (msg.author === client.user) return;
     msg.mentions.members.forEach(m => {
