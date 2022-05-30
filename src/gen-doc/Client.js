@@ -19,7 +19,7 @@ class Client {
          */
         this.models = null;
         /**
-         * Content of the `replies.json` file
+         * Content of the `strings.json` file
          * @type {Object}
          */
         this.strings = null;
