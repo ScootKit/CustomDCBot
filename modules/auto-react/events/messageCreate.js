@@ -1,3 +1,4 @@
+const {embedType} = require('../../../src/functions/helpers');
 module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
     if (msg.interaction || msg.system || !msg.guild || msg.guild.id !== client.config.guildID) return;
@@ -5,6 +6,7 @@ module.exports.run = async (client, msg) => {
     await checkMembers(msg);
     await checkCategory(msg);
     await checkAuthor(msg);
+    await checkMembersReply(msg);
 };
 
 /**
@@ -55,6 +57,26 @@ async function checkCategory(msg) {
         });
     });
 }
+
+/**
+ * Checks for member pings in a message and replys with the configured message
+ * @private
+ * @param msg
+ * @returns {Promise<void>}
+ */
+async function checkMembersReply(msg) {
+    const moduleConfig = msg.client.configurations['auto-react']['replies'];
+    if (!msg.mentions.users) return;
+    if (msg.author.id === msg.client.user.id) return;
+    for (const m of msg.mentions.users.values()) {
+        const matches = moduleConfig.filter(c => c.members === m.id);
+        for (const element of matches) {
+            await msg.reply(embedType(element.reply, {}, {ephemeral: true})).catch(() => {
+            });
+        }
+    }
+}
+
 
 /**
  * Checks if a message need reactions (and reacts if needed) because it was send in a configured channel
