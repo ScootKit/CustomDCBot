@@ -2,6 +2,7 @@
   "name": "auto-react",
   "humanReadableName-de": "Automatisches Reagieren",
   "humanReadableName-en": "Automatic reactions",
+  "fa-icon": "far fa-smile",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -12,7 +13,10 @@
   "description-de": "Reagiert automatisch mit ausgewählten Emojs in einem ausgewählten Channel und bei Pings",
   "events-dir": "/events",
   "config-example-files": [
-    "config.json"
+    "configs/config.json",
+    "configs/replies.json"
   ],
-  "tags": ["fun"]
+  "tags": [
+    "fun"
+  ]
 }

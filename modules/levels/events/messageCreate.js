@@ -63,7 +63,7 @@ exports.run = async (client, msg) => {
             '%newLevel%': user.level,
             '%role%': isRewardMessage ? `<@&${moduleConfig.reward_roles[user.level.toString()]}>` : localize('levels', 'no-role'),
             '%tag%': msg.author.tag
-        }, {allowedMentions: {parse: []}}));
+        }, {allowedMentions: {parse: ['users']}}));
 
         /**
          * Sends the level up messages

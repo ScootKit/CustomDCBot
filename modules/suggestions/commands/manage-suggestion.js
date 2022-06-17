@@ -1,6 +1,6 @@
 const {generateSuggestionEmbed, notifyMembers} = require('../suggestion');
 const {localize} = require('../../../src/functions/localize');
-const {autoCompleteSuggestionID} = require('./suggestion');
+const {truncate} = require('../../../src/functions/helpers');
 
 module.exports.beforeSubcommand = async function (interaction) {
     interaction.suggestion = await interaction.client.models['suggestions']['Suggestion'].findOne({
@@ -38,6 +38,36 @@ module.exports.run = async function (interaction) {
     await notifyMembers(interaction.client, interaction.suggestion, 'team', interaction.user.id);
     await interaction.editReply({content: '✅ ' + localize('suggestions', 'updated-suggestion')});
 };
+
+
+module.exports.autoComplete = {
+    'comment': {
+        'id': autoCompleteSuggestionID
+    }
+};
+
+/**
+ * Auto-Completes a suggestion id
+ * @param {Interaction} interaction Interaction to auto-complete up on
+ * @return {Promise<void>}
+ */
+async function autoCompleteSuggestionID(interaction) {
+    const suggestions = await interaction.client.models['suggestions']['Suggestion'].findAll({
+        order: [['createdAt', 'DESC']]
+    });
+    const returnValue = [];
+    interaction.value = interaction.value.toLowerCase();
+    for (const suggestion of suggestions.filter(s => (interaction.client.guild.members.cache.get(s.suggesterID) || {user: {tag: s.suggesterID}}).user.tag.toLowerCase().includes(interaction.value) || s.suggestion.toLowerCase().includes(interaction.value) || s.id.toString().includes(interaction.value) || s.messageID.includes(interaction.value))) {
+        if (returnValue.length !== 25) returnValue.push({
+            value: suggestion.id.toString(),
+            name: truncate(`${(interaction.client.guild.members.cache.get(suggestion.suggesterID) || {user: {tag: suggestion.suggesterID}}).user.tag}: ${suggestion.suggestion}`, 100)
+        });
+    }
+    interaction.respond(returnValue);
+}
+
+module.exports.autoCompleteSuggestionID = autoCompleteSuggestionID;
+
 
 module.exports.autoComplete = {
     'accept': {

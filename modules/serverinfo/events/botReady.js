@@ -30,10 +30,10 @@ async function generateEmbed(client) {
         .setTitle(config.embed.title)
         .setDescription(config.embed.description)
         .setColor(config.embed.color)
-        .setTimestamp()
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setThumbnail(channel.guild.iconURL())
         .setAuthor({name: client.user.tag, iconURL: client.user.avatarURL()});
+    if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
     const guildMembers = await channel.guild.members.fetch({withPresences: true});
     const guildCreationDate = new Date(channel.guild.createdAt);

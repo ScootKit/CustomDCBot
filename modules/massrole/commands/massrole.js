@@ -3,7 +3,6 @@ const {embedType} = require('../../../src/functions/helpers');
 let target;
 let failed;
 
-
 module.exports.subcommands = {
     'add': async function (interaction) {
         const moduleStrings = interaction.client.configurations['massrole']['strings'];

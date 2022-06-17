@@ -66,6 +66,15 @@
       ]
     },
     {
+      "field_name": "timezone",
+      "humanname-en": "Timezone",
+      "humanname-de": "Zeitzone",
+      "default": "Europe/Berlin",
+      "type": "timezone",
+      "description-en": "Timezone the bot runs in",
+      "description-de": "Zeitzone in der der Bot laufen soll"
+    },
+    {
       "field_name": "logChannelID",
       "allowNull": true,
       "humanname-en": "Log-Channel",

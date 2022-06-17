@@ -6,7 +6,6 @@
 const {formatDate, randomElementFromArray} = require('../../src/functions/helpers');
 const {scheduleJob} = require('node-schedule');
 const {embedType} = require('../../src/functions/helpers');
-const {confDir} = require('../../main');
 const {localize} = require('../../src/functions/localize');
 
 /**
@@ -218,7 +217,7 @@ module.exports.endGiveaway = endGiveaway;
 async function checkRequirements(member, giveaway) {
     let failedRequirements = false;
     let notPassedRequirementsString = '';
-    const moduleConfig = require(`${confDir}/giveaways/config.json`);
+    const moduleConfig = member.client.configurations['giveaways']['config'];
     if (member.roles.cache.find(r => (moduleConfig.bypassRoles || []).includes(r.id))) {
         return [failedRequirements, notPassedRequirementsString];
     }
@@ -259,7 +258,7 @@ function calculateUserEntries(member) {
     const moduleConfig = member.client.configurations['giveaways']['config'];
     let entries = 1;
     for (const rID in moduleConfig.multipleEntries) {
-        if (member.roles.cache.get(rID)) entries = entries + moduleConfig.multipleEntries[rID];
+        if (member.roles.cache.get(rID)) entries = entries + parseFloat(moduleConfig.multipleEntries[rID]);
     }
     return entries;
 }

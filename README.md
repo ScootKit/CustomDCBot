@@ -172,7 +172,6 @@ Every module has to contain a `module.json` file with the following content:
 #### Interaction-Command
 
 Note: Interaction-Commands get loaded after the configuration got checked.\
-Note: Permissions for Slash-Commands have to be configured in the Server-Settings and will be checked by Discord.\
 An interaction-command ("slash command") file has to export the following things:
 
 * `run` (function; provided arguments: `interaction`):
@@ -225,6 +224,11 @@ An CLI-File should export the following things:
 
 Note: All you CLI-Commands can also get executed via the API.
 
+#### Config-Elements
+Certain configuration may contain an array of multiple objects with different values - these are called "Config-Elements".
+
+To add a new Config-Element to your configuration use `node add-config-element-object.js <Path to example config file> <Path to your config-file>`.
+
 #### Example config-file
 
 An example config file should include the following things:
@@ -232,10 +236,15 @@ An example config file should include the following things:
 * `filename`: Name of the generated config file
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
+* `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in their discord-server-settings
+  * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
+  * `special`: Array of commands that need special configuration in addition to editing the permissions in the server-settings
+    * `name`: Name of the command
+    * `info`: Key by language; Information about the command; used to explain users what exactly they should do
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
     * `default`: Default value
-    * `type`: Can be `channelID`, `select`, `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
+    * `type`: Can be `channelID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
     * `description`: Short description of this field
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please
@@ -250,6 +259,7 @@ An example config file should include the following things:
         * `description`: Description of the parameter (e.g. `Mention of the user`)
         * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
           is `fieldValue`.
+        * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
 

@@ -177,6 +177,52 @@
         "color": "GREEN",
         "button": "👤 Mein Level anzeigen"
       }
+    },
+    {
+      "field_name": "leaderboard-button-answer",
+      "default-en": "Hi, %name%, you are currently on **level %level%** with **%userXP%**/%nextLevelXP% **XP**. Learn more with `/profile`.",
+      "default-de": "Hi, %name%, du bist aktuell auf **Level %level%** mit **%userXP%**/%nextLevelXP% **Erfahrungspunkten**. Erfahre mehr mit `/profile`.",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This messages gets send if a user clicks on the button below the live-leaderboard",
+      "params": [
+        {
+          "name": "%name%",
+          "description": "Username of the user"
+        },
+        {
+          "name": "%level%",
+          "description": "Level of the user"
+        },
+        {
+          "name": "%userXP%",
+          "description": "XP of the user"
+        },
+        {
+          "name": "%nextLevelXP%",
+          "description": "XP of the next level"
+        }
+      ],
+      "humanname-de": "Nachricht bei Klick auf den Knopf unter dem Live-Leaderboard",
+      "description-de": "Diese Nachricht wird gesendet, wenn ein Nutzer den Knopf unter dem Live-Embed drückt",
+      "params-de": [
+        {
+          "name": "%name%",
+          "description": "Username des Nutzers"
+        },
+        {
+          "name": "%level%",
+          "description": "Level des Nutzers"
+        },
+        {
+          "name": "%userXP%",
+          "description": "XP des Nutzers"
+        },
+        {
+          "name": "%nextLevelXP%",
+          "description": "Benötigtes XP zum nächsten Level"
+        }
+      ]
     }
   ]
 }

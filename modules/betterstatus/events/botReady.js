@@ -15,6 +15,10 @@ module.exports.run = async function (client) {
         client.intervals.push(interval);
     }
 
+    if (moduleConf.botStatus !== 'ONLINE') {
+        await client.user.setPresence({status: moduleConf.botStatus});
+    }
+
     /**
      * @private
      * Replace status variables
@@ -22,12 +26,13 @@ module.exports.run = async function (client) {
      * @returns {Promise<String>}
      */
     async function replaceStatusString(statusString) {
+        if (!statusString) return 'Invalid status';
         const members = await (await client.guild.fetch()).members.fetch({withPresences: true, force: true});
         const randomOnline = members.filter(m => m.presence && !m.user.bot).random();
         const random = members.filter(m => !m.user.bot).random();
         return statusString.replaceAll('%memberCount%', client.guild.memberCount)
             .replaceAll('%onlineMemberCount%', members.filter(m => m.presence && !m.user.bot).size)
-            .replaceAll('%randomOnlineMemberTag%', `${randomOnline.user.username}#${randomOnline.user.discriminator}`)
+            .replaceAll('%randomOnlineMemberTag%', randomOnline ? `${randomOnline.user.username}#${randomOnline.user.discriminator}` : client.user.tag)
             .replaceAll('%randomMemberTag%', `${random.user.username}#${random.user.discriminator}`)
             .replaceAll('%channelCount%', client.guild.channels.cache.size)
             .replaceAll('%roleCount%', (await client.guild.roles.fetch()).size);

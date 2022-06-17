@@ -12,11 +12,12 @@
   "description-de": "Ein einfaches economy-system mit einem Shop, Nachrichten-Drops und Befehlen, um Geld zu verdienen",
   "commands-dir": "/commands",
   "events-dir": "/events",
-  "fa-icon": "fa-solid fa-bank",
   "models-dir": "/models",
   "config-example-files": [
     "configs/config.json",
     "configs/strings.json"
   ],
-  "tags": ["community"]
+  "tags": [
+    "community"
+  ]
 }

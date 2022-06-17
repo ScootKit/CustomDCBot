@@ -48,7 +48,7 @@ function inputReplacer(args, input) {
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
 module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
-    optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
+    if (!optionsToKeep.allowedMentions) optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
     if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
     if (typeof input === 'string') {
         optionsToKeep.content = inputReplacer(args, input);
@@ -80,7 +80,7 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
         });
         optionsToKeep.embeds = [emb];
     } else optionsToKeep.embeds = [];
-    if (input['message']) optionsToKeep.content = inputReplacer(args, input['message']);
+    optionsToKeep.content = input['message'] ? inputReplacer(args, input['message']) : null;
     return optionsToKeep;
 };
 
@@ -126,6 +126,22 @@ async function postToSCNetworkPaste(content, opts = {
 }
 
 module.exports.postToSCNetworkPaste = postToSCNetworkPaste;
+
+/**
+ * Genrate a random string (cryptographically unsafe)
+ * @param {Number} length Length of the generated string
+ * @param {String} characters String of characters to choose from
+ * @returns {string} Random string
+ */
+module.exports.randomString = function (length, characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result = result + characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+};
 
 /**
  * Creates a paste from the messages in a channel.

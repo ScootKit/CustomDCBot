@@ -1,0 +1,59 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "content": [
+    {
+      "field_name": "channels",
+      "humanname-de": "Kanäle",
+      "humanname-en": "Channels",
+      "default": {},
+      "type": "keyed",
+      "description-en": "Here you can add channels and the reactions in it (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier Kanal-IDs und die dazugehörigen Emojis eintragen (mehrere Emojis müssen mit einem | getrennt werden)",
+      "content": {
+        "key": "channelID",
+        "value": "string"
+      }
+    },
+    {
+      "field_name": "members",
+      "default": {},
+      "humanname-de": "Erwähnungen",
+      "humanname-en": "Mentions",
+      "type": "keyed",
+      "description-en": "Here you can add members and the reactions on their mentions of them (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier NutzerIDs und die dazugehörigen Emojis auf Erwähnungen dieser eintragen (mehrere Emojis müssen mit einem | getrennt werden",
+      "content": {
+        "key": "integer",
+        "value": "string"
+      }
+    },
+    {
+      "field_name": "authors",
+      "default": {},
+      "humanname-de": "Autoren",
+      "humanname-en": "Authors",
+      "type": "keyed",
+      "description-en": "Here you can add members and the reactions on their messages in it (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier NutzerIDs und die dazugehörigen Emojis auf deren Nachrichten eintragen (mehrere Emojis müssen mit einem | getrennt werden",
+      "content": {
+        "key": "integer",
+        "value": "string"
+      }
+    },
+    {
+      "field_name": "categories",
+      "humanname-de": "Kategorien",
+      "humanname-en": "Categories",
+      "default": {},
+      "type": "keyed",
+      "description-en": "Here you can add categories and the reactions in it (you can add multiple emojis with | between each one)",
+      "description-de": "Du kannst hier Kategorien und die dazugehörigen Emojis eintragen (mehrere Emojis müssen mit einem | getrennt werden)",
+      "content": {
+        "key": "channelID",
+        "value": "string"
+      }
+    }
+  ]
+}

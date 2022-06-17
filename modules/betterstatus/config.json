@@ -99,8 +99,22 @@
         "COMPETING",
         "LISTENING"
       ],
-      "description-de": "Typ aller Status",
-      "description-en": "Type of the user status"
+      "description-de": "Type der Aktivität deines Bots",
+      "description-en": "Type of the user activity"
+    },
+    {
+      "field_name": "botStatus",
+      "humanname-en": "Bot-Status",
+      "humanname-de": "Bot-Status",
+      "default": "online",
+      "type": "select",
+      "content": [
+        "idle",
+        "online",
+        "dnd"
+      ],
+      "description-de": "Status deines Bots",
+      "description-en": "Status of your bot"
     },
     {
       "field_name": "interval",

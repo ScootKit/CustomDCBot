@@ -58,7 +58,7 @@ exports.run = async (client, interaction) => {
         if (giveaway.requirements.length !== 0) {
             let requirementString = '';
             giveaway.requirements.forEach((r) => {
-                if (r.type === 'messages') requirementString = requirementString + `• ${localize('giveaways', 'required-message', {mc: r.messageCount})}\n`;
+                if (r.type === 'messages') requirementString = requirementString + `• ${localize('giveaways', 'required-messages', {mc: r.messageCount})}\n`;
                 if (r.type === 'roles') {
                     let rolesString = ''; // Surely there is a better way to to this kind of stuff, but I am to stupid to find it
                     r.roles.forEach(rID => rolesString = rolesString + `<@&${rID}> `);

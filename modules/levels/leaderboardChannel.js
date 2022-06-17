@@ -32,8 +32,15 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
     let leaderboardString = '';
     let i = 0;
     for (const user of users) {
+        const member = channel.guild.members.cache.get(user.userID);
+        if (!member) continue;
         i++;
-        leaderboardString = leaderboardString + localize('levels', 'leaderboard-notation', {p: i, ui: user.userID, l: user.level, xp: user.xp}) + '\n';
+        leaderboardString = leaderboardString + localize('levels', 'leaderboard-notation', {
+            p: i,
+            u: client.configurations['levels']['config']['useTags'] ? member.user.tag : member.user.toString(),
+            l: user.level,
+            xp: user.xp
+        }) + '\n';
     }
     if (leaderboardString.length === 0) leaderboardString = localize('levels', 'no-user-on-leaderboard');
 
@@ -41,10 +48,11 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
         .setTitle(moduleStrings.liveLeaderBoardEmbed.title)
         .setDescription(moduleStrings.liveLeaderBoardEmbed.description)
         .setColor(moduleStrings.liveLeaderBoardEmbed.color)
-        .setFooter(client.strings.footer, client.strings.footerImgUrl)
+        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setThumbnail(channel.guild.iconURL())
-        .addField(localize('levels', 'leaderboard'), leaderboardString)
-        .setTimestamp();
+        .addField(localize('levels', 'leaderboard'), leaderboardString);
+
+    if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
     const components = [{
         type: 'ACTION_ROW',

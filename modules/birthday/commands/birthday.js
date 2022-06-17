@@ -25,7 +25,7 @@ module.exports.subcommands = {
                 mm: interaction.birthday.month,
                 yyyy: (interaction.birthday.year ? `.${interaction.birthday.year}` : ''),
                 age: interaction.birthday.year ? (localize('birthdays', 'your-age', {age: new AgeFromDateString(`${interaction.birthday.year}-${interaction.birthday.month - 1}-${interaction.birthday.day}`).age})) : '',
-                syncstatus: interaction.birthday.sync ? localize('birthdays', 'sync-on') : localize('birthdays', 'sync-off')
+                syncstatus: interaction.client.configurations['birthday']['config'].disableSync ? '' : interaction.birthday.sync ? localize('birthdays', 'sync-on') : localize('birthdays', 'sync-off') // eslint-disable-line no-nested-ternary
             })
         });
 
@@ -144,36 +144,11 @@ module.exports.config = {
     name: 'birthday',
     description: localize('birthdays', 'command-description'),
     defaultPermission: true,
-    options: [
-        {
+    options: function (client) {
+        const commands = [{
             type: 'SUB_COMMAND',
             name: 'status',
             description: localize('birthdays', 'status-command-description')
-        },
-        {
-            type: 'SUB_COMMAND',
-            name: 'sync',
-            description: localize('birthdays', 'sync-command-description'),
-            options: [
-                {
-                    type: 'STRING',
-                    name: 'action',
-                    description: localize('birthdays', 'sync-command-action-description'),
-                    required: true,
-                    choices: [
-                        {
-                            name: 'enable',
-                            description: localize('birthdays', 'sync-command-action-enable-description'),
-                            value: 'enable'
-                        },
-                        {
-                            name: 'disable',
-                            description: localize('birthdays', 'sync-command-action-disable-description'),
-                            value: 'disable'
-                        }
-                    ]
-                }
-            ]
         },
         {
             type: 'SUB_COMMAND',
@@ -205,5 +180,32 @@ module.exports.config = {
             name: 'delete',
             description: localize('birthdays', 'delete-command-description')
         }
-    ]
+        ];
+        if (!client.configurations['birthday']['config'].disableSync) commands.push({
+            type: 'SUB_COMMAND',
+            name: 'sync',
+            description: localize('birthdays', 'sync-command-description'),
+            options: [
+                {
+                    type: 'STRING',
+                    name: 'action',
+                    description: localize('birthdays', 'sync-command-action-description'),
+                    required: true,
+                    choices: [
+                        {
+                            name: 'enable',
+                            description: localize('birthdays', 'sync-command-action-enable-description'),
+                            value: 'enable'
+                        },
+                        {
+                            name: 'disable',
+                            description: localize('birthdays', 'sync-command-action-disable-description'),
+                            value: 'disable'
+                        }
+                    ]
+                }
+            ]
+        });
+        return commands;
+    }
 };

@@ -1,16 +1,22 @@
 {
   "name": "birthday",
-  "description": "A",
-  "author": {
-    "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox",
-    "scnxOrgID": "1"
-  },
+  "humanReadableName-en": "Birthday-Calendar",
+  "humanReadableName-de": "Geburtstags-Kalender",
+  "description-en": "Let users set their birthday and congratulate them when they have birthday",
+  "description-de": "Lasse deine Nutzer ihre Geburtstage eintragen und gratuliere automatisch, wenn sie Geburtstag haben!",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/birthday",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
   "commands-dir": "/commands",
   "models-dir": "/models",
   "events-dir": "/events",
   "config-example-files": [
     "config.json"
+  ],
+  "tags": [
+    "community"
   ]
 }

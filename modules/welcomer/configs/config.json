@@ -39,6 +39,16 @@
       "description-de": "Rollen, die Booster haben sollen",
       "params-de": {},
       "default-de": []
+    },
+    {
+      "field_name": "delete-welcome-message",
+      "humanname-en": "Delete welcome message",
+      "humanname-de": "Willkommensnachricht löschen",
+      "default": true,
+      "type": "boolean",
+      "description-en": "Should their welcome message be deleted, if a user leaves the server within 7 days",
+      "description-de": "Soll die Willkommensnachricht eines Nutzers, der den Server innerhalb von 7 Tagen wieder verlässt gelöscht werden",
+      "params-de": {}
     }
   ]
 }

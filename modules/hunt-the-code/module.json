@@ -1,0 +1,21 @@
+{
+  "name": "hunt-the-code",
+  "humanReadableName-en": "Hunt the code",
+  "humanReadableName-de": "Sammel die Codes",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/hunt-the-code",
+  "description-en": "Hide codes and let your users collect them",
+  "description-de": "Verstecke Codes und lasse sie von deinen Nutzern sammeln",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "config-example-files": [
+    "strings.json"
+  ],
+  "tags": [
+    "community"
+  ]
+}

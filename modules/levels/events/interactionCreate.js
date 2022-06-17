@@ -1,4 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
+const {embedType} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, interaction) {
     if (!interaction.client.botReadyAt) return;
@@ -14,8 +15,10 @@ module.exports.run = async function (client, interaction) {
         content: localize('levels', 'please-send-a-message')
     });
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
-    interaction.reply({
-        ephemeral: true,
-        content: localize('levels', 'leaderboard-button-answer', {name: interaction.user.username, l: user.level, ux: user.xp, nx: nextLevelXp})
-    });
+    interaction.reply(embedType(client.configurations['levels']['strings']['leaderboard-button-answer'], {
+        '%name%': interaction.user.username,
+        '%level%': user.level,
+        '%userXP%': user.xp,
+        '%nextLevelXP%': nextLevelXp
+    }, {ephemeral: true}));
 };

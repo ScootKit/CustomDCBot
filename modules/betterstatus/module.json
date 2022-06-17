@@ -6,7 +6,6 @@
     "link": "https://github.com/SCDerox",
     "scnxOrgID": "1"
   },
-  "fa-icon": "far fa-user-circle",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/betterstatus",
   "description-en": "Give you more features to make your status even better - change it when someone joins, change it every x seconds and more!",
   "description-de": "Mache den Status deines Bots noch besser - Nutze Variablen, Intervalle und vieles mehr!",
@@ -14,5 +13,7 @@
   "config-example-files": [
     "config.json"
   ],
-  "tags": ["bot"]
+  "tags": [
+    "bot"
+  ]
 }

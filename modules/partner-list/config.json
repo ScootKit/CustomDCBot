@@ -2,6 +2,11 @@
   "filename": "config.json",
   "humanname-de": "Konfiguration",
   "humanname-en": "Configuration",
+  "commandsWarnings": {
+    "normal": [
+      "/partner"
+    ]
+  },
   "content": [
     {
       "field_name": "channelID",

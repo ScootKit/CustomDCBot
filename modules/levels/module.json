@@ -2,9 +2,9 @@
   "name": "levels",
   "humanReadableName": "Level-System",
   "author": {
+    "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox",
-    "scnxOrgID": "1"
+    "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/levels",
   "description-en": "Easy to use levelsystem with a lot of customization!",
@@ -18,6 +18,7 @@
     "configs/random-levelup-messages.json",
     "configs/special-levelup-messages.json"
   ],
-  "fa-icon": "far fa-comments",
-  "tags": ["community"]
+  "tags": [
+    "community"
+  ]
 }

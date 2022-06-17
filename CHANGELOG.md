@@ -2,6 +2,26 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.3.0
+* Bumped and fixed dependencies
+* Added code-hunt-module ([#60](https://github.com/SCNetwork/CustomDCBot/pull/60))
+* Remove-Feature for status-roles module ([#61](https://github.com/SCNetwork/CustomDCBot/pull/61))
+* Added color-me module ([#62](https://github.com/SCNetwork/CustomDCBot/pull/62))
+* Added auto react for message authors ([#63](https://github.com/SCNetwork/CustomDCBot/pull/63))
+* Added auto react for category-reactions
+* Few new improvements, support for `commandsWarnings` config parameter
+
+Contributors: [hfgd123](https://github.com/hfgd123), [scderox](https://github.com/scderox)
+
+
+## v3.2.0
+* Added support for timezone-config-parameter
+* Bumped dependencies
+* New modules: status-role, massrole
+* Optimizations for the economy module
+
+Contributors: [jateute](https://github.com/jateute/), [hfgd123](https://github.com/hfgd123), [scderox](https://github.com/scderox)
+
 ## v3.1.1
 * Discord released their new way of editing slash-command-permissions ([read their blog](https://discord.com/blog/slash-commands-permissions-discord-apps-bots)), which made  a lot of features basiclly usless:
   * Commands can now only set a `defaultPermission` value

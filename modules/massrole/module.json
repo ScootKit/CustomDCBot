@@ -13,5 +13,7 @@
   "config-example-files": [
     "configs/strings.json"
   ],
-  "tags": ["administration"]
+  "tags": [
+    "administration"
+  ]
 }

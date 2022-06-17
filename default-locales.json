@@ -50,6 +50,28 @@
       "reload-failed-message": "**FAILED**\n```%r```\n**Please read your log to find more information**\nThe bot will kill itself now, bye :wave:",
       "command-description": "Reloads the configuration"
     },
+    "hunt-the-code": {
+      "admin-command-description": "Manage the current Code-Hunt",
+      "create-code-description": "Create a new code for the current code-hunt",
+      "display-name-description": "Name of the code that will be displayed to user when they redeem the code",
+      "code-description": "Set the code that will be used to redeem it (default: randomly generated)",
+      "code-created": "Code \"%displayName\" successfully created: \"%code\"",
+      "error-creating-code": "Error creating code \"{{displayName}}\". Maybe the entered code is already in the database?",
+      "successful-reset": "Successfully ended the current Code-Hunt-Game - [here](%url)'s your report - save the URL if you want to access it later.",
+      "end-description": "Ends the current Code-Hunt (will clear users and codes and generates a report)",
+      "command-description": "Redeem or see data about the current Code-Hunt",
+      "redeem-description": "Redeem a code you found",
+      "code-redeem-description": "The code you want to redeem",
+      "leaderboard-description": "See the current leaderboard",
+      "profile-description": "See your current count of found codes",
+      "no-codes-found": "No codes redeemed yet ):",
+      "no-users": "No users redeemed codes yet ):",
+      "report-header": "Report for the Hunt-The-Code game on %s",
+      "user-header": "Participating users",
+      "code-header": "Codes",
+      "report-description": "Generates a report",
+      "report": "You can find the report [here](%url)."
+    },
     "config": {
       "checking-config": "Checking configurations...",
       "done-with-checking": "Done with checking. Out of %totalModules modules, %enabled were enabled, %configDisabled were disabled because their configuration was wrong.",
@@ -374,6 +396,22 @@
       "all-users": "All Users",
       "bots": "Bots",
       "humans": "Humans"
+    },
+    "status-role": {
+      "fulfilled": "Status-role condition is fulfilled",
+      "not-fulfilled": "Status-role condition is no longer fulfilled"
+    },
+    "color-me": {
+      "create-log-reason": "%user redeemed their boosting-rewards by requesting the creation of this role",
+      "edit-log-reason": "%user edited their boosting-reward-role",
+      "delete-unboost-log-reason": "%user stopped boosting, so their role got deleted",
+      "delete-manual-log-reason": "%user deleted their role manually",
+      "command-description": "Request a Custom role as a reward for boosting. This has a cooldown of 24 hours",
+      "manage-subcommand-description": "Create or edit your custom role",
+      "name-option-description": "The name of your custom role",
+      "color-option-description": "The color of your custom role",
+      "remove-subcommand-description": "Remove your custom role",
+      "confirm-option-remove-description": "Do you really want to delete your custom role? This will not reset any running cooldowns"
     }
   }
 }
