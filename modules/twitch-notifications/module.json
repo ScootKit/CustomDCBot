@@ -1,7 +1,7 @@
 {
   "name": "twitch-notifications",
   "author": {
-    "name": "ja.teute",
+    "name": "jateute",
     "link": "https://github.com/jateute",
     "scnxOrgID": "4"
   },
@@ -10,6 +10,7 @@
   "events-dir": "/events",
   "models-dir": "/models",
   "config-example-files": [
-    "configs/config.json"
+    "configs/config.json",
+    "configs/streamers.json"
   ]
 }

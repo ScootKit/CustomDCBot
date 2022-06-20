@@ -327,7 +327,8 @@
     },
     "twitch-notifications": {
       "channel-not-found": "Channel with ID %c could not be found",
-      "user-not-on-twitch": "Could not find user %u on twitch"
+      "user-not-on-twitch": "Could not find user %u on twitch",
+      "message-not-found": "The Message for the Streamer %s is invalid"
     },
     "economy-system": {
       "work-earned-money": "The user %u gained %m %c by working",
