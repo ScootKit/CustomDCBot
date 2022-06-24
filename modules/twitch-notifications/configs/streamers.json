@@ -1,0 +1,64 @@
+{
+  "filename": "streamers.json",
+  "humanname-de": "Streamers",
+  "humanname-en": "Streamers",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "liveMessage",
+      "humanname-de": "Live-Nachricht",
+      "humanname-en": "Live-Messages",
+      "default-en": "Hey, %streamer% is live on Twitch streaming %game%! Check it out: %url%",
+      "default-de": "Hi, %streamer% ist Live auf Twitch und streamt %game%! Jetzt anschauen: %url%",
+      "type": "string",
+      "allowEmbed": true,
+      "description-en": "Message that gets send if the streamer goes live",
+      "description-de": "Nachricht, die gesendet wird, wenn ein Streamer anfängt zu streamen",
+      "params-en": [
+        {
+          "name": "%streamer%",
+          "description": "Name of the Streamer"
+        },
+        {
+          "name": "%game%",
+          "description": "Game which is streamed"
+        },
+        {
+          "name": "%url%",
+          "description": "Link to the stream"
+        }
+      ],
+      "params-de": [
+        {
+          "name": "%streamer%",
+          "description": "Name des Streamers"
+        },
+        {
+          "name": "%game%",
+          "description": "Spiel, welches gestreamt wird"
+        },
+        {
+          "name": "%url%",
+          "description": "Link zum Twitch-Stream"
+        }
+      ]
+    },
+    {
+      "field_name": "liveMessageChannel",
+      "humanname-en": "Channel",
+      "default": "",
+      "type": "channelID",
+      "description-en": "Channel in which live-message should get sent",
+      "description-de": "Kanal, in welchen Benachrichtigung gesendet werden soll"
+    },
+    {
+      "field_name": "streamer",
+      "humanname-en": "Streamer",
+      "humanname-de": "Streamer",
+      "default": "",
+      "type": "string",
+      "description-en": "Streamer where a notification should send when they start streaming",
+      "description-de": "Steamer, bei denen eine Benachrichtigung gesendet werden soll, wenn sie anfangen, zu streamen"
+    }
+  ]
+}
