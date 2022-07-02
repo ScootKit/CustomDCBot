@@ -10,7 +10,7 @@ const {localize} = require('../../../src/functions/localize');
 /**
  * General program
  * @param {Client} client Discord js Client
- * @param {object} apiClient Twitch API Client
+ * @param {ApiClient} apiClient Twitch API Client
  * @private
  */
 function twitchNotifications(client, apiClient) {
@@ -26,7 +26,7 @@ function twitchNotifications(client, apiClient) {
      * @returns {*}
      * @private
      */
-    function sendMsg(username, game, thumbnailUrl, channelID, i) {
+    function sendMsg(username, game, thumbnailUrl, channelID, title, i) {
         const channel = client.channels.cache.get(channelID);
         if (!channel) return client.logger.fatal(`[twitch-notifications] ` + localize('twitch-notifications', 'channel-not-found', {c: channelID}));
         if (!streamers[i]['liveMessage']) return client.logger.fatal(`[twitch-notifications] ` + localize('twitch-notifications', 'message-not-found', {s: username}));
@@ -34,14 +34,15 @@ function twitchNotifications(client, apiClient) {
             '%streamer%': username,
             '%game%': game,
             '%url%': `https://twitch.tv/${username.toLowerCase()}`,
-            '%thumbnailUrl': thumbnailUrl
+            '%thumbnailUrl%': thumbnailUrl,
+            '%title%': title
         }));
     }
 
     /**
      * Checks if the streamer is live
      * @param {string} userName Name of the Streamer
-     * @returns {object}
+     * @returns {HelixStream}
      * @private
      */
     async function isStreamLive(userName) {
@@ -73,11 +74,11 @@ function twitchNotifications(client, apiClient) {
                 name: value.streamer.toLowerCase(),
                 startedAt: stream.startDate.toString()
             });
-            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], index);
+            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
         } else if (stream !== null && stream.startDate.toString() !== streamer.startedAt) {
             streamer.startedAt = stream.startDate.toString();
             streamer.save();
-            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], index);
+            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
         }
     }
 }

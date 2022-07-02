@@ -26,6 +26,14 @@
         {
           "name": "%url%",
           "description": "Link to the stream"
+        },
+        {
+          "name": "%title%",
+          "description": "Title of the Stream"
+        },
+        {
+          "name": "%thumbnailUrl%",
+          "description": "The Link to the thumbnail of the Stream"
         }
       ],
       "params-de": [
@@ -40,6 +48,14 @@
         {
           "name": "%url%",
           "description": "Link zum Twitch-Stream"
+        },
+        {
+          "name": "%title%",
+          "description": "Titel des Streams"
+        },
+        {
+          "name": "%thumbnailUrl%",
+          "description": "Link zum Thumbnail des Streams"
         }
       ]
     },
