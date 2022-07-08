@@ -106,7 +106,7 @@ const commands = [];
 db.authenticate().then(async () => {
     if (config.timezone !== process.env.TZ) {
         process.env.TZ = config.timezone;
-        logger.info(`Successfully set timezone to ${config.timezone}. The time is ${new Date().toLocaleString(client.locale)}.`);
+        logger.info(`Successfully set timezone to ${config.timezone}. The time is ${new Date().toLocaleString(client.locale)}.`)
     }
     if (scnxSetup) client.scnxHost = client.config.scnxHostOverwirde || 'https://scnx.app';
     await loadModelsInDir('/src/models');
@@ -161,6 +161,7 @@ db.authenticate().then(async () => {
     client.emit('botReady');
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     logger.info(localize('main', 'bot-ready'));
+    if (client.scnxSetup) client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
     if (client.logChannel) client.logChannel.send('🚀 ' + localize('main', 'bot-ready'));
     await checkForUpdates(client);
 });
@@ -198,7 +199,7 @@ async function syncCommandsIfNeeded() {
         if (!c.module) return true;
         return client.modules[c.module].enabled;
     });
-    const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch().catch(async () => {
+    const oldCommands = await (config.syncCommandGlobally ? client.application : await client.guilds.fetch(config.guildID)).commands.fetch().catch(async () => {
         if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
             type: 'CORE_FAILURE',
             errorDescription: 'commands_sync_failed',
@@ -269,7 +270,18 @@ async function syncCommandsIfNeeded() {
     }
 
     if (needSync) {
-        await client.application.commands.set(ranCommands, config.guildID).catch(async (e) => {
+        await client.application.commands.set(ranCommands, config.syncCommandGlobally ? null : config.guildID).catch(async (e) => {
+            logger.debug(JSON.stringify(enabledCommands), e);
+            console.log(e);
+            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+                type: 'CORE_FAILURE',
+                errorDescription: 'commands_sync_failed',
+                errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
+            });
+            logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
+            process.exit(1);
+        });
+        await client.application.commands.set([], config.syncCommandGlobally ? config.guildID : null).catch(async (e) => {
             logger.debug(JSON.stringify(enabledCommands), e);
             console.log(e);
             if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
