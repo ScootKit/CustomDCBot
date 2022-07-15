@@ -1,4 +1,4 @@
-const {createShopItem, balance, createShopMsg, deleteShopItem, createleaderboard} = require('../economy-system');
+const {createShopItem, editBalance, createShopMsg, deleteShopItem, createleaderboard} = require('../economy-system');
 const {embedType} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
