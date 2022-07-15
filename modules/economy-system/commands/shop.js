@@ -50,7 +50,7 @@ module.exports.subcommands = {
             content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
             ephemeral: true
         });
-        balance(interaction.client, interaction.user.id, 'remove', item.price);
+        await editBalance(interaction.client, interaction.user.id, 'remove', item.price);
         await interaction.member.roles.add(item.role);
         createleaderboard(interaction.client);
         interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': itemName['value']}, {ephemeral: true}));
