@@ -9,6 +9,7 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-delete",
   "events-dir": "/events",
   "config-example-files": [
     "channels.json"
