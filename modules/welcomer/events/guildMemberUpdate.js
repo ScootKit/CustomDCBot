@@ -47,7 +47,7 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
                     '%tag%': newGuildMember.user.tag,
                     '%guildUserCount%': (await client.guild.members.fetch()).size,
                     '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
-                    '%memberProfilePictureUrl%': newGuildMember.user.avatarURL(),
+                    '%memberProfilePictureUrl%': newGuildMember.user.avatarURL() || newGuildMember.user.defaultAvatarURL,
                     '%createdAt%': formatDate(newGuildMember.user.createdAt),
                     '%guildLevel%': client.guild.premiumTier,
                     '%boostCount%%': client.guild.premiumSubscriptionCount,
