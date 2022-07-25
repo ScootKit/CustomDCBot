@@ -34,7 +34,7 @@ function twitchNotifications(client, apiClient) {
             '%streamer%': username,
             '%game%': game,
             '%url%': `https://twitch.tv/${username.toLowerCase()}`,
-            '%thumbnailUrl%': (thumbnailUrl || '').replaceAll('{width}', '1920').replaceAll('{height}', '1080'),
+            '%thumbnailUrl%': (thumbnailUrl + `?_t=${new Date().getTime()}` || '').replaceAll('{width}', '1920').replaceAll('{height}', '1080'),
             '%title%': title
         }));
     }
