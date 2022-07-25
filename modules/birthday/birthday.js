@@ -154,6 +154,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
     ];
 
     if (moduleConf['birthdayEmbed']['thumbnail']) embeds[0].setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
+    if (moduleConf['birthdayEmbed']['image']) embeds[0].setImage(moduleConf['birthdayEmbed']['image']);
     if (!client.strings.disableFooterTimestamp) embeds[0].setTimestamp();
 
     if (messages.last()) await messages.last().edit({embeds});
