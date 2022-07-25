@@ -1,0 +1,26 @@
+{
+  "filename": "channels.json",
+  "humanname-de": "Channels",
+  "humanname-en": "Channels",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "description": "ID of the (text) channel"
+    },
+    {
+      "field_name": "timeout",
+      "default": "5",
+      "type": "integer",
+      "description": "Timeout after which messages sent (if not pinned) in this channel get deleted automatically (in minutes, at least 2 minutes)"
+    },
+    {
+      "field_name": "purgeOnStart",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled every (excluding pinned) message (max 100) in this channel gets deleted when the bot starts"
+    }
+  ]
+}
