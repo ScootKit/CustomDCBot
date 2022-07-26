@@ -1,6 +1,6 @@
 {
   "name": "customdcbot",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Create your own discord bot - Fully customizable and with a lot of features",
   "main": "main.js",
   "repository": {
