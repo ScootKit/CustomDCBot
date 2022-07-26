@@ -304,7 +304,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 logger.error(localize('config', 'channel-not-on-guild', {id: value}));
                 return false;
             }
-            if (!(contentFormat || ['GUILD_TEXT', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']).includes(channel.type)) {
+            if (!(contentFormat || ['GUILD_TEXT', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_VOICE', 'GUILD_STAGE_VOICE']).includes(channel.type)) {
                 logger.error(localize('config', 'channel-invalid-type', {id: value}));
                 return false;
             }
