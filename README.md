@@ -250,6 +250,7 @@ An example config file should include the following things:
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please
       use the build-in function in `src/functions/helpers.js`)
     * `content` (if type === `array`): Type (see `type` above) of every value
+    * `content` (if type === `channelID`): Array of supported [ChannelType](https://discord.js.org/#/docs/discord.js/13.9.1/typedef/ChannelType)s (default: `['GUILD_TEXT', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']`). To improve user experience, we recommend adding information about supported types into `description`. The bot will verify that the channel is inside the bot's guild.
     * `content` (if type === `select`): Array of the possible options
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value

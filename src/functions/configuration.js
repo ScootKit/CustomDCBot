@@ -304,6 +304,10 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 logger.error(localize('config', 'channel-not-on-guild', {id: value}));
                 return false;
             }
+            if (!(contentFormat || ['GUILD_TEXT', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']).includes(channel.type)) {
+                logger.error(localize('config', 'channel-invalid-type', {id: value}));
+                return false;
+            }
             return true;
         case 'roleID':
             if (await (await client.guilds.fetch(client.guildID)).roles.fetch(value)) {
