@@ -19,8 +19,10 @@
       "module-disabled": "Module %m is disabled",
       "command-loaded": "Loaded command %d/%f",
       "command-dir": "Loading commands in %d/%f",
-      "command-sync": "Synced application commands",
-      "command-no-sync-required": "Application commands are up to date - no syncing required",
+      "global-command-sync": "Synced global application commands",
+      "guild-command-sync": "Synced guild application commands",
+      "guild-command-no-sync-required": "Guild application commands are up to date - no syncing required",
+      "global-command-no-sync-required": "Global application commands are up to date - no syncing required",
       "event-loaded": "Loaded events %d/%f",
       "event-dir": "Loading events in %d/%f",
       "model-loaded": "Loaded database model %d/%f",
@@ -95,12 +97,13 @@
       "toggle-data-fetch": "SC Network Release: Toggle-Data fetched successfully"
     },
     "command": {
-      "startup": "The bot is currently starting up. Please try again in a few minutes",
+      "startup": "The bot is currently starting up. Please try again in a few minutes.",
       "not-found": "Command not found",
       "used": "%tag (%id) used command /%c %g %s",
       "message-used": "%tag (%id) used command %p%c",
       "execution-failed": "Execution of command /%c %g %s failed: %e",
       "message-execution-failed": "Execution of command %p%c failed: %e",
+      "wrong-guild": "This command is only available on the server **%g**.",
       "autcomplete-execution-failed": "Execution of auto-complete on command /%c %g %s with option %f failed: %e",
       "execution-failed-message": "**🔴 Command execution failed 🔴**\nThis is not intended and can have multiple reasons.\n\nThe bot reported this issue, if this feature isn't disabled in the configuration, to the bot-developer. No further actions are required from your part. If the developer has some follow-up-questions and you are a member of the [SC Network Discord](<https://sc-net.work/dc>), the may reach out to you.",
       "error-giving-role": "An error occurred when trying to giving to give your your roles ):",
@@ -414,6 +417,31 @@
       "color-option-description": "The color of your custom role",
       "remove-subcommand-description": "Remove your custom role",
       "confirm-option-remove-description": "Do you really want to delete your custom role? This will not reset any running cooldowns"
+    },
+    "tickets": {
+      "channel-not-found": "Ticket-Create-Channel could not be found",
+      "existing-ticket": "You already have a ticket open: %c",
+      "ticket-created-audit-log": "%u created a new ticket by clicking the button",
+      "ticket-created": "Successfully created ticket and notified staff. Head over to it: %c",
+      "new-ticket-embed-title": "📥 New ticket #%i",
+      "new-ticket-embed-user": "👤 User",
+      "new-ticket-embed-info": "ℹ️ Information",
+      "close-info": "Your issue got solved? Click the button below. You can always find this message pinned.",
+      "no-admin-pings": "No pings configured. Check your configuration to ping your staff.",
+      "ticket-closed-successfully": "Closed ticket successfully. This channel will be deleted in a few seconds, thanks for reaching out to our support.",
+      "ticket-closed-audit-log": "%u closed ticket",
+      "closing-ticket": "Closing ticket as requested by %u...",
+      "could-not-dm": "Could not DM %u: %r",
+      "no-log-channel": "Log-Channel not found",
+      "ticket-log-embed-title": "📎 Ticket %i closed",
+      "ticket-with-user": "👤 Ticket-User",
+      "ticket-log": "Ticket-Log",
+      "ticket-log-value": "Transcript with %n messages can be found [here](%u).",
+      "closed-by": "👷 Ticket closed by",
+      "ticket-type": "☕ Ticket-Topic"
+    },
+    "auto-delete": {
+      "could-not-fetch-channel": "Could not fetch channel with ID %c"
     }
   }
 }
