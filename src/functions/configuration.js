@@ -281,6 +281,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
     const {client} = require('../../main');
     switch (type) {
         case 'integer':
+            if (parseInt(value) === 0) return true;
             return !!parseInt(value);
         case 'string':
         case 'timezone': // Timezones can not be checked correctly for their type currently.
