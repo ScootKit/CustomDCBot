@@ -391,7 +391,10 @@ module.exports.reloadConfig = async function (client) {
      */
     client.emit('botReady');
 
-    if (client.scnxSetup) client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+    if (client.scnxSetup) {
+        client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+        await require('./scnx-integration').verifyCustomCommands(client);
+    }
 
     return res;
 };
