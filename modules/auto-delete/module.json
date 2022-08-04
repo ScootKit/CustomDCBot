@@ -12,7 +12,8 @@
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-delete",
   "events-dir": "/events",
   "config-example-files": [
-    "channels.json"
+    "channels.json",
+    "voice-channels.json"
   ],
   "tags": [
     "administration"
