@@ -1,0 +1,27 @@
+{
+  "filename": "voice-channels.json",
+  "humanname-de": "Voice-Channel",
+  "humanname-en": "Voice-Channels",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "content": "GUILD_VOICE",
+      "description": "ID of the (voice) channel"
+    },
+    {
+      "field_name": "timeout",
+      "default": "5",
+      "type": "integer",
+      "description": "Timeout after which the messages of a Voice-Channel are deleted after the last member left the channel (in minutes). Entering '0' will result in an instant deletion."
+    },
+    {
+      "field_name": "purgeOnStart",
+      "default": false,
+      "type": "boolean",
+      "description": "If enabled every message (max 100) in this channel gets deleted when the bot starts and no one is in the channel"
+    }
+  ]
+}
