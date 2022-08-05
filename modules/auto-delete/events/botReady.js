@@ -31,6 +31,7 @@ module.exports.run = async function (client) {
         const dcVoiceChannel = await client.channels.fetch(voiceChannel.channelID).catch(() => {});
         if (dcVoiceChannel.members.size) return;
         if (!dcVoiceChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: voiceChannel.channelID})}`);
+        if (dcVoiceChannel.members.size === 0) continue;
 
         dcVoiceChannel.bulkDelete(await dcVoiceChannel.messages.fetch(), true);
     }
