@@ -29,7 +29,6 @@ module.exports.run = async function (client) {
         if (!voiceChannel.purgeOnStart) continue;
 
         const dcVoiceChannel = await client.channels.fetch(voiceChannel.channelID).catch(() => {});
-        if (dcVoiceChannel.members.size) return;
         if (!dcVoiceChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: voiceChannel.channelID})}`);
         if (dcVoiceChannel.members.size === 0) continue;
 
