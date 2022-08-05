@@ -4,8 +4,8 @@ module.exports.run = async function (client, oldState) {
 
     const voiceChannels = client.configurations['auto-delete']['voice-channels'];
 
-    const channelConfigEntry = {...voiceChannels.find((vc) => oldState.channelId === vc.channelID)};
-    if (!channelConfigEntry.channelID) return;
+    const channelConfigEntry = voiceChannels.find((vc) => oldState.channelId === vc.channelID);
+    if (!channelConfigEntry) return;
 
     const channel = await client.channels.fetch(channelConfigEntry.channelID);
     if (!channel) {
