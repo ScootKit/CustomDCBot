@@ -38,6 +38,8 @@ module.exports.run = async function (client) {
             return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: voiceChannel.channelID})}`);
         }
         if(!channelMessages.size === 0) continue;
+
+        dcVoiceChannel.bulkDelete(channelMessages, true);
     }
 };
 
