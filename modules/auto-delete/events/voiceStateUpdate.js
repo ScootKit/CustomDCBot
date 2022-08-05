@@ -7,9 +7,9 @@ module.exports.run = async function (client, oldState) {
     const channelConfigEntry = voiceChannels.find((vc) => oldState.channelId === vc.channelID);
     if (!channelConfigEntry) return;
 
-    const channel = await client.channels.fetch(channelConfigEntry.channelID);
+    const channel = await client.channels.fetch(channelConfigEntry.channelID).catch(()=>{});
     if (!channel) {
-        return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channel.channelID})}`);
+        return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channelConfigEntry.channelID})}`);
     }
     if (channel.members.size) return;
 
