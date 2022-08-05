@@ -16,11 +16,11 @@ module.exports.run = async function (client) {
         const dcChannel = await client.channels.fetch(channel.channelID).catch(() => {});
         if (!dcChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channel.channelID})}`);
 
-        const channelMessages = await dcChannel.messages.fetch().catch(()=>{});
-        if(!channelMessages){
+        const channelMessages = await dcChannel.messages.fetch().catch(() => {});
+        if (!channelMessages) {
             return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: channel.channelID})}`);
         }
-        if(!channelMessages.size === 0) continue;
+        if (!channelMessages.size === 0) continue;
 
         dcChannel.bulkDelete(channelMessages.filter(m => !m.pinned && m.deletable), true);
     }
@@ -36,7 +36,7 @@ module.exports.run = async function (client) {
         if (!channelMessages) {
             return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: voiceChannel.channelID})}`);
         }
-        if(!channelMessages.size === 0) continue;
+        if (!channelMessages.size === 0) continue;
 
         dcVoiceChannel.bulkDelete(channelMessages, true);
     }
