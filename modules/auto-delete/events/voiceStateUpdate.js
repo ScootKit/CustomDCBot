@@ -17,6 +17,8 @@ module.exports.run = async function (client, oldState) {
     if(!channelMessages){
         return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: channelConfigEntry.channelID})}`);
     }
+    if(channelMessages.size === 0) return;
+
     setTimeout(async() => {
         channel.bulkDelete(await channel.messages.fetch(), true).catch(() => {});
     }, parseInt(channelConfigEntry.timeout * 1000 * 60));
