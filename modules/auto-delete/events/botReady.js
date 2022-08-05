@@ -21,6 +21,8 @@ module.exports.run = async function (client) {
             return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: channel.channelID})}`);
         }
         if(!channelMessages.size === 0) continue;
+
+        dcChannel.bulkDelete(channelMessages.filter(m => !m.pinned && m.deletable), true);
     }
 
     for (const voiceChannel of uniqueConfigVoiceChannels) {
