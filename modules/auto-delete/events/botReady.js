@@ -33,7 +33,11 @@ module.exports.run = async function (client) {
         if (!dcVoiceChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: voiceChannel.channelID})}`);
         if (dcVoiceChannel.members.size === 0) continue;
 
-        dcVoiceChannel.bulkDelete(await dcVoiceChannel.messages.fetch(), true);
+        const channelMessages = await voiceChannel.messages.fetch().catch(() => {});
+        if (!channelMessages) {
+            return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: voiceChannel.channelID})}`);
+        }
+        if(!channelMessages.size === 0) continue;
     }
 };
 
