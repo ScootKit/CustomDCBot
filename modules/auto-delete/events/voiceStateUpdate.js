@@ -11,7 +11,7 @@ module.exports.run = async function (client, oldState) {
     if (!channel) {
         return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channelConfigEntry.channelID})}`);
     }
-    if (channel.members.size) return;
+    if (channel.members.size === 0) return;
 
     setTimeout(async() => {
         channel.bulkDelete(await channel.messages.fetch(), true).catch(() => {});
