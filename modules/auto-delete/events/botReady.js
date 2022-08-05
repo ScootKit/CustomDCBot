@@ -15,7 +15,12 @@ module.exports.run = async function (client) {
         if (!channel.purgeOnStart) continue;
         const dcChannel = await client.channels.fetch(channel.channelID).catch(() => {});
         if (!dcChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channel.channelID})}`);
-        dcChannel.bulkDelete((await dcChannel.messages.fetch()).filter(m => !m.pinned && m.deletable), true);
+
+        const channelMessages = await dcChannel.messages.fetch().catch(()=>{});
+        if(!channelMessages){
+            return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: channel.channelID})}`);
+        }
+        if(!channelMessages.size === 0) continue;
     }
 
     for (const voiceChannel of uniqueConfigVoiceChannels) {
