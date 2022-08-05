@@ -1,3 +1,4 @@
+const {localize} = require('../../../src/functions/localize');
 module.exports.run = async function (client, oldState) {
     if (!client.botReadyAt) return;
 
