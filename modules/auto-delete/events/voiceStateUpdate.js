@@ -20,6 +20,6 @@ module.exports.run = async function (client, oldState) {
     if(channelMessages.size === 0) return;
 
     setTimeout(async() => {
-        channel.bulkDelete(await channel.messages.fetch(), true).catch(() => {});
+        channel.bulkDelete(channelMessages, true).catch(() => {});
     }, parseInt(channelConfigEntry.timeout * 1000 * 60));
 };
