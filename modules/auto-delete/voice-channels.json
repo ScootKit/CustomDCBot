@@ -18,10 +18,10 @@
       "field_name": "timeout",
       "default": "5",
       "type": "integer",
-      "humanname-de": "Zeit",
+      "humanname-de": "Timeout",
       "humanname-en": "Timeout",
       "description-en": "Timeout (in minutes) after which the messages in a Voice-Channel are deleted after the last member left the channel. Entering '0' will result in an instant deletion.",
-      "description-de": "Die Zei (in Minuten), nachdem die Nachrichten gelöscht werden, wenn das letzte Mitglied den Sprachkanal verlassen hat. Wenn du eine '0' verwendest, werden die Nachrichten sofort gelöscht."
+      "description-de": "Timeout (in Minuten), nachdem die Nachrichten gelöscht werden, wenn das letzte Mitglied den Sprachkanal verlassen hat. Wenn du eine '0' verwendest, werden die Nachrichten sofort gelöscht."
     },
     {
       "field_name": "purgeOnStart",

@@ -17,10 +17,10 @@
       "field_name": "timeout",
       "default": "5",
       "type": "integer",
-      "humanname-de": "Zeit",
+      "humanname-de": "Timeout",
       "humanname-en": "Timeout",
       "description-en": "Timeout (in minutes) after which the messages in a channel will be deleted.",
-      "description-de": "Die Zei (in Minuten), nachdem die Nachrichten in einem Kanal automatisch gelöscht werden sollen."
+      "description-de": "Timeout (in Minuten), nachdem die Nachrichten in einem Kanal automatisch gelöscht werden sollen."
     },
     {
       "field_name": "purgeOnStart",
