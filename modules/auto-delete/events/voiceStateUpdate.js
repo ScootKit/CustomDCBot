@@ -21,5 +21,5 @@ module.exports.run = async function (client, oldState) {
 
     setTimeout(async() => {
         channel.bulkDelete(channelMessages, true).catch(() => {});
-    }, parseInt(channelConfigEntry.timeout * 1000 * 60));
+    }, parseInt(channelConfigEntry.timeout) * 1000 * 60);
 };
