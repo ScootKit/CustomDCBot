@@ -3,7 +3,8 @@
   "humanReadableName": "Invite-Tracking",
   "author": {
     "scnxOrgID": "1",
-    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
   },
   "description-en": "Track who invited who",
   "description-de": "Track, wer wen eingeladen hat",
@@ -15,5 +16,8 @@
   ],
   "fa-icon": "fa-solid fa-user-plus",
   "on-load-event": "onLoad.js",
-  "tags": ["moderation"]
+  "tags": [
+    "moderation"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/invite-tracking"
 }

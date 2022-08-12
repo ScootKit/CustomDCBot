@@ -5,7 +5,8 @@
   "fa-icon": "fa-solid fa-circle-info",
   "author": {
     "scnxOrgID": "1",
-    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
   },
   "description-en": "Adds info-commands with information about specific parts of your server",
   "description-de": "Fügt viele Info-Commands zu deinen Server hinzu",
@@ -13,5 +14,8 @@
   "config-example-files": [
     "strings.json"
   ],
-  "tags": ["moderation"]
+  "tags": [
+    "moderation"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/info-commands"
 }

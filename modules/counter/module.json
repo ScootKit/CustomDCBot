@@ -7,7 +7,8 @@
   "fa-icon": "fas fa-arrow-up-1-9",
   "author": {
     "scnxOrgID": "1",
-    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
   },
   "events-dir": "/events",
   "models-dir": "/models",
@@ -15,5 +16,8 @@
     "config.json",
     "milestones.json"
   ],
-  "tags": ["fun"]
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/counter"
 }

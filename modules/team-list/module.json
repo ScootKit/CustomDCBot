@@ -14,5 +14,8 @@
   "config-example-files": [
     "config.json"
   ],
-  "tags": ["administration"]
+  "tags": [
+    "administration"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/team-list"
 }

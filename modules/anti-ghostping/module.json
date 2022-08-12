@@ -15,5 +15,6 @@
   ],
   "tags": [
     "moderation"
-  ]
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/anti-ghostping"
 }

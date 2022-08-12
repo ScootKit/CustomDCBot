@@ -7,11 +7,15 @@
   "fa-icon": "fas fa-stream",
   "author": {
     "scnxOrgID": "1",
-    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
   },
   "events-dir": "/events",
   "config-example-files": [
     "channels.json"
   ],
-  "tags": ["administration"]
+  "tags": [
+    "administration"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/channel-stats"
 }
