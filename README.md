@@ -39,8 +39,13 @@ information about that in [this issue](https://github.com/SCNetwork/CustomDCBot/
 
 As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
 product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-, [donate on Patreon](https://patreon.com/scnetwork)
-or on [any other platform](https://github.com/SCNetwork/CustomDCBot?sponsor=1). Thank you so much <3
+, [get a membership](https://membership.sc-network.net) (also on [Patreon](https://patreon.com/scnetwork)), or donate [via Creditcard](https://scnx.app/scam) or [PayPal](https://paypal.me/therealscderox). Thank you so much <3
+
+## Need help?
+Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in the [discussions-tab](https://github.com/SCNetwork/CustomDCBot/discussions). 
+
+## Need something even more custom?
+We are happy to give you a quote for individual requirements. Please email `sales@sc-network.net` with your requirements.  
 
 ### Table of contents
 
