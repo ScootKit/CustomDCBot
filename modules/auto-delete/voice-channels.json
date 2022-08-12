@@ -9,19 +9,28 @@
       "default": "",
       "type": "channelID",
       "content": "GUILD_VOICE",
-      "description": "ID of the (voice) channel"
+      "humanname-de": "Sprachkanal",
+      "humanname-en": "Voice-Channel",
+      "description-en": "The Voice-Channel you want the auto-deleter to clear if there are no channel members left.",
+      "description-de": "Wähle den Sprachkanal aus, den der Bot leeren soll, sobald keine Mitglieder mehr im Sprachkanal sind."
     },
     {
       "field_name": "timeout",
       "default": "5",
       "type": "integer",
-      "description": "Timeout after which the messages of a Voice-Channel are deleted after the last member left the channel (in minutes). Entering '0' will result in an instant deletion."
+      "humanname-de": "Zeit",
+      "humanname-en": "Timeout",
+      "description-en": "Timeout (in minutes) after which the messages in a Voice-Channel are deleted after the last member left the channel. Entering '0' will result in an instant deletion.",
+      "description-de": "Die Zei (in Minuten), nachdem die Nachrichten gelöscht werden, wenn das letzte Mitglied den Sprachkanal verlassen hat. Wenn du eine '0' verwendest, werden die Nachrichten sofort gelöscht."
     },
     {
       "field_name": "purgeOnStart",
       "default": false,
       "type": "boolean",
-      "description": "If enabled every message (max 100) in this channel gets deleted when the bot starts and no one is in the channel"
+      "humanname-de": "Kanal leeren beim Bot Start",
+      "humanname-en": "Purge On Start",
+      "description-en": "If enabled every message (max 100) in this channel gets deleted when the bot starts and no members are left in the channel",
+      "description-de": "Wenn aktiviert, werden alle Nachrichten (max 100) aus dem gewälten Sprachkanal gelöscht (beim Start des Bots), sofern keine Mitglieder in dem Sprachkanal sind."
     }
   ]
 }
