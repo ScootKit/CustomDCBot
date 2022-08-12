@@ -132,6 +132,9 @@
       "humanname-en": "Leaderboard-Channel",
       "default": "",
       "type": "channelID",
+      "content": [
+        "GUILD_TEXT"
+      ],
       "allowNull": true,
       "description-de": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes",
       "description-en": "Wenn gesetzt wird der Bot in diesen Channel eine Nachricht senden, welche die aktuellen Level der Nutzern enthält",

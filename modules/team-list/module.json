@@ -1,0 +1,18 @@
+{
+  "name": "team-list",
+  "humanReadableName-en": "Staff-List",
+  "humanReadableName-de": "Teammitglieder-Liste",
+  "fa-icon": "fa-user-tie",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description-en": "List all your staff and explain team-roles in a always up-to-date embed",
+  "description-de": "Liste alle deine Teammitglieder und erkläre sie in einem immer up-to-date Embed ",
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": ["administration"]
+}

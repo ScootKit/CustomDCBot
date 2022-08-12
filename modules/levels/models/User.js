@@ -1,6 +1,6 @@
 const {DataTypes, Model} = require('sequelize');
 
-module.exports = class User extends Model {
+module.exports = class LevelsUser extends Model {
     static init(sequelize) {
         return super.init({
             userID: {

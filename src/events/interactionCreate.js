@@ -9,22 +9,22 @@ module.exports.run = async (client, interaction) => {
             ephemeral: true
         });
     }
-    if (interaction.isSelectMenu()) {
-        if (interaction.customId === 'select-roles') {
-            try {
-                for (const option of interaction.component.options) {
-                    if (interaction.values.includes(option.value) && !interaction.member.roles.cache.get(option.value)) await interaction.member.roles.add(option.value);
-                    else if (!interaction.values.includes(option.value) && interaction.member.roles.cache.get(option.value)) await interaction.member.roles.remove(option.value);
-                }
-                return await interaction.reply(embedType(client.strings['updated_roles'] || `⚠ Error: Missing string. Please set a string [here](<https://scnx.xyz/guild/${client.guild.id}/bot/config#strings>) under "Roles updated successfully"`, {}, {ephemeral: true}));
-            } catch (e) {
-                client.logger.error('Could not give roles: ' + e);
-                return interaction.reply({content: '⚠ ' + localize('command', 'error-giving-role'), ephemeral: true});
-            }
-        }
+    if (client.guild.id !== interaction.guild.id) {
+        if (interaction.isAutocomplete()) return interaction.respond({});
+        return interaction.reply({
+            content: '⚠ ' + localize('command', 'wrong-guild', {g: client.guild.name}),
+            ephemeral: true
+        });
     }
+    if ((interaction.customId || '').startsWith('cc-') && client.scnxSetup) return require('../functions/scnx-integration').customCommandInteractionClick(interaction);
+    if (interaction.isSelectMenu() && interaction.customId === 'select-roles' && client.scnxSetup) return require('../functions/scnx-integration').handleSelectRoles(client, interaction);
+    if (interaction.isButton() && interaction.customId.startsWith('srb-') && client.scnxSetup) return require('../functions/scnx-integration').handleRoleButton(client, interaction);
     if (!interaction.commandName) return;
     const command = client.commands.find(c => c.name.toLowerCase() === interaction.commandName.toLowerCase());
+    if (!command) {
+        if (client.scnxSetup) return require('./../functions/scnx-integration').customCommandSlashInteraction(interaction);
+        else return interaction.reply({content: '⚠ ' + localize('command', 'not-found'), ephemeral: true});
+    }
     if (command.module && !client.modules[command.module].enabled) return interaction.reply({
         ephemeral: true,
         content: '⚠ ' + localize('command', 'module-disabled', {m: module})
@@ -43,7 +43,14 @@ module.exports.run = async (client, interaction) => {
             if (group) return await command.autoComplete[group][subCommand][focusedOption](interaction);
             else return await command.autoComplete[subCommand][focusedOption](interaction);
         } catch (e) {
-            if (client.captureException) client.captureException(e, {command: command.name, module: command.module, group, subCommand, focusedOption, userID: interaction.user.id});
+            if (client.captureException) client.captureException(e, {
+                command: command.name,
+                module: command.module,
+                group,
+                subCommand,
+                focusedOption,
+                userID: interaction.user.id
+            });
             interaction.client.logger.error(localize('command', 'autcomplete-execution-failed', {
                 e,
                 f: focusedOption,
@@ -55,7 +62,6 @@ module.exports.run = async (client, interaction) => {
         }
     }
     if (!interaction.isCommand()) return;
-    if (!command) return interaction.reply({content: '⚠ ' + localize('command', 'not-found'), ephemeral: true});
     if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions));
     client.logger.debug(localize('command', 'used', {
         tag: interaction.user.tag,
@@ -79,7 +85,13 @@ module.exports.run = async (client, interaction) => {
         else await command.subcommands[subCommand](interaction);
         if (command.run) await command.run(interaction);
     } catch (e) {
-        if (client.captureException) client.captureException(e, {command: command.name, module: command.module, group, subCommand, userID: interaction.user.id});
+        if (client.captureException) client.captureException(e, {
+            command: command.name,
+            module: command.module,
+            group,
+            subCommand,
+            userID: interaction.user.id
+        });
         interaction.client.logger.error(localize('command', 'execution-failed', {
             e,
             c: command.name,

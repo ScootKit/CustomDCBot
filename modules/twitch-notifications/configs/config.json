@@ -2,6 +2,7 @@
   "filename": "config.json",
   "humanname-de": "Konfiguration",
   "humanname-en": "Configuration",
+  "hidden": true,
   "content": [
     {
       "field_name": "twitchClientID",

@@ -10,10 +10,9 @@
   "description-en": "Simple module to manage the roles of many members at once!",
   "description-de": "Einfaches Modul, um die Rollen vieler Nutzer gleichzeitig zu verwalten!",
   "commands-dir": "/commands",
+  "fa-icon": "fa-solid fa-users-viewfinder",
   "config-example-files": [
     "configs/strings.json"
   ],
-  "tags": [
-    "administration"
-  ]
+  "tags": ["administration"]
 }

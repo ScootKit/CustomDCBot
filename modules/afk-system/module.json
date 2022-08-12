@@ -1,0 +1,21 @@
+{
+  "name": "afk-system",
+  "humanReadableName-en": "AFK-System",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description-en": "Allow users to set their AFK-Status and notify other users if they try to reach them",
+  "description-de": "Erlaubt es deinen Nutzern, ihren AFK-Status zu setzen und benachrichtigt andere Nutzer, wenn sie diesen versuchen zu erreichen",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "tools"
+  ],
+  "fa-icon": "fas fa-right-from-bracket"
+}

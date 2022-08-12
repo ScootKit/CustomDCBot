@@ -4,8 +4,21 @@
  */
 const {client} = require('../../main');
 const jsonfile = require('jsonfile');
+const fs = require('fs');
 
-const locals = jsonfile.readFileSync(`${__dirname}/../../default-locales.json`);
+const locals = {};
+loadLocale('en');
+
+/**
+ * Loads a locale file
+ * @private
+ * @param {String} locale Locale to load
+ */
+function loadLocale(locale) {
+    if (locals[locale]) return;
+    if (!fs.existsSync(`${__dirname}/../../locales/${locale}.json`)) locale = 'en';
+    locals[locale] = jsonfile.readFileSync(`${__dirname}/../../locales/${locale}.json`);
+}
 
 /**
  * Gets the translation for a string
@@ -15,6 +28,8 @@ const locals = jsonfile.readFileSync(`${__dirname}/../../default-locales.json`);
  * @return {String} Translation in the user's language
  */
 function localize(file, string, replace = {}) {
+    loadLocale(client.locale);
+    if (!locals[client.locale]) client.locale = 'en';
     if (!locals[client.locale][file]) locals[client.locale][file] = [];
     let rs = locals[client.locale][file][string];
     if (!rs) rs = locals['en'][file][string];

@@ -1,7 +1,7 @@
 const {embedType} = require('../../../src/functions/helpers');
 module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
-    if (msg.interaction || msg.system || !msg.guild || msg.guild.id !== client.config.guildID) return;
+    if (msg.interaction || msg.system || !msg.author || !msg.guild || msg.guild.id !== client.config.guildID) return;
     await checkChannel(msg);
     await checkMembers(msg);
     await checkCategory(msg);
@@ -86,8 +86,8 @@ async function checkMembersReply(msg) {
  */
 async function checkAuthor(msg) {
     const moduleConfig = msg.client.configurations['auto-react']['config'];
-    if (!moduleConfig.authors[msg.member.id]) return;
-    moduleConfig.authors[msg.member.id].split('|').forEach(emoji => {
+    if (!moduleConfig.authors[msg.author.id]) return;
+    moduleConfig.authors[msg.author.id].split('|').forEach(emoji => {
         msg.react(emoji).catch(() => {
         });
     });

@@ -4,6 +4,7 @@
   "humanReadableName-de": "Automatische Nachrichten",
   "description-de": "Dieses Modul erlaubt dir es dir, automatisch versenden zu lassen",
   "description-en": "You can - with this module - send automatic messages",
+  "fa-icon": "fas fa-comment-dots",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",

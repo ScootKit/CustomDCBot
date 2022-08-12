@@ -2,6 +2,8 @@
   "filename": "streamers.json",
   "humanname-de": "Streamers",
   "humanname-en": "Streamers",
+  "description-de": "Stelle hier ein, bei welchem Streamer in welchen Channel eine Nachricht gesendet werden soll",
+  "description-en": "Configure here, where for what streamer which message should get send",
   "configElements": true,
   "content": [
     {
@@ -33,7 +35,8 @@
         },
         {
           "name": "%thumbnailUrl%",
-          "description": "The Link to the thumbnail of the Stream"
+          "description": "The Link to the thumbnail of the Stream",
+          "isImage": true
         }
       ],
       "params-de": [
@@ -55,7 +58,8 @@
         },
         {
           "name": "%thumbnailUrl%",
-          "description": "Link zum Thumbnail des Streams"
+          "description": "Link zum Thumbnail des Streams",
+          "isImage": true
         }
       ]
     },

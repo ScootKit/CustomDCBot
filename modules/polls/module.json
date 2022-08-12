@@ -1,0 +1,20 @@
+{
+  "name": "polls",
+  "humanReadableName-de": "Umfragen",
+  "humanReadableName-en": "Polls",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+  },
+  "description-en": "Simple module to create fresh polls on your server!",
+  "description": "Einfaches Modul, um coole Umfragen auf deinem Server zu erstellen",
+  "events-dir": "/events",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "fa-icon": "fas fa-poll",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json"
+  ],
+  "tags": ["community"]
+}

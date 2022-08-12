@@ -5,7 +5,7 @@
  */
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../src/functions/localize');
-const {disableModule} = require('../../src/functions/helpers');
+const {disableModule, truncate} = require('../../src/functions/helpers');
 
 /**
  * Generate the partner-list embed
@@ -36,7 +36,7 @@ async function generatePartnerList(client) {
             sortedByCategory[category].forEach(partner => {
                 string = string + moduleConf['embed']['partner-string'].split('%invite%').join(partner.invLink).split('%name%').join(partner.name).split('%userID%').join(partner.userID).split('%id%').join(partner.id).split('%teamMemberID%').join(partner.teamUserID) + '\n';
             });
-            embed.addField(category, string.length >= 1020 ? string.substr(0, 1020) + '...' : string);
+            embed.addField(category, truncate(string, 1020));
             delete sortedByCategory[category];
         }
     });
@@ -45,7 +45,7 @@ async function generatePartnerList(client) {
         sortedByCategory[category].forEach(partner => {
             string = string + moduleConf['embed']['partner-string'].split('%invite%').join(partner.invLink).split('%name%').join(partner.name).split('%userID%').join(partner.userID).split('%id%').join(partner.id).split('%teamMemberID%').join(partner.teamUserID) + '\n';
         });
-        embed.addField(category, string.length >= 1020 ? string.substr(0, 1020) + '...' : string);
+        embed.addField(category, truncate(string, 1020));
     }
 
     if (partners.length === 0) embed.addField('ℹ ' + localize('partner-list', 'information'), localize('partner-list', 'no-partners'));

@@ -12,10 +12,9 @@
   "description-de": "Verstecke Codes und lasse sie von deinen Nutzern sammeln",
   "commands-dir": "/commands",
   "models-dir": "/models",
+  "fa-icon": "fa-solid fa-tags",
   "config-example-files": [
     "strings.json"
   ],
-  "tags": [
-    "community"
-  ]
+  "tags": ["community"]
 }

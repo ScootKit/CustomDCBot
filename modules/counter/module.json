@@ -1,0 +1,19 @@
+{
+  "name": "counter",
+  "humanReadableName-en": "Count-Game",
+  "humanReadableName-de": "Zähl-Spiel",
+  "description-en": "Allow your users to count together",
+  "description-de": "Erlaubt es deinen Nutzern, zusammen zu zählen!",
+  "fa-icon": "fas fa-arrow-up-1-9",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+  },
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "config.json",
+    "milestones.json"
+  ],
+  "tags": ["fun"]
+}

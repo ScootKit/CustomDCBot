@@ -1,16 +1,23 @@
 {
   "name": "twitch-notifications",
+  "humanReadableName-en": "Twitch-Notifications",
+  "humanReadableName-de": "Twitch-Benachrichtigungen",
+  "fa-icon": "fa-brands fa-twitch",
   "author": {
     "name": "jateute",
     "link": "https://github.com/jateute",
     "scnxOrgID": "4"
   },
-  "openSourceURL": "https://github.com/jateute/CustomDCBot/tree/main/modules/twitch-notifications",
-  "description": "Module that sends a message to a channel, when a streamer goes live on Twitch",
   "events-dir": "/events",
   "models-dir": "/models",
+  "openSourceURL": "https://github.com/jateute/CustomDCBot/tree/main/modules/twitch-notifications",
+  "description-en": "Module that sends a message to a channel, when a streamer goes live on Twitch",
+  "description-de": "Sendet eine Nachricht in einen ausgewählten Channel, wenn ein Streamer Live auf Twitch streamt",
   "config-example-files": [
     "configs/config.json",
     "configs/streamers.json"
+  ],
+  "tags": [
+    "community"
   ]
 }

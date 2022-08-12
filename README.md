@@ -13,13 +13,10 @@ available features we offer:
 
 * Free hosting
 * Custom-Commands
-* Music
-* Temp-Channels
-* Scheduled messages
-* Info-Commands
-* Embed-Messages
-* Tickets
-* Mini-Games
+* Easy-to-use Embed-Editor
+* Send and edit messages in specific channels
+* Easy-to-use Configuration-Editor
+* Human-Readable Issue Reporting - never look at logs again
 * and a modern dashboard
 * and *a lot* more - for free
 
@@ -44,11 +41,6 @@ As mentioned above our business model is to host these bots for servers - it doe
 product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
 , [donate on Patreon](https://patreon.com/scnetwork)
 or on [any other platform](https://github.com/SCNetwork/CustomDCBot?sponsor=1). Thank you so much <3
-
-## Please read this issue before continuing.
-
-This repo does not get any new modules or features
-currently. [Learn more](https://github.com/SCNetwork/CustomDCBot/issues/13).
 
 ### Table of contents
 
@@ -107,6 +99,7 @@ You either input a string (normal discord message), or an embed object with the 
 * `fields`: Fields of the embed, must be an array
   of [EmbedFieldData](https://discord.js.org/#/docs/main/stable/typedef/EmbedFieldData) (optional)
 * `footer`:  Footer value (optional, default: global footer value)
+* `footerImgUrl`:  URL to image of the footer (optional, default: global footer value)
 
 The footer of the embed is global and is defined in your global `strings.json` file. The timestamp is set automatically
 to the current time.
@@ -135,20 +128,40 @@ Every module should
 * Should provide a file with exported functions which other modules can use to manipulate data or perform actions in
   your module (eg: an economy module should provide a file with exported functions like `User.addToBalance()`)
 * Answer with ephemeral messages wherever it makes sense
-* create as few commands as possible (we have a limit to 100 commands in total), so please try to
+* Create as few commands as possible (we have a limit to 100 commands in total), so please try to
   use [Sub-Commands](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups)
   wherever possible (eg: instead of having /ban, /kick, /mute etc, have a /moderate command with sub-commands)
 * Use the newest features of the discord api and discord.js (buttons, selects, etc) if possible
-* process only needed user information and data
+* Process and Store only needed user information and data
+* Support localization (you don't need to translate everything, you only need to support translations, read
+  more [here](#Localization)
 * follow our [terms of service](https://sc-net.work/tos), [Discord's Terms of Service](https://discord.com/tos) and
   the [Discord Developer Terms of Service](https://discord.com/developers/docs/legal). A module should not allow users
   to bypass or break the mentioned documents. This includes but is not limited to Nitro-Only-Features.
+
+#### Localization
+
+We'd like to offer SCNX and this bot in as many languages as possible. Because of this, we highly encourage you to use
+translationable systems in your module.
+
+* Localizations of not-user-editable strings: Use `localize(key, string, replace = {})` from `src/functions/localize.js`
+  to localize strings. Translations of these strings happen
+  on [Weblate]()https://localize.sc-network.net/projects/custombot/locales/
+    * `key`: Key of the string (usually your module name, check out any files in `locales` to get an idea how this
+      works)
+    * `string`: Name of the string
+    * `replace` (optional, object): Will replace `%<key>` in the source string by `<value>`
+* Localizations of configuration-files and user-editable strings: You can specify field-fields like `description`
+  , `default` and more in multiple languages. The bot / dashboard will choose the correct one automatically.
 
 #### module.json
 
 Every module has to contain a `module.json` file with the following content:
 
 * `name` of the module. Should be the same as the name of your dictionary.
+* `humanReadableName`: English name of the module, shown to users
+* `humanReadableName-<lang>`: Replace `<lang>` with any supported language-code (currently: `de`, `en`); Name of the
+  module show to users (fallback order: `humanReadableName-<lang>`, `humanReadableName-en`, `humanReadableName`)
 * `author`
     * `name`: Name of the author
     * `link`: Link to the author
@@ -168,6 +181,7 @@ Every module has to contain a `module.json` file with the following content:
 * `config-example-files` (optional, seriously leave this out when you don't have config files): Array
   of [config-files](#example-config-file) inside your module directory.
 * `tags` (optional): Array of tags.
+* `fa-icon`: Used for matching of icons in our dashboard. We will fill this out for you, please do not set this field.
 
 #### Interaction-Command
 
@@ -222,45 +236,64 @@ An CLI-File should export the following things:
         * `client`: [Client](https://discord.js.org/#/docs/main/stable/class/Client)
         * `cliCommands`: Array of all CLICommands
 
-Note: All you CLI-Commands can also get executed via the API.
+Note: We might allow users to execute CLI-Commands via the Dashboard in future. This is not supported right now.
 
 #### Config-Elements
-Certain configuration may contain an array of multiple objects with different values - these are called "Config-Elements".
 
-To add a new Config-Element to your configuration use `node add-config-element-object.js <Path to example config file> <Path to your config-file>`.
+Certain configuration may contain an array of multiple objects with different values - these are called "
+Config-Elements".
+
+To add a new Config-Element to your configuration
+use `node add-config-element-object.js <Path to example config file> <Path to your config-file>`.
 
 #### Example config-file
 
 An example config file should include the following things:
 
 * `filename`: Name of the generated config file
+* `humanname-<lang>`: Name of the file, shown to users (fallback order: `humanname-<lang>`, `humanname-en`, `filename`)
+* `description-<lang>`: Description of the file, shown to users (fallback order: `humanname-<lang>`, `humanname-en`
+  , `No description, but you can configure <name> here`)
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
-* `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in their discord-server-settings
-  * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
-  * `special`: Array of commands that need special configuration in addition to editing the permissions in the server-settings
-    * `name`: Name of the command
-    * `info`: Key by language; Information about the command; used to explain users what exactly they should do
+* `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
+  their discord-server-settings
+    * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
+    * `special`: Array of commands that need special configuration in addition to editing the permissions in the
+      server-settings
+        * `name`: Name of the command
+        * `info`: Key by language; Information about the command; used to explain users what exactly they should do
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
-    * `default`: Default value
-    * `type`: Can be `channelID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`, `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
+    * `default-<lang>`: Default value of this field (replace `<lang>` with a supported language code),
+      Fallback-Order: `default-<lang>`, `default-en`, `default`
+    * `type`: Can be `channelID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
+      , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
-    * `description`: Short description of this field
+    * `description-<lang>`: Description of this field (replace `<lang>` with a supported language code),
+      Fallback-Order: `description-<lang>`, `description-en`, `description`
+    * `humanname-<lang>`: Name of this field show to users (replace `<lang>` with a supported language code),
+      Fallback-Order: `humanname-<lang>`, `humanname-en`, `humanname`, `field_name`
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please
       use the build-in function in `src/functions/helpers.js`)
     * `content` (if type === `array`): Type (see `type` above) of every value
-    * `content` (if type === `channelID`): Array of supported [ChannelType](https://discord.js.org/#/docs/discord.js/13.9.1/typedef/ChannelType)s (default: `['GUILD_TEXT', 'GUILD_VOICE', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']`). To improve user experience, we recommend adding information about supported types into `description`. The bot will verify that the channel is inside the bot's guild.
+    * `content` (if type === `channelID`): Array of
+      supported [ChannelType](https://discord.js.org/#/docs/discord.js/13.9.1/typedef/ChannelType)s (
+      default: `['GUILD_TEXT', 'GUILD_VOICE', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']`). To improve user
+      experience, we recommend adding information about supported types into `description`. The bot will verify that the
+      channel is inside the bot's guild.
     * `content` (if type === `select`): Array of the possible options
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value
         * `value`: Type (see `type` above) of the value of every value
-    * `params` (if type === `string`, array, optional)
+    * `params-<lang>` (if type === `string`, array, optional, replace `<lang>` with supported language code,
+      Fallback-Order: `params-<lang>`, `params-en`, `params`)
         * `name`: Name of the parameter (e.g. `%mention%`)
         * `description`: Description of the parameter (e.g. `Mention of the user`)
         * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
           is `fieldValue`.
-        * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail of an embed (only if `allowEmbed` is enabled)
+        * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail
+          of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
 
@@ -274,9 +307,19 @@ please push the return value to `client.intervals` to get them removed on `confi
 
 #### Helper-Functions
 
-The bot includes a lot of functions to make your live easier. Please open
-the [DevDoc](https://custombot-devdocs.sc-network.net/) to see all of them.
+The bot includes a lot of functions to make your live easier. Check out the file `src/functions/helpers.js`.
 
-© Simon Csaba, 2020-2021
+### Support for developers
+
+As we earn some money with hosting your modules for users, we have decided to give you some (remember, we need to pay
+for hosting) of this money. Here are the main ways to earn some pocket-cash with developing for SCNX:
+
+* [Open-Source-Developer-Pool](https://faq.scnx.app/open-source-developer-pool/): We give you a monthly amount for each
+  paying server using your module
+* [Bounties](https://faq.scnx.app/open-source-developer-pool/#bounties): We giv you a small amount of money for merged
+  pull-requests and contributions
+  We support a lot of payout-methods, learn more [here](https://faq.scnx.app/scnx-referrals-faq/#payout-methods).
+
+© Simon Csaba, 2020-2022
 
 Love ya <3
