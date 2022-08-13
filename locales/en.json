@@ -301,7 +301,8 @@
     "manage-suggestion-comment-description": "Explain why you made this choice"
   },
   "auto-delete": {
-    "could-not-fetch-channel": "Could not fetch channel with ID %c"
+    "could-not-fetch-channel": "Could not fetch channel with ID %c",
+    "could-not-fetch-messages": "Die Nachrichten im Kanal mit der ID %c konnten nicht gefunden werden"
   },
   "auto-thread": {
     "thread-create-reason": "This thread got created, because you configured auto-thread to do so"
