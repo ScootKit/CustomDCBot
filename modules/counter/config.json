@@ -1,0 +1,72 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "content": [
+    {
+      "field_name": "channels",
+      "default": [],
+      "content": "channelID",
+      "type": "array",
+      "description": "ID of channels with the counter game",
+      "humanname-de": "Kanäle",
+      "description-de": "ID der Kanäle mit dem Zählspiel",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "channelDescription",
+      "default": "Next number %x%",
+      "type": "string",
+      "allowNull": true,
+      "description": "Text which should be set after someone counted (leave blank to disable)",
+      "params": [
+        {
+          "name": "%x%",
+          "description": "Next number users should count"
+        }
+      ],
+      "humanname-de": "Kanalbeschreibung",
+      "description-de": "Text, welcher gesetzt werden soll, nachdem jemand gezählt hat (leer lassen zum deaktivieren)",
+      "params-de": [
+        {
+          "name": "%x%",
+          "description": "Nächste Zahl, welche die Nutzer zählen sollen"
+        }
+      ],
+      "default-de": "Nächste Zahl: %x%"
+    },
+    {
+      "field_name": "success-reaction",
+      "default": "✅",
+      "type": "string",
+      "description": "Reaction which the bot should give when someone counts successfully",
+      "humanname-de": "Erfolgsreaktion",
+      "description-de": "Reaktion welche der Bot geben soll, wenn jemand erfolgreich gezählt hat",
+      "params-de": {},
+      "default-de": "✅"
+    },
+    {
+      "field_name": "wrong-input-message",
+      "default": "⚠ %err%",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "Message that gets send if a user provides an invalid input",
+      "params": [
+        {
+          "name": "%err%",
+          "description": "Description of what they did wrong"
+        }
+      ],
+      "humanname-de": "Nachricht bei falscher Eingabe",
+      "description-de": "Nachricht, welche gesendet wird, wenn ein Nutzer eine ungültige Nachricht sendet",
+      "params-de": [
+        {
+          "name": "%err%",
+          "description": "Beschreibung, was der Nutzer falsch gemacht hat"
+        }
+      ],
+      "default-de": "⚠ %err%"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "auto-thread",
+  "humanReadableName-de": "Automatisches Thread-Erstellen",
+  "humanReadableName-en": "Automatic Thread-Creation",
+  "fa-icon": "fa-regular fa-comment",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description-en": "Automatically creates a thread under each message that gets posted in a selected channel",
+  "description-de": "Erstellt einen Thread unter jeder Nachricht, die in einem bestimmten Channel gesendet wird",
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "administration"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-thread"
+}

@@ -1,0 +1,43 @@
+{
+  "filename": "milestones.json",
+  "humanname-de": "Ziele",
+  "description-de": "Belohne deine Nutzer, wenn diese bestimmte Ziele erreichen",
+  "description-en": "Reward your users, when they reach certain goals",
+  "humanname-en": "Milestones",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "userMessageCount",
+      "default": "",
+      "type": "integer",
+      "description": "Count of valid counter-messages the users has to archive this goal",
+      "humanname-de": "Nachrichtenzahl",
+      "description-de": "Anzahl der gültigen Zähl-Nachrichten, die der Nutzer schreiben muss, um dieses Ziel zu erreichen",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "giveRoles",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "These roles are given to the user if they archive this goal (optional)",
+      "humanname-de": "Rollen",
+      "description-de": "Diese Rollen werden an den Nutzer vergeben, wenn er dieses Ziel erreicht (optional)",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "sendMessage",
+      "default": "",
+      "type": "string",
+      "allowNull": true,
+      "allowEmbed": true,
+      "description": "This message gets send when they archive this goal",
+      "humanname-de": "Nachricht",
+      "description-de": "Diese Nachricht wird gesendet, wenn er dieses Ziel erreicht",
+      "params-de": {},
+      "default-de": ""
+    }
+  ]
+}

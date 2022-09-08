@@ -1,0 +1,265 @@
+{
+  "filename": "config.json",
+  "commandsWarnings": {
+    "special": [
+      {
+        "name": "/moderate",
+        "info": {
+          "en": "Each moderator needs to be able to execute the /moderate command, so set your permissions in your server-settings accordingly. Additionally, moderator need to be entered into their level below.",
+          "de": "Jeder Modator muss den /moderate Befehl ausführen können, bitte konfiguriere das in deinen Server-Einstellungen. Zusätzlich muss jede Moderator-Rolle zu ihrem Level unten manuell eingetragen werden."
+        }
+      }
+    ]
+  },
+  "content": [
+    {
+      "field_name": "logchannel-id",
+      "default": "",
+      "type": "channelID",
+      "description": "Channel-ID of the log channel",
+      "humanname-de": "Log-Kanal",
+      "description-de": "Kanal-ID des Log-Kanals",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "quarantine-role-id",
+      "default": "",
+      "type": "roleID",
+      "description": "ID of the quarantine role",
+      "humanname-de": "Quarantäne-Rolle",
+      "description-de": "ID der Quarantäne-Rolle",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "report-channel-id",
+      "default": "",
+      "type": "channelID",
+      "allowNull": true,
+      "description": "Channel-ID of channel in which reports should get send. (optional, default: logchannel-id)"
+    },
+    {
+      "field_name": "remove-all-roles-on-quarantine",
+      "default": true,
+      "type": "boolean",
+      "description": "If enabled all roles from a user get removed if they get quarantined (they get saved an can be restored with !unquarantine)",
+      "humanname-de": "Entferne alle Rollen bei Quarantäne",
+      "description-de": "Wenn diese Option aktiviert ist, werden alle Rollen eines Nutzers entfernt, wenn er in Quarantäne gesetzt wird (sie werden gespeichert und mit /unquarantine wiederhergestellt)",
+      "params-de": {},
+      "default-de": true
+    },
+    {
+      "field_name": "moderator-roles_level1",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn",
+      "humanname-de": "Moderator-Level 1",
+      "description-de": "ID der Rollen, die folgende Aktionen ausfhren können: Warn",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "moderator-roles_level2",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute",
+      "humanname-de": "Moderator-Level 2",
+      "description-de": "ID der Rollen, die folgende Aktionen ausfhren können: Warn, Mute, Unmute",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "moderator-roles_level3",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear",
+      "humanname-de": "Moderator-Level 3",
+      "description-de": "ID der Rollen, die folgende Aktionen ausfhren können: Warn, Mute, Unmute, Kick, Clear",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "moderator-roles_level4",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear, Ban, Unban",
+      "humanname-de": "Moderator-Level 4",
+      "description-de": "ID der Rollen, die folgende Aktionen ausfhren können: Warn, Mute, Unmute, Kick, Clear, Ban, Unban",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "roles-to-ping-on-report",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of roles that should get pinged in the log-channel when a user reports someone",
+      "humanname-de": "Rollenpings bei Report",
+      "description-de": "Rollen, die im log-Kanal gepingt werden sollen, wenn ein Nutzer jemanden Reportet",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "require_reason",
+      "default": true,
+      "type": "boolean",
+      "description": "Should moderators be required to set a reason?",
+      "humanname-de": "Begründung erzwingen",
+      "description-de": "Sollen Moderatoren verpflichtet werden, eine Begründung anzugeben?",
+      "params-de": {},
+      "default-de": true
+    },
+    {
+      "field_name": "action_on_invite",
+      "default": "mute",
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "quarantine",
+        "ban"
+      ],
+      "description": "What should the bot do if someone posts an invite link?",
+      "humanname-de": "Aktion bei Invite",
+      "description-de": "Was soll der Bot tun, wenn jemand einen Invite sendet?",
+      "params-de": {},
+      "default-de": "mute"
+    },
+    {
+      "field_name": "action_on_scam_link",
+      "default": "none",
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "quarantine",
+        "ban"
+      ],
+      "description": "What should the bot do if someone posts an suspicious or confirmed scam link?",
+      "humanname-de": "Aktion bei Scam-Link",
+      "description-de": "Was soll der Bot tun, wenn jemand einen Link zu einer verdächtigen oder bestätigten Scam-Seite sendet?",
+      "params-de": {},
+      "default-de": "mute"
+    },
+    {
+      "field_name": "scam_link_level",
+      "default": "confirmed",
+      "type": "select",
+      "content": [
+        "confirmed",
+        "suspicious"
+      ],
+      "description": "Select the Level of Scam-Link-Filter. \"confirmed\" only contains verified Scam-Domains, while \"suspicious\" may contain not-harmful domains.",
+      "humanname-de": "Level der Scam-Link-Erkennung",
+      "description-de": "\"confirmed\" enthält nur Scam-Domains, die wirklich als solche verifiziert wurden, während \"suspicious\" auch nicht-gefährdende Domains beinhalten kann",
+      "params-de": {},
+      "default-de": "confirmed"
+    },
+    {
+      "field_name": "whitelisted_channels_for_invite_blocking",
+      "default": [],
+      "type": "array",
+      "content": "channelID",
+      "description": "ID of channels or categories where invite blocking is disabled",
+      "humanname-de": "Erlaubte Kanäle für Invitesperre",
+      "description-de": "Kanäle oder Kategorien, in welchen die Invitesperre deaktiviert ist",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "whitelisted_roles_for_invite_blocking",
+      "default": [],
+      "type": "array",
+      "content": "roleID",
+      "description": "ID of Roles which are allowed to bypass invite blocking",
+      "humanname-de": "Erlaubte Rollen für Invitesperre",
+      "description-de": "Rollen, welche die Invitesperre umgehen dürfen",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "blacklisted_words",
+      "default": [],
+      "type": "array",
+      "content": "string",
+      "description": "Words that are blacklisted",
+      "humanname-de": "Gesperrte Wörter",
+      "description-de": "Wörter, die blockiert sind",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "action_on_posting_blacklisted_word",
+      "default": "mute",
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "ban",
+        "quarantine"
+      ],
+      "description": "What should the bot do if someone posts a blacklisted word?",
+      "humanname-de": "Aktion bei gesperrtem Wort",
+      "description-de": "Was soll der Bot tun, wenn jemand ein gesperrtes Wort sagt?",
+      "params-de": {},
+      "default-de": "mute"
+    },
+    {
+      "field_name": "changeNicknameOnMute",
+      "default": "%nickname%",
+      "description": "The nickname in which the user should be renamed when they get muted",
+      "type": "string",
+      "params": [
+        {
+          "name": "%nickname%",
+          "description": "Original nickname of the user"
+        }
+      ],
+      "humanname-de": "Umbenennung bei mute",
+      "description-de": "Der Nickname, in welchen der Nutzer umbenannt werden soll, wenn er gemuted wird",
+      "params-de": {},
+      "default-de": "%nickname%"
+    },
+    {
+      "field_name": "changeNicknameOnQuarantine",
+      "default": "%nickname%",
+      "description": "The nickname in which the user should be renamed when they get quarantined",
+      "type": "string",
+      "params": [
+        {
+          "name": "%nickname%",
+          "description": "Original nickname of the user"
+        }
+      ],
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "%nickname%"
+    },
+    {
+      "field_name": "automod",
+      "default": {},
+      "description": "You can define here what should happen (options: mute, kick, ban, quarantine) when someone gets x warns. Specify duration by writing :<Duration> after the action.",
+      "content": {
+        "key": "integer",
+        "value": "string"
+      },
+      "type": "keyed",
+      "humanname-de": "Automod",
+      "description-de": "Du kannst hier festlegen, was passieren soll (optionen: mute, kick, ban), wenn jemand x Verwarnungen bekommt. Länge festlegen, indem :<Länge> hinter die Aktion geschrieben wird.",
+      "params-de": {},
+      "default-de": {}
+    }
+  ]
+}

@@ -80,6 +80,7 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
         });
         optionsToKeep.embeds = [emb];
     } else optionsToKeep.embeds = [];
+    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input);
     optionsToKeep.content = input['message'] ? inputReplacer(args, input['message']) : null;
     return optionsToKeep;
 };

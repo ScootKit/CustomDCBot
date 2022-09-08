@@ -1,0 +1,23 @@
+{
+  "name": "temp-channels",
+  "humanReadableName-en": "Temporary channels",
+  "humanReadableName-de": "Temporäre Channel",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description-en": "Allow users to quickly create voice channels by joining a voicechannel",
+  "description-de": "Erlaube es Nutzern, ihren eigenen Voice-Channel zu erstellen, indem sie einem VC joinen",
+  "models-dir": "/models",
+  "events-dir": "/events",
+  "commands-dir": "/commands",
+  "fa-icon": "fas fa-hourglass-half",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "community"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/temp-channels"
+}
