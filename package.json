@@ -24,13 +24,14 @@
     "@haileybot/captcha-generator": "1.7.0",
     "@pixelfactory/privatebin": "2.6.1",
     "@scnetwork/api": "1.0.1",
-    "@twurple/api": "5.2.1",
-    "@twurple/auth": "5.2.1",
+    "@scderox/ikea-name-generator": "1.0.0",
+    "@twurple/api": "5.2.3",
+    "@twurple/auth": "5.2.3",
     "age-calculator": "1.0.0",
     "bs58": "5.0.0",
     "bufferutil": "4.0.6",
     "centra": "2.5.0",
-    "discord.js": "13.10.2",
+    "discord.js": "13.10.3",
     "erlpack": "github:discord/erlpack",
     "fs-extra": "10.1.0",
     "is-equal": "1.6.4",
@@ -39,13 +40,13 @@
     "log4js": "6.6.1",
     "node-schedule": "2.1.0",
     "parse-duration": "1.0.2",
-    "sequelize": "6.21.3",
+    "sequelize": "6.21.6",
     "sqlite3": "5.0.11",
     "stop-discord-phishing": "0.3.1",
     "utf-8-validate": "5.0.9",
     "zlib-sync": "0.1.7"
   },
   "devDependencies": {
-    "eslint": "8.20.0"
+    "eslint": "8.23.0"
   }
 }
