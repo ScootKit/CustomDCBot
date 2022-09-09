@@ -8,19 +8,28 @@
       "field_name": "channelID",
       "default": "",
       "type": "channelID",
-      "description": "ID of the (text) channel"
+      "humanname-de": "Sprachkanal",
+      "humanname-en": "Voice-Channel",
+      "description-en": "The Voice-Channel you want the auto-deleter to clear if there are no channel members left.",
+      "description-de": "Wähle den Sprachkanal aus, den der Bot leeren soll, sobald keine Mitglieder mehr im Sprachkanal sind."
     },
     {
       "field_name": "timeout",
       "default": "5",
       "type": "integer",
-      "description": "Timeout after which messages sent (if not pinned) in this channel get deleted automatically (in minutes, at least 2 minutes)"
+      "humanname-de": "Timeout",
+      "humanname-en": "Timeout",
+      "description-en": "Timeout (in minutes) after which the messages in a channel will be deleted.",
+      "description-de": "Timeout (in Minuten), nachdem die Nachrichten in einem Kanal automatisch gelöscht werden sollen."
     },
     {
       "field_name": "purgeOnStart",
       "default": false,
       "type": "boolean",
-      "description": "If enabled every (excluding pinned) message (max 100) in this channel gets deleted when the bot starts"
+      "humanname-de": "Kanal leeren beim Bot Start",
+      "humanname-en": "Purge On Start",
+      "description-en": "If enabled every (excluding pinned) message (max 100) in this channel gets deleted when the bot starts.",
+      "description-de": "Wenn aktiviert, werden alle (außer angepinnte) Nachrichten (max 100) aus dem gewälten Kanal, beim Start des Bots, gelöscht."
     }
   ]
 }
