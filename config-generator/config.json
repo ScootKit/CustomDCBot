@@ -96,6 +96,15 @@
       "description-de": "Standard Log-Kanal für viele Module. Wird außerdem genutzt, um wesentliche Bot-Informationen zu senden"
     },
     {
+      "field_name": "disableEveryoneProtection",
+      "humanname-en": "Allow @everyone / @here pings",
+      "humanname-de": "@everyone und @here Pings erlauben",
+      "default": false,
+      "type": "boolean",
+      "description-de": "Erlaubt @everyone und @here pings in im Dashboard anpassbaren Nachrichten",
+      "description-en": "Allows @everyone and @here pings for messages configurable in the dashboard"
+    },
+    {
       "field_name": "syncCommandGlobally",
       "default": false,
       "type": "boolean",
