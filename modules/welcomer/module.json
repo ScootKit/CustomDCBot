@@ -7,6 +7,7 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
+  "fa-icon": "fas fa-door-open",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/welcomer",
   "description-en": "Simple module to say \"Hi\" to new members, give them roles automatically and say \"thanks\" to users who boosted",
   "description-de": "Einfaches Modul zum Begrüßen von neuen Usern, zum automatischen Vergeben von Rollen beim Joinen und zum Bedanken bei Boosts.",

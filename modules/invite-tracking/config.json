@@ -1,0 +1,20 @@
+{
+  "filename": "config.json",
+  "commandsWarnings": {
+    "normal": [
+      "/trace-invites"
+    ]
+  },
+  "content": [
+    {
+      "field_name": "logchannel-id",
+      "humanname-en": "Invite-Log-Channel",
+      "humanname-de": "Invite-Log-Kanal",
+      "default": "",
+      "type": "channelID",
+      "description-en": "Channel in which information about new members should get logged (optional)",
+      "description-de": "Kanal, in welchem Informationen über neue Nutzer geloggt werden sollen (optional)",
+      "allowNull": true
+    }
+  ]
+}

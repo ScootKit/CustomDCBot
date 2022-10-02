@@ -1,0 +1,65 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "content": [
+    {
+      "field_name": "sessionEndedSuccessfully",
+      "default": "Welcome back!",
+      "allowEmbed": true,
+      "type": "string",
+      "description": "This message gets send if a user ended their session successfully."
+    },
+    {
+      "field_name": "sessionStartedSuccessfully",
+      "default": "You are afk, have fun!",
+      "allowEmbed": true,
+      "type": "string",
+      "description": "This message gets send if a user started their session successfully."
+    },
+    {
+      "field_name": "afkUserWithReason",
+      "default": "%user% is afk. They gave this reason: \"%reason%\"",
+      "allowEmbed": true,
+      "type": "string",
+      "params": [
+        {
+          "name": "%reason%",
+          "description": "Reason for their absence"
+        },
+        {
+          "name": "%user%",
+          "description": "Mention of the user who is AFK"
+        }
+      ],
+      "description": "This message gets send if a pinged user is AFK and they have given a reason for it"
+    },
+    {
+      "field_name": "afkUserWithoutReason",
+      "default": "%user% is afk.",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "%user%",
+          "description": "Mention of the user who is AFK"
+        }
+      ],
+      "type": "string",
+      "description": "This message gets send if a pinged user is AFK and they have given not any a reason for it"
+    },
+    {
+      "field_name": "autoEndMessage",
+      "default-en": "Welcome back! You are not longer AFK because you wrote a message. You can start a new session with `/afk start` and disable `auto-end` if you don't want your sessions to be ended automatically.",
+      "default-de": "Willkommen zurück! Du bist nun nicht länger AFK, da du eine Nachricht geschrieben hast. Um eine neue Sitzung zu starten gebe bitte `/afk start` ein; solltest du dieses Verhalten deaktivieren wollen, setze außerdem den `auto-end` Parameter.",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "%user%",
+          "description": "Mention of the user who was AFK"
+        }
+      ],
+      "type": "string",
+      "description": "This message gets send if a previously AFK user sends a message"
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 const {getUser, getAutoSyncMembers} = require('@scnetwork/api');
 const {embedType, disableModule} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
-const {AgeFromDateString} = require('age-calculator');
+const {AgeFromDate} = require('age-calculator');
 const {localize} = require('../../src/functions/localize');
 
 /**
@@ -65,6 +65,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
                 id: au.id
             }
         });
+        console.log('AUTO SYNCED', au.id);
         if (u) {
             u.day = au.birthday.day;
             u.month = au.birthday.month;
@@ -154,6 +155,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
     ];
 
     if (moduleConf['birthdayEmbed']['thumbnail']) embeds[0].setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
+    if (moduleConf['birthdayEmbed']['image']) embeds[0].setImage(moduleConf['birthdayEmbed']['image']);
     if (!client.strings.disableFooterTimestamp) embeds[0].setTimestamp();
 
     if (messages.last()) await messages.last().edit({embeds});
@@ -232,7 +234,7 @@ async function getUserStringForMonth(client, channel, month) {
         }
         let dateString = `${user.day}.${month}${user.year ? `.${user.year}` : ''}`;
         if (user.year && !client.configurations['birthday']['config'].disableSync) {
-            const age = new AgeFromDateString(`${user.year}-${month - 1}-${user.day}`).age;
+            const age = new AgeFromDate(new Date(user.year, user.month - 1, user.day)).age;
             if (age < 13 || age > 125) {
                 await user.destroy();
                 continue;

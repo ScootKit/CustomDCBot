@@ -1,0 +1,144 @@
+{
+  "filename": "verification.json",
+  "content": [
+    {
+      "field_name": "enabled",
+      "default": false,
+      "type": "boolean",
+      "description": "If checked, verification on your server will be enabled",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": false
+    },
+    {
+      "field_name": "verification-needed-role",
+      "default": "",
+      "type": "roleID",
+      "allowNull": true,
+      "description": "ID of the role members should be given before they got verified",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "verification-passed-role",
+      "default": "",
+      "allowNull": true,
+      "type": "roleID",
+      "description": "ID of the role members should be given after they got verified successfully",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "verification-log",
+      "default": "",
+      "allowNull": true,
+      "type": "channelID",
+      "description": "ID of the channel where all verification-actions should get logged",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "type",
+      "default": "captcha",
+      "type": "select",
+      "content": [
+        "manual",
+        "captcha"
+      ],
+      "description": "How should the verification process be performed on your server?",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "captcha"
+    },
+    {
+      "field_name": "actionOnFail",
+      "default": "kick",
+      "type": "select",
+      "content": [
+        "kick",
+        "quarantine",
+        "ban",
+        "mute"
+      ],
+      "description": "What should happen if someone fails the verification?",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "kick"
+    },
+    {
+      "field_name": "restart-verification-channel",
+      "default": "",
+      "type": "channelID",
+      "allowNull": true,
+      "description": "(optional) Add support for a channel where users can easily restart their verification process (for example if they had DMs disabled when they tried) and get notified if we couldn't reach them",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "captcha-message",
+      "default": "Welcome! Please verify that you are a human. You have two minutes to complete this.",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets sent to users who need to complete a captcha",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "Welcome! Please verify that you are a human. You have two minutes to complete this."
+    },
+    {
+      "field_name": "manual-verification-message",
+      "default": "Welcome! A human will be verifying your account shortly. I will update you if I have any news.",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets sent to users who need to get verified manually.",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "Welcome! A human will be verifying your account shortly. I will update you if I have any news."
+    },
+    {
+      "field_name": "captcha-failed-message",
+      "default": "It seems like you failed the verification. This is bad, I will have to take moderative actions against you - sorry fellow bot.",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets sent when a user fails the verification",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "It seems like you failed the verification. This is bad, I will have to take moderative actions against you - sorry fellow bot."
+    },
+    {
+      "field_name": "captcha-succeeded-message",
+      "default": "Thanks! We have verified that you are indeed not a bot, so I granted you access to the whole server! Have fun <3",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message gets sent to users when they complete the verification",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "Thanks! We have verified that you are indeed not a bot, so I granted you access to the whole server! Have fun <3"
+    },
+    {
+      "field_name": "verify-channel-first-message",
+      "default": "Welcome! I have send you a DM about your verification-process. Please read it carefully. If you have DMs disabled, please activate them and click the button below. This step is required to join this server.",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message is the introduction message in the verify-channel.",
+      "humanname-de": "",
+      "description-de": "",
+      "params-de": {},
+      "default-de": "Welcome! I have send you a DM about your verification-process. Please read it carefully. If you have DMs disabled, please activate them and click the button below. This step is required to join this server."
+    }
+  ]
+}

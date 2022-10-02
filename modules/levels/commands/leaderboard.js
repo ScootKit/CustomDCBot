@@ -1,4 +1,4 @@
-const {sendMultipleSiteButtonMessage} = require('../../../src/functions/helpers');
+const {sendMultipleSiteButtonMessage, truncate} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
 
@@ -73,11 +73,9 @@ module.exports.run = async function (interaction) {
     } else {
         let userString = '';
         let i = 0;
-        let total = 0;
         for (const user of users) {
             const member = interaction.guild.members.cache.get(user.userID);
             if (!member) continue;
-            total++;
             i++;
             userString = userString + localize('levels', 'leaderboard-notation', {
                 p: i,
@@ -85,11 +83,11 @@ module.exports.run = async function (interaction) {
                 l: user.level,
                 xp: user.xp
             }) + '\n';
-            if (i === total || i === 20) {
-                addSite({
+            if (i === users.filter(u => interaction.guild.members.cache.get(u.userID)).length || i % 20 === 0) {
+                addSite([{
                     name: localize('levels', 'users'),
-                    value: userString
-                });
+                    value: truncate(userString, 1024)
+                }]);
                 userString = '';
             }
         }

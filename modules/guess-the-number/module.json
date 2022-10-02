@@ -1,0 +1,23 @@
+{
+  "name": "guess-the-number",
+  "humanReadableName-en": "Guess the number",
+  "humanReadableName-de": "Errate die Nummer",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description-en": "Select a number and let your users guess",
+  "description-de": "Wähle eine Nummer und lass deine Mitglieder diese erraten",
+  "commands-dir": "/commands",
+  "fa-icon": "fas fa-dice-five",
+  "models-dir": "/models",
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/guess-the-number"
+}

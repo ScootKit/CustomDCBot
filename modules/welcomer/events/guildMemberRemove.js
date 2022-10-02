@@ -31,7 +31,7 @@ module.exports.run = async function (client, guildMember) {
                 '%tag%': guildMember.user.tag,
                 '%guildUserCount%': (await client.guild.members.fetch()).size,
                 '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
-                '%memberProfilePictureUrl%': guildMember.user.avatarURL(),
+                '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
                 '%createdAt%': formatDate(guildMember.user.createdAt),
                 '%guildLevel%': client.guild.premiumTier,
                 '%boostCount%%': client.guild.premiumSubscriptionCount,
@@ -45,11 +45,13 @@ module.exports.run = async function (client, guildMember) {
         }
     });
     if (memberModel && moduleConfig['delete-welcome-message']) {
-        const channel = await guildMember.guild.channels.fetch(memberModel.channelID).catch(() => {});
+        const channel = await guildMember.guild.channels.fetch(memberModel.channelID).catch(() => {
+        });
         if (await timer(client, guildMember.id)) {
             try {
                 await (await channel.messages.fetch(memberModel.messageID)).delete();
-            } catch (e) {}
+            } catch (e) {
+            }
         }
         await moduleModel.destroy({
             where: {

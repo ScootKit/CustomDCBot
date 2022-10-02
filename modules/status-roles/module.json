@@ -14,7 +14,6 @@
   "config-example-files": [
     "configs/config.json"
   ],
-  "tags": [
-    "administration"
-  ]
+  "fa-icon": "fa-solid fa-user-tag",
+  "tags": ["administration"]
 }

@@ -1,0 +1,20 @@
+{
+  "name": "anti-ghostping",
+  "humanReadableName-en": "Anti-Ghostping",
+  "description-en": "This module detects ghost-pings and sends a message if one occurs",
+  "description-de": "Dieses Modul erkennt automatisch Ghost-Pings und schickt eine Nachricht, wenn einer erkannt wird",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "events-dir": "/events",
+  "fa-icon": "far fa-bell-slash",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "moderation"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/anti-ghostping"
+}

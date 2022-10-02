@@ -74,6 +74,8 @@ module.exports.subcommands = {
         const moduleConf = interaction.client.configurations['partner-list']['config'];
         if (interaction.options.getString('name')) partner.name = interaction.options.getString('name');
         if (interaction.options.getString('invite-url')) partner.invLink = interaction.options.getString('invite-url');
+        if (interaction.options.getUser('staff')) partner.teamUserID = interaction.options.getUser('staff').id;
+        if (interaction.options.getUser('owner')) partner.userID = interaction.options.getUser('owner').id;
         if (interaction.options.getString('category')) {
             const member = await interaction.guild.members.fetch(partner.userID).catch(() => {
             });
@@ -194,6 +196,16 @@ module.exports.config = {
                         name: 'category',
                         choices: cats,
                         description: localize('partner-list', 'pedit-category-description')
+                    },
+                    {
+                        type: 'USER',
+                        name: 'owner',
+                        description: localize('partner-list', 'pedit-owner-description')
+                    },
+                    {
+                        type: 'USER',
+                        name: 'staff',
+                        description: localize('partner-list', 'pedit-staff-description')
                     }
                 ]
             },

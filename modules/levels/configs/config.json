@@ -107,6 +107,15 @@
       "description-de": "Wenn aktiviert, werden alle vorherigen Level-Rollen, die ein Nutzer hatte, entfernt, wenn dieser ein neues Level erreicht."
     },
     {
+      "field_name": "reset-on-leave",
+      "hummanname-de": "XP und Level eines Nutzers bei Leave löschen",
+      "hummanname-en": "Delete XP and Level of a user when they leave",
+      "default": false,
+      "type": "boolean",
+      "description-en": "If enabled, all levels and the XP of a user will be deleted, when they leave your server.",
+      "description-de": "Wenn aktiviert, werden alle Level und das XP eines Nutzers gelöscht, wenn er den Server verlässt."
+    },
+    {
       "field_name": "randomMessages",
       "humanname-de": "Zufällige Nachrichten",
       "humanname-en": "Random messages",
@@ -123,6 +132,9 @@
       "humanname-en": "Leaderboard-Channel",
       "default": "",
       "type": "channelID",
+      "content": [
+        "GUILD_TEXT"
+      ],
       "allowNull": true,
       "description-de": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes",
       "description-en": "Wenn gesetzt wird der Bot in diesen Channel eine Nachricht senden, welche die aktuellen Level der Nutzern enthält",

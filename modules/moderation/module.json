@@ -1,0 +1,28 @@
+{
+  "name": "moderation",
+  "humanReadableName-de": "Moderation & Sicherheit",
+  "humanReadableName-en": "Moderation & Security",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "description-de": "Fortgeschrittenes Moderation- und Sicherheit-System mit vielen Funktionen",
+  "description-en": "Advanced security- and moderation-system with tons of features",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/joinGate.json",
+    "configs/strings.json",
+    "configs/antiSpam.json",
+    "configs/antiJoinRaid.json",
+    "configs/verification.json"
+  ],
+  "fa-icon": "fas fa-hammer",
+  "tags": [
+    "moderation"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/moderation"
+}

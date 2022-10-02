@@ -117,10 +117,16 @@ db.authenticate().then(async () => {
     if (scnxSetup) await require('./src/functions/scnx-integration').beforeInit(client);
     await client.login(config.token).catch(async (e) => {
         if (e.code === 'TOKEN_INVALID') {
-            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'invalid_token'});
+            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+                type: 'CORE_FAILURE',
+                errorDescription: 'invalid_token'
+            });
             logger.fatal(localize('main', 'login-error-token'));
         } else if (e.code === 'DISALLOWED_INTENTS') {
-            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'disallowed_intents'});
+            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+                type: 'CORE_FAILURE',
+                errorDescription: 'disallowed_intents'
+            });
             logger.fatal(localize('main', 'login-error-intents', {url: `https://discord.com/developers/applications/`}));
         } else logger.fatal(localize('main', 'login-error', {e}));
         process.exit();
@@ -154,6 +160,10 @@ db.authenticate().then(async () => {
         process.exit(1);
     });
     await loadCommandsInDir('./src/commands');
+    if (client.scnxSetup) {
+        client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+        require('./src/functions/scnx-integration').verifyCustomCommands(client);
+    }
     await syncCommandsIfNeeded();
     client.commands = commands;
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
@@ -198,7 +208,13 @@ async function syncCommandsIfNeeded() {
         if (!c.module) return true;
         return client.modules[c.module].enabled;
     });
-    const oldCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch().catch(async () => {
+
+    /**
+     *  Handele exception on command sync
+     *  @param {Exception} e Exception
+     */
+    async function handleSyncFailure(e) {
+        logger.debug(e);
         if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
             type: 'CORE_FAILURE',
             errorDescription: 'commands_sync_failed',
@@ -206,9 +222,10 @@ async function syncCommandsIfNeeded() {
         });
         logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
         process.exit(1);
-    });
-    let needSync = false;
-    if (oldCommands.size !== enabledCommands.length) needSync = true;
+    }
+
+    const oldGuildCommands = await (await client.guilds.fetch(config.guildID)).commands.fetch().catch(handleSyncFailure);
+    const oldGlobalCommands = await client.application.commands.fetch().catch(handleSyncFailure);
     const ranCommands = []; // Commands with all functions run
     for (const orgCmd of enabledCommands) {
         const command = {...orgCmd};
@@ -224,64 +241,72 @@ async function syncCommandsIfNeeded() {
         ranCommands.push(command);
     }
 
-    if (!needSync) for (const command of ranCommands) {
-        const oldCommand = oldCommands.find(c => c.name === command.name);
-        if (!oldCommand) {
-            needSync = true;
-            break;
-        }
-
-        if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length || oldCommand.defaultPermission !== (typeof command.defaultPermission === 'undefined' ? true : command.defaultPermission)) {
-            needSync = true;
-            break;
-        }
-
-        for (const option of (command.options || [])) {
-            const oldOptionOption = (oldCommand.options || []).find(o => o.name === option.name);
-            if (!oldOptionOption) {
+    /**
+     * Checks if two application commands need to be synced
+     * @param {ApplicationCommands} oldCommands Currently synced commands
+     * @param {ApplicationCommands} commandsToCheck New synced commands
+     * @returns {boolean} Returns true if syncronisation is needed
+     */
+    function commandsNeedSync(oldCommands, commandsToCheck) {
+        let needSync = false;
+        if (oldCommands.size !== commandsToCheck.length) needSync = true;
+        if (!needSync) for (const command of commandsToCheck) {
+            const oldCommand = oldCommands.find(c => c.name === command.name);
+            if (!oldCommand) {
                 needSync = true;
                 break;
             }
-            if (checkOption(oldOptionOption, option)) {
+
+            if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length || oldCommand.defaultPermission !== (typeof command.defaultPermission === 'undefined' ? true : command.defaultPermission)) {
                 needSync = true;
                 break;
             }
-        }
 
-        /**
-         * Checks if two command options are identical
-         * @private
-         * @param {Object<ApplicationCommandOptions>} oldOption Old options
-         * @param {Object<ApplicationCommandOptions>} newOption New options
-         * @returns {Boolean} If synchronisation is needed
-         */
-        function checkOption(oldOption, newOption) {
-            if (oldOption.name !== newOption.name || oldOption.autocomplete !== newOption.autocomplete || oldOption.description !== newOption.description || oldOption.type !== newOption.type || (typeof oldOption.required === 'undefined' ? false : oldOption.required) !== (typeof newOption.required === 'undefined' ? false : newOption.required)) return true;
-            if (!compareArrays(oldOption.choices || [], newOption.choices || [])) return true;
-            if ((oldOption.options || []).length !== (newOption.options || []).length) return true;
-            for (const option of (newOption.options || [])) {
-                const oldOptionOption = (oldOption.options || []).find(o => o.name === option.name);
-                if (!oldOptionOption) return true;
-                if (checkOption(oldOptionOption, option)) return true;
+            for (const option of (command.options || [])) {
+                const oldOptionOption = (oldCommand.options || []).find(o => o.name === option.name);
+                if (!oldOptionOption) {
+                    needSync = true;
+                    break;
+                }
+                if (checkOption(oldOptionOption, option)) {
+                    needSync = true;
+                    break;
+                }
             }
-            return false;
+
+            /**
+             * Checks if two command options are identical
+             * @private
+             * @param {Object<ApplicationCommandOptions>} oldOption Old options
+             * @param {Object<ApplicationCommandOptions>} newOption New options
+             * @returns {Boolean} If synchronisation is needed
+             */
+            function checkOption(oldOption, newOption) {
+                if (oldOption.name !== newOption.name || oldOption.autocomplete !== newOption.autocomplete || oldOption.description !== newOption.description || oldOption.type !== newOption.type || (typeof oldOption.required === 'undefined' ? false : oldOption.required) !== (typeof newOption.required === 'undefined' ? false : newOption.required)) return true;
+                if (!compareArrays(oldOption.choices || [], newOption.choices || [])) return true;
+                if ((oldOption.options || []).length !== (newOption.options || []).length) return true;
+                for (const option of (newOption.options || [])) {
+                    const oldOptionOption = (oldOption.options || []).find(o => o.name === option.name);
+                    if (!oldOptionOption) return true;
+                    if (checkOption(oldOptionOption, option)) return true;
+                }
+                return false;
+            }
         }
+        return needSync;
     }
 
-    if (needSync) {
-        await client.application.commands.set(ranCommands, config.guildID).catch(async (e) => {
-            logger.debug(JSON.stringify(enabledCommands), e);
-            console.log(e);
-            if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
-                type: 'CORE_FAILURE',
-                errorDescription: 'commands_sync_failed',
-                errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
-            });
-            logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
-            process.exit(1);
-        });
-        logger.info(localize('main', 'command-sync'));
-    } else logger.info(localize('main', 'command-no-sync-required'));
+    let guildCommands = config.syncCommandGlobally ? [] : ranCommands;
+    const globalCommands = config.syncCommandGlobally ? ranCommands : [];
+    if (scnxSetup) guildCommands = [...guildCommands, ...await require('./src/functions/scnx-integration').generateCustomSlashCommands(client, guildCommands)];
+    if (commandsNeedSync(oldGuildCommands, guildCommands)) {
+        await client.application.commands.set(guildCommands, config.guildID).catch(handleSyncFailure);
+        logger.info(localize('main', 'guild-command-sync'));
+    } else logger.info(localize('main', 'guild-command-no-sync-required'));
+    if (commandsNeedSync(oldGlobalCommands, globalCommands)) {
+        await client.application.commands.set(globalCommands, null).catch(handleSyncFailure);
+        logger.info(localize('main', 'global-command-sync'));
+    } else logger.info(localize('main', 'global-command-no-sync-required'));
 }
 
 module.exports.syncCommandsIfNeeded = syncCommandsIfNeeded;
@@ -348,7 +373,10 @@ async function loadEventsInDir(dir, moduleName = null) {
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {
-                                    if (client.captureException) client.captureException(e, {module: eData.moduleName, event: eventName});
+                                    if (client.captureException) client.captureException(e, {
+                                        module: eData.moduleName,
+                                        event: eventName
+                                    });
                                     client.logger.error(`Error on event ${(eData.moduleName ? eData.moduleName + '/' : '') + eventName}: ${e}`);
                                 }
                             }
