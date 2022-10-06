@@ -9,7 +9,8 @@
       "humanname-de": "Aktiviert?",
       "description-de": "Aktiviere oder deaktiviere das Join-Gate",
       "params-de": {},
-      "default-de": true
+      "default-de": true,
+      "elementToggle": true
     },
     {
       "field_name": "allUsers",
