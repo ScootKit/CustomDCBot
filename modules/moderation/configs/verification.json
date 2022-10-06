@@ -9,7 +9,8 @@
       "humanname-de": "",
       "description-de": "",
       "params-de": {},
-      "default-de": false
+      "default-de": false,
+      "elementToggle": true
     },
     {
       "field_name": "verification-needed-role",
