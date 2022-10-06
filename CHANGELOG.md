@@ -2,6 +2,9 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.6.1
+* Support for configuration-example-file `content.elementToggle` toggle to improve UX in the SCNX Dashboard
+
 ## v3.5.0
 * Like ten new previously closed-sourced-modules got added
 * Locales-Loading now takes place in splitted files, instead of a big `default-locales.json`
