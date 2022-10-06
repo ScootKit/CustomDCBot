@@ -300,7 +300,8 @@ An example config file should include the following things:
         * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail
           of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
-    * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
+    * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
+    * `elementToggle` (if type === `boolean`): If this option gets turned of, other fields of the config-element / file will not be rendered in the dashboard
 
 #### `botReady`-Event and Config-Reload
 
