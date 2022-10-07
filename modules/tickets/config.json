@@ -93,6 +93,7 @@
       "allowEmbed": true,
       "description-de": "Diese Nachricht wird an den Nutzer gesendet, wenn die entsprechende Option aktiviert ist",
       "description-en": "This message gets send to the user if sendUserDMAfterTicketClose is enabled",
+      "dependsOn": "sendUserDMAfterTicketClose",
       "params-de": [
         {
           "name": "%transcriptURL%",
