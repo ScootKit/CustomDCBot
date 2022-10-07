@@ -140,7 +140,8 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                         '%reason%': reason,
                         '%user%': user.user.tag,
                         '%date%': expiringAt ? formatDate(expiringAt) : null
-                    })).catch(() => {});
+                    })).catch(() => {
+                    });
                     if (victim.bannable) await victim.ban({
                         days: additionalData.days || 0,
                         reason: '[moderation] ' + localize('moderation', 'banned-audit-log-reason', {
@@ -154,7 +155,10 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     victim.user.id = victim.id;
                     await guild.members.ban(victim.id, {
                         days: additionalData.days || 0,
-                        reason: `[moderation] Got banned by ${user.user.tag} because of "${reason}"`
+                        reason: '[moderation] ' + localize('moderation', 'banned-audit-log-reason', {
+                            u: user.user.tag,
+                            r: reason
+                        })
                     });
                 }
                 break;
@@ -175,6 +179,34 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     victim.roles.cache.forEach(role => roles.push(role.id));
                     await moderationAction(client, moduleConfig['automod'][warns.length + 1].split(':')[0], {user: client.user}, victim, `[${localize('moderation', 'auto-mod')}]: ${localize('moderation', 'reached-warns', {w: warns.length + 1})}`, {roles: roles}, moduleConfig['automod'][warns.length + 1].includes(':') ? new Date(new Date().getTime() + durationParser(moduleConfig['automod'][warns.length + 1].split(':')[1])) : null);
                 }
+                break;
+            case 'channel-mute':
+                await additionalData.channel.permissionOverwrites.edit(victim, {SEND_MESSAGES: false}, {
+                    reason: '[moderation] ' + localize('moderation', 'channelmute-audit-log-reason', {
+                        u: user.user.tag,
+                        r: reason
+                    })
+                });
+                await victim.send(embedType(moduleStrings['channel_mute'], {
+                    '%reason%': reason,
+                    '%user%': user.user.tag,
+                    '%channel%': additionalData.channel.toString()
+                })).catch(() => {
+                });
+                break;
+            case 'unchannel-mute':
+                await additionalData.channel.permissionOverwrites.delete(victim, {
+                    reason: '[moderation] ' + localize('moderation', 'unchannelmute-audit-log-reason', {
+                        u: user.user.tag,
+                        r: reason
+                    })
+                });
+                await victim.send(embedType(moduleStrings['remove-channel_mute'], {
+                    '%reason%': reason,
+                    '%user%': user.user.tag,
+                    '%channel%': additionalData.channel.toString()
+                })).catch(() => {
+                });
                 break;
             case 'unwarn':
                 break;

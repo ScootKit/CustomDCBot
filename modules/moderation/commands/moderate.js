@@ -331,6 +331,32 @@ module.exports.subcommands = {
             interaction.reply({ephemeral: true, content: '⚠ ' + r});
         });
     },
+    'channel-mute': async function (interaction) {
+        if (interaction.replied) return;
+        if (!checkRoles(interaction, 2)) return;
+        moderationAction(interaction.client, 'channel-mute', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {channel: interaction.channel}).then(r => {
+            if (r) interaction.reply({
+                ephemeral: true,
+                content: localize('moderation', 'action-done', {i: r.actionID})
+            });
+            else interaction.reply({ephemeral: true, content: '⚠ ' + r});
+        }).catch((r) => {
+            interaction.reply({ephemeral: true, content: '⚠ ' + r});
+        });
+    },
+    'remove-channel-mute': async function (interaction) {
+        if (interaction.replied) return;
+        if (!checkRoles(interaction, 2)) return;
+        moderationAction(interaction.client, 'unchannel-mute', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {channel: interaction.channel}).then(r => {
+            if (r) interaction.reply({
+                ephemeral: true,
+                content: localize('moderation', 'action-done', {i: r.actionID})
+            });
+            else interaction.reply({ephemeral: true, content: '⚠ ' + r});
+        }).catch((r) => {
+            interaction.reply({ephemeral: true, content: '⚠ ' + r});
+        });
+    },
     'lock': async function (interaction) {
         if (interaction.replied) return;
         if (!checkRoles(interaction, 2)) return;
@@ -776,6 +802,46 @@ module.exports.config = {
             type: 'SUB_COMMAND',
             name: 'warn',
             description: localize('moderation', 'moderate-warn-command-description'),
+            options: function (client) {
+                return [{
+                    type: 'USER',
+                    name: 'user',
+                    required: true,
+                    description: localize('moderation', 'moderate-user-description')
+                },
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
+                ];
+            }
+        },
+        {
+            type: 'SUB_COMMAND',
+            name: 'channel-mute',
+            description: localize('moderation', 'moderate-channel-mute-description'),
+            options: function (client) {
+                return [{
+                    type: 'USER',
+                    name: 'user',
+                    required: true,
+                    description: localize('moderation', 'moderate-user-description')
+                },
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
+                ];
+            }
+        },
+        {
+            type: 'SUB_COMMAND',
+            name: 'remove-channel-mute',
+            description: localize('moderation', 'moderate-unchannel-mute-description'),
             options: function (client) {
                 return [{
                     type: 'USER',
