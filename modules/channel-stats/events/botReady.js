@@ -33,6 +33,10 @@ async function channelNameReplacer(client, channel, input) {
     const users = await channel.guild.members.fetch();
     const members = users.filter(u => !u.user.bot);
 
+    /**
+     * Replaces the first member-with-role-count parameters of the input
+     * @private
+     */
     function replaceFirst() {
         if (input.includes('%userWithRoleCount-')) {
             const id = input.split('%userWithRoleCount-')[1].split('%')[0];
