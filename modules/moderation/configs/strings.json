@@ -94,6 +94,48 @@
       "default-de": "You got muted for **%reason%** by %user%!"
     },
     {
+      "field_name": "channel_mute",
+      "default": "You got channel-muted from %channel% for **%reason%** by %user%!",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "Message that gets send to a user when they got muted",
+      "params": [
+        {
+          "name": "%user%",
+          "description": "Tag of the moderator"
+        },
+        {
+          "name": "%reason%",
+          "description": "Reason of the mute"
+        },
+        {
+          "name": "%channel%",
+          "description": "Channel from which the user got muted"
+        }
+      ]
+    },
+    {
+      "field_name": "remove-channel_mute",
+      "default": "Your channel-mute from %channel% got removed because of **%reason%** by %user%!",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "Message that gets send to a user when they got muted",
+      "params": [
+        {
+          "name": "%user%",
+          "description": "Tag of the moderator"
+        },
+        {
+          "name": "%reason%",
+          "description": "Reason of the mute"
+        },
+        {
+          "name": "%channel%",
+          "description": "Channel from which the user got unmuted"
+        }
+      ]
+    },
+    {
       "field_name": "tmpmute_message",
       "default": "You got temporarily muted for **%reason%** by %user%! This action is going to expire on %date%.",
       "type": "string",
