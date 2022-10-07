@@ -83,6 +83,14 @@
         {
           "name": "%currentTime%",
           "description": "Current time and date"
+        },
+        {
+          "name": "%userWithRoleCount-<ID>%",
+          "description": "Count of members with a specific role (replace \"<ID>\" with an actual role-id)"
+        },
+        {
+          "name": "%onlineUserWithRoleCount-<ID>%",
+          "description": "Count of members with a specific role who are online (replace \"<ID>\" with an actual role-id)"
         }
       ],
       "humanname-de": "Kanalname",
@@ -98,10 +106,6 @@
         },
         {
           "name": "%onlineUserCount%",
-          "description": "Anzahl an Nutzern auf dem Server, welche Online sind (Bitte nicht stören oder Online Status)"
-        },
-        {
-          "name": "%onlineMemberCount%",
           "description": "Anzahl an Mitgliedern (keine Bots) auf dem Server, welche Online sind (Bitte nicht stören oder Online Status)"
         },
         {
@@ -151,6 +155,14 @@
         {
           "name": "%currentTime%",
           "description": "Aktuelles Datum und Uhrzeit"
+        },
+        {
+          "name": "%userWithRoleCount-<ID>%",
+          "description": "Anzahl von Nutzern mit einer bestimmen Rolle (bitte \"<ID>\" mit einer echten Rollen-ID ersetzen)"
+        },
+        {
+          "name": "%onlineUserWithRoleCount-<ID>%",
+          "description": "Anzahl von Nutzern mit einer bestimmen Rolle, die online sind (bitte \"<ID>\" mit einer echten Rollen-ID ersetzen)"
         }
       ],
       "default-de": ""
