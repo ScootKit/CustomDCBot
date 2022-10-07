@@ -2,7 +2,7 @@ const {formatDate} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async (client) => {
-    const channels = require(`${client.configDir}/channel-stats/channels.json`);
+    const channels = client.configurations['channel-stats']['channels'];
     for (const channel of channels) {
         const dcChannel = await client.channels.fetch(channel.channelID).catch(() => {
         });
