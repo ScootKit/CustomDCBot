@@ -809,12 +809,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
                 ];
             }
         },
@@ -829,12 +829,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
                 ];
             }
         },
@@ -849,12 +849,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
                 ];
             }
         },
