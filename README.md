@@ -301,7 +301,8 @@ An example config file should include the following things:
           of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
-    * `elementToggle` (if type === `boolean`): If this option gets turned of, other fields of the config-element / file will not be rendered in the dashboard
+    * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file will not be rendered in the dashboard
+    * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in the dashboard
 
 #### `botReady`-Event and Config-Reload
 
