@@ -2,12 +2,12 @@ const {formatDate} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async (client) => {
-    const channels = require(`${client.configDir}/channel-stats/channels.json`);
+    const channels = client.configurations['channel-stats']['channels'];
     for (const channel of channels) {
         const dcChannel = await client.channels.fetch(channel.channelID).catch(() => {
         });
         if (!dcChannel) continue;
-        if (dcChannel.type !== 'GUILD_VOICE') client.logger.warn(`[channel-stats] ` + localize('channel-stats', 'not-voice-channel-info', {
+        if (dcChannel.type !== 'GUILD_VOICE' && dcChannel.type !== 'GUILD_CATEGORY') client.logger.warn(`[channel-stats] ` + localize('channel-stats', 'not-voice-channel-info', {
             c: dcChannel.name,
             id: dcChannel.id,
             t: dcChannel.type
@@ -32,6 +32,29 @@ module.exports.run = async (client) => {
 async function channelNameReplacer(client, channel, input) {
     const users = await channel.guild.members.fetch();
     const members = users.filter(u => !u.user.bot);
+
+    /**
+     * Replaces the first member-with-role-count parameters of the input
+     * @private
+     */
+    function replaceFirst() {
+        if (input.includes('%userWithRoleCount-')) {
+            const id = input.split('%userWithRoleCount-')[1].split('%')[0];
+            if (input.includes(`%userWithRoleCount-${id}%`)) {
+                input = input.replaceAll(`%userWithRoleCount-${id}%`, users.filter(f => f.roles.cache.has(id)).size.toString());
+                replaceFirst();
+            }
+        }
+        if (input.includes('%onlineUserWithRoleCount-')) {
+            const id = input.split('%onlineUserWithRoleCount-')[1].split('%')[0];
+            if (input.includes(`%onlineUserWithRoleCount-${id}%`)) {
+                input = input.replaceAll(`%onlineUserWithRoleCount-${id}%`, users.filter(f => f.roles.cache.has(id) && f.presence && (f.presence || {}).status !== 'offline').size.toString());
+                replaceFirst();
+            }
+        }
+    }
+
+    replaceFirst();
     return input.split('%userCount%').join(users.size)
         .split('%memberCount%').join(members.size)
         .split('%onlineUserCount%').join(users.filter(u => u.presence && (u.presence || {}).status !== 'offline').size)
