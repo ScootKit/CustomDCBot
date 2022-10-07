@@ -7,7 +7,7 @@ module.exports.run = async (client) => {
         const dcChannel = await client.channels.fetch(channel.channelID).catch(() => {
         });
         if (!dcChannel) continue;
-        if (dcChannel.type !== 'GUILD_VOICE') client.logger.warn(`[channel-stats] ` + localize('channel-stats', 'not-voice-channel-info', {
+        if (dcChannel.type !== 'GUILD_VOICE' && dcChannel.type !== 'GUILD_CATEGORY') client.logger.warn(`[channel-stats] ` + localize('channel-stats', 'not-voice-channel-info', {
             c: dcChannel.name,
             id: dcChannel.id,
             t: dcChannel.type
