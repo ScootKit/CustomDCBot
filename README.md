@@ -39,13 +39,18 @@ information about that in [this issue](https://github.com/SCNetwork/CustomDCBot/
 
 As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
 product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-, [get a membership](https://membership.sc-network.net) (also on [Patreon](https://patreon.com/scnetwork)), or donate [via Creditcard](https://scnx.app/scam) or [PayPal](https://paypal.me/therealscderox). Thank you so much <3
+, [get a membership](https://membership.sc-network.net) (also on [Patreon](https://patreon.com/scnetwork)), or
+donate [via Creditcard](https://scnx.app/scam) or [PayPal](https://paypal.me/therealscderox). Thank you so much <3
 
 ## Need help?
-Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in the [discussions-tab](https://github.com/SCNetwork/CustomDCBot/discussions). 
+
+Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in
+the [discussions-tab](https://github.com/SCNetwork/CustomDCBot/discussions).
 
 ## Need something even more custom?
-We are happy to give you a quote for individual requirements. Please email `sales@sc-network.net` with your requirements.  
+
+We are happy to give you a quote for individual requirements. Please email `sales@sc-network.net` with your
+requirements.
 
 ### Table of contents
 
@@ -207,7 +212,8 @@ An interaction-command ("slash command") file has to export the following things
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
-    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command and your command's permissions can not be synced
+    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command and your
+      command's permissions can not be synced
     * `options`:
         * [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
           OR
@@ -272,7 +278,7 @@ An example config file should include the following things:
     * `field_name`: Name of the config field
     * `default-<lang>`: Default value of this field (replace `<lang>` with a supported language code),
       Fallback-Order: `default-<lang>`, `default-en`, `default`
-    * `type`: Can be `channelID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
+    * `type`: Can be `channelID`, `userID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
       , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
     * `description-<lang>`: Description of this field (replace `<lang>` with a supported language code),
