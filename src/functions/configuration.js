@@ -284,6 +284,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             if (parseInt(value) === 0) return true;
             return !!parseInt(value);
         case 'string':
+        case 'imgURL':
         case 'timezone': // Timezones can not be checked correctly for their type currently.
             if (allowEmbed && typeof value === 'object') return true;
             return typeof value === 'string';
