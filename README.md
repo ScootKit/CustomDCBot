@@ -278,7 +278,7 @@ An example config file should include the following things:
     * `field_name`: Name of the config field
     * `default-<lang>`: Default value of this field (replace `<lang>` with a supported language code),
       Fallback-Order: `default-<lang>`, `default-en`, `default`
-    * `type`: Can be `channelID`, `userID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
+    * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
       , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
     * `description-<lang>`: Description of this field (replace `<lang>` with a supported language code),
