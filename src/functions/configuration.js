@@ -160,7 +160,7 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                     }
                     if (field.disableKeyEdits) {
                         for (const content in configElement[field.field_name]) {
-                            if (!field.default[content]) {
+                            if (typeof field.default[content] === 'undefined') {
                                 delete configElement[field.field_name][content];
                                 ow = true;
                             }
@@ -294,6 +294,13 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 if (!errored) errored = !(await checkType(contentFormat, v, null, allowEmbed));
             }
             return !errored;
+        case 'userID':
+            const user = await client.users.fetch(value).catch(() => {});
+            if (!user) {
+                logger.error(localize('config', 'user-not-found', {id: value}));
+                return false;
+            }
+            return true;
         case 'channelID':
             const channel = await client.channels.fetch(value).catch(() => {
             });

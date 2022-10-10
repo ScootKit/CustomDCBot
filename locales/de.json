@@ -66,6 +66,7 @@
         "moduleconf-regeneration": "Modul-Konfiguration wird regeniert, es werden keine Einstellungen überschrieben.",
         "moduleconf-regeneration-success": "Module-Konfiguration wurde regeniert.",
         "channel-not-found": "Kanal mit ID \"%id\" wurde nicht gefunden",
+        "user-not-found": "Discord-Account mit ID \"%id\" wurde nicht gefunden",
         "channel-not-on-guild": "Kanal mit ID \"%id\" ist nicht auf deinem Server",
         "role-not-found": "Rolle mit ID \"%id\" wurde nicht auf deinem Server gefunden",
         "config-reload": "Gesamte Konfiguration wird neugeladen...",

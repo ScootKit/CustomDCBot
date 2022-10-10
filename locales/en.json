@@ -64,6 +64,7 @@
     "moduleconf-regeneration": "Regenerating module configuration, no settings will be overwritten, don't worry.",
     "moduleconf-regeneration-success": "Module configuration regeneration successfully finished.",
     "channel-not-found": "Channel with ID \"%id\" could not be found",
+    "user-not-found": "Discord-User with ID \"%id\" could not be found",
     "channel-not-on-guild": "Channel with ID \"%id\" is not on your guild",
     "channel-invalid-type": "Channel with ID \"%id\" has a type that can not be used for this field",
     "role-not-found": "Role with ID \"%id\" could not be found on your guild",
