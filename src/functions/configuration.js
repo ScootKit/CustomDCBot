@@ -82,9 +82,10 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                 ow = true;
             }
             if (exampleFile.configElements) {
-                if (typeof config[Symbol.iterator] !== 'function') {
-                    client.logger.warn('Called f 239 as work-around for wrong configuration');
-                    config = [];
+                if (!Array.isArray(config)) {
+                    client.logger.warn('Called f 239B (with addition: trying to automatically migrate) as work-around for wrong configuration'); // idk what the fuck this is, so i just added some random stuff to it
+                    if (typeof config === 'object') config = [config];
+                    else config = [];
                 }
                 for (const field of exampleFile.content) {
                     if (client.locale) {
@@ -208,7 +209,7 @@ async function checkBuildInConfig(configName) {
             }));
             ow = true;
         }
-        for (const field of exampleFile.content) {
+        if (!exampleFile.skipContentCheck) for (const field of exampleFile.content) {
             if (!field.field_name) return reject(`One field is missing a name. Please check your config generation files`);
             if (client.locale) {
                 if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
@@ -246,6 +247,7 @@ async function checkBuildInConfig(configName) {
                 }
             }
         }
+        else if (ow) config = exampleFile.default;
         if (ow) {
             jsonfile.writeFile(`${client.configDir}/${configName}`, config, {spaces: 2}, (err => {
                 if (err) {
@@ -279,8 +281,10 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
     const {client} = require('../../main');
     switch (type) {
         case 'integer':
+            if (parseInt(value) === 0) return true;
             return !!parseInt(value);
         case 'string':
+        case 'timezone': // Timezones can not be checked correctly for their type currently.
             if (allowEmbed && typeof value === 'object') return true;
             return typeof value === 'string';
         case 'array':
@@ -301,12 +305,16 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 logger.error(localize('config', 'channel-not-on-guild', {id: value}));
                 return false;
             }
+            if (!(contentFormat || ['GUILD_TEXT', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_VOICE', 'GUILD_STAGE_VOICE']).includes(channel.type)) {
+                logger.error(localize('config', 'channel-invalid-type', {id: value}));
+                return false;
+            }
             return true;
         case 'roleID':
             if (await (await client.guilds.fetch(client.guildID)).roles.fetch(value)) {
                 return true;
             } else {
-                logger.error(localize('config', 'role-not-found'));
+                logger.error(localize('config', 'role-not-found', {id: value}));
                 return false;
             }
         case 'guildID':
@@ -382,6 +390,11 @@ module.exports.reloadConfig = async function (client) {
      * @event Client#botReady
      */
     client.emit('botReady');
+
+    if (client.scnxSetup) {
+        client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+        await require('./scnx-integration').verifyCustomCommands(client);
+    }
 
     return res;
 };

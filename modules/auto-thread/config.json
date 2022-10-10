@@ -1,0 +1,46 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "content": [
+    {
+      "field_name": "channels",
+      "humanname-de": "Kanäle",
+      "humanname-en": "Channels",
+      "default": [],
+      "type": "array",
+      "description-en": "Here you can add channels in which the bot should create a thread under every message",
+      "content": "channelID",
+      "description-de": "Hier kannst du Kanäle hinzufügen, in welchen der Bot automatisch unter jeder Nachricht einen Thread erstellen soll",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "threadName",
+      "type": "string",
+      "default": "Comments",
+      "description": "Name of every thread",
+      "humanname-de": "Threadname",
+      "description-de": "Name jedes Threads",
+      "params-de": {},
+      "default-de": "Kommentare"
+    },
+    {
+      "field_name": "threadArchiveDuration",
+      "type": "select",
+      "default": "MAX",
+      "content": [
+        "MAX",
+        "60",
+        "1440",
+        "4320",
+        "10080"
+      ],
+      "description": "Inactivity after which a thread is automatically archived (in minutes, some values are limited by guild boost level; select \"max\" for the longest possible duration)",
+      "humanname-de": "Archivierungsdauer",
+      "description-de": "Inaktivität nach welcher ein Thread automatisch archiviert wird (in Minutes, manche Werte sind durch das Boostlevel des Servers eingeschränkt; verwende \"max\" für die längstmögliche Dauer)",
+      "params-de": {},
+      "default-de": "MAX"
+    }
+  ]
+}

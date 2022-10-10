@@ -11,6 +11,7 @@
   "description-de": "Einfaches Modul, um Nutzer mit einer eigenen Rolle zu belohnen, die deinen Server boosten!",
   "commands-dir": "/commands",
   "events-dir": "/events",
+  "fa-icon": "fas fa-palette",
   "models-dir": "/models",
   "config-example-files": [
     "configs/config.json",

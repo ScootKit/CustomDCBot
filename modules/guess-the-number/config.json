@@ -1,0 +1,115 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "commandsWarnings": {
+    "special": [
+      {
+        "name": "/guess-the-number",
+        "info": {
+          "en": "You need to first set the permissions in your server settings for this command and after that add them under \"adminRoles\" here.",
+          "de": "Du musst zuerst die Rechte in deinen Server-Einstellungen einstellen und danach diese unter \"AdminRollen\" hinzufügen."
+        }
+      }
+    ]
+  },
+  "content": [
+    {
+      "field_name": "adminRoles",
+      "type": "array",
+      "description": "Every role that can manage game sessions",
+      "default": [],
+      "content": "roleID",
+      "default-de": [],
+      "humanname-de": "Adminrollen",
+      "description-de": "Jede Rolle, welche Spielrunden verwalten kann",
+      "params-de": {}
+    },
+    {
+      "field_name": "startMessage",
+      "default": {
+        "title": "Guess the Number - Game started",
+        "description": "Guess a number between %min% and %max%. Good look!"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "%min%",
+          "description": "Minimal value to guess"
+        },
+        {
+          "name": "%max%",
+          "description": "Maximal value to guess"
+        }
+      ],
+      "humanname-de": "Startnachricht",
+      "description-de": "Nachricht, die am Anfang einer Runde gesendet wird",
+      "params-de": [
+        {
+          "name": "%min%",
+          "description": "Niedrigester möglichster Wert"
+        },
+        {
+          "name": "%max%",
+          "description": "Höchster möglichster Wert"
+        }
+      ],
+      "default-de": {
+        "title": "Errate die Zahl - Das Spiel beginnt",
+        "description": "Errate eine Zahl zwischen %min% und %max%. Viel Glück!"
+      }
+    },
+    {
+      "field_name": "endMessage",
+      "default": {
+        "title": "Guess the Number - Game ended",
+        "description": "Good game everyone!\nThe winner is %winner%.\nThe number was **%number%**.\nThere were around **%guessCount% guesses** in total."
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "%min%",
+          "description": "Minimal value to guess"
+        },
+        {
+          "name": "%max%",
+          "description": "Maximal value to guess"
+        },
+        {
+          "name": "%winner%",
+          "description": "@-mention of the winner"
+        },
+        {
+          "name": "%guessCount%",
+          "description": "Count of guesses in this game session"
+        }
+      ],
+      "humanname-de": "Endnachricht",
+      "description-de": "Nachricht, die am Ende einer Runde gesendet wird",
+      "params-de": [
+        {
+          "name": "%min%",
+          "description": "Niedrigester möglichster Wert"
+        },
+        {
+          "name": "%max%",
+          "description": "Höchster möglichster Wert"
+        },
+        {
+          "name": "%winner%",
+          "description": "@-Erwähnung des Gewinners"
+        },
+        {
+          "name": "%guessCount%",
+          "description": "Anzahl der Versuche in dieser Runde"
+        }
+      ],
+      "default-de": {
+        "title": "Errate die Zahl - Das Spiel ist beendet",
+        "description": "Gutes Spiel!\nDer Gewinner ist %winner%.\nDie Zahl war **%number%**.\nInsgesamt wurde **%guessCount% mal** geraten."
+      }
+    }
+  ]
+}

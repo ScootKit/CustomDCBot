@@ -2,6 +2,26 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.5.0
+* Like ten new previously closed-sourced-modules got added
+* Locales-Loading now takes place in splitted files, instead of a big `default-locales.json`
+* Added documentation about localizable configuration
+* Added information about our Developer-Support-Programs (e.g. Bounties, OSS-Developer-Pool)
+* Added new branch-protection settings and improved certain aspects of the repository
+
+## v3.4.0
+* "Welcomer" can now automatically delete join-messages of users who left the server after joining within 7 days ([#64](https://github.com/SCNetwork/CustomDCBot/pull/64))
+* "auto-react" can now reply to mentions of configured users ([#65](https://github.com/SCNetwork/CustomDCBot/pull/65), [#66](https://github.com/SCNetwork/CustomDCBot/pull/66))
+* Twitch-Notifications now supports Config-Elements ([#67](https://github.com/SCNetwork/CustomDCBot/pull/67))
+* Twitch-Notifications now supports more arguments for messages ([#68](https://github.com/SCNetwork/CustomDCBot/pull/68))
+* Fixed the /shop buy command of economy-Module ([#71](https://github.com/SCNetwork/CustomDCBot/pull/71))
+* Support for timezone type and skipContent file parameter
+* Commands can now optionally be synced globally
+* Made auto-delete-module public
+* Made tickets-module public
+* Several fixes of small bugs in welcomer, levels, birthdays, twitch-notifications and tickets module
+* Support for `content` option on config-fields with type `channelID` to allow editing of allowed types 
+
 ## v3.3.0
 * Bumped and fixed dependencies
 * Added code-hunt-module ([#60](https://github.com/SCNetwork/CustomDCBot/pull/60))

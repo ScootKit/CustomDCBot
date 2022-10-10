@@ -3,12 +3,21 @@
   "description-de": "Generelle Konfiguration deines Bots",
   "humanname-de": "Konfiguration",
   "humanname-en": "Configuration",
+  "filename": "config.json",
   "content": [
     {
       "field_name": "token",
       "default": "yourtokengoeshere",
       "type": "string",
-      "description": "Replace this with your token"
+      "description": "Replace this with your token",
+      "hidden": true
+    },
+    {
+      "field_name": "scnxToken",
+      "default": "yourtokengoeshere",
+      "type": "string",
+      "description": "Replace this with your token",
+      "hidden": true
     },
     {
       "field_name": "prefix",
@@ -24,12 +33,14 @@
       "default": [],
       "type": "array",
       "content": "string",
+      "hidden": true,
       "description": "Bot operators can reload the configuration and perform system relevant actions with this bot. Please only add users you really trust (and yourself of course)"
     },
     {
       "field_name": "guildID",
       "default": "489786377261678592",
       "type": "guildID",
+      "hidden": true,
       "description": "Replace this the id of the guild the bot should work in."
     },
     {
@@ -83,6 +94,24 @@
       "type": "channelID",
       "description-en": "Default log-channel for most modules and used to log relevant information",
       "description-de": "Standard Log-Kanal für viele Module. Wird außerdem genutzt, um wesentliche Bot-Informationen zu senden"
+    },
+    {
+      "field_name": "disableEveryoneProtection",
+      "humanname-en": "Allow @everyone / @here pings",
+      "humanname-de": "@everyone und @here Pings erlauben",
+      "default": false,
+      "type": "boolean",
+      "description-de": "Erlaubt @everyone und @here pings in im Dashboard anpassbaren Nachrichten",
+      "description-en": "Allows @everyone and @here pings for messages configurable in the dashboard"
+    },
+    {
+      "field_name": "syncCommandGlobally",
+      "default": false,
+      "type": "boolean",
+      "humanname-en": "Sync module commands as global commands",
+      "humanname-de": "Speichere Modul-Befehle als Globale-Befehle",
+      "description-en": "If enabled, module-commands will be synced to discord as global commands. They will show up on other servers, but won't work. Syncing can take up to 2 hours, so changes may not be reflected immediately.",
+      "description-de": "Wenn aktiviert, werden Befehle von Modulen als Globale-Befehle zu Discord gesendet. Sie werden auf anderen Servern angezeigt, werden aber nicht funktionieren. Synchronisierung kann bis zu 2 Stunden dauern."
     }
   ]
 }

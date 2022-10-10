@@ -3,18 +3,18 @@
  */
 const {embedType} = require('../../../src/functions/helpers');
 
-const {ApiClient} = require('twitch');
-const {ClientCredentialsAuthProvider} = require('twitch-auth');
+const {ApiClient} = require('@twurple/api');
+const {ClientCredentialsAuthProvider} = require('@twurple/auth');
 const {localize} = require('../../../src/functions/localize');
 
 /**
  * General program
- * @param {object} client Discord js Client
- * @param {object} apiClient Twitch API Client
+ * @param {Client} client Discord js Client
+ * @param {ApiClient} apiClient Twitch API Client
  * @private
  */
 function twitchNotifications(client, apiClient) {
-    const config = client.configurations['twitch-notifications']['config'];
+    const streamers = client.configurations['twitch-notifications']['streamers'];
 
     /**
      * Sends the live-message
@@ -22,33 +22,36 @@ function twitchNotifications(client, apiClient) {
      * @param {string} game Game that is streamed
      * @param {string} thumbnailUrl URL of the thumbnail of the stream
      * @param {number} channelID ID of the live-message-channel
+     * @param {number} i Index of the config-element-object
      * @returns {*}
      * @private
      */
-    function sendMsg(username, game, thumbnailUrl, channelID) {
+    function sendMsg(username, game, thumbnailUrl, channelID, title, i) {
         const channel = client.channels.cache.get(channelID);
         if (!channel) return client.logger.fatal(`[twitch-notifications] ` + localize('twitch-notifications', 'channel-not-found', {c: channelID}));
-        channel.send(embedType(config['liveMessage'], {
+        if (!streamers[i]['liveMessage']) return client.logger.fatal(`[twitch-notifications] ` + localize('twitch-notifications', 'message-not-found', {s: username}));
+        channel.send(embedType(streamers[i]['liveMessage'], {
             '%streamer%': username,
             '%game%': game,
             '%url%': `https://twitch.tv/${username.toLowerCase()}`,
-            '%thumbnailUrl': thumbnailUrl
+            '%thumbnailUrl%': (thumbnailUrl + `?_t=${new Date().getTime()}` || '').replaceAll('{width}', '1920').replaceAll('{height}', '1080'),
+            '%title%': title
         }));
     }
 
     /**
      * Checks if the streamer is live
      * @param {string} userName Name of the Streamer
-     * @returns {object}
+     * @returns {HelixStream}
      * @private
      */
     async function isStreamLive(userName) {
-        const user = await apiClient.helix.users.getUserByName(userName.toLowerCase());
+        const user = await apiClient.users.getUserByName(userName.toLowerCase());
         if (!user) return 'userNotFound';
         return await user.getStream();
     }
 
-    config['streamers'].forEach(start);
+    streamers.forEach(start);
 
     /**
      * Starts checking if the streamer is live
@@ -60,22 +63,22 @@ function twitchNotifications(client, apiClient) {
     async function start(value, index) {
         const streamer = await client.models['twitch-notifications']['streamer'].findOne({
             where: {
-                name: value.toLowerCase()
+                name: value.streamer.toLowerCase()
             }
         });
-        const stream = await isStreamLive(value);
+        const stream = await isStreamLive(value.streamer);
         if (stream === 'userNotFound') {
             return client.logger.error(`[twitch-notifications] ` + localize('twitch-notifications', 'user-not-on-twitch', {u: value}));
         } else if (stream !== null && !streamer) {
             client.models['twitch-notifications']['streamer'].create({
-                name: value.toLowerCase(),
+                name: value.streamer.toLowerCase(),
                 startedAt: stream.startDate.toString()
             });
-            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index]);
+            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
         } else if (stream !== null && stream.startDate.toString() !== streamer.startedAt) {
             streamer.startedAt = stream.startDate.toString();
             streamer.save();
-            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, config['liveMessageChannels'][index]);
+            sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
         }
     }
 }

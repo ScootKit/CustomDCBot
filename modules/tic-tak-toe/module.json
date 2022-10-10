@@ -1,0 +1,25 @@
+{
+  "name": "tic-tak-toe",
+  "humanReadableName-en": "Tick-Tack-Toe",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
+  },
+  "fa-icon": "fa-solid fa-border-all",
+  "description-en": "Let your users play Tick-Tac-Toe against each other!",
+  "description-de": "Lasse Nutzer auf deinem Server Tick-Tac-Toe gegeneinander spielen",
+  "commands-dir": "/commands",
+  "noConfig": true,
+  "releaseDate": "1641230658000",
+  "earlyAccessFeatures": [
+    "Lasse Nutzer auf deinem Server Tick-Tac-Toe spielen",
+    "Angenehmes Spiel-Erlebnis durch Nutzung von Buttons, Ping-Nachrichten-Farben und Einladungen",
+    "(definitiv existierende und nicht erfundene) Studien zeigen, dass Server aktiver werden, wenn sie Minispiele anbieten",
+    "Teste als einer der ersten das neue Modul und gib uns Feedback!"
+  ],
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/tic-tak-toe"
+}

@@ -35,7 +35,42 @@
       "disableKeyEdits": true,
       "humanname-de": "Partner-Embed",
       "description-de": "Konfiguration des Partner-Embeds",
-      "params-de": {},
+      "params-de": [
+        {
+          "name": "%invite%",
+          "description": "Konfigurierter Invite des Partner-Servers (nur für \"partner-string\" Feld)"
+        },
+        {
+          "name": "%name%",
+          "description": "Konfigurierter Name des Partner-Servers (nur für \"partner-string\" Feld)"
+        },
+        {
+          "name": "%userID%",
+          "description": "Konfigurierter Owner-ID des Partner-Servers (nur für \"partner-string\" Feld)"
+        },
+        {
+          "name": "%teamMemberID%",
+          "description": "ID des Nutzers, der den Partner-Server eingetragen hat (nur für \"partner-string\" Feld)"
+        }
+      ],
+      "params": [
+        {
+          "name": "%invite%",
+          "description": "Configured invite to the partner-server (only for \"partner-string\" field)"
+        },
+        {
+          "name": "%name%",
+          "description": "Configured name to the partner-server (only for \"partner-string\" field)"
+        },
+        {
+          "name": "%userID%",
+          "description": "Configured owner-ID to the partner-server (only for \"partner-string\" field)"
+        },
+        {
+          "name": "%teamMemberID%",
+          "description": "User who added this partner-server (only for \"partner-string\" field)"
+        }
+      ],
       "default-de": {
         "title": "Unsere Partner",
         "description": "Hier findest du alles über unsere Partner - Wenn du selbst Partner werden möchtest kontaktiere eins unserer Teammitglieder!",

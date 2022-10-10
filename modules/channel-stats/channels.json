@@ -1,0 +1,181 @@
+{
+  "filename": "channels.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "configElements": true,
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "description": "ID of the voice channel",
+      "humanname-de": "Kanal",
+      "description-de": "ID des Sprachkanals",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "channelName",
+      "default": "",
+      "description": "Name of Channel",
+      "type": "string",
+      "params": [
+        {
+          "name": "%userCount%",
+          "description": "Total count of users on your server"
+        },
+        {
+          "name": "%memberCount%",
+          "description": "Total count of members (not bots) on your server"
+        },
+        {
+          "name": "%onlineUserCount%",
+          "description": "Total count of online (dnd or online status) users on your server"
+        },
+        {
+          "name": "%onlineMemberCount%",
+          "description": "Total count of online (dnd or online status) members (not bots) on your server"
+        },
+        {
+          "name": "%channelCount%",
+          "description": "Total count of channels on your server"
+        },
+        {
+          "name": "%roleCount%",
+          "description": "Total count of roles on your server"
+        },
+        {
+          "name": "%botCount%",
+          "description": "Count of Bots on your server"
+        },
+        {
+          "name": "%dndCount%",
+          "description": "Count of members (not bots) with DND as status"
+        },
+        {
+          "name": "%onlineMemberCount%",
+          "description": "Count of members (not bots) with online (and only online) as status"
+        },
+        {
+          "name": "%awayCount%",
+          "description": "Count of members (not bots) with away status"
+        },
+        {
+          "name": "%offlineCount%",
+          "description": "Count of members (not bots) with offline status"
+        },
+        {
+          "name": "%guildBoosts%",
+          "description": "Show how often this guild was boosted"
+        },
+        {
+          "name": "%boostLevel%",
+          "description": "Shows the current boost-level of this guild"
+        },
+        {
+          "name": "%boosterCount%",
+          "description": "Count of boosters on this guild"
+        },
+        {
+          "name": "%emojiCount%",
+          "description": "Count of emojis on this guild"
+        },
+        {
+          "name": "%currentTime%",
+          "description": "Current time and date"
+        },
+        {
+          "name": "%userWithRoleCount-<ID>%",
+          "description": "Count of members with a specific role (replace \"<ID>\" with an actual role-id)"
+        },
+        {
+          "name": "%onlineUserWithRoleCount-<ID>%",
+          "description": "Count of members with a specific role who are online (replace \"<ID>\" with an actual role-id)"
+        }
+      ],
+      "humanname-de": "Kanalname",
+      "description-de": "Name des Kanals",
+      "params-de": [
+        {
+          "name": "%userCount%",
+          "description": "Anzahl an Nutzern auf dem Server"
+        },
+        {
+          "name": "%memberCount%",
+          "description": "Anzahl an Mitgliedern (keine Bots) auf dem Server"
+        },
+        {
+          "name": "%onlineUserCount%",
+          "description": "Anzahl an Mitgliedern (keine Bots) auf dem Server, welche Online sind (Bitte nicht stören oder Online Status)"
+        },
+        {
+          "name": "%channelCount%",
+          "description": "Anzahl der Kanäle auf dem Server"
+        },
+        {
+          "name": "%roleCount%",
+          "description": "Anzahl der Rollen auf dem Server"
+        },
+        {
+          "name": "%botCount%",
+          "description": "Anzahl der Bots auf dem Server"
+        },
+        {
+          "name": "%dndCount%",
+          "description": "Anzahl der Mitglieder (keine Bots) mit Bitte nicht stören als Status"
+        },
+        {
+          "name": "%onlineMemberCount%",
+          "description": "Anzahl der Mitglieder (keine Bots) mit Online (und NUR Online) als Status"
+        },
+        {
+          "name": "%awayCount%",
+          "description": "Anzahl der Mitglieder (keine Bots) mit \"Abwesend\" Status"
+        },
+        {
+          "name": "%offlineCount%",
+          "description": "Anzahl der Mitglieder (keine Bots) mit \"Offline\" status"
+        },
+        {
+          "name": "%guildBoosts%",
+          "description": "Zeigt, wie oft der Server geboostet wurde"
+        },
+        {
+          "name": "%boostLevel%",
+          "description": "Zeigt das aktuelle Boost-Level des Servers"
+        },
+        {
+          "name": "%boosterCount%",
+          "description": "Anzahl an Boostern auf dem Server"
+        },
+        {
+          "name": "%emojiCount%",
+          "description": "Anzahl an Emojis auf dem Server"
+        },
+        {
+          "name": "%currentTime%",
+          "description": "Aktuelles Datum und Uhrzeit"
+        },
+        {
+          "name": "%userWithRoleCount-<ID>%",
+          "description": "Anzahl von Nutzern mit einer bestimmen Rolle (bitte \"<ID>\" mit einer echten Rollen-ID ersetzen)"
+        },
+        {
+          "name": "%onlineUserWithRoleCount-<ID>%",
+          "description": "Anzahl von Nutzern mit einer bestimmen Rolle, die online sind (bitte \"<ID>\" mit einer echten Rollen-ID ersetzen)"
+        }
+      ],
+      "default-de": ""
+    },
+    {
+      "field_name": "updateInterval",
+      "default": "15",
+      "type": "integer",
+      "description": "You can set an interval here in which the bot should update the channels. Must be higher than seven; in minutes.",
+      "humanname-de": "Aktualisierungsintervall",
+      "description-de": "Du kannst hier ein Intervall einstellen, in welchem der Bot die Kanäle aktualisieren soll. Muss höher als sieben sein; in Minuten.",
+      "params-de": {},
+      "default-de": 15
+    }
+  ]
+}

@@ -103,6 +103,15 @@ module.exports.subcommands = {
             });
         }
 
+        if (!interaction.client.configurations['birthday']['config'].disableSync) {
+            const u = await getUser(interaction.user.id).catch(() => {
+            });
+            if (u && (u.birthday || {}).autoSync) return interaction.reply({
+                ephemeral: true,
+                content: '⚠ ' + localize('birthdays', 'auto-sync-on')
+            });
+        }
+
         if ((day > 31 || day < 1) || (month > 12 || month < 1)) return interaction.reply({
             ephemeral: true,
             content: '⚠ ' + localize('birthdays', 'invalid-date')
@@ -129,6 +138,7 @@ module.exports.subcommands = {
         interaction.birthday.day = day;
         interaction.birthday.month = month;
         interaction.birthday.year = year;
+        interaction.birthday.sync = false;
         interaction.regenerateEmbed = true;
 
         await interaction.reply(embedType(interaction.client.configurations['birthday']['config']['successfully_changed'], {}, {ephemeral: true}));

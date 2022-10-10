@@ -1,0 +1,89 @@
+{
+  "filename": "config.json",
+  "humanname-de": "Konfiguration",
+  "humanname-en": "Configuration",
+  "content": [
+    {
+      "field_name": "channelID",
+      "default": "",
+      "type": "channelID",
+      "description": "Channel-ID to run all operations in it",
+      "humanname-de": "Kanal",
+      "humanname-en": "Channel",
+      "description-de": "Kanal-ID, in welchem alle Aktionen ausgeführt werden",
+      "params-de": {},
+      "default-de": ""
+    },
+    {
+      "field_name": "roles",
+      "type": "array",
+      "description": "Roles to list",
+      "default": [],
+      "content": "roleID",
+      "humanname-de": "Gelistete Rollen",
+      "humanname-en": "Listed Roles",
+      "description-de": "Jede Rolle, die im Embed gelistet werden soll",
+      "description-en": "Roles that should be listed in the embed",
+      "params-de": {},
+      "default-de": []
+    },
+    {
+      "field_name": "descriptions",
+      "type": "keyed",
+      "description": "Roles to list",
+      "default": [],
+      "content": {
+        "key": "roleID",
+        "value": "string"
+      },
+      "humanname-de": "Beschreibung von Rollen",
+      "humanname-en": "Descriptions of roles",
+      "description-de": "Optionale Beschreibung einer gelisteten Rolle (Feld 1: Rollen-ID, Feld 2: Beschreibung)",
+      "description-en": "Optional description of a listed role (Field 1: Role-ID, Field 2: Description)",
+      "params-de": {},
+      "default-de": {}
+    },
+    {
+      "field_name": "embed",
+      "type": "keyed",
+      "description": "Configuration of the member-embed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "default": {
+        "title": "Our staff",
+        "description": "Meet our staff here",
+        "color": "GREEN",
+        "thumbnail-url": "",
+        "icon-url": ""
+      },
+      "disableKeyEdits": true,
+      "humanname": "Embed",
+      "description-de": "Konfiguration des Partner-Embeds",
+      "params-de": {},
+      "default-de": {
+        "title": "Unser Team",
+        "description": "Hier findest du alle unsere Teammitglieder",
+        "color": "GREEN",
+        "thumbnail-url": "",
+        "icon-url": ""
+      }
+    },
+    {
+      "field_name": "nameOverwrites",
+      "type": "keyed",
+      "default": [],
+      "content": {
+        "key": "roleID",
+        "value": "string"
+      },
+      "description-de": "optional; Allows to overwrite the displayed name of a role (Feld 1: Rollen-ID, Feld 2: Angezeigter Name)",
+      "description-en": "optional; Allows to overwrite the displayed name of roles (Field 1: Role-ID, Field 2: Displayed Name)",
+      "humanname-de": "Name-Overwrites",
+      "humanname-en": "Name-Overwrites",
+      "params-de": {},
+      "default-de": {}
+    }
+  ]
+}
