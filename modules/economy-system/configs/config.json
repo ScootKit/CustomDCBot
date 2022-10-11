@@ -198,7 +198,7 @@
       "description": "The weekly reward"
     },
     {
-      "field_name": "PublicCommandReplies",
+      "field_name": "publicCommandReplies",
       "humanname-de": "Öffentliche Command-Antworten",
       "humanname-en": "Public Command-Replies",
       "default": false,
