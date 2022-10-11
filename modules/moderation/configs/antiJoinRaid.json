@@ -9,7 +9,8 @@
       "humanname-de": "Aktiviert",
       "description-de": "Aktiviert oder deaktiviert das Anti-Join-Raid-System",
       "params-de": {},
-      "default-de": true
+      "default-de": true,
+      "elementToggle": true
     },
     {
       "field_name": "timeframe",

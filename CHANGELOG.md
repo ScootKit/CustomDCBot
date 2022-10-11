@@ -2,6 +2,13 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.6.0
+* Support for configuration-example-file `content.elementToggle` toggle to improve UX in the SCNX Dashboard ([#76](https://github.com/SCNetwork/CustomDCBot/pull/76))
+* Support for configuration-example-file `content.dependsOn` toggle to improve UX in the SCNX Dashboard ([#76](https://github.com/SCNetwork/CustomDCBot/pull/76))
+* Support for new field-types: `userID`, `imgURL` ([#76](https://github.com/SCNetwork/CustomDCBot/pull/76))
+* Moderation-Modul: Support for Channel-Mutes ([#77](https://github.com/SCNetwork/CustomDCBot/pull/77))
+* Channel-Stats-Modul: Support for userWithRole parameters ([#78](https://github.com/SCNetwork/CustomDCBot/pull/78))
+
 ## v3.5.0
 * Like ten new previously closed-sourced-modules got added
 * Locales-Loading now takes place in splitted files, instead of a big `default-locales.json`

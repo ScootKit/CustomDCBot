@@ -129,6 +129,7 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                     }
                     if (typeof configElement[field.field_name] === 'undefined') {
                         configElement[field.field_name] = field.default;
+                        ow = true;
                         return res(configElement);
                     } else if (field.type === 'keyed' && field.disableKeyEdits) {
                         for (const key in field.default) {
@@ -160,7 +161,7 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                     }
                     if (field.disableKeyEdits) {
                         for (const content in configElement[field.field_name]) {
-                            if (!field.default[content]) {
+                            if (typeof field.default[content] === 'undefined') {
                                 delete configElement[field.field_name][content];
                                 ow = true;
                             }
@@ -284,6 +285,7 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             if (parseInt(value) === 0) return true;
             return !!parseInt(value);
         case 'string':
+        case 'imgURL':
         case 'timezone': // Timezones can not be checked correctly for their type currently.
             if (allowEmbed && typeof value === 'object') return true;
             return typeof value === 'string';
@@ -294,6 +296,13 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 if (!errored) errored = !(await checkType(contentFormat, v, null, allowEmbed));
             }
             return !errored;
+        case 'userID':
+            const user = await client.users.fetch(value).catch(() => {});
+            if (!user) {
+                logger.error(localize('config', 'user-not-found', {id: value}));
+                return false;
+            }
+            return true;
         case 'channelID':
             const channel = await client.channels.fetch(value).catch(() => {
             });
