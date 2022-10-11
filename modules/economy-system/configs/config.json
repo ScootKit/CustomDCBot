@@ -204,8 +204,7 @@
       "default": false,
       "type": "boolean",
       "description-de": "Sollen die Command-Antworten für alle angezeigt werden?",
-      "description-en": "Should the Command-replies be displayed for everyone?",
-      "elementToggle": true
+      "description-en": "Should the Command-replies be displayed for everyone?"
     }
   ]
 }
