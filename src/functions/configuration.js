@@ -129,6 +129,7 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
                     }
                     if (typeof configElement[field.field_name] === 'undefined') {
                         configElement[field.field_name] = field.default;
+                        ow = true;
                         return res(configElement);
                     } else if (field.type === 'keyed' && field.disableKeyEdits) {
                         for (const key in field.default) {
