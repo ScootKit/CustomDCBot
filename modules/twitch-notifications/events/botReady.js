@@ -20,10 +20,12 @@ function twitchNotifications(client, apiClient) {
      * Function to add the Live-Role
      * @param {string} userID ID of the User
      * @param {String} roleID ID of the Role
+     * @param {boolean} liveRole Should the live-role be active
      */
-    async function addLiveRole(userID, roleID) {
-        await client.guild.members.fetch();
+    async function addLiveRole(userID, roleID, liveRole) {
+        if (!liveRole) return;
         if (!userID || userID === '' || !roleID || roleID === '') return;
+        await client.guild.members.fetch();
         const member = client.guild.members.cache.get(userID);
         if (!member) {
             client.logger.error(localize('twitch-notifications', 'user-not-found', {u: userID}));
@@ -98,8 +100,9 @@ function twitchNotifications(client, apiClient) {
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
             addLiveRole(streamers[index]['id'], streamers[index]['role']);
         } else if (stream === null) {
-            await client.guild.members.fetch();
+            if (!streamers[index]['liveRole']) return;
             if (!streamers[index]['id'] || streamers[index]['id'] === '' || !streamers[index]['role'] || streamers[index]['role'] === '') return;
+            await client.guild.members.fetch();
             const member = client.guild.members.cache.get(streamers[index]['id']);
             if (!member) {
                 client.logger.error(localize('twitch-notifications', 'user-not-found', {u: streamers[index]['id']}));
