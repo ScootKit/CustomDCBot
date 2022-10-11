@@ -94,7 +94,7 @@
       "humanname-en": "Discord-User ID",
       "humanname-de": "Discord-Benutzer ID",
       "default": "",
-      "type": "string",
+      "type": "userID",
       "description-en": "ID of the Discord-Account of the Streamer",
       "description-de": "ID des Discord-Accounts des Streamers",
       "dependsOn": "liveRole"
