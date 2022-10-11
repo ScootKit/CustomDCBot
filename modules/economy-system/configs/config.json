@@ -196,6 +196,15 @@
       "default": 100,
       "type": "integer",
       "description": "The weekly reward"
+    },
+    {
+      "field_name": "publicCommandReplies",
+      "humanname-de": "Öffentliche Command-Antworten",
+      "humanname-en": "Public Command-Replies",
+      "default": false,
+      "type": "boolean",
+      "description-de": "Sollen die Command-Antworten für alle angezeigt werden?",
+      "description-en": "Should the Command-replies be displayed for everyone?"
     }
   ]
 }

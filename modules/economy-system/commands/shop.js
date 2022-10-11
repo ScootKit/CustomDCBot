@@ -7,7 +7,7 @@ module.exports.subcommands = {
         if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
             return await interaction.reply({
                 content: interaction.client.strings['not_enough_permissions'],
-                ephemeral: true
+                ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
             });
         }
         const item = await interaction.options.get('item');
@@ -18,7 +18,7 @@ module.exports.subcommands = {
             '%item%': item['value'],
             '%price%': price,
             '%role%': role.name
-        }, {ephemeral: true}));
+        }, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
         interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
             u: interaction.user.tag,
             i: item['value']
@@ -38,7 +38,7 @@ module.exports.subcommands = {
         if (!item) {
             interaction.reply({
                 content: interaction.client.configurations['economy-system']['strings']['notFound'],
-                ephemeral: true
+                ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
             });
         }
         const user = await interaction.client.models['economy-system']['Balance'].findOne({
@@ -48,12 +48,12 @@ module.exports.subcommands = {
         });
         if (user.balance < item.price) return interaction.reply({
             content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
-            ephemeral: true
+            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
         });
         await editBalance(interaction.client, interaction.user.id, 'remove', item.price);
         await interaction.member.roles.add(item.role);
         createleaderboard(interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': itemName['value']}, {ephemeral: true}));
+        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': itemName['value']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
         interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'user-purchase', {
             u: interaction.user.tag,
             i: item['value'],
@@ -73,12 +73,12 @@ module.exports.subcommands = {
         if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
             return await interaction.reply({
                 content: interaction.client.strings['not_enough_permissions'],
-                ephemeral: true
+                ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
             });
         }
         const item = interaction.options.get('item');
         await deleteShopItem(item['value'], interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%item%': item['value']}, {ephemeral: true}));
+        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%item%': item['value']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
         interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
             u: interaction.user.tag,
             i: item['value']
