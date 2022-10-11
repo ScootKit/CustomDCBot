@@ -464,7 +464,8 @@
   },
   "twitch-notifications": {
     "channel-not-found": "Channel with ID %c could not be found",
-    "user-not-on-twitch": "Could not find user %u on twitch"
+    "user-not-on-twitch": "Could not find user %u on twitch",
+    "user-not-found": "Could not find the user with the id %u"
   },
   "hunt-the-code": {
     "admin-command-description": "Manage the current Code-Hunt",
