@@ -93,12 +93,12 @@ function twitchNotifications(client, apiClient) {
                 startedAt: stream.startDate.toString()
             });
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
-            addLiveRole(streamers[index]['id'], streamers[index]['role']);
+            addLiveRole(streamers[index]['id'], streamers[index]['role'], streamers[index]['liveRole']);
         } else if (stream !== null && stream.startDate.toString() !== streamer.startedAt) {
             streamer.startedAt = stream.startDate.toString();
             streamer.save();
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
-            addLiveRole(streamers[index]['id'], streamers[index]['role']);
+            addLiveRole(streamers[index]['id'], streamers[index]['role'], streamers[index]['liveRole']);
         } else if (stream === null) {
             if (!streamers[index]['liveRole']) return;
             if (!streamers[index]['id'] || streamers[index]['id'] === '' || !streamers[index]['role'] || streamers[index]['role'] === '') return;
