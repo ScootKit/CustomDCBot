@@ -433,7 +433,8 @@
     },
     "twitch-notifications": {
         "channel-not-found": "Der Kanal mit der ID %c konnte nicht gefunden werden",
-        "user-not-on-twitch": "Nutzer %u konnte auf Twitch nicht gefunden werden"
+        "user-not-on-twitch": "Nutzer %u konnte auf Twitch nicht gefunden werden",
+        "user-not-found": "Der Benutzer mit der ID %u konnte nicht gefunden werden"
     },
     "fun": {
         "slap-command-description": "Schlägt einen Nutzer ins Gesicht",

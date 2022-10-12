@@ -17,6 +17,24 @@ function twitchNotifications(client, apiClient) {
     const streamers = client.configurations['twitch-notifications']['streamers'];
 
     /**
+     * Function to add the Live-Role
+     * @param {string} userID ID of the User
+     * @param {String} roleID ID of the Role
+     * @param {boolean} liveRole Should the live-role be active
+     */
+    async function addLiveRole(userID, roleID, liveRole) {
+        if (!liveRole) return;
+        if (!userID || userID === '' || !roleID || roleID === '') return;
+        await client.guild.members.fetch();
+        const member = client.guild.members.cache.get(userID);
+        if (!member) {
+            client.logger.error(localize('twitch-notifications', 'user-not-found', {u: userID}));
+            return;
+        }
+        await member.roles.add(roleID);
+    }
+
+    /**
      * Sends the live-message
      * @param {string} username Username of the streamer
      * @param {string} game Game that is streamed
@@ -75,10 +93,24 @@ function twitchNotifications(client, apiClient) {
                 startedAt: stream.startDate.toString()
             });
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
+            addLiveRole(streamers[index]['id'], streamers[index]['role'], streamers[index]['liveRole']);
         } else if (stream !== null && stream.startDate.toString() !== streamer.startedAt) {
             streamer.startedAt = stream.startDate.toString();
             streamer.save();
             sendMsg(stream.userDisplayName, stream.gameName, stream.thumbnailUrl, streamers[index]['liveMessageChannel'], stream.title, index);
+            addLiveRole(streamers[index]['id'], streamers[index]['role'], streamers[index]['liveRole']);
+        } else if (stream === null) {
+            if (!streamers[index]['liveRole']) return;
+            if (!streamers[index]['id'] || streamers[index]['id'] === '' || !streamers[index]['role'] || streamers[index]['role'] === '') return;
+            await client.guild.members.fetch();
+            const member = client.guild.members.cache.get(streamers[index]['id']);
+            if (!member) {
+                client.logger.error(localize('twitch-notifications', 'user-not-found', {u: streamers[index]['id']}));
+                return;
+            }
+            if (member.roles.cache.has(streamers[index]['role'])) {
+                await member.roles.remove(streamers[index]['role']);
+            }
         }
     }
 }

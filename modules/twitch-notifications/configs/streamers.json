@@ -79,6 +79,36 @@
       "type": "string",
       "description-en": "Streamer where a notification should send when they start streaming",
       "description-de": "Steamer, bei denen eine Benachrichtigung gesendet werden soll, wenn sie anfangen, zu streamen"
+    },
+    {
+      "field_name": "liveRole",
+      "humanname-en": "Use Live-Role",
+      "humanname-de": "Live-Rolle Aktivieren",
+      "default": false,
+      "type": "boolean",
+      "description-en": "Should the Live-Role be activated?",
+      "description-de": "Soll die Live-Rolle aktiviert sein?"
+    },
+    {
+      "field_name": "id",
+      "humanname-en": "Discord-User ID",
+      "humanname-de": "Discord-Benutzer ID",
+      "default": "",
+      "type": "userID",
+      "description-en": "ID of the Discord-Account of the Streamer",
+      "description-de": "ID des Discord-Accounts des Streamers",
+      "dependsOn": "liveRole"
+    },
+    {
+      "field_name": "role",
+      "humanname-en": "Live Role",
+      "humanname-de": "Live Rolle",
+      "default": "",
+      "type": "roleID",
+      "description-en": "ID of the Role that the Streamer should get, when live",
+      "description-de": "ID der Rolle, die der streamer bekommen soll, wenn er live ist",
+      "allowNull": true,
+      "dependsOn": "liveRole"
     }
   ]
 }
