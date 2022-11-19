@@ -1,44 +1,62 @@
 {
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
-  "description-en": "Configure the function of the module here",
-  "description-de": "Stelle hier die Funktionen des Modules ein",
   "content": [
     {
-      "field_name": "words",
-      "humanname-en": "Words",
-      "humanname-de": "Statusinhalt",
-      "default": [],
+      "name": "words",
+      "humanName": {
+        "en": "Words",
+        "de": "Statusinhalt"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Words users should have in their status.",
+        "de": "Wörter, die Nutzer in ihrem Status haben sollen."
+      },
       "type": "array",
-      "content": "string",
-      "description-en": "Words users should have in their status.",
-      "description-de": "Wörter, die Nutzer in ihrem Status haben sollen.",
-      "params-de": {},
-      "default-de": []
+      "content": "string"
     },
     {
-      "field_name": "roles",
-      "humanname-en": "Roles",
-      "humanname-de": "Rollen",
-      "default": [],
+      "name": "roles",
+      "humanName": {
+        "en": "Roles",
+        "de": "Rollen"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Roles to give to users with one of the words in their status",
+        "de": "Rollen, die an Nutzer mit einem der Wörter im Status vergeben werden sollen"
+      },
       "type": "array",
-      "content": "roleID",
-      "description-en": "Roles to give to users with one of the words in their status",
-      "description-de": "Rollen, die an Nutzer mit einem der Wörter im Status vergeben werden sollen",
-      "params-de": {},
-      "default-de": []
+      "content": "roleID"
     },
     {
-      "field_name": "remove",
-      "humanname-en": "Remove all other roles",
-      "humanname-de": "Entferne alle anderen Rollen",
-      "default": false,
-      "type": "boolean",
-      "description-en": "Remove all other roles from users with one of the words in their status",
-      "description-de": "Entferne alle anderen Rollen von Nutzern mit einem der Wörter im Status",
-      "params-de": {},
-      "default-de": []
+      "name": "remove",
+      "humanName": {
+        "en": "Remove all other roles",
+        "de": "Entferne alle anderen Rollen"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Remove all other roles from users with one of the words in their status",
+        "de": "Entferne alle anderen Rollen von Nutzern mit einem der Wörter im Status"
+      },
+      "type": "boolean"
     }
   ]
 }

@@ -1,54 +1,78 @@
 {
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
-  "description-de": "Passe die grundlegenden Optionen des Modules hier an",
-  "description-en": "Manage the basic settings of this module here",
+  "description": {
+    "en": "Manage the basic settings of this module here",
+    "de": "Passe die grundlegenden Optionen des Modules hier an"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
   "content": [
     {
-      "humanname-en": "Give roles on join",
-      "humanname-de": "Nutzer Rollen beim Beitreten geben",
-      "field_name": "give-roles-on-join",
-      "default": [],
+      "name": "give-roles-on-join",
+      "humanName": {
+        "en": "Give roles on join",
+        "de": "Nutzer Rollen beim Beitreten geben"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Roles to give to a new member",
+        "de": "Rollen, die neuen Mitgliedern gegeben werden sollen"
+      },
       "type": "array",
-      "content": "roleID",
-      "description-en": "Roles to give to a new member",
-      "description-de": "Rollen, die neuen Mitgliedern gegeben werden sollen",
-      "params-de": {},
-      "default-de": []
+      "content": "roleID"
     },
     {
-      "field_name": "not-send-messages-if-member-is-bot",
-      "default": true,
-      "type": "boolean",
-      "humanname-en": "Ignore bots?",
-      "humanname-de": "Bots ignorieren?",
-      "description-en": "Should bots get ignored when they join (or leave) the server",
-      "description-de": "Sollen Bots ignoriert werden, wenn sie den Server beitreten (oder diesen verlassen)",
-      "params-de": {},
-      "default-de": true
+      "name": "not-send-messages-if-member-is-bot",
+      "humanName": {
+        "en": "Ignore bots?",
+        "de": "Bots ignorieren?"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Should bots get ignored when they join (or leave) the server",
+        "de": "Sollen Bots ignoriert werden, wenn sie den Server beitreten (oder diesen verlassen)"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "give-roles-on-boost",
-      "humanname-en": "Zusätzliche Rollen beim Boost geben",
-      "humanname-de": "Give additional roles to boosters",
-      "default": [],
+      "name": "give-roles-on-boost",
+      "humanName": {
+        "en": "Zusätzliche Rollen beim Boost geben",
+        "de": "Give additional roles to boosters"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Roles to give to members who boosts the server",
+        "de": "Rollen, die Booster haben sollen"
+      },
       "type": "array",
-      "content": "roleID",
-      "description-en": "Roles to give to members who boosts the server",
-      "description-de": "Rollen, die Booster haben sollen",
-      "params-de": {},
-      "default-de": []
+      "content": "roleID"
     },
     {
-      "field_name": "delete-welcome-message",
-      "humanname-en": "Delete welcome message",
-      "humanname-de": "Willkommensnachricht löschen",
-      "default": true,
-      "type": "boolean",
-      "description-en": "Should their welcome message be deleted, if a user leaves the server within 7 days",
-      "description-de": "Soll die Willkommensnachricht eines Nutzers, der den Server innerhalb von 7 Tagen wieder verlässt gelöscht werden",
-      "params-de": {}
+      "name": "delete-welcome-message",
+      "humanName": {
+        "en": "Delete welcome message",
+        "de": "Willkommensnachricht löschen"
+      },
+      "default": {
+        "en": true
+      },
+      "description": {
+        "en": "Should their welcome message be deleted, if a user leaves the server within 7 days",
+        "de": "Soll die Willkommensnachricht eines Nutzers, der den Server innerhalb von 7 Tagen wieder verlässt gelöscht werden"
+      },
+      "type": "boolean"
     }
   ]
 }

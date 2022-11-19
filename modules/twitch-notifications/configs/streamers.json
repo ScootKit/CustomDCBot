@@ -1,112 +1,144 @@
 {
+  "description": {
+    "en": "Configure here, where for what streamer which message should get send",
+    "de": "Stelle hier ein, bei welchem Streamer in welchen Channel eine Nachricht gesendet werden soll"
+  },
+  "humanName": {
+    "en": "Streamers",
+    "de": "Streamers"
+  },
   "filename": "streamers.json",
-  "humanname-de": "Streamers",
-  "humanname-en": "Streamers",
-  "description-de": "Stelle hier ein, bei welchem Streamer in welchen Channel eine Nachricht gesendet werden soll",
-  "description-en": "Configure here, where for what streamer which message should get send",
   "configElements": true,
   "content": [
     {
-      "field_name": "liveMessage",
-      "humanname-de": "Live-Nachricht",
-      "humanname-en": "Live-Messages",
-      "default-en": "Hey, %streamer% is live on Twitch streaming %game%! Check it out: %url%",
-      "default-de": "Hi, %streamer% ist Live auf Twitch und streamt %game%! Jetzt anschauen: %url%",
+      "name": "liveMessage",
+      "humanName": {
+        "en": "Live-Messages",
+        "de": "Live-Nachricht"
+      },
+      "default": {
+        "en": "Hey, %streamer% is live on Twitch streaming %game%! Check it out: %url%",
+        "de": "Hi, %streamer% ist Live auf Twitch und streamt %game%! Jetzt anschauen: %url%"
+      },
+      "description": {
+        "en": "Message that gets send if the streamer goes live",
+        "de": "Nachricht, die gesendet wird, wenn ein Streamer anfängt zu streamen"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description-en": "Message that gets send if the streamer goes live",
-      "description-de": "Nachricht, die gesendet wird, wenn ein Streamer anfängt zu streamen",
-      "params-en": [
+      "params": [
         {
-          "name": "%streamer%",
-          "description": "Name of the Streamer"
+          "name": "streamer",
+          "description": {
+            "en": "Name of the Streamer",
+            "de": "Name des Streamers"
+          }
         },
         {
-          "name": "%game%",
-          "description": "Game which is streamed"
+          "name": "game",
+          "description": {
+            "en": "Game which is streamed",
+            "de": "Spiel, welches gestreamt wird"
+          }
         },
         {
-          "name": "%url%",
-          "description": "Link to the stream"
+          "name": "url",
+          "description": {
+            "en": "Link to the stream",
+            "de": "Link zum Twitch-Stream"
+          }
         },
         {
-          "name": "%title%",
-          "description": "Title of the Stream"
+          "name": "title",
+          "description": {
+            "en": "Title of the Stream",
+            "de": "Titel des Streams"
+          }
         },
         {
-          "name": "%thumbnailUrl%",
-          "description": "The Link to the thumbnail of the Stream",
-          "isImage": true
-        }
-      ],
-      "params-de": [
-        {
-          "name": "%streamer%",
-          "description": "Name des Streamers"
-        },
-        {
-          "name": "%game%",
-          "description": "Spiel, welches gestreamt wird"
-        },
-        {
-          "name": "%url%",
-          "description": "Link zum Twitch-Stream"
-        },
-        {
-          "name": "%title%",
-          "description": "Titel des Streams"
-        },
-        {
-          "name": "%thumbnailUrl%",
-          "description": "Link zum Thumbnail des Streams",
+          "name": "thumbnailUrl",
+          "description": {
+            "en": "The Link to the thumbnail of the Stream",
+            "de": "Link zum Thumbnail des Streams"
+          },
           "isImage": true
         }
       ]
     },
     {
-      "field_name": "liveMessageChannel",
-      "humanname-en": "Channel",
-      "default": "",
-      "type": "channelID",
-      "description-en": "Channel in which live-message should get sent",
-      "description-de": "Kanal, in welchen Benachrichtigung gesendet werden soll"
+      "name": "liveMessageChannel",
+      "humanName": {
+        "en": "Channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Channel in which live-message should get sent",
+        "de": "Kanal, in welchen Benachrichtigung gesendet werden soll"
+      },
+      "type": "channelID"
     },
     {
-      "field_name": "streamer",
-      "humanname-en": "Streamer",
-      "humanname-de": "Streamer",
-      "default": "",
-      "type": "string",
-      "description-en": "Streamer where a notification should send when they start streaming",
-      "description-de": "Steamer, bei denen eine Benachrichtigung gesendet werden soll, wenn sie anfangen, zu streamen"
+      "name": "streamer",
+      "humanName": {
+        "en": "Streamer",
+        "de": "Streamer"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Streamer where a notification should send when they start streaming",
+        "de": "Steamer, bei denen eine Benachrichtigung gesendet werden soll, wenn sie anfangen, zu streamen"
+      },
+      "type": "string"
     },
     {
-      "field_name": "liveRole",
-      "humanname-en": "Use Live-Role",
-      "humanname-de": "Live-Rolle Aktivieren",
-      "default": false,
-      "type": "boolean",
-      "description-en": "Should the Live-Role be activated?",
-      "description-de": "Soll die Live-Rolle aktiviert sein?"
+      "name": "liveRole",
+      "humanName": {
+        "en": "Use Live-Role",
+        "de": "Live-Rolle Aktivieren"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Should the Live-Role be activated?",
+        "de": "Soll die Live-Rolle aktiviert sein?"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "id",
-      "humanname-en": "Discord-User ID",
-      "humanname-de": "Discord-Benutzer ID",
-      "default": "",
+      "name": "id",
+      "humanName": {
+        "en": "Discord-User ID",
+        "de": "Discord-Benutzer ID"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "ID of the Discord-Account of the Streamer",
+        "de": "ID des Discord-Accounts des Streamers"
+      },
       "type": "userID",
-      "description-en": "ID of the Discord-Account of the Streamer",
-      "description-de": "ID des Discord-Accounts des Streamers",
       "dependsOn": "liveRole"
     },
     {
-      "field_name": "role",
-      "humanname-en": "Live Role",
-      "humanname-de": "Live Rolle",
-      "default": "",
+      "name": "role",
+      "humanName": {
+        "en": "Live Role",
+        "de": "Live Rolle"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "ID of the Role that the Streamer should get, when live",
+        "de": "ID der Rolle, die der streamer bekommen soll, wenn er live ist"
+      },
       "type": "roleID",
-      "description-en": "ID of the Role that the Streamer should get, when live",
-      "description-de": "ID der Rolle, die der streamer bekommen soll, wenn er live ist",
       "allowNull": true,
       "dependsOn": "liveRole"
     }

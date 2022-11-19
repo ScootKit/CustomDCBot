@@ -1,29 +1,60 @@
 {
+  "description": {
+    "en": "This system can prevent suspicious accounts from getting access to your server",
+    "de": "Dieses System kann verhindern, dass verdächtige Accounts Zugriff erhalten"
+  },
+  "humanName": {
+    "de": "Join-Gate-Konfiguration",
+    "en": "Join-Gate-Configuration"
+  },
   "filename": "joinGate.json",
   "content": [
     {
-      "field_name": "enabled",
+      "name": "enabled",
+      "humanName": {
+        "de": "Aktiviert?",
+        "en": "Enabled?"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Enable or disable the join gate",
+        "de": "Aktiviere oder deaktiviere das Join-Gate"
+      },
       "type": "boolean",
-      "default": true,
-      "description": "Enable or disable the join gate",
-      "humanname-de": "Aktiviert?",
-      "description-de": "Aktiviere oder deaktiviere das Join-Gate",
-      "params-de": {},
-      "default-de": true,
       "elementToggle": true
     },
     {
-      "field_name": "allUsers",
-      "type": "boolean",
-      "default": false,
-      "description": "If enabled all users action against all new users will be taken",
-      "humanname-de": "Alle Nutzer",
-      "description-de": "Wenn aktiviert, werden Aktionen gegen alle neuen Nutzer ausgefüht",
-      "params-de": {},
-      "default-de": false
+      "name": "allUsers",
+      "humanName": {
+        "de": "Alle Nutzer filtern",
+        "en": "Filter all users"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled all users action against all new users will be taken",
+        "de": "Wenn aktiviert, werden Aktionen gegen alle neuen Nutzer ausgefüht"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "action",
+      "name": "action",
+      "humanName": {
+        "de": "Aktion",
+        "en": "Action"
+      },
+      "default": {
+        "en": "quarantine",
+        "de": "quarantine"
+      },
+      "description": {
+        "en": "Select the action here that should get performed if the join gate gets triggered",
+        "de": "Wähle hier die Aktion, die ausgeführt werden soll, wenn das Join-Gate ausgelöst wird"
+      },
       "type": "select",
       "content": [
         "mute",
@@ -31,63 +62,86 @@
         "quarantine",
         "ban",
         "give-role"
-      ],
-      "default": "quarantine",
-      "description": "Select the action here that should get performed if the join gate gets triggered",
-      "humanname-de": "Aktion",
-      "description-de": "Wähle hier die Aktion, die ausgeführt werden soll, wenn das Join-Gate ausgelöst wird",
-      "params-de": {},
-      "default-de": "quarantine"
+      ]
     },
     {
-      "field_name": "roleID",
-      "type": "roleID",
-      "description": "Only if action = give-role. Role that gets given to users who fail the join gate",
-      "default": "",
-      "humanname-de": "Rolle",
-      "description-de": "Nur verfügbar, wenn Aktion = give-role. Rolle, die Nutzern gegeben wird, die das Join-Gate nicht bestehen",
-      "params-de": {},
-      "default-de": ""
+      "name": "roleID",
+      "humanName": {
+        "de": "Rolle",
+        "en": "Role"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Only if action = give-role. Role that gets given to users who fail the join gate",
+        "de": "Nur verfügbar, wenn Aktion = give-role. Rolle, die Nutzern gegeben wird, die das Join-Gate nicht bestehen"
+      },
+      "type": "roleID"
     },
     {
-      "field_name": "removeOtherRoles",
-      "type": "boolean",
-      "description": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
-      "default": true,
-      "humanname-de": "Andere Rollen entfernen",
-      "description-de": "Nur verfügbar, wenn Aktion = give-role. Wenn aktiviert, werden andere Rollen die der Nutzer hat nach einem kurzen Zeitraum entfernt (und das Vergeben der Rolle von \"Rolle\" wird verzögert)",
-      "params-de": {},
-      "default-de": true
+      "name": "removeOtherRoles",
+      "humanName": {
+        "de": "Andere Rollen entfernen",
+        "en": "Remove other roles"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
+        "de": "Nur verfügbar, wenn Aktion = give-role. Wenn aktiviert, werden andere Rollen die der Nutzer hat nach einem kurzen Zeitraum entfernt (und das Vergeben der Rolle von \"Rolle\" wird verzögert)"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "minAccountAge",
-      "type": "integer",
-      "default": "3",
-      "description": "Age of the account of a new user that is required to be set to pass the join gate (in days)",
-      "humanname-de": "Minimales Accountalter",
-      "description-de": "Alter des Accounts eines neuen Nutzers, der beitritt, welches benötigt wird um das Join-Gate zu bestehen (in Tagen)",
-      "params-de": {},
-      "default-de": 3
+      "name": "minAccountAge",
+      "humanName": {
+        "de": "Minimales Accountalter",
+        "en": "Minimum account age"
+      },
+      "default": {
+        "en": "3",
+        "de": 3
+      },
+      "description": {
+        "en": "Age of the account of a new user that is required to be set to pass the join gate (in days)",
+        "de": "Alter des Accounts eines neuen Nutzers, der beitritt, welches benötigt wird um das Join-Gate zu bestehen (in Tagen)"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "requireProfilePicture",
-      "type": "boolean",
-      "default": true,
-      "description": "If enabled users are required to have a profile picture set to pass the join gate",
-      "humanname-de": "Benötige Profilbild",
-      "description-de": "Wenn aktiviert, brauchen Nutzer ein Profilbild um das Join-Gate zu bestehen",
-      "params-de": {},
-      "default-de": true
+      "name": "requireProfilePicture",
+      "humanName": {
+        "de": "Benötige Profilbild",
+        "en": "Require profile picture"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled users are required to have a profile picture set to pass the join gate",
+        "de": "Wenn aktiviert, brauchen Nutzer ein Profilbild um das Join-Gate zu bestehen"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "ignoreBots",
-      "type": "boolean",
-      "default": true,
-      "description": "If enabled bots are allowed to pass the join gate without any restrictions",
-      "humanname-de": "Ignoriere Bots",
-      "description-de": "Wenn aktiviert, bestehen Bots das Join-Gate ohne Beschränkungen",
-      "params-de": {},
-      "default-de": true
+      "name": "ignoreBots",
+      "humanName": {
+        "de": "Ignoriere Bots",
+        "en": "Ignore bots"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled bots are allowed to pass the join gate without any restrictions",
+        "de": "Wenn aktiviert, bestehen Bots das Join-Gate ohne Beschränkungen"
+      },
+      "type": "boolean"
     }
   ]
 }

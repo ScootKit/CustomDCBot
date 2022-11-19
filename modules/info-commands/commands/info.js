@@ -2,7 +2,7 @@ const {localize} = require('../../../src/functions/localize');
 const {embedType, pufferStringToSize, dateToDiscordTimestamp} = require('../../../src/functions/helpers');
 const {getUser} = require('@scnetwork/api');
 const {MessageEmbed} = require('discord.js');
-const {AgeFromDateString} = require('age-calculator');
+const {AgeFromDate} = require('age-calculator');
 const {stringNames} = require('../../invite-tracking/events/guildMemberJoin');
 
 // THIS IS PAIN. Rewrite it as soon as possible
@@ -169,7 +169,7 @@ module.exports.subcommands = {
         if (birthday) {
             let dateString = `${birthday.day}.${birthday.month}${birthday.year ? `.${birthday.year}` : ''}`;
             if (birthday.year) {
-                const age = new AgeFromDateString(`${birthday.year}-${birthday.month - 1}-${birthday.day}`).age;
+                const age = new AgeFromDate(new Date(birthday.year, birthday.month - 1, birthday.day)).age;
                 dateString = `[${dateString}](https://sc-network.net/age?age=${age} "${localize('birthdays', 'age-hover', {a: age})}")`;
             }
             embed.addField(moduleStrings.userinfo.birthday, `${dateString} ${((scNetworkUser || {}).birthday || {}).day && birthdaySyncSymbol ? `[🗘](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "${localize('birthdays', 'sync-enabled-hover')}")` : ''}${((scNetworkUser || {}).birthday || {}).day && ((scNetworkUser || {}).birthday || {}).verfied && showVerifiedItem ? `[✓](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "${localize('birthdays', 'verified-hover')}")` : ''}`, true);

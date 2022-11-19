@@ -1,226 +1,253 @@
 {
+  "description": {
+    "en": "Edit the messages and strings of the module here",
+    "de": "Stelle hier die Nachrichten des Modules ein"
+  },
+  "humanName": {
+    "en": "Messages",
+    "de": "Nachrichten"
+  },
   "filename": "strings.json",
-  "humanname-de": "Nachrichten",
-  "humanname-en": "Messages",
-  "description-en": "Edit the messages and strings of the module here",
-  "description-de": "Stelle hier die Nachrichten des Modules ein",
   "content": [
     {
-      "field_name": "user_not_found",
-      "humanname-en": "User not found",
-      "humanname-de": "Nutzer nicht gefunden",
-      "default-en": ":warning: We do not have any records of this user",
-      "default-de": ":warning: Dieser Nutzer hat anscheinend noch keine Nachricht verschickt",
+      "name": "user_not_found",
+      "humanName": {
+        "en": "User not found",
+        "de": "Nutzer nicht gefunden"
+      },
+      "default": {
+        "en": ":warning: We do not have any records of this user",
+        "de": ":warning: Dieser Nutzer hat anscheinend noch keine Nachricht verschickt"
+      },
+      "description": {
+        "en": "This messages gets send if someone checks a profile of a user when the user never send a message",
+        "de": "Diese Nachricht wird verschickt, wenn ein eine Person sein Profil sehen will, aber noch kein XP hat"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description-en": "This messages gets send if someone checks a profile of a user when the user never send a message",
-      "description-de": "Diese Nachricht wird verschickt, wenn ein eine Person sein Profil sehen will, aber noch kein XP hat",
-      "params-de": {}
+      "allowEmbed": true
     },
     {
-      "field_name": "embed",
-      "type": "keyed",
-      "description": "Embed which gets send if !profile gets executed",
-      "default": {
-        "title": "%username%'s Profile",
-        "description": "You can find %username%'s profile here.",
-        "messages": "Message-Count",
-        "xp": "XP",
-        "level": "Level",
-        "joinedAt": "Joined server",
-        "color": "GREEN",
-        "bio": "Bio"
+      "name": "embed",
+      "humanName": {
+        "de": "Profilembed"
       },
+      "default": {
+        "en": {
+          "title": "%username%'s Profile",
+          "description": "You can find %username%'s profile here.",
+          "messages": "Message-Count",
+          "xp": "XP",
+          "level": "Level",
+          "joinedAt": "Joined server",
+          "color": "GREEN",
+          "bio": "Bio"
+        },
+        "de": {
+          "title": "%username%'s Profil",
+          "description": "Das Profil von %username% findest du hier.",
+          "messages": "Nachrichten-Anzahl",
+          "xp": "XP",
+          "level": "Level",
+          "joinedAt": "Server beigetreten",
+          "color": "GREEN",
+          "bio": "Bio"
+        }
+      },
+      "description": {
+        "en": "Embed which gets send if !profile gets executed",
+        "de": "Embed das gesendet wird, wenn /profile ausgeführt wird"
+      },
+      "type": "keyed",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "disableKeyEdits": true,
-      "humanname-de": "Profilembed",
-      "description-de": "Embed das gesendet wird, wenn /profile ausgeführt wird",
-      "params-de": {},
-      "default-de": {
-        "title": "%username%'s Profil",
-        "description": "Das Profil von %username% findest du hier.",
-        "messages": "Nachrichten-Anzahl",
-        "xp": "XP",
-        "level": "Level",
-        "joinedAt": "Server beigetreten",
-        "color": "GREEN",
-        "bio": "Bio"
-      }
+      "disableKeyEdits": true
     },
     {
-      "field_name": "leaderboardEmbed",
-      "type": "keyed",
-      "description": "This embed gets send if !leaderboard (!lb) gets executed",
-      "default": {
-        "title": "Leaderboard",
-        "description": "You can find the level of every user here",
-        "and_x_more_people": "And %count% other members",
-        "more_level": "More Levels",
-        "x_levels_are_not_shown": "And **%count% Level** are not being displayed",
-        "your_level": "Your Level",
-        "you_are_level_x_with_x_xp": "You are currently on **Level %level%** with **%xp% XP**. See more with `/profile`.",
-        "joinedAt": "Joined server",
-        "color": "GREEN"
+      "name": "leaderboardEmbed",
+      "humanName": {
+        "de": "Ranglisten-Embed"
       },
+      "default": {
+        "en": {
+          "title": "Leaderboard",
+          "description": "You can find the level of every user here",
+          "and_x_more_people": "And %count% other members",
+          "more_level": "More Levels",
+          "x_levels_are_not_shown": "And **%count% Level** are not being displayed",
+          "your_level": "Your Level",
+          "you_are_level_x_with_x_xp": "You are currently on **Level %level%** with **%xp% XP**. See more with `/profile`.",
+          "joinedAt": "Joined server",
+          "color": "GREEN"
+        },
+        "de": {
+          "title": "Rangliste",
+          "description": "Hier findest du das Level von jedem Nutzer",
+          "and_x_more_people": "Und %count% andere Mitglieder",
+          "more_level": "Mehr Level",
+          "x_levels_are_not_shown": "Und **%count% Level** werden nicht angezeigt",
+          "your_level": "Dein Level",
+          "you_are_level_x_with_x_xp": "Du bist aktuell auf **Level %level%** mit **%xp% XP**. Siehe mehr mit `/profile`.",
+          "joinedAt": "Server beigetreten",
+          "color": "GREEN"
+        }
+      },
+      "description": {
+        "en": "This embed gets send if !leaderboard (!lb) gets executed",
+        "de": "Dieses Embed wird gesendet, wenn /leaderboard (/lb) ausgeführt wird"
+      },
+      "type": "keyed",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "disableKeyEdits": true,
-      "humanname-de": "Ranglisten-Embed",
-      "description-de": "Dieses Embed wird gesendet, wenn /leaderboard (/lb) ausgeführt wird",
-      "params-de": {},
-      "default-de": {
-        "title": "Rangliste",
-        "description": "Hier findest du das Level von jedem Nutzer",
-        "and_x_more_people": "Und %count% andere Mitglieder",
-        "more_level": "Mehr Level",
-        "x_levels_are_not_shown": "Und **%count% Level** werden nicht angezeigt",
-        "your_level": "Dein Level",
-        "you_are_level_x_with_x_xp": "Du bist aktuell auf **Level %level%** mit **%xp% XP**. Siehe mehr mit `/profile`.",
-        "joinedAt": "Server beigetreten",
-        "color": "GREEN"
-      }
+      "disableKeyEdits": true
     },
     {
-      "field_name": "level_up_message",
-      "default": "Level Up! Your new level is **%newLevel%**!",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "This messages gets send if a user levels up (gets overwritten if randomMessages is enabled)",
-      "params": [
-        {
-          "name": "%mention%",
-          "description": "Mention of the user"
-        },
-        {
-          "name": "%newLevel%",
-          "description": "New level of the user"
-        }
-      ],
-      "humanname-de": "Level-Up-Nachricht",
-      "description-de": "Diese Nachricht wird gesendet, wenn ein Nutzer ein Level aufsteigt (Wird überschrieben, wenn \"Zufällige Nachrichten\" aktiviert ist)",
-      "params-de": [
-        {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers"
-        },
-        {
-          "name": "%newLevel%",
-          "description": "Neues Level des Nutzers"
-        }
-      ],
-      "default-de": "Level Up! Dein neues Level ist jetzt %newLevel%"
-    },
-    {
-      "field_name": "level_up_message_with_reward",
-      "default": "Level Up! Your new level is **%newLevel%**! You received %role%.",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "This messages gets send if a user levels up and gets a role (gets overwritten if randomMessages is enabled)",
-      "params": [
-        {
-          "name": "%mention%",
-          "description": "Mention of the user"
-        },
-        {
-          "name": "%newLevel%",
-          "description": "New level of the user"
-        },
-        {
-          "name": "%role%",
-          "description": "Mention of the role (No ping)"
-        }
-      ],
-      "humanname-de": "Level-Up-Nachricht mit Belohnung",
-      "description-de": "Diese Nachricht wird gesendet, wenn ein Nutzer ein Level aufsteigt und eine Rolle erhält (Wird überschrieben, wenn \"Zufällige Nachrichten\" aktiviert ist)",
-      "params-de": [
-        {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers"
-        },
-        {
-          "name": "%newLevel%",
-          "description": "Neues Level des Nutzers"
-        },
-        {
-          "name": "%role%",
-          "description": "Erwähnung der Rolle (Ohne \"Ping\")"
-        }
-      ],
-      "default-de": "Level Up! Dein neues Level ist **%newLevel%**! Du erhältst %role%."
-    },
-    {
-      "field_name": "liveLeaderBoardEmbed",
-      "type": "keyed",
-      "description": "Embed which gets send to the leaderboard-channel and gets updated",
-      "default": {
-        "title": "Live Leaderboard",
-        "description": "Find all the users levels here. Updated every five minutes.",
-        "color": "GREEN",
-        "button": "👤 Show my level"
+      "name": "level_up_message",
+      "humanName": {
+        "de": "Level-Up-Nachricht"
       },
+      "default": {
+        "en": "Level Up! Your new level is **%newLevel%**!",
+        "de": "Level Up! Dein neues Level ist jetzt %newLevel%"
+      },
+      "description": {
+        "en": "This messages gets send if a user levels up (gets overwritten if randomMessages is enabled)",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer ein Level aufsteigt (Wird überschrieben, wenn \"Zufällige Nachrichten\" aktiviert ist)"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user",
+            "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "newLevel",
+          "description": {
+            "en": "New level of the user",
+            "de": "Neues Level des Nutzers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "level_up_message_with_reward",
+      "humanName": {
+        "de": "Level-Up-Nachricht mit Belohnung"
+      },
+      "default": {
+        "en": "Level Up! Your new level is **%newLevel%**! You received %role%.",
+        "de": "Level Up! Dein neues Level ist **%newLevel%**! Du erhältst %role%."
+      },
+      "description": {
+        "en": "This messages gets send if a user levels up and gets a role (gets overwritten if randomMessages is enabled)",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer ein Level aufsteigt und eine Rolle erhält (Wird überschrieben, wenn \"Zufällige Nachrichten\" aktiviert ist)"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user",
+            "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "newLevel",
+          "description": {
+            "en": "New level of the user",
+            "de": "Neues Level des Nutzers"
+          }
+        },
+        {
+          "name": "role",
+          "description": {
+            "en": "Mention of the role (No ping)",
+            "de": "Erwähnung der Rolle (Ohne \"Ping\")"
+          }
+        }
+      ]
+    },
+    {
+      "name": "liveLeaderBoardEmbed",
+      "humanName": {
+        "de": "Echtzeit-Rangliste"
+      },
+      "default": {
+        "en": {
+          "title": "Live Leaderboard",
+          "description": "Find all the users levels here. Updated every five minutes.",
+          "color": "GREEN",
+          "button": "👤 Show my level"
+        },
+        "de": {
+          "title": "Echtzeit-Rangliste",
+          "description": "Hier findest du das Level von jedem Nutzer. Diese Liste wird alle fünf Minuten aktualisiert.",
+          "color": "GREEN",
+          "button": "👤 Mein Level anzeigen"
+        }
+      },
+      "description": {
+        "en": "Embed which gets send to the leaderboard-channel and gets updated",
+        "de": "Embed, welches in den Ranglisten-Kanal gesendet und danach geupdated wird"
+      },
+      "type": "keyed",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "disableKeyEdits": true,
-      "humanname-de": "Echtzeit-Rangliste",
-      "description-de": "Embed, welches in den Ranglisten-Kanal gesendet und danach geupdated wird",
-      "params-de": {},
-      "default-de": {
-        "title": "Echtzeit-Rangliste",
-        "description": "Hier findest du das Level von jedem Nutzer. Diese Liste wird alle fünf Minuten aktualisiert.",
-        "color": "GREEN",
-        "button": "👤 Mein Level anzeigen"
-      }
+      "disableKeyEdits": true
     },
     {
-      "field_name": "leaderboard-button-answer",
-      "default-en": "Hi, %name%, you are currently on **level %level%** with **%userXP%**/%nextLevelXP% **XP**. Learn more with `/profile`.",
-      "default-de": "Hi, %name%, du bist aktuell auf **Level %level%** mit **%userXP%**/%nextLevelXP% **Erfahrungspunkten**. Erfahre mehr mit `/profile`.",
+      "name": "leaderboard-button-answer",
+      "humanName": {
+        "de": "Nachricht bei Klick auf den Knopf unter dem Live-Leaderboard"
+      },
+      "default": {
+        "en": "Hi, %name%, you are currently on **level %level%** with **%userXP%**/%nextLevelXP% **XP**. Learn more with `/profile`.",
+        "de": "Hi, %name%, du bist aktuell auf **Level %level%** mit **%userXP%**/%nextLevelXP% **Erfahrungspunkten**. Erfahre mehr mit `/profile`."
+      },
+      "description": {
+        "en": "This messages gets send if a user clicks on the button below the live-leaderboard",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer den Knopf unter dem Live-Embed drückt"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "This messages gets send if a user clicks on the button below the live-leaderboard",
       "params": [
         {
-          "name": "%name%",
-          "description": "Username of the user"
+          "name": "name",
+          "description": {
+            "en": "Username of the user",
+            "de": "Username des Nutzers"
+          }
         },
         {
-          "name": "%level%",
-          "description": "Level of the user"
+          "name": "level",
+          "description": {
+            "en": "Level of the user",
+            "de": "Level des Nutzers"
+          }
         },
         {
-          "name": "%userXP%",
-          "description": "XP of the user"
+          "name": "userXP",
+          "description": {
+            "en": "XP of the user",
+            "de": "XP des Nutzers"
+          }
         },
         {
-          "name": "%nextLevelXP%",
-          "description": "XP of the next level"
-        }
-      ],
-      "humanname-de": "Nachricht bei Klick auf den Knopf unter dem Live-Leaderboard",
-      "description-de": "Diese Nachricht wird gesendet, wenn ein Nutzer den Knopf unter dem Live-Embed drückt",
-      "params-de": [
-        {
-          "name": "%name%",
-          "description": "Username des Nutzers"
-        },
-        {
-          "name": "%level%",
-          "description": "Level des Nutzers"
-        },
-        {
-          "name": "%userXP%",
-          "description": "XP des Nutzers"
-        },
-        {
-          "name": "%nextLevelXP%",
-          "description": "Benötigtes XP zum nächsten Level"
+          "name": "nextLevelXP",
+          "description": {
+            "en": "XP of the next level",
+            "de": "Benötigtes XP zum nächsten Level"
+          }
         }
       ]
     }

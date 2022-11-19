@@ -7,8 +7,16 @@ module.exports.run = async function (client, msg) {
 
     const channel = client.modules['auto-delete'].uniqueChannels.find(c => c.channelID === msg.channel.id);
     if (!channel) return;
-    setTimeout(() => {
-        if (msg.deletable && !msg.pinned) msg.delete().catch(() => {
+    setTimeout(async () => {
+        if (parseInt(channel.keepMessageCount) === 0) {
+            if (msg.deletable && !msg.pinned) msg.delete().catch(() => {
+            });
+        }
+        const oldMessages = await msg.channel.messages.fetch({
+            before: msg.id,
+            limit: parseInt(channel.keepMessageCount)
         });
-    }, parseFloat(channel.timeout < 2 ? 2 : channel.timeout) * 60000);
+        if (oldMessages.length < parseInt(channel.keepMessageCount)) return;
+        if (oldMessages.last().deltable && !oldMessages.last().pinned) await oldMessages.last().delete();
+    }, parseInt(channel.timeout) * 60000);
 };

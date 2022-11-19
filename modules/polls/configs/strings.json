@@ -1,42 +1,51 @@
 {
+  "description": {
+    "en": "Edit the messages and strings of the module here",
+    "de": "Stelle hier die Nachrichten des Modules ein"
+  },
+  "humanName": {
+    "en": "Nachrichten",
+    "de": "Nachrichten"
+  },
   "filename": "strings.json",
-  "humanname-de": "Nachrichten",
-  "humanname-en": "Nachrichten",
-  "description-en": "Edit the messages and strings of the module here",
-  "description-de": "Stelle hier die Nachrichten des Modules ein",
   "content": [
     {
-      "field_name": "embed",
-      "description": "You can edit the settings of your embed here",
+      "name": "embed",
+      "humanName": {
+        "de": "Embed"
+      },
+      "default": {
+        "en": {
+          "title": "New Poll",
+          "color": "BLUE",
+          "options": "Today's options",
+          "liveView": "Live-Views of the results",
+          "expiresOn": "End of this poll",
+          "thisPollExpiresOn": "This poll expires on %date%.",
+          "endedPollTitle": "Poll ended",
+          "endedPollColor": "RED"
+        },
+        "de": {
+          "title": "Neue Umfrage",
+          "color": "BLUE",
+          "options": "Heutige Auswahlmöglichkeiten",
+          "liveView": "Live-Anzeige der Ergebnisse",
+          "expiresOn": "Ende dieser Umfrage",
+          "thisPollExpiresOn": "Diese Umfrage endet am %date%.",
+          "endedPollTitle": "Umfrage beendet",
+          "endedPollColor": "RED"
+        }
+      },
+      "description": {
+        "en": "You can edit the settings of your embed here",
+        "de": "Du kannst die Einstellungen des Embeds hier bearbeiten"
+      },
       "type": "keyed",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "disableKeyEdits": true,
-      "default": {
-        "title": "New Poll",
-        "color": "BLUE",
-        "options": "Today's options",
-        "liveView": "Live-Views of the results",
-        "expiresOn": "End of this poll",
-        "thisPollExpiresOn": "This poll expires on %date%.",
-        "endedPollTitle": "Poll ended",
-        "endedPollColor": "RED"
-      },
-      "humanname-de": "Embed",
-      "description-de": "Du kannst die Einstellungen des Embeds hier bearbeiten",
-      "params-de": {},
-      "default-de": {
-        "title": "Neue Umfrage",
-        "color": "BLUE",
-        "options": "Heutige Auswahlmöglichkeiten",
-        "liveView": "Live-Anzeige der Ergebnisse",
-        "expiresOn": "Ende dieser Umfrage",
-        "thisPollExpiresOn": "Diese Umfrage endet am %date%.",
-        "endedPollTitle": "Umfrage beendet",
-        "endedPollColor": "RED"
-      }
+      "disableKeyEdits": true
     }
   ]
 }

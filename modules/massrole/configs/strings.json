@@ -1,37 +1,47 @@
 {
+  "description": {
+    "en": "Edit the messages and strings of the module here",
+    "de": "Stelle hier die Nachrichten des Modules ein"
+  },
+  "humanName": {
+    "en": "Messages",
+    "de": "Nachrichten"
+  },
   "filename": "strings.json",
-  "humanname-de": "Nachrichten",
-  "humanname-en": "Messages",
-  "description-en": "Edit the messages and strings of the module here",
-  "description-de": "Stelle hier die Nachrichten des Modules ein",
   "content": [
     {
-      "field_name": "done",
-      "humanname-en": "Action executed",
-      "humanname-de": "Aktion ausgeführt",
-      "default-en": "The action was executed successfully.",
-      "default-de": "Die Aktion wurde erfolgreich ausgeführt.",
+      "name": "done",
+      "humanName": {
+        "en": "Action executed",
+        "de": "Aktion ausgeführt"
+      },
+      "default": {
+        "en": "The action was executed successfully.",
+        "de": "Die Aktion wurde erfolgreich ausgeführt."
+      },
+      "description": {
+        "en": "This messages gets send when a action was executed successfully",
+        "de": "Diese Nachricht wird verschickt, wenn eine Akton erfolgreich ausgeführt wurde"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description-en": "This messages gets send when a action was executed successfully",
-      "description-de": "Diese Nachricht wird verschickt, wenn eine Akton erfolgreich ausgeführt wurde",
-      "params-de": {
-
-      }
+      "allowEmbed": true
     },
     {
-      "field_name": "notDone",
-      "humanname-en": "Action not executed",
-      "humanname-de": "Aktion nicht ausgeführt",
-      "default-en": "The Action couldn't be executed because the bot has not enough permissions.",
-      "default-de": "Die Aktion konnte nicht vollständig ausgeführt werden, da der Bot nicht genug Rechte hat.",
+      "name": "notDone",
+      "humanName": {
+        "en": "Action not executed",
+        "de": "Aktion nicht ausgeführt"
+      },
+      "default": {
+        "en": "The Action couldn't be executed because the bot has not enough permissions.",
+        "de": "Die Aktion konnte nicht vollständig ausgeführt werden, da der Bot nicht genug Rechte hat."
+      },
+      "description": {
+        "en": "This messages gets send when a action was not executed successfully",
+        "de": "Diese Nachricht wird verschickt, wenn eine Aktion nicht erfolgreich ausgeführt wurde"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description-en": "This messages gets send when a action was not executed successfully",
-      "description-de": "Diese Nachricht wird verschickt, wenn eine Aktion nicht erfolgreich ausgeführt wurde",
-      "params-de": {
-
-      }
+      "allowEmbed": true
     }
   ]
 }

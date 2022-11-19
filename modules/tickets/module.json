@@ -1,14 +1,11 @@
 {
   "name": "tickets",
-  "humanReadableName-en": "Ticket-System",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
   "fa-icon": "fas fa-ticket-simple",
-  "description-en": "Let users create tickets to message your staff",
-  "description-de": "Lasse deine Nutzer durch Tickets mit deinem Team kommunizieren",
   "events-dir": "/events",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/tickets",
   "models-dir": "/models",
@@ -17,5 +14,12 @@
   ],
   "tags": [
     "support"
-  ]
+  ],
+  "humanReadableName": {
+    "en": "Ticket-System"
+  },
+  "description": {
+    "en": "Let users create tickets to message your staff",
+    "de": "Lasse deine Nutzer durch Tickets mit deinem Team kommunizieren"
+  }
 }

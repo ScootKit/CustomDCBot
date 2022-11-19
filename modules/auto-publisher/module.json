@@ -1,7 +1,5 @@
 {
   "name": "auto-publisher",
-  "humanReadableName-en": "Automatic Publishing",
-  "humanReadableName-de": "Automatische Veröffentlichung",
   "fa-icon": "fas fa-bullhorn",
   "author": {
     "scnxOrgID": "1",
@@ -9,13 +7,19 @@
     "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-publisher",
-  "description-de": "Veröffentlicht Nachrichten in Ankündigungskanälen",
-  "description-en": "Publishes messages in announcement channels",
   "events-dir": "/events",
   "config-example-files": [
     "config.json"
   ],
   "tags": [
     "administration"
-  ]
+  ],
+  "humanReadableName": {
+    "en": "Automatic Publishing",
+    "de": "Automatische Veröffentlichung"
+  },
+  "description": {
+    "en": "Publishes messages in announcement channels",
+    "de": "Veröffentlicht Nachrichten in Ankündigungskanälen"
+  }
 }

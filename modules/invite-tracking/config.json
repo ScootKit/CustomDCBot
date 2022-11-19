@@ -1,4 +1,6 @@
 {
+  "description": {},
+  "humanName": {},
   "filename": "config.json",
   "commandsWarnings": {
     "normal": [
@@ -7,13 +9,19 @@
   },
   "content": [
     {
-      "field_name": "logchannel-id",
-      "humanname-en": "Invite-Log-Channel",
-      "humanname-de": "Invite-Log-Kanal",
-      "default": "",
+      "name": "logchannel-id",
+      "humanName": {
+        "en": "Invite-Log-Channel",
+        "de": "Invite-Log-Kanal"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Channel in which information about new members should get logged (optional)",
+        "de": "Kanal, in welchem Informationen über neue Nutzer geloggt werden sollen (optional)"
+      },
       "type": "channelID",
-      "description-en": "Channel in which information about new members should get logged (optional)",
-      "description-de": "Kanal, in welchem Informationen über neue Nutzer geloggt werden sollen (optional)",
       "allowNull": true
     }
   ]
