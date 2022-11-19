@@ -1,72 +1,91 @@
 {
+  "description": {},
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
   "content": [
     {
-      "field_name": "channels",
-      "default": [],
-      "content": "channelID",
+      "name": "channels",
+      "humanName": {
+        "de": "Kanäle"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "ID of channels with the counter game",
+        "de": "ID der Kanäle mit dem Zählspiel"
+      },
       "type": "array",
-      "description": "ID of channels with the counter game",
-      "humanname-de": "Kanäle",
-      "description-de": "ID der Kanäle mit dem Zählspiel",
-      "params-de": {},
-      "default-de": []
+      "content": "channelID"
     },
     {
-      "field_name": "channelDescription",
-      "default": "Next number %x%",
+      "name": "channelDescription",
+      "humanName": {
+        "de": "Kanalbeschreibung"
+      },
+      "default": {
+        "en": "Next number %x%",
+        "de": "Nächste Zahl: %x%"
+      },
+      "description": {
+        "en": "Text which should be set after someone counted (leave blank to disable)",
+        "de": "Text, welcher gesetzt werden soll, nachdem jemand gezählt hat (leer lassen zum deaktivieren)"
+      },
       "type": "string",
       "allowNull": true,
-      "description": "Text which should be set after someone counted (leave blank to disable)",
       "params": [
         {
-          "name": "%x%",
-          "description": "Next number users should count"
+          "name": "x",
+          "description": {
+            "en": "Next number users should count",
+            "de": "Nächste Zahl, welche die Nutzer zählen sollen"
+          }
         }
-      ],
-      "humanname-de": "Kanalbeschreibung",
-      "description-de": "Text, welcher gesetzt werden soll, nachdem jemand gezählt hat (leer lassen zum deaktivieren)",
-      "params-de": [
-        {
-          "name": "%x%",
-          "description": "Nächste Zahl, welche die Nutzer zählen sollen"
-        }
-      ],
-      "default-de": "Nächste Zahl: %x%"
+      ]
     },
     {
-      "field_name": "success-reaction",
-      "default": "✅",
-      "type": "string",
-      "description": "Reaction which the bot should give when someone counts successfully",
-      "humanname-de": "Erfolgsreaktion",
-      "description-de": "Reaktion welche der Bot geben soll, wenn jemand erfolgreich gezählt hat",
-      "params-de": {},
-      "default-de": "✅"
+      "name": "success-reaction",
+      "humanName": {
+        "de": "Erfolgsreaktion"
+      },
+      "default": {
+        "en": "✅",
+        "de": "✅"
+      },
+      "description": {
+        "en": "Reaction which the bot should give when someone counts successfully",
+        "de": "Reaktion welche der Bot geben soll, wenn jemand erfolgreich gezählt hat"
+      },
+      "type": "string"
     },
     {
-      "field_name": "wrong-input-message",
-      "default": "⚠ %err%",
+      "name": "wrong-input-message",
+      "humanName": {
+        "de": "Nachricht bei falscher Eingabe"
+      },
+      "default": {
+        "en": "⚠ %err%",
+        "de": "⚠ %err%"
+      },
+      "description": {
+        "en": "Message that gets send if a user provides an invalid input",
+        "de": "Nachricht, welche gesendet wird, wenn ein Nutzer eine ungültige Nachricht sendet"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send if a user provides an invalid input",
       "params": [
         {
-          "name": "%err%",
-          "description": "Description of what they did wrong"
+          "name": "err",
+          "description": {
+            "en": "Description of what they did wrong",
+            "de": "Beschreibung, was der Nutzer falsch gemacht hat"
+          }
         }
-      ],
-      "humanname-de": "Nachricht bei falscher Eingabe",
-      "description-de": "Nachricht, welche gesendet wird, wenn ein Nutzer eine ungültige Nachricht sendet",
-      "params-de": [
-        {
-          "name": "%err%",
-          "description": "Beschreibung, was der Nutzer falsch gemacht hat"
-        }
-      ],
-      "default-de": "⚠ %err%"
+      ]
     }
   ]
 }

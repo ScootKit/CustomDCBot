@@ -1,378 +1,500 @@
 {
+  "description": {
+    "en": "Set up which messages your bot should send",
+    "de": "Stelle hier ein, welche Nachrichten dein Bot schicken soll"
+  },
+  "humanName": {
+    "en": "Messages",
+    "de": "Nachrichten"
+  },
   "filename": "strings.json",
   "content": [
     {
-      "field_name": "no_permissions",
-      "default": "You can not do that. You need at least moderator level %required_level% to do this",
+      "name": "no_permissions",
+      "humanName": {},
+      "default": {
+        "en": "You can not do that. You need at least moderator level %required_level% to do this",
+        "de": "You can not do that. You need at least moderator level %required_level% to do this"
+      },
+      "description": {
+        "en": "Message that gets send if the user doesn't has the required role and/or has not the required mod-level"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send if the user doesn't has the required role and/or has not the required mod-level",
       "params": [
         {
-          "name": "%required_level%",
-          "description": "Required mod-level to do this."
-        }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You can not do that. You need at least moderator level %required_level% to do this"
-    },
-    {
-      "field_name": "user_not_found",
-      "default": "I could not find this user - try using an ID or a mention",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send if the user provided an invalid userid",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "I could not find this user - try using an ID or a mention"
-    },
-    {
-      "field_name": "missing_reason",
-      "default": "Please specify an reason",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send if the user does not provide a reason and 'require reason' is activated",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "Please specify an reason"
-    },
-    {
-      "field_name": "this_is_a_mod",
-      "default": "You can not perform this action on your college.",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send if the user tries to mute another moderator",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You can not perform this action on your college."
-    },
-    {
-      "field_name": "submitted-report-message",
-      "default": "Thanks for reporting %user%. I notified our server team and transmitted them an [encrypted snapshot](<%mURL%>) of the current messages in this channel, so they can see what really happened. Please make sure that our bots and staff can message you, so we can ask you follow-up-questions, if needed.",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send, if someone reports somebody.",
-      "params": [
-        {
-          "name": "%user%",
-          "description": "Tag of the user they reported"
-        },
-        {
-          "name": "%mURL%",
-          "description": "URL to the message log"
-        }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "Thanks for reporting %user%. I notified our server team and transmitted them an [encrypted snapshot](<%mURL%>) of the current messages in this channel, so they can see what really happened. Please make sure that our bots and staff can message you, so we can ask you follow-up-questions, if needed."
-    },
-    {
-      "field_name": "mute_message",
-      "default": "You got muted for **%reason%** by %user%!",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send to a user when they got muted",
-      "params": [
-        {
-          "name": "%user%",
-          "description": "Tag of the moderator"
-        },
-        {
-          "name": "%reason%",
-          "description": "Reason of the mute"
-        }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got muted for **%reason%** by %user%!"
-    },
-    {
-      "field_name": "channel_mute",
-      "default": "You got channel-muted from %channel% for **%reason%** by %user%!",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send to a user when they got muted",
-      "params": [
-        {
-          "name": "%user%",
-          "description": "Tag of the moderator"
-        },
-        {
-          "name": "%reason%",
-          "description": "Reason of the mute"
-        },
-        {
-          "name": "%channel%",
-          "description": "Channel from which the user got muted"
+          "name": "required_level",
+          "description": {
+            "en": "Required mod-level to do this."
+          }
         }
       ]
     },
     {
-      "field_name": "remove-channel_mute",
-      "default": "Your channel-mute from %channel% got removed because of **%reason%** by %user%!",
+      "name": "user_not_found",
+      "humanName": {},
+      "default": {
+        "en": "I could not find this user - try using an ID or a mention",
+        "de": "I could not find this user - try using an ID or a mention"
+      },
+      "description": {
+        "en": "Message that gets send if the user provided an invalid userid"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "missing_reason",
+      "humanName": {},
+      "default": {
+        "en": "Please specify an reason",
+        "de": "Please specify an reason"
+      },
+      "description": {
+        "en": "Message that gets send if the user does not provide a reason and 'require reason' is activated"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "this_is_a_mod",
+      "humanName": {},
+      "default": {
+        "en": "You can not perform this action on your college.",
+        "de": "You can not perform this action on your college."
+      },
+      "description": {
+        "en": "Message that gets send if the user tries to mute another moderator"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "submitted-report-message",
+      "humanName": {},
+      "default": {
+        "en": "Thanks for reporting %user%. I notified our server team and transmitted them an [encrypted snapshot](<%mURL%>) of the current messages in this channel, so they can see what really happened. Please make sure that our bots and staff can message you, so we can ask you follow-up-questions, if needed.",
+        "de": "Thanks for reporting %user%. I notified our server team and transmitted them an [encrypted snapshot](<%mURL%>) of the current messages in this channel, so they can see what really happened. Please make sure that our bots and staff can message you, so we can ask you follow-up-questions, if needed."
+      },
+      "description": {
+        "en": "Message that gets send, if someone reports somebody."
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they got muted",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the user they reported"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the mute"
-        },
-        {
-          "name": "%channel%",
-          "description": "Channel from which the user got unmuted"
+          "name": "mURL",
+          "description": {
+            "en": "URL to the message log"
+          }
         }
       ]
     },
     {
-      "field_name": "tmpmute_message",
-      "default": "You got temporarily muted for **%reason%** by %user%! This action is going to expire on %date%.",
+      "name": "mute_message",
+      "humanName": {},
+      "default": {
+        "en": "You got muted for **%reason%** by %user%!",
+        "de": "You got muted for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got muted"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they got temporarily muted",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the mute"
-        },
-        {
-          "name": "%date%",
-          "description": "Timestamp when this action expires"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the mute"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got temporarily muted for **%reason%** by %user%! This action is going to expire on %date%."
+      ]
     },
     {
-      "field_name": "quarantine_message",
-      "default": "You got quarantined for **%reason%** by %user%!",
+      "name": "channel_mute",
+      "humanName": {},
+      "default": {
+        "en": "You got channel-muted from %channel% for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got muted"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they get quarantined",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the mute"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the mute"
+          }
+        },
+        {
+          "name": "channel",
+          "description": {
+            "en": "Channel from which the user got muted"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got quarantined for **%reason%** by %user%!"
+      ]
     },
     {
-      "field_name": "tmpquarantine_message",
-      "default": "You got quarantined temporarily for **%reason%** by %user%! This action is going to expire on %date%",
+      "name": "remove-channel_mute",
+      "humanName": {},
+      "default": {
+        "en": "Your channel-mute from %channel% got removed because of **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got muted"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they get quarantined",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the mute"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the mute"
+          }
         },
         {
-          "name": "%date%",
-          "description": "Date when the quarantine is going to be removed automatically"
+          "name": "channel",
+          "description": {
+            "en": "Channel from which the user got unmuted"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got quarantined temporarily for **%reason%** by %user%! This action is going to expire on %date%"
+      ]
     },
     {
-      "field_name": "unquarantine_message",
-      "default": "You got unquarantined for **%reason%** by %user%!",
+      "name": "tmpmute_message",
+      "humanName": {},
+      "default": {
+        "en": "You got temporarily muted for **%reason%** by %user%! This action is going to expire on %date%.",
+        "de": "You got temporarily muted for **%reason%** by %user%! This action is going to expire on %date%."
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got temporarily muted"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they get unquarantined",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the mute"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the mute"
+          }
+        },
+        {
+          "name": "date",
+          "description": {
+            "en": "Timestamp when this action expires"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got unquarantined for **%reason%** by %user%!"
+      ]
     },
     {
-      "field_name": "unmute_message",
-      "default": "You got unmuted for **%reason%** by %user%!",
+      "name": "quarantine_message",
+      "humanName": {},
+      "default": {
+        "en": "You got quarantined for **%reason%** by %user%!",
+        "de": "You got quarantined for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they get quarantined"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they got unmuted",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the unmute"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the mute"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got unmuted for **%reason%** by %user%!"
+      ]
     },
     {
-      "field_name": "kick_message",
-      "default": "You got kicked for **%reason%** by %user%!",
+      "name": "tmpquarantine_message",
+      "humanName": {},
+      "default": {
+        "en": "You got quarantined temporarily for **%reason%** by %user%! This action is going to expire on %date%",
+        "de": "You got quarantined temporarily for **%reason%** by %user%! This action is going to expire on %date%"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they get quarantined"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they got kicked",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the kick"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the mute"
+          }
+        },
+        {
+          "name": "date",
+          "description": {
+            "en": "Date when the quarantine is going to be removed automatically"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got kicked for **%reason%** by %user%!"
+      ]
     },
     {
-      "field_name": "ban_message",
-      "default": "You got banned for **%reason%** by %user%!",
+      "name": "unquarantine_message",
+      "humanName": {},
+      "default": {
+        "en": "You got unquarantined for **%reason%** by %user%!",
+        "de": "You got unquarantined for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they get unquarantined"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they got banned",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the ban"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the mute"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got banned for **%reason%** by %user%!"
+      ]
     },
     {
-      "field_name": "tmpban_message",
-      "default": "You got temporarily banned for **%reason%** by %user%! This action is going to expire on %date%",
+      "name": "unmute_message",
+      "humanName": {},
+      "default": {
+        "en": "You got unmuted for **%reason%** by %user%!",
+        "de": "You got unmuted for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got unmuted"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they got banned temporarily",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the ban"
-        },
-        {
-          "name": "%date%",
-          "description": "Date on which the ban expires"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the unmute"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got temporarily banned for **%reason%** by %user%! This action is going to expire on %date%"
+      ]
     },
     {
-      "field_name": "warn_message",
-      "default": "You got warned for **%reason%** by %user%!",
+      "name": "kick_message",
+      "humanName": {},
+      "default": {
+        "en": "You got kicked for **%reason%** by %user%!",
+        "de": "You got kicked for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got kicked"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send to a user when they got warned",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the warn"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the kick"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "You got warned for **%reason%** by %user%!"
+      ]
     },
     {
-      "field_name": "lock_channel_message",
-      "default": "This channel got locked because %reason% by %user%",
+      "name": "ban_message",
+      "humanName": {},
+      "default": {
+        "en": "You got banned for **%reason%** by %user%!",
+        "de": "You got banned for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got banned"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send in a channel if it gets locked",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the lock"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the ban"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "This channel got locked because %reason% by %user%"
+      ]
     },
     {
-      "field_name": "unlock_channel_message",
-      "default": "This channel got unlocked by %user%",
+      "name": "tmpban_message",
+      "humanName": {},
+      "default": {
+        "en": "You got temporarily banned for **%reason%** by %user%! This action is going to expire on %date%",
+        "de": "You got temporarily banned for **%reason%** by %user%! This action is going to expire on %date%"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got banned temporarily"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send in a channel if it gets unlocked",
       "params": [
         {
-          "name": "%user%",
-          "description": "Tag of the moderator"
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
+        },
+        {
+          "name": "reason",
+          "description": {
+            "en": "Reason of the ban"
+          }
+        },
+        {
+          "name": "date",
+          "description": {
+            "en": "Date on which the ban expires"
+          }
         }
-      ],
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "This channel got unlocked by %user%"
+      ]
+    },
+    {
+      "name": "warn_message",
+      "humanName": {},
+      "default": {
+        "en": "You got warned for **%reason%** by %user%!",
+        "de": "You got warned for **%reason%** by %user%!"
+      },
+      "description": {
+        "en": "Message that gets send to a user when they got warned"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
+        },
+        {
+          "name": "reason",
+          "description": {
+            "en": "Reason of the warn"
+          }
+        }
+      ]
+    },
+    {
+      "name": "lock_channel_message",
+      "humanName": {},
+      "default": {
+        "en": "This channel got locked because %reason% by %user%",
+        "de": "This channel got locked because %reason% by %user%"
+      },
+      "description": {
+        "en": "Message that gets send in a channel if it gets locked"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
+        },
+        {
+          "name": "reason",
+          "description": {
+            "en": "Reason of the lock"
+          }
+        }
+      ]
+    },
+    {
+      "name": "unlock_channel_message",
+      "humanName": {},
+      "default": {
+        "en": "This channel got unlocked by %user%",
+        "de": "This channel got unlocked by %user%"
+      },
+      "description": {
+        "en": "Message that gets send in a channel if it gets unlocked"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": {
+            "en": "Tag of the moderator"
+          }
+        }
+      ]
     }
   ]
 }

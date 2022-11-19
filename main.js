@@ -154,8 +154,9 @@ db.authenticate().then(async () => {
             await reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'log_channel_not_set_or_wrong_type'});
         }
     }
-    await configChecker.loadAllConfigs(client).catch(async () => {
+    await configChecker.loadAllConfigs(client).catch(async (e) => {
         if (client.logChannel) await client.logChannel.send('⚠ ' + localize('main', 'config-check-failed'));
+        console.log(e);
         logger.fatal(localize('main', 'config-check-failed'));
         process.exit(1);
     });
@@ -210,8 +211,9 @@ async function syncCommandsIfNeeded() {
     });
 
     /**
-     *  Handele exception on command sync
-     *  @param {Exception} e Exception
+     * Handels a sync failure
+     * @param e Exception
+     * @returns {Promise<void>}
      */
     async function handleSyncFailure(e) {
         logger.debug(e);

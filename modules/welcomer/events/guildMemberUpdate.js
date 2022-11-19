@@ -50,7 +50,7 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
                     '%memberProfilePictureUrl%': newGuildMember.user.avatarURL() || newGuildMember.user.defaultAvatarURL,
                     '%createdAt%': formatDate(newGuildMember.user.createdAt),
                     '%guildLevel%': client.guild.premiumTier,
-                    '%boostCount%%': client.guild.premiumSubscriptionCount,
+                    '%boostCount%': client.guild.premiumSubscriptionCount,
                     '%joinedAt%': formatDate(newGuildMember.joinedAt)
                 }
             ));

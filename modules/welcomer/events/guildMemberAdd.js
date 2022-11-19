@@ -11,7 +11,10 @@ module.exports.run = async function (client, guildMember) {
     const moduleChannels = client.configurations['welcomer']['channels'];
 
     if (!guildMember.pending && moduleConfig['give-roles-on-join'].length !== 0) {
-        await guildMember.roles.add(moduleConfig['give-roles-on-join']);
+        setTimeout(() => {
+            if (!guildMember.doNotGiveWelcomeRole) guildMember.roles.add(moduleConfig['give-roles-on-join']).then(() => {
+            });
+        }, 1000);
     }
 
     for (const channelConfig of moduleChannels.filter(c => c.type === 'join')) {
@@ -27,6 +30,20 @@ module.exports.run = async function (client, guildMember) {
         }
         if (!message) message = channelConfig.message;
 
+        const components = [];
+        if (channelConfig['welcome-button']) {
+            components.push({
+                type: 'ACTION_ROW',
+                components: [
+                    {
+                        label: channelConfig['welcome-button-content'],
+                        customId: 'welcome-' + guildMember.id,
+                        style: 'PRIMARY',
+                        type: 'BUTTON'
+                    }
+                ]
+            });
+        }
         const sentMessage = await channel.send(embedType(message || 'Message not found',
             {
                 '%mention%': guildMember.toString(),
@@ -39,17 +56,18 @@ module.exports.run = async function (client, guildMember) {
                 '%guildLevel%': client.guild.premiumTier,
                 '%boostCount%%': client.guild.premiumSubscriptionCount,
                 '%joinedAt%': formatDate(guildMember.joinedAt)
-            }
+            },
+            {},
+            components
         ));
-
         const memberModel = await moduleModel.findOne({
             where: {
-                userId: guildMember.id
+                userId: guildMember.id,
+                channelID: sentMessage.channelId
             }
         });
         if (memberModel) {
             await memberModel.update({
-                channelID: sentMessage.channelId,
                 messageID: sentMessage.id,
                 timestamp: new Date()
             });

@@ -1,98 +1,122 @@
 {
+  "description": {},
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
   "configElements": true,
   "content": [
     {
-      "field_name": "channels",
-      "default": [],
+      "name": "channels",
+      "humanName": {
+        "en": "Channels",
+        "de": "Auslöserkanäle"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Channel-ID in which this messages should get triggered",
+        "de": "Kanäle, bei denen der Bot reagieren soll, wenn ein Nutzer joint"
+      },
       "type": "array",
-      "content": "channelID",
-      "description": "Channel-ID in which this messages should get triggered",
-      "humanname-de": "Auslöserkanal",
-      "description-de": "Kanäle, bei denen der Bot reagieren soll, wenn ein Nutzer joint",
-      "params-de": {},
-      "default-de": []
+      "content": "channelID"
     },
     {
-      "field_name": "message",
-      "default": "The user %tag% joined the voicechat %vc%",
-      "allowEmbed": true,
-      "description": "Here you can set the message that should be send if someone joins a selected voicechat",
+      "name": "message",
+      "humanName": {
+        "de": "Nachricht"
+      },
+      "default": {
+        "en": "The user %tag% joined the voicechat %vc%",
+        "de": "Der Nutzer %tag% ist dem Voicechat %vc% beigetreten.n"
+      },
+      "description": {
+        "en": "Here you can set the message that should be send if someone joins a selected voicechat",
+        "de": "Hier kannst du die Nachricht einstellen, die gesendet werden soll, wenn jemand dem Sprachkanal beitritt"
+      },
       "type": "string",
-      "parms": [
-        {
-          "name": "%tag%",
-          "description": "Tag of the user"
-        },
-        {
-          "name": "%vc%",
-          "description": "Name of the voicechat"
-        },
-        {
-          "name": "%mention%",
-          "description": "Mention of the user"
-        }
-      ],
-      "humanname-de": "Nachricht",
-      "description-de": "Hier kannst du die Nachricht einstellen, die gesendet werden soll, wenn jemand dem Sprachkanal beitritt",
-      "params-de": [
-        {
-          "name": "%tag%",
-          "description": "Tag des Nutzers"
-        },
-        {
-          "name": "%vc%",
-          "description": "Name des Sprackkanals"
-        },
-        {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers"
-        }
-      ],
-      "default-de": "Der Nutzer %tag% ist dem Voicechat %vc% beigetreten.n"
-    },
-    {
-      "field_name": "notify_channel_id",
-      "default": "",
-      "type": "channelID",
-      "description": "Channel where the message should be send",
-      "humanname-de": "Benachrichtigungskanal",
-      "description-de": "Kanal, in welchen die Nachricht gesendet werden soll",
-      "params-de": {},
-      "default-de": ""
-    },
-    {
-      "field_name": "send_pn_to_member",
-      "default": false,
-      "type": "boolean",
-      "description": "Should the bot send a PN to the member?",
-      "humanname-de": "Join-PN",
-      "description-de": "Soll der Bot eine PN an den Nutzer schicken?",
-      "params-de": {},
-      "default-de": false
-    },
-    {
-      "field_name": "pn_message",
-      "default": "Hi, I saw you joined the voice chat %vc%. Nice (;",
       "allowEmbed": true,
+      "params": [
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
+        },
+        {
+          "name": "vc",
+          "description": {
+            "en": "Name of the voicechat",
+            "de": "Name des Sprackkanals"
+          }
+        },
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user",
+            "de": "Erwähnung des Nutzers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "notify_channel_id",
+      "humanName": {
+        "de": "Benachrichtigungskanal"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Channel where the message should be send",
+        "de": "Kanal, in welchen die Nachricht gesendet werden soll"
+      },
+      "type": "channelID"
+    },
+    {
+      "name": "send_pn_to_member",
+      "humanName": {
+        "en": "Join-DM",
+        "de": "Join-PN"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Should the bot send a PN to the member?",
+        "de": "Soll der Bot eine PN an den Nutzer schicken?"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "pn_message",
+      "humanName": {
+        "en": "Join-DM-Message",
+        "de": "Join-PN-Nachricht"
+      },
+      "default": {
+        "en": "Hi, I saw you joined the voice chat %vc%. Nice (;",
+        "de": "Hi, ich habe gesehen, dass du %vc% beigetreten bist. Nice (;"
+      },
+      "description": {
+        "de": "Diese Nachricht wird an den Nutzer versandt, wenn er einem Voicechat beitritt (wenn \"Join-PN\" aktiviert ist)."
+      },
       "type": "string",
-      "parms": [
+      "dependsOn": "send_pn_to_member",
+      "allowEmbed": true,
+      "params": [
         {
-          "name": "%vc%",
-          "description": "Name of the voicechat"
+          "name": "vc",
+          "description": {
+            "en": "Name of the voicechat",
+            "de": "Name des Sprachkanals"
+          }
         }
-      ],
-      "humanname-de": "Join-PN-Nachricht",
-      "description-de": "Diese Nachricht wird an den Nutzer versandt, wenn er einem Voicechat beitritt (wenn \"Join-PN\" aktiviert ist).",
-      "params-de": [
-        {
-          "name": "%vc%",
-          "description": "Name des Sprachkanals"
-        }
-      ],
-      "default-de": "Hi, ich habe gesehen, dass du %vc% beigetreten bist. Nice (;"
+      ]
     }
   ]
 }

@@ -3,57 +3,29 @@
  * @module Suggestions
  * @author Simon Csaba <mail@scderox.de>
  */
-const {MessageEmbed} = require('discord.js');
 const {embedType} = require('../../src/functions/helpers');
-const {localize} = require('../../src/functions/localize');
 
 module.exports.generateSuggestionEmbed = async function (client, suggestion) {
     const moduleConfig = client.configurations['suggestions']['config'];
     const channel = await client.channels.fetch(moduleConfig.suggestionChannel);
     const message = await channel.messages.fetch(suggestion.messageID);
-    let member = await client.guild.members.fetch(suggestion.suggesterID).catch(() => {
+    const user = await client.users.fetch(suggestion.suggesterID).catch(() => {
     });
-    if (!member) { // I could fetch the data another way so we don't have to show fake data
-        member = {
-            user: {
-                tag: 'Clyde#1234',
-                avatarURL: function () {
-                    return 'https://www.kindpng.com/picc/m/105-1055656_account-user-profile-avatar-avatar-user-profile-icon.png';
-                }
-            }
-        };
-    }
 
-    const embed = new MessageEmbed()
-        .setTitle(replacer(moduleConfig.suggestionEmbed.title))
-        .setAuthor({name: member.user.tag, iconURL: member.user.avatarURL()})
-        .setThumbnail(member.user.avatarURL())
-        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
-        .setDescription(suggestion.suggestion)
-        .addField('\u200b', '\u200b');
-    embed.setColor('YELLOW');
-
+    const params = {
+        '%id%': suggestion.id,
+        '%suggestion%': suggestion.suggestion,
+        '%tag%': user.tag,
+        '%avatarURL%': user.avatarURL(),
+        '%adminUser%': suggestion.adminAnswer ? `<@${suggestion.adminAnswer.userID}>` : '',
+        '%adminMessage%': suggestion.adminAnswer ? suggestion.adminAnswer.reason : ''
+    };
+    let field = 'unansweredSuggestion';
     if (suggestion.adminAnswer) {
-        embed.setColor(suggestion.adminAnswer.action === 'approve' ? 'GREEN' : 'RED');
-        embed.addField(moduleConfig.suggestionEmbed.adminAnswerTitle.replaceAll('%status%', suggestion.adminAnswer.action === 'approve' ? localize('suggestions', 'approved') : localize('suggestions', 'denied')),
-            localize('suggestions', 'admin-answer', {
-                status: suggestion.adminAnswer.action === 'approve' ? localize('suggestions', 'approved') : localize('suggestions', 'denied'),
-                u: `<@${suggestion.adminAnswer.userID}>`,
-                r: suggestion.adminAnswer.reason
-            }));
-    } else embed.addField(moduleConfig.suggestionEmbed.awaitingAdminAnswerTitle, moduleConfig.suggestionEmbed.awaitingAnswer);
-
-    await message.edit({content: '\u200b', embeds: [embed]});
-
-    /**
-     * Replaces variables in a string
-     * @private
-     * @param {String} string string to replace variables in
-     * @returns {String} String with replaced variables
-     */
-    function replacer(string) {
-        return string.split('%id%').join(suggestion.id);
+        if (suggestion.adminAnswer.action === 'approve') field = 'approvedSuggestion';
+        else field = 'deniedSuggestion';
     }
+    await message.edit(embedType(moduleConfig[field], params));
 };
 
 /**

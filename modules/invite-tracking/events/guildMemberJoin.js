@@ -33,10 +33,7 @@ module.exports.run = async (client, member, type, invite) => {
     if (moduleConfig['logchannel-id']) {
         const c = client.channels.cache.get(moduleConfig['logchannel-id']);
         if (!c) return client.logger.error(localize('invite-tracking', 'log-channel-not-found-but-set', {c: moduleConfig['logchannel-id']}));
-        const components = [{
-            type: 'ACTION_ROW',
-            components: []
-        }];
+        const components = [];
         const embed = new MessageEmbed()
             .setTitle('📥 ' + localize('invite-tracking', 'new-member'))
             .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
@@ -58,15 +55,22 @@ module.exports.run = async (client, member, type, invite) => {
                         inviter: invite.inviter.id
                     }
                 });
-                inviteString = inviteString + '\n' + localize('invite-tracking', 'inviter', {u: invite.inviter.toString(), i: userInvites.length, a: userInvites.filter(i => !i.left).length});
+                inviteString = inviteString + '\n' + localize('invite-tracking', 'inviter', {
+                    u: invite.inviter.toString(),
+                    i: userInvites.length,
+                    a: userInvites.filter(i => !i.left).length
+                });
             }
             if (invite.uses) inviteString = inviteString + '\n' + localize('invite-tracking', 'uses', {u: invite.uses});
             if (invite.maxUses) inviteString = inviteString + '\n' + localize('invite-tracking', 'max-uses', {u: invite.maxUses});
-            components[0].components.push({
-                type: 'BUTTON',
-                label: '🗑️ ' + localize('invite-tracking', 'revoke-invite'),
-                style: 'DANGER',
-                customId: `inv-rev-${invite.code}`
+            components.push({
+                type: 'ACTION_ROW',
+                components: [{
+                    type: 'BUTTON',
+                    label: '🗑️ ' + localize('invite-tracking', 'revoke-invite'),
+                    style: 'DANGER',
+                    customId: `inv-rev-${invite.code}`
+                }]
             });
             embed.addField(localize('invite-tracking', 'invite'), inviteString);
         }

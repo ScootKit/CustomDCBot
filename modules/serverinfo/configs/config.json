@@ -1,39 +1,55 @@
 {
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
-  "description-en": "Configure the function of the module here",
-  "description-de": "Stelle hier die Funktionen des Modules ein",
   "content": [
     {
-      "field_name": "channelID",
-      "humanname-en": "Channel",
-      "default": "",
-      "type": "channelID",
-      "description-en": "ID of the channel this module should operate in",
-      "description-de": "ID des Channels, in welchem die Nachricht gesendet und bearbeitet werden soll"
+      "name": "channelID",
+      "humanName": {
+        "en": "Channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "ID of the channel this module should operate in",
+        "de": "ID des Channels, in welchem die Nachricht gesendet und bearbeitet werden soll"
+      },
+      "type": "channelID"
     },
     {
-      "field_name": "embed",
-      "humanname-en": "Embed",
-      "default-en": {
-        "title": "Information about this guild",
-        "description": "You can find some basic information about our guild here",
-        "color": "GREEN"
+      "name": "embed",
+      "humanName": {
+        "en": "Embed"
       },
-      "default-de": {
-        "title": "Informationen über diesen Server",
-        "description": "Hier kannst du alle Informationen über unseren Server finden",
-        "color": "GREEN"
+      "default": {
+        "en": {
+          "title": "Information about this guild",
+          "description": "You can find some basic information about our guild here",
+          "color": "GREEN"
+        },
+        "de": {
+          "title": "Informationen über diesen Server",
+          "description": "Hier kannst du alle Informationen über unseren Server finden",
+          "color": "GREEN"
+        }
+      },
+      "description": {
+        "en": "You can configure some of the parameters of the embed here",
+        "de": "Du kannst hier einige Teile des Embeds anpassen"
       },
       "type": "keyed",
-      "description-de": "Du kannst hier einige Teile des Embeds anpassen",
-      "description-en": "You can configure some of the parameters of the embed here",
-      "disableKeyEdits": true,
       "content": {
         "key": "string",
         "value": "string"
-      }
+      },
+      "disableKeyEdits": true
     }
   ]
 }

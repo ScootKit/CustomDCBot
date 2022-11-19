@@ -1,9 +1,5 @@
 {
   "name": "auto-messager",
-  "humanReadableName-en": "Automatic Messages",
-  "humanReadableName-de": "Automatische Nachrichten",
-  "description-de": "Dieses Modul erlaubt dir es dir, automatisch versenden zu lassen",
-  "description-en": "You can - with this module - send automatic messages",
   "fa-icon": "fas fa-comment-dots",
   "author": {
     "scnxOrgID": "1",
@@ -19,5 +15,13 @@
   ],
   "tags": [
     "administration"
-  ]
+  ],
+  "humanReadableName": {
+    "en": "Automatic Messages",
+    "de": "Automatische Nachrichten"
+  },
+  "description": {
+    "en": "You can - with this module - send automatic messages",
+    "de": "Dieses Modul erlaubt dir es dir, automatisch versenden zu lassen"
+  }
 }

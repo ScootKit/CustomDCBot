@@ -101,7 +101,8 @@ exports.run = async (client, guildMember) => {
             }
             );
             setTimeout(() => {
-                m.delete().then(() => {});
+                m.delete().then(() => {
+                });
             }, 300000);
         }
 
@@ -156,13 +157,13 @@ exports.run = async (client, guildMember) => {
          * @return {Promise<void>}
          */
         async function performJoinGateAction(reason) {
+            guildMember.joinGateTriggered = true;
             if (joinGateConfig.action === 'give-role') {
                 if (joinGateConfig.removeOtherRoles) {
-                    setTimeout(async () => {
-                        await guildMember.roles.remove(guildMember.roles.cache, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
-                        await guildMember.roles.add(joinGateConfig.roleID, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
-                    }, 4000);
-                } else await guildMember.roles.add(joinGateConfig.roleID, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
+                    guildMember.doNotGiveWelcomeRole = true;
+                    await guildMember.roles.remove(guildMember.roles.cache, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
+                }
+                await guildMember.roles.add(joinGateConfig.roleID, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
                 return;
             }
             const roles = [];

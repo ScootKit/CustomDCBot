@@ -1,14 +1,11 @@
 {
   "name": "giveaways",
-  "humanReadableName-en": "Giveaways",
-  "humanReadableName-de": "Gewinnspiele",
   "author": {
     "scnxOrgID": "1",
-    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/giveaways",
-  "description-en": "Easily create a giveaway in your server",
-  "description-de": "Erstelle einfach Gewinnspiele auf deinem Server",
   "commands-dir": "/commands",
   "fa-icon": "fas fa-gift",
   "models-dir": "/models",
@@ -17,5 +14,15 @@
     "configs/strings.json",
     "configs/config.json"
   ],
-  "tags": ["community"]
+  "tags": [
+    "community"
+  ],
+  "humanReadableName": {
+    "en": "Giveaways",
+    "de": "Gewinnspiele"
+  },
+  "description": {
+    "en": "Easily create a giveaway in your server",
+    "de": "Erstelle einfach Gewinnspiele auf deinem Server"
+  }
 }
