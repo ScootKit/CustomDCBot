@@ -5,7 +5,8 @@ module.exports.run = async function (client, msg) {
     const {messageWithMentions} = require(`${__dirname}/messageCreate.js`);
     if (!messageWithMentions[msg.id]) return;
     const moduleStrings = client.configurations['anti-ghostping']['config'];
-    if (messageWithMentions[msg.id].author.bot) return;if (moduleConfig.ignoredChannels.includes(msg.channel.id)) return;
+    if (messageWithMentions[msg.id].author.bot) return;
+	if (moduleStrings.ignoredChannels.includes(msg.channel.id)) return;
     let whitelisted = false;
     moduleStrings.ignoredRoles.forEach(r => {
         if (msg.member.roles.cache.get(r)) whitelisted = true;
