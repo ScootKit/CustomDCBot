@@ -24,6 +24,17 @@
       "humanname-de": "Ignorierte Channel",
       "humanname-en": "Ignored Channels"
     },
+	{
+      "field_name": "ignoredRoles",
+      "default": [],
+      "default-de": [],
+      "type": "array",
+      "content": "roleID",
+      "description-en": "If a ghost ping gets send and the user has any of the configured roles, the bot will not run anti-ghost-ping",
+      "description-de": "Wenn ein Ghost-Ping gesendet wird und der User eine dieser konfigurierten Rollen hat, wird der Bot nicht anti-ghost-ping ausführen",
+      "humanname-de": "Ignorierte Rollen",
+      "humanname-en": "Ignored Roles"
+    },
     {
       "field_name": "youJustGotGhostPinged",
       "default": "%mentions%,\nYou just got ghost-pinged by %authorMention% with the following message: \"%msgContent%\"",
