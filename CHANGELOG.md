@@ -2,6 +2,12 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.7.0
+* Rework of configuration localization and loading. All files got migrated.
+* Synced open source-version with close-source-SCNX-version. Please read the detailed changelog on our Discord to learn about new module functionality.
+* feat(economy-system): Added ability to make command-replies public ([#79](https://github.com/SCNetwork/CustomDCBot/pull/79))
+* feat(Twitch-Notifications): Added live-Roles ([#81](https://github.com/SCNetwork/CustomDCBot/pull/81))
+
 ## v3.6.0
 * Support for configuration-example-file `content.elementToggle` toggle to improve UX in the SCNX Dashboard ([#76](https://github.com/SCNetwork/CustomDCBot/pull/76))
 * Support for configuration-example-file `content.dependsOn` toggle to improve UX in the SCNX Dashboard ([#76](https://github.com/SCNetwork/CustomDCBot/pull/76))

@@ -1,97 +1,188 @@
 {
-  "description-de": "Passe die Nachrichten deines Botes an",
-  "description-en": "Configure strings & messages of your bot here",
-  "humanname-de": "Nachrichten",
-  "humanname-en": "Messages",
+  "description": {
+    "en": "Configure strings & messages of your bot here",
+    "de": "Passe die Nachrichten deines Botes an"
+  },
+  "humanName": {
+    "en": "Messages",
+    "de": "Nachrichten"
+  },
+  "filename": "strings.json",
   "content": [
     {
-      "field_name": "footer",
-      "humanname-en": "Embed-Footer",
-      "default": "Powered by scnx.xyz ⚡",
+      "name": "footer",
+      "humanName": {
+        "en": "Embed-Footer"
+      },
+      "default": {
+        "en": "Powered by scnx.xyz ⚡"
+      },
+      "description": {
+        "en": "Footer of every embed",
+        "de": "Footer jedes Embeds"
+      },
       "type": "string",
-      "description-en": "Footer of every embed",
-      "description-de": "Footer jedes Embeds"
+      "pro": true
     },
     {
-      "field_name": "footerImgUrl",
-      "humanname-en": "Embed-Footer-Image-URL",
-      "humanname-de": "Embed-Footer-Bild-URL",
-      "default": "https://scnx.xyz/img/favicon.png",
+      "name": "footerImgUrl",
+      "humanName": {
+        "en": "Embed-Footer-Image-URL",
+        "de": "Embed-Footer-Bild-URL"
+      },
+      "default": {
+        "en": "https://scnx.xyz/favicon.png"
+      },
+      "description": {
+        "en": "Footer-Image of every embed",
+        "de": "Footer-Bild von jedem Embed"
+      },
       "type": "string",
-      "description-de": "Footer-Bild von jedem Embed",
-      "description-en": "Footer-Image of every embed"
+      "pro": true
     },
     {
-      "field_name": "need_args",
-      "humanname-en": "More arguments are needed",
-      "humanname-de": "Mehr Argumente werden benötigt",
-      "default-en": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
-      "default-de": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
+      "name": "need_args",
+      "humanName": {
+        "en": "More arguments are needed",
+        "de": "Mehr Argumente werden benötigt"
+      },
+      "default": {
+        "en": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
+        "de": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%."
+      },
+      "description": {
+        "en": "This message gets send if there are not enough arguments specified",
+        "de": "Diese Nachricht wird versendet, wenn eine oder mehrere Argumente für einen Befehl fehlen"
+      },
       "type": "string",
-      "description-en": "This message gets send if there are not enough arguments specified",
-      "description-de": "Diese Nachricht wird versendet, wenn eine oder mehrere Argumente für einen Befehl fehlen",
       "allowEmbed": true,
-      "params-en": [
+      "params": [
         {
-          "name": "%count%",
-          "description": "Count of arguments provided"
+          "name": "count",
+          "description": {
+            "en": "Count of arguments provided",
+            "de": "Anzahl von angegebenen Parameter"
+          }
         },
         {
-          "name": "%neededCount%",
-          "description": "Count of arguments needed"
-        }
-      ],
-      "params-de": [
-        {
-          "name": "%count%",
-          "description": "Anzahl von angegebenen Parameter"
-        },
-        {
-          "name": "%neededCount%",
-          "description": "Anzahl von benötigten Argumenten"
+          "name": "neededCount",
+          "description": {
+            "en": "Count of arguments needed",
+            "de": "Anzahl von benötigten Argumenten"
+          }
         }
       ]
     },
     {
-      "field_name": "updated_roles",
-      "humanname-en": "Roles updated",
-      "humanname-de": "Rollen erfolgreich geupdated",
-      "default-en": "✅ Updated roles according to your settings",
-      "default-de": "✅ Rollen-Änderungen übernommen",
+      "name": "updated_roles",
+      "humanName": {
+        "en": "Roles updated",
+        "de": "Rollen erfolgreich geupdated"
+      },
+      "default": {
+        "en": "✅ Updated roles according to your settings",
+        "de": "✅ Rollen-Änderungen übernommen"
+      },
+      "description": {
+        "en": "This message gets send after a user selects self-roles on a self-role-element.",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer eine Self-Rolle auswählt."
+      },
       "type": "string",
-      "description-en": "This message gets send after a user selects self-roles on a self-role-element.",
-      "description-de": "Diese Nachricht wird gesendet, wenn ein Nutzer eine Self-Rolle auswählt.",
       "allowEmbed": true
     },
     {
-      "field_name": "not_enough_permissions",
-      "humanname-en": "Not enough permissions",
-      "humanname-de": "Nicht genügend Rechte",
-      "default-en": "Seems like you don't have enough permissions.",
-      "default-de": "Scheint als hättest du nicht genügend Rechte.",
+      "name": "added_role",
+      "humanName": {
+        "en": "Role added",
+        "de": "Rolle erfolgreich hinzugefügt"
+      },
+      "default": {
+        "en": "✅ Role %role% successfully added",
+        "de": "✅ Rolle %role% erfolgreich hinzugefügt"
+      },
+      "description": {
+        "en": "This message gets send when a user adds a role to themselves.",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer sich selbst eine Self-Rolle hinzufügt."
+      },
       "type": "string",
-      "description-en": "This message gets send if an user don't hase enough permissions",
-      "description-de": "Diese Nachricht wird versendet, wenn der Nutzer nicht genügen Rechte hat",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "role",
+          "description": {
+            "en": "Name of the role",
+            "de": "Name der Rolle"
+          }
+        }
+      ]
+    },
+    {
+      "name": "removed_role",
+      "humanName": {
+        "en": "Role removed",
+        "de": "Rolle erfolgreich entfernt"
+      },
+      "default": {
+        "en": "✅ Role %role% successfully removed",
+        "de": "✅ Rolle %role% erfolgreich entfernt"
+      },
+      "description": {
+        "en": "This message gets send when a user removes a role from themselves.",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer sich selbst eine Self-Rolle entfernt."
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "role",
+          "description": {
+            "en": "Name of the role",
+            "de": "Name der Rolle"
+          }
+        }
+      ]
+    },
+    {
+      "name": "not_enough_permissions",
+      "humanName": {
+        "en": "Not enough permissions",
+        "de": "Nicht genügend Rechte"
+      },
+      "default": {
+        "en": "Seems like you don't have enough permissions.",
+        "de": "Scheint als hättest du nicht genügend Rechte."
+      },
+      "description": {
+        "en": "This message gets send if an user don't hase enough permissions",
+        "de": "Diese Nachricht wird versendet, wenn der Nutzer nicht genügen Rechte hat"
+      },
+      "type": "string",
       "allowEmbed": true
     },
     {
-      "field_name": "helpembed",
-      "default-en": {
-        "title": "Help",
-        "description": "You can find every command here",
-        "module_translation": "%name% by %author%: %description%",
-        "build_in": "Build-In-Commands"
+      "name": "helpembed",
+      "humanName": {
+        "en": "Help-Message",
+        "de": "Hilfe-Nachricht"
       },
-      "default-de": {
-        "title": "Help",
-        "description": "Alle Commands findest du hier",
-        "module_translation": "%name% by %author%: %description%",
-        "build_in": "Build-In-Commands"
+      "default": {
+        "en": {
+          "title": "Help",
+          "description": "You can find every command here",
+          "module_translation": "%name% by %author%: %description%",
+          "build_in": "Build-In-Commands"
+        },
+        "de": {
+          "title": "Help",
+          "description": "Alle Commands findest du hier",
+          "module_translation": "%name% by %author%: %description%",
+          "build_in": "Build-In-Commands"
+        }
       },
-      "humanname-en": "Help-Message",
-      "humanname-de": "Hilfe-Nachricht",
+      "description": {
+        "en": "Strings for help command"
+      },
       "type": "keyed",
-      "description": "Strings for help command",
       "content": {
         "key": "string",
         "value": "string"
@@ -99,31 +190,51 @@
       "disableKeyEdits": true
     },
     {
-      "field_name": "disableHelpEmbedStats",
-      "humanname-en": "Disable Stats in Help-Embed",
-      "humanname-de": "Deaktiviere Stats im Hilfe-Embed",
+      "name": "disableHelpEmbedStats",
+      "humanName": {
+        "en": "Disable Stats in Help-Embed",
+        "de": "Deaktiviere Stats im Hilfe-Embed"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, the stats-field in the Help-Embed will get hidden",
+        "de": "Wenn aktiviert, wird der Stats-Bereich im Help-Embed verborgen"
+      },
       "type": "boolean",
-      "default": false,
-      "description-de": "Wenn aktiviert, wird der Stats-Bereich im Help-Embed verborgen",
-      "description-en": "If enabled, the stats-field in the Help-Embed will get hidden"
+      "pro": true
     },
     {
-      "field_name": "disableFooterTimestamp",
-      "humanname-en": "Disable default Timestamp in footer",
-      "humanname-de": "Standard-Timestamp im Footer deaktivieren",
-      "type": "boolean",
-      "default": false,
-      "description-de": "Wenn aktiviert, wird die Aktuelle Uhrzeit nicht im Footer angezeigt",
-      "description-en": "If enabled, the current time will not be displayed in the embed footer"
+      "name": "disableFooterTimestamp",
+      "humanName": {
+        "en": "Disable default Timestamp in footer",
+        "de": "Standard-Timestamp im Footer deaktivieren"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, the current time will not be displayed in the embed footer",
+        "de": "Wenn aktiviert, wird die Aktuelle Uhrzeit nicht im Footer angezeigt"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "putBotInfoOnLastSite",
-      "humanname-en": "Put Bot-Info on the last site of the Help-Embed",
-      "humanname-de": "Verschiebt die Bot-Info auf die letzte Seite im Hilfe-Embed",
+      "name": "putBotInfoOnLastSite",
+      "humanName": {
+        "en": "Put Bot-Info on the last site of the Help-Embed",
+        "de": "Verschiebt die Bot-Info auf die letzte Seite im Hilfe-Embed"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, the Bot-Info-Section of the Help-Embed will be moved to the last site",
+        "de": "Wenn aktiviert, wird der Bot-Info-Bereich im Help-Embed auf die letzte Seite verschoben"
+      },
       "type": "boolean",
-      "default": false,
-      "description-de": "Wenn aktiviert, wird der Bot-Info-Bereich im Help-Embed auf die letzte Seite verschoben",
-      "description-en": "If enabled, the Bot-Info-Section of the Help-Embed will be moved to the last site"
+      "pro": true
     }
   ]
 }

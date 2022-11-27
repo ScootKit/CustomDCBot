@@ -161,17 +161,14 @@ translationable systems in your module.
       works)
     * `string`: Name of the string
     * `replace` (optional, object): Will replace `%<key>` in the source string by `<value>`
-* Localizations of configuration-files and user-editable strings: You can specify field-fields like `description`
-  , `default` and more in multiple languages. The bot / dashboard will choose the correct one automatically.
+* Localizations of configuration-files and user-editable strings: All localizable configuration fields are an object with values keyed based on language codes. Example: `{"description": {"de": "Beschreibung des Feldes", "en": "Description of the field"}`. Each field needs to have at least an English value, as every other language will default back to English.
 
 #### module.json
 
 Every module has to contain a `module.json` file with the following content:
 
 * `name` of the module. Should be the same as the name of your dictionary.
-* `humanReadableName`: English name of the module, shown to users
-* `humanReadableName-<lang>`: Replace `<lang>` with any supported language-code (currently: `de`, `en`); Name of the
-  module show to users (fallback order: `humanReadableName-<lang>`, `humanReadableName-en`, `humanReadableName`)
+* `humanReadableName`: [Localized](#localization) name of the module, shown to users
 * `author`
     * `name`: Name of the author
     * `link`: Link to the author
@@ -180,7 +177,7 @@ Every module has to contain a `module.json` file with the following content:
 * `openSourceURL`: URL to the Source-Code of the module licensed under an Open-Source-License (will show
   donation-banners in the SCNX Dashboard (if orgID is set) and qualifies (qualified) developers for financial support
   from the Open-Source-Pool of SCNX)
-* `description`: Short description of the module
+* `description`: [Localized](#localization)  short description of the module
 * `cli` (optional): [CLI-File](#cli-files) of your module
 * `commands-dir` (optional): Directory inside your module folder where all
   the [interaction-command-files](#interaction-command) are in
@@ -262,9 +259,8 @@ use `node add-config-element-object.js <Path to example config file> <Path to yo
 An example config file should include the following things:
 
 * `filename`: Name of the generated config file
-* `humanname-<lang>`: Name of the file, shown to users (fallback order: `humanname-<lang>`, `humanname-en`, `filename`)
-* `description-<lang>`: Description of the file, shown to users (fallback order: `humanname-<lang>`, `humanname-en`
-  , `No description, but you can configure <name> here`)
+* `humanname`: [Localized](#localization)  name of the file, shown to users
+* `description`: [Localized](#localization)  description of the file, shown to users
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
 * `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
@@ -276,15 +272,12 @@ An example config file should include the following things:
         * `info`: Key by language; Information about the command; used to explain users what exactly they should do
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
-    * `default-<lang>`: Default value of this field (replace `<lang>` with a supported language code),
-      Fallback-Order: `default-<lang>`, `default-en`, `default`
+    * `default`: [Localized](#localization) default value of this field
     * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
       , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
-    * `description-<lang>`: Description of this field (replace `<lang>` with a supported language code),
-      Fallback-Order: `description-<lang>`, `description-en`, `description`
-    * `humanname-<lang>`: Name of this field show to users (replace `<lang>` with a supported language code),
-      Fallback-Order: `humanname-<lang>`, `humanname-en`, `humanname`, `field_name`
+    * `description`: [Localized](#localization) description of this field
+    * `humanname`: [Localized](#localization) name of this field show to users
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please
       use the build-in function in `src/functions/helpers.js`)
     * `content` (if type === `array`): Type (see `type` above) of every value
@@ -297,12 +290,9 @@ An example config file should include the following things:
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value
         * `value`: Type (see `type` above) of the value of every value
-    * `params-<lang>` (if type === `string`, array, optional, replace `<lang>` with supported language code,
-      Fallback-Order: `params-<lang>`, `params-en`, `params`)
+    * `params`: (if type === `string`, array, optional) Possible parameters
         * `name`: Name of the parameter (e.g. `%mention%`)
-        * `description`: Description of the parameter (e.g. `Mention of the user`)
-        * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
-          is `fieldValue`.
+        * `description`: [Localized](#localization) Description of the parameter (e.g. `Mention of the user`)
         * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail
           of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty

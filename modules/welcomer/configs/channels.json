@@ -1,227 +1,310 @@
 {
+  "description": {
+    "en": "Configure here in which channel which message should get send",
+    "de": "Passe hier an, in welchen Kanälen welche Nachricht gesendet werden soll"
+  },
+  "humanName": {
+    "en": "Channel",
+    "de": "Kanäle"
+  },
   "filename": "channels.json",
-  "humanname-en": "Channel",
-  "humanname-de": "Kanäle",
-  "description-de": "Passe hier an, in welchen Kanälen welche Nachricht gesendet werden soll",
-  "description-en": "Configure here in which channel which message should get send",
   "configElements": true,
   "content": [
     {
-      "humanname-de": "Channel",
-      "humanname-en": "Channel",
-      "type": "channelID",
-      "default": "",
-      "description-en": "Channel in which the message should get send",
-      "description-de": "Kanal in welchen die Nachricht gesendet werden soll",
-      "field_name": "channelID",
-      "params-de": {},
-      "default-de": ""
+      "name": "channelID",
+      "humanName": {
+        "en": "Channel",
+        "de": "Channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Channel in which the message should get send",
+        "de": "Kanal in welchen die Nachricht gesendet werden soll"
+      },
+      "type": "channelID"
     },
     {
-      "humanname-en": "Channel-Type",
-      "humanname-de": "Kanal-Typ",
-      "field_name": "type",
+      "name": "type",
+      "humanName": {
+        "en": "Channel-Type",
+        "de": "Kanal-Typ"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "This sets in which content the channel should get used",
+        "de": "Dies gibt an, in welchem Kontext dieser Kanal verwendet werden soll"
+      },
       "type": "select",
-      "default": "",
-      "description-de": "Dies gibt an, in welchem Kontext dieser Kanal verwendet werden soll",
-      "description-en": "This sets in which content the channel should get used",
       "content": [
         "join",
         "leave",
         "boost",
         "unboost"
-      ],
-      "params-de": {},
-      "default-de": ""
+      ]
     },
     {
-      "humanname-en": "Random messages?",
-      "humanname-de": "Zufällige Nachrichten?",
-      "description-de": "Wenn aktiviert wird der Bot eine zufällige Nachricht aus deiner Konfiguration wählen, anstatt die unten",
-      "description-en": "If enabled the bot will randomly pick a messages instead of using the message option below",
-      "field_name": "randomMessages",
-      "type": "boolean",
-      "default": false,
-      "params-de": {},
-      "default-de": false
+      "name": "randomMessages",
+      "humanName": {
+        "en": "Random messages?",
+        "de": "Zufällige Nachrichten?"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled the bot will randomly pick a messages instead of using the message option below",
+        "de": "Wenn aktiviert wird der Bot eine zufällige Nachricht aus deiner Konfiguration wählen, anstatt die unten"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "message",
+      "name": "message",
+      "humanName": {
+        "de": "Nachricht",
+        "en": "Message"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Message that should get send",
+        "de": "Nachricht, die gesendet wird"
+      },
       "type": "string",
-      "default": "",
       "allowEmbed": true,
-      "description": "Message that should get send",
-      "params-en": [
+      "params": [
         {
-          "name": "%mention%",
-          "description": "Mentions the user",
-          "fieldValue": "type.join"
+          "name": "mention",
+          "description": {
+            "en": "Mentions the user",
+            "de": "Erwähnung des Nutzers"
+          }
         },
         {
-          "name": "%memberProfilePictureUrl%",
-          "description": "URL of the user's avatar",
-          "fieldValue": "type.join",
+          "name": "memberProfilePictureUrl",
+          "description": {
+            "en": "URL of the user's avatar",
+            "de": "URL zum Avatar des Nutzers"
+          },
           "isImage": true
         },
         {
-          "name": "%servername%",
-          "description": "Name of the guild",
-          "fieldValue": "type.join"
+          "name": "servername",
+          "description": {
+            "en": "Name of the guild",
+            "de": "Servername"
+          }
         },
         {
-          "name": "%tag%",
-          "description": "Tag of the user",
-          "fieldValue": "type.join"
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
         },
         {
-          "name": "%createdAt%",
-          "description": "Date when account was created",
-          "fieldValue": "type.join"
+          "name": "createdAt",
+          "description": {
+            "en": "Date when account was created",
+            "de": "Datum an dem der Account erstellt wurde"
+          }
         },
         {
-          "name": "%tag%",
-          "description": "Tag of the user",
-          "fieldValue": "type.leave"
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
         },
         {
-          "name": "%memberProfilePictureUrl%",
-          "description": "URL of the user's avatar",
-          "fieldValue": "type.leave",
+          "name": "memberProfilePictureUrl",
+          "description": {
+            "en": "URL of the user's avatar",
+            "de": "URL zum Avatar des Nutzers"
+          },
           "isImage": true
         },
         {
-          "name": "%joinedAt%",
-          "description": "Date when user joined guild",
-          "fieldValue": "type.leave"
+          "name": "joinedAt",
+          "description": {
+            "en": "Date when user joined guild",
+            "de": "Datum, an dem der Nutzer den Server betreten hat"
+          }
         },
         {
-          "name": "%guildUserCount%",
-          "description": "Count of users on the guild",
-          "fieldValue": "type.leave"
+          "name": "guildUserCount",
+          "description": {
+            "en": "Count of users on the guild",
+            "de": "Anzahl von Nutzern auf dem Server"
+          }
         },
         {
-          "name": "%guildMemberCount%",
-          "description": "Count of members (without bots) on the guild",
-          "fieldValue": "type.leave"
+          "name": "guildMemberCount",
+          "description": {
+            "en": "Count of members (without bots) on the guild",
+            "de": "Anzahl von Nutzern auf dem Server"
+          }
         },
         {
-          "name": "%mention%",
-          "description": "Mention of the user who boosted",
-          "fieldValue": "type.boost"
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user who boosted",
+            "de": "Erwähnung des Nutzers"
+          }
         },
         {
-          "name": "%boostCount%",
-          "description": "Total count of boosts",
-          "fieldValue": "type.boost"
+          "name": "boostCount",
+          "description": {
+            "en": "Total count of boosts",
+            "de": "Gesamte Anzahl an Boosts"
+          }
         },
         {
-          "name": "%guildLevel%",
-          "description": "Boost-Level of the guild after the boost",
-          "fieldValue": "type.boost"
+          "name": "guildLevel",
+          "description": {
+            "en": "Boost-Level of the guild after the boost",
+            "de": "Boost-Level nach dem Boost"
+          }
         },
         {
-          "name": "%mention%",
-          "description": "Mention of the user who unboosted",
-          "fieldValue": "type.unboost"
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user who unboosted",
+            "de": "Erwähnung des Nutzers"
+          }
         },
         {
-          "name": "%boostCount%",
-          "description": "Total count of boosts",
-          "fieldValue": "type.unboost"
+          "name": "boostCount",
+          "description": {
+            "en": "Total count of boosts",
+            "de": "Gesamte Anzahl an Boosts"
+          }
         },
         {
-          "name": "%guildLevel%",
-          "description": "Boost-Level of the guild after the unboost",
-          "fieldValue": "type.unboost"
+          "name": "guildLevel",
+          "description": {
+            "en": "Boost-Level of the guild after the unboost",
+            "de": "Boost-Level nach dem Boost"
+          }
         }
-      ],
-      "params-de": [
+      ]
+    },
+    {
+      "name": "welcome-button",
+      "humanName": {
+        "en": "Welcome-Button (only if \"Channel-Type\" = \"join\")",
+        "de": "Willkommens-Knopf (nur wenn \"Channel-Type\" = \"join\")"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, a welcome-button will be attached to the welcome message. When a user clicks on it, the bot will send a welcome-ping in a configured channel. The button can be pressed once.",
+        "de": "If enabled, a welcome-button will be attached to the welcome message. When a user clicks on it, the bot will send a welcome-ping in a configured channel. The button can be pressed once."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "welcome-button-content",
+      "dependsOn": "welcome-button",
+      "humanName": {
+        "en": "Welcome-Button-Content",
+        "de": "Willkommens-Knopf-Inhalt"
+      },
+      "default": {
+        "en": "Say hi \uD83D\uDC4B",
+        "de": "Hallo sagen \uD83D\uDC4B"
+      },
+      "description": {
+        "en": "Content of the welcome button",
+        "de": "Inhalt des Willkommens-Knopfes"
+      },
+      "type": "string"
+    },
+    {
+      "name": "welcome-button-channel",
+      "dependsOn": "welcome-button",
+      "humanName": {
+        "en": "Channel in which the welcome-button should send a message",
+        "de": "Kanal, in welchen der Willkommens-Knopf die Nachricht senden soll"
+      },
+      "default": {
+        "en": "",
+        "de": ""
+      },
+      "description": {
+        "en": "The bot will send the configured message in this channel when a user presses the button",
+        "de": "Der Bot wird die konfigurierte Nachricht in diesen Kanal senden, wenn jemand den Knopf drückt"
+      },
+      "type": "channelID"
+    },
+    {
+      "name": "welcome-button-message",
+      "dependsOn": "welcome-button",
+      "humanName": {
+        "en": "Welcome-Button-Message",
+        "de": "Willkommens-Knopf-Nachricht"
+      },
+      "default": {
+        "en": "%clickUserMention% welcomes %userMention% :wave:",
+        "de": "%clickUserMention% begrüßt %userMention% :wave:"
+      },
+      "allowEmbed": true,
+      "description": {
+        "en": "This is the message the bot will send in the configured channel when a user presses the button",
+        "de": "Der Bot wird in diesen Kanal die Nachricht senden, wenn ein Nutzer den Knopf drückt"
+      },
+      "type": "string",
+      "params": [
         {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers",
-          "fieldValue": "type.join"
+          "name": "userMention",
+          "description": {
+            "en": "Mention of the user who joined the server",
+            "de": "Erwähnung des Nutzer, der den Server beigetreten hat"
+          }
         },
         {
-          "name": "%memberProfilePictureUrl%",
-          "description": "URL zum Avatar des Nutzers",
-          "fieldValue": "type.join",
-          "isImage": true
+          "name": "userTag",
+          "description": {
+            "en": "Tag of the user who joined the server",
+            "de": "Tag des Nutzer, der den Server beigetreten hat"
+          }
         },
         {
-          "name": "%servername%",
-          "description": "Servername",
-          "fieldValue": "type.join"
+          "name": "userAvatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar of the user who joined the server",
+            "de": "Avatar des Nutzer, der den Server beigetreten hat"
+          }
         },
         {
-          "name": "%tag%",
-          "description": "Tag des Nutzers",
-          "fieldValue": "type.join"
+          "name": "clickUserMention",
+          "description": {
+            "en": "Mention of the user who clicked the button",
+            "de": "Erwähnung des Nutzer, der den Knopf gedrückt hat"
+          }
         },
         {
-          "name": "%createdAt%",
-          "description": "Datum an dem der Account erstellt wurde",
-          "fieldValue": "type.join"
+          "name": "clickUserTag",
+          "description": {
+            "en": "Tag of the user who clicked the button",
+            "de": "Tag des Nutzer, der den Knopf gedrückt hat"
+          }
         },
         {
-          "name": "%tag%",
-          "description": "Tag des Nutzers",
-          "fieldValue": "leave"
-        },
-        {
-          "name": "%memberProfilePictureUrl%",
-          "description": "URL zum Avatar des Nutzers",
-          "fieldValue": "type.leave",
-          "isImage": true
-        },
-        {
-          "name": "%joinedAt%",
-          "description": "Datum, an dem der Nutzer den Server betreten hat",
-          "fieldValue": "type.leave"
-        },
-        {
-          "name": "%guildUserCount%",
-          "description": "Anzahl von Nutzern auf dem Server",
-          "fieldValue": "type.leave"
-        },
-        {
-          "name": "%guildMemberCount%",
-          "description": "Anzahl von Nutzern auf dem Server",
-          "fieldValue": "type.leave"
-        },
-        {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers",
-          "fieldValue": "type.boost"
-        },
-        {
-          "name": "%boostCount%",
-          "description": "Gesamte Anzahl an Boosts",
-          "fieldValue": "type.boost"
-        },
-        {
-          "name": "%guildLevel%",
-          "description": "Boost-Level nach dem Boost",
-          "fieldValue": "type.boost"
-        },
-        {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers, der aufgehört hat zu boosten",
-          "fieldValue": "type.unboost"
-        },
-        {
-          "name": "%boostCount%",
-          "description": "Gesamte Anzahl aller Boosts",
-          "fieldValue": "type.unboost"
-        },
-        {
-          "name": "%guildLevel%",
-          "description": "Boost-Level nach der Entfernung des Boosts",
-          "fieldValue": "type.unboost"
+          "name": "clickUserAvatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar of the user who clicked the button",
+            "de": "Avatar des Nutzer, der den Knopf gedrückt hat"
+          }
         }
-      ],
-      "humanname-de": "Nachricht",
-      "description-de": "Nachricht, die gesendet wird",
-      "default-de": ""
+      ]
     }
   ]
 }

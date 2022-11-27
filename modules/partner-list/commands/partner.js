@@ -203,6 +203,8 @@ module.exports.config = {
                         description: localize('partner-list', 'pedit-owner-description')
                     },
                     {
+
+
                         type: 'USER',
                         name: 'staff',
                         description: localize('partner-list', 'pedit-staff-description')

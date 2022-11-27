@@ -1,29 +1,47 @@
 {
+  "description": {},
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
   "hidden": true,
   "content": [
     {
-      "field_name": "twitchClientID",
-      "default": "",
+      "name": "twitchClientID",
+      "humanName": {},
+      "default": {
+        "en": "me3ub5wbx2jxlhkvxrc6fbgp8wgixq"
+      },
+      "description": {
+        "en": "ID of the Client, which is used to check if the Streamer is live"
+      },
       "hidden": true,
-      "type": "string",
-      "description": "ID of the Client, which is used to check if the Streamer is live"
+      "type": "string"
     },
     {
-      "field_name": "clientSecret",
-      "default": "",
+      "name": "clientSecret",
+      "humanName": {},
+      "default": {
+        "en": "58v6r0v2oips1tldmfunrxp5m8xv6r"
+      },
+      "description": {
+        "en": "Secret of the Twitch-Client, which is used to check if the Streamer is live"
+      },
       "hidden": true,
-      "type": "string",
-      "description": "Secret of the Twitch-Client, which is used to check if the Streamer is live"
+      "type": "string"
     },
     {
-      "field_name": "interval",
-      "default": 180,
+      "name": "interval",
+      "humanName": {},
+      "default": {
+        "en": 180
+      },
+      "description": {
+        "en": "Interval (in seconds) in which it is tested whether the streamer is live. This value must be higher than 60"
+      },
       "hidden": true,
-      "type": "integer",
-      "description": "Interval (in seconds) in which it is tested whether the streamer is live. This value must be higher than 60"
+      "type": "integer"
     }
   ]
 }

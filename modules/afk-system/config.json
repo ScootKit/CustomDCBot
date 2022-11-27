@@ -1,65 +1,101 @@
 {
+  "description": {},
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
   "content": [
     {
-      "field_name": "sessionEndedSuccessfully",
-      "default": "Welcome back!",
-      "allowEmbed": true,
+      "name": "sessionEndedSuccessfully",
+      "humanName": {},
+      "default": {
+        "en": "Welcome back!"
+      },
+      "description": {
+        "en": "This message gets send if a user ended their session successfully."
+      },
       "type": "string",
-      "description": "This message gets send if a user ended their session successfully."
+      "allowEmbed": true
     },
     {
-      "field_name": "sessionStartedSuccessfully",
-      "default": "You are afk, have fun!",
-      "allowEmbed": true,
+      "name": "sessionStartedSuccessfully",
+      "humanName": {},
+      "default": {
+        "en": "You are afk, have fun!"
+      },
+      "description": {
+        "en": "This message gets send if a user started their session successfully."
+      },
       "type": "string",
-      "description": "This message gets send if a user started their session successfully."
+      "allowEmbed": true
     },
     {
-      "field_name": "afkUserWithReason",
-      "default": "%user% is afk. They gave this reason: \"%reason%\"",
-      "allowEmbed": true,
+      "name": "afkUserWithReason",
+      "humanName": {},
+      "default": {
+        "en": "%user% is afk. They gave this reason: \"%reason%\""
+      },
+      "description": {
+        "en": "This message gets send if a pinged user is AFK and they have given a reason for it"
+      },
       "type": "string",
+      "allowEmbed": true,
       "params": [
         {
-          "name": "%reason%",
-          "description": "Reason for their absence"
+          "name": "reason",
+          "description": {
+            "en": "Reason for their absence"
+          }
         },
         {
-          "name": "%user%",
-          "description": "Mention of the user who is AFK"
+          "name": "user",
+          "description": {
+            "en": "Mention of the user who is AFK"
+          }
         }
-      ],
-      "description": "This message gets send if a pinged user is AFK and they have given a reason for it"
+      ]
     },
     {
-      "field_name": "afkUserWithoutReason",
-      "default": "%user% is afk.",
+      "name": "afkUserWithoutReason",
+      "humanName": {},
+      "default": {
+        "en": "%user% is afk."
+      },
+      "description": {
+        "en": "This message gets send if a pinged user is AFK and they have given not any a reason for it"
+      },
+      "type": "string",
       "allowEmbed": true,
       "params": [
         {
-          "name": "%user%",
-          "description": "Mention of the user who is AFK"
+          "name": "user",
+          "description": {
+            "en": "Mention of the user who is AFK"
+          }
         }
-      ],
-      "type": "string",
-      "description": "This message gets send if a pinged user is AFK and they have given not any a reason for it"
+      ]
     },
     {
-      "field_name": "autoEndMessage",
-      "default-en": "Welcome back! You are not longer AFK because you wrote a message. You can start a new session with `/afk start` and disable `auto-end` if you don't want your sessions to be ended automatically.",
-      "default-de": "Willkommen zurück! Du bist nun nicht länger AFK, da du eine Nachricht geschrieben hast. Um eine neue Sitzung zu starten gebe bitte `/afk start` ein; solltest du dieses Verhalten deaktivieren wollen, setze außerdem den `auto-end` Parameter.",
+      "name": "autoEndMessage",
+      "humanName": {},
+      "default": {
+        "en": "Welcome back! You are not longer AFK because you wrote a message. You can start a new session with `/afk start` and disable `auto-end` if you don't want your sessions to be ended automatically.",
+        "de": "Willkommen zurück! Du bist nun nicht länger AFK, da du eine Nachricht geschrieben hast. Um eine neue Sitzung zu starten gebe bitte `/afk start` ein; solltest du dieses Verhalten deaktivieren wollen, setze außerdem den `auto-end` Parameter."
+      },
+      "description": {
+        "en": "This message gets send if a previously AFK user sends a message"
+      },
+      "type": "string",
       "allowEmbed": true,
       "params": [
         {
-          "name": "%user%",
-          "description": "Mention of the user who was AFK"
+          "name": "user",
+          "description": {
+            "en": "Mention of the user who was AFK"
+          }
         }
-      ],
-      "type": "string",
-      "description": "This message gets send if a previously AFK user sends a message"
+      ]
     }
   ]
 }

@@ -1,39 +1,77 @@
 {
+  "description": {
+    "en": "This system can prevent spammers from raiding your server",
+    "de": "Dieses System kann es Spammern verhindern, deinen Server zu raiden"
+  },
+  "humanName": {
+    "en": "Anti-Join-Raid-Configuration",
+    "de": "Anti-Join-Raid-Konfiguration"
+  },
   "filename": "antiJoinRaid.json",
   "content": [
     {
-      "field_name": "enabled",
-      "default": true,
+      "name": "enabled",
+      "humanName": {
+        "de": "Aktiviert",
+        "en": "Enabled?"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Enables or disables the anti-join-raid-system",
+        "de": "Aktiviert oder deaktiviert das Anti-Join-Raid-System"
+      },
       "type": "boolean",
-      "description": "Enables or disables the anti-join-raid-system",
-      "humanname-de": "Aktiviert",
-      "description-de": "Aktiviert oder deaktiviert das Anti-Join-Raid-System",
-      "params-de": {},
-      "default-de": true,
       "elementToggle": true
     },
     {
-      "field_name": "timeframe",
-      "default": 5,
-      "type": "integer",
-      "description": "Timeframe in which join actions should be recorded (in minutes)",
-      "humanname-de": "Zeitfenster",
-      "description-de": "Zeitfenster, in welchem Serverbeitritte gezählt werden sollen (in Minuten)",
-      "params-de": {},
-      "default-de": 5
+      "name": "timeframe",
+      "humanName": {
+        "de": "Zeitfenster",
+        "en": "Timeframe"
+      },
+      "default": {
+        "en": 5,
+        "de": 5
+      },
+      "description": {
+        "en": "Timeframe in which join actions should be recorded (in minutes)",
+        "de": "Zeitfenster, in welchem Serverbeitritte gezählt werden sollen (in Minuten)"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "maxJoinsInTimeframe",
-      "default": 3,
-      "type": "integer",
-      "description": "Count of joins that are allowed to happen in the selected timeframe",
-      "humanname-de": "Maximale Beitrittsanzahl",
-      "description-de": "Anzahl an Serverbeitritten, die im ausgewählten Zeitfenster zugelassen werden",
-      "params-de": {},
-      "default-de": 3
+      "name": "maxJoinsInTimeframe",
+      "humanName": {
+        "de": "Maximale Beitrittsanzahl",
+        "en": "Maximal count of new users"
+      },
+      "default": {
+        "en": 3,
+        "de": 3
+      },
+      "description": {
+        "en": "Count of joins that are allowed to happen in the selected timeframe",
+        "de": "Anzahl an Serverbeitritten, die im ausgewählten Zeitfenster zugelassen werden"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "action",
+      "name": "action",
+      "humanName": {
+        "de": "Aktion",
+        "en": "Action"
+      },
+      "default": {
+        "en": "quarantine",
+        "de": "quarantine"
+      },
+      "description": {
+        "en": "Select the action here that should get performed if the anti-join-system gets triggered",
+        "de": "Wähle hier die Aktion aus, die ausgeführt werden soll, wenn das Anti-Join-Raid-System ausgelöst wird"
+      },
       "type": "select",
       "content": [
         "mute",
@@ -41,33 +79,38 @@
         "quarantine",
         "ban",
         "give-role"
-      ],
-      "default": "quarantine",
-      "description": "Select the action here that should get performed if the anti-join-system gets triggered",
-      "humanname-de": "Aktion",
-      "description-de": "Wähle hier die Aktion aus, die ausgeführt werden soll, wenn das Anti-Join-Raid-System ausgelöst wird",
-      "params-de": {},
-      "default-de": "quarantine"
+      ]
     },
     {
-      "field_name": "roleID",
-      "type": "roleID",
-      "description": "Only if action = give-role. Role that gets given to users who trigger the antiJoinRaid-System",
-      "default": "",
-      "humanname-de": "Rolle",
-      "description-de": "Nur verfügbar, wenn Aktion = give-role. Rolle, die Nutzern gegeben wird, die das Anti-Join-Raid-System auslösen",
-      "params-de": {},
-      "default-de": ""
+      "name": "roleID",
+      "humanName": {
+        "de": "Rolle",
+        "en": "Role"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Only if action = give-role. Role that gets given to users who trigger the antiJoinRaid-System",
+        "de": "Nur verfügbar, wenn Aktion = give-role. Rolle, die Nutzern gegeben wird, die das Anti-Join-Raid-System auslösen"
+      },
+      "type": "roleID"
     },
     {
-      "field_name": "removeOtherRoles",
-      "type": "boolean",
-      "description": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
-      "default": true,
-      "humanname-de": "Andere Rollen entfernen",
-      "description-de": "Nur verfügbar, wenn Aktion = give-role. Wenn aktiviert, werden andere Rollen die der Nutzer hat nach einem kurzen Zeitraum entfernt (und das Vergeben der Rolle von \"Rolle\" wird verzögert)",
-      "params-de": {},
-      "default-de": true
+      "name": "removeOtherRoles",
+      "humanName": {
+        "de": "Andere Rollen entfernen",
+        "en": "Remove other roles"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
+        "de": "Nur verfügbar, wenn Aktion = give-role. Wenn aktiviert, werden andere Rollen die der Nutzer hat nach einem kurzen Zeitraum entfernt (und das Vergeben der Rolle von \"Rolle\" wird verzögert)"
+      },
+      "type": "boolean"
     }
   ]
 }

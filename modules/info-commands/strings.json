@@ -1,256 +1,295 @@
 {
+  "description": {},
+  "humanName": {},
   "filename": "strings.json",
   "content": [
     {
-      "field_name": "serverinfo",
+      "name": "serverinfo",
+      "humanName": {
+        "de": "Serverinfo"
+      },
+      "default": {
+        "en": {
+          "id": "ID",
+          "owner": "Owner",
+          "boosts": "Boosts",
+          "emojiCount": "Emoji-Count",
+          "region": "Region",
+          "roleCount": "Role-Count",
+          "rulesChannel": "Rules-Channel",
+          "dcSystemChannel": "Discord-System-Channel",
+          "verificationLevel": "Verification-Level",
+          "banCount": "Banns",
+          "createdAt": "Created at",
+          "members": "Members",
+          "channels": "Channels",
+          "features": "Features",
+          "noFeaturesEnabled": "No features enabled",
+          "afkChannel": "AFK-Channel",
+          "stickerCount": "Sticker-Count"
+        },
+        "de": {
+          "id": "ID",
+          "owner": "Eigentümer",
+          "boosts": "Boosts",
+          "emojiCount": "Emoji-Anzahl",
+          "region": "Region",
+          "roleCount": "Rollen-Anzahl",
+          "rulesChannel": "Regelkanal",
+          "dcSystemChannel": "Discord-Systemkanal",
+          "verificationLevel": "Verifizierungsstufe",
+          "banCount": "Banns",
+          "createdAt": "Erstellt am",
+          "members": "Mitglieder",
+          "channels": "Kanäle",
+          "features": "Funktionen",
+          "noFeaturesEnabled": "Keine Funktionen aktiviert",
+          "afkChannel": "AFK-Kanal",
+          "stickerCount": "Sticker-Anzahl"
+        }
+      },
+      "description": {
+        "en": "You can change the parts of the serverinfo-command here",
+        "de": "Hier kannst du die Teile des serverinfo-Befehls anpassen"
+      },
       "type": "keyed",
-      "description": "You can change the parts of the serverinfo-command here",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "default": {
-        "id": "ID",
-        "owner": "Owner",
-        "boosts": "Boosts",
-        "emojiCount": "Emoji-Count",
-        "region": "Region",
-        "roleCount": "Role-Count",
-        "rulesChannel": "Rules-Channel",
-        "dcSystemChannel": "Discord-System-Channel",
-        "verificationLevel": "Verification-Level",
-        "banCount": "Banns",
-        "createdAt": "Created at",
-        "members": "Members",
-        "channels": "Channels",
-        "features": "Features",
-        "noFeaturesEnabled": "No features enabled",
-        "afkChannel": "AFK-Channel",
-        "stickerCount": "Sticker-Count"
-      },
-      "disableKeyEdits": true,
-      "humanname-de": "Serverinfo",
-      "description-de": "Hier kannst du die Teile des serverinfo-Befehls anpassen",
-      "params-de": {},
-      "default-de": {
-        "id": "ID",
-        "owner": "Eigentümer",
-        "boosts": "Boosts",
-        "emojiCount": "Emoji-Anzahl",
-        "region": "Region",
-        "roleCount": "Rollen-Anzahl",
-        "rulesChannel": "Regelkanal",
-        "dcSystemChannel": "Discord-Systemkanal",
-        "verificationLevel": "Verifizierungsstufe",
-        "banCount": "Banns",
-        "createdAt": "Erstellt am",
-        "members": "Mitglieder",
-        "channels": "Kanäle",
-        "features": "Funktionen",
-        "noFeaturesEnabled": "Keine Funktionen aktiviert",
-        "afkChannel": "AFK-Kanal",
-        "stickerCount": "Sticker-Anzahl"
-      }
+      "disableKeyEdits": true
     },
     {
-      "field_name": "userinfo",
+      "name": "userinfo",
+      "humanName": {
+        "de": "Userinfo"
+      },
+      "default": {
+        "en": {
+          "id": "ID",
+          "tag": "Tag",
+          "currentStatus": "Current status",
+          "createdAt": "Account created at",
+          "joinedAt": "Joined Server at",
+          "nickname": "Nickname",
+          "boosterSince": "Server-Booster since",
+          "displayColor": "Display-Color",
+          "currentVoiceChannel": "Current Voice-Channel",
+          "highestRole": "Highest role",
+          "hoistRole": "Hoisted role",
+          "birthday": "Birthday",
+          "permissions": "Permissions",
+          "xp": "XP",
+          "invited-by": "Invited by",
+          "bio": "Bio",
+          "invites": "Invites",
+          "level": "Level",
+          "messages": "Messages",
+          "noPermissions": "This user does not have any permissions ):"
+        },
+        "de": {
+          "id": "ID",
+          "tag": "Tag",
+          "currentStatus": "Aktueller Status",
+          "createdAt": "Account erstellt am",
+          "joinedAt": "Server beigetreten am",
+          "nickname": "Nickname",
+          "boosterSince": "Server-Booster seit",
+          "displayColor": "Anzeigefarbe",
+          "currentVoiceChannel": "Aktueller Sprachkanal",
+          "highestRole": "Höchste Rolle",
+          "hoistRole": "Gelistete Rolle",
+          "birthday": "Geburtstag",
+          "permissions": "Berechtigungen",
+          "xp": "XP",
+          "bio": "Bio",
+          "level": "Level",
+          "messages": "Nachrichten",
+          "noPermissions": "Dieser Nutzer hat keine Berechtigungen ):",
+          "invited-by": "Invited by",
+          "invites": "Invites"
+        }
+      },
+      "description": {
+        "en": "You can change the parts of the userinfo-command here",
+        "de": "Hier kannst du die Teile des userinfo-Befehls anpassen"
+      },
       "type": "keyed",
-      "description": "You can change the parts of the userinfo-command here",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "default": {
-        "id": "ID",
-        "tag": "Tag",
-        "currentStatus": "Current status",
-        "createdAt": "Account created at",
-        "joinedAt": "Joined Server at",
-        "nickname": "Nickname",
-        "boosterSince": "Server-Booster since",
-        "displayColor": "Display-Color",
-        "currentVoiceChannel": "Current Voice-Channel",
-        "highestRole": "Highest role",
-        "hoistRole": "Hoisted role",
-        "birthday": "Birthday",
-        "permissions": "Permissions",
-        "xp": "XP",
-        "invited-by": "Invited by",
-        "bio": "Bio",
-        "invites": "Invites",
-        "level": "Level",
-        "messages": "Messages",
-        "noPermissions": "This user does not have any permissions ):"
-      },
-      "disableKeyEdits": true,
-      "humanname-de": "Userinfo",
-      "description-de": "Hier kannst du die Teile des userinfo-Befehls anpassen",
-      "params-de": {},
-      "default-de": {
-        "id": "ID",
-        "tag": "Tag",
-        "currentStatus": "Aktueller Status",
-        "createdAt": "Account erstellt am",
-        "joinedAt": "Server beigetreten am",
-        "nickname": "Nickname",
-        "boosterSince": "Server-Booster seit",
-        "displayColor": "Anzeigefarbe",
-        "currentVoiceChannel": "Aktueller Sprachkanal",
-        "highestRole": "Höchste Rolle",
-        "hoistRole": "Gelistete Rolle",
-        "birthday": "Geburtstag",
-        "permissions": "Berechtigungen",
-        "xp": "XP",
-        "bio": "Bio",
-        "level": "Level",
-        "messages": "Nachrichten",
-        "noPermissions": "Dieser Nutzer hat keine Berechtigungen ):",
-        "invited-by": "Invited by",
-        "invites": "Invites"
-      }
+      "disableKeyEdits": true
     },
     {
-      "field_name": "channelInfo",
+      "name": "channelInfo",
+      "humanName": {
+        "de": "Channelinfo"
+      },
+      "default": {
+        "en": {
+          "id": "ID",
+          "createdAt": "Created at",
+          "type": "Type",
+          "name": "Name",
+          "parent": "Category",
+          "topic": "Topic",
+          "position": "Current position",
+          "stageInstanceName": "Stage topic",
+          "stageInstancePrivacy": "Stage Privacy",
+          "threadArchivedAt": "Thread archived at",
+          "threadAutoArchiveDuration": "Thread auto Archive Duration",
+          "threadOwner": "Thread-Owner",
+          "threadMessages": "Messages in thread",
+          "threadMemberCount": "Members in this thread",
+          "membersInChannel": "Members currently in this channel"
+        },
+        "de": {
+          "id": "ID",
+          "createdAt": "Erstellt am",
+          "type": "Typ",
+          "name": "Name",
+          "parent": "Kategorie",
+          "topic": "Kanalbeschreibung",
+          "position": "Aktuelle Position",
+          "stageInstanceName": "Stage Thema",
+          "stageInstancePrivacy": "Stage Privacy",
+          "threadArchivedAt": "Thread archiviert am",
+          "threadAutoArchiveDuration": "Automatische Threadarchivierungsdauer",
+          "threadOwner": "Thread-Besitzer",
+          "threadMessages": "Nachrichten im Thread",
+          "threadMemberCount": "Mitglieder in diesem Thread",
+          "membersInChannel": "Mitglieder, die sich aktuell in diesem Kanal befinden"
+        }
+      },
+      "description": {
+        "en": "You can change the parts of the channelinfo-command here",
+        "de": "Hier kannst du die Teile des channelinfo-Befehls anpassen"
+      },
       "type": "keyed",
-      "description": "You can change the parts of the channelinfo-command here",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "default": {
-        "id": "ID",
-        "createdAt": "Created at",
-        "type": "Type",
-        "name": "Name",
-        "parent": "Category",
-        "topic": "Topic",
-        "position": "Current position",
-        "stageInstanceName": "Stage topic",
-        "stageInstancePrivacy": "Stage Privacy",
-        "threadArchivedAt": "Thread archived at",
-        "threadAutoArchiveDuration": "Thread auto Archive Duration",
-        "threadOwner": "Thread-Owner",
-        "threadMessages": "Messages in thread",
-        "threadMemberCount": "Members in this thread",
-        "membersInChannel": "Members currently in this channel"
-      },
-      "disableKeyEdits": true,
-      "humanname-de": "Channelinfo",
-      "description-de": "Hier kannst du die Teile des channelinfo-Befehls anpassen",
-      "params-de": {},
-      "default-de": {
-        "id": "ID",
-        "createdAt": "Erstellt am",
-        "type": "Typ",
-        "name": "Name",
-        "parent": "Kategorie",
-        "topic": "Kanalbeschreibung",
-        "position": "Aktuelle Position",
-        "stageInstanceName": "Stage Thema",
-        "stageInstancePrivacy": "Stage Privacy",
-        "threadArchivedAt": "Thread archiviert am",
-        "threadAutoArchiveDuration": "Automatische Threadarchivierungsdauer",
-        "threadOwner": "Thread-Besitzer",
-        "threadMessages": "Nachrichten im Thread",
-        "threadMemberCount": "Mitglieder in diesem Thread",
-        "membersInChannel": "Mitglieder, die sich aktuell in diesem Kanal befinden"
-      }
+      "disableKeyEdits": true
     },
     {
-      "field_name": "roleInfo",
+      "name": "roleInfo",
+      "humanName": {
+        "de": "Roleinfo"
+      },
+      "default": {
+        "en": {
+          "id": "ID",
+          "createdAt": "Created at",
+          "color": "Color",
+          "name": "Name",
+          "position": "Current position",
+          "memberWithThisRoleCount": "Count of members with this role",
+          "memberWithThisRole": "Members with this role",
+          "permissions": "Permissions"
+        },
+        "de": {
+          "id": "ID",
+          "createdAt": "Erstellt am",
+          "color": "Farbe",
+          "name": "Name",
+          "position": "Aktuelle Position",
+          "memberWithThisRoleCount": "Anzahl der Mitglieder mit dieser Rolle",
+          "memberWithThisRole": "Mitglieder mit dieser Rolle",
+          "permissions": "Berechtigungen"
+        }
+      },
+      "description": {
+        "en": "You can change the parts of the roleinfo-command here",
+        "de": "Hier kannst du die Teile des serverinfo-Befehls anpassen"
+      },
       "type": "keyed",
-      "description": "You can change the parts of the roleinfo-command here",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "default": {
-        "id": "ID",
-        "createdAt": "Created at",
-        "color": "Color",
-        "name": "Name",
-        "position": "Current position",
-        "memberWithThisRoleCount": "Count of members with this role",
-        "memberWithThisRole": "Members with this role",
-        "permissions": "Permissions"
+      "disableKeyEdits": true
+    },
+    {
+      "name": "user_not_found",
+      "humanName": {
+        "de": "Nutzer nicht gefunden"
       },
-      "disableKeyEdits": true,
-      "humanname-de": "Roleinfo",
-      "description-de": "Hier kannst du die Teile des serverinfo-Befehls anpassen",
-      "params-de": {},
-      "default-de": {
-        "id": "ID",
-        "createdAt": "Erstellt am",
-        "color": "Farbe",
-        "name": "Name",
-        "position": "Aktuelle Position",
-        "memberWithThisRoleCount": "Anzahl der Mitglieder mit dieser Rolle",
-        "memberWithThisRole": "Mitglieder mit dieser Rolle",
-        "permissions": "Berechtigungen"
-      }
+      "default": {
+        "en": "I could not find this user - try using an ID or a mention",
+        "de": "Dieser Nutzer konnte nicht gefunden werden - versuche eine ID oder eine Erwähnung zu verwenden"
+      },
+      "description": {
+        "en": "Message that gets send if the user provided an invalid userid",
+        "de": "Nachricht, die gesendet wird, wenn der Nutzer eine Ungültige NutzerID angibt"
+      },
+      "type": "string",
+      "allowEmbed": true
     },
     {
-      "field_name": "user_not_found",
-      "default": "I could not find this user - try using an ID or a mention",
+      "name": "channel_not_found",
+      "humanName": {
+        "de": "Kanal nicht gefunden"
+      },
+      "default": {
+        "en": "I could not find this channel - try using an ID or a mention",
+        "de": "Dieser Kanal konnte nicht gefunden werden - versuche eine ID oder eine Erwähnung zu verwenden"
+      },
+      "description": {
+        "en": "Message that gets send if the user provided an invalid userid",
+        "de": "Nachricht, die gesendet wird, wenn der Nutzer eine Ungültige KanalID angibt"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send if the user provided an invalid userid",
-      "humanname-de": "Nutzer nicht gefunden",
-      "description-de": "Nachricht, die gesendet wird, wenn der Nutzer eine Ungültige NutzerID angibt",
-      "params-de": {},
-      "default-de": "Dieser Nutzer konnte nicht gefunden werden - versuche eine ID oder eine Erwähnung zu verwenden"
+      "allowEmbed": true
     },
     {
-      "field_name": "channel_not_found",
-      "default": "I could not find this channel - try using an ID or a mention",
+      "name": "role_not_found",
+      "humanName": {
+        "de": "Rolle nicht gefunden"
+      },
+      "default": {
+        "en": "I could not find this role - try using an ID or a mention",
+        "de": "Diese Rolle konnte nicht gefunden werden - versuche eine ID oder eine Erwähnung zu verwenden"
+      },
+      "description": {
+        "en": "Message that gets send if the user provided an invalid roleid",
+        "de": "Nachricht, die gesendet wird, wenn der Nutzer eine Ungültige RollenID angibt"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send if the user provided an invalid userid",
-      "humanname-de": "Kanal nicht gefunden",
-      "description-de": "Nachricht, die gesendet wird, wenn der Nutzer eine Ungültige KanalID angibt",
-      "params-de": {},
-      "default-de": "Dieser Kanal konnte nicht gefunden werden - versuche eine ID oder eine Erwähnung zu verwenden"
+      "allowEmbed": true
     },
     {
-      "field_name": "role_not_found",
-      "default": "I could not find this role - try using an ID or a mention",
+      "name": "avatarMsg",
+      "humanName": {
+        "de": "Avatar-Nachricht"
+      },
+      "default": {
+        "en": "Here is the avatar: (Please reminder that the image may be protected under copyright-law)",
+        "de": "Hier ist der Avatar: (Bitte beachte, dass das Bild eventuell urheberrechtlich geschützt ist)"
+      },
+      "description": {
+        "en": "Message that gets send if the user requested an avatar",
+        "de": "Nachricht, die gesendet wird, wenn ein Nutzer einen Avatar anfragt"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description": "Message that gets send if the user provided an invalid roleid",
-      "humanname-de": "Rolle nicht gefunden",
-      "description-de": "Nachricht, die gesendet wird, wenn der Nutzer eine Ungültige RollenID angibt",
-      "params-de": {},
-      "default-de": "Diese Rolle konnte nicht gefunden werden - versuche eine ID oder eine Erwähnung zu verwenden"
-    },
-    {
-      "field_name": "avatarMsg",
-      "default": "Here is the avatar: (Please reminder that the image may be protected under copyright-law)",
-      "type": "string",
-      "allowEmbed": true,
-      "description": "Message that gets send if the user requested an avatar",
       "params": [
         {
-          "name": "%avatarUrl%",
-          "description": "URL to the avatar"
+          "name": "avatarUrl",
+          "description": {
+            "en": "URL to the avatar",
+            "de": "URL zum Avatar"
+          }
         },
         {
-          "name": "%tag%",
-          "description": "Tag of the requested user"
+          "name": "tag",
+          "description": {
+            "en": "Tag of the requested user",
+            "de": "Tag des gewünschten Nutzers"
+          }
         }
-      ],
-      "humanname-de": "Avatar-Nachricht",
-      "description-de": "Nachricht, die gesendet wird, wenn ein Nutzer einen Avatar anfragt",
-      "params-de": [
-        {
-          "name": "%avatarUrl%",
-          "description": "URL zum Avatar"
-        },
-        {
-          "name": "%tag%",
-          "description": "Tag des gewünschten Nutzers"
-        }
-      ],
-      "default-de": "Hier ist der Avatar: (Bitte beachte, dass das Bild eventuell urheberrechtlich geschützt ist)"
+      ]
     }
   ]
 }

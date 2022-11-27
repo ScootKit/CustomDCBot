@@ -1,7 +1,10 @@
 {
+  "description": {},
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
   "commandsWarnings": {
     "normal": [
       "/partner"
@@ -9,177 +12,199 @@
   },
   "content": [
     {
-      "field_name": "channelID",
-      "default": "",
-      "type": "channelID",
-      "description": "Channel-ID to run all operations in it",
-      "humanname-de": "Kanal-ID",
-      "description-de": "Kanal-ID, in welchem alle Aktionen ausgeführt werden",
-      "params-de": {},
-      "default-de": ""
+      "name": "channelID",
+      "humanName": {
+        "de": "Kanal-ID"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Channel-ID to run all operations in it",
+        "de": "Kanal-ID, in welchem alle Aktionen ausgeführt werden"
+      },
+      "type": "channelID"
     },
     {
-      "field_name": "embed",
+      "name": "embed",
+      "humanName": {
+        "de": "Partner-Embed"
+      },
+      "default": {
+        "en": {
+          "title": "Our partners",
+          "description": "You can find all of our partners here - If you want to be one of our partners message a staff member!",
+          "partner-string": "#%id%: [%name%](%invite%) (<@%userID%>)",
+          "color": "GREEN"
+        },
+        "de": {
+          "title": "Unsere Partner",
+          "description": "Hier findest du alles über unsere Partner - Wenn du selbst Partner werden möchtest kontaktiere eins unserer Teammitglieder!",
+          "partner-string": "#%id%: [%name%](%invite%) (<@%userID%>)",
+          "color": "GREEN"
+        }
+      },
+      "description": {
+        "en": "Configuration of the partnership-embed",
+        "de": "Konfiguration des Partner-Embeds"
+      },
       "type": "keyed",
-      "description": "Configuration of the partnership-embed",
       "content": {
         "key": "string",
         "value": "string"
       },
-      "default": {
-        "title": "Our partners",
-        "description": "You can find all of our partners here - If you want to be one of our partners message a staff member!",
-        "partner-string": "#%id%: [%name%](%invite%) (<@%userID%>)",
-        "color": "GREEN"
-      },
       "disableKeyEdits": true,
-      "humanname-de": "Partner-Embed",
-      "description-de": "Konfiguration des Partner-Embeds",
-      "params-de": [
-        {
-          "name": "%invite%",
-          "description": "Konfigurierter Invite des Partner-Servers (nur für \"partner-string\" Feld)"
-        },
-        {
-          "name": "%name%",
-          "description": "Konfigurierter Name des Partner-Servers (nur für \"partner-string\" Feld)"
-        },
-        {
-          "name": "%userID%",
-          "description": "Konfigurierter Owner-ID des Partner-Servers (nur für \"partner-string\" Feld)"
-        },
-        {
-          "name": "%teamMemberID%",
-          "description": "ID des Nutzers, der den Partner-Server eingetragen hat (nur für \"partner-string\" Feld)"
-        }
-      ],
       "params": [
         {
-          "name": "%invite%",
-          "description": "Configured invite to the partner-server (only for \"partner-string\" field)"
+          "name": "invite",
+          "description": {
+            "en": "Configured invite to the partner-server (only for \"partner-string\" field)",
+            "de": "Konfigurierter Invite des Partner-Servers (nur für \"partner-string\" Feld)"
+          }
         },
         {
-          "name": "%name%",
-          "description": "Configured name to the partner-server (only for \"partner-string\" field)"
+          "name": "name",
+          "description": {
+            "en": "Configured name to the partner-server (only for \"partner-string\" field)",
+            "de": "Konfigurierter Name des Partner-Servers (nur für \"partner-string\" Feld)"
+          }
         },
         {
-          "name": "%userID%",
-          "description": "Configured owner-ID to the partner-server (only for \"partner-string\" field)"
+          "name": "userID",
+          "description": {
+            "en": "Configured owner-ID to the partner-server (only for \"partner-string\" field)",
+            "de": "Konfigurierter Owner-ID des Partner-Servers (nur für \"partner-string\" Feld)"
+          }
         },
         {
-          "name": "%teamMemberID%",
-          "description": "User who added this partner-server (only for \"partner-string\" field)"
+          "name": "teamMemberID",
+          "description": {
+            "en": "User who added this partner-server (only for \"partner-string\" field)",
+            "de": "ID des Nutzers, der den Partner-Server eingetragen hat (nur für \"partner-string\" Feld)"
+          }
         }
-      ],
-      "default-de": {
-        "title": "Unsere Partner",
-        "description": "Hier findest du alles über unsere Partner - Wenn du selbst Partner werden möchtest kontaktiere eins unserer Teammitglieder!",
-        "partner-string": "#%id%: [%name%](%invite%) (<@%userID%>)",
-        "color": "GREEN"
-      }
-    },
-    {
-      "field_name": "categories",
-      "type": "array",
-      "description": "Please specify each category here",
-      "content": "string",
-      "default": [
-        "Normal Partners",
-        "Kooperation",
-        "Small Partners"
-      ],
-      "humanname-de": "Kategorien",
-      "description-de": "Bitte liste jede Kategorie hier auf",
-      "params-de": {},
-      "default-de": [
-        "Normale Partner",
-        "Kooperation",
-        "Kleine Partner"
       ]
     },
     {
-      "field_name": "category-roles",
+      "name": "categories",
+      "humanName": {
+        "de": "Kategorien"
+      },
+      "default": {
+        "en": [
+          "Normal Partners",
+          "Kooperation",
+          "Small Partners"
+        ],
+        "de": [
+          "Normale Partner",
+          "Kooperation",
+          "Kleine Partner"
+        ]
+      },
+      "description": {
+        "en": "Please specify each category here",
+        "de": "Bitte liste jede Kategorie hier auf"
+      },
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "category-roles",
+      "humanName": {
+        "de": "Kategorie-Rollen"
+      },
+      "default": {
+        "en": {},
+        "de": {}
+      },
+      "description": {
+        "en": "(optional) Role which should be given for a partner in a specific category",
+        "de": "(optional) Rolle welche Partner in einer bestimmten Kategorie gegeben werden soll"
+      },
       "type": "keyed",
-      "description": "(optional) Role which should be given for a partner in a specific category",
       "content": {
         "key": "string",
         "value": "roleID"
+      }
+    },
+    {
+      "name": "sendNotificationToPartner",
+      "humanName": {
+        "de": "Partner-Benachrichtigung"
       },
-      "default": {},
-      "humanname-de": "Kategorie-Rollen",
-      "description-de": "(optional) Rolle welche Partner in einer bestimmten Kategorie gegeben werden soll",
-      "params-de": {},
-      "default-de": {}
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, the bot is going to send a DM to the partner when they get added or removed",
+        "de": "Wenn aktiviert, sendet der Bot eine PN an Partner, wenn sie hinzugefügt oder entfernt werden"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "sendNotificationToPartner",
-      "type": "boolean",
-      "default": false,
-      "description": "If enabled, the bot is going to send a DM to the partner when they get added or removed",
-      "humanname-de": "Partner-Benachrichtigung",
-      "description-de": "Wenn aktiviert, sendet der Bot eine PN an Partner, wenn sie hinzugefügt oder entfernt werden",
-      "params-de": {},
-      "default-de": false
-    },
-    {
-      "field_name": "newPartnerDM",
+      "name": "newPartnerDM",
+      "humanName": {
+        "de": "Partner-Hinzufügungs-PN"
+      },
+      "default": {
+        "en": "Hello, Hello! You are now a partner - congratulations",
+        "de": "Hi. Du bist jetzt Partner - Herzlichen Glückwunsch"
+      },
+      "description": {
+        "en": "This message gets send to the partner (if enabled)",
+        "de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)"
+      },
       "type": "string",
       "allowEmbed": true,
-      "default": "Hello, Hello! You are now a partner - congratulations",
-      "description": "This message gets send to the partner (if enabled)",
       "params": [
         {
-          "name": "%name%",
-          "description": "Name of the added partner"
+          "name": "name",
+          "description": {
+            "en": "Name of the added partner",
+            "de": "Name des hinzugefügten Partners"
+          }
         },
         {
-          "name": "%category%",
-          "description": "Category of the partner"
+          "name": "category",
+          "description": {
+            "en": "Category of the partner",
+            "de": "Kategorie des Partners"
+          }
         }
-      ],
-      "humanname-de": "Partner-Hinzufügungs-PN",
-      "description-de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)",
-      "params-de": [
-        {
-          "name": "%name%",
-          "description": "Name des hinzugefügten Partners"
-        },
-        {
-          "name": "%category%",
-          "description": "Kategorie des Partners"
-        }
-      ],
-      "default-de": "Hi. Du bist jetzt Partner - Herzlichen Glückwunsch"
+      ]
     },
     {
-      "field_name": "byePartnerDM",
+      "name": "byePartnerDM",
+      "humanName": {
+        "de": "Partner-Entfernungs-PN"
+      },
+      "default": {
+        "en": "Sorry, but you are no longer a partner ):",
+        "de": "Leider bist du nicht länger Partner ):"
+      },
+      "description": {
+        "en": "This message gets send to the partner (if enabled)",
+        "de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)"
+      },
       "type": "string",
       "allowEmbed": true,
-      "default": "Sorry, but you are no longer a partner ):",
-      "description": "This message gets send to the partner (if enabled)",
       "params": [
         {
-          "name": "%name%",
-          "description": "Name of the added partner"
+          "name": "name",
+          "description": {
+            "en": "Name of the added partner",
+            "de": "Name des hinzugefügten Partners"
+          }
         },
         {
-          "name": "%category%",
-          "description": "Category of the partner"
+          "name": "category",
+          "description": {
+            "en": "Category of the partner",
+            "de": "Kategorie des Partners"
+          }
         }
-      ],
-      "humanname-de": "Partner-Entfernungs-PN",
-      "description-de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)",
-      "params-de": [
-        {
-          "name": "%name%",
-          "description": "Name des hinzugefügten Partners"
-        },
-        {
-          "name": "%category%",
-          "description": "Kategorie des Partners"
-        }
-      ],
-      "default-de": "Leider bist du nicht länger Partner ):"
+      ]
     }
   ]
 }

@@ -39,7 +39,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     '%user%': user.user.tag,
                     '%date%': expiringAt ? formatDate(expiringAt) : null
                 }));
-                await victim.setNickname(moduleConfig['changeNicknameOnMute'] ? moduleConfig['changeNicknameOnMute'].split('%nickname%').join(victim.nickname ? victim.nickname : victim.user.username) : victim.nickname, '[moderation] ' + localize('moderation', 'mute-audit-log-reason', {
+                if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(moduleConfig['changeNicknameOnMute'].split('%nickname%').join(victim.nickname ? victim.nickname : victim.user.username), '[moderation] ' + localize('moderation', 'mute-audit-log-reason', {
                     u: user.user.tag,
                     r: reason
                 })).catch(() => {
@@ -54,7 +54,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     '%reason%': reason,
                     '%user%': user.user.tag
                 }));
-                await victim.setNickname(victim.user.username, '[moderation] ' + localize('moderation', 'unmute-audit-log-reason', {
+                if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(victim.user.username, '[moderation] ' + localize('moderation', 'unmute-audit-log-reason', {
                     u: user.user.tag,
                     r: reason
                 }));
@@ -96,7 +96,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                         u: user.user.tag,
                         r: reason
                     }));
-                    await victim.setNickname(moduleConfig['changeNicknameOnQuarantine'] ? moduleConfig['changeNicknameOnQuarantine'].split('%nickname%').join(victim.nickname ? victim.nickname : victim.user.username) : victim.nickname, '[moderation] ' + localize('moderation', 'quarantine-audit-log-reason', {
+                    if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(moduleConfig['changeNicknameOnQuarantine'].split('%nickname%').join(victim.nickname ? victim.nickname : victim.user.username), '[moderation] ' + localize('moderation', 'quarantine-audit-log-reason', {
                         u: user.user.tag,
                         r: reason
                     })).catch(() => {
@@ -121,7 +121,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     '%reason%': reason,
                     '%user%': user.user.tag
                 }));
-                await victim.setNickname(victim.user.username).catch(() => {
+                if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(victim.user.username).catch(() => {
                 });
                 break;
             case 'kick':

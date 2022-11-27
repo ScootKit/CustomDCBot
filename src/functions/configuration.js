@@ -7,6 +7,7 @@ const jsonfile = require('jsonfile');
 const fs = require('fs');
 const {logger} = require('../../main');
 const {localize} = require('./localize');
+const isEqual = require('is-equal');
 
 /**
  * Check every (including module) configuration and load them
@@ -18,34 +19,168 @@ const {localize} = require('./localize');
 async function loadAllConfigs(client) {
     logger.info(localize('config', 'checking-config'));
     return new Promise(async (resolve, reject) => {
-        await fs.readdir(`${__dirname}/../../config-generator/`, async (err, files) => {
+        await fs.readdir(`${__dirname}/../../config-generator`, async (err, files) => {
             for (const f of files) {
-                await checkBuildInConfig(f).catch((reason) => reject(reason));
+                await checkConfigFile(f).catch((reason) => {
+                    logger.error(reason);
+                    reject(reason);
+                });
             }
-
-            for (const moduleName in client.modules) {
-                if (!client.modules[moduleName].userEnabled) continue;
-                await checkModuleConfig(moduleName, client.modules[moduleName]['config']['on-checked-config-event'] ? require(`./modules/${moduleName}/${client.modules[moduleName]['config']['on-checked-config-event']}`) : null)
-                    .catch(async (e) => {
-                        client.modules[moduleName].enabled = false;
-                        client.logger.error(`[CONFIGURATION] ERROR CHECKING ${moduleName}. Module disabled internally. Error: ${e}`);
-                        if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
-                            type: 'MODULE_FAILURE',
-                            errorDescription: 'module_disabled',
-                            module: moduleName,
-                            errorData: {reason: 'Invalid configuration: ' + e}
-                        });
-                    });
-            }
-            const data = {
-                totalModules: Object.keys(client.modules).length,
-                enabled: Object.values(client.modules).filter(m => m.enabled).length,
-                configDisabled: Object.values(client.modules).filter(m => m.userEnabled && !m.enabled).length,
-                userEnabled: Object.values(client.modules).filter(m => m.userEnabled && !m.enabled).length
-            };
-            logger.info(localize('config', 'done-with-checking', data));
-            resolve(data);
         });
+
+        for (const moduleName in client.modules) {
+            if (!client.modules[moduleName].userEnabled) continue;
+            await checkModuleConfig(moduleName, client.modules[moduleName]['config']['on-checked-config-event'] ? require(`./modules/${moduleName}/${client.modules[moduleName]['config']['on-checked-config-event']}`) : null)
+                .catch(async (e) => {
+                    client.modules[moduleName].enabled = false;
+                    client.logger.error(`[CONFIGURATION] ERROR CHECKING ${moduleName}. Module disabled internally. Error: ${e}`);
+                    if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
+                        type: 'MODULE_FAILURE',
+                        errorDescription: 'module_disabled',
+                        module: moduleName,
+                        errorData: {reason: 'Invalid configuration: ' + e}
+                    });
+                });
+        }
+        const data = {
+            totalModules: Object.keys(client.modules).length,
+            enabled: Object.values(client.modules).filter(m => m.enabled).length,
+            configDisabled: Object.values(client.modules).filter(m => m.userEnabled && !m.enabled).length,
+            userEnabled: Object.values(client.modules).filter(m => m.userEnabled && !m.enabled).length
+        };
+        logger.info(localize('config', 'done-with-checking', data));
+        resolve(data);
+    });
+}
+
+/**
+ *
+ */
+async function checkConfigFile(file, moduleName) {
+    const {client} = require('../../main');
+    return new Promise(async (resolve, reject) => {
+        const builtIn = !moduleName;
+        let exampleFile;
+        try {
+            exampleFile = require(builtIn ? `${__dirname}/../../config-generator/${file}` : `${__dirname}/../../modules/${moduleName}/${file}`);
+        } catch (e) {
+            logger.error(`Not found config example file: ${file}`);
+            return reject(`Not found config example file: ${file}`);
+        }
+        if (!exampleFile) return;
+        let forceOverwrite = false;
+        let configData = exampleFile.configElements ? [] : {};
+        try {
+            configData = jsonfile.readFileSync(`${client.configDir}${builtIn ? '' : '/' + moduleName}/${exampleFile.filename}`);
+        } catch (e) {
+            forceOverwrite = true;
+            logger.info(localize('config', 'creating-file', {
+                m: builtIn ? 'bot' : moduleName,
+                f: exampleFile.filename
+            }));
+        }
+        let newConfig = exampleFile.configElements ? [] : {};
+
+        if (exampleFile.skipContentCheck) newConfig = configData;
+        else if (exampleFile.configElements) {
+            if (!Array.isArray(configData)) {
+                client.logger.warn(`${builtIn ? '' : '/' + moduleName}/${exampleFile.filename}: This file should be a config-element, but is not. Converting to config-element.`);
+                if (typeof configData === 'object') configData = [configData];
+                else configData = [];
+            }
+            for (const object of configData) {
+                const objectData = {};
+                for (const field of exampleFile.content) {
+                    const dependsOnField = field.dependsOn ? exampleFile.content.find(f => f.name === field.dependsOn) : null;
+                    if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
+                    if (dependsOnField && !(typeof object[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : object[dependsOnField.name])) continue;
+                    try {
+                        objectData[field.name] = await checkField(field, object[field.name]);
+                    } catch (e) {
+                        return reject(e);
+                    }
+                }
+                newConfig.push(objectData);
+            }
+        } else {
+            for (const field of exampleFile.content) {
+                const dependsOnField = field.dependsOn ? exampleFile.content.find(f => f.name === field.dependsOn) : null;
+                if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
+                if (dependsOnField && !(typeof configData[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : configData[dependsOnField.name])) {
+                    newConfig[field.name] = configData[field.name]; // Otherwise disabled fields may be overwritten
+                    continue;
+                }
+                try {
+                    newConfig[field.name] = await checkField(field, configData[field.name]);
+                } catch (e) {
+                    return reject(e);
+                }
+            }
+        }
+
+        /**
+         * Checks the content of a field
+         * @param {Field<Object>} field Field-Object
+         * @param {*} fieldValue Current config element
+         * @returns {Promise<void|*>}
+         */
+        function checkField(fieldData, fieldValue) {
+            const field = {...fieldData};
+            return new Promise(async (res, rej) => {
+                if (!field.name) return rej('missing fieldname.');
+                if (typeof field.default === 'undefined' || typeof field.default.en === 'undefined') {
+                    console.log(field.default);
+                    return rej('Missing default value on ' + field.name);
+                }
+                if (typeof field.default !== 'object') return rej(`${field.name} has an invalid default value. The default value needs to be localized. A possible fix could be: default = "${JSON.stringify({en: field.default})}". If you want a default value for all languages, only set the "en" key.`);
+                field.default = field.default[client.locale] || field.default['en'];
+                if (typeof fieldValue === 'undefined') {
+                    fieldValue = field.default;
+                    return res(fieldValue);
+                } else if (field.type === 'keyed' && field.disableKeyEdits) for (const key in field.default) if (typeof fieldValue[key] === 'undefined') fieldValue[key] = field.default[key];
+                if (field.allowNull && field.type !== 'boolean' && !fieldValue) return res(fieldValue);
+                if (!await checkType(field.type, fieldValue, field.content, field.allowEmbed)) {
+                    if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
+                        type: 'CONFIGURATION_ISSUE',
+                        module: moduleName,
+                        field: field.name,
+                        configFile: exampleFile.filename.replaceAll('.json', ''),
+                        errorDescription: 'field_check_failed'
+                    });
+                    logger.error(localize('config', 'checking-of-field-failed', {
+                        fieldName: field.name,
+                        m: moduleName,
+                        f: exampleFile.filename
+                    }));
+                    rej(localize('config', 'checking-of-field-failed', {
+                        fieldName: field.name,
+                        m: moduleName,
+                        f: exampleFile.filename
+                    }));
+                }
+                if (field.disableKeyEdits && field.type === 'keyed') {
+                    for (const key in fieldValue) {
+                        if (typeof field.default[key] === 'undefined') delete fieldValue[key];
+                    }
+                    for (const key in field.default) {
+                        if (typeof fieldValue[key] === 'undefined') fieldValue[key] = field.default[key];
+                    }
+                }
+                if (client.scnxSetup) fieldValue = require('./scnx-integration').setFieldValue(client, field, fieldValue);
+                res(fieldValue);
+            });
+        }
+
+        if (!isEqual(configData, newConfig) || forceOverwrite) {
+            if (!fs.existsSync(`${client.configDir}/${moduleName}`) && moduleName) fs.mkdirSync(`${client.configDir}/${moduleName}`);
+            jsonfile.writeFileSync(`${client.configDir}${builtIn ? '' : '/' + moduleName}/${exampleFile.filename}`, newConfig, {spaces: 2});
+            logger.info(localize('config', 'saved-file', {
+                f: file,
+                m: moduleName
+            }));
+        }
+        if (!builtIn) client.configurations[moduleName][exampleFile.filename.split('.json').join('')] = newConfig;
+        resolve();
     });
 }
 
@@ -58,213 +193,17 @@ async function loadAllConfigs(client) {
  */
 async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
     return new Promise(async (resolve, reject) => {
-        const {client} = require('../../main');
         const moduleConf = require(`../../modules/${moduleName}/module.json`);
-        if (!moduleConf['config-example-files']) return resolve();
-        for (const v of moduleConf['config-example-files']) {
-            let exampleFile;
-            try {
-                exampleFile = require(`../../modules/${moduleName}/${v}`);
-            } catch (e) {
-                logger.error(`Not found config example file: ${moduleName}/${v}`);
-                return reject(`Not found config example file: ${moduleName}/${v}`);
-            }
-            if (!exampleFile) return;
-            let config = exampleFile.configElements ? [] : {};
-            let ow = false;
-            try {
-                config = jsonfile.readFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`);
-            } catch (e) {
-                logger.info(localize('config', 'creating-file', {
-                    m: moduleName,
-                    f: exampleFile.filename
-                }));
-                ow = true;
-            }
-            if (exampleFile.configElements) {
-                if (!Array.isArray(config)) {
-                    client.logger.warn('Called f 239B (with addition: trying to automatically migrate) as work-around for wrong configuration'); // idk what the fuck this is, so i just added some random stuff to it
-                    if (typeof config === 'object') config = [config];
-                    else config = [];
-                }
-                for (const field of exampleFile.content) {
-                    if (client.locale) {
-                        if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
-                        else if (field[`default-en`]) field.default = field[`default-en`];
-                    }
-                    for (const i in config) {
-                        try {
-                            config[i] = await checkField(field, config[i]);
-                        } catch (e) {
-                            return reject(e);
-                        }
-                    }
-                }
-            } else {
-                for (const field of exampleFile.content) {
-                    if (client.locale) {
-                        if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
-                        else if (field[`default-en`]) field.default = field[`default-en`];
-                    }
-                    try {
-                        config = await checkField(field, config);
-                    } catch (e) {
-                        return reject(e);
-                    }
-                }
-            }
-
-            /**
-             * Checks the content of a field
-             * @param {Field<Object>} field Field-Object
-             * @param {*[]} configElement Current config element
-             * @returns {Promise<void|*>}
-             */
-            function checkField(field, configElement) {
-                return new Promise(async (res, rej) => {
-                    if (!field.field_name) return rej('missing fieldname.');
-                    if (client.locale) {
-                        if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
-                        else if (field[`default-en`]) field.default = field[`default-en`];
-                    }
-                    if (typeof configElement[field.field_name] === 'undefined') {
-                        configElement[field.field_name] = field.default;
-                        ow = true;
-                        return res(configElement);
-                    } else if (field.type === 'keyed' && field.disableKeyEdits) {
-                        for (const key in field.default) {
-                            if (!configElement[field.field_name][key]) {
-                                ow = true;
-                                configElement[field.field_name][key] = field.default[key];
-                            }
-                        }
-                    }
-                    if (field.allowNull && (configElement[field.field_name] || '').toString().replaceAll(' ', '') === '' || typeof configElement[field.field_name] === 'undefined') return res(configElement);
-                    if (!await checkType(field.type, configElement[field.field_name], field.content, field.allowEmbed)) {
-                        if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
-                            type: 'CONFIGURATION_ISSUE',
-                            module: moduleName,
-                            field: field.field_name,
-                            configFile: exampleFile.filename.replaceAll('.json', ''),
-                            errorDescription: 'field_check_failed'
-                        });
-                        logger.error(localize('config', 'checking-of-field-failed', {
-                            fieldName: field.field_name,
-                            m: moduleName,
-                            f: exampleFile.filename
-                        }));
-                        rej(localize('config', 'checking-of-field-failed', {
-                            fieldName: field.field_name,
-                            m: moduleName,
-                            f: exampleFile.filename
-                        }));
-                    }
-                    if (field.disableKeyEdits) {
-                        for (const content in configElement[field.field_name]) {
-                            if (typeof field.default[content] === 'undefined') {
-                                delete configElement[field.field_name][content];
-                                ow = true;
-                            }
-                        }
-                    }
-                    if (client.scnxSetup) configElement[field.field_name] = require('./scnx-integration').setFieldValue(client, field, configElement[field.field_name]);
-                    res(configElement);
-                });
-            }
-
-            if (ow) {
-                if (!fs.existsSync(`${client.configDir}/${moduleName}`)) fs.mkdirSync(`${client.configDir}/${moduleName}`);
-                jsonfile.writeFileSync(`${client.configDir}/${moduleName}/${exampleFile.filename}`, config, {spaces: 2});
-                logger.info(localize('config', 'saved-file', {
-                    f: v,
-                    m: moduleName
-                }));
-            }
-            client.configurations[moduleName][exampleFile.filename.split('.json').join('')] = config;
+        if ((moduleConf['config-example-files'] || []).length === 0) return resolve();
+        try {
+            for (const v of moduleConf['config-example-files']) await checkConfigFile(v, moduleName);
+            resolve();
+        } catch (r) {
+            reject(r);
         }
-        resolve();
         if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
     }
     );
-}
-
-/**
- * Checks the build-in-configuration (not modules)
- * @private
- * @param {String} configName Name of the configuration to check
- * @returns {Promise<unknown>}
- */
-async function checkBuildInConfig(configName) {
-    return new Promise(async (resolve, reject) => {
-        const {client} = require('../../main');
-        const exampleFile = require(`../../config-generator/${configName}`);
-        if (!exampleFile) return;
-        let config = {};
-        let ow = false;
-        try {
-            config = jsonfile.readFileSync(`${client.configDir}/${configName}`);
-        } catch (e) {
-            logger.log(localize('config', 'creating-file', {
-                m: 'config',
-                f: configName
-            }));
-            ow = true;
-        }
-        if (!exampleFile.skipContentCheck) for (const field of exampleFile.content) {
-            if (!field.field_name) return reject(`One field is missing a name. Please check your config generation files`);
-            if (client.locale) {
-                if (field[`default-${client.locale}`]) field.default = field[`default-${client.locale}`];
-                else if (field[`default-en`]) field.default = field[`default-en`];
-            }
-            if (!config[field.field_name]) {
-                config[field.field_name] = field.default;
-                continue;
-            }
-            if (!await checkType(field.type, config[field.field_name], field.content, field.allowEmbed)) {
-                if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
-                    type: 'CONFIGURATION_ISSUE',
-                    field: field.field_name,
-                    configFile: exampleFile.filename.replaceAll('.json', ''),
-                    errorDescription: 'field_check_failed'
-                });
-                logger.error(localize('config', 'checking-of-field-failed', {
-                    fieldName: field.field_name,
-                    m: 'config',
-                    f: exampleFile.filename
-                }));
-                return reject(localize('config', 'checking-of-field-failed', {
-                    fieldName: field.field_name,
-                    m: 'config',
-                    f: exampleFile.filename
-                }));
-            }
-            if (field.disableKeyEdits) {
-                for (const content in config[field.field_name]) {
-                    if (!field.default[content]) {
-                        delete config[field.field_name][content];
-                        ow = true;
-                        logger.warn(`Error with ${content} in ${field.field_name} in config/${configName}: Unexpected index ${content}. Auto-Fix attempt succeeded`);
-                    }
-                }
-            }
-        }
-        else if (ow) config = exampleFile.default;
-        if (ow) {
-            jsonfile.writeFile(`${client.configDir}/${configName}`, config, {spaces: 2}, (err => {
-                if (err) {
-                    logger.error(`An error occurred while saving config/${configName}: ${err}`);
-                } else {
-                    logger.info(localize('config', 'saved-file', {
-                        f: configName,
-                        m: 'config'
-                    }));
-                }
-                resolve();
-            }));
-        } else {
-            resolve();
-        }
-    });
 }
 
 module.exports.loadAllConfigs = loadAllConfigs;
@@ -297,7 +236,8 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             }
             return !errored;
         case 'userID':
-            const user = await client.users.fetch(value).catch(() => {});
+            const user = await client.users.fetch(value).catch(() => {
+            });
             if (!user) {
                 logger.error(localize('config', 'user-not-found', {id: value}));
                 return false;

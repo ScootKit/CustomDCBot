@@ -1,35 +1,78 @@
 {
+  "description": {
+    "en": "Set up channels to delete text-messages from",
+    "de": "Stelle hier Text-Kanäle ein, aus welchen gelöscht werden soll"
+  },
+  "humanName": {
+    "en": "Text-Channels",
+    "de": "Text-Kanäle"
+  },
   "filename": "channels.json",
-  "humanname-de": "Channels",
-  "humanname-en": "Channels",
   "configElements": true,
   "content": [
     {
-      "field_name": "channelID",
-      "default": "",
+      "name": "channelID",
+      "humanName": {
+        "en": "Channel",
+        "de": "Kanal"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The Channel you want messages to be deleted from.",
+        "de": "Wähle den Kanal aus, aus welchen Nachrichten automatisch gelöscht werden sollen."
+      },
       "type": "channelID",
-      "humanname-de": "Sprachkanal",
-      "humanname-en": "Voice-Channel",
-      "description-en": "The Voice-Channel you want the auto-deleter to clear if there are no channel members left.",
-      "description-de": "Wähle den Sprachkanal aus, den der Bot leeren soll, sobald keine Mitglieder mehr im Sprachkanal sind."
+      "content": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ]
     },
     {
-      "field_name": "timeout",
-      "default": "5",
+      "name": "timeout",
+      "humanName": {
+        "en": "Timeout",
+        "de": "Timeout"
+      },
+      "default": {
+        "en": "5"
+      },
+      "description": {
+        "en": "Timeout (in minutes) after which the messages in a channel will be deleted.",
+        "de": "Timeout (in Minuten), nachdem die Nachrichten in einem Kanal automatisch gelöscht werden sollen."
+      },
+      "type": "integer"
+    },
+    {
+      "name": "purgeOnStart",
+      "humanName": {
+        "en": "Purge On Start",
+        "de": "Kanal leeren beim Bot Start"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled every (excluding pinned) message (max 100) in this channel gets deleted when the bot starts.",
+        "de": "Wenn aktiviert, werden alle (außer angepinnte) Nachrichten (max 100) aus dem gewälten Kanal, beim Start des Bots, gelöscht."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "keepMessageCount",
+      "default": {
+        "en": 0
+      },
+      "humanName": {
+        "en": "Amount of messages to keep",
+        "de": "Anzahl von zu behaltenden Nachrichten"
+      },
       "type": "integer",
-      "humanname-de": "Timeout",
-      "humanname-en": "Timeout",
-      "description-en": "Timeout (in minutes) after which the messages in a channel will be deleted.",
-      "description-de": "Timeout (in Minuten), nachdem die Nachrichten in einem Kanal automatisch gelöscht werden sollen."
-    },
-    {
-      "field_name": "purgeOnStart",
-      "default": false,
-      "type": "boolean",
-      "humanname-de": "Kanal leeren beim Bot Start",
-      "humanname-en": "Purge On Start",
-      "description-en": "If enabled every (excluding pinned) message (max 100) in this channel gets deleted when the bot starts.",
-      "description-de": "Wenn aktiviert, werden alle (außer angepinnte) Nachrichten (max 100) aus dem gewälten Kanal, beim Start des Bots, gelöscht."
+      "description": {
+        "en": "Set up a number here to always have x messages in your channel left (newest messages are kept). The number has to below 50.",
+        "de": "Stelle hier eine Anzahl an Nachrichten ein, die auch nach einer Löschung in dem Kanal behalten werden sollen (neuere Nachrichten werden behalten). Die Zahl muss unter 50 liegen."
+      }
     }
   ]
 }

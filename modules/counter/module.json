@@ -1,9 +1,5 @@
 {
   "name": "counter",
-  "humanReadableName-en": "Count-Game",
-  "humanReadableName-de": "Zähl-Spiel",
-  "description-en": "Allow your users to count together",
-  "description-de": "Erlaubt es deinen Nutzern, zusammen zu zählen!",
   "fa-icon": "fas fa-arrow-up-1-9",
   "author": {
     "scnxOrgID": "1",
@@ -19,5 +15,13 @@
   "tags": [
     "fun"
   ],
-  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/counter"
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/counter",
+  "humanReadableName": {
+    "en": "Count-Game",
+    "de": "Zähl-Spiel"
+  },
+  "description": {
+    "en": "Allow your users to count together",
+    "de": "Erlaubt es deinen Nutzern, zusammen zu zählen!"
+  }
 }
