@@ -6,12 +6,8 @@ module.exports.run = async function (client, msg) {
     if (!messageWithMentions[msg.id]) return;
     const moduleStrings = client.configurations['anti-ghostping']['config'];
     if (messageWithMentions[msg.id].author.bot) return;
-	if (moduleStrings.ignoredChannels.includes(msg.channel.id)) return;
-    let whitelisted = false;
-    moduleStrings.ignoredRoles.forEach(r => {
-        if (msg.member.roles.cache.get(r)) whitelisted = true;
-    });
-    if (whitelisted) return;
+    if (moduleStrings.ignoredChannels.includes(msg.channel.id)) return;
+    if (msg.member.roles.cache.find(r => moduleStrings.ignoredRoles.includes(r.id))) return;
     if (messageWithMentions[msg.id].guild.id !== client.config.guildID) return;
     if (!moduleStrings.awaitBotMessages) return executeGhostPingMessage();
     setTimeout(async () => {
