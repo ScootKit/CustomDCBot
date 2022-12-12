@@ -38,7 +38,7 @@
       "type": "array",
       "content": "channelID"
     },
-	{
+    {
       "field_name": "ignoredRoles",
       "default": [],
       "default-de": [],
