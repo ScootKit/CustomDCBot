@@ -308,6 +308,55 @@
         "en": "The message to be sent, if a user edited their channel, but it failed"
       },
       "type": "string"
+    },
+    {
+      "name": "settingsChannel",
+      "humanName": {
+        "de": "Einstellungskanal",
+        "en": "Settings channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "You can set a channel here in which the settings menu should be created. Leave this field empty, if you don't want to use this feature.",
+        "de": "Gebe hier die ID des Kanals an, in welcher das Einstellungsmenü erstellt werden soll. Lass dieses Feld leer, wenn du diese Funktion nicht verwenden willst."
+      },
+      "type": "channelID",
+      "content": "GUILD_TEXT",
+      "allowNull": true
+    },
+    {
+      "name": "useNoMic",
+      "humanName": {
+        "de": "No-Mic-Channel für Einstellungen verwenden"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled the settings menu will be sent into the no-mic-channel. If no-mic-channels aren't enabled, the menu will instead be sent to Discord's integrated text-in-voice channels",
+        "de": "Wenn aktiviert wird das Einstellungsmenü in den No-Mic-Channel gesendet. Wenn No-Mic-Channels nicht aktiviert sind, wird es stattdessen in die in Sprachkanälen integrierten Textkanäle gesendet."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "settingsMessage",
+      "humanName": {
+        "de": "Einstellungsnachricht"
+      },
+      "default": {
+        "en": "Change the Settings of your temp-channnel here",
+        "de": "Ändere die Einstellungen deines Temp-Channels hier"
+      },
+      "description": {
+        "en": "Set the message that should get send in the channel specified above to let the users change the settings of their temp-channels",
+        "de": "Hier kannst du die Nachricht festlegen, die in den weiter oben festgelegten Kanal gesendet werden soll, damit Nutzer ihre Temp-Channels bearbeiten können"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": []
     }
   ]
 }

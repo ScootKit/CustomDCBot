@@ -425,7 +425,17 @@
     "no-added-user": "There are no users to be displayed here",
     "nothing-changed": "Your channel already had these settings.",
     "no-disconnect": "Couldn't disconnect the user from your channel. This could be due to missing permissions, or the user not being in your voice-channel",
-    "edit-error": "An error occurred while editing your channel. one or more of your settings couldn't be applied. This could be due to missing permissions or an invalid value."
+    "edit-error": "An error occurred while editing your channel. one or more of your settings couldn't be applied. This could be due to missing permissions or an invalid value.",
+    "add-user": "Add user",
+    "remove-user": "Remove user",
+    "list-users": "List users",
+    "private-channel": "Private",
+    "public-channel": "Public",
+    "edit-channel": "Edit channel",
+    "add-modal-title": "Add an user to your temp-channel",
+    "add-modal-prompt": "The user you want to add (tag or user-id)",
+    "remove-modal-title": "Remove an user from your temp-channel",
+    "remove-modal-prompt": "The user you want to remove (tag or user-id)"
   },
   "guess-the-number": {
     "command-description": "Manage your guess-the-number-games",

@@ -1,6 +1,7 @@
 const {embedType} = require('./../../../src/functions/helpers');
 const {Op} = require('sequelize');
 const {localize} = require('../../../src/functions/localize');
+const {sendMessage} = require("../channel-settings");
 
 module.exports.run = async function (client, oldState, newState) {
     if (!client.botReadyAt) return;
@@ -91,6 +92,9 @@ module.exports.run = async function (client, oldState, newState) {
                 reason: '[temp-channels] ' + localize('temp-channels', 'created-audit-log-reason', {u: newState.member.user.tag})
             });
             await noMicChannel.send(embedType(moduleConfig['noMicChannelMessage'])).then(m => m.pin());
+            if (moduleConfig['useNoMic']) {
+                await sendMessage(noMicChannel);
+            }
         }
         await client.models['temp-channels']['TempChannel'].create({
             creatorID: newState.member.user.id,
@@ -99,5 +103,10 @@ module.exports.run = async function (client, oldState, newState) {
             allowedUsers: newState.member.user.id,
             isPublic: moduleConfig['publicChannels']
         });
+        if (moduleConfig['useNoMic']) {
+            if (!moduleConfig['create_no_mic_channel']) {
+                await sendMessage(newChannel);
+            }
+        }
     }
 };

@@ -405,7 +405,17 @@
         "created-audit-log-reason": "Temp-Channel für %u erstellt",
         "move-audit-log-reason": "Nutzer in seinen/ihren Sprachkanal verschoben",
         "no-mic-channel-topic": "Willkommen in %us No-Mic-Kanal. Du wirst diesen Kanal so lang sehen, wie du mit dem Temp-Channel verbunden bist.",
-        "disconnect-audit-log-reason": "Der alte Kanal des Nutzers konnte nicht gefunden werden - Verbindung wird getrennt - Hoffentlich joint er/sie wieder"
+        "disconnect-audit-log-reason": "Der alte Kanal des Nutzers konnte nicht gefunden werden - Verbindung wird getrennt - Hoffentlich joint er/sie wieder",
+        "add-user": "Nutzer hinzufügen",
+        "remove-user": "Nutzer hinzufügen",
+        "list-users": "Nutzer anzeigen",
+        "private-channel": "Privat",
+        "public-channel": "Öffentlich",
+        "edit-channel": "Kanal Bearbeiten",
+        "add-modal-title": "Füge einen Nutzer zu deinem Temp-channel hinzu",
+        "add-modal-prompt": "Der Nutzer den du hinzufügen willst (vollständiger Tag oder ID)",
+        "remove-modal-title": "Entferne einen Nutzer von deinem Temp-channel",
+        "remove-modal-prompt": "Der Nutzer den du entfernen willst (vollständiger Tag oder ID)"
     },
     "guess-the-number": {
         "command-description": "Verwalte den Status deines Errate-die-Zahl-Spiels",
