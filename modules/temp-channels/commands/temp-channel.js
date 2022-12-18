@@ -1,7 +1,7 @@
 const {localize} = require('../../../src/functions/localize');
 const {client} = require('../../../main');
 const {Op} = require('sequelize');
-const {channelMode, userAdd, userRemove, usersList, channelEdit} = require("../channel-settings");
+const {channelMode, userAdd, userRemove, usersList, channelEdit} = require('../channel-settings');
 
 module.exports.beforeSubcommand = async function (interaction) {
     await interaction.deferReply({ephemeral: true});
@@ -27,19 +27,19 @@ module.exports.subcommands = {
     },
     'add-user': async function (interaction) {
         if (interaction.cancel) return;
-        await userAdd(interaction, 'command')
+        await userAdd(interaction, 'command');
     },
     'remove-user': async function (interaction) {
         if (interaction.cancel) return;
-        await userRemove(interaction, 'command')
+        await userRemove(interaction, 'command');
     },
     'list-users': async function (interaction) {
         if (interaction.cancel) return;
-        await usersList(interaction, 'command')
+        await usersList(interaction, 'command');
     },
     'edit': async function (interaction) {
         if (interaction.cancel) return;
-        await channelEdit(interaction, 'command')
+        await channelEdit(interaction, 'command');
     }
 };
 

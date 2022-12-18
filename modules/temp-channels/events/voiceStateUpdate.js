@@ -1,7 +1,7 @@
 const {embedType} = require('./../../../src/functions/helpers');
 const {Op} = require('sequelize');
 const {localize} = require('../../../src/functions/localize');
-const {sendMessage} = require("../channel-settings");
+const {sendMessage} = require('../channel-settings');
 
 module.exports.run = async function (client, oldState, newState) {
     if (!client.botReadyAt) return;

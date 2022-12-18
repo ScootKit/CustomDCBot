@@ -1,7 +1,7 @@
 const {MessageActionRow, Modal, TextInputComponent } = require('discord.js');
-const {usersList, channelMode, userAdd, userRemove} = require("../channel-settings");
-const {localize} = require("../../../src/functions/localize");
-const {Op} = require("sequelize");
+const {usersList, channelMode, userAdd, userRemove} = require('../channel-settings');
+const {localize} = require('../../../src/functions/localize');
+const {Op} = require('sequelize');
 
 module.exports.run = async function (client, interaction) {
     if (!client.botReadyAt) return;
@@ -17,8 +17,7 @@ module.exports.run = async function (client, interaction) {
         });
 
         if (!vc) {
-            interaction.reply({
-                ephemeral: true,
+            interaction.reply({ ephemeral: true,
                 content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
             return;
         }
@@ -29,7 +28,7 @@ module.exports.run = async function (client, interaction) {
             const userInput = new TextInputComponent()
                 .setCustomId('add-modal-input')
                 .setLabel(localize('temp-channels', 'add-modal-prompt'))
-                .setStyle("SHORT")
+                .setStyle('SHORT')
                 .setPlaceholder('User#1234');
             const actionRow = new MessageActionRow().addComponents(userInput);
             modal.addComponents(actionRow);
@@ -42,7 +41,7 @@ module.exports.run = async function (client, interaction) {
             const userInput = new TextInputComponent()
                 .setCustomId('remove-modal-input')
                 .setLabel(localize('temp-channels', 'remove-modal-prompt'))
-                .setStyle("SHORT")
+                .setStyle('SHORT')
                 .setPlaceholder('User#1234');
             const actionRow = new MessageActionRow().addComponents(userInput);
             modal.addComponents(actionRow);
