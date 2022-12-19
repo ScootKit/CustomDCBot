@@ -67,7 +67,7 @@
         "de": "Gebe hier die ID der Kategorie an, in welcher neue Temp-Channel erstellt werden sollen"
       },
       "type": "channelID",
-      "content": "GUILD_CATEGORY"
+      "content": ["GUILD_CATEGORY"]
     },
     {
       "name": "channelname_format",
@@ -323,7 +323,7 @@
         "de": "Gebe hier die ID des Kanals an, in welcher das Einstellungsmenü erstellt werden soll. Lass dieses Feld leer, wenn du diese Funktion nicht verwenden willst."
       },
       "type": "channelID",
-      "content": "GUILD_TEXT",
+      "content": ["GUILD_TEXT"],
       "allowNull": true
     },
     {

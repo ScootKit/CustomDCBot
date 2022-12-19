@@ -79,7 +79,8 @@ module.exports.userAdd = async function (interaction, callerInfo) {
             try {
                 addedUser = await client.users.fetch(addedUserString);
             } catch {
-
+                interaction.editReply(localize('temp-channels', 'user-not-found'));
+                return;
             }
         }
     }
@@ -127,7 +128,8 @@ module.exports.userRemove = async function (interaction, callerInfo) {
             try {
                 removedUser = await client.users.fetch(removedUserString);
             } catch (f) {
-
+                interaction.editReply(localize('temp-channels', 'user-not-found'));
+                return;
             }
         }
     }
@@ -216,6 +218,33 @@ module.exports.channelEdit = async function (interaction, callerInfo) {
         } else vcName = vchann.name;
         if (interaction.options.getBoolean('nsfw')) {
             vcNsfw = interaction.options.getBoolean('nsfw');
+            edited++;
+        } else vcNsfw = vchann.nsfw;
+    }
+    if (callerInfo === 'modal') {
+        if (interaction.fields.getTextInputValue('edit-modal-limit-input') >= 0) {
+            if (interaction.fields.getTextInputValue('edit-modal-limit-input') < 0 || interaction.fields.getTextInputValue('edit-modal-limit-input') > 99) {
+                interaction.editReply(localize('temp-channels', 'edit-error'));
+                return;
+            }
+            vcLimit = interaction.fields.getTextInputValue('edit-modal-limit-input');
+            edited++;
+        } else vcLimit = vchann.userLimit;
+        if (interaction.fields.getTextInputValue('edit-modal-bitrate-input')) {
+            if (interaction.fields.getTextInputValue('edit-modal-bitrate-input') <= 8000 || interaction.fields.getTextInputValue('edit-modal-bitrate-input') >= interaction.guild.maximumBitrate) {
+                interaction.editReply(localize('temp-channels', 'edit-error'));
+                return;
+            }
+            vcBitrate = interaction.fields.getTextInputValue('edit-modal-bitrate-input');
+            edited++;
+        } else vcBitrate = vchann.bitrate;
+        if (interaction.fields.getTextInputValue('edit-modal-name-input')) {
+            vcName = interaction.fields.getTextInputValue('edit-modal-name-input');
+            edited++;
+        } else vcName = vchann.name;
+        if (interaction.fields.getTextInputValue('edit-modal-nsfw-input')) {
+            const nsfwInput = interaction.fields.getTextInputValue('edit-modal-nsfw-input');
+            vcNsfw = (nsfwInput === 'true');
             edited++;
         } else vcNsfw = vchann.nsfw;
     }
