@@ -59,7 +59,7 @@ module.exports.run = async function () {
                         customId: 'tempc-edit',
                         emoji: '📝'
                     }]
-                }];
+            }];
             const message = embedType(moduleConfig['settingsMessage'], {}, {components});
             await messages.first().edit(message);
         } else await sendMessage(settingsChannel);
