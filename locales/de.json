@@ -416,7 +416,7 @@
         "add-modal-prompt": "Der Nutzer den du hinzufügen willst (vollständiger Tag oder ID)",
         "remove-modal-title": "Entferne einen Nutzer von deinem Temp-channel",
         "remove-modal-prompt": "Der Nutzer den du entfernen willst (vollständiger Tag oder ID)",
-        "edit-modal-title": "Kanal bearbeiten - Alle Felder optional",
+        "edit-modal-title": "Kanal bearbeiten",
         "edit-modal-nsfw-prompt": "Temp-channel als altersbeschränkt markieren?",
         "edit-modal-nsfw-placeholder": "\"true\" (ja) oder \"false\" (nein)",
         "edit-modal-bitrate-prompt": "Bitrate deines Temp-channels",

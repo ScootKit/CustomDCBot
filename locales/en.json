@@ -436,7 +436,7 @@
     "add-modal-prompt": "The user you want to add (tag or user-id)",
     "remove-modal-title": "Remove an user from your temp-channel",
     "remove-modal-prompt": "The user you want to remove (tag or user-id)",
-    "edit-modal-title": "Edit your temp-channel (all fields optional)",
+    "edit-modal-title": "Edit your temp-channel",
     "edit-modal-nsfw-prompt": "Mark temp-channel as age-restricted?",
     "edit-modal-nsfw-placeholder": "\"true\" (yes) or \"false\" (no)",
     "edit-modal-bitrate-prompt": "Bitrate of your Temp-channel?",
