@@ -1,9 +1,9 @@
 {
   "name": "temp-channels",
   "author": {
-    "scnxOrgID": "1",
-    "name": "SCDerox (SC Network Team)",
-    "link": "https://github.com/SCDerox"
+    "scnxOrgID": "2",
+    "name": "hfgd",
+    "link": "https://github.com/hfgd123"
   },
   "models-dir": "/models",
   "events-dir": "/events",
