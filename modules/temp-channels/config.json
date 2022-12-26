@@ -9,10 +9,12 @@
     {
       "name": "channelID",
       "humanName": {
+        "en": "Channel",
         "de": "Kanal"
       },
       "default": {
-        "en": ""
+        "en": "",
+        "de": ""
       },
       "description": {
         "en": "Set the channel here where users have to join to create their temp-channel",
@@ -26,6 +28,7 @@
     {
       "name": "allowUserToChangeName",
       "humanName": {
+        "en": "Allow editing the channel",
         "de": "Kanaländerungen erlauben"
       },
       "default": {
@@ -41,11 +44,12 @@
     {
       "name": "timeout",
       "humanName": {
+        "en": "Deletion timeout",
         "de": "Löschverzögerung"
       },
       "default": {
         "en": 3,
-        "de": 10
+        "de": 3
       },
       "description": {
         "en": "Set a timeout here in which the bot should wait before deleting the voicechannel (in secounds)",
@@ -57,10 +61,12 @@
     {
       "name": "category",
       "humanName": {
+        "en": "Category",
         "de": "Kategorie"
       },
       "default": {
-        "en": ""
+        "en": "",
+        "de": ""
       },
       "description": {
         "en": "You can set a category here in which the new channel should be created",
@@ -72,6 +78,7 @@
     {
       "name": "channelname_format",
       "humanName": {
+        "en": "Channel name",
         "de": "Kanalname"
       },
       "default": {
@@ -110,6 +117,7 @@
     {
       "name": "create_no_mic_channel",
       "humanName": {
+        "en": "Create no-mic-channel",
         "de": "No-Mic-Kanal erstellen"
       },
       "default": {
@@ -125,6 +133,7 @@
     {
       "name": "noMicChannelMessage",
       "humanName": {
+        "en": "no-mic-channel-message",
         "de": "No-Mic-Kanal-Nachricht"
       },
       "default": {
