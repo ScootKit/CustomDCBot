@@ -225,7 +225,7 @@ module.exports.channelEdit = async function (interaction, callerInfo) {
             interaction.editReply(localize('temp-channels', 'edit-error'));
             return;
         }
-        if (isNaN(interaction.fields.getTextInputValue('edit-modal-bitrate-input'))){
+        if (isNaN(interaction.fields.getTextInputValue('edit-modal-bitrate-input'))) {
             interaction.editReply(localize('temp-channels', 'edit-error'));
             return;
         }
