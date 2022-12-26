@@ -9,6 +9,7 @@
     {
       "name": "channelID",
       "humanName": {
+        "en": "Channel",
         "de": "Kanal"
       },
       "default": {
@@ -26,6 +27,7 @@
     {
       "name": "allowUserToChangeName",
       "humanName": {
+        "en": "Allow editing the channel",
         "de": "Kanaländerungen erlauben"
       },
       "default": {
@@ -41,11 +43,12 @@
     {
       "name": "timeout",
       "humanName": {
+        "en": "Deletion timeout",
         "de": "Löschverzögerung"
       },
       "default": {
         "en": 3,
-        "de": 10
+        "de": 3
       },
       "description": {
         "en": "Set a timeout here in which the bot should wait before deleting the voicechannel (in secounds)",
@@ -57,6 +60,7 @@
     {
       "name": "category",
       "humanName": {
+        "en": "Category",
         "de": "Kategorie"
       },
       "default": {
@@ -67,11 +71,12 @@
         "de": "Gebe hier die ID der Kategorie an, in welcher neue Temp-Channel erstellt werden sollen"
       },
       "type": "channelID",
-      "content": "GUILD_CATEGORY"
+      "content": ["GUILD_CATEGORY"]
     },
     {
       "name": "channelname_format",
       "humanName": {
+        "en": "Channel name",
         "de": "Kanalname"
       },
       "default": {
@@ -110,6 +115,7 @@
     {
       "name": "create_no_mic_channel",
       "humanName": {
+        "en": "Create no-mic-channel",
         "de": "No-Mic-Kanal erstellen"
       },
       "default": {
@@ -125,6 +131,7 @@
     {
       "name": "noMicChannelMessage",
       "humanName": {
+        "en": "no-mic-channel-message",
         "de": "No-Mic-Kanal-Nachricht"
       },
       "default": {
@@ -141,6 +148,7 @@
     {
       "name": "send_dm",
       "humanName": {
+        "en": "Send DM",
         "de": "PN senden"
       },
       "default": {
@@ -156,6 +164,7 @@
     {
       "name": "dm",
       "humanName": {
+        "en": "DM",
         "de": "Privatnachricht"
       },
       "default": {
@@ -196,6 +205,7 @@
     {
       "name": "allowUserToChangeMode",
       "humanName": {
+        "en": "Allow change of channel mode",
         "de": "Kanaländerungen erlauben"
       },
       "default": {
@@ -212,10 +222,12 @@
       "name": "notInChannel",
       "humanName": {},
       "default": {
+        "de": "Du musst in deinem Temp-Channel sein um das zu tun",
         "en": "You have to be in your temp-channel to do this"
       },
       "description": {
-        "en": "This message gets sent to a user, who tries to edit their channel, while not being in it"
+        "en": "This message gets sent to a user, who tries to edit their channel, while not being in it",
+        "de": "Diese Nachricht wird an Nutzer gesendet, die versuchen ihren Kanal zu bearbeiten, während sie sich nicht darin befinden"
       },
       "type": "string"
     },
@@ -223,17 +235,20 @@
       "name": "modeSwitched",
       "humanName": {},
       "default": {
-        "en": "The access-mode of your channel has been switched to %mode%"
+        "en": "The access-mode of your channel has been switched to %mode%",
+        "de": "Der Zugriffsmodus deines Kanals wurde auf %mode% geändert"
       },
       "description": {
-        "en": "This message gets sent to a user, after they changed  the mode of their channel"
+        "en": "This message gets sent to a user, after they changed  the mode of their channel",
+        "de": "Diese Nachricht wird an Nutzer gesendet, nachdem sie ihren Kanal bearbeitet haben"
       },
       "type": "string",
       "params": [
         {
           "name": "mode",
           "description": {
-            "en": "Mode of the channel"
+            "en": "Mode of the channel",
+            "de": "Modus des Kanals"
           }
         }
       ]
@@ -242,17 +257,20 @@
       "name": "userAdded",
       "humanName": {},
       "default": {
-        "en": "The user %user% has beed added to your channel. They can now access it whenever they like to"
+        "en": "The user %user% has beed added to your channel. They can now access it whenever they like to",
+        "de": "Der Nutzer %user% wurde zu deinem Kanal hinzugefügt. Er/Sie hat nun uneingeschränkten Zugang dazu"
       },
       "description": {
-        "en": "This message gets sent to a user, after they added an user to their channel"
+        "en": "This message gets sent to a user, after they added an user to their channel",
+        "de": "Diese Nachricht wird an Nutzer gesendet, nachdem sie einen Nutzer zu ihrem Kanal hinzugefügt haben"
       },
       "type": "string",
       "params": [
         {
           "name": "user",
           "description": {
-            "en": "The user, that was added"
+            "en": "The user, that was added",
+            "de": "Der hinzugefügte Nutzer"
           }
         }
       ]
@@ -261,17 +279,20 @@
       "name": "userRemoved",
       "humanName": {},
       "default": {
-        "en": "The user %user% has beed removed from your channel. They can no longer access it, while your channel is private"
+        "en": "The user %user% has beed removed from your channel. They can no longer access it, while your channel is private",
+        "de": "Der Nutzer %user% wurde von deinem Kanal entfernt. Er/Sie hat nun keinen Zugriff mehr, während dein Kanal privat ist"
       },
       "description": {
-        "en": "This message gets sent to a user, after they removed an user from their channel"
+        "en": "This message gets sent to a user, after they removed an user from their channel",
+        "de": "Diese Nachricht wird an Nutzer gesendet, nachdem sie einen Nutzer von ihrem Kanal entfernt haben"
       },
       "type": "string",
       "params": [
         {
           "name": "user",
           "description": {
-            "en": "The user, that was removed"
+            "en": "The user, that was removed",
+            "de": "Der Nutzer, der entfernt wurde"
           }
         }
       ]
@@ -280,9 +301,11 @@
       "name": "listUsers",
       "humanName": {},
       "default": {
-        "en": "Here is a list of all the users that have access to your channel:"
+        "en": "Here is a list of all the users that have access to your channel:",
+        "de": "Hier ist eine Liste aller Nutzer mit Zugang zu deinem Kanal:"
       },
       "description": {
+        "de": "Die Nachricht die gesendet wird, wenn ein Nutzer eine Liste der Nutzer mit Zugang zu seinem Temp-Channel anfragt. Dieser Nachricht folgt automatisch eine Liste der Nutzer.",
         "en": "The message to be sent, if a user requests a list of the users with access to their channel. This is automatically followed by a list of the users' tags."
       },
       "type": "string"
@@ -291,10 +314,12 @@
       "name": "channelEdited",
       "humanName": {},
       "default": {
-        "en": "Your channel was edited"
+        "en": "Your channel was edited",
+        "de": "Dein Kanal wurde bearbeitet"
       },
       "description": {
-        "en": "The message to be sent, if a user edited their channel"
+        "en": "The message to be sent, if a user edited their channel",
+        "de": "Die Nachricht, die gesendet wird, wenn ein Nutzer seinen Kanal bearbeitet"
       },
       "type": "string"
     },
@@ -302,12 +327,63 @@
       "name": "edit-error",
       "humanName": {},
       "default": {
-        "en": "An error occured while editing your channel. One or more of your settings could not be applied. This could be due to missing permissions or an invalid value"
+        "en": "An error occured while editing your channel. One or more of your settings could not be applied. This could be due to missing permissions or an invalid value",
+        "de": "Beim Bearbeiten des Kanals ist ein Fehler aufgetreten. Eine oder mehr deiner Einstellungen konnten nicht angewendet werden. Dies kann an fehlenden Rechten oder einem ungültigen Eingabewert liegen"
       },
       "description": {
-        "en": "The message to be sent, if a user edited their channel, but it failed"
+        "en": "The message to be sent, if a user edited their channel, but it failed",
+        "de": "Die Nachricht, die gesendet wird, wenn das Bearbeiten eines Kanals fehlschlägt"
       },
       "type": "string"
+    },
+    {
+      "name": "settingsChannel",
+      "humanName": {
+        "de": "Einstellungskanal",
+        "en": "Settings channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "You can set a channel here in which the settings menu should be created. Leave this field empty, if you don't want to use this feature.",
+        "de": "Gebe hier die ID des Kanals an, in welcher das Einstellungsmenü erstellt werden soll. Lass dieses Feld leer, wenn du diese Funktion nicht verwenden willst."
+      },
+      "type": "channelID",
+      "content": ["GUILD_TEXT"],
+      "allowNull": true
+    },
+    {
+      "name": "useNoMic",
+      "humanName": {
+        "de": "No-Mic-Channel für Einstellungen verwenden"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled the settings menu will be sent into the no-mic-channel. If no-mic-channels aren't enabled, the menu will instead be sent to Discord's integrated text-in-voice channels",
+        "de": "Wenn aktiviert wird das Einstellungsmenü in den No-Mic-Channel gesendet. Wenn No-Mic-Channels nicht aktiviert sind, wird es stattdessen in die in Sprachkanälen integrierten Textkanäle gesendet."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "settingsMessage",
+      "humanName": {
+        "de": "Einstellungsnachricht"
+      },
+      "default": {
+        "en": "Change the Settings of your temp-channnel here",
+        "de": "Ändere die Einstellungen deines Temp-Channels hier"
+      },
+      "description": {
+        "en": "Set the message that should get send in the channel specified above to let the users change the settings of their temp-channels",
+        "de": "Hier kannst du die Nachricht festlegen, die in den weiter oben festgelegten Kanal gesendet werden soll, damit Nutzer ihre Temp-Channels bearbeiten können"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": []
     }
   ]
 }
