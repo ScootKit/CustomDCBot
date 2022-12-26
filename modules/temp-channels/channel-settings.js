@@ -221,6 +221,10 @@ module.exports.channelEdit = async function (interaction, callerInfo) {
         } else vcNsfw = vchann.nsfw;
     }
     if (callerInfo === 'modal') {
+        if (isNaN(interaction.fields.getTextInputValue('edit-modal-limit-input'))) {
+            interaction.editReply(localize('temp-channels', 'edit-error'));
+            return;
+        }
         if (interaction.fields.getTextInputValue('edit-modal-limit-input') < 0 || interaction.fields.getTextInputValue('edit-modal-limit-input') > 99) {
             interaction.editReply(localize('temp-channels', 'edit-error'));
             return;
