@@ -1,53 +1,75 @@
 {
+  "description": {
+    "en": "You can send on a daily basic here - this can be once a week or month",
+    "de": "Hier kannst du Nachrichten auf täglicher Basis versenden lassen - das kann auch nur einmal pro Woche oder Monat sein"
+  },
+  "humanName": {
+    "en": "Daily Basic",
+    "de": "Tägliche Basis"
+  },
   "filename": "daily.json",
-  "humanname-de": "Tägliche Basis",
-  "humanname-en": "Daily Basic",
-  "description-de": "Hier kannst du Nachrichten auf täglicher Basis versenden lassen - das kann auch nur einmal pro Woche oder Monat sein",
-  "description-en": "You can send on a daily basic here - this can be once a week or month",
   "configElements": true,
   "content": [
     {
-      "field_name": "channelID",
-      "default": "",
-      "type": "channelID",
-      "description": "ID of the channel in which the message should be send",
-      "humanname-de": "Kanal",
-      "description-de": "ID des Kanals, in welchen die Nachricht gesendet werden soll",
-      "params-de": {},
-      "default-de": ""
+      "name": "channelID",
+      "humanName": {
+        "de": "Kanal"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "ID of the channel in which the message should be send",
+        "de": "ID des Kanals, in welchen die Nachricht gesendet werden soll"
+      },
+      "type": "channelID"
     },
     {
-      "field_name": "message",
+      "name": "message",
+      "humanName": {
+        "de": "Nachricht"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Message that should be send",
+        "de": "Nachricht, die gesendet werden soll"
+      },
       "type": "string",
-      "default": "",
-      "description": "Message that should be send",
-      "allowEmbed": true,
-      "humanname-de": "Nachricht",
-      "description-de": "Nachricht, die gesendet werden soll",
-      "params-de": {},
-      "default-de": ""
+      "allowEmbed": true
     },
     {
-      "field_name": "limitWeekDaysTo",
+      "name": "limitWeekDaysTo",
+      "humanName": {
+        "de": "Wochentage begrenzen auf"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "If one or more values are set, the message will only get send when the current week-day is included in this array",
+        "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Wochentag hier enthalten ist"
+      },
       "type": "array",
-      "default": [],
-      "content": "integer",
-      "description": "If one or more values are set, the message will only get send when the current week-day is included in this array",
-      "humanname-de": "Wochentage begrenzen auf",
-      "description-de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Wochentag hier enthalten ist",
-      "params-de": {},
-      "default-de": []
+      "content": "integer"
     },
     {
-      "field_name": "limitDaysTo",
+      "name": "limitDaysTo",
+      "humanName": {
+        "de": "Tage begrenzen auf"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "If one or more values are set, the message will only get send when the current day (of the month) is included in this array",
+        "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Tag (des Monats) hier enthalten ist"
+      },
       "type": "array",
-      "default": [],
-      "content": "integer",
-      "description": "If one or more values are set, the message will only get send when the current day (of the month) is included in this array",
-      "humanname-de": "Tage begrenzen auf",
-      "description-de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Tag (des Monats) hier enthalten ist",
-      "params-de": {},
-      "default-de": []
+      "content": "integer"
     }
   ]
 }

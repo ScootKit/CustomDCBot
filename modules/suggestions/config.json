@@ -1,9 +1,13 @@
 {
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
-  "description-en": "Configure the function of the module here",
-  "description-de": "Stelle hier die Funktionen des Modules ein",
   "commandsWarnings": {
     "normal": [
       "/manage-suggestion"
@@ -11,144 +15,421 @@
   },
   "content": [
     {
-      "field_name": "suggestionChannel",
-      "type": "channelID",
-      "default": "",
-      "description": "Channel in which this module should operate",
-      "humanname-de": "Vorschlagskanal",
-      "description-de": "Kanal in dem dieses Modul arbeiten soll",
-      "params-de": {},
-      "default-de": ""
-    },
-    {
-      "field_name": "reactions",
-      "type": "array",
-      "description": "Emojis with which the bot should react to a new suggestion",
-      "default": [],
-      "content": "string",
-      "humanname-de": "Reaktionen",
-      "description-de": "Emojis mit denen der Bot auf neue Vorschläge reagieren soll",
-      "params-de": {},
-      "default-de": []
-    },
-    {
-      "field_name": "allowUserComment",
-      "type": "boolean",
-      "description": "If enabled, the bot will create thread under each suggestion",
-      "default": true,
-      "humanname-de": "Nutzerkommentare in Threads",
-      "humanname-en": "User-Comments in Threads",
-      "description-de": "Wenn aktiviert erstellt der Bot immer einen neuen Thread unter Vorschlägen",
-      "params-de": {},
-      "default-de": true
-    },
-    {
-      "field_name": "threadName",
-      "type": "string",
-      "humanname": "Thread-Name",
-      "description": "Only if \"User-Comments in Threads\" enabled; Name of the thread",
-      "description-de": "Nur wenn \"Nutzerkommentare in Threads\" aktiviert; Name des Threads",
-      "default": "Comments",
-      "default-de": "Kommentare"
-    },
-    {
-      "field_name": "suggestionEmbed",
-      "type": "keyed",
+      "name": "suggestionChannel",
+      "humanName": {
+        "en": "Suggestion-Channel",
+        "de": "Vorschlagskanal"
+      },
       "default": {
-        "title": "Suggestion #%id%",
-        "commentsTitle": "💬 Comments",
-        "awaitingAdminAnswerTitle": "Suggestion-Status",
-        "awaitingAnswer": "No admin answered to this suggestion yet",
-        "adminAnswerTitle": "Suggestion-Status: %status%"
+        "en": ""
       },
-      "content": {
-        "key": "string",
-        "value": "string"
+      "description": {
+        "en": "Channel in which this module should operate",
+        "de": "Kanal in dem dieses Modul arbeiten soll"
       },
-      "disableKeyEdits": true,
-      "humanname-de": "Vorschlagsembed",
-      "description-de": "Lege hier den Aufbau der Embeds für neue Vorschläge fest",
-      "params-de": {},
-      "default-de": {
-        "title": "Vorschlag #%id%",
-        "commentsTitle": "💬 Kommentare",
-        "awaitingAdminAnswerTitle": "Vorschlagsstatus",
-        "awaitingAnswer": "Es hat noch kein Admin auf diesen Vorschlag geantwortet",
-        "adminAnswerTitle": "Vorschlagssatus: %status%"
-      }
+      "type": "channelID"
     },
     {
-      "field_name": "successfullySubmitted",
-      "default": "Suggestion %id% submitted successfully.",
-      "description": "This message gets send if a suggestion is submitted successfully.",
-      "allowEmbed": true,
+      "name": "reactions",
+      "humanName": {
+        "en": "Reactions",
+        "de": "Reaktionen"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Emojis with which the bot should react to a new suggestion",
+        "de": "Emojis mit denen der Bot auf neue Vorschläge reagieren soll"
+      },
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "allowUserComment",
+      "humanName": {
+        "en": "User-Comments in Threads",
+        "de": "Nutzerkommentare in Threads"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled, the bot will create thread under each suggestion",
+        "de": "Wenn aktiviert erstellt der Bot immer einen neuen Thread unter Vorschlägen"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "threadName",
+      "humanName": {
+        "en": "Thread-Name"
+      },
+      "default": {
+        "en": "Comments",
+        "de": "Kommentare"
+      },
+      "description": {
+        "en": "Only if \"User-Comments in Threads\" enabled; Name of the thread",
+        "de": "Nur wenn \"Nutzerkommentare in Threads\" aktiviert; Name des Threads"
+      },
+      "type": "string"
+    },
+    {
+      "name": "successfullySubmitted",
+      "humanName": {
+        "en": "\"Successfully submitted\"-Message",
+        "de": "\"Erfolgreich eingereicht\"-Nachricht"
+      },
+      "default": {
+        "en": "Suggestion %id% submitted successfully.",
+        "de": "Vorschlag %id% erfolgreich eingereicht."
+      },
+      "description": {
+        "en": "This message gets send if a suggestion is submitted successfully.",
+        "de": "Diese Nachricht wird gesendet, wenn ein Vorschlag erfolgreich eingereicht wurde"
+      },
       "type": "string",
+      "allowEmbed": true,
       "params": [
         {
-          "name": "%id%",
-          "description": "ID of the suggestion"
+          "name": "id",
+          "description": {
+            "en": "ID of the suggestion",
+            "de": "ID des Vorschlags"
+          }
         }
-      ],
-      "humanname-de": "Erfolgreich eingereicht",
-      "description-de": "Diese Nachricht wird gesendet, wenn ein Vorschlag erfolgreich eingereicht wurde",
-      "params-de": [
-        {
-          "name": "%id%",
-          "description": "ID des Vorschlags"
-        }
-      ],
-      "default-de": "Vorschlag %id% erfolgreich eingereicht."
+      ]
     },
     {
-      "field_name": "notifyRole",
-      "default": "",
-      "allowNull": true,
+      "name": "notifyRole",
+      "humanName": {
+        "en": "Notification-Role",
+        "de": "Benachrichtigungsrolle"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "If set, this role gets pinged when a new suggestion gets created",
+        "de": "Wenn eine Rolle gesetzt ist, wird diese gepingt wenn ein neuer Vorschlag erstellt wird"
+      },
       "type": "roleID",
-      "description": "If set, this role gets pinged when a new suggestion gets created",
-      "humanname-de": "Benachrichtigungsrolle",
-      "description-de": "Wenn eine Rolle gesetzt ist, wird diese gepingt wenn ein neuer Vorschlag erstellt wird",
-      "params-de": {},
-      "default-de": ""
+      "allowNull": true
     },
     {
-      "field_name": "sendPNNotifications",
-      "default": true,
-      "type": "boolean",
-      "description": "If enabled the creator and all commentators get a notification when something changes on a suggestion",
-      "humanname-de": "PN-Benachrichtigungen senden",
-      "description-de": "Wenn diese Option aktiviert ist, wird der Ersteller benachrichtigt, wenn sich etwas an einem Vorschlag ändert",
-      "params-de": {},
-      "default-de": true
+      "name": "sendPNNotifications",
+      "humanName": {
+        "en": "Send DM-Notifications",
+        "de": "PN-Benachrichtigungen senden"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled the creator and all commentators get a notification when something changes on a suggestion",
+        "de": "Wenn diese Option aktiviert ist, wird der Ersteller benachrichtigt, wenn sich etwas an einem Vorschlag ändert"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "teamChange",
-      "default": "Hi, a suggestion you are subscribed to got updated by a team member - read it here %url%",
-      "description": "This message gets send to the creator and all commentators when a suggestion gets updated and sendPNNotifications is enabled",
+      "name": "teamChange",
+      "humanName": {
+        "en": "DM-Status-Notification",
+        "de": "PN-Statusbenachrichtigung"
+      },
+      "default": {
+        "en": "Hi, a suggestion you are subscribed to got updated by a team member - read it here %url%",
+        "de": "Hi, ein von dir abonnierter Vorschlag wurde von einem Teammitglied beantwortet - lese ihn hier %url%"
+      },
+      "description": {
+        "en": "This message gets send to the creator and all commentators when a suggestion gets updated and sendPNNotifications is enabled",
+        "de": "Diese Nachricht wird an den Ersteller und alle Nutzer, die einen Kommentar geschrieben haben, gesendet, wenn ein Vorschlag aktualisiert wird und \"PN-Benachrichtigungen senden\" aktiviert ist"
+      },
+      "type": "string",
+      "dependsOn": "sendPNNotifications",
       "allowEmbed": true,
       "params": [
         {
-          "name": "%url%",
-          "description": "URL to the suggestion"
+          "name": "url",
+          "description": {
+            "en": "URL to the suggestion",
+            "de": "URL zum Vorschlag"
+          }
         },
         {
-          "name": "%title%",
-          "description": "Title of the suggestion"
+          "name": "title",
+          "description": {
+            "en": "Title of the suggestion",
+            "de": "Titel des Vorschlags"
+          }
         }
-      ],
+      ]
+    },
+    {
+      "name": "unansweredSuggestion",
+      "humanName": {
+        "en": "Unanswered Suggestion-Message",
+        "de": "Unbeantwortete Vorschlags-Nachricht"
+      },
+      "default": {
+        "en": {
+          "title": "Suggestion #%id%",
+          "description": "%suggestion%",
+          "color": "#F1C40F",
+          "thumbnail": "%avatarURL%",
+          "author": {
+            "name": "%tag%",
+            "img": "%avatarURL%"
+          },
+          "fields": [
+            {
+              "name": "Suggestion-Status",
+              "value": "No admin answered to this suggestion yet"
+            }
+          ]
+        },
+        "de": {
+          "title": "Vorschlag #%id%",
+          "description": "%suggestion%",
+          "color": "#F1C40F",
+          "thumbnail": "%avatarURL%",
+          "author": {
+            "name": "%tag%",
+            "img": "%avatarURL%"
+          },
+          "fields": [
+            {
+              "name": "Vorschlagsstatus",
+              "value": "Es hat noch kein Admin auf diesen Vorschlag geantwortet"
+            }
+          ]
+        }
+      },
+      "description": {
+        "en": "This will be the messages that will get send when the user creates their suggestion and no admin has responded yet",
+        "de": "Das wird die Nachricht sein, die gesendet wird, wenn ein Nutzer seinen Vorschlag erstellt hat und noch kein Admin darauf geantwortet hat"
+      },
       "type": "string",
-      "humanname-de": "Statusbenachrichtigung",
-      "description-de": "Diese Nachricht wird an den Ersteller und alle Nutzer, die einen Kommentar geschrieben haben, gesendet, wenn ein Vorschlag aktualisiert wird und \"PN-Benachrichtigungen senden\" aktiviert ist",
-      "params-de": [
+      "allowEmbed": true,
+      "params": [
         {
-          "name": "%url%",
-          "description": "URL zum Vorschlag"
+          "name": "id",
+          "description": {
+            "en": "ID of the suggestion",
+            "de": "ID des Vorschlags"
+          }
         },
         {
-          "name": "%title%",
-          "description": "Titel des Vorschlags"
+          "name": "suggestion",
+          "description": {
+            "en": "Content of the suggestion",
+            "de": "Inhalt des Vorschlags"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user who created this suggestion",
+            "de": "Tag des Users, der den Vorschlag erstellt hat"
+          }
+        },
+        {
+          "name": "avatarURL",
+          "description": {
+            "en": "Avatar-URL of the user who created this suggestion",
+            "de": "Avatar-URL des Users, der den Vorschlag erstellt hat"
+          },
+          "isImage": true
         }
-      ],
-      "default-de": "Hi, ein von dir abonnierter Vorschlag wurde von einem Teammitglied beantwortet - lese ihn hier %url%"
+      ]
+    },
+    {
+      "name": "deniedSuggestion",
+      "humanName": {
+        "en": "Denied Suggestion-Message",
+        "de": "Abgelehnte Vorschlags-Nachricht"
+      },
+      "default": {
+        "en": {
+          "title": "Suggestion #%id%",
+          "description": "%suggestion%",
+          "color": "#E74C3C",
+          "thumbnail": "%avatarURL%",
+          "author": {
+            "name": "%tag%",
+            "img": "%avatarURL%"
+          },
+          "fields": [
+            {
+              "name": "Suggestion-Status: DENIED",
+              "value": "Denied by %adminUser% with the following reason: \"%adminMessage%\""
+            }
+          ]
+        },
+        "de": {
+          "title": "Vorschlag #%id%",
+          "description": "%suggestion%",
+          "color": "#E74C3C",
+          "thumbnail": "%avatarURL%",
+          "author": {
+            "name": "%tag%",
+            "img": "%avatarURL%"
+          },
+          "fields": [
+            {
+              "name": "Vorschlags-Status: ABGELEHNT",
+              "value": "Abgelehnt von %adminUser% mit folgendem Grund: \"%adminMessage%\""
+            }
+          ]
+        }
+      },
+      "description": {
+        "en": "The suggestion will be edited to this message, when an admin denies a suggestion",
+        "de": "Zu dieser Nachricht wird der Vorschlag editiert, wenn ein Admin den Vorschlag ablehnt"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "ID of the suggestion",
+            "de": "ID des Vorschlags"
+          }
+        },
+        {
+          "name": "suggestion",
+          "description": {
+            "en": "Content of the suggestion",
+            "de": "Inhalt des Vorschlags"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user who created this suggestion",
+            "de": "Tag des Users, der den Vorschlag erstellt hat"
+          }
+        },
+        {
+          "name": "avatarURL",
+          "description": {
+            "en": "Avatar-URL of the user who created this suggestion",
+            "de": "Avatar-URL des Users, der den Vorschlag erstellt hat"
+          },
+          "isImage": true
+        },
+        {
+          "name": "adminUser",
+          "description": {
+            "en": "Mention of the administrator who denied this suggestion",
+            "de": "Erwähnung des Administrators, der den Vorschlag abgelehnt hat"
+          }
+        },
+        {
+          "name": "adminMessage",
+          "description": {
+            "en": "Message by administrator who denied this suggestion",
+            "de": "Nachricht des Administrators, der den Vorschlag abgelehnt hat"
+          }
+        }
+      ]
+    },
+    {
+      "name": "approvedSuggestion",
+      "humanName": {
+        "en": "Approved Suggestion-Message",
+        "de": "Angenommene Vorschlags-Nachricht"
+      },
+      "default": {
+        "en": {
+          "title": "Suggestion #%id%",
+          "description": "%suggestion%",
+          "color": "#2ECC71",
+          "thumbnail": "%avatarURL%",
+          "author": {
+            "name": "%tag%",
+            "img": "%avatarURL%"
+          },
+          "fields": [
+            {
+              "name": "Suggestion-Status: APPROVED",
+              "value": "Approved by %adminUser% with the following reason: \"%adminMessage%\""
+            }
+          ]
+        },
+        "de": {
+          "title": "Vorschlag #%id%",
+          "description": "%suggestion%",
+          "color": "#2ECC71",
+          "thumbnail": "%avatarURL%",
+          "author": {
+            "name": "%tag%",
+            "img": "%avatarURL%"
+          },
+          "fields": [
+            {
+              "name": "Vorschlagsstatus: ANGENOMMEN",
+              "value": "Wurde von %adminUser% mit folgendem Grund angenommen: \"%adminMessage%\""
+            }
+          ]
+        }
+      },
+      "description": {
+        "en": "The suggestion will be edited to this message, when an admin approves a suggestion",
+        "de": "Zu dieser Nachricht wird der Vorschlag editiert, wenn ein Admin den Vorschlag annimt"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "ID of the suggestion",
+            "de": "ID des Vorschlags"
+          }
+        },
+        {
+          "name": "suggestion",
+          "description": {
+            "en": "Content of the suggestion",
+            "de": "Inhalt des Vorschlags"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user who created this suggestion",
+            "de": "Tag des Users, der den Vorschlag erstellt hat"
+          }
+        },
+        {
+          "name": "avatarURL",
+          "description": {
+            "en": "Avatar-URL of the user who created this suggestion",
+            "de": "Avatar-URL des Users, der den Vorschlag erstellt hat"
+          },
+          "isImage": true
+        },
+        {
+          "name": "adminUser",
+          "description": {
+            "en": "Mention of the administrator who approved this suggestion",
+            "de": "Erwähnung des Administrators, der den Vorschlag angenommen hat"
+          }
+        },
+        {
+          "name": "adminMessage",
+          "description": {
+            "en": "Message by administrator who approved this suggestion",
+            "de": "Nachricht des Administrators, der den Vorschlag angenommen hat"
+          }
+        }
+      ]
     }
   ]
 }

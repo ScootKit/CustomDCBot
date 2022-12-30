@@ -45,12 +45,6 @@ module.exports.run = async function (interaction) {
         a.stop();
     }, 120000);
 
-    /*
-     * GET READY FOR THE WORST IMPLEMENTATION OF SUCH A BASIC PATH-FINDING-ALGORITHM YOUR EYES WILL EVER SEE
-     * While I prepared for the public release of custombot, I took a look at this module, and now I feel a
-     * sharp pain in my chest.
-     */
-
     const grid = {
         1: {
             1: null,

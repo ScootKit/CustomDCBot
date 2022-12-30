@@ -9,7 +9,8 @@ module.exports.run = async function (client) {
         const interval = setInterval(async () => {
             await client.user.setActivity(await replaceStatusString(moduleConf['intervalStatuses'][moduleConf['intervalStatuses'].length * Math.random() | 0]),
                 {
-                    type: moduleConf['activityType']
+                    type: moduleConf['activityType'],
+                    url: moduleConf['streamingLink']
                 });
         }, moduleConf.interval < 5 ? 5000 : moduleConf.interval * 1000); // At least 5 seconds to prevent rate limiting
         client.intervals.push(interval);
@@ -17,6 +18,13 @@ module.exports.run = async function (client) {
 
     if (moduleConf.botStatus !== 'ONLINE') {
         await client.user.setPresence({status: moduleConf.botStatus});
+    }
+
+    if (moduleConf.activityType !== 'PLAYING' && !moduleConf.enableInterval) {
+        await client.user.setActivity(client.config.user_presence, {
+            type: moduleConf.activityType,
+            url: moduleConf['streamingLink']
+        });
     }
 
     /**

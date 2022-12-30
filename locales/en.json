@@ -64,6 +64,7 @@
     "moduleconf-regeneration": "Regenerating module configuration, no settings will be overwritten, don't worry.",
     "moduleconf-regeneration-success": "Module configuration regeneration successfully finished.",
     "channel-not-found": "Channel with ID \"%id\" could not be found",
+    "user-not-found": "Discord-User with ID \"%id\" could not be found",
     "channel-not-on-guild": "Channel with ID \"%id\" is not on your guild",
     "channel-invalid-type": "Channel with ID \"%id\" has a type that can not be used for this field",
     "role-not-found": "Role with ID \"%id\" could not be found on your guild",
@@ -424,7 +425,27 @@
     "no-added-user": "There are no users to be displayed here",
     "nothing-changed": "Your channel already had these settings.",
     "no-disconnect": "Couldn't disconnect the user from your channel. This could be due to missing permissions, or the user not being in your voice-channel",
-    "edit-error": "An error occurred while editing your channel. one or more of your settings couldn't be applied. This could be due to missing permissions or an invalid value."
+    "edit-error": "An error occurred while editing your channel. one or more of your settings couldn't be applied. This could be due to missing permissions or an invalid value.",
+    "add-user": "Add user",
+    "remove-user": "Remove user",
+    "list-users": "List users",
+    "private-channel": "Private",
+    "public-channel": "Public",
+    "edit-channel": "Edit channel",
+    "add-modal-title": "Add an user to your temp-channel",
+    "add-modal-prompt": "The user you want to add (tag or user-id)",
+    "remove-modal-title": "Remove an user from your temp-channel",
+    "remove-modal-prompt": "The user you want to remove (tag or user-id)",
+    "edit-modal-title": "Edit your temp-channel",
+    "edit-modal-nsfw-prompt": "Mark temp-channel as age-restricted?",
+    "edit-modal-nsfw-placeholder": "\"true\" (yes) or \"false\" (no)",
+    "edit-modal-bitrate-prompt": "Bitrate of your Temp-channel?",
+    "edit-modal-bitrate-placeholder": "A number over 8000",
+    "edit-modal-limit-prompt": "Limit of users in your temp-channel",
+    "edit-modal-limit-placeholder": "Number between 0 and 99; 0 = unlimited",
+    "edit-modal-name-prompt": "How should your name be called?",
+    "edit-modal-name-placeholder": "A very creative channel name",
+    "user-not-found": "User not found"
   },
   "guess-the-number": {
     "command-description": "Manage your guess-the-number-games",
@@ -464,7 +485,8 @@
   },
   "twitch-notifications": {
     "channel-not-found": "Channel with ID %c could not be found",
-    "user-not-on-twitch": "Could not find user %u on twitch"
+    "user-not-on-twitch": "Could not find user %u on twitch",
+    "user-not-found": "Could not find the user with the id %u"
   },
   "hunt-the-code": {
     "admin-command-description": "Manage the current Code-Hunt",

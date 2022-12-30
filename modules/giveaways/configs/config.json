@@ -1,9 +1,13 @@
 {
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
-  "description-en": "Configure the function of the module here",
-  "description-de": "Stelle hier die Funktionen des Modules ein",
   "commandsWarnings": {
     "normal": [
       "/gmanage"
@@ -11,82 +15,109 @@
   },
   "content": [
     {
-      "field_name": "bypassRoles",
-      "humanname-en": "Giveaway-Requirement-Bypass-Roles",
-      "humanname-de": "Gewinnspiel-Voraussetzungen-Ignorierung-Rollen",
-      "default": [],
+      "name": "bypassRoles",
+      "humanName": {
+        "en": "Giveaway-Requirement-Bypass-Roles",
+        "de": "Gewinnspiel-Voraussetzungen-Ignorierung-Rollen"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Roles who can participate in giveaways even if they don't meet the requirements",
+        "de": "Rollen, die an Gewinnspielen teilnehmen können, ohne die Bedingungen erfüllen zu müssen"
+      },
       "type": "array",
-      "content": "roleID",
-      "description-de": "Rollen, die an Gewinnspielen teilnehmen können, ohne die Bedingungen erfüllen zu müssen",
-      "description-en": "Roles who can participate in giveaways even if they don't meet the requirements",
-      "params-de": {},
-      "default-de": []
+      "content": "roleID"
     },
     {
-      "field_name": "messageCountMode",
-      "humanname-en": "Message-Count-Mode",
-      "humanname-de": "Nachrichten-Zähl-Modus",
-      "default": "all",
+      "name": "messageCountMode",
+      "humanName": {
+        "en": "Message-Count-Mode",
+        "de": "Nachrichten-Zähl-Modus"
+      },
+      "default": {
+        "en": "all",
+        "de": "all"
+      },
+      "description": {
+        "en": "Modus in which messages should get counted",
+        "de": "Modus, in welchem Nachrichten gezählt werden sollen"
+      },
       "type": "select",
       "content": [
         "all",
         "blacklist",
         "whitelist"
-      ],
-      "description-en": "Modus in which messages should get counted",
-      "description-de": "Modus, in welchem Nachrichten gezählt werden sollen",
-      "params-de": {},
-      "default-de": "all"
+      ]
     },
     {
-      "field_name": "blacklist",
-      "humanname": "Blacklist",
-      "default": [],
+      "name": "blacklist",
+      "humanName": {
+        "en": "Blacklist"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Channel in which messages should get ignored (only if messageCountMode = \"blacklist\")",
+        "de": "Channel in welchen Nachrichten nicht gezählt werden sollen (nur wenn messageCountMode = \"blacklist\")"
+      },
       "type": "array",
-      "content": "channelID",
-      "description-en": "Channel in which messages should get ignored (only if messageCountMode = \"blacklist\")",
-      "description-de": "Channel in welchen Nachrichten nicht gezählt werden sollen (nur wenn messageCountMode = \"blacklist\")",
-      "humanname-de": "",
-      "params-de": {},
-      "default-de": []
+      "content": "channelID"
     },
     {
-      "field_name": "whitelist",
-      "humanname": "Whitelist",
-      "default": [],
+      "name": "whitelist",
+      "humanName": {
+        "en": "Whitelist"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Channel in which messages should get counted (only if messageCountMode = \"whitelist\")",
+        "de": "Channel in welchen Nachrichten gezählt werden sollen (nur wenn messageCountMode = \"whitelist\")"
+      },
       "type": "array",
-      "content": "channelID",
-      "description-en": "Channel in which messages should get counted (only if messageCountMode = \"whitelist\")",
-      "description-de": "Channel in welchen Nachrichten gezählt werden sollen (nur wenn messageCountMode = \"whitelist\")",
-      "humanname-de": "",
-      "params-de": {},
-      "default-de": []
+      "content": "channelID"
     },
     {
-      "field_name": "multipleEntries",
-      "humanname-en": "Multiple Entries",
-      "humanname-de": "Zusätzliche Gewinnchancen",
-      "default": {},
+      "name": "multipleEntries",
+      "humanName": {
+        "en": "Multiple Entries",
+        "de": "Zusätzliche Gewinnchancen"
+      },
+      "default": {
+        "en": {},
+        "de": {}
+      },
+      "description": {
+        "en": "Allow certain users with a specified role to enter multiple times.\n⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
+        "de": "Erlaubt es, Nutzern mit einer bestimmten Rollen mehre Gewinnchancen zu geben.\n⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service"
+      },
       "type": "keyed",
-      "description-en": "Allow certain users with a specified role to enter multiple times.\n⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
-      "description-de": "Erlaubt es, Nutzern mit einer bestimmten Rollen mehre Gewinnchancen zu geben.\n⚠ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
       "content": {
         "key": "roleID",
         "value": "integer"
-      },
-      "params-de": {},
-      "default-de": {}
+      }
     },
     {
-      "field_name": "sendDMOnWin",
-      "humanname-en": "Send DM-message to winner",
-      "humanname-de": "PN-Nachricht an Gewinner senden",
-      "default": false,
-      "type": "boolean",
-      "description-en": "If enabled the bot will send each winner a DM when they win.",
-      "description-de": "Wenn aktiviert wird der Bot eine Nachricht an den Gewinner senden, wenn diese gewinnen.",
-      "params-de": {},
-      "default-de": false
+      "name": "sendDMOnWin",
+      "humanName": {
+        "en": "Send DM-message to winner",
+        "de": "PN-Nachricht an Gewinner senden"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled the bot will send each winner a DM when they win.",
+        "de": "Wenn aktiviert wird der Bot eine Nachricht an den Gewinner senden, wenn diese gewinnen."
+      },
+      "type": "boolean"
     }
   ]
 }

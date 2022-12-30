@@ -1,9 +1,13 @@
 {
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
-  "description-en": "Configure the function of the module here",
-  "description-de": "Stelle hier die Funktionen des Modules ein",
   "commandsWarnings": {
     "normal": [
       "/manage-levels"
@@ -11,167 +15,226 @@
   },
   "content": [
     {
-      "field_name": "min-xp",
-      "humanname-en": "XP given at least",
-      "humanname-de": "Mindestens gegebenes XP",
-      "default": 25,
-      "type": "integer",
-      "description-en": "How much XP the user gets at least",
-      "description-de": "So viel XP bekommt ein Benutzer mindestens",
-      "params-de": {},
-      "default-de": 25
+      "name": "min-xp",
+      "humanName": {
+        "en": "XP given at least",
+        "de": "Mindestens gegebenes XP"
+      },
+      "default": {
+        "en": 25,
+        "de": 25
+      },
+      "description": {
+        "en": "How much XP the user gets at least",
+        "de": "So viel XP bekommt ein Benutzer mindestens"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "max-xp",
-      "humanname-en": "XP given at most",
-      "humanname-de": "Maximal gegebenes XP",
-      "default": 65,
-      "type": "integer",
-      "description-en": "How much XP the user gets at most",
-      "description-de": "So viel XP bekommt ein Benutzer maximal",
-      "params-de": {},
-      "default-de": 65
+      "name": "max-xp",
+      "humanName": {
+        "en": "XP given at most",
+        "de": "Maximal gegebenes XP"
+      },
+      "default": {
+        "en": 65,
+        "de": 65
+      },
+      "description": {
+        "en": "How much XP the user gets at most",
+        "de": "So viel XP bekommt ein Benutzer maximal"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "cooldown",
-      "humanname-en": "Cooldown",
-      "default": 1500,
-      "type": "integer",
-      "description-en": "In ms. How much cooldown there is between each XP getting",
-      "description-de": "In Millisekunden! So viel Zeit muss ein Nutzer zwischen jeder Nachricht mit XP warten",
-      "humanname-de": "",
-      "params-de": {},
-      "default-de": 1500
+      "name": "cooldown",
+      "humanName": {
+        "en": "Cooldown"
+      },
+      "default": {
+        "en": 1500,
+        "de": 1500
+      },
+      "description": {
+        "en": "In ms. How much cooldown there is between each XP getting",
+        "de": "In Millisekunden! So viel Zeit muss ein Nutzer zwischen jeder Nachricht mit XP warten"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "level_up_channel_id",
-      "humanname-en": "Level-Up-Channel",
-      "default": "",
+      "name": "level_up_channel_id",
+      "humanName": {
+        "en": "Level-Up-Channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)",
+        "de": "Channel, in den die Level-Up-Nachrichten gesendet werden. (Leerlassen, um sie einfach in den aktuellen Channel zu schicken))"
+      },
       "type": "channelID",
-      "allowNull": true,
-      "description-en": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)",
-      "description-de": "Channel, in den die Level-Up-Nachrichten gesendet werden. (Leerlassen, um sie einfach in den aktuellen Channel zu schicken))",
-      "humanname-de": "",
-      "params-de": {},
-      "default-de": ""
+      "allowNull": true
     },
     {
-      "field_name": "sortLeaderboardBy",
-      "humanname-en": "Leaderboard-Sort-Category",
-      "humanname-de": "Ranglisten-Sortierung",
-      "default": "levels",
+      "name": "sortLeaderboardBy",
+      "humanName": {
+        "en": "Leaderboard-Sort-Category",
+        "de": "Ranglisten-Sortierung"
+      },
+      "default": {
+        "en": "levels",
+        "de": "levels"
+      },
+      "description": {
+        "en": "How the leaderboard should be sorted",
+        "de": "Wähle aus, wie der /leaderboard-command aussehen werden soll"
+      },
       "type": "select",
       "content": [
         "levels",
         "xp"
-      ],
-      "description-en": "How the leaderboard should be sorted",
-      "description-de": "Wähle aus, wie der /leaderboard-command aussehen werden soll",
-      "params-de": {},
-      "default-de": "levels"
+      ]
     },
     {
-      "field_name": "blacklisted_channels",
-      "humanname-en": "Blacklisted Channels",
-      "humanname-de": "Channel ohne XP",
-      "default": [],
+      "name": "blacklisted_channels",
+      "humanName": {
+        "en": "Blacklisted Channels",
+        "de": "Channel ohne XP"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Blacklisted-Channels in which users can not earn XP",
+        "de": "Channel, in denen kein XP gesammelt werden kann"
+      },
       "type": "array",
-      "content": "channelID",
-      "description-en": "Blacklisted-Channels in which users can not earn XP",
-      "description-de": "Channel, in denen kein XP gesammelt werden kann",
-      "params-de": {},
-      "default-de": []
+      "content": "channelID"
     },
     {
-      "field_name": "reward_roles",
-      "humanname-de": "Level-Belohnung-Rollen",
-      "humanname-en": "Level-Reward-Roles",
-      "default": {},
+      "name": "reward_roles",
+      "humanName": {
+        "en": "Level-Reward-Roles",
+        "de": "Level-Belohnung-Rollen"
+      },
+      "default": {
+        "en": {},
+        "de": {}
+      },
+      "description": {
+        "en": "Level, bei denen der Nutzer eine Rolle bekommt. Parameter 1: Level, Parameter 2: Rollen-ID",
+        "de": "Level at which users should get roles"
+      },
       "type": "keyed",
-      "description-de": "Level at which users should get roles",
-      "description-en": "Level, bei denen der Nutzer eine Rolle bekommt. Parameter 1: Level, Parameter 2: Rollen-ID",
       "content": {
         "key": "integer",
         "value": "roleID"
+      }
+    },
+    {
+      "name": "onlyTopLevelRole",
+      "humanName": {},
+      "default": {
+        "en": false
       },
-      "params-de": {},
-      "default-de": {}
+      "description": {
+        "en": "If enabled, all previous level roles a user had will get removed, when they advance to a new level.",
+        "de": "Wenn aktiviert, werden alle vorherigen Level-Rollen, die ein Nutzer hatte, entfernt, wenn dieser ein neues Level erreicht."
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "onlyTopLevelRole",
-      "hummanname-de": "Nur die höchste Level-Rolle geben",
-      "hummanname-en": "Users only can have their highest level role",
-      "default": false,
-      "type": "boolean",
-      "description-en": "If enabled, all previous level roles a user had will get removed, when they advance to a new level.",
-      "description-de": "Wenn aktiviert, werden alle vorherigen Level-Rollen, die ein Nutzer hatte, entfernt, wenn dieser ein neues Level erreicht."
+      "name": "reset-on-leave",
+      "humanName": {},
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, all levels and the XP of a user will be deleted, when they leave your server.",
+        "de": "Wenn aktiviert, werden alle Level und das XP eines Nutzers gelöscht, wenn er den Server verlässt."
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "reset-on-leave",
-      "hummanname-de": "XP und Level eines Nutzers bei Leave löschen",
-      "hummanname-en": "Delete XP and Level of a user when they leave",
-      "default": false,
-      "type": "boolean",
-      "description-en": "If enabled, all levels and the XP of a user will be deleted, when they leave your server.",
-      "description-de": "Wenn aktiviert, werden alle Level und das XP eines Nutzers gelöscht, wenn er den Server verlässt."
+      "name": "randomMessages",
+      "humanName": {
+        "en": "Random messages",
+        "de": "Zufällige Nachrichten"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Wenn aktiviert wird das Modul die Level-Up-Nachricht zufällig auswählen und nicht die in Nachrichten angegebene verwenden",
+        "de": "If enabled the module will randomly select a messages from random-levelup-messages and ignore the one set in strings"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "randomMessages",
-      "humanname-de": "Zufällige Nachrichten",
-      "humanname-en": "Random messages",
-      "default": false,
-      "type": "boolean",
-      "description-de": "If enabled the module will randomly select a messages from random-levelup-messages and ignore the one set in strings",
-      "description-en": "Wenn aktiviert wird das Modul die Level-Up-Nachricht zufällig auswählen und nicht die in Nachrichten angegebene verwenden",
-      "params-de": {},
-      "default-de": false
-    },
-    {
-      "field_name": "leaderboard-channel",
-      "humanname-de": "Ranglisten-Channel",
-      "humanname-en": "Leaderboard-Channel",
-      "default": "",
+      "name": "leaderboard-channel",
+      "humanName": {
+        "en": "Leaderboard-Channel",
+        "de": "Ranglisten-Channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Wenn gesetzt wird der Bot in diesen Channel eine Nachricht senden, welche die aktuellen Level der Nutzern enthält",
+        "de": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes"
+      },
       "type": "channelID",
       "content": [
         "GUILD_TEXT"
       ],
-      "allowNull": true,
-      "description-de": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes",
-      "description-en": "Wenn gesetzt wird der Bot in diesen Channel eine Nachricht senden, welche die aktuellen Level der Nutzern enthält",
-      "params-de": {},
-      "default-de": ""
+      "allowNull": true
     },
     {
-      "field_name": "useTags",
-      "humanname-en": "Use User's Tags instead of their Mention in the Leaderboard-Channel-Embed",
-      "humanname-de": "Nutze den Tag der Nutzer, anstatt eine Erwähnung im Ranglisten-Channel-Embed",
-      "default": false,
-      "type": "boolean",
-      "description-de": "Wenn aktiviert, wird im Ranglisten-Channel-Embed der Tag des Nutzers angezeigt und nicht eine Erwähnung (bei großen Servern empfohlen)",
-      "description-en": "If enabled, the bot will use the tag of users in the Leaderboard-Channel-Embed instead of their mention."
+      "name": "useTags",
+      "humanName": {
+        "en": "Use User's Tags instead of their Mention in the Leaderboard-Channel-Embed",
+        "de": "Nutze den Tag der Nutzer, anstatt eine Erwähnung im Ranglisten-Channel-Embed"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, the bot will use the tag of users in the Leaderboard-Channel-Embed instead of their mention.",
+        "de": "Wenn aktiviert, wird im Ranglisten-Channel-Embed der Tag des Nutzers angezeigt und nicht eine Erwähnung (bei großen Servern empfohlen)"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "allowCheats",
-      "humanname-en": "Cheats",
-      "default": false,
-      "type": "boolean",
-      "description-de": "Wenn aktiviert können Administratoren die XP von anderen Nutzern editieren (nicht empfohlen, wenn du einen coolen, fairen Server haben willst (wirklich nicht!!!)))",
-      "description-en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))",
-      "humanname-de": "",
-      "params-de": {},
-      "default-de": false
+      "name": "allowCheats",
+      "humanName": {
+        "en": "Cheats"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))",
+        "de": "Wenn aktiviert können Administratoren die XP von anderen Nutzern editieren (nicht empfohlen, wenn du einen coolen, fairen Server haben willst (wirklich nicht!!!)))"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "disableSCNetworkProfile",
-      "humanname-en": "Disable SC Network Profiles",
-      "humanname-de": "Deaktiviert SC Network Profile",
-      "default": false,
+      "name": "disableSCNetworkProfile",
+      "humanName": {
+        "en": "Disable SC Network Profiles",
+        "de": "Deaktiviert SC Network Profile"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))",
+        "de": "Wenn aktiviert können Administratoren die XP von anderen Nutzern editieren (nicht empfohlen, wenn du einen coolen, fairen Server haben willst (wirklich nicht!!!)))"
+      },
       "type": "boolean",
-      "description-de": "Wenn aktiviert können Administratoren die XP von anderen Nutzern editieren (nicht empfohlen, wenn du einen coolen, fairen Server haben willst (wirklich nicht!!!)))",
-      "description-en": "If enabled admins can change the XP of other users (not recommended (please leave it of if you want to have a fair levelsystem!!!))",
-      "params-de": {},
-      "pro": true,
-      "default-de": false
+      "pro": true
     }
   ]
 }

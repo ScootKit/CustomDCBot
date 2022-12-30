@@ -24,7 +24,7 @@ module.exports.subcommands = {
                 dd: interaction.birthday.day,
                 mm: interaction.birthday.month,
                 yyyy: (interaction.birthday.year ? `.${interaction.birthday.year}` : ''),
-                age: interaction.birthday.year ? (localize('birthdays', 'your-age', {age: new AgeFromDateString(`${interaction.birthday.year}-${interaction.birthday.month - 1}-${interaction.birthday.day}`).age})) : '',
+                age: interaction.birthday.year ? (localize('birthdays', 'your-age', {age: ' ' + new AgeFromDateString(`${interaction.birthday.year}-${interaction.birthday.month - 1}-${interaction.birthday.day}`).age})) : '',
                 syncstatus: interaction.client.configurations['birthday']['config'].disableSync ? '' : interaction.birthday.sync ? localize('birthdays', 'sync-on') : localize('birthdays', 'sync-off') // eslint-disable-line no-nested-ternary
             })
         });

@@ -1,210 +1,348 @@
 {
+  "description": {
+    "en": "Configure here, how the module should behave",
+    "de": "Stelle hier ein, wie sich das Modul verhalten soll"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
-  "description-en": "Configure here, how the module should behave",
-  "description-de": "Stelle hier ein, wie sich das Modul verhalten soll",
   "content": [
     {
-      "field_name": "startMoney",
-      "humanname-en": "Start Money",
-      "humanname-de": "Start Geld",
-      "default": 100,
-      "type": "integer",
-      "description-en": "The amount of money that is given to a new user",
-      "description-de": "Das Geld, welches einem neuen Benutzer gegeben wird"
+      "name": "startMoney",
+      "humanName": {
+        "en": "Start Money",
+        "de": "Start Geld"
+      },
+      "default": {
+        "en": 100
+      },
+      "description": {
+        "en": "The amount of money that is given to a new user",
+        "de": "Das Geld, welches einem neuen Benutzer gegeben wird"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "shopManagers",
-      "humanname-en": "shop-managers",
-      "humanname-de": "Shop-Verwaltung",
-      "default": [],
+      "name": "shopManagers",
+      "humanName": {
+        "en": "shop-managers",
+        "de": "Shop-Verwaltung"
+      },
+      "default": {
+        "en": []
+      },
+      "description": {
+        "en": "The Ids of the shop managers (Bot Operators have this permission always)",
+        "de": "Die Benutzer-IDs der Shopverwaltung (Bot-Operatoren haben immer diese Berechtigung)"
+      },
       "type": "array",
-      "content": "integer",
-      "description-en": "The Ids of the shop managers (Bot Operators have this permission always)",
-      "description-de": "Die Benutzer-IDs der Shopverwaltung (Bot-Operatoren haben immer diese Berechtigung)"
+      "content": "integer"
     },
     {
-      "field_name": "currencyName",
-      "humanname-en": "currency name",
-      "humanname-de": "Währungsbezeichnung",
-      "default": "",
-      "type": "string",
-      "description-en": "The name of the currency",
-      "description-de": "Der Name der Währung",
-      "allowEmbed": false
+      "name": "currencyName",
+      "humanName": {
+        "en": "currency name",
+        "de": "Währungsbezeichnung"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The name of the currency",
+        "de": "Der Name der Währung"
+      },
+      "type": "string"
     },
     {
-      "field_name": "currencySymbol",
-      "humanname-en": "Symbol of the currency",
-      "humanname-de": "Symbol der Währung",
-      "default": "\uD83D\uDCB0",
-      "type": "string",
-      "description-en": "The symbol of the currency",
-      "description-de": "Das Symbol der Währung",
-      "allowEmbed": false
+      "name": "currencySymbol",
+      "humanName": {
+        "en": "Symbol of the currency",
+        "de": "Symbol der Währung"
+      },
+      "default": {
+        "en": "💰"
+      },
+      "description": {
+        "en": "The symbol of the currency",
+        "de": "Das Symbol der Währung"
+      },
+      "type": "string"
     },
     {
-      "field_name": "maxWorkMoney",
-      "humanname-en": "max work money",
-      "humanname-de": "Maximaler Arbeits Lohn",
-      "default": 100,
-      "type": "integer",
-      "description-en": "The highest amount of money you can get for working",
-      "description-de": "Der höchte Betrag, den man fürs Arbeiten bekommen kann"
+      "name": "maxWorkMoney",
+      "humanName": {
+        "en": "max work money",
+        "de": "Maximaler Arbeits Lohn"
+      },
+      "default": {
+        "en": 100
+      },
+      "description": {
+        "en": "The highest amount of money you can get for working",
+        "de": "Der höchte Betrag, den man fürs Arbeiten bekommen kann"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "minWorkMoney",
-      "humanname-en": "min work money",
-      "humanname-de": "Mainimaler Arbeits Lohn",
-      "default": 20,
-      "type": "integer",
-      "description-en": "The lowest amount of money you can get for working",
-      "description-de": "Der niedrigste Betrag, den man fürs Arbeiten bekommen kann"
+      "name": "minWorkMoney",
+      "humanName": {
+        "en": "min work money",
+        "de": "Mainimaler Arbeits Lohn"
+      },
+      "default": {
+        "en": 20
+      },
+      "description": {
+        "en": "The lowest amount of money you can get for working",
+        "de": "Der niedrigste Betrag, den man fürs Arbeiten bekommen kann"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "workCooldown",
-      "humanname-en": "work cooldown",
-      "humanname-de": "Arbeits Cooldown",
-      "default": 20,
-      "type": "integer",
-      "description-en": "The amount of time a user needs to wait util they can use the work command again (in minutes)",
-      "description-de": "Die Dauer, die Benutzer*innen warten müssen, bevor der Arbeits-Command wieder ausgeführt werden kann (in Minuten)"
+      "name": "workCooldown",
+      "humanName": {
+        "en": "work cooldown",
+        "de": "Arbeits Cooldown"
+      },
+      "default": {
+        "en": 20
+      },
+      "description": {
+        "en": "The amount of time a user needs to wait util they can use the work command again (in minutes)",
+        "de": "Die Dauer, die Benutzer*innen warten müssen, bevor der Arbeits-Command wieder ausgeführt werden kann (in Minuten)"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "maxCrimeMoney",
-      "humanname-en": "max crime money",
-      "humanname-de": "Maximales Verbrechens Geld",
-      "default": 1000,
-      "type": "integer",
-      "description-en": "The highest amount of money you can get for crime",
-      "description-de": "Das maximale Geld, was man dafür bekommen kann, ein Verbrechen zu begehen"
+      "name": "maxCrimeMoney",
+      "humanName": {
+        "en": "max crime money",
+        "de": "Maximales Verbrechens Geld"
+      },
+      "default": {
+        "en": 1000
+      },
+      "description": {
+        "en": "The highest amount of money you can get for crime",
+        "de": "Das maximale Geld, was man dafür bekommen kann, ein Verbrechen zu begehen"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "minCrimeMoney",
-      "humanname-en": "min crime money",
-      "humanname-de": "Minimales Verbrechens Geld",
-      "default": 100,
-      "type": "integer",
-      "description-en": "The lowest amount of money you can get for crime",
-      "description-de": "Das minimale Geld, was man dafür bekommen kann, ein Verbrechen zu begehen"
+      "name": "minCrimeMoney",
+      "humanName": {
+        "en": "min crime money",
+        "de": "Minimales Verbrechens Geld"
+      },
+      "default": {
+        "en": 100
+      },
+      "description": {
+        "en": "The lowest amount of money you can get for crime",
+        "de": "Das minimale Geld, was man dafür bekommen kann, ein Verbrechen zu begehen"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "crimeCooldown",
-      "humanname-en":"crime cooldown",
-      "humanname-de": "Verbrechens Cooldown",
-      "default": 30,
-      "type": "integer",
-      "description-en": "The amount of time a user needs to wait util they can use the crime command again (in minutes)",
-      "description-de": "Die Dauer, die Benutzer*innen warten müssen, bevor der Verbrechens-Command wieder ausgeführt werden kann (in Minuten)"
+      "name": "crimeCooldown",
+      "humanName": {
+        "en": "crime cooldown",
+        "de": "Verbrechens Cooldown"
+      },
+      "default": {
+        "en": 30
+      },
+      "description": {
+        "en": "The amount of time a user needs to wait util they can use the crime command again (in minutes)",
+        "de": "Die Dauer, die Benutzer*innen warten müssen, bevor der Verbrechens-Command wieder ausgeführt werden kann (in Minuten)"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "maxRobAmount",
-      "humanname-en": "max rob amount",
-      "humanname-de": "Maximale Raub Beute",
-      "default": 400,
-      "type": "integer",
-      "description-en": "The highest amount of money that a user can rob",
-      "description-de": "Das maximale Geld, was man durch Rauben bekommen kann"
+      "name": "maxRobAmount",
+      "humanName": {
+        "en": "max rob amount",
+        "de": "Maximale Raub Beute"
+      },
+      "default": {
+        "en": 400
+      },
+      "description": {
+        "en": "The highest amount of money that a user can rob",
+        "de": "Das maximale Geld, was man durch Rauben bekommen kann"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "robPercent",
-      "humanname-en": "rob percent",
-      "humanname-de": "Raub Prozent",
-      "default": 10,
-      "type": "integer",
-      "description-en": "The amount that can get robed in percent",
-      "description-de": "Das maximale Geld, was bei einem Raub erbeutet werden kann, in Prozent"
+      "name": "robPercent",
+      "humanName": {
+        "en": "rob percent",
+        "de": "Raub Prozent"
+      },
+      "default": {
+        "en": 10
+      },
+      "description": {
+        "en": "The amount that can get robed in percent",
+        "de": "Das maximale Geld, was bei einem Raub erbeutet werden kann, in Prozent"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "robCooldown",
-      "humanname-en": "rob cooldown",
-      "humanname-de": "Raub Cooldown",
-      "default": 60,
-      "type": "integer",
-      "description-en": "The amount of time a user needs to wait util they can use the rob command again (in minutes)",
-      "description-de": "Die Zeit die Benutzer warten müssen, bis sie den Raub-Command nochmal ausführen können (in Minuten)"
+      "name": "robCooldown",
+      "humanName": {
+        "en": "rob cooldown",
+        "de": "Raub Cooldown"
+      },
+      "default": {
+        "en": 60
+      },
+      "description": {
+        "en": "The amount of time a user needs to wait util they can use the rob command again (in minutes)",
+        "de": "Die Zeit die Benutzer warten müssen, bis sie den Raub-Command nochmal ausführen können (in Minuten)"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "leaderboardChannel",
-      "humanname-en": "leaderboard-channel",
-      "humanname-de": "Leaderboard-Kanal",
-      "default": "",
-      "type": "channelID",
-      "description-en": "The ID if the channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
-      "description-de": "Die ID des Kanals für das Leaderboard. Hier kann jeder sehen, wer das meiste Geld hat"
+      "name": "leaderboardChannel",
+      "humanName": {
+        "en": "leaderboard-channel",
+        "de": "Leaderboard-Kanal"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The ID if the channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
+        "de": "Die ID des Kanals für das Leaderboard. Hier kann jeder sehen, wer das meiste Geld hat"
+      },
+      "type": "channelID"
     },
     {
-      "field_name": "admins",
-      "humanname-en": "Administrators",
-      "humanname-de": "Administartoren",
-      "default": [],
+      "name": "admins",
+      "humanName": {
+        "en": "Administrators",
+        "de": "Administartoren"
+      },
+      "default": {
+        "en": []
+      },
+      "description": {
+        "en": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
+        "de": "Benuter*innen die Admin only Aktionen ausführen können, wie z.B. die Balance von Benutzern ändern (Bot-Operatoren haben immer diese Berrechtigung)"
+      },
       "type": "array",
-      "content": "integer",
-      "description-en": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
-      "description-de": "Benuter*innen die Admin only Aktionen ausführen können, wie z.B. die Balance von Benutzern ändern (Bot-Operatoren haben immer diese Berrechtigung)",
-      "allowEmbed": false
+      "content": "integer"
     },
     {
-      "field_name": "allowCheats",
-      "default": false,
-      "type": "boolean",
-      "description": "Allow admins to edit the balance of users (for a fair system not recommended!)"
+      "name": "allowCheats",
+      "humanName": {},
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Allow admins to edit the balance of users (for a fair system not recommended!)"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "selfBalance",
-      "default": false,
-      "type": "boolean",
-      "description": "Allow admins to edit their own balance (for a fair system not recommended! DON'T DO THIS!!!!!)"
+      "name": "selfBalance",
+      "humanName": {},
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Allow admins to edit their own balance (for a fair system not recommended! DON'T DO THIS!!!!!)"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "msgDropsIgnoredChannels",
-      "humanname-en": "message-drops ignored channels",
-      "humanname-de": "Ignorierte Message-Drop Kanäle",
-      "default": [],
+      "name": "msgDropsIgnoredChannels",
+      "humanName": {
+        "en": "message-drops ignored channels",
+        "de": "Ignorierte Message-Drop Kanäle"
+      },
+      "default": {
+        "en": []
+      },
+      "description": {
+        "en": "List of Channels where Users can't get message-drops",
+        "de": "Liste an Kanälen, in denen Benutzer keine Message-Drops bekommen können"
+      },
       "type": "array",
-      "content": "string",
-      "description-en": "List of Channels where Users can't get message-drops",
-      "description-de": "Liste an Kanälen, in denen Benutzer keine Message-Drops bekommen können"
+      "content": "string"
     },
     {
-      "field_name": "messageDrops",
-      "default": 25,
-      "type": "integer",
-      "description": "Chance to become money for a message (Chance: 1/ This value). Set to 0 to disable message drops"
+      "name": "messageDrops",
+      "humanName": {},
+      "default": {
+        "en": 25
+      },
+      "description": {
+        "en": "Chance to become money for a message (Chance: 1/ This value). Set to 0 to disable message drops"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "messageDropsMax",
-      "default": 50,
-      "type": "integer",
-      "description": "The max amount of money in a message Drop"
+      "name": "messageDropsMax",
+      "humanName": {},
+      "default": {
+        "en": 50
+      },
+      "description": {
+        "en": "The max amount of money in a message Drop"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "messageDropsMin",
-      "default": 5,
-      "type": "integer",
-      "description": "The min amount of money in a message Drop"
+      "name": "messageDropsMin",
+      "humanName": {},
+      "default": {
+        "en": 5
+      },
+      "description": {
+        "en": "The min amount of money in a message Drop"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "dailyReward",
-      "default": 25,
-      "type": "integer",
-      "description": "The daily reward"
+      "name": "dailyReward",
+      "humanName": {},
+      "default": {
+        "en": 25
+      },
+      "description": {
+        "en": "The daily reward"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "weeklyReward",
-      "default": 100,
-      "type": "integer",
-      "description": "The weekly reward"
+      "name": "weeklyReward",
+      "humanName": {},
+      "default": {
+        "en": 100
+      },
+      "description": {
+        "en": "The weekly reward"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "publicCommandReplies",
-      "humanname-de": "Öffentliche Command-Antworten",
-      "humanname-en": "Public Command-Replies",
-      "default": false,
-      "type": "boolean",
-      "description-de": "Sollen die Command-Antworten für alle angezeigt werden?",
-      "description-en": "Should the Command-replies be displayed for everyone?"
+      "name": "publicCommandReplies",
+      "humanName": {
+        "en": "Public Command-Replies",
+        "de": "Öffentliche Command-Antworten"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Should the Command-replies be displayed for everyone?",
+        "de": "Sollen die Command-Antworten für alle angezeigt werden?"
+      },
+      "type": "boolean"
     }
   ]
 }

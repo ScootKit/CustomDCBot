@@ -1,137 +1,173 @@
 {
+  "description": {},
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
   "filename": "config.json",
-  "humanname-de": "Konfiguration",
-  "humanname-en": "Configuration",
   "content": [
     {
-      "field_name": "channelID",
-      "humanname-en": "Birthday-Channel",
-      "humanname-de": "Geburtstag-Channel",
-      "default": "",
-      "type": "channelID",
-      "description-en": "Channel-ID to run all operations in it",
-      "description-de": "Channel-ID des Geburtstags-Channels"
+      "name": "channelID",
+      "humanName": {
+        "en": "Birthday-Channel",
+        "de": "Geburtstag-Channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Channel-ID to run all operations in it",
+        "de": "Channel-ID des Geburtstags-Channels"
+      },
+      "type": "channelID"
     },
     {
-      "field_name": "enableBirthdayEmbed",
-      "humanname-en": "Birthday-Embed enabled",
-      "humanname-de": "Birthday-Embed aktiviert",
-      "default": true,
-      "type": "boolean",
-      "description-de": "Wenn aktiviert, wird in den Geburtstag-Channel einen Nachricht gesendet (aktualisiert sich automatisch), welche alle Geburtstage enthält",
-      "description-en": "If enabled, a messages (which will update itself) will be sent in the Birthday-Channel, which contains all Birthdays"
+      "name": "enableBirthdayEmbed",
+      "humanName": {
+        "en": "Birthday-Embed enabled",
+        "de": "Birthday-Embed aktiviert"
+      },
+      "default": {
+        "en": true
+      },
+      "description": {
+        "en": "If enabled, a messages (which will update itself) will be sent in the Birthday-Channel, which contains all Birthdays",
+        "de": "Wenn aktiviert, wird in den Geburtstag-Channel einen Nachricht gesendet (aktualisiert sich automatisch), welche alle Geburtstage enthält"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "birthday_message",
-      "humanname-de": "Geburtstags-Nachricht",
-      "humanname-en": "Giveaway-Message",
-      "default": "Happy birthday, %mention%!",
+      "name": "birthday_message",
+      "humanName": {
+        "en": "Giveaway-Message",
+        "de": "Geburtstags-Nachricht"
+      },
+      "default": {
+        "en": "Happy birthday, %mention%!"
+      },
+      "description": {
+        "en": "Message that gets send if the user has not set a birthday",
+        "de": "Diese Nachricht wird verschickt, wenn der Nutzer kein Geburtsjahr angegeben hat und Geburtstag hat"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description-en": "Message that gets send if the user has not set a birthday",
-      "description-de": "Diese Nachricht wird verschickt, wenn der Nutzer kein Geburtsjahr angegeben hat und Geburtstag hat",
-      "params-en": [
+      "params": [
         {
-          "name": "%tag%",
-          "description": "Tag of the user"
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
         },
         {
-          "name": "%mention%",
-          "description": "Mention of the user"
-        }
-      ],
-      "params-de": [
-        {
-          "name": "%tag%",
-          "description": "Tag des Nutzers"
-        },
-        {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers"
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user",
+            "de": "Erwähnung des Nutzers"
+          }
         }
       ]
     },
     {
-      "field_name": "birthday_message_with_age",
-      "humanname-de": "Geburtstags-Nachricht mit Alter",
-      "humanname-en": "Giveaway-Message with age",
-      "default-en": "Happy birthday, %mention%! You are now %age% years old!",
-      "default-de": "Alles Gute zum %age%ten Geburtstag, %mention%!",
+      "name": "birthday_message_with_age",
+      "humanName": {
+        "en": "Giveaway-Message with age",
+        "de": "Geburtstags-Nachricht mit Alter"
+      },
+      "default": {
+        "en": "Happy birthday, %mention%! You are now %age% years old!",
+        "de": "Alles Gute zum %age%ten Geburtstag, %mention%!"
+      },
+      "description": {
+        "en": "Message that gets send if the user has not set a birthday",
+        "de": "Diese Nachricht wird verschickt, wenn der Nutzer kein Geburtsjahr angegeben hat und Geburtstag hat"
+      },
       "type": "string",
       "allowEmbed": true,
-      "description-en": "Message that gets send if the user has not set a birthday",
-      "description-de": "Diese Nachricht wird verschickt, wenn der Nutzer kein Geburtsjahr angegeben hat und Geburtstag hat",
-      "params-en": [
+      "params": [
         {
-          "name": "%tag%",
-          "description": "Tag of the user"
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
         },
         {
-          "name": "%mention%",
-          "description": "Mention of the user"
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user",
+            "de": "Erwähnung des Nutzers"
+          }
         },
         {
-          "name": "%age%",
-          "description": "New age of user"
-        }
-      ],
-      "params-de": [
-        {
-          "name": "%tag%",
-          "description": "Tag des Nutzers"
-        },
-        {
-          "name": "%mention%",
-          "description": "Erwähnung des Nutzers"
-        },
-        {
-          "name": "%age%",
-          "description": "Neues Alter des Nutzers"
+          "name": "age",
+          "description": {
+            "en": "New age of user",
+            "de": "Neues Alter des Nutzers"
+          }
         }
       ]
     },
     {
-      "field_name": "birthday_role",
-      "humanname-de": "Geburtstags-Rolle",
-      "humanname-en": "Birthday-Role",
-      "description-en": "Role that is given to users when they have birthday (Leave out to disable)",
-      "description-de": "Diese Rolle wird an Leute vergeben, die Geburtstag haben und wieder entfernt, wenn ihr Geburtstag vorbei ist (Leer lassen, um zu deaktivieren) [Tipp: Stelle diese Rolle so ein, dass sie ganz oben angezeigt wird, denn Geburtstage sind etwas besonderes ^^]",
-      "default": "",
+      "name": "birthday_role",
+      "humanName": {
+        "en": "Birthday-Role",
+        "de": "Geburtstags-Rolle"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Role that is given to users when they have birthday (Leave out to disable)",
+        "de": "Diese Rolle wird an Leute vergeben, die Geburtstag haben und wieder entfernt, wenn ihr Geburtstag vorbei ist (Leer lassen, um zu deaktivieren) [Tipp: Stelle diese Rolle so ein, dass sie ganz oben angezeigt wird, denn Geburtstage sind etwas besonderes ^^]"
+      },
       "type": "roleID",
       "allowNull": true
     },
     {
-      "field_name": "successfully_changed",
-      "humanname-de": "\"Erfolgreich geändert\"-Nachricht",
-      "humanname-en": "\"Successfully changed\"-Message",
-      "default-en": "Successfully changed record!",
-      "default-de": "Die Änderungen wurden gespeichert!",
-      "allowEmbed": true,
+      "name": "successfully_changed",
+      "humanName": {
+        "en": "\"Successfully changed\"-Message",
+        "de": "\"Erfolgreich geändert\"-Nachricht"
+      },
+      "default": {
+        "en": "Successfully changed record!",
+        "de": "Die Änderungen wurden gespeichert!"
+      },
+      "description": {
+        "en": "Message that gets send when the bot changes an item",
+        "de": "Diese Nachricht wird verschickt, wenn eine Änderung übernommen wurde."
+      },
       "type": "string",
-      "description-en": "Message that gets send when the bot changes an item",
-      "description-de": "Diese Nachricht wird verschickt, wenn eine Änderung übernommen wurde."
+      "allowEmbed": true
     },
     {
-      "field_name": "birthdayEmbed",
-      "humanname-en": "Birthday-Embed",
-      "humanname-de": "Geburtstags-Embed",
-      "description-de": "Passe hier das Geburtstage-Embed an (Du kannst einige Optionen gerne leer lassen)",
-      "description-en": "Change settings of the birthday-embed here",
+      "name": "birthdayEmbed",
+      "humanName": {
+        "en": "Birthday-Embed",
+        "de": "Geburtstags-Embed"
+      },
+      "default": {
+        "en": {
+          "title": "Birthdays",
+          "color": "GREEN",
+          "thumbnail": " ",
+          "image": " ",
+          "description": "Here you can find every birthday - add yours with !birthday <Day> <Month> [Year]"
+        },
+        "de": {
+          "title": "Geburtstage",
+          "color": "GREEN",
+          "thumbnail": " ",
+          "image": " ",
+          "description": "Hier siehst du die Geburtstage unserer Mitglieder - du kannst deinen Geburtstag mit `/birthday set <Day> <Month> [Year]` hinzufügen."
+        }
+      },
+      "description": {
+        "en": "Change settings of the birthday-embed here",
+        "de": "Passe hier das Geburtstage-Embed an (Du kannst einige Optionen gerne leer lassen)"
+      },
       "type": "keyed",
-      "default-en": {
-        "title": "Birthdays",
-        "color": "GREEN",
-        "thumbnail": " ",
-        "image": " ",
-        "description": "Here you can find every birthday - add yours with !birthday <Day> <Month> [Year]"
-      },
-      "default-de": {
-        "title": "Geburtstage",
-        "color": "GREEN",
-        "thumbnail": " ",
-        "image": " ",
-        "description": "Hier siehst du die Geburtstage unserer Mitglieder - du kannst deinen Geburtstag mit `/birthday set <Day> <Month> [Year]` hinzufügen."
-      },
       "content": {
         "key": "string",
         "value": "string"
@@ -139,32 +175,50 @@
       "disableKeyEdits": true
     },
     {
-      "field_name": "forceSCNetworkSync",
-      "humanname-en": "Force SC Network Account Sync",
-      "humanname-de": "SC Network Account Synchronisierung erzwingen",
-      "default": false,
-      "type": "boolean",
-      "description-en": "If enabled, users can not set a local birthday on this server, instead they have to use the SC Network Dashboard to set their birthday",
-      "description-de": "Wenn aktiviert können Nutzer ihr Geburtsdatum nur über das SC Network Dashboard anpassen - dies kann eventuellen Missbrauch verhindern und als Sicherheitsmaßnahme dienen (empfohlen, wenn Preise für Geburtstags-Kinder gegeben werden)"
+      "name": "forceSCNetworkSync",
+      "humanName": {
+        "en": "Force SC Network Account Sync",
+        "de": "SC Network Account Synchronisierung erzwingen"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, users can not set a local birthday on this server, instead they have to use the SC Network Dashboard to set their birthday",
+        "de": "Wenn aktiviert können Nutzer ihr Geburtsdatum nur über das SC Network Dashboard anpassen - dies kann eventuellen Missbrauch verhindern und als Sicherheitsmaßnahme dienen (empfohlen, wenn Preise für Geburtstags-Kinder gegeben werden)"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "useTags",
-      "humanname-en": "Use User's Tags instead of their Mention",
-      "humanname-de": "Nutze den Tag der Nutzer, anstatt eine Erwähnung",
-      "default": false,
-      "type": "boolean",
-      "description-de": "Wenn aktiviert, wird im Geburtags-Embed der Tag des Nutzers angezeigt und nicht eine Erwähnung (bei großen Servern empfohlen)",
-      "description-en": "If enabled, the bot will use the tag of users in the birthday embed instead of their mention."
+      "name": "useTags",
+      "humanName": {
+        "en": "Use User's Tags instead of their Mention",
+        "de": "Nutze den Tag der Nutzer, anstatt eine Erwähnung"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, the bot will use the tag of users in the birthday embed instead of their mention.",
+        "de": "Wenn aktiviert, wird im Geburtags-Embed der Tag des Nutzers angezeigt und nicht eine Erwähnung (bei großen Servern empfohlen)"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "disableSync",
-      "humanname-en": "Disable SC Network Account Sync & Age calculations",
-      "humanname-de": "SC Network Account Synchronization und Altersberechnungen deaktivieren",
-      "pro": true,
-      "default": false,
+      "name": "disableSync",
+      "humanName": {
+        "en": "Disable SC Network Account Sync & Age calculations",
+        "de": "SC Network Account Synchronization und Altersberechnungen deaktivieren"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, users can't sync their birthdays and can't calculate their age.",
+        "de": "Wenn aktiviert, werden Nutzer nicht mehr ihre Geburtstage synchronisieren oder berechnen könne."
+      },
       "type": "boolean",
-      "description-en": "If enabled, users can't sync their birthdays and can't calculate their age.",
-      "description-de": "Wenn aktiviert, werden Nutzer nicht mehr ihre Geburtstage synchronisieren oder berechnen könne."
+      "pro": true
     }
   ]
 }

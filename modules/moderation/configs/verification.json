@@ -1,144 +1,218 @@
 {
+  "description": {
+    "en": "Require accounts to verify that they are not a robot before accessing your server",
+    "de": "Zwinge neue Nutzer zu verifizieren, dass sie kein Roboter sind"
+  },
+  "humanName": {
+    "de": "Verifikation-Konfiguration",
+    "en": "Verification-Configuration"
+  },
   "filename": "verification.json",
   "content": [
     {
-      "field_name": "enabled",
-      "default": false,
+      "name": "enabled",
+      "humanName": {
+        "de": "Aktiviert?",
+        "en": "Enabled?"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If checked, verification on your server will be enabled",
+        "de": "Wenn aktiviert, wird Verifikation auf deinem Server aktiviert"
+      },
       "type": "boolean",
-      "description": "If checked, verification on your server will be enabled",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": false
+      "elementToggle": true
     },
     {
-      "field_name": "verification-needed-role",
-      "default": "",
+      "name": "verification-needed-role",
+      "humanName": {
+        "de": "Rolle für Nutzer, die sich noch verifizieren müssen",
+        "en": "Role for users with pending verification"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Role, which members should be given before they verify themselves",
+        "de": "Rolle, die Nutzer erhalten, bevor sie sich verifiziert haben"
+      },
       "type": "roleID",
-      "allowNull": true,
-      "description": "ID of the role members should be given before they got verified",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": ""
+      "allowNull": true
     },
     {
-      "field_name": "verification-passed-role",
-      "default": "",
-      "allowNull": true,
+      "name": "verification-passed-role",
+      "humanName": {
+        "de": "Rolle für Nutzer mit bestandener Verifikation",
+        "en": "Role for users that passed verification"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Role, which members should be given after they got verified successfully",
+        "de": "Rolle, die Nutzern gegeben werden soll, wenn sie sich erfolgreich verifiziert haben"
+      },
       "type": "roleID",
-      "description": "ID of the role members should be given after they got verified successfully",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": ""
+      "allowNull": true
     },
     {
-      "field_name": "verification-log",
-      "default": "",
-      "allowNull": true,
+      "name": "verification-log",
+      "humanName": {},
+      "default": {
+        "en": "Verification-Log",
+        "de": "Verifikation-Log"
+      },
+      "description": {
+        "en": "Channel where all verification-actions should get logged",
+        "de": "Kanal, in welchem alle Verifikation-Aktionen dokumentiert werden sollen"
+      },
       "type": "channelID",
-      "description": "ID of the channel where all verification-actions should get logged",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": ""
+      "allowNull": true
     },
     {
-      "field_name": "type",
-      "default": "captcha",
+      "name": "type",
+      "humanName": {
+        "en": "Type of verification",
+        "de": "Art der Verifikation"
+      },
+      "default": {
+        "en": "captcha",
+        "de": "captcha"
+      },
+      "description": {
+        "en": "How should the verification process be performed on your server?",
+        "de": "Wie sollen sich Nutzer verifizieren müssen, wenn sie den Server beitreten?"
+      },
       "type": "select",
       "content": [
         "manual",
         "captcha"
-      ],
-      "description": "How should the verification process be performed on your server?",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "captcha"
+      ]
     },
     {
-      "field_name": "actionOnFail",
-      "default": "kick",
+      "name": "actionOnFail",
+      "humanName": {
+        "de": "Aktion bei Fehlschlagen der Verifikation",
+        "en": "Action on failure of verification"
+      },
+      "default": {
+        "en": "kick",
+        "de": "kick"
+      },
+      "description": {
+        "en": "What should happen if someone fails the verification?",
+        "de": "Was soll passieren, wenn die Verifikation fehlschlägt?"
+      },
       "type": "select",
       "content": [
         "kick",
         "quarantine",
         "ban",
         "mute"
-      ],
-      "description": "What should happen if someone fails the verification?",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "kick"
+      ]
     },
     {
-      "field_name": "restart-verification-channel",
-      "default": "",
+      "name": "restart-verification-channel",
+      "humanName": {
+        "de": "Verifikation-Neustarten-Kanal",
+        "en": "Restart Verification-Channel"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "(optional) Add support for a channel where users can easily restart their verification process (for example if they had DMs disabled when they tried) and get notified if we couldn't reach them",
+        "de": "(optional) Kanal in welchem Nutzer ganz einfach den Verifikationsprozess neustarten können (zum Beispiel, wenn der Nutzer PNs deaktiviert hat) und benachrichtigt werden, wenn wir sie nicht erreichen konnten"
+      },
       "type": "channelID",
-      "allowNull": true,
-      "description": "(optional) Add support for a channel where users can easily restart their verification process (for example if they had DMs disabled when they tried) and get notified if we couldn't reach them",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": ""
+      "allowNull": true
     },
     {
-      "field_name": "captcha-message",
-      "default": "Welcome! Please verify that you are a human. You have two minutes to complete this.",
+      "name": "captcha-message",
+      "humanName": {
+        "de": "Captcha-Nachricht",
+        "en": "Captcha-Message"
+      },
+      "default": {
+        "en": "Welcome! Please verify that you are a human. You have two minutes to complete this.",
+        "de": "Willkommen! Bitte verifiziere, dass du kein Bot bist. Du hast zwei Minuten, um dies zu tun."
+      },
+      "description": {
+        "en": "This message gets sent to users who need to complete a captcha",
+        "de": "Diese Nachricht wird an den Nutzer gesendet, der ein Captcha durchführen muss"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description": "This message gets sent to users who need to complete a captcha",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "Welcome! Please verify that you are a human. You have two minutes to complete this."
+      "allowEmbed": true
     },
     {
-      "field_name": "manual-verification-message",
-      "default": "Welcome! A human will be verifying your account shortly. I will update you if I have any news.",
+      "name": "manual-verification-message",
+      "humanName": {
+        "en": "Manual-Verification-Message",
+        "de": "Manuelle-Verifikation-Nachricht"
+      },
+      "default": {
+        "en": "Welcome! A human will be verifying your account shortly. I will update you if I have any news.",
+        "de": "Willkommen! Ein Mensch wird deinen Account bald überprüfen und dir Zugriff auf den Server geben, bitte gedulde dich. Ich informiere dich bei Neuigkeiten."
+      },
+      "description": {
+        "en": "This message gets sent to users who need to get verified manually.",
+        "de": "Diese Nachricht wird an Nutzer geschickt, die manuell verifiziert werden müssen"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description": "This message gets sent to users who need to get verified manually.",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "Welcome! A human will be verifying your account shortly. I will update you if I have any news."
+      "allowEmbed": true
     },
     {
-      "field_name": "captcha-failed-message",
-      "default": "It seems like you failed the verification. This is bad, I will have to take moderative actions against you - sorry fellow bot.",
+      "name": "captcha-failed-message",
+      "humanName": {
+        "de": "Captcha fehlgeschlagen-Nachricht",
+        "en": "Captcha failed-Message"
+      },
+      "default": {
+        "en": "It seems like you failed the verification. This is bad, I will have to take moderative actions against you - sorry fellow bot.",
+        "de": "Es scheint, als hättest du die Verifikation nicht bestanden. Schade, ich werde moderative Maßnahmen gegen dich ergreifen - entschuldige, Roboter."
+      },
+      "description": {
+        "en": "This message gets sent when a user fails the verification",
+        "de": "Diese Nachricht wird an Nutzer gesendet, bei denen die Verifikation fehlgeschlagen ist"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description": "This message gets sent when a user fails the verification",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "It seems like you failed the verification. This is bad, I will have to take moderative actions against you - sorry fellow bot."
+      "allowEmbed": true
     },
     {
-      "field_name": "captcha-succeeded-message",
-      "default": "Thanks! We have verified that you are indeed not a bot, so I granted you access to the whole server! Have fun <3",
+      "name": "captcha-succeeded-message",
+      "humanName": {
+        "de": "Captcha abgeschlossen-Nachricht",
+        "en": "Captcha completed-Message"
+      },
+      "default": {
+        "en": "Thanks! We have verified that you are indeed not a bot, so I granted you access to the whole server! Have fun <3",
+        "de": "Danke dir! Wir konnten verifizieren, dass du tatsächlich kein Bot bist, also haben wir dir auf den gesamten Server Zugriff gegeben! Viel Spaß <3"
+      },
+      "description": {
+        "en": "This message gets sent to users when they complete the verification",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer die Verifikation erfolgreich abgeschlossen hat"
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description": "This message gets sent to users when they complete the verification",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "Thanks! We have verified that you are indeed not a bot, so I granted you access to the whole server! Have fun <3"
+      "allowEmbed": true
     },
     {
-      "field_name": "verify-channel-first-message",
-      "default": "Welcome! I have send you a DM about your verification-process. Please read it carefully. If you have DMs disabled, please activate them and click the button below. This step is required to join this server.",
+      "name": "verify-channel-first-message",
+      "humanName": {
+        "de": "Verifkations-Kanal-Info-Nachricht",
+        "en": "Verification-Channel-Info-Message"
+      },
+      "default": {
+        "en": "Welcome! I have send you a DM about your verification-process. Please read it carefully. If you have DMs disabled, please activate them and click the button below. This step is required to join this server.",
+        "de": "Willkommen! Ich habe dir eine PN über den Verifikationsprozess. Bitte lese sie dir genau durch. Wenn du PNs deaktiviert hast, aktiviere sie bitte und klicke den Knopf unten. Dieser Schritt ist notwendig, um dem Server beizutreten."
+      },
+      "description": {
+        "en": "This message is the introduction message in the verify-channel.",
+        "de": "Das ist die Informations-Nachricht im Verfikationskanal."
+      },
       "type": "string",
-      "allowEmbed": true,
-      "description": "This message is the introduction message in the verify-channel.",
-      "humanname-de": "",
-      "description-de": "",
-      "params-de": {},
-      "default-de": "Welcome! I have send you a DM about your verification-process. Please read it carefully. If you have DMs disabled, please activate them and click the button below. This step is required to join this server."
+      "allowEmbed": true
     }
   ]
 }

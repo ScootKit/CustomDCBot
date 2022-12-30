@@ -1,68 +1,125 @@
 {
+  "description": {
+    "en": "You can configure here, how your bot should react to spam",
+    "de": "Du kannst hier einstellen, wie dein Bot auf Spam reagieren soll"
+  },
+  "humanName": {
+    "en": "Anti-Spam-Configuration",
+    "de": "Anti-Spam-Konfiguration"
+  },
   "filename": "antiSpam.json",
   "content": [
     {
-      "field_name": "enabled",
+      "name": "enabled",
+      "humanName": {
+        "de": "Aktiviert",
+        "en": "Enabled?"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Enable or disable the anti spam system",
+        "de": "Aktiviert oder deaktiviert das Anti-Spam-System"
+      },
       "type": "boolean",
-      "default": true,
-      "description": "Enable or disable the anti spam system",
-      "humanname-de": "Aktiviert",
-      "description-de": "Aktiviert oder deaktiviert das Anti-Spam-System",
-      "params-de": {},
-      "default-de": true
+      "elementToggle": true
     },
     {
-      "field_name": "timeframe",
-      "type": "integer",
-      "default": 5,
-      "description": "Timeframe after which message objects get deleted (and can not longer be used to detect spam)",
-      "humanname-de": "Zeitfenster",
-      "description-de": "Zeitfenster, in dem Nachrichten gelöscht werden (und nicht länger zur Erkennung von Spam verwendet werden können)",
-      "params-de": {},
-      "default-de": 5
+      "name": "timeframe",
+      "humanName": {
+        "de": "Zeitfenster",
+        "en": "Timeframe"
+      },
+      "default": {
+        "en": 5,
+        "de": 5
+      },
+      "description": {
+        "en": "Timeframe after which message objects get deleted (and can not longer be used to detect spam)",
+        "de": "Zeitfenster, in dem Nachrichten gelöscht werden (und nicht länger zur Erkennung von Spam verwendet werden können)"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "maxMessagesInTimeframe",
-      "type": "integer",
-      "default": 10,
-      "description": "Count of messages that are allowed to be sent in the selected timeframe",
-      "humanname-de": "Maximale Nachrichten im Zeitfenster",
-      "description-de": "Anzahl an Nachrichten, die im ausgewählten Zeitfenster erlaubt sind",
-      "params-de": {},
-      "default-de": 10
+      "name": "maxMessagesInTimeframe",
+      "humanName": {
+        "de": "Maximale Nachrichten im Zeitfenster",
+        "en": "Maximal count of messages in timeframe"
+      },
+      "default": {
+        "en": 10,
+        "de": 10
+      },
+      "description": {
+        "en": "Count of messages that are allowed to be sent in the selected timeframe",
+        "de": "Anzahl an Nachrichten, die im ausgewählten Zeitfenster erlaubt sind"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "maxDuplicatedMessagesInTimeframe",
-      "type": "integer",
-      "default": 5,
-      "description": "Count of identical messages that are allowed to be sent in the selected timeframe",
-      "humanname-de": "Maximale gleiche Nachrichten im Zeitfenster",
-      "description-de": "Anzahl an gleichen Nachrichten, die im ausgewählten Zeitfenster erlaubt sind",
-      "params-de": {},
-      "default-de": 5
+      "name": "maxDuplicatedMessagesInTimeframe",
+      "humanName": {
+        "de": "Maximale gleiche Nachrichten im Zeitfenster",
+        "en": "Maximal count of duplicated messages in timeframe"
+      },
+      "default": {
+        "en": 5,
+        "de": 5
+      },
+      "description": {
+        "en": "Count of identical messages that are allowed to be sent in the selected timeframe",
+        "de": "Anzahl an gleichen Nachrichten, die im ausgewählten Zeitfenster erlaubt sind"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "maxPingsInTimeframe",
-      "type": "integer",
-      "default": 4,
-      "description": "Count of pings (also counts replies) that are allowed to be sent in the selected timeframe",
-      "humanname-de": "Maximale Pings im Zeitfenster",
-      "description-de": "Anzahl an Erwähnungen (zählt auch Antworten), die im ausgewählten Zeitfenster erlaubt sind",
-      "params-de": {},
-      "default-de": 4
+      "name": "maxPingsInTimeframe",
+      "humanName": {
+        "de": "Maximale Pings im Zeitfenster",
+        "en": "Maximal count of pings in timeframe"
+      },
+      "default": {
+        "en": 4,
+        "de": 4
+      },
+      "description": {
+        "en": "Count of pings (also counts replies) that are allowed to be sent in the selected timeframe",
+        "de": "Anzahl an Erwähnungen (zählt auch Antworten), die im ausgewählten Zeitfenster erlaubt sind"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "maxMassPings",
-      "type": "integer",
-      "default": 3,
-      "description": "Count of mass pings (= @everyone, @here and roles) that are allowed to be sent in the selected timeframe",
-      "humanname-de": "Maximale Massenpings im Zeitfenster",
-      "description-de": "Anzahl an Massenerwähnungen (= @everyone, @here und Rollen), die im ausgewählten Zeitfenster erlaubt sind",
-      "params-de": {},
-      "default-de": 3
+      "name": "maxMassPings",
+      "humanName": {
+        "de": "Maximale Massenpings im Zeitfenster",
+        "en": "Maximal count of mass-pings in timeframe"
+      },
+      "default": {
+        "en": 3,
+        "de": 3
+      },
+      "description": {
+        "en": "Count of mass pings (= @everyone, @here and roles) that are allowed to be sent in the selected timeframe",
+        "de": "Anzahl an Massenerwähnungen (= @everyone, @here und Rollen), die im ausgewählten Zeitfenster erlaubt sind"
+      },
+      "type": "integer"
     },
     {
-      "field_name": "action",
+      "name": "action",
+      "humanName": {
+        "de": "Aktion",
+        "en": "Action"
+      },
+      "default": {
+        "en": "mute",
+        "de": "mute"
+      },
+      "description": {
+        "en": "Select what should happen if someone spams",
+        "de": "Wähle hier die Aktion aus, die ausgeführt werden soll, wenn jemand spammt"
+      },
       "type": "select",
       "content": [
         "mute",
@@ -70,74 +127,91 @@
         "kick",
         "quarantine",
         "ban"
-      ],
-      "default": "mute",
-      "description": "Select what should happen if someone spams",
-      "humanname-de": "Aktion",
-      "description-de": "Wähle hier die Aktion aus, die ausgeführt werden soll, wenn jemand spammt",
-      "params-de": {},
-      "default-de": "mute"
+      ]
     },
     {
-      "field_name": "sendChatMessage",
-      "type": "boolean",
-      "default": true,
-      "description": "If enabled the bot will send a chat message if it has to take action agains a bot",
-      "humanname-de": "Chatnachricht senden",
-      "description-de": "Wenn aktiviert, wird der Bot eine Nachricht in den Chat senden, wenn er eine Aktion gegen einen Bot ausführen musste",
-      "params-de": {},
-      "default-de": true
+      "name": "sendChatMessage",
+      "humanName": {
+        "de": "Chatnachricht senden",
+        "en": "Send Chat-Message"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled the bot will send a chat message if it has to take action agains a bot",
+        "de": "Wenn aktiviert, wird der Bot eine Nachricht in den Chat senden, wenn er eine Aktion gegen einen Bot ausführen musste"
+      },
+      "type": "boolean"
     },
     {
-      "field_name": "message",
+      "name": "message",
+      "dependsOn": "sendChatMessage",
+      "humanName": {
+        "de": "Nachricht",
+        "en": "Message"
+      },
+      "default": {
+        "en": "Anti-Spam: I took action against <@%userid%> because of **%reason%**",
+        "de": "Anti-Spam: Ich habe wegen **%reason%** eine Aktion gegen <@%userid%> ausgeführt"
+      },
+      "description": {
+        "en": "This will get send in the channel the spam is occurring in when anti-spam gets triggered",
+        "de": "Das wird in den Kanal gesendet, wenn das Anti-Spam-System ausgelöst wird"
+      },
       "type": "string",
       "allowEmbed": true,
-      "default": "Anti-Spam: I took action against <@%userid%> because of **%reason%**",
       "params": [
         {
-          "name": "%userid%",
-          "description": "ID of the user"
+          "name": "userid",
+          "description": {
+            "en": "ID of the user",
+            "de": "ID des Nutzers"
+          }
         },
         {
-          "name": "%reason%",
-          "description": "Reason of the action"
+          "name": "reason",
+          "description": {
+            "en": "Reason of the action",
+            "de": "Grund der Aktion"
+          }
         }
-      ],
-      "humanname-de": "Nachricht",
-      "description-de": "",
-      "params-de": [
-        {
-          "name": "%userid%",
-          "description": "ID des Nutzers"
-        },
-        {
-          "name": "%reason%",
-          "description": "Grund der Aktion"
-        }
-      ],
-      "default-de": "Anti-Spam: Ich habe wegen **%reason%** eine Aktion gegen <@%userid%> ausgeführt"
+      ]
     },
     {
-      "field_name": "ignoredChannels",
+      "name": "ignoredChannels",
+      "humanName": {
+        "de": "Ignorierte Kanäle",
+        "en": "Whitelisted Channels"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "You can set channels that get ignored here",
+        "de": "Du kannst hier Kanäle einstellen, die ignoriert werden sollen"
+      },
       "type": "array",
-      "content": "channelID",
-      "default": [],
-      "description": "You can set channels that get ignored here",
-      "humanname-de": "Ignorierte Kanäle",
-      "description-de": "Du kannst hier Kanäle einstellen, die ignoriert werden sollen",
-      "params-de": {},
-      "default-de": []
+      "content": "channelID"
     },
     {
-      "field_name": "ignoredRoles",
+      "name": "ignoredRoles",
+      "humanName": {
+        "de": "Ignorierte Rollen",
+        "en": "Whitelisted roles"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "You can set roles that get ignored here",
+        "de": "Du kannst hier Rollen einstellen, die ignoriert werden sollen"
+      },
       "type": "array",
-      "content": "roleID",
-      "default": [],
-      "description": "You can set roles that get ignored here",
-      "humanname-de": "Ignorierte Rollen",
-      "description-de": "Du kannst hier Rollen einstellen, die ignoriert werden sollen",
-      "params-de": {},
-      "default-de": []
+      "content": "roleID"
     }
   ]
 }

@@ -44,15 +44,15 @@ function inputReplacer(args, input) {
  * @param  {string|array} input Input in the configuration file
  * @param  {Object} args Object of variables to replace
  * @param  {Object} optionsToKeep [BaseMessageOptions](https://discord.js.org/#/docs/main/stable/typedef/BaseMessageOptions) to keep
+ * @param {Array<ActionRow>} mergeComponentsRows ActionRows to be merged with custom rows
  * @author Simon Csaba <mail@scderox.de>
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
-module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
+module.exports.embedType = function (input, args = {}, optionsToKeep = {}, mergeComponentsRows = []) {
     if (!optionsToKeep.allowedMentions) {
         optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
         if (client.config.disableEveryoneProtection) optionsToKeep.allowedMentions.parse.push('everyone');
     }
-    if (!optionsToKeep.allowedMentions) optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
     if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
     if (typeof input === 'string') {
         optionsToKeep.content = inputReplacer(args, input);
@@ -69,7 +69,7 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
         if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
         if (input['author'] && typeof input['author'] === 'object' && (input['author'] || {}).name) emb.setAuthor({
             name: inputReplacer(args, input['author']['name']),
-            iconURL: inputReplacer(args, input['author']['img'])
+            iconURL: input['author']['img'] ? inputReplacer(args, input['author']['img']) : null
         });
         if (typeof input['fields'] === 'object') {
             input.fields.forEach(f => {
@@ -84,7 +84,7 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}) {
         });
         optionsToKeep.embeds = [emb];
     } else optionsToKeep.embeds = [];
-    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input);
+    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input, mergeComponentsRows);
     optionsToKeep.content = input['message'] ? inputReplacer(args, input['message']) : null;
     return optionsToKeep;
 };

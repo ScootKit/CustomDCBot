@@ -146,7 +146,7 @@ async function createShopItem(item, price, role, client) {
                 price: price,
                 role: role
             });
-            resolve(localize('economy-system', 'item-created'));
+            resolve(localize('economy-system', 'created-item'));
         }
     });
 }

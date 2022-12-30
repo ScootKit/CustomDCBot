@@ -53,8 +53,16 @@ module.exports.subcommands = {
         }
         user.xp = interaction.options.getNumber('value');
         await user.save();
-        interaction.client.logger.info(localize('levels', 'manipulated', {u: interaction.user.tag, ui: user.userID, v: interaction.options.getNumber('value')}));
-        if (interaction.client.logChannel) await interaction.client.logChannel.send(localize('levels', 'manipulated', {u: interaction.user.tag, ui: user.userID, v: interaction.options.getNumber('value')}));
+        interaction.client.logger.info(localize('levels', 'manipulated', {
+            u: interaction.user.tag,
+            m: dcUser.tag,
+            v: interaction.options.getNumber('value')
+        }));
+        if (interaction.client.logChannel) await interaction.client.logChannel.send(localize('levels', 'manipulated', {
+            u: interaction.user.tag,
+            m: dcUser.tag,
+            v: interaction.options.getNumber('value')
+        }));
         await interaction.reply({
             ephemeral: true,
             content: localize('levels', 'successfully-changed')

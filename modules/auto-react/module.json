@@ -1,7 +1,5 @@
 {
   "name": "auto-react",
-  "humanReadableName-de": "Automatisches Reagieren",
-  "humanReadableName-en": "Automatic reactions",
   "fa-icon": "far fa-smile",
   "author": {
     "scnxOrgID": "1",
@@ -9,8 +7,6 @@
     "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-react",
-  "description-en": "Automatically reacts with selected emojis in selected channels or if a user gets pinged",
-  "description-de": "Reagiert automatisch mit ausgewählten Emojs in einem ausgewählten Channel und bei Pings",
   "events-dir": "/events",
   "config-example-files": [
     "configs/config.json",
@@ -18,5 +14,13 @@
   ],
   "tags": [
     "fun"
-  ]
+  ],
+  "humanReadableName": {
+    "en": "Automatic reactions",
+    "de": "Automatisches Reagieren"
+  },
+  "description": {
+    "en": "Automatically reacts with selected emojis in selected channels or if a user gets pinged",
+    "de": "Reagiert automatisch mit ausgewählten Emojs in einem ausgewählten Channel und bei Pings"
+  }
 }

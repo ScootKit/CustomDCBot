@@ -1,26 +1,41 @@
 {
+  "description": {},
+  "humanName": {
+    "en": "Replies",
+    "de": "Antworten"
+  },
   "filename": "replies.json",
-  "humanname-de": "Antworten",
-  "humanname-en": "Replies",
   "configElements": true,
   "content": [
     {
-      "field_name": "members",
-      "default": "",
-      "humanname-de": "Nutzer",
-      "humanname-en": "User",
-      "type": "string",
-      "description-en": "Here you can add a member to be replied on mentions of them",
-      "description-de": "Du kannst hier einen Nutzer für Antworten auf Erwähnungen dessen eintragen"
+      "name": "members",
+      "humanName": {
+        "en": "User",
+        "de": "Nutzer"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Here you can add a member to be replied on mentions of them",
+        "de": "Du kannst hier einen Nutzer für Antworten auf Erwähnungen dessen eintragen"
+      },
+      "type": "string"
     },
     {
-      "field_name": "reply",
-      "default": "",
-      "humanname-de": "Antwort",
-      "humanname-en": "Reply",
+      "name": "reply",
+      "humanName": {
+        "en": "Reply",
+        "de": "Antwort"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Here you can add the reply message",
+        "de": "Du kannst hier die Antwort eintragen"
+      },
       "type": "string",
-      "description-en": "Here you can add the reply message",
-      "description-de": "Du kannst hier die Antwort eintragen",
       "allowEmbed": true
     }
   ]

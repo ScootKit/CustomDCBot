@@ -1,19 +1,26 @@
 {
   "name": "serverinfo",
-  "humanReadableName-de": "Serverinformationen",
-  "humanReadableName-en": "Server-Information-Channel",
   "fa-icon": "fas fa-info-circle",
   "author": {
     "scnxOrgID": "1",
-    "name": "SCDerox (SC Network Team)",    "link": "https://github.com/SCDerox"
+    "name": "SCDerox (SC Network Team)",
+    "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/serverinfo",
-  "description-en": "Simple module to have a channel with a message that shows the users some information about your guild",
-  "description-de": "Fortgeschrittenes Modul, um einen Channel zu erstellen, in dem Server-Informationen als Embed angezeigt werden",
   "events-dir": "/events",
   "config-example-files": [
     "configs/config.json",
     "configs/fields.json"
   ],
-  "tags": ["community"]
+  "tags": [
+    "community"
+  ],
+  "humanReadableName": {
+    "en": "Server-Information-Channel",
+    "de": "Serverinformationen"
+  },
+  "description": {
+    "en": "Simple module to have a channel with a message that shows the users some information about your guild",
+    "de": "Fortgeschrittenes Modul, um einen Channel zu erstellen, in dem Server-Informationen als Embed angezeigt werden"
+  }
 }

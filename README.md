@@ -39,13 +39,18 @@ information about that in [this issue](https://github.com/SCNetwork/CustomDCBot/
 
 As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
 product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-, [get a membership](https://membership.sc-network.net) (also on [Patreon](https://patreon.com/scnetwork)), or donate [via Creditcard](https://scnx.app/scam) or [PayPal](https://paypal.me/therealscderox). Thank you so much <3
+, [get a membership](https://membership.sc-network.net) (also on [Patreon](https://patreon.com/scnetwork)), or
+donate [via Creditcard](https://scnx.app/scam) or [PayPal](https://paypal.me/therealscderox). Thank you so much <3
 
 ## Need help?
-Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in the [discussions-tab](https://github.com/SCNetwork/CustomDCBot/discussions). 
+
+Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in
+the [discussions-tab](https://github.com/SCNetwork/CustomDCBot/discussions).
 
 ## Need something even more custom?
-We are happy to give you a quote for individual requirements. Please email `sales@sc-network.net` with your requirements.  
+
+We are happy to give you a quote for individual requirements. Please email `sales@sc-network.net` with your
+requirements.
 
 ### Table of contents
 
@@ -156,17 +161,14 @@ translationable systems in your module.
       works)
     * `string`: Name of the string
     * `replace` (optional, object): Will replace `%<key>` in the source string by `<value>`
-* Localizations of configuration-files and user-editable strings: You can specify field-fields like `description`
-  , `default` and more in multiple languages. The bot / dashboard will choose the correct one automatically.
+* Localizations of configuration-files and user-editable strings: All localizable configuration fields are an object with values keyed based on language codes. Example: `{"description": {"de": "Beschreibung des Feldes", "en": "Description of the field"}`. Each field needs to have at least an English value, as every other language will default back to English.
 
 #### module.json
 
 Every module has to contain a `module.json` file with the following content:
 
 * `name` of the module. Should be the same as the name of your dictionary.
-* `humanReadableName`: English name of the module, shown to users
-* `humanReadableName-<lang>`: Replace `<lang>` with any supported language-code (currently: `de`, `en`); Name of the
-  module show to users (fallback order: `humanReadableName-<lang>`, `humanReadableName-en`, `humanReadableName`)
+* `humanReadableName`: [Localized](#localization) name of the module, shown to users
 * `author`
     * `name`: Name of the author
     * `link`: Link to the author
@@ -175,7 +177,7 @@ Every module has to contain a `module.json` file with the following content:
 * `openSourceURL`: URL to the Source-Code of the module licensed under an Open-Source-License (will show
   donation-banners in the SCNX Dashboard (if orgID is set) and qualifies (qualified) developers for financial support
   from the Open-Source-Pool of SCNX)
-* `description`: Short description of the module
+* `description`: [Localized](#localization)  short description of the module
 * `cli` (optional): [CLI-File](#cli-files) of your module
 * `commands-dir` (optional): Directory inside your module folder where all
   the [interaction-command-files](#interaction-command) are in
@@ -207,7 +209,8 @@ An interaction-command ("slash command") file has to export the following things
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
-    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command and your command's permissions can not be synced
+    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command and your
+      command's permissions can not be synced
     * `options`:
         * [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
           OR
@@ -256,9 +259,8 @@ use `node add-config-element-object.js <Path to example config file> <Path to yo
 An example config file should include the following things:
 
 * `filename`: Name of the generated config file
-* `humanname-<lang>`: Name of the file, shown to users (fallback order: `humanname-<lang>`, `humanname-en`, `filename`)
-* `description-<lang>`: Description of the file, shown to users (fallback order: `humanname-<lang>`, `humanname-en`
-  , `No description, but you can configure <name> here`)
+* `humanname`: [Localized](#localization)  name of the file, shown to users
+* `description`: [Localized](#localization)  description of the file, shown to users
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
 * `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
@@ -270,15 +272,12 @@ An example config file should include the following things:
         * `info`: Key by language; Information about the command; used to explain users what exactly they should do
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
-    * `default-<lang>`: Default value of this field (replace `<lang>` with a supported language code),
-      Fallback-Order: `default-<lang>`, `default-en`, `default`
-    * `type`: Can be `channelID`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
+    * `default`: [Localized](#localization) default value of this field
+    * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
       , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
-    * `description-<lang>`: Description of this field (replace `<lang>` with a supported language code),
-      Fallback-Order: `description-<lang>`, `description-en`, `description`
-    * `humanname-<lang>`: Name of this field show to users (replace `<lang>` with a supported language code),
-      Fallback-Order: `humanname-<lang>`, `humanname-en`, `humanname`, `field_name`
+    * `description`: [Localized](#localization) description of this field
+    * `humanname`: [Localized](#localization) name of this field show to users
     * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please
       use the build-in function in `src/functions/helpers.js`)
     * `content` (if type === `array`): Type (see `type` above) of every value
@@ -291,16 +290,15 @@ An example config file should include the following things:
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value
         * `value`: Type (see `type` above) of the value of every value
-    * `params-<lang>` (if type === `string`, array, optional, replace `<lang>` with supported language code,
-      Fallback-Order: `params-<lang>`, `params-en`, `params`)
+    * `params`: (if type === `string`, array, optional) Possible parameters
         * `name`: Name of the parameter (e.g. `%mention%`)
-        * `description`: Description of the parameter (e.g. `Mention of the user`)
-        * `fieldValue` (only if type === `select`): If set, the parameter can only be used if the value of the field
-          is `fieldValue`.
+        * `description`: [Localized](#localization) Description of the parameter (e.g. `Mention of the user`)
         * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail
           of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
-    * `disableKeyEdits` (if type === `keyed`): If enabled the user is not allowed to change the keys of this element
+    * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
+    * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file will not be rendered in the dashboard
+    * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in the dashboard
 
 #### `botReady`-Event and Config-Reload
 
