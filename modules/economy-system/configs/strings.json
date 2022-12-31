@@ -518,6 +518,23 @@
         "en": "Message that gets send when a User disables the Message-Drop message"
       },
       "type": "string"
+    },
+    {
+      "name": "rebuyItem",
+      "humanName": {
+        "en": "rebuy message",
+        "de": "Erneutkaufen Nachricht"
+      },
+      "default": {
+        "en": "You alread own this Item",
+        "de": "Du hast diese Item bereits gekauft"
+      },
+      "description": {
+        "en": "The message that is send when the user trys to buy an Item that he aleady own",
+        "de": "Die Nachricht, die gesendet wird, wenn der Nutzer das Item bereits besitzt"
+      },
+      "type": "string",
+      "allowEmbed": true
     }
   ]
 }

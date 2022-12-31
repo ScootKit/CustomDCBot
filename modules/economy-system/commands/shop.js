@@ -41,6 +41,10 @@ module.exports.subcommands = {
                 ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
             });
         }
+        if (interaction.member.roles.cache.has(item['role'])) return interaction.reply({
+            content: interaction.client.configurations['economy-system']['strings']['rebuyItem'],
+            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+        });
         const user = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: interaction.user.id
@@ -56,12 +60,12 @@ module.exports.subcommands = {
         interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': itemName['value']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
         interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'user-purchase', {
             u: interaction.user.tag,
-            i: item['value'],
+            i: item['name'],
             p: item['price']
         }));
         if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'user-purchase', {
             u: interaction.user.tag,
-            i: item['value'],
+            i: item['name'],
             p: item['price']
         }));
     },

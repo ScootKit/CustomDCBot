@@ -197,13 +197,13 @@ async function createShopMsg(client) {
 async function topTen(object, client) {
     if (object.length === 0) return;
     object.sort(function (x, y) {
-        return y.dataValues.balance - x.dataValues.balance;
+        return (y.dataValues.balance + y.dataValues.bank) - (x.dataValues.balance + x.dataValues.bank);
     });
     let retStr = '';
     let items = 10;
     if (object.length < items) items = object.length;
     for (let i = 0; i < items; i++) {
-        retStr = `${retStr}<@!${object[i].dataValues.id}>: ${object[i].dataValues.balance} ${client.configurations['economy-system']['config']['currencySymbol']}\n`;
+        retStr = `${retStr}<@!${object[i].dataValues.id}>: ${object[i].dataValues.balance + object[i].dataValues.bank} ${client.configurations['economy-system']['config']['currencySymbol']}\n`;
     }
     return retStr;
 }

@@ -781,6 +781,7 @@
   "economy-system": {
     "work-earned-money": "The user %u gained %m %c by working",
     "crime-earned-money": "The user %u gained %m %c by committing a crime",
+    "crime-loose-money": "The user %u lost %m %c by committing a crime",
     "message-drop-earned-money": "The user %u gained %m %c by getting a message drop",
     "rob-earned-money": "The user %u gained %m %c by robbing from %v",
     "weekly-earned-money": "The user %u gained %m %c by cashing in their weekly reward",
