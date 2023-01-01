@@ -340,7 +340,7 @@
       "name": "itemCreate",
       "humanName": {},
       "default": {
-        "en": "Successfully created the item %item%. It costs %price% and you get the role %role%"
+        "en": "Successfully created the item %name% with the id %id%. It costs %price% and you get the role %role%"
       },
       "description": {
         "en": "Message that gets send when a new shop item gets created"
@@ -349,9 +349,15 @@
       "allowEmbed": true,
       "params": [
         {
-          "name": "item",
+          "name": "name",
           "description": {
             "en": "Name of the created item"
+          }
+        },
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the created item"
           }
         },
         {
@@ -372,7 +378,7 @@
       "name": "itemDelete",
       "humanName": {},
       "default": {
-        "en": "Successfully deleted the item %item%."
+        "en": "Successfully deleted the item %name%."
       },
       "description": {
         "en": "Message that gets send when a new shop item gets deleted"
@@ -381,9 +387,17 @@
       "allowEmbed": true,
       "params": [
         {
-          "name": "item",
+          "name": "name",
           "description": {
-            "en": "Name of the deleted item"
+            "en": "Name of the deleted item",
+            "de": "Name des gelöschten Items"
+          }
+        },
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the deleted item",
+            "de": "ID des gelöschten Items"
           }
         }
       ]
@@ -535,6 +549,89 @@
       },
       "type": "string",
       "allowEmbed": true
+    },
+    {
+      "name": "multipleMatches",
+      "humanName": {
+        "en": "multiple matches",
+        "de": "mehrere Treffer"
+      },
+      "default": {
+        "en": "Multiple items match the query",
+        "de": "Mehrere Items entsprechen der Suche"
+      },
+      "description": {
+        "en": "The message that gets send when multiple items match the query",
+        "de": "Die Nachricht, die gesendet wird, wenn mehrere Items der Suche entsprechen"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "noMatches",
+      "humanName": {
+        "en": "no matches",
+        "de": "keine Treffer"
+      },
+      "default": {
+        "en": "The item with the id %id%/ the name %name% doesn't exists",
+        "de": "Das Item mit der ID %id%/ dem Namen %name% wurde nicht gefunden"
+      },
+      "description": {
+        "en": "The message that gets send when the item can't be found",
+        "de": "Die Nachricht, die gesendet wird, wenn das Item nicht gefunden wird"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "The specified ID",
+            "de": "Die angegebene ID"
+          }
+        },
+        {
+          "name": "name",
+          "description": {
+            "en": "The specified name",
+            "de": "Der angegebene Name"
+          }
+        }
+      ]
+    },
+    {
+      "name": "itemDuplicate",
+      "humanName": {
+        "en": "item duplicate",
+        "de": "Item Duplikat"
+      },
+      "default": {
+        "en": "There's already an item with the id %id% or the name %name%",
+        "de": "Es gibt schon ein Item mit der ID %id% oder dem Namen %name%"
+      },
+      "description": {
+        "en": "The message thag gets send when an item with the specified id or name already exists",
+        "de": "Die Nachricht, die gesendet wird, wenn ein Item mit dem angegebenen Namen oder der angegebenen ID schon existiert"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "The specified ID",
+            "de": "Die angegebene ID"
+          }
+        },
+        {
+          "name": "name",
+          "description": {
+            "en": "The specified name",
+            "de": "Der angegebene Name"
+          }
+        }
+      ]
     }
   ]
 }

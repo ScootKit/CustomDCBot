@@ -1,55 +1,64 @@
-const {createShopItem, editBalance, createShopMsg, deleteShopItem, createleaderboard} = require('../economy-system');
+const {createShopItem, editBalance, createShopMsg, deleteShopItem, createleaderboard, createUser} = require('../economy-system');
 const {embedType} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
+/**
+ * @param {*} interaction Interaction
+ * @returns {boolean} Result
+ */
+async function checkPerms(interaction) {
+    const result = interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) || interaction.client.config['botOperators'].includes(interaction.user.id);
+    if (!result) {
+        await interaction.reply({
+            content: interaction.client.strings['not_enough_permissions'],
+            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+        });
+    }
+    return result;
+}
+
 module.exports.subcommands = {
-    'add': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
-            return await interaction.reply({
-                content: interaction.client.strings['not_enough_permissions'],
-                ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-            });
-        }
-        const item = await interaction.options.get('item');
-        const price = await interaction.options.getInteger('price');
-        const role = await interaction.options.getRole('role', true);
-        await createShopItem(item['value'], price, role.id, interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {
-            '%item%': item['value'],
-            '%price%': price,
-            '%role%': role.name
-        }, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
-            u: interaction.user.tag,
-            i: item['value']
-        }));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'created-item', {
-            u: interaction.user.tag,
-            i: item['value']
-        }));
+    'add': async function (interaction) { // ToDo: Update Command
+        if (!checkPerms(interaction)) return;
+        await createShopItem(interaction);
     },
     'buy': async function (interaction) {
-        const itemName = await interaction.options.get('item');
-        const item = await interaction.client.models['economy-system']['Shop'].findOne({
+        const name = await interaction.options.get('itemName')['value'];
+        const id = await interaction.options.get('itemId')['value'];
+        const item = await interaction.client.models['economy-system']['Shop'].findAll({
             where: {
-                name: itemName['value']
+                [Op.or]: [
+                    {name: name},
+                    {id: id}
+                ]
             }
         });
-        if (!item) {
-            interaction.reply({
-                content: interaction.client.configurations['economy-system']['strings']['notFound'],
-                ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-            });
-        }
+        if (item.length < 1) return interaction.reply({
+            content: interaction.client.configurations['economy-system']['strings']['notFound'],
+            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+        });
+        else if (item.length > 1) return interaction.reply({
+            content: interaction.client.configurations['economy-system']['strings']['multipleMatches'],
+            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+        });
+
         if (interaction.member.roles.cache.has(item['role'])) return interaction.reply({
             content: interaction.client.configurations['economy-system']['strings']['rebuyItem'],
             ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
         });
-        const user = await interaction.client.models['economy-system']['Balance'].findOne({
+        let user = await interaction.client.models['economy-system']['Balance'].findOne({
             where: {
                 id: interaction.user.id
             }
         });
+        if (!user) {
+            createUser(interaction.client, interaction.user.id);
+            user = await interaction.client.models['economy-system']['Balance'].findOne({
+                where: {
+                    id: interaction.user.id
+                }
+            });
+        }
         if (user.balance < item.price) return interaction.reply({
             content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
             ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
@@ -74,23 +83,8 @@ module.exports.subcommands = {
         interaction.reply(msg);
     },
     'delete': async function (interaction) {
-        if (!interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) {
-            return await interaction.reply({
-                content: interaction.client.strings['not_enough_permissions'],
-                ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-            });
-        }
-        const item = interaction.options.get('item');
+        if (!checkPerms(interaction)) return;
         await deleteShopItem(item['value'], interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%item%': item['value']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
-            u: interaction.user.tag,
-            i: item['value']
-        }));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'delete-item', {
-            u: interaction.user.tag,
-            i: item['value']
-        }));
     }
 };
 
@@ -107,8 +101,14 @@ module.exports.config = {
                 {
                     type: 'STRING',
                     required: true,
-                    name: 'item',
-                    description: localize('economy-system', 'shop-option-description-item')
+                    name: 'itemName',
+                    description: localize('economy-system', 'shop-option-description-itemName')
+                },
+                {
+                    type: 'STRING',
+                    required: true,
+                    name: 'itemId',
+                    description: localize('economy-system', 'shop-option-description-itemID')
                 },
                 {
                     type: 'INTEGER',
@@ -131,9 +131,15 @@ module.exports.config = {
             options: [
                 {
                     type: 'STRING',
-                    required: true,
-                    name: 'item',
-                    description: localize('economy-system', 'shop-option-description-item')
+                    name: 'itemName',
+                    description: localize('economy-system', 'shop-option-description-itemName'),
+                    required: false
+                },
+                {
+                    type: 'STRING',
+                    name: 'itemId',
+                    description: localize('economy-system', 'shop-option-description-itemID'),
+                    required: false
                 }
             ]
         },
@@ -149,9 +155,15 @@ module.exports.config = {
             options: [
                 {
                     type: 'STRING',
-                    required: true,
-                    name: 'item',
-                    description: localize('economy-system', 'shop-option-description-item')
+                    name: 'itemName',
+                    description: localize('economy-system', 'shop-option-description-itemName'),
+                    required: false
+                },
+                {
+                    type: 'STRING',
+                    name: 'itemId',
+                    description: localize('economy-system', 'shop-option-description-itemID'),
+                    required: false
                 }
             ]
         }

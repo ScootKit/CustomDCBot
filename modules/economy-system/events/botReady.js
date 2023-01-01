@@ -4,8 +4,8 @@ const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (client) {
     // Migration
-    const dbVersion = await client.models['DatabaseSchemeVersion'].findOne({where: {model: 'economy_User'}});
-    if (!dbVersion) {
+    const dbVersionUser = await client.models['DatabaseSchemeVersion'].findOne({where: {model: 'economy_User'}});
+    if (!dbVersionUser) {
         client.logger.info('[economy-system] ' + localize('economy-system', 'migration-happening'));
         const data = await client.models['economy-system']['Balance'].findAll({attributes: ['id', 'balance']});
         await client.models['economy-system']['Balance'].sync({force: true});
@@ -25,6 +25,20 @@ module.exports.run = async function (client) {
         }
         client.logger.info('[economy-system] ' + localize('economy-system', 'migration-done'));
         await client.models['DatabaseSchemeVersion'].create({model: 'economy_Cooldown', version: 'V1'});
+    }
+    const dbVersionShop = await client.models['DatabaseSchemeVersion'].findOne({where: {model: 'economy_Shop'}});
+    if (!dbVersionShop) {
+        client.logger.info('[economy-system] ' + localize('economy-system', 'migration-happening'));
+        const data = await client.models['economy-system']['Shop'].findAll({attributes: ['name', 'price', 'role']});
+        await client.models['economy-system']['Shop'].sync({force: true});
+        i = 0;
+        for (const item of data) {
+            item['dataValues']['id'] = i;
+            await client.models['economy-system']['Shop'].create(item['dataValues']);
+            i++;
+        }
+        client.logger.info('[economy-system] ' + localize('economy-system', 'migration-done'));
+        await client.models['DatabaseSchemeVersion'].create({model: 'economy_Shop', version: 'V1'});
     }
     await createleaderboard(client);
     const job = schedule.scheduleJob('1 0 * * *', async () => { // Every day at 00:01 https://crontab.guru/#0_0_*_*_
