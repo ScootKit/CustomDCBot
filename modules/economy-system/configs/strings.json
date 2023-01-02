@@ -64,7 +64,57 @@
       "params": [
         {
           "name": "shopItems",
-          "description": {}
+          "description": {
+            "en": "All items of the shop (format specified below)",
+            "de": "Alle Items des Shops (Format wird unten angegeben)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "itemString",
+      "humanName": {
+        "en": "item string",
+        "de": "Item Text"
+      },
+      "default": {
+        "en": "**%id%** %itemName%, **price**: %price%, **sellcount**: %sellcount%\n",
+        "de": "**%id%** %itemName%: **Preis**: %price%, **Verkäufe**: %sellcount%\n"
+      },
+      "description": {
+        "en": "String for the items for the shop message",
+        "de": "Text für die Items für die Shop-Nachricht"
+      },
+      "type": "string",
+      "allowEmbed": false,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the item",
+            "de": "ID des Items"
+          }
+        },
+        {
+          "name": "itemName",
+          "description": {
+            "en": "Name of the item",
+            "de": "Name des Items"
+          }
+        },
+        {
+          "name": "price",
+          "description": {
+            "en": "Price of the item",
+            "de": "Preis des Items"
+          }
+        },
+        {
+          "name": "sellcount",
+          "description": {
+            "en": "Count of the sales of the item",
+            "de": "Anzahl, wie häufig das Item verkauft wurde"
+          }
         }
       ]
     },

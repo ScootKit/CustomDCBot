@@ -1,4 +1,4 @@
-const {createShopItem, editBalance, createShopMsg, deleteShopItem, createleaderboard, createUser} = require('../economy-system');
+const {createShopItem, editBalance, createShopMsg, deleteShopItem, createleaderboard, createUser, shopMsg} = require('../economy-system');
 const {embedType} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
@@ -21,6 +21,7 @@ module.exports.subcommands = {
     'add': async function (interaction) { // ToDo: Update Command
         if (!checkPerms(interaction)) return;
         await createShopItem(interaction);
+        shopMsg(interaction.client);
     },
     'buy': async function (interaction) {
         const name = await interaction.options.get('itemName')['value'];
@@ -77,6 +78,7 @@ module.exports.subcommands = {
             i: item['name'],
             p: item['price']
         }));
+        shopMsg(interaction.client);
     },
     'list': async function (interaction) {
         const msg = await createShopMsg(interaction.client);
@@ -85,6 +87,7 @@ module.exports.subcommands = {
     'delete': async function (interaction) {
         if (!checkPerms(interaction)) return;
         await deleteShopItem(item['value'], interaction.client);
+        shopMsg(interaction.client);
     }
 };
 

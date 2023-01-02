@@ -1,4 +1,4 @@
-const {createleaderboard} = require('../economy-system');
+const {createleaderboard, shopMsg} = require('../economy-system');
 const schedule = require('node-schedule');
 const {localize} = require('../../../src/functions/localize');
 
@@ -40,6 +40,7 @@ module.exports.run = async function (client) {
         client.logger.info('[economy-system] ' + localize('economy-system', 'migration-done'));
         await client.models['DatabaseSchemeVersion'].create({model: 'economy_Shop', version: 'V1'});
     }
+    await shopMsg(client);
     await createleaderboard(client);
     const job = schedule.scheduleJob('1 0 * * *', async () => { // Every day at 00:01 https://crontab.guru/#0_0_*_*_
         await createleaderboard(client);

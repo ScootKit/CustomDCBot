@@ -4,7 +4,7 @@
  * @author jateute
  */
 const { MessageEmbed } = require('discord.js');
-const {embedType} = require('../../src/functions/helpers');
+const {embedType, inputReplacer} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 const { Op } = require('sequelize');
 
@@ -285,15 +285,29 @@ async function deleteShopItem(interaction, pName, pId, client) {
 /**
  * Create the shop message
  * @param {Client} client Client
+ * @param {object} guild Object of the guild
+ * @param {boolean} ephemeral Should the message be ephemeral?
  * @returns {string}
  */
-async function createShopMsg(client) {
+async function createShopMsg(client, guild, ephemeral) {
     const items = await client.models['economy-system']['Shop'].findAll();
     let string = '';
     for (let i = 0; i < items.length; i++) {
-        string = `${string}**${items[i].dataValues.name}**: ${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}\n`;
+        string = `${string}${inputReplacer({'%id%': items[i].dataValues.id, '%itemName%': items[i].dataValues.name, '%price%': `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`, '%sellcount%': guild.roles.fetch(items[i].dataValues.role).members.size}, client.configurations['economy-system']['strings']['itemString'])}`;
     }
-    return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: true });
+    return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: ephemeral }); // Change somehow
+}
+
+/**
+ * Create a shop message in the configured channel
+ * @param {Client} client Client
+ */
+async function shopMsg(client) {
+    if (!client.configurations['economy-system']['config']['shopChannel'] || client.configurations['economy-system']['config']['shopChannel'] === '') return;
+    const channel = await client.channels.fetch(client.configurations['economy-system']['config']['shopChannel']);
+    if (!channel) return client.logger.fatal(`[economy-system] ` + localize('economy-system', 'channel-not-found'));
+    if (messages.last()) await messages.last().edit(await createShopMsg(client, channel.guild, false));
+    else channel.send(await createShopMsg(client, channel.guild, false));
 }
 
 /**
@@ -356,4 +370,5 @@ module.exports.createUser = createUser;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItem = deleteShopItem;
 module.exports.createShopMsg = createShopMsg;
+module.exports.shopMsg = shopMsg;
 module.exports.createleaderboard = leaderboard;

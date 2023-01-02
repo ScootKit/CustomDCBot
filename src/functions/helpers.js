@@ -39,6 +39,8 @@ function inputReplacer(args, input) {
     return input;
 }
 
+module.exports.inputReplacer = inputReplacer;
+
 /**
  * Will turn an object or string into embeds
  * @param  {string|array} input Input in the configuration file
