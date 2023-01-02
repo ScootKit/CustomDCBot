@@ -136,8 +136,8 @@ async function editBank(client, id, action, value) {
 async function createShopItem(interaction, pId, pName, pPrice, pRole, client) {
     return new Promise(async (resolve) => {
         if (interaction !== '') {
-            const name = await interaction.options.get('itemname')['value'];
-            const id = await interaction.options.get('itemId', true)['value'];
+            const name = await interaction.options.get('item-name')['value'];
+            const id = await interaction.options.get('item-id', true)['value'];
             const role = await interaction.options.getRole('role', true);
             const price = await interaction.options.getInteger('price');
             const model = interaction.client.models['economy-system']['Shop'];
@@ -157,7 +157,7 @@ async function createShopItem(interaction, pId, pName, pPrice, pRole, client) {
                     id: id,
                     name: name,
                     price: price,
-                    role: role
+                    role: role['id']
                 });
                 interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {
                     '%name%': name,
@@ -214,6 +214,70 @@ async function createShopItem(interaction, pId, pName, pPrice, pRole, client) {
 }
 
 /**
+ * Function to buy an item
+ * @param {*} interaction Interaction
+ * @param {*} id Id of the item
+ * @param {*} name Name of the item
+ */
+async function buyShopItem(interaction, id, name) {
+    if (!interaction) return;
+    const item = await interaction.client.models['economy-system']['Shop'].findAll({
+        where: {
+            [Op.or]: [
+                {name: name},
+                {id: id}
+            ]
+        }
+    });
+    if (item.length < 1) return interaction.reply({
+        content: interaction.client.configurations['economy-system']['strings']['notFound'],
+        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    });
+    else if (item.length > 1) return interaction.reply({
+        content: interaction.client.configurations['economy-system']['strings']['multipleMatches'],
+        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    });
+
+    if (interaction.member.roles.cache.has(item[0]['role'])) return interaction.reply({
+        content: interaction.client.configurations['economy-system']['strings']['rebuyItem'],
+        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    });
+    let user = await interaction.client.models['economy-system']['Balance'].findOne({
+        where: {
+            id: interaction.user.id
+        }
+    });
+    if (!user) {
+        createUser(interaction.client, interaction.user.id);
+        user = await interaction.client.models['economy-system']['Balance'].findOne({
+            where: {
+                id: interaction.user.id
+            }
+        });
+    }
+    if (user.balance < item[0]['price']) return interaction.reply({
+        content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
+        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    });
+    await editBalance(interaction.client, interaction.user.id, 'remove', item[0]['price']);
+    console.log(item[0]['role']);
+    await interaction.member.roles.add(item[0]['role']);
+    leaderboard(interaction.client);
+    interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': item[0]['name']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+    interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'user-purchase', {
+        u: interaction.user.tag,
+        i: item[0]['name'],
+        p: item[0]['price']
+    }));
+    if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'user-purchase', {
+        u: interaction.user.tag,
+        i: item[0]['name'],
+        p: item[0]['price']
+    }));
+    shopMsg(interaction.client);
+}
+
+/**
  * Function to delete a shop-item
  * @param {*} interaction Interaction (if you specify a name or ID, set this to an empty string)
  * @param {string} pName Name of the item
@@ -223,8 +287,8 @@ async function createShopItem(interaction, pId, pName, pPrice, pRole, client) {
 async function deleteShopItem(interaction, pName, pId, client) {
     return new Promise(async (resolve) => {
         if (interaction !== '') { // interaction mode
-            const name = interaction.options.get('itemName')['value'];
-            const id = interaction.options.get('itemId')['value'];
+            const name = interaction.options.get('item-name')['value'];
+            const id = interaction.options.get('item-id')['value'];
             const model = await interaction.client.models['economy-system']['Shop'].findAll({
                 where: {
                     [Op.or]: [
@@ -292,10 +356,30 @@ async function deleteShopItem(interaction, pName, pId, client) {
 async function createShopMsg(client, guild, ephemeral) {
     const items = await client.models['economy-system']['Shop'].findAll();
     let string = '';
+    const options = [];
     for (let i = 0; i < items.length; i++) {
-        string = `${string}${inputReplacer({'%id%': items[i].dataValues.id, '%itemName%': items[i].dataValues.name, '%price%': `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`, '%sellcount%': guild.roles.fetch(items[i].dataValues.role).members.size}, client.configurations['economy-system']['strings']['itemString'])}`;
+        const roles = await guild.roles.fetch(items[i].dataValues.role);
+        string = `${string}${inputReplacer({'%id%': items[i].dataValues.id, '%itemName%': items[i].dataValues.name, '%price%': `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`, '%sellcount%': roles.members.size}, client.configurations['economy-system']['strings']['itemString'])}`;
+        options.push({
+            label: items[i].dataValues.name,
+            description: localize('economy-system', 'select-menu-price', {
+                p: `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`
+            }),
+            value: items[i].dataValues.id
+        });
     }
-    return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: ephemeral }); // Change somehow
+    const components = [{
+        type: 'ACTION_ROW',
+        components: [{
+            type: 3,
+            placeholder: localize('economy-system', 'nothing-selected'),
+            'min_values': 1,
+            'max_values': 1,
+            options: options,
+            'custom_id': 'economy-system_shop-select'
+        }]
+    }];
+    return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: ephemeral, components: components });
 }
 
 /**
@@ -306,6 +390,7 @@ async function shopMsg(client) {
     if (!client.configurations['economy-system']['config']['shopChannel'] || client.configurations['economy-system']['config']['shopChannel'] === '') return;
     const channel = await client.channels.fetch(client.configurations['economy-system']['config']['shopChannel']);
     if (!channel) return client.logger.fatal(`[economy-system] ` + localize('economy-system', 'channel-not-found'));
+    const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     if (messages.last()) await messages.last().edit(await createShopMsg(client, channel.guild, false));
     else channel.send(await createShopMsg(client, channel.guild, false));
 }
@@ -367,6 +452,7 @@ async function leaderboard(client) {
 module.exports.editBalance = editBalance;
 module.exports.editBank = editBank;
 module.exports.createUser = createUser;
+module.exports.buyShopItem = buyShopItem;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItem = deleteShopItem;
 module.exports.createShopMsg = createShopMsg;

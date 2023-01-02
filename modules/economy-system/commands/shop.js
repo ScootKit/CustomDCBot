@@ -1,5 +1,4 @@
-const {createShopItem, editBalance, createShopMsg, deleteShopItem, createleaderboard, createUser, shopMsg} = require('../economy-system');
-const {embedType} = require('../../../src/functions/helpers');
+const {createShopItem, createShopMsg, deleteShopItem, shopMsg, buyShopItem} = require('../economy-system');
 const {localize} = require('../../../src/functions/localize');
 
 /**
@@ -24,64 +23,14 @@ module.exports.subcommands = {
         shopMsg(interaction.client);
     },
     'buy': async function (interaction) {
-        const name = await interaction.options.get('itemName')['value'];
-        const id = await interaction.options.get('itemId')['value'];
-        const item = await interaction.client.models['economy-system']['Shop'].findAll({
-            where: {
-                [Op.or]: [
-                    {name: name},
-                    {id: id}
-                ]
-            }
-        });
-        if (item.length < 1) return interaction.reply({
-            content: interaction.client.configurations['economy-system']['strings']['notFound'],
-            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-        });
-        else if (item.length > 1) return interaction.reply({
-            content: interaction.client.configurations['economy-system']['strings']['multipleMatches'],
-            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-        });
-
-        if (interaction.member.roles.cache.has(item['role'])) return interaction.reply({
-            content: interaction.client.configurations['economy-system']['strings']['rebuyItem'],
-            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-        });
-        let user = await interaction.client.models['economy-system']['Balance'].findOne({
-            where: {
-                id: interaction.user.id
-            }
-        });
-        if (!user) {
-            createUser(interaction.client, interaction.user.id);
-            user = await interaction.client.models['economy-system']['Balance'].findOne({
-                where: {
-                    id: interaction.user.id
-                }
-            });
-        }
-        if (user.balance < item.price) return interaction.reply({
-            content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
-            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-        });
-        await editBalance(interaction.client, interaction.user.id, 'remove', item.price);
-        await interaction.member.roles.add(item.role);
-        createleaderboard(interaction.client);
-        interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': itemName['value']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'user-purchase', {
-            u: interaction.user.tag,
-            i: item['name'],
-            p: item['price']
-        }));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'user-purchase', {
-            u: interaction.user.tag,
-            i: item['name'],
-            p: item['price']
-        }));
-        shopMsg(interaction.client);
+        let name = await interaction.options.get('item-name');
+        if (name) name = name['value'];
+        let id = await interaction.options.get('item-id')['value'];
+        if (id) id = id['value'];
+        buyShopItem(interaction, id, name);
     },
     'list': async function (interaction) {
-        const msg = await createShopMsg(interaction.client);
+        const msg = await createShopMsg(interaction.client, interaction.guild, !interaction.client.configurations['economy-system']['config']['publicCommandReplies']);
         interaction.reply(msg);
     },
     'delete': async function (interaction) {
@@ -104,13 +53,13 @@ module.exports.config = {
                 {
                     type: 'STRING',
                     required: true,
-                    name: 'itemName',
+                    name: 'item-name',
                     description: localize('economy-system', 'shop-option-description-itemName')
                 },
                 {
                     type: 'STRING',
                     required: true,
-                    name: 'itemId',
+                    name: 'item-id',
                     description: localize('economy-system', 'shop-option-description-itemID')
                 },
                 {
@@ -134,13 +83,13 @@ module.exports.config = {
             options: [
                 {
                     type: 'STRING',
-                    name: 'itemName',
+                    name: 'item-name',
                     description: localize('economy-system', 'shop-option-description-itemName'),
                     required: false
                 },
                 {
                     type: 'STRING',
-                    name: 'itemId',
+                    name: 'item-id',
                     description: localize('economy-system', 'shop-option-description-itemID'),
                     required: false
                 }
@@ -158,13 +107,13 @@ module.exports.config = {
             options: [
                 {
                     type: 'STRING',
-                    name: 'itemName',
+                    name: 'item-name',
                     description: localize('economy-system', 'shop-option-description-itemName'),
                     required: false
                 },
                 {
                     type: 'STRING',
-                    name: 'itemId',
+                    name: 'item-id',
                     description: localize('economy-system', 'shop-option-description-itemID'),
                     required: false
                 }

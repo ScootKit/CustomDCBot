@@ -834,7 +834,9 @@
     "command-description-destroy": "Destroy the whole economy (deletes all Database-Entrys)",
     "option-description-confirm": "Confirm, that you really want to destroy the whole economy",
     "destroy-cancel-reply": "You're lucky. You stppoed me in the last moment before I destroyed the economy",
-    "destroy-reply": "Ok... I'll destroy the whole economy"
+    "destroy-reply": "Ok... I'll destroy the whole economy",
+    "nothing-selected": "Nothing selected",
+    "select-menu-price": "Price: %p"
   },
   "status-role": {
     "fulfilled": "Status-role condition is fulfilled",
