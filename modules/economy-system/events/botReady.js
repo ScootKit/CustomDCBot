@@ -31,7 +31,7 @@ module.exports.run = async function (client) {
         client.logger.info('[economy-system] ' + localize('economy-system', 'migration-happening'));
         const data = await client.models['economy-system']['Shop'].findAll({attributes: ['name', 'price', 'role']});
         await client.models['economy-system']['Shop'].sync({force: true});
-        i = 0;
+        let i = 0;
         for (const item of data) {
             item['dataValues']['id'] = i;
             await client.models['economy-system']['Shop'].create(item['dataValues']);
