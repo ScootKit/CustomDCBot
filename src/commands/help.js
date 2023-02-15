@@ -14,7 +14,7 @@ module.exports.run = async function (interaction) {
     const embedFields = [];
     for (const module in modules) {
         let content = '';
-        if (module !== 'none') content = (interaction.client.modules[module]['config'][`description-${interaction.client.locale}`] || interaction.client.modules[module]['config'][`description-en`] || interaction.client.modules[module]['config'][`description-en`]) + '\n';
+        if (module !== 'none') content = (interaction.client.modules[module].config.description[interaction.client.locale] || interaction.client.modules[module].config.description.en || interaction.client.modules[module].config.description.de) + '\n';
         for (let d of modules[module]) {
             content = content + `\n\`/${d.name}\`: ${d.description}`;
             d = {...d};
@@ -42,7 +42,7 @@ module.exports.run = async function (interaction) {
             }
         }
         embedFields.push({
-            name: module === 'none' ? interaction.client.strings.helpembed.build_in : `${interaction.client.modules[module]['config'][`humanReadableName-${interaction.client.locale}`] || interaction.client.modules[module]['config'][`humanReadableName-en`] || interaction.client.modules[module]['config'][`humanReadableName`] || module}`,
+            name: module === 'none' ? interaction.client.strings.helpembed.build_in : `${interaction.client.modules[module].config.humanReadableName[interaction.client.locale] || interaction.client.modules[module].config.humanReadableName.en || interaction.client.modules[module].config.humanReadableName.de || module}`,
             value: truncate(content, 1024)
         });
     }

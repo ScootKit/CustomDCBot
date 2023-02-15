@@ -90,7 +90,7 @@ can verify this by looking at the source code, which you should do before execut
 You can find all the configuration-files inside your `config` folder. Every **enabled module** will have their own
 folder with config-files inside them. **These files are generated automatically**. Every module has slightly different
 configuration options. Every module has example files. Inside these files are more information about every configuration
-option.  
+option.
 Some config values also support [embeds](https://discordjs.guide/popular-topics/embeds.html). This is the case
 if `allowEmbed` is true.\
 You either input a string (normal discord message), or an embed object with the following values:
@@ -125,10 +125,10 @@ config file, so the bot can automatically check configs and do all the boring st
 As per the [License](LICENSE) you *have* to make *every* of your modules publicly available under the same license.
 Please read the license for more information.
 
-**Before you make a module**: Please create an issue with your suggestion and claim that you are working on it so nobody
-is working on the same thing (;\
-Also please read the [Rues for modules](#rules-for-modules).\
-**Submit a module**: Simply create a pullrequest, and we will check your module and merge it then (;
+**Before you make a module**:
+Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same thing (;\
+Also please read the [Rules for modules](#rules-for-modules).\
+**Submit a module**: Simply create a pull request, and we will check your module and merge it then (;
 
 #### Rules for modules
 
@@ -156,7 +156,7 @@ translationable systems in your module.
 
 * Localizations of not-user-editable strings: Use `localize(key, string, replace = {})` from `src/functions/localize.js`
   to localize strings. Translations of these strings happen
-  on [Weblate]()https://localize.sc-network.net/projects/custombot/locales/
+  on [Weblate](https://localize.sc-network.net/projects/custombot/locales/)
     * `key`: Key of the string (usually your module name, check out any files in `locales` to get an idea how this
       works)
     * `string`: Name of the string
