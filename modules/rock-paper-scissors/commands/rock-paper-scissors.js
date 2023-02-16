@@ -114,8 +114,8 @@ function resetGame(game) {
  */
 function mentionUsers(game) {
     let mention = '';
-    if (game.state1 == 'none') mention += '<@' + game.user1.id + '>';
-    if (!game.user2.bot && game.state2 == 'none') mention += (mention == '' ? '' : ' ') + '<@' + game.user2.id + '>';
+    if (game.state1 === 'none') mention = mention + '<@' + game.user1.id + '>';
+    if (!game.user2.bot && game.state2 === 'none') mention = mention + (mention === '' ? '' : ' ') + '<@' + game.user2.id + '>';
     return mention || null;
 }
 
@@ -156,7 +156,7 @@ module.exports.run = async function (interaction) {
         });
         confirmed = await confirmmsg.awaitMessageComponent({filter: i => i.user.id === user2.id, componentType: 'BUTTON', time: 120000}).catch(() => {});
         if (!confirmed) return confirmed.update({content: localize('rock-paper-scissors', 'invite-expired', {u: interaction.user.toString(), i: '<@' + user2.id + '>'}), components: []});
-        if (confirmed.customId == 'deny-invite') return confirmed.update({content: localize('rock-paper-scissors', 'invite-denied', {u: interaction.user.toString(), i: '<@' + user2.id + '>'}), components: []})
+        if (confirmed.customId === 'deny-invite') return confirmed.update({content: localize('rock-paper-scissors', 'invite-denied', {u: interaction.user.toString(), i: '<@' + user2.id + '>'}), components: []});
     }
 
     const embed = new MessageEmbed()
