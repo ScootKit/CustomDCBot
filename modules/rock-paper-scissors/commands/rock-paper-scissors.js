@@ -110,15 +110,46 @@ function resetGame(game) {
 module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user');
 
-    const embed = new MessageEmbed()
-        .setTitle(localize('rock-paper-scissors', 'rps-title'))
-        .setDescription(localize('rock-paper-scissors', 'rps-description')); // Something like 'Choose your weapon!' or 'Choose your move!'
-
     let user2;
     if (member && interaction.user.id !== member.id) user2 = member.user;
     else user2 = interaction.client.user;
 
-    const msg = await interaction.reply({embeds: [embed], components: [rpsrow(), generatePlayer(interaction.user, user2, 'none', user2.bot ? 'selected' : 'none')], fetchReply: true});
+    if (!user2.bot) {
+        const confirmmsg = await interaction.reply({
+            content: localize('rock-paper-scissors', 'challenge-message', {t: member.toString(), u: interaction.user.toString()}),
+            allowedMentions: {
+                users: [user2.id]
+            },
+            fetchReply: true,
+            components: [
+                {
+                    type: 'ACTION_ROW',
+                    components: [
+                        {
+                            type: 'BUTTON',
+                            style: 'PRIMARY',
+                            customId: 'accept-invite',
+                            label: localize('tic-tac-toe', 'accept-invite')
+                        },
+                        {
+                            type: 'BUTTON',
+                            style: 'SECONDARY',
+                            customId: 'deny-invite',
+                            label: localize('tic-tac-toe', 'deny-invite')
+                        }
+                    ]
+                }
+            ]
+        });
+        const confirmed = await confirmmsg.awaitMessageComponent({filter: i => i.user.id === user2.id, componentType: 'BUTTON', time: 120000}).catch(() => {});
+        if (!confirmed) return interaction.editReply({content: localize('rock-paper-scissors', 'invite-expired', {u: interaction.user.toString(), i: "<@" + user2.id + ">"}), components: []});
+    }
+
+    const embed = new MessageEmbed()
+        .setTitle(localize('rock-paper-scissors', 'rps-title'))
+        .setDescription(localize('rock-paper-scissors', 'rps-description')); // Something like 'Choose your weapon!' or 'Choose your move!'
+
+    const msg = await interaction.editReply({embeds: [embed], components: [rpsrow(), generatePlayer(interaction.user, user2, 'none', user2.bot ? 'selected' : 'none')], fetchReply: true});
 
     rpsgames[msg.id] = {
         user1: interaction.user,
