@@ -15,9 +15,10 @@ const stateemoji = {
     selected: '✅'
 }
 
-/*
+/**
+ * Generates a row with the buttons for the game
  * @returns {MessageActionRow}
-*/
+ */
 function rpsrow() {
     return new MessageActionRow()
         .addComponents(
@@ -43,9 +44,10 @@ function rpsrow() {
         );
 }
 
-/*
+/**
+ * Generates a row with a play again button
  * @returns {MessageActionRow}
-*/
+ */
 function playagain() {
     return new MessageActionRow()
         .addComponents(
@@ -56,7 +58,8 @@ function playagain() {
         );
 }
 
-/*
+/**
+ * Generates a row which displays the players and their current state
  * @param {User} user1
  * @param {User} user2
  * @param {String} state1
@@ -88,7 +91,7 @@ function generatePlayer(user1, user2, state1, state2) {
                 .setStyle(statestyle[state2])
                 .setDisabled(true)
         );
-};
+}
 
 module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user');
@@ -110,11 +113,7 @@ module.exports.run = async function (interaction) {
         state2: user2.bot ? 'selected' : 'none'
     };
 
-    const collector = msg.createMessageComponentCollector({componentType: 'BUTTON', filter: i => {
-        if (i.user.id === interaction.user.id || i.user.id === user2.id) return true;
-        i.deferUpdate();
-        return false;
-    }});
+    const collector = msg.createMessageComponentCollector({componentType: 'BUTTON', filter: i => i.user.id === interaction.user.id || i.user.id === user2.id});
     collector.on('collect', i => {
         const game = rpsgames[i.message.id];
 
