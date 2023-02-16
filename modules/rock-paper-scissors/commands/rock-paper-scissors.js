@@ -107,6 +107,18 @@ function resetGame(game) {
     return [rpsrow(), generatePlayer(game.user1, game.user2, game.state1, game.state2)];
 }
 
+/**
+ * Generates a string with the users to mention
+ * @param {Object} game
+ * @returns string
+ */
+function mentionUsers(game) {
+    let mention = '';
+    if (game.state1 == 'none') mention += '<@' + game.user1.id + '>';
+    if (!game.user2.bot && game.state2 == 'none') mention += (mention == '' ? '' : ' ') + '<@' + game.user2.id + '>';
+    return mention || null;
+}
+
 module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user');
 
@@ -114,6 +126,7 @@ module.exports.run = async function (interaction) {
     if (member && interaction.user.id !== member.id) user2 = member.user;
     else user2 = interaction.client.user;
 
+    let confirmed;
     if (!user2.bot) {
         const confirmmsg = await interaction.reply({
             content: localize('rock-paper-scissors', 'challenge-message', {t: member.toString(), u: interaction.user.toString()}),
@@ -141,15 +154,16 @@ module.exports.run = async function (interaction) {
                 }
             ]
         });
-        const confirmed = await confirmmsg.awaitMessageComponent({filter: i => i.user.id === user2.id, componentType: 'BUTTON', time: 120000}).catch(() => {});
-        if (!confirmed) return interaction.editReply({content: localize('rock-paper-scissors', 'invite-expired', {u: interaction.user.toString(), i: "<@" + user2.id + ">"}), components: []});
+        confirmed = await confirmmsg.awaitMessageComponent({filter: i => i.user.id === user2.id, componentType: 'BUTTON', time: 120000}).catch(() => {});
+        if (!confirmed) return confirmed.update({content: localize('rock-paper-scissors', 'invite-expired', {u: interaction.user.toString(), i: '<@' + user2.id + '>'}), components: []});
+        if (confirmed.customId == 'deny-invite') return confirmed.update({content: localize('rock-paper-scissors', 'invite-denied', {u: interaction.user.toString(), i: '<@' + user2.id + '>'}), components: []})
     }
 
     const embed = new MessageEmbed()
         .setTitle(localize('rock-paper-scissors', 'rps-title'))
         .setDescription(localize('rock-paper-scissors', 'rps-description')); // Something like 'Choose your weapon!' or 'Choose your move!'
 
-    const msg = await interaction.editReply({embeds: [embed], components: [rpsrow(), generatePlayer(interaction.user, user2, 'none', user2.bot ? 'selected' : 'none')], fetchReply: true});
+    const msg = await (confirmed || interaction)[confirmed ? 'update' : 'reply']({content: '<@' + interaction.user.id + '>' + (user2.bot ? '' : ' <@' + user2.id + '>'), embeds: [embed], components: [rpsrow(), generatePlayer(interaction.user, user2, 'none', user2.bot ? 'selected' : 'none')], fetchReply: true});
 
     rpsgames[msg.id] = {
         user1: interaction.user,
@@ -163,7 +177,7 @@ module.exports.run = async function (interaction) {
     collector.on('collect', i => {
         const game = rpsgames[i.message.id];
 
-        if (i.customId === 'rps_playagain') return i.update({components: resetGame(game)});
+        if (i.customId === 'rps_playagain') return i.update({components: resetGame(game), content: mentionUsers(game)});
 
         if (i.user.id === game.user1.id) {
             game.state1 = 'selected';
@@ -174,7 +188,7 @@ module.exports.run = async function (interaction) {
         }
 
         rpsgames[i.message.id] = game;
-        if (!game.selected1 || (!game.selected2 && !user2.bot)) return i.update({components: [rpsrow(), generatePlayer(game.user1, game.user2, game.state1, game.state2)]});
+        if (!game.selected1 || (!game.selected2 && !user2.bot)) return i.update({content: mentionUsers(game), components: [rpsrow(), generatePlayer(game.user1, game.user2, game.state1, game.state2)]});
 
         let resU1 = '';
         let components = [];
@@ -206,7 +220,9 @@ module.exports.run = async function (interaction) {
             rpsgames[i.message.id] = game;
 
             if (picked === resU1) embed.setTitle(localize('rock-paper-scissors', 'its-a-tie-try-again'));
+            else embed.setTitle(localize('rock-paper-scissors', 'rps-title'));
             embed.setDescription('<@' + game.user1.id + '>: **' + resU1 + '**' + (resU1 !== picked ? ' (' + win1 + ')' : '') + '\n<@' + game.user2.id + '>: **' + picked + '**' + (resU1 !== picked ? ' (' + win2 + ')' : ''));
+
             if (picked === resU1) components = resetGame(game);
             else components = [generatePlayer(game.user1, game.user2, win1, win2), playagain()];
         } else {
@@ -240,11 +256,13 @@ module.exports.run = async function (interaction) {
             rpsgames[i.message.id] = game;
 
             if (resU1 === resU2) embed.setTitle(localize('rock-paper-scissors', 'its-a-tie-try-again'));
+            else embed.setTitle(localize('rock-paper-scissors', 'rps-title'));
             embed.setDescription('<@' + game.user1.id + '>: **' + resU2 + '**' + (resU1 !== resU2 ? ' (' + win2 + ')' : '') + '\n<@' + game.user2.id + '>: **' + resU1 + '**' + (resU1 !== resU2 ? ' (' + win1 + ')' : ''));
+
             if (resU1 === resU2) components = resetGame(game);
             else components = [generatePlayer(game.user1, game.user2, win2, win1), playagain()];
         }
-        i.update({embeds: [embed], components});
+        i.update({content: mentionUsers(game), embeds: [embed], components});
     });
 };
 
