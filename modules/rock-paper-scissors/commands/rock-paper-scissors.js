@@ -1,7 +1,7 @@
 const {localize} = require('../../../src/functions/localize');
 const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
 
-var rpsgames = [];
+const rpsgames = [];
 const moves = ['🪨 ' + localize('rock-paper-scissors', 'stone'), '📄 ' + localize('rock-paper-scissors', 'paper'), '✂️ ' + localize('rock-paper-scissors', 'scissors')];
 const statestyle = {
     none: 'PRIMARY',
@@ -10,45 +10,66 @@ const statestyle = {
     [localize('rock-paper-scissors', 'won')]: 'SUCCESS',
     [localize('rock-paper-scissors', 'lost')]: 'DANGER'
 };
+const stateemoji = {
+    none: '⏰',
+    selected: '✅'
+}
 
-const rpsrow = () => new MessageActionRow()
-    .addComponents(
-        new MessageButton()
-            .setCustomId('rps_scissors')
-            .setLabel(localize('rock-paper-scissors', 'scissors'))
-            .setStyle('PRIMARY')
-            .setEmoji('✂️')
-    )
-    .addComponents(
-        new MessageButton()
-            .setCustomId('rps_stone')
-            .setLabel(localize('rock-paper-scissors', 'stone'))
-            .setStyle('PRIMARY')
-            .setEmoji('🪨')
-    )
-    .addComponents(
-        new MessageButton()
-            .setCustomId('rps_paper')
-            .setLabel(localize('rock-paper-scissors', 'paper'))
-            .setStyle('PRIMARY')
-            .setEmoji('📄')
-    );
+/*
+ * @returns {MessageActionRow}
+*/
+function rpsrow() {
+    return new MessageActionRow()
+        .addComponents(
+            new MessageButton()
+                .setCustomId('rps_scissors')
+                .setLabel(localize('rock-paper-scissors', 'scissors'))
+                .setStyle('PRIMARY')
+                .setEmoji('✂️')
+        )
+        .addComponents(
+            new MessageButton()
+                .setCustomId('rps_stone')
+                .setLabel(localize('rock-paper-scissors', 'stone'))
+                .setStyle('PRIMARY')
+                .setEmoji('🪨')
+        )
+        .addComponents(
+            new MessageButton()
+                .setCustomId('rps_paper')
+                .setLabel(localize('rock-paper-scissors', 'paper'))
+                .setStyle('PRIMARY')
+                .setEmoji('📄')
+        );
+}
 
-const playagain = () => new MessageActionRow()
-    .addComponents(
-        new MessageButton()
-            .setCustomId('rps_playagain')
-            .setLabel(localize('rock-paper-scissors', 'play-again'))
-            .setStyle('SECONDARY')
-    );
+/*
+ * @returns {MessageActionRow}
+*/
+function playagain() {
+    return new MessageActionRow()
+        .addComponents(
+            new MessageButton()
+                .setCustomId('rps_playagain')
+                .setLabel(localize('rock-paper-scissors', 'play-again'))
+                .setStyle('SECONDARY')
+        );
+}
 
+/*
+ * @param {User} user1
+ * @param {User} user2
+ * @param {String} state1
+ * @param {String} state2
+ * @returns {MessageActionRow}
+*/
 function generatePlayer(user1, user2, state1, state2) {
     return new MessageActionRow()
         .addComponents(
             new MessageButton()
                 .setCustomId('user1')
                 .setLabel(user1.tag)
-                .setEmoji(state1 === 'none' ? '⏰' : (state1 === 'selected' ? '✅' : ''))
+                .setEmoji(stateemoji[state1] || '')
                 .setStyle(statestyle[state1])
                 .setDisabled(true)
         )
@@ -63,7 +84,7 @@ function generatePlayer(user1, user2, state1, state2) {
             new MessageButton()
                 .setCustomId('user2')
                 .setLabel(user2.tag)
-                .setEmoji(state2 === 'none' ? '⏰' : (state2 === 'selected' ? '✅' : ''))
+                .setEmoji(stateemoji[state2] || '')
                 .setStyle(statestyle[state2])
                 .setDisabled(true)
         );
@@ -94,8 +115,8 @@ module.exports.run = async function (interaction) {
         i.deferUpdate();
         return false;
     }});
-    collector.on('collect', async i => {
-        let game = rpsgames[i.message.id];
+    collector.on('collect', i => {
+        const game = rpsgames[i.message.id];
 
         if (i.customId === 'rps_playagain') {
             game.state1 = 'none';
@@ -120,7 +141,7 @@ module.exports.run = async function (interaction) {
         let resU1 = '';
         let components = [];
         if (user2.bot) {
-            var picked = moves[Math.floor(Math.random() * 3)];
+            const picked = moves[Math.floor(Math.random() * 3)];
 
             if (i.customId === 'rps_stone') resU1 = moves[0];
             else if (i.customId === 'rps_paper') resU1 = moves[1];
@@ -147,7 +168,7 @@ module.exports.run = async function (interaction) {
             rpsgames[i.message.id] = game;
 
             if (picked === resU1) embed.setTitle(localize('rock-paper-scissors', 'its-a-tie'));
-            embed.setDescription('<@' + game.user1.id + '>: **' + resU1 + '**' + (resU1 !== resU2 ? ' (' + win1 + ')' : '') + '\n<@' + game.user2.id + '>: **' + picked + '**' + (resU1 !== resU2 ? ' (' + win2 + ')' : ''));
+            embed.setDescription('<@' + game.user1.id + '>: **' + resU1 + '**' + (resU1 !== picked ? ' (' + win1 + ')' : '') + '\n<@' + game.user2.id + '>: **' + picked + '**' + (resU1 !== picked ? ' (' + win2 + ')' : ''));
             components = [generatePlayer(game.user1, game.user2, win1, win2), playagain()];
         } else {
             let resU2 = '';
