@@ -200,7 +200,7 @@ module.exports.run = async function (interaction) {
             rpsgames[i.message.id] = game;
 
             if (resU1 === resU2) embed.setTitle(localize('rock-paper-scissors', 'its-a-tie'));
-            embed.setDescription('<@' + game.user1.id + '>: **' + resU2 + '**' + (resU1 !== resU2 ? ' (' + win1 + ')' : '') + '\n<@' + game.user2.id + '>: **' + resU1 + '**' + (resU1 !== resU2 ? ' (' + win2 + ')' : ''));
+            embed.setDescription('<@' + game.user1.id + '>: **' + resU2 + '**' + (resU1 !== resU2 ? ' (' + win2 + ')' : '') + '\n<@' + game.user2.id + '>: **' + resU1 + '**' + (resU1 !== resU2 ? ' (' + win1 + ')' : ''));
             components = [generatePlayer(game.user1, game.user2, win2, win1), playagain()];
         }
         i.update({embeds: [embed], components});
