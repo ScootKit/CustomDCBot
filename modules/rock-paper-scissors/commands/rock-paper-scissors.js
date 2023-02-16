@@ -13,7 +13,7 @@ const statestyle = {
 const stateemoji = {
     none: '⏰',
     selected: '✅'
-}
+};
 
 /**
  * Generates a row with the buttons for the game
@@ -65,7 +65,7 @@ function playagain() {
  * @param {String} state1
  * @param {String} state2
  * @returns {MessageActionRow}
-*/
+ */
 function generatePlayer(user1, user2, state1, state2) {
     return new MessageActionRow()
         .addComponents(
