@@ -865,5 +865,21 @@
         "color-option-description": "Die Farbe deiner Custom Rolle",
         "remove-subcommand-description": "Entferne deine Custom Rolle",
         "confirm-option-remove-description": "Willst du deine Custom Rolle wirklich löschen? Dies wird keine laufenden Cooldowns zurücksetzen"
+    },
+    "rock-paper-scissors": {
+        "stone": "Stein",
+        "paper": "Papier",
+        "scissors": "Schere",
+        "won": "gewonnen",
+        "lost": "verloren",
+        "tie": "Unentschieden",
+        "play-again": "Erneut spielen",
+        "challenge-message": "%t, %u hat dich zu einer Runde Schere Stein Papier herausgefordert! Klicke auf den Knopf unter dieser Nachricht, um beizutreten! Diese Einladung wird in etwa 2 Minuten ablaufen, also zögere nicht, sie anzunehmen.",
+        "invite-expired": "Entschuldigung, %u, %i hat deine Einladung, Schere Stein Papier zu spielen, nicht rechtzeitig angenommen ):",
+        "invite-denied": "Entschuldigung, %u, aber %i hat deine Einladung, Schere Stein Papier zu spielen, abgelehnt ):",
+        "rps-title": "Schere Stein Papier",
+        "rps-description": "Wähle deine Waffe!",
+        "its-a-tie-try-again": "Untentschieden! Versuch's nochmal!",
+        "command-description": "Spiele Schere Stein Papier gegen den Bot oder jemanden im Chat"
     }
 }

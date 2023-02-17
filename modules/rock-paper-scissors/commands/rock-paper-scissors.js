@@ -162,7 +162,7 @@ module.exports.run = async function (interaction) {
 
     const embed = new MessageEmbed()
         .setTitle(localize('rock-paper-scissors', 'rps-title'))
-        .setDescription(localize('rock-paper-scissors', 'rps-description')); // Something like 'Choose your weapon!' or 'Choose your move!'
+        .setDescription(localize('rock-paper-scissors', 'rps-description'));
 
     const msg = await (confirmed || interaction)[confirmed ? 'update' : 'reply']({content: '<@' + interaction.user.id + '>' + (user2.bot ? '' : ' <@' + user2.id + '>'), embeds: [embed], components: [rpsrow(), generatePlayer(interaction.user, user2, 'none', user2.bot ? 'selected' : 'none')], fetchReply: true});
 
@@ -274,7 +274,7 @@ module.exports.config = {
         {
             type: 'USER',
             name: 'user',
-            description: localize('rock-paper-scissors', 'user-description')
+            description: localize('tic-tac-toe', 'user-description')
         }
     ]
 };
