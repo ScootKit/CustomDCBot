@@ -3,6 +3,7 @@ const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
 
 const rpsgames = [];
 const moves = ['🪨 ' + localize('rock-paper-scissors', 'stone'), '📄 ' + localize('rock-paper-scissors', 'paper'), '✂️ ' + localize('rock-paper-scissors', 'scissors')];
+const movesDouble = [...moves, ...moves];
 const statestyle = {
     none: 'PRIMARY',
     selected: 'SECONDARY',
@@ -193,7 +194,7 @@ module.exports.run = async function (interaction) {
         let resU1 = '';
         let components = [];
         if (user2.bot) {
-            const picked = moves[Math.floor(Math.random() * 3)];
+            const picked = moves[Math.floor(Math.random() * moves.length)];
 
             if (i.customId === 'rps_stone') resU1 = moves[0];
             else if (i.customId === 'rps_paper') resU1 = moves[1];
@@ -202,18 +203,17 @@ module.exports.run = async function (interaction) {
             if (picked === resU1) {
                 win1 = localize('rock-paper-scissors', 'tie');
                 win2 = localize('rock-paper-scissors', 'tie');
-            } else if (picked === moves[0] && resU1 === moves[1]) win1 = localize('rock-paper-scissors', 'won');
-            else if (picked === moves[0] && resU1 === moves[2]) win1 = localize('rock-paper-scissors', 'lost');
-            else if (picked === moves[1] && resU1 === moves[0]) win1 = localize('rock-paper-scissors', 'lost');
-            else if (picked === moves[1] && resU1 === moves[2]) win1 = localize('rock-paper-scissors', 'won');
-            else if (picked === moves[2] && resU1 === moves[0]) win1 = localize('rock-paper-scissors', 'won');
-            else if (picked === moves[2] && resU1 === moves[1]) win1 = localize('rock-paper-scissors', 'lost');
-            if (picked === moves[0] && resU1 === moves[1]) win2 = localize('rock-paper-scissors', 'lost');
-            else if (picked === moves[0] && resU1 === moves[2]) win2 = localize('rock-paper-scissors', 'won');
-            else if (picked === moves[1] && resU1 === moves[0]) win2 = localize('rock-paper-scissors', 'won');
-            else if (picked === moves[1] && resU1 === moves[2]) win2 = localize('rock-paper-scissors', 'lost');
-            else if (picked === moves[2] && resU1 === moves[0]) win2 = localize('rock-paper-scissors', 'lost');
-            else if (picked === moves[2] && resU1 === moves[1]) win2 = localize('rock-paper-scissors', 'won');
+            } else {
+                for (let i = 0; i < moves.length; i++) {
+                    if (picked === moves[i] && resU1 === movesDouble[i + 1]) {
+                        win1 = localize('rock-paper-scissors', 'won');
+                        win2 = localize('rock-paper-scissors', 'lost');
+                    } else if (picked === moves[i] && resU1 === movesDouble[i + 2]) {
+                        win1 = localize('rock-paper-scissors', 'lost');
+                        win2 = localize('rock-paper-scissors', 'won');
+                    }
+                }
+            }
 
             game.state1 = win1;
             game.state2 = win2;
@@ -238,18 +238,17 @@ module.exports.run = async function (interaction) {
             if (resU1 === resU2) {
                 win1 = localize('rock-paper-scissors', 'tie');
                 win2 = localize('rock-paper-scissors', 'tie');
-            } else if (resU2 === moves[0] && resU1 === moves[1]) win1 = localize('rock-paper-scissors', 'won');
-            else if (resU2 === moves[0] && resU1 === moves[2]) win1 = localize('rock-paper-scissors', 'lost');
-            else if (resU2 === moves[1] && resU1 === moves[0]) win1 = localize('rock-paper-scissors', 'lost');
-            else if (resU2 === moves[1] && resU1 === moves[2]) win1 = localize('rock-paper-scissors', 'won');
-            else if (resU2 === moves[2] && resU1 === moves[0]) win1 = localize('rock-paper-scissors', 'won');
-            else if (resU2 === moves[2] && resU1 === moves[1]) win1 = localize('rock-paper-scissors', 'lost');
-            if (resU2 === moves[0] && resU1 === moves[1]) win2 = localize('rock-paper-scissors', 'lost');
-            else if (resU2 === moves[0] && resU1 === moves[2]) win2 = localize('rock-paper-scissors', 'won');
-            else if (resU2 === moves[1] && resU1 === moves[0]) win2 = localize('rock-paper-scissors', 'won');
-            else if (resU2 === moves[1] && resU1 === moves[2]) win2 = localize('rock-paper-scissors', 'lost');
-            else if (resU2 === moves[2] && resU1 === moves[0]) win2 = localize('rock-paper-scissors', 'lost');
-            else if (resU2 === moves[2] && resU1 === moves[1]) win2 = localize('rock-paper-scissors', 'won');
+            } else {
+                for (let i = 0; i < moves.length; i++) {
+                    if (resU2 === moves[i] && resU1 === movesDouble[i + 1]) {
+                        win1 = localize('rock-paper-scissors', 'won');
+                        win2 = localize('rock-paper-scissors', 'lost');
+                    } else if (resU2 === moves[i] && resU1 === movesDouble[i + 2]) {
+                        win1 = localize('rock-paper-scissors', 'lost');
+                        win2 = localize('rock-paper-scissors', 'won');
+                    }
+                }
+            }
 
             game.state1 = win1;
             game.state2 = win2;
