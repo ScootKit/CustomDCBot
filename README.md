@@ -299,6 +299,9 @@ An example config file should include the following things:
     * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
     * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file will not be rendered in the dashboard
     * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in the dashboard
+    * `links` (optional): Array of links displayed below the field description in the SCNX Dashboard
+      * `label`: [Localized](#localization) label of the link displayed to the user
+      * `url`: URL the user will be redirected to on click
 
 #### `botReady`-Event and Config-Reload
 
