@@ -263,6 +263,7 @@ An example config file should include the following things:
 * `description`: [Localized](#localization)  description of the file, shown to users
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
+* `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements that guilds with a specific plan
 * `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
   their discord-server-settings
     * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
