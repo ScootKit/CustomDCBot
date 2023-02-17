@@ -204,11 +204,11 @@ module.exports.run = async function (interaction) {
                 win1 = localize('rock-paper-scissors', 'tie');
                 win2 = localize('rock-paper-scissors', 'tie');
             } else {
-                for (let i = 0; i < moves.length; i++) {
-                    if (picked === moves[i] && resU1 === movesDouble[i + 1]) {
+                for (let j = 0; j < moves.length; j++) {
+                    if (picked === moves[j] && resU1 === movesDouble[j + 1]) {
                         win1 = localize('rock-paper-scissors', 'won');
                         win2 = localize('rock-paper-scissors', 'lost');
-                    } else if (picked === moves[i] && resU1 === movesDouble[i + 2]) {
+                    } else if (picked === moves[j] && resU1 === movesDouble[j + 2]) {
                         win1 = localize('rock-paper-scissors', 'lost');
                         win2 = localize('rock-paper-scissors', 'won');
                     }
@@ -239,11 +239,11 @@ module.exports.run = async function (interaction) {
                 win1 = localize('rock-paper-scissors', 'tie');
                 win2 = localize('rock-paper-scissors', 'tie');
             } else {
-                for (let i = 0; i < moves.length; i++) {
-                    if (resU2 === moves[i] && resU1 === movesDouble[i + 1]) {
+                for (let j = 0; j < moves.length; j++) {
+                    if (resU2 === moves[j] && resU1 === movesDouble[j + 1]) {
                         win1 = localize('rock-paper-scissors', 'won');
                         win2 = localize('rock-paper-scissors', 'lost');
-                    } else if (resU2 === moves[i] && resU1 === movesDouble[i + 2]) {
+                    } else if (resU2 === moves[j] && resU1 === movesDouble[j + 2]) {
                         win1 = localize('rock-paper-scissors', 'lost');
                         win2 = localize('rock-paper-scissors', 'won');
                     }
