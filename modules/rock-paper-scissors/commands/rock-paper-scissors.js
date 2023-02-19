@@ -17,6 +17,31 @@ const stateemoji = {
 };
 
 /**
+ * Finds the winner of the game
+ * @param {String} move1
+ * @param {String} move2
+ * @returns {{win1: string, win2: string}}
+ */
+function findWinner(move1, move2) {
+    let win1 = '', win2 = '';
+    if (move1 === move2) {
+        win1 = localize('rock-paper-scissors', 'tie');
+        win2 = localize('rock-paper-scissors', 'tie');
+    } else {
+        for (let j = 0; j < moves.length; j++) {
+            if (move2 === moves[j] && move1 === movesDouble[j + 1]) {
+                win1 = localize('rock-paper-scissors', 'won');
+                win2 = localize('rock-paper-scissors', 'lost');
+            } else if (move2 === moves[j] && move1 === movesDouble[j + 2]) {
+                win1 = localize('rock-paper-scissors', 'lost');
+                win2 = localize('rock-paper-scissors', 'won');
+            }
+        }
+    }
+    return {win1, win2};
+}
+
+/**
  * Generates a row with the buttons for the game
  * @returns {MessageActionRow}
  */
@@ -71,7 +96,7 @@ function generatePlayer(user1, user2, state1, state2) {
     return new MessageActionRow()
         .addComponents(
             new MessageButton()
-                .setCustomId('user1')
+                .setCustomId('rps_user1')
                 .setLabel(user1.tag)
                 .setEmoji(stateemoji[state1] || '')
                 .setStyle(statestyle[state1])
@@ -79,14 +104,14 @@ function generatePlayer(user1, user2, state1, state2) {
         )
         .addComponents(
             new MessageButton()
-                .setCustomId('vs')
+                .setCustomId('rps_vs')
                 .setStyle('SECONDARY')
                 .setEmoji('⚔️')
                 .setDisabled(true)
         )
         .addComponents(
             new MessageButton()
-                .setCustomId('user2')
+                .setCustomId('rps_user2')
                 .setLabel(user2.tag)
                 .setEmoji(stateemoji[state2] || '')
                 .setStyle(statestyle[state2])
@@ -192,6 +217,7 @@ module.exports.run = async function (interaction) {
         if (!game.selected1 || (!game.selected2 && !user2.bot)) return i.update({content: mentionUsers(game), components: [rpsrow(), generatePlayer(game.user1, game.user2, game.state1, game.state2)]});
 
         let resU1 = '';
+        let winResult = {};
         let components = [];
         if (user2.bot) {
             const picked = moves[Math.floor(Math.random() * moves.length)];
@@ -200,31 +226,17 @@ module.exports.run = async function (interaction) {
             else if (i.customId === 'rps_paper') resU1 = moves[1];
             else if (i.customId === 'rps_scissors') resU1 = moves[2];
 
-            if (picked === resU1) {
-                win1 = localize('rock-paper-scissors', 'tie');
-                win2 = localize('rock-paper-scissors', 'tie');
-            } else {
-                for (let j = 0; j < moves.length; j++) {
-                    if (picked === moves[j] && resU1 === movesDouble[j + 1]) {
-                        win1 = localize('rock-paper-scissors', 'won');
-                        win2 = localize('rock-paper-scissors', 'lost');
-                    } else if (picked === moves[j] && resU1 === movesDouble[j + 2]) {
-                        win1 = localize('rock-paper-scissors', 'lost');
-                        win2 = localize('rock-paper-scissors', 'won');
-                    }
-                }
-            }
-
-            game.state1 = win1;
-            game.state2 = win2;
+            winResult = findWinner(resU1, picked);
+            game.state1 = winResult.win1;
+            game.state2 = winResult.win2;
             rpsgames[i.message.id] = game;
 
             if (picked === resU1) embed.setTitle(localize('rock-paper-scissors', 'its-a-tie-try-again'));
             else embed.setTitle(localize('rock-paper-scissors', 'rps-title'));
-            embed.setDescription('<@' + game.user1.id + '>: **' + resU1 + '**' + (resU1 !== picked ? ' (' + win1 + ')' : '') + '\n<@' + game.user2.id + '>: **' + picked + '**' + (resU1 !== picked ? ' (' + win2 + ')' : ''));
+            embed.setDescription('<@' + game.user1.id + '>: **' + resU1 + '**' + (resU1 !== picked ? ' (' + game.state1 + ')' : '') + '\n<@' + game.user2.id + '>: **' + picked + '**' + (resU1 !== picked ? ' (' + game.state2 + ')' : ''));
 
             if (picked === resU1) components = resetGame(game);
-            else components = [generatePlayer(game.user1, game.user2, win1, win2), playagain()];
+            else components = [generatePlayer(game.user1, game.user2, game.state1, game.state2), playagain()];
         } else {
             let resU2 = '';
             if (game.selected1 === 'rps_stone') resU2 = moves[0];
@@ -235,31 +247,17 @@ module.exports.run = async function (interaction) {
             else if (game.selected2 === 'rps_paper') resU1 = moves[1];
             else if (game.selected2 === 'rps_scissors') resU1 = moves[2];
 
-            if (resU1 === resU2) {
-                win1 = localize('rock-paper-scissors', 'tie');
-                win2 = localize('rock-paper-scissors', 'tie');
-            } else {
-                for (let j = 0; j < moves.length; j++) {
-                    if (resU2 === moves[j] && resU1 === movesDouble[j + 1]) {
-                        win1 = localize('rock-paper-scissors', 'won');
-                        win2 = localize('rock-paper-scissors', 'lost');
-                    } else if (resU2 === moves[j] && resU1 === movesDouble[j + 2]) {
-                        win1 = localize('rock-paper-scissors', 'lost');
-                        win2 = localize('rock-paper-scissors', 'won');
-                    }
-                }
-            }
-
-            game.state1 = win1;
-            game.state2 = win2;
+            winResult = findWinner(resU1, resU2);
+            game.state1 = winResult.win1;
+            game.state2 = winResult.win2;
             rpsgames[i.message.id] = game;
 
             if (resU1 === resU2) embed.setTitle(localize('rock-paper-scissors', 'its-a-tie-try-again'));
             else embed.setTitle(localize('rock-paper-scissors', 'rps-title'));
-            embed.setDescription('<@' + game.user1.id + '>: **' + resU2 + '**' + (resU1 !== resU2 ? ' (' + win2 + ')' : '') + '\n<@' + game.user2.id + '>: **' + resU1 + '**' + (resU1 !== resU2 ? ' (' + win1 + ')' : ''));
+            embed.setDescription('<@' + game.user1.id + '>: **' + resU2 + '**' + (resU1 !== resU2 ? ' (' + game.state2 + ')' : '') + '\n<@' + game.user2.id + '>: **' + resU1 + '**' + (resU1 !== resU2 ? ' (' + game.state1 + ')' : ''));
 
             if (resU1 === resU2) components = resetGame(game);
-            else components = [generatePlayer(game.user1, game.user2, win2, win1), playagain()];
+            else components = [generatePlayer(game.user1, game.user2, game.state2, game.state1), playagain()];
         }
         i.update({content: mentionUsers(game), embeds: [embed], components});
     });

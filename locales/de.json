@@ -879,7 +879,7 @@
         "invite-denied": "Entschuldigung, %u, aber %i hat deine Einladung, Schere Stein Papier zu spielen, abgelehnt ):",
         "rps-title": "Schere Stein Papier",
         "rps-description": "Wähle deine Waffe!",
-        "its-a-tie-try-again": "Untentschieden! Versuch's nochmal!",
+        "its-a-tie-try-again": "Unentschieden! Versuch's nochmal!",
         "command-description": "Spiele Schere Stein Papier gegen den Bot oder jemanden im Chat"
     }
 }
