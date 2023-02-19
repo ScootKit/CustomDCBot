@@ -80,7 +80,7 @@ async function checkConfigFile(file, moduleName) {
             }));
         }
         let newConfig = exampleFile.configElements ? [] : {};
-        if (exampleFile.elementLimits) configData = require('./scnx-integration').verifyLimitedConfigElementFile(client, exampleFile, configData)
+        if (exampleFile.elementLimits) configData = require('./scnx-integration').verifyLimitedConfigElementFile(client, exampleFile, configData);
 
         if (exampleFile.skipContentCheck) newConfig = configData;
         else if (exampleFile.configElements) {
