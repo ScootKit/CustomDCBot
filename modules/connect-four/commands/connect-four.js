@@ -131,6 +131,8 @@ function checkWin(grid, color, position, y) {
 
 module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user');
+    if (member.id === interaction.user.id) return interaction.reply({content: localize('connect-four', 'challenge-yourself'), ephemeral: true});
+    if (member.user.bot) return interaction.reply({content: localize('connect-four', 'challenge-bot'), ephemeral: true});
 
     const msg = await interaction.reply({
         content: localize('connect-four', 'challenge-message', {t: member.toString(), u: interaction.user.toString()}),

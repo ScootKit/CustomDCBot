@@ -875,6 +875,8 @@
         "invite-expired": "Sorry, %u, %i didn't accept your request to play Connect Four in time ):",
         "invite-denied": "Sorry, %u, but %i denied your request to play a round of Connect Four ):",
         "command-description": "Play Connect Four against the bot or someone in the chat",
-        "field-size-description": "The size of the playfield (default: 7)"
+        "field-size-description": "The size of the playfield (default: 7)",
+        "challenge-yourself": "You cannot challenge yourself!",
+        "challenge-bot": "You cannot challenge bots!"
     }
 }

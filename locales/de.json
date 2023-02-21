@@ -891,6 +891,8 @@
         "invite-expired": "Entschuldigung, %u, %i hat deine Einladung, Vier gewinnt zu spielen, nicht rechtzeitig angenommen ):",
         "invite-denied": "Entschuldigung, %u, aber %i hat deine Einladung, Vier gewinnt zu spielen, abgelehnt ):",
         "command-description": "Spiele Vier gewinnt gegen jemanden im Chat",
-        "field-size-description": "Die Größe des Spielfelds (Standard: 7)"
+        "field-size-description": "Die Größe des Spielfelds (Standard: 7)",
+        "challenge-yourself": "Du kannst dich nicht selbst herausfordern!",
+        "challenge-bot": "Du kannst Bots nicht herausfordern!"
     }
 }
