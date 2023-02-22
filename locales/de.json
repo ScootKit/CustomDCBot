@@ -894,5 +894,15 @@
         "field-size-description": "Die Größe des Spielfelds (Standard: 7)",
         "challenge-yourself": "Du kannst dich nicht selbst herausfordern!",
         "challenge-bot": "Du kannst Bots nicht herausfordern!"
+    },
+    "uno": {
+        "command-description": "Spiele Uno gegen jemanden im Chat",
+        "challenge-message": "%u lädt zu einer Runde Uno ein! Klicke auf den Knopf unter dieser Nachricht, um beizutreten! Das Spiel startet in %timestamp mit %count Spielern.",
+        "not-enough-players": "Es sind nicht genug Spieler für eine Runde Uno beigetreten!",
+        "game-started": "Uno-Spiel startet mit %u!",
+        "already-joined": "Du bist bereits beigetreten!",
+        "view-deck": "Kartenstapel ansehen",
+        "draw": "Ziehe eine Karte",
+        "uno": "Uno!"
     }
 }
