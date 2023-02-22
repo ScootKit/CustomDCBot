@@ -38,7 +38,7 @@ function checkWinDiag(grid, position, y) {
     while (runningCheck) {
         i++;
         j++;
-        if (i === grid.length || j === 7) {
+        if (i === grid.length || j === grid.length + 1) {
             runningCheck = false;
             runningPush = true;
         }
@@ -46,7 +46,7 @@ function checkWinDiag(grid, position, y) {
     while (runningPush) {
         i--;
         j--;
-        diagonal.push(grid[i][j]);
+        diagonal.push([i, j]);
         if (i === 0 || j === -1) runningPush = false;
     }
 
@@ -77,8 +77,8 @@ function checkWinDiagLeft(grid, position, y) {
     while (runningPush) {
         i--;
         j++;
-        diagonal.push(grid[i][j]);
-        if (i === 0 || j === 6) runningPush = false;
+        diagonal.push([i, j]);
+        if (i === 0 || j === grid.length) runningPush = false;
     }
 
     return diagonal;
@@ -93,39 +93,55 @@ function checkWinDiagLeft(grid, position, y) {
  * @returns {String}
  */
 function checkWin(grid, color, position, y) {
-    let streak = 0;
+    let streak = [];
     for (const i in grid) {
         for (const j in grid[i]) {
-            if (grid[i][j].includes('_circle')) streak++;
-            else streak = 0;
-            if (streak === grid.length * grid[0].length) return 'tie';
+            if (grid[i][j].includes('_circle')) streak.push(grid[i][j]);
+            else streak = [];
+            if (streak.length === grid.length * grid[0].length) return 'tie';
         }
     }
 
     const diagonal = [checkWinDiag(grid, position, y), checkWinDiagLeft(grid, position, y)];
     for (const dir in diagonal) {
-        streak = 0;
-        for (const field in diagonal[dir]) {
-            if (diagonal[dir][field] === ':' + color + '_circle:') streak++;
-            else streak = 0;
-            if (streak === 4) return color;
+        streak = [];
+        for (const index in diagonal[dir]) {
+            const field = diagonal[dir][index];
+            if (grid[field[0]][field[1]] === ':' + color + '_circle:') streak.push(field);
+            else streak = [];
+            if (streak.length === 4) {
+                streak.forEach(k => {
+                    grid[k[0]][k[1]] = ':' + color + '_square:';
+                });
+                return color;
+            }
         }
     }
 
     for (const i in grid) {
-        streak = 0;
+        streak = [];
         for (const j in grid[i]) {
-            if (grid[i][j] === ':' + color + '_circle:') streak++;
-            else streak = 0;
-            if (streak === 4) return color;
+            if (grid[i][j] === ':' + color + '_circle:') streak.push([i, j]);
+            else streak = [];
+            if (streak.length === 4) {
+                streak.forEach(k => {
+                    grid[k[0]][k[1]] = ':' + color + '_square:';
+                });
+                return color;
+            }
         }
     }
 
-    streak = 0;
+    streak = [];
     for (const i in grid) {
-        if (grid[i][position] === ':' + color + '_circle:') streak++;
-        else streak = 0;
-        if (streak === 4) return color;
+        if (grid[i][position] === ':' + color + '_circle:') streak.push([i, position]);
+        else streak = [];
+        if (streak.length === 4) {
+            streak.forEach(k => {
+                grid[k[0]][k[1]] = ':' + color + '_square:';
+            });
+            return color;
+        }
     }
 }
 
