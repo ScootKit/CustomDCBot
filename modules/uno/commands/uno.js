@@ -1,35 +1,51 @@
 const {localize} = require('../../../src/functions/localize');
 const {MessageActionRow, MessageButton} = require('discord.js');
 
-const cards = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'skip', 'reverse', 'draw2', 'draw4'];
+const cards = [
+    '0',
+    '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    localize('uno', 'skip'), localize('uno', 'skip'),
+    localize('uno', 'reverse'), localize('uno', 'reverse'),
+    localize('uno', 'draw2'), localize('uno', 'draw2'),
+    localize('uno', 'color'),
+    localize('uno', 'colordraw4')
+];
 const colors = ['red', 'blue', 'green', 'yellow'];
-const colorEmojis = {'red': '🟥', 'blue': '🟦', 'green': '🟩', 'yellow': '🟨', 'black': '⬛'};
+const colorEmojis = {'red': '🟥', 'blue': '🟦', 'green': '🟩', 'yellow': '🟨'};
 
 const publicrow = new MessageActionRow()
     .addComponents(
         new MessageButton()
             .setCustomId('uno-deck')
             .setLabel(localize('uno', 'view-deck'))
+            .setStyle('PRIMARY'),
+        new MessageButton()
+            .setCustomId('uno-uno')
+            .setLabel(localize('uno', 'uno'))
             .setStyle('PRIMARY')
     );
 
 /**
  * Build a deck for a player
  * @param {Object} player
+ * @param {Object} game
  * @return {MessageActionRow}
  */
 function buildDeck(player, game) {
-    const controlrow = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-                .setCustomId('uno-draw')
-                .setLabel(localize('uno', 'draw'))
-                .setStyle('SECONDARY'),
-            new MessageButton()
-                .setCustomId('uno-uno')
-                .setLabel(localize('uno', 'uno'))
-                .setStyle('SECONDARY')
-        );
+    const controlrow = new MessageActionRow();
+    if (player.turn) controlrow.addComponents(
+        new MessageButton()
+            .setCustomId('uno-draw')
+            .setLabel(localize('uno', 'draw'))
+            .setStyle('SECONDARY')
+    );
+    else controlrow.addComponents(
+        new MessageButton()
+            .setCustomId('uno-update')
+            .setLabel(localize('uno', 'update-button'))
+            .setStyle('SECONDARY')
+    );
 
     const cardrow1 = new MessageActionRow();
     const cardrow2 = new MessageActionRow();
@@ -44,11 +60,11 @@ function buildDeck(player, game) {
 
         row.addComponents(
             new MessageButton()
-                .setCustomId('uno-card-' + c.name + '-' + c.color)
+                .setCustomId('uno-card-' + c.name + '-' + c.color + '-' + i)
                 .setLabel(c.name)
                 .setEmoji(colorEmojis[c.color])
-                .setStyle('PRIMARY')
-                .setDisabled(game.lastCard.color !== c.color && game.lastCard.name !== c.name)
+                .setStyle(canUseCard(game, c, player.cards) ? 'PRIMARY' : 'SECONDARY')
+                .setDisabled(player.turn ? !canUseCard(game, c, player.cards) : true)
         );
     });
 
@@ -60,17 +76,156 @@ function buildDeck(player, game) {
 }
 
 /**
+ * Checks if the player can use a card
+ * @param {Object} game
+ * @param {Object} card
+ * @param {Array} cards
+ * @returns {Boolean}
+ */
+function canUseCard(game, card, cards) {
+    if (card.name === localize('uno', 'color') || (card.name === localize('uno', 'colordraw4') && !cards.some(c => c.color === game.lastCard.color))) return true;
+    return game.lastCard.name === card.name || game.lastCard.color === card.color;
+}
+
+/**
+ * Selects the next player
+ * @param {Object} game
+ * @param {player} player
+ * @param {Integer} moves
+ */
+function nextPlayer(game, player, moves = 1, revSkip = false) {
+    player.turn = false;
+    let next = game.players[player.n + (game.reversed ? -1 * moves : moves)] || game.players[game.reversed ? game.players.length - 1 : 0];
+    if (game.players.length === 2 && revSkip) next = player;
+    next.turn = true;
+    next.uno = false;
+}
+
+/**
  * Handle a button click
  * @param {MessageComponentInteraction} i
+ * @param {Object} player
+ * @param {Object} game
  */
-function perPlayerHandler(i) {
+function perPlayerHandler(i, player, game) {
+    if (i.customId === 'uno-update') return i.update({components: buildDeck(player, game)});
+    if (!player.turn) return i.reply({content: localize('connect-four', 'not-turn'), ephemeral: true});
 
+    game.turns++;
+    if (game.pendingDraws > 0 && i.customId !== 'uno-dont-use-drawn' && !i.customId.startsWith("uno-color-") && i.customId.startsWith('uno-card-' + localize('uno', 'draw2') + '-') && i.customId.startsWith('uno-card-' + localize('uno', 'colordraw4') + '-')) {
+        for (let i = 0; i < game.pendingDraws; i++)
+            player.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
+        game.pendingDraws = 0;
+    }
+    if (i.customId === 'uno-draw') {
+        player.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
+
+        const c = player.cards[player.cards.length - 1];
+        if (canUseCard(game, c, player.cards)) {
+            i.update({
+                content: localize('uno', 'use-drawn'),
+                components: [
+                    new MessageActionRow()
+                        .addComponents(
+                            new MessageButton()
+                                .setCustomId('uno-card-' + c.name + '-' + c.color)
+                                .setLabel(c.name)
+                                .setEmoji(colorEmojis[c.color])
+                                .setStyle('PRIMARY'),
+                            new MessageButton()
+                                .setCustomId('uno-dont-use-drawn')
+                                .setLabel(localize('uno', 'dont-use-drawn'))
+                                .setStyle('SECONDARY')
+                        )
+                ],
+                ephemeral: true
+            });
+        } else {
+            nextPlayer(game, player);
+            i.update({components: buildDeck(player, game)});
+            game.msg.edit(gameMsg(game));
+        }
+    } else if (i.customId.startsWith('uno-card-')) {
+        if (player.cards.length === 2 && !player.uno) {
+            player.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
+            nextPlayer(game, player);
+            i.update({content: localize('uno', 'missing-uno'), components: buildDeck(player, game)});
+            return game.msg.edit(gameMsg(game));
+        }
+        const name = i.customId.split('-')[2];
+        const color = i.customId.split('-')[3];
+
+        const toremove = player.cards.find(c => c.name === name && c.color === color);
+        player.cards.splice(player.cards.indexOf(toremove), 1);
+
+        if (player.cards.length === 0) {
+            i.update({content: localize('uno', 'win-you'), components: []});
+            return game.msg.edit({content: localize('uno', 'win', {u: '<@' + player.id + '>', turns: '**' + game.turns + '**'}), components: []});
+        }
+        if (name === localize('uno', 'reverse')) game.reversed = !game.reversed;
+
+        if (name === localize('uno', 'skip')) nextPlayer(game, player, 2, true);
+        else if (name === localize('uno', 'color') || name === localize('uno', 'colordraw4')) {
+            if (name === localize('uno', 'colordraw4')) game.pendingDraws += 4;
+            return i.update({content: localize('uno', 'choose-color'), components: [
+                new MessageActionRow()
+                    .addComponents(
+                        new MessageButton()
+                            .setCustomId('uno-color-red')
+                            .setEmoji(colorEmojis.red)
+                            .setStyle('PRIMARY'),
+                        new MessageButton()
+                            .setCustomId('uno-color-blue')
+                            .setEmoji(colorEmojis.blue)
+                            .setStyle('PRIMARY'),
+                        new MessageButton()
+                            .setCustomId('uno-color-green')
+                            .setEmoji(colorEmojis.green)
+                            .setStyle('PRIMARY'),
+                        new MessageButton()
+                            .setCustomId('uno-color-yellow')
+                            .setEmoji(colorEmojis.yellow)
+                            .setStyle('PRIMARY')
+                    )
+            ]});
+        } else nextPlayer(game, player, 1, name === localize('uno', 'reverse'));
+        if (name === localize('uno', 'draw2')) game.pendingDraws += 2;
+
+        game.lastCard = {name, color};
+        i.update({content: null, components: buildDeck(player, game)});
+        game.msg.edit(gameMsg(game));
+    } else if (i.customId === 'uno-dont-use-drawn' || i.customId.startsWith('uno-color-')) {
+        if (i.customId.startsWith('uno-color-')) game.lastCard = {name: "", color: i.customId.split('-')[2]};
+        nextPlayer(game, player);
+        i.update({content: null, components: buildDeck(player, game)});
+        game.msg.edit(gameMsg(game));
+    }
+    game.players[player.n] = player;
+}
+
+/**
+ * Returns the game message
+ * @param {Object} game
+ * @returns {String}
+ */
+function gameMsg(game) {
+    return {
+        content: game.players.map(u => localize('uno', 'user-cards', {u: '<@' + u.id + '>', cards: '**' + u.cards.length + '**'})).join(', ') + '\n' +
+            localize('uno', 'turn', {u: '<@' + game.players.find(p => p.turn).id + '>'}) + '\n\n' +
+            colorEmojis[game.lastCard.color] + (game.lastCard.name ? ' **' + game.lastCard.name + '**' : '') +
+            (game.players.some(p => p.uno) ? '\nUno: ' + game.players.filter(p => p.uno).map(p => '<@' + p.id + '>').join(' ') : '') +
+            (game.pendingDraws > 0 ? '\n\n:warning: ' + localize('uno', 'pending-draws', {count: '**' + game.pendingDraws + '**'}) : ''),
+        allowedMentions: {
+            users: [game.players.find(p => p.turn).id]
+        },
+        components: [publicrow]
+    };
 }
 
 module.exports.run = async function (interaction) {
     const now = Date.now();
     const msg = await interaction.reply({
-        content: localize('uno', 'challenge-message', {u: interaction.user.toString(), count: '**1**', timestamp: '<t:' + Math.floor(now / 1000 + 2 * 60) + ':R>'}),
+        content: localize('uno', 'challenge-message', {u: interaction.user.toString(), count: '**1**', timestamp: '<t:' + Math.floor(now / 1000 + 60) + ':R>'}),
         allowedMentions: {
             users: []
         },
@@ -95,45 +250,70 @@ module.exports.run = async function (interaction) {
             id: interaction.user.id,
             name: interaction.user.username,
             interaction,
+            n: 0,
             cards: [],
-            uno: false
+            uno: false,
+            turn: false
         }],
-        lastCard: {name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]}
+        lastCard: {name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]},
+        msg,
+        turns: 0,
+        reversed: false,
+        pendingDraws: 0
     };
     const collector = msg.createMessageComponentCollector({componentType: 'BUTTON'});
     collector.on('collect', async i => {
         if (i.customId === 'uno-join') {
-            // if (game.players.some(p => p.id === i.user.id)) return i.reply({content: localize('uno', 'already-joined'), ephemeral: true});
+            if (game.players.some(p => p.id === i.user.id)) return i.reply({content: localize('uno', 'already-joined'), ephemeral: true});
             game.players.push({
                 id: i.user.id,
                 name: i.user.username,
                 interaction: i,
+                n: game.players.length,
                 cards: [],
-                uno: false
+                uno: false,
+                turn: false
             });
             i.update({
-                content: localize('uno', 'challenge-message', {u: interaction.user.toString(), count: '**' + game.players.length + '**', timestamp: '<t:' + Math.floor(now / 1000 + 2 * 60) + ':R>'}),
+                content: localize('uno', 'challenge-message', {u: interaction.user.toString(), count: '**' + game.players.length + '**', timestamp: '<t:' + Math.floor(now / 1000 + 25/*60*/) + ':R>'}),
                 allowedMentions: {
                     users: []
                 }
             });
         } else if (i.customId === 'uno-deck') {
-            const m = await i.reply({components: buildDeck(game.players.find(p => p.id === i.user.id), game), fetchReply: true, ephemeral: true});
-            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', perPlayerHandler);
+            const player = game.players.find(p => p.id === i.user.id);
+            if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});
+            const m = await i.reply({components: buildDeck(player, game), fetchReply: true, ephemeral: true});
+            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', i => perPlayerHandler(i, player, game));
+        } else if (i.customId === 'uno-uno') {
+            const player = game.players.find(p => p.id === i.user.id);
+            if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});
+
+            if (player.cards.length === 2) {
+                player.uno = true;
+                i.reply({content: localize('uno', 'done-uno'), ephemeral: true});
+            } else {
+                player.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
+                i.reply({content: localize('uno', 'cant-uno'), ephemeral: true});
+            }
         }
     });
 
     setTimeout(() => {
-        if (game.players.length < 2) return interaction.editReply({content: localize('uno', 'not-enough-players'), components: []});
+        if (game.players.length < 2) {
+            collector.stop();
+            return interaction.editReply({content: localize('uno', 'not-enough-players'), components: []});
+        }
 
-        interaction.editReply({content: localize('uno', 'game-started', {u: game.players.map(u => '<@' + u.id + '>').join(' ')}) + '\n' + game.lastCard.color + ' ' + game.lastCard.name, components: [publicrow]});
+        game.players[Math.floor(Math.random() * game.players.length)].turn = true;
+        interaction.editReply(gameMsg(game));
         game.players.forEach(async p => {
             for (let i = 0; i < 7; i++) p.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
 
             const m = await p.interaction.followUp({components: buildDeck(p, game), fetchReply: true, ephemeral: true});
-            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', perPlayerHandler);
+            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', i => perPlayerHandler(i, p, game));
         });
-    }, 4000); // 120000
+    }, 25000); // 60000
 };
 
 
