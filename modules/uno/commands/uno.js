@@ -11,8 +11,8 @@ const cards = [
     localize('uno', 'color'),
     localize('uno', 'colordraw4')
 ];
-const colors = ['red', 'blue', 'green', 'yellow'];
 const colorEmojis = {'red': '🟥', 'blue': '🟦', 'green': '🟩', 'yellow': '🟨'};
+const colors = Object.keys(colorEmojis);
 
 const publicrow = new MessageActionRow()
     .addComponents(
