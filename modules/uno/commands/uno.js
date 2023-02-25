@@ -34,7 +34,7 @@ const publicrow = new MessageActionRow()
  */
 function buildDeck(player, game) {
     const controlrow = new MessageActionRow();
-    if (player.turn) controlrow.addComponents(
+    if (player.turn && !player.blockRedraw) controlrow.addComponents(
         new MessageButton()
             .setCustomId('uno-draw')
             .setLabel(localize('uno', 'draw'))
@@ -135,6 +135,7 @@ function perPlayerHandler(i, player, game) {
 
         const c = player.cards[player.cards.length - 1];
         if (canUseCard(game, c, player.cards)) {
+            player.blockRedraw = true;
             i.update({
                 content: localize('uno', 'use-drawn'),
                 components: [
@@ -159,6 +160,7 @@ function perPlayerHandler(i, player, game) {
             game.msg.edit(gameMsg(game));
         }
     } else if (i.customId.startsWith('uno-card-')) {
+        player.blockRedraw = false;
         if (player.cards.length === 2 && !player.uno) {
             player.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
             nextPlayer(game, player);
@@ -208,6 +210,7 @@ function perPlayerHandler(i, player, game) {
         i.update({content: null, components: buildDeck(player, game)});
         game.msg.edit(gameMsg(game));
     } else if (i.customId === 'uno-dont-use-drawn' || i.customId.startsWith('uno-color-')) {
+        player.blockRedraw = false;
         if (i.customId.startsWith('uno-color-')) game.lastCard = {name: '', color: i.customId.split('-')[2]};
         nextPlayer(game, player);
         i.update({content: null, components: buildDeck(player, game)});
@@ -223,7 +226,7 @@ function perPlayerHandler(i, player, game) {
  */
 function gameMsg(game) {
     return {
-        content: game.players.map(u => localize('uno', 'user-cards', {u: '<@' + u.id + '>', cards: '**' + u.cards.length + '**'})).join(', ') + '\n' +
+        content: game.players.map(u => localize('uno', 'user-cards', {u: '<@' + u.id + '>', cards: '**' + (u.cards.length === 0 ? 7 : u.cards.length) + '**'})).join(', ') + '\n' +
             localize('uno', 'turn', {u: '<@' + game.players.find(p => p.turn).id + '>'}) + '\n\n' +
             colorEmojis[game.lastCard.color] + (game.lastCard.name ? ' **' + game.lastCard.name + '**' : '') +
             (game.players.some(p => p.uno) ? '\nUno: ' + game.players.filter(p => p.uno).map(p => '<@' + p.id + '>').join(' ') : '') +
@@ -265,7 +268,8 @@ module.exports.run = async function (interaction) {
             n: 0,
             cards: [],
             uno: false,
-            turn: false
+            turn: false,
+            blockRedraw: false
         }],
         lastCard: {name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]},
         msg,
@@ -283,7 +287,8 @@ module.exports.run = async function (interaction) {
                 n: game.players.length,
                 cards: [],
                 uno: false,
-                turn: false
+                turn: false,
+                blockRedraw: false
             });
             i.update({
                 content: localize('uno', 'challenge-message', {u: interaction.user.toString(), count: '**' + game.players.length + '**', timestamp}),
