@@ -921,6 +921,8 @@
         "colordraw4": "Farbwahl und ziehe 4",
         "cant-uno": "Du kannst Uno aktuell nicht nutzen.",
         "done-uno": "Du hast Uno gerufen!",
-        "auto-drawn-skip": "Dein Zug wurde übersprungen, da du die Karten sowieso hättest ziehen müssen."
+        "auto-drawn-skip": "Dein Zug wurde übersprungen, da du die Karten sowieso hättest ziehen müssen.",
+        "start-game": "Spiel sofort starten",
+        "not-host": "Du bist nicht der Ersteller des Spiels!"
     }
 }

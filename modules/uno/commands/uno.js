@@ -90,7 +90,7 @@ function canUseCard(game, card, playerCards) {
 /**
  * Selects the next player
  * @param {Object} game
- * @param {player} player
+ * @param {Object} player
  * @param {Integer} moves
  * @param {Boolean} revSkip
  */
@@ -201,7 +201,8 @@ function perPlayerHandler(i, player, game) {
                             .setCustomId('uno-color-yellow')
                             .setEmoji(colorEmojis.yellow)
                             .setStyle('PRIMARY')
-                    )
+                    ),
+                ...buildDeck(player, game).slice(1, 3)
             ]});
         } else nextPlayer(game, player, 1, name === localize('uno', 'reverse'));
         if (name === localize('uno', 'draw2')) game.pendingDraws = game.pendingDraws + 2;
@@ -239,7 +240,7 @@ function gameMsg(game) {
 }
 
 module.exports.run = async function (interaction) {
-    const timestamp = '<t:' + Math.floor(Date.now() / 1000 + 15) + ':R>';
+    const timestamp = '<t:' + Math.floor(Date.now() / 1000 + 90) + ':R>';
     const msg = await interaction.reply({
         content: localize('uno', 'challenge-message', {u: interaction.user.toString(), count: '**1**', timestamp}),
         allowedMentions: {
@@ -255,6 +256,12 @@ module.exports.run = async function (interaction) {
                         style: 'PRIMARY',
                         customId: 'uno-join',
                         label: localize('tic-tac-toe', 'accept-invite')
+                    },
+                    {
+                        type: 'BUTTON',
+                        style: 'SECONDARY',
+                        customId: 'uno-start',
+                        label: localize('uno', 'start-game')
                     }
                 ]
             }
@@ -277,6 +284,27 @@ module.exports.run = async function (interaction) {
         reversed: false,
         pendingDraws: 0
     };
+
+    /**
+     * Starts the game
+     */
+    function startGame() {
+        if (game.players.length < 2) {
+            collector.stop();
+            return interaction.editReply({content: localize('uno', 'not-enough-players'), components: []}).catch(() => {});
+        }
+
+        game.players[Math.floor(Math.random() * game.players.length)].turn = true;
+        interaction.editReply(gameMsg(game)).catch(() => {});
+        game.players.forEach(async p => {
+            for (let i = 0; i < 7; i++) p.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
+
+            const m = await p.interaction.followUp({components: buildDeck(p, game), fetchReply: true, ephemeral: true});
+            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', i => perPlayerHandler(i, p, game));
+        });
+    }
+    const timeout = setTimeout(startGame, 89000);
+
     const collector = msg.createMessageComponentCollector({componentType: 'BUTTON'});
     collector.on('collect', async i => {
         if (i.customId === 'uno-join') {
@@ -296,6 +324,11 @@ module.exports.run = async function (interaction) {
                     users: []
                 }
             });
+        } else if (i.customId === 'uno-start') {
+            if (game.players[0].id !== i.user.id) return i.reply({content: localize('uno', 'not-host'), ephemeral: true});
+            startGame();
+            clearTimeout(timeout);
+            i.deferUpdate();
         } else if (i.customId === 'uno-deck') {
             const player = game.players.find(p => p.id === i.user.id);
             if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});
@@ -314,22 +347,6 @@ module.exports.run = async function (interaction) {
             }
         }
     });
-
-    setTimeout(() => {
-        if (game.players.length < 2) {
-            collector.stop();
-            return interaction.editReply({content: localize('uno', 'not-enough-players'), components: []});
-        }
-
-        game.players[Math.floor(Math.random() * game.players.length)].turn = true;
-        interaction.editReply(gameMsg(game));
-        game.players.forEach(async p => {
-            for (let i = 0; i < 7; i++) p.cards.push({name: cards[Math.floor(Math.random() * cards.length)], color: colors[Math.floor(Math.random() * colors.length)]});
-
-            const m = await p.interaction.followUp({components: buildDeck(p, game), fetchReply: true, ephemeral: true});
-            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', i => perPlayerHandler(i, p, game));
-        });
-    }, 15000); // 60000
 };
 
 

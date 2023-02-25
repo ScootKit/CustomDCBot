@@ -905,6 +905,8 @@
         "colordraw4": "Color choice and draw 4",
         "cant-uno": "You cannot use Uno currently.",
         "done-uno": "You've called Uno!",
-        "auto-drawn-skip": "Your turn was skipped because you would have had to draw the cards anyway."
+        "auto-drawn-skip": "Your turn was skipped because you would have had to draw the cards anyway.",
+        "start-game": "Start game now",
+        "not-host": "You're not the host of the game!"
     }
 }
