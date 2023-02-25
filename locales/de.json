@@ -924,6 +924,7 @@
         "auto-drawn-skip": "Dein Zug wurde übersprungen, da du die Karten sowieso hättest ziehen müssen.",
         "start-game": "Spiel sofort starten",
         "not-host": "Du bist nicht der Ersteller des Spiels!",
-        "max-players": "Das Spiel ist voll!"
+        "max-players": "Das Spiel ist voll!",
+        "previous-cards": "Vorherige Karten: "
     }
 }

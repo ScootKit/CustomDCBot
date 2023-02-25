@@ -229,8 +229,8 @@ function perPlayerHandler(i, player, game) {
 function gameMsg(game) {
     return {
         content: game.players.map(u => localize('uno', 'user-cards', {u: '<@' + u.id + '>', cards: '**' + (u.cards.length === 0 ? 7 : u.cards.length) + '**'})).join(', ') + '\n' +
-            localize('uno', 'turn', {u: '<@' + game.players.find(p => p.turn).id + '>'}) + '\n\n' +
-            game.previousCards.filter(c => c).join(" → ") + '\n' +
+            localize('uno', 'turn', {u: '<@' + game.players.find(p => p.turn).id + '>'}) + '\n' +
+            localize('uno', 'previous-cards') + game.previousCards.filter(c => c).join(' → ') + '\n\n' +
             colorEmojis[game.lastCard.color] + ' **' + game.lastCard.name + '**' +
             (game.players.some(p => p.uno) ? '\nUno: ' + game.players.filter(p => p.uno).map(p => '<@' + p.id + '>').join(' ') : '') +
             (game.pendingDraws > 0 ? '\n\n:warning: ' + localize('uno', 'pending-draws', {count: '**' + game.pendingDraws + '**'}) : ''),
