@@ -309,6 +309,7 @@ module.exports.run = async function (interaction) {
     collector.on('collect', async i => {
         if (i.customId === 'uno-join') {
             if (game.players.some(p => p.id === i.user.id)) return i.reply({content: localize('uno', 'already-joined'), ephemeral: true});
+            if (game.players.length > 45) return i.reply({content: localize('uno', 'max-players'), ephemeral: true});
             game.players.push({
                 id: i.user.id,
                 interaction: i,

@@ -907,6 +907,7 @@
         "done-uno": "You've called Uno!",
         "auto-drawn-skip": "Your turn was skipped because you would have had to draw the cards anyway.",
         "start-game": "Start game now",
-        "not-host": "You're not the host of the game!"
+        "not-host": "You're not the host of the game!",
+        "max-players": "The game is full!"
     }
 }
