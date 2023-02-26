@@ -17,7 +17,7 @@ async function checkPerms(interaction) {
 }
 
 module.exports.subcommands = {
-    'add': async function (interaction) { // ToDo: Update Command
+    'add': async function (interaction) {
         if (!checkPerms(interaction)) return;
         await createShopItem(interaction);
         shopMsg(interaction.client);

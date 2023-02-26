@@ -141,6 +141,7 @@ async function createShopItem(interaction, pId, pName, pPrice, pRole, client) {
             const role = await interaction.options.getRole('role', true);
             const price = await interaction.options.getInteger('price');
             const model = interaction.client.models['economy-system']['Shop'];
+            if (interaction.guild.me.roles.highest.comparePositionTo(role) <= 0) return interaction.reply(localize('economy-system', 'role-to-high'));
             const itemModel = await model.findOne({
                 where: {
                     [Op.or]: [
@@ -150,7 +151,10 @@ async function createShopItem(interaction, pId, pName, pPrice, pRole, client) {
                 }
             });
             if (itemModel) {
-                interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate']));
+                interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
+                    '%id%': id,
+                    '%name%': name
+                }, {ephemeral: interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
                 resolve(localize('economy-system', 'item-duplicate'));
             } else {
                 await model.create({
@@ -368,17 +372,20 @@ async function createShopMsg(client, guild, ephemeral) {
             value: items[i].dataValues.id
         });
     }
-    const components = [{
-        type: 'ACTION_ROW',
-        components: [{
-            type: 3,
-            placeholder: localize('economy-system', 'nothing-selected'),
-            'min_values': 1,
-            'max_values': 1,
-            options: options,
-            'custom_id': 'economy-system_shop-select'
-        }]
-    }];
+    let components = [];
+    if (items.length > 0) {
+        components = [{
+            type: 'ACTION_ROW',
+            components: [{
+                type: 3,
+                placeholder: localize('economy-system', 'nothing-selected'),
+                'min_values': 1,
+                'max_values': 1,
+                options: options,
+                'custom_id': 'economy-system_shop-select'
+            }]
+        }];
+    }
     return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: ephemeral, components: components });
 }
 
@@ -441,8 +448,8 @@ async function leaderboard(client) {
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
 
     if (model.length !== 0) embed.addField('Leaderboard:', await topTen(model, client));
-    if (moduleStr['leaderboardEmbed']['thumbnail']) embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
-    if (moduleStr['leaderboardEmbed']['image']) embed.setImage(moduleStr['leaderboardEmbed']['image']);
+    if (moduleStr['leaderboardEmbed']['thumbnail'] === '') embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
+    if (moduleStr['leaderboardEmbed']['image'] === '') embed.setImage(moduleStr['leaderboardEmbed']['image']);
 
     if (messages.last()) await messages.last().edit({embeds: [embed]});
     else channel.send({embeds: [embed]});

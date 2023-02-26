@@ -785,6 +785,8 @@
         "option-description-balance": "Kontostand, welches das Mitglied bekommt",
         "message-drop": "Nachrichten-Drop: Du hast %m %c einfach durch Chatten verdient!",
         "created-item": "Der Nutzer %u hat einen neuen Shopartikel erstellt: Name: %n, ID: %i",
+        "item-duplicate": "Das Item existiert schon",
+        "role-to-high" : "Die angegebene Rolle ist höher, als die höchste Rolle des Bots. Deshalb kann der Bot die ROlle nicht vergeben. Das Item wurde **nicht** erstellt.",
         "delete-item": "Der Nutzer %u hat einen Shopartikel entfernt: %i",
         "user-purchase": "Der Nutzer %u hat den Shopartikel %i für %p gekauft.",
         "shop-command-description": "Benutze das Shop-System",

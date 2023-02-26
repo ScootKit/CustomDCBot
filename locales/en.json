@@ -810,6 +810,8 @@
     "option-description-balance": "Balance to set user to",
     "message-drop": "Message-Drop: You earned %m %c simply by chatting!",
     "created-item": "The user %u has created a new shop item: name: %n, id: %i",
+    "item-duplicate": "The item already exist",
+    "role-to-high": "The specified role is higher than the higehst role of the bot. The bot can't add the role to users. The item was **not** created.",
     "delete-item": "The user %u has deleted the shop item %i",
     "user-purchase": "The user %u has purchased the shop item %i for %p.",
     "shop-command-description": "Use the shop-system",
