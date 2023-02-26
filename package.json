@@ -13,18 +13,18 @@
     "generate-config": "node generate-config.js",
     "generate-template": "node generate-template.js"
   },
-  "author": "SC Network Team",
+  "author": "ScootKit Team",
   "contributors": [
     "SCDerox <scderox@sc-network.net>"
   ],
-  "funding": "https://github.com/SCNetwork/CustomDCBot?sponsor=1",
+  "funding": "https://github.com/ScootKit/CustomDCBot?sponsor=1",
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@androz2091/discord-invites-tracker": "1.1.1",
     "@haileybot/captcha-generator": "1.7.0",
     "@pixelfactory/privatebin": "2.6.1",
-    "@scnetwork/api": "1.0.1",
     "@scderox/ikea-name-generator": "1.0.0",
+    "@scnetwork/api": "1.0.1",
     "@twurple/api": "5.2.4",
     "@twurple/auth": "5.2.4",
     "age-calculator": "1.0.0",
@@ -32,23 +32,23 @@
     "bufferutil": "4.0.7",
     "centra": "2.5.0",
     "discord-logs": "2.0.1",
-    "discord.js": "13.10.3",
+    "discord.js": "13.12.0",
     "dotenv": "16.0.3",
     "erlpack": "github:discord/erlpack",
     "fs-extra": "10.1.0",
     "is-equal": "1.6.4",
     "isomorphic-webcrypto": "2.3.8",
     "jsonfile": "6.1.0",
-    "log4js": "6.7.0",
-    "node-schedule": "2.1.0",
+    "log4js": "6.8.0",
+    "node-schedule": "2.1.1",
     "parse-duration": "1.0.2",
-    "sequelize": "6.25.5",
-    "sqlite3": "5.1.2",
+    "sequelize": "6.28.0",
+    "sqlite3": "5.1.4",
     "stop-discord-phishing": "0.3.1",
     "utf-8-validate": "5.0.10",
-    "zlib-sync": "0.1.7"
+    "zlib-sync": "0.1.8"
   },
   "devDependencies": {
-    "eslint": "8.23.0"
+    "eslint": "8.34.0"
   }
 }

@@ -855,5 +855,32 @@
     "color-option-description": "The color of your custom role",
     "remove-subcommand-description": "Remove your custom role",
     "confirm-option-remove-description": "Do you really want to delete your custom role? This will not reset any running cooldowns"
-  }
+  },
+    "rock-paper-scissors": {
+        "stone": "Stone",
+        "paper": "Paper",
+        "scissors": "Scissors",
+        "won": "won",
+        "lost": "lost",
+        "tie": "tie",
+        "play-again": "Play again",
+        "challenge-message": "%t, %u challenged you to a game of rock-paper-scissors! Hit the button below to join the game! This invitation will expire in about 2 minutes, so don't hesitate to much.",
+        "invite-expired": "Sorry, %u, %i didn't accept your request to play rock-paper-scissors in time ):",
+        "invite-denied": "Sorry, %u, but %i denied your request to play a round of rock-paper-scissors ):",
+        "rps-title": "Rock Paper Scissors",
+        "rps-description": "Choose your weapon!",
+        "its-a-tie-try-again": "It's a tie! Try again!",
+        "command-description": "Play rock-paper-scissors against the bot or someone in the chat"
+    },
+    "connect-four": {
+        "tie": "It's a tie!",
+        "win": "%u has won the game!",
+        "not-turn": "Sorry, but it's not your turn!",
+        "game-message": "Connect Four game of %u1 and %u2\nCurrent turn: %c %t.\n\n%g",
+        "challenge-message": "%t, %u challenged you to a game of Connect Four! Hit the button below to join the game! This invitation will expire in about 2 minutes, so don't hesitate to much.",
+        "invite-expired": "Sorry, %u, %i didn't accept your request to play Connect Four in time ):",
+        "invite-denied": "Sorry, %u, but %i denied your request to play a round of Connect Four ):",
+        "command-description": "Play Connect Four against the bot or someone in the chat",
+        "field-size-description": "The size of the playfield (default: 7)"
+    }
 }

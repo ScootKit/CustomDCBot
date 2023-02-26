@@ -871,5 +871,32 @@
         "color-option-description": "Die Farbe deiner Custom Rolle",
         "remove-subcommand-description": "Entferne deine Custom Rolle",
         "confirm-option-remove-description": "Willst du deine Custom Rolle wirklich löschen? Dies wird keine laufenden Cooldowns zurücksetzen"
+    },
+    "rock-paper-scissors": {
+        "stone": "Stein",
+        "paper": "Papier",
+        "scissors": "Schere",
+        "won": "gewonnen",
+        "lost": "verloren",
+        "tie": "Unentschieden",
+        "play-again": "Erneut spielen",
+        "challenge-message": "%t, %u hat dich zu einer Runde Schere Stein Papier herausgefordert! Klicke auf den Knopf unter dieser Nachricht, um beizutreten! Diese Einladung wird in etwa 2 Minuten ablaufen, also zögere nicht, sie anzunehmen.",
+        "invite-expired": "Entschuldigung, %u, %i hat deine Einladung, Schere Stein Papier zu spielen, nicht rechtzeitig angenommen ):",
+        "invite-denied": "Entschuldigung, %u, aber %i hat deine Einladung, Schere Stein Papier zu spielen, abgelehnt ):",
+        "rps-title": "Schere Stein Papier",
+        "rps-description": "Wähle deine Waffe!",
+        "its-a-tie-try-again": "Unentschieden! Versuch's nochmal!",
+        "command-description": "Spiele Schere Stein Papier gegen den Bot oder jemanden im Chat"
+    },
+    "connect-four": {
+        "tie": "Unentschieden!",
+        "win": "%u hat das Spiel gewonnen!",
+        "not-turn": "Entschuldigung, aber du bist nicht an der Reihe!",
+        "game-message": "Vier-gewinnt-Spiel von %u1 und %u2\nAktuell spielt: %c %t.\n\n%g",
+        "challenge-message": "%t, %u hat dich zu einer Runde Vier gewinnt herausgefordert! Klicke auf den Knopf unter dieser Nachricht, um beizutreten! Diese Einladung wird in etwa 2 Minuten ablaufen, also zögere nicht, sie anzunehmen.",
+        "invite-expired": "Entschuldigung, %u, %i hat deine Einladung, Vier gewinnt zu spielen, nicht rechtzeitig angenommen ):",
+        "invite-denied": "Entschuldigung, %u, aber %i hat deine Einladung, Vier gewinnt zu spielen, abgelehnt ):",
+        "command-description": "Spiele Vier gewinnt gegen jemanden im Chat",
+        "field-size-description": "Die Größe des Spielfelds (Standard: 7)"
     }
 }

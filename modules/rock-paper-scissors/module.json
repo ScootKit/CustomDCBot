@@ -1,0 +1,23 @@
+{
+  "name": "rock-paper-scissors",
+  "humanReadableName": {
+    "en": "Rock Paper Scissors",
+    "de": "Schere Stein Papier"
+  },
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": {
+    "en": "Let your users play Rock Paper Scissors against the bot and each other!",
+    "de": "Lasse Nutzer auf deinem Server Schere Stein Paper gegen den Bot und gegeneinander spielen"
+  },
+  "commands-dir": "/commands",
+  "noConfig": true,
+  "releaseDate": "0",
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/rock-paper-scissors"
+}

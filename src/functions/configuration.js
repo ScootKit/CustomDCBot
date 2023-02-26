@@ -80,6 +80,7 @@ async function checkConfigFile(file, moduleName) {
             }));
         }
         let newConfig = exampleFile.configElements ? [] : {};
+        if (exampleFile.elementLimits) configData = require('./scnx-integration').verifyLimitedConfigElementFile(client, exampleFile, configData);
 
         if (exampleFile.skipContentCheck) newConfig = configData;
         else if (exampleFile.configElements) {
@@ -317,7 +318,7 @@ module.exports.reloadConfig = async function (client) {
         clearInterval(interval);
     }
     client.intervals = [];
-    for (const job of client.jobs) {
+    for (const job of client.jobs.filter(f => f !== null)) {
         job.cancel();
     }
     client.jobs = [];

@@ -1,0 +1,23 @@
+{
+	"name": "connect-four",
+	"humanReadableName": {
+	  "en": "Connect Four",
+	  "de": "Vier gewinnt"
+	},
+	"author": {
+	  "scnxOrgID": "60",
+	  "name": "TomatoCake",
+	  "link": "https://github.com/DEVTomatoCake"
+	},
+	"description": {
+	  "en": "Let your users play Connect Four against each other!",
+	  "de": "Lasse Nutzer auf deinem Server Vier gewinnt gegeneinander spielen"
+	},
+	"commands-dir": "/commands",
+	"noConfig": true,
+	"releaseDate": "0",
+	"tags": [
+	  "fun"
+	],
+	"openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/connect-four"
+}

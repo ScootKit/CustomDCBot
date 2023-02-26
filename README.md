@@ -90,7 +90,7 @@ can verify this by looking at the source code, which you should do before execut
 You can find all the configuration-files inside your `config` folder. Every **enabled module** will have their own
 folder with config-files inside them. **These files are generated automatically**. Every module has slightly different
 configuration options. Every module has example files. Inside these files are more information about every configuration
-option.  
+option.
 Some config values also support [embeds](https://discordjs.guide/popular-topics/embeds.html). This is the case
 if `allowEmbed` is true.\
 You either input a string (normal discord message), or an embed object with the following values:
@@ -125,10 +125,10 @@ config file, so the bot can automatically check configs and do all the boring st
 As per the [License](LICENSE) you *have* to make *every* of your modules publicly available under the same license.
 Please read the license for more information.
 
-**Before you make a module**: Please create an issue with your suggestion and claim that you are working on it so nobody
-is working on the same thing (;\
-Also please read the [Rues for modules](#rules-for-modules).\
-**Submit a module**: Simply create a pullrequest, and we will check your module and merge it then (;
+**Before you make a module**:
+Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same thing (;\
+Also please read the [Rules for modules](#rules-for-modules).\
+**Submit a module**: Simply create a pull request, and we will check your module and merge it then (;
 
 #### Rules for modules
 
@@ -156,7 +156,7 @@ translationable systems in your module.
 
 * Localizations of not-user-editable strings: Use `localize(key, string, replace = {})` from `src/functions/localize.js`
   to localize strings. Translations of these strings happen
-  on [Weblate]()https://localize.sc-network.net/projects/custombot/locales/
+  on [Weblate](https://localize.sc-network.net/projects/custombot/locales/)
     * `key`: Key of the string (usually your module name, check out any files in `locales` to get an idea how this
       works)
     * `string`: Name of the string
@@ -263,6 +263,7 @@ An example config file should include the following things:
 * `description`: [Localized](#localization)  description of the file, shown to users
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
+* `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements that guilds with a specific plan
 * `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
   their discord-server-settings
     * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
@@ -299,6 +300,9 @@ An example config file should include the following things:
     * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
     * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file will not be rendered in the dashboard
     * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in the dashboard
+    * `links` (optional): Array of links displayed below the field description in the SCNX Dashboard
+      * `label`: [Localized](#localization) label of the link displayed to the user
+      * `url`: URL the user will be redirected to on click
 
 #### `botReady`-Event and Config-Reload
 
