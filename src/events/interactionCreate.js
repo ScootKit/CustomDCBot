@@ -27,7 +27,7 @@ module.exports.run = async (client, interaction) => {
     }
     if (command.module && !client.modules[command.module].enabled) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('command', 'module-disabled', {m: module})
+        content: '⚠ ' + localize('command', 'module-disabled', {m: command.module})
     });
     if (command && typeof (command || {}).options === 'function') command.options = await command.options(interaction.client);
     const group = interaction.options['_group'];
