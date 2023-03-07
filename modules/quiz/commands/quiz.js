@@ -14,7 +14,7 @@ async function create(interaction) {
     let emojis = config.emojis;
     if (interaction.options.getSubcommand() === 'create-bool') {
         options = [{text: localize('quiz', 'bool-true')}, {text: localize('quiz', 'bool-false')}];
-        emojis = [undefined, emojis['true'], emojis['false']];
+        emojis = [undefined, emojis.true, emojis.false];
     } else {
         for (let step = 1; step <= 10; step++) {
             if (interaction.options.getString('option' + step)) options.push({text: interaction.options.getString('option' + step)});
@@ -71,45 +71,15 @@ async function create(interaction) {
 module.exports.subcommands = {
     'create': create,
     'create-bool': create,
-    'end': async function (interaction) {
-        const quiz = await interaction.client.models['quiz']['Quiz'].findOne({
-            where: {
-                messageID: interaction.options.getString('msg-id')
-            }
-        });
-        if (!quiz) return interaction.reply({
-            content: '⚠ ' + localize('quiz', 'not-found'),
-            ephemeral: true
-        });
-        quiz.expiresAt = new Date();
-        await quiz.save();
-        await updateMessage(await interaction.guild.channels.cache.get(quiz.channelID), quiz, interaction.options.getString('msg-id'));
-        interaction.reply({
-            content: localize('quiz', 'ended'),
-            ephemeral: true
-        });
-    }
-};
+    'play': async function (interaction) {
+        let user = interaction.client.models['quiz']['QuizUser'].findAll({where: {userId: interaction.user.id}});
+        if (!user) user = await channel.client.models['quiz']['QuizUser'].create({userID: voter, dailyQuiz: 0});
 
-module.exports.autoComplete = {
-    'end': {
-        'msg-id': async function(interaction) {
-            const activeQuiz = [];
-            const quizList = await interaction.client.models['quiz']['Quiz'].findAll();
-            for (const quiz of quizList) {
-                if (quiz.expiresAt && new Date(quiz.expiresAt).getTime() > new Date().getTime()) activeQuiz.push(quiz);
-                else if (!quiz.expiresAt) activeQuiz.push(quiz);
-            }
-            const value = interaction.value.toLowerCase();
-            const returnValue = [];
-            for (const quiz of activeQuiz.filter(p => p.description.toLowerCase().includes(value) || p.id.toString().includes(value))) {
-                if (returnValue.length < 25) returnValue.push({
-                    value: quiz.messageID,
-                    name: truncate('#' + (interaction.client.guild.channels.cache.get(quiz.channelID) || {name: quiz.channelID}).name + ': ' + quiz.description, 100)
-                });
-            }
-            interaction.respond(returnValue);
-        }
+        if (user.dailyQuiz >= interaction.configurations['quiz']['config'].dailyQuizLimit) return interaction.reply({content: localize('quiz', 'daily-quiz-limit', {l: interaction.configurations['quiz']['config'].dailyQuizLimit}), ephemeral: true});
+        const quiz = interaction.client.configurations['quiz']['quizList'][Math.floor(Math.random() * interaction.client.configurations['quiz']['quizList'].length)];
+        quiz.private = true;
+        updateMessage(interaction.channel, quiz, interaction);
+        channel.client.models['quiz']['QuizUser'].update({dailyQuiz: user[0].dailyQuiz + 1}, {where: {userID: interaction.user.id}});
     }
 };
 
@@ -193,17 +163,8 @@ module.exports.config = {
             },
             {
                 type: 'SUB_COMMAND',
-                name: 'end',
-                description: localize('quiz', 'cmd-end-description'),
-                options: [
-                    {
-                        type: 'STRING',
-                        name: 'msg-id',
-                        required: true,
-                        autocomplete: true,
-                        description: localize('quiz', 'cmd-end-msgid-description')
-                    }
-                ]
+                name: 'play',
+                description: localize('quiz', 'cmd-play-description')
             }
         ];
         for (let step = 1; step <= 7; step++) {

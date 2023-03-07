@@ -59,4 +59,13 @@ module.exports.run = async (client, interaction) => {
             ephemeral: true
         });
     }
+    if (interaction.isButton() && interaction.customId === 'show-quiz-rank') {
+        const user = await client.models['quiz']['QuizUser'].findOne({
+            where: {
+                userID: interaction.user.id
+            }
+        });
+        if (user) interaction.reply({content: localize('quiz', 'your-rank', {xp: user.xp}), ephemeral: true});
+        else interaction.reply({content: "⚠️ " + localize('quiz', 'no-rank'), ephemeral: true})
+    }
 };

@@ -1,0 +1,32 @@
+{
+	"description": {
+	  "en": "Create and edit the quizzes of the server",
+	  "de": "Erstelle und bearbeite hier die Quiz des Servers"
+	},
+	"humanName": {
+	  "en": "Edit quiz",
+	  "de": "Quiz bearbeiten"
+	},
+	"filename": "quizList.json",
+	"content": [
+	  {
+		"name": "quiz",
+		"humanName": {
+		  "en": "Quiz"
+		},
+		"default": {
+		  "en": {}
+		},
+		"description": {
+		  "en": "You can edit the quizzes here that can be played with /quiz play",
+		  "de": "Du kannst hier Quiz, die bei /quiz play gespielt werden können, bearbeiten"
+		},
+		"type": "keyed",
+		"content": {
+		  "key": "string",
+		  "value": "string"
+		},
+		"disableKeyEdits": true
+	  }
+	]
+  }

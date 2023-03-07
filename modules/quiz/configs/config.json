@@ -57,6 +57,42 @@
         "value": "string"
       },
       "disableKeyEdits": true
+    },
+    {
+      "name": "dailyQuizLimit",
+      "humanName": {
+        "en": "Daily quiz limit",
+        "de": "Tägliches Quizlimit"
+      },
+      "default": {
+        "en": 5
+      },
+      "description": {
+        "en": "How many quizzes can be played per day",
+        "de": "Wie viele Quiz pro Tag gespielt werden können"
+      },
+      "type": "integer",
+      "allowNull": true
+    },
+    {
+      "name": "leaderboardChannel",
+      "humanName": {
+        "en": "Quiz leaderboard channel",
+        "de": "Quiz-Leaderboard-Kanal"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "In which channel the quiz leaderboard is displayed",
+        "de": "In welchem Kanal das Quiz-Leaderboard angezeigt wird"
+      },
+      "type": "channelID",
+      "content": [
+        "GUILD_TEXT",
+        "GUILD_ANNOUNCEMENT"
+      ],
+      "allowNull": true
     }
   ]
 }

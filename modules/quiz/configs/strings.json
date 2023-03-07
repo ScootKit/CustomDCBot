@@ -16,14 +16,18 @@
       },
       "default": {
         "en": {
-          "title": "New quiz",
+          "title": "New quiz - What's right?",
           "color": "BLUE",
           "options": "Today's options",
           "liveView": "Live view of the results",
           "expiresOn": "End of this quiz",
           "thisQuizExpiresOn": "This quiz expires on %date%.",
           "endedQuizTitle": "Quiz ended",
-          "endedQuizColor": "RED"
+          "endedQuizColor": "RED",
+          "leaderboardTitle": "The best quiz players",
+          "leaderboardSubtitle": "Quiz leaderboard",
+          "leaderboardColor": "GREEN",
+          "leaderboardButton": "View my ranking"
         },
         "de": {
           "title": "Neues Quiz - Was ist richtig?",
@@ -33,7 +37,11 @@
           "expiresOn": "Ende dieses Quiz",
           "thisQuizExpiresOn": "Dieses Quiz endet am %date%.",
           "endedQuizTitle": "Quiz beendet",
-          "endedQuizColor": "RED"
+          "endedQuizColor": "RED",
+          "leaderboardTitle": "Die besten Quiz-Spieler",
+          "leaderboardSubtitle": "Quiz-Rangliste",
+          "leaderboardColor": "GREEN",
+          "leaderboardButton": "Meine Platzierung ansehen"
         }
       },
       "description": {
