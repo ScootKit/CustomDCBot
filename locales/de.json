@@ -930,7 +930,7 @@
     "quiz": {
         "what-have-i-voted": "Was habe ich gewählt?",
         "vote": "Abstimmen!",
-        "vote-this": "Wähle diese Option, um hierfür abzustimmen",
+        "vote-this": "Wähle diese Option, wenn du denkst, dass diese richtig ist.",
         "voted-successfully": "Erfolgreich ausgewählt. Danke für deine Teilnahme.",
         "not-voted-yet": "Du hast noch keine Antwort ausgewählt, also kann ich dir nicht zeigen für was du abgestimmt hast?",
         "you-voted": "Du hast **%o** als Antwort ausgewählt.",
@@ -938,19 +938,18 @@
         "cannot-change-opinion": "Du kannst deine Auswahl nicht ändern, da der Ersteller diese Funktion deaktiviert hat.",
         "select-correct": "Wähle alle richtigen Antworten aus",
         "this-correct": "Diese Antwort als richtig markieren",
-        "cmd-description": "Erstelle und beende Quiz",
+        "cmd-description": "Erstelle und spiele Quiz",
         "cmd-create-normal-description": "Erstelle ein neues Quiz mit bis zu 10 Antworten",
         "cmd-create-bool-description": "Erstelle ein neues Quiz, bei dem Spieler nur Ja oder Nein auswählen können",
         "cmd-play-description": "Spiele ein Quiz",
+        "cmd-leaderboard-description": "Zeigt das Quiz-Leaderboard des Servers",
         "cmd-create-description-description": "Thema / Beschreibung dieses Quiz",
         "cmd-create-channel-description": "Kanal, in welchem dieses Quiz erstellt werden soll",
+        "cmd-create-endAt-description": "Dauer des Quiz",
         "cmd-create-option-description": "Option Nummer %o",
         "cmd-create-canchange-description": "Ob die Teilnehmer ihre Auswahl nachträglich ändern können (Standard: Nein)",
-        "cmd-create-endAt-description": "Dauer des Quiz (wenn nicht gesetzt ist, wird das Quiz nicht automatisch beendet)",
         "daily-quiz-limit": "Du hast das Limit von **%l** täglichen Quiz erreicht. Du kannst morgen wieder Quiz spielen.",
         "created": "Quiz erfolgreich in %c erstellt.",
-        "not-found": "Quiz konnte nicht gefunden werden",
-        "ended": "Quiz erfolgreich beendet",
         "correct-highlighted": "Alle richtigen Antworten wurden hervorgehoben.",
         "answer-correct": "✅ Deine Antwort war richtig!",
         "answer-wrong": "❌ Deine Antwort war falsch!",
@@ -959,6 +958,7 @@
         "leaderboard-channel-not-found": "Der Leaderboard-Kanal wurde nicht gefunden oder sein Typ ist nicht erlaubt.",
         "leaderboard-notation": "**%p. %u**: %xp XP",
         "your-rank": "Du hast **%xp** Punkte in Quiz gesammelt!",
-        "no-rank": "Du hast noch nie ein Quiz erfolgreich beendet!"
+        "no-rank": "Du hast noch nie ein Quiz erfolgreich beendet!",
+        "no-quiz": "Es wurden noch keine Quiz erstellt. Serveradmins können auf https://scnx.app/glink?page=bot/configuration?query=quiz&file=quiz%7Cconfigs%2FquizList Quiz hinzufügen."
     }
 }

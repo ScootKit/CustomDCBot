@@ -1,4 +1,4 @@
-const {truncate} = require('../../../src/functions/helpers');
+const {MessageEmbed} = require('discord.js');
 const durationParser = require('parse-duration');
 const {localize} = require('../../../src/functions/localize');
 const {createQuiz, updateMessage} = require('../quizUtil');
@@ -14,7 +14,7 @@ async function create(interaction) {
     let emojis = config.emojis;
     if (interaction.options.getSubcommand() === 'create-bool') {
         options = [{text: localize('quiz', 'bool-true')}, {text: localize('quiz', 'bool-false')}];
-        emojis = [undefined, emojis.true, emojis.false];
+        emojis = [void 0, emojis.true, emojis.false];
     } else {
         for (let step = 1; step <= 10; step++) {
             if (interaction.options.getString('option' + step)) options.push({text: interaction.options.getString('option' + step)});
@@ -73,13 +73,59 @@ module.exports.subcommands = {
     'create-bool': create,
     'play': async function (interaction) {
         let user = interaction.client.models['quiz']['QuizUser'].findAll({where: {userId: interaction.user.id}});
-        if (!user) user = await channel.client.models['quiz']['QuizUser'].create({userID: voter, dailyQuiz: 0});
+        if (!user) user = await interaction.client.models['quiz']['QuizUser'].create({userID: voter, dailyQuiz: 0});
 
         if (user.dailyQuiz >= interaction.configurations['quiz']['config'].dailyQuizLimit) return interaction.reply({content: localize('quiz', 'daily-quiz-limit', {l: interaction.configurations['quiz']['config'].dailyQuizLimit}), ephemeral: true});
+        if (!interaction.client.configurations['quiz']['quizList'] || interaction.client.configurations['quiz']['quizList'].length === 0) return interaction.reply({content: localize('quiz', 'no-quiz'), ephemeral: true});
+
         const quiz = interaction.client.configurations['quiz']['quizList'][Math.floor(Math.random() * interaction.client.configurations['quiz']['quizList'].length)];
         quiz.private = true;
         updateMessage(interaction.channel, quiz, interaction);
-        channel.client.models['quiz']['QuizUser'].update({dailyQuiz: user[0].dailyQuiz + 1}, {where: {userID: interaction.user.id}});
+        interaction.client.models['quiz']['QuizUser'].update({dailyQuiz: user[0].dailyQuiz + 1}, {where: {userID: interaction.user.id}});
+    },
+    'leaderboard': async function (interaction) {
+        const moduleStrings = interaction.client.configurations['quiz']['strings'];
+        const users = await interaction.client.models['quiz']['QuizUser'].findAll({
+            order: [
+                ['xp', 'DESC']
+            ],
+            limit: 15
+        });
+
+        let leaderboardString = '';
+        let i = 0;
+        for (const user of users) {
+            const member = interaction.guild.members.cache.get(user.userID);
+            if (!member) continue;
+            i++;
+            leaderboardString = leaderboardString + localize('quiz', 'leaderboard-notation', {
+                p: i,
+                u: member.user.toString(),
+                xp: user.xp
+            }) + '\n';
+        }
+        if (leaderboardString.length === 0) leaderboardString = localize('levels', 'no-user-on-leaderboard');
+
+        const embed = new MessageEmbed()
+            .setTitle(moduleStrings.embed.leaderboardTitle)
+            .setColor(moduleStrings.embed.leaderboardColor)
+            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
+            .setThumbnail(interaction.guild.iconURL())
+            .addField(moduleStrings.embed.leaderboardSubtitle, leaderboardString);
+
+        if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
+
+        const components = [{
+            type: 'ACTION_ROW',
+            components: [{
+                type: 'BUTTON',
+                label: moduleStrings.embed.leaderboardButton,
+                style: 'SUCCESS',
+                customId: 'show-quiz-rank'
+            }]
+        }];
+
+        interaction.reply({embeds: [embed], components});
     }
 };
 
@@ -108,6 +154,12 @@ module.exports.config = {
                 },
                 {
                     type: 'STRING',
+                    name: 'duration',
+                    required: true,
+                    description: localize('quiz', 'cmd-create-endAt-description')
+                },
+                {
+                    type: 'STRING',
                     name: 'option1',
                     required: true,
                     description: localize('quiz', 'cmd-create-option-description', {o: 1})
@@ -123,12 +175,6 @@ module.exports.config = {
                     name: 'canchange',
                     required: false,
                     description: localize('quiz', 'cmd-create-canchange-description')
-                },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('quiz', 'cmd-create-endAt-description')
                 }]
             },
             {
@@ -165,6 +211,11 @@ module.exports.config = {
                 type: 'SUB_COMMAND',
                 name: 'play',
                 description: localize('quiz', 'cmd-play-description')
+            },
+            {
+                type: 'SUB_COMMAND',
+                name: 'leaderboard',
+                description: localize('quiz', 'cmd-leaderboard-description')
             }
         ];
         for (let step = 1; step <= 7; step++) {

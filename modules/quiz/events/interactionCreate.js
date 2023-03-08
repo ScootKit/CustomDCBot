@@ -3,6 +3,16 @@ const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async (client, interaction) => {
     if (!interaction.message) return;
+    if (interaction.isButton() && interaction.customId === 'show-quiz-rank') {
+        const user = await client.models['quiz']['QuizUser'].findOne({
+            where: {
+                userID: interaction.user.id
+            }
+        });
+        if (user) return interaction.reply({content: localize('quiz', 'your-rank', {xp: user.xp}), ephemeral: true});
+        else return interaction.reply({content: '⚠️ ' + localize('quiz', 'no-rank'), ephemeral: true});
+    }
+
     const quiz = await client.models['quiz']['Quiz'].findOne({
         where: {
             messageID: interaction.message.id
@@ -58,14 +68,5 @@ module.exports.run = async (client, interaction) => {
             content: localize('quiz', 'voted-successfully'),
             ephemeral: true
         });
-    }
-    if (interaction.isButton() && interaction.customId === 'show-quiz-rank') {
-        const user = await client.models['quiz']['QuizUser'].findOne({
-            where: {
-                userID: interaction.user.id
-            }
-        });
-        if (user) interaction.reply({content: localize('quiz', 'your-rank', {xp: user.xp}), ephemeral: true});
-        else interaction.reply({content: "⚠️ " + localize('quiz', 'no-rank'), ephemeral: true})
     }
 };

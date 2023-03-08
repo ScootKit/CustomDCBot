@@ -18,7 +18,8 @@
   "models-dir": "/models",
   "config-example-files": [
     "configs/config.json",
-    "configs/strings.json"
+    "configs/strings.json",
+    "configs/quizList.json"
   ],
   "tags": [
     "community"

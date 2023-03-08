@@ -7,26 +7,54 @@
 	  "en": "Edit quiz",
 	  "de": "Quiz bearbeiten"
 	},
+	"configElements": true,
 	"filename": "quizList.json",
 	"content": [
-	  {
-		"name": "quiz",
-		"humanName": {
-		  "en": "Quiz"
+		{
+			"name": "title",
+			"humanName": {
+			  "en": "Title",
+			  "de": "Titel"
+			},
+			"default": {
+			  "en": ""
+			},
+			"description": {
+			  "en": "Title/Question of the quiz",
+			  "de": "Titel/Frage des Quiz"
+			},
+			"type": "string"
 		},
-		"default": {
-		  "en": {}
+		{
+			"name": "duration",
+			"humanName": {
+			  "en": "Time limit",
+			  "de": "Zeitlimit"
+			},
+			"default": {
+			  "en": "1m"
+			},
+			"description": {
+			  "en": "How much time the user has to answer",
+			  "de": "Wie viel Zeit der Nutzer zum Beantworten hat"
+			},
+			"type": "string"
 		},
-		"description": {
-		  "en": "You can edit the quizzes here that can be played with /quiz play",
-		  "de": "Du kannst hier Quiz, die bei /quiz play gespielt werden können, bearbeiten"
-		},
-		"type": "keyed",
-		"content": {
-		  "key": "string",
-		  "value": "string"
-		},
-		"disableKeyEdits": true
-	  }
+		{
+			"name": "options",
+			"humanName": {
+			  "en": "Possible answers",
+			  "de": "Mögliche Antworten"
+			},
+			"default": {
+			  "en": []
+			},
+			"description": {
+			  "en": "Possible answers and if they are correct",
+			  "de": "Mögliche Antworten und ob sie richtig sind"
+			},
+			"type": "array",
+			"content": ["string", "boolean"]
+		}
 	]
-  }
+}
