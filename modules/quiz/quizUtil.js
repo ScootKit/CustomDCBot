@@ -13,15 +13,16 @@ let changed = false;
  * Creates a new quiz
  * @param {Object} data Data of the new quiz
  * @param {Client} client Client
+ * @param {Discord.ApplicationCommandInteraction} interaction? Interaction if private
  * @return {Promise<void>}
  */
-async function createQuiz(data, client) {
+async function createQuiz(data, client, interaction) {
     const votes = {};
     for (const vid in data.options) {
         votes[parseInt(vid) + 1] = [];
     }
     data.votes = votes;
-    const id = await updateMessage(data.channel, data);
+    const id = await updateMessage(data.channel, data, data.private ? interaction : null);
 
     await client.models['quiz']['Quiz'].create({
         messageID: id,

@@ -14,7 +14,7 @@ async function create(interaction) {
     let emojis = config.emojis;
     if (interaction.options.getSubcommand() === 'create-bool') {
         options = [{text: localize('quiz', 'bool-true')}, {text: localize('quiz', 'bool-false')}];
-        emojis = [void 0, emojis.true, emojis.false];
+        emojis = [undefined, emojis.true, emojis.false];
     } else {
         for (let step = 1; step <= 10; step++) {
             if (interaction.options.getString('option' + step)) options.push({text: interaction.options.getString('option' + step)});
@@ -78,9 +78,10 @@ module.exports.subcommands = {
         if (user.dailyQuiz >= interaction.configurations['quiz']['config'].dailyQuizLimit) return interaction.reply({content: localize('quiz', 'daily-quiz-limit', {l: interaction.configurations['quiz']['config'].dailyQuizLimit}), ephemeral: true});
         if (!interaction.client.configurations['quiz']['quizList'] || interaction.client.configurations['quiz']['quizList'].length === 0) return interaction.reply({content: localize('quiz', 'no-quiz'), ephemeral: true});
 
+        console.log(interaction.client.configurations['quiz']['quizList']);
         const quiz = interaction.client.configurations['quiz']['quizList'][Math.floor(Math.random() * interaction.client.configurations['quiz']['quizList'].length)];
         quiz.private = true;
-        updateMessage(interaction.channel, quiz, interaction);
+        createQuiz(quiz, interaction.client, interaction);
         interaction.client.models['quiz']['QuizUser'].update({dailyQuiz: user[0].dailyQuiz + 1}, {where: {userID: interaction.user.id}});
     },
     'leaderboard': async function (interaction) {

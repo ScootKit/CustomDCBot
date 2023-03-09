@@ -41,20 +41,36 @@
 			"type": "string"
 		},
 		{
-			"name": "options",
+			"name": "correctOptions",
 			"humanName": {
-			  "en": "Possible answers",
-			  "de": "Mögliche Antworten"
+			  "en": "Correct answers",
+			  "de": "Richtige Antworten"
 			},
 			"default": {
 			  "en": []
 			},
 			"description": {
-			  "en": "Possible answers and if they are correct",
-			  "de": "Mögliche Antworten und ob sie richtig sind"
+			  "en": "Correct answers",
+			  "de": "Richtige Antworten"
 			},
 			"type": "array",
-			"content": ["string", "boolean"]
+			"content": "string"
+		},
+		{
+			"name": "wrongOptions",
+			"humanName": {
+			  "en": "Wrong answers",
+			  "de": "Falsche Antworten"
+			},
+			"default": {
+			  "en": []
+			},
+			"description": {
+			  "en": "Wrong answers",
+			  "de": "Falsche Antworten"
+			},
+			"type": "array",
+			"content": "string"
 		}
 	]
 }
