@@ -55,7 +55,7 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
     const strings = channel.client.configurations['quiz']['strings'];
     const config = channel.client.configurations['quiz']['config'];
     let emojis = config.emojis;
-    if (data.type === 'bool') emojis = [undefined, emojis.true, emojis.false];
+    if (data.type === 'bool') emojis = [null, emojis.true, emojis.false];
 
     let m;
     if (mID && !interaction) m = await channel.messages.fetch(mID).catch(() => {});

@@ -14,7 +14,7 @@ async function create(interaction) {
     let emojis = config.emojis;
     if (interaction.options.getSubcommand() === 'create-bool') {
         options = [{text: localize('quiz', 'bool-true')}, {text: localize('quiz', 'bool-false')}];
-        emojis = [undefined, emojis.true, emojis.false];
+        emojis = [null, emojis.true, emojis.false];
     } else {
         for (let step = 1; step <= 10; step++) {
             if (interaction.options.getString('option' + step)) options.push({text: interaction.options.getString('option' + step)});
