@@ -22,7 +22,7 @@ async function createQuiz(data, client, interaction) {
         votes[parseInt(vid) + 1] = [];
     }
     data.votes = votes;
-    const id = await updateMessage(data.channel, data, data.private ? interaction : null);
+    const id = await updateMessage(data.channel, data, null, data.private ? interaction : null);
 
     await client.models['quiz']['Quiz'].create({
         messageID: id,
@@ -47,16 +47,17 @@ async function createQuiz(data, client, interaction) {
  * @param {TextChannel} channel Channel in which the message is
  * @param {Object} data Data-Object (can be DB-Object)
  * @param {String} mID ID of already sent message
+ * @param {Discord.ApplicationCommandInteraction} interaction? Interaction if private
  * @return {Promise<*>}
  */
-async function updateMessage(channel, data, mID = null) {
+async function updateMessage(channel, data, mID = null, interaction = null) {
     const strings = channel.client.configurations.quiz.strings;
     const config = channel.client.configurations.quiz.config;
     let emojis = config.emojis;
-    if (data.type === 'bool') emojis = [void 0, emojis.true, emojis.false];
+    if (data.type === 'bool') emojis = [undefined, emojis.true, emojis.false];
 
     let m;
-    if (mID) m = await channel.messages.fetch(mID).catch(() => {});
+    if (mID && !interaction) m = await channel.messages.fetch(mID).catch(() => {});
     const embed = new MessageEmbed()
         .setTitle(strings.embed.title)
         .setColor(strings.embed.color)
@@ -124,10 +125,12 @@ async function updateMessage(channel, data, mID = null) {
     components.push({type: 'ACTION_ROW', components: [{type: 'BUTTON', customId: 'quiz-own-vote', label: localize('quiz', 'what-have-i-voted'), style: 'SECONDARY'}]});
 
     let r;
-    if (data.private) await m.reply({embeds: [embed], components, ephemeral: true});
-    else if (m) r = await m.edit({embeds: [embed], components});
+    if (data.private && interaction) {
+        if (mID) r = await interaction.update({embeds: [embed], components, fetchReply: true});
+        else r = await interaction.reply({embeds: [embed], components, fetchReply: true, ephemeral: true});
+    } else if (m) r = await m.edit({embeds: [embed], components});
     else r = await channel.send({embeds: [embed], components});
-    return r?.id;
+    return r.id;
 }
 
 /**

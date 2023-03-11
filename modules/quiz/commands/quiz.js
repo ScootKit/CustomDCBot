@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const durationParser = require('parse-duration');
 const {localize} = require('../../../src/functions/localize');
-const {createQuiz, updateMessage} = require('../quizUtil');
+const {createQuiz} = require('../quizUtil');
 
 /**
  * Handles quiz create commands
@@ -72,14 +72,18 @@ module.exports.subcommands = {
     'create': create,
     'create-bool': create,
     'play': async function (interaction) {
-        let user = interaction.client.models['quiz']['QuizUser'].findAll({where: {userId: interaction.user.id}});
+        let user = await interaction.client.models['quiz']['QuizUser'].findAll({where: {userId: interaction.user.id}});
         if (!user) user = await interaction.client.models['quiz']['QuizUser'].create({userID: voter, dailyQuiz: 0});
 
-        if (user.dailyQuiz >= interaction.configurations['quiz']['config'].dailyQuizLimit) return interaction.reply({content: localize('quiz', 'daily-quiz-limit', {l: interaction.configurations['quiz']['config'].dailyQuizLimit}), ephemeral: true});
+        if (user.dailyQuiz >= interaction.client.configurations['quiz']['config'].dailyQuizLimit) return interaction.reply({content: localize('quiz', 'daily-quiz-limit', {l: interaction.client.configurations['quiz']['config'].dailyQuizLimit}), ephemeral: true});
         if (!interaction.client.configurations['quiz']['quizList'] || interaction.client.configurations['quiz']['quizList'].length === 0) return interaction.reply({content: localize('quiz', 'no-quiz'), ephemeral: true});
 
-        console.log(interaction.client.configurations['quiz']['quizList']);
         const quiz = interaction.client.configurations['quiz']['quizList'][Math.floor(Math.random() * interaction.client.configurations['quiz']['quizList'].length)];
+        quiz.channel = interaction.channel;
+        quiz.options = [
+            ...quiz.wrongOptions.map(o => ({text: o})),
+            ...quiz.correctOptions.map(o => ({text: o, correct: true}))
+        ];
         quiz.private = true;
         createQuiz(quiz, interaction.client, interaction);
         interaction.client.models['quiz']['QuizUser'].update({dailyQuiz: user[0].dailyQuiz + 1}, {where: {userID: interaction.user.id}});

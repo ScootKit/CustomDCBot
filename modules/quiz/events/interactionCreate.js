@@ -63,8 +63,8 @@ module.exports.run = async (client, interaction) => {
         o[(parseInt(interaction.isSelectMenu() ? interaction.values[0] : interaction.customId.split('-')[2]) + 1).toString()].push(interaction.user.id);
         quiz.votes = o;
         quiz.save();
-        updateMessage(interaction.message.channel, quiz, interaction.message.id);
-        interaction.reply({
+        await updateMessage(interaction.channel, quiz, interaction.message.id, interaction);
+        interaction[quiz.private ? 'followUp' : 'reply']({
             content: localize('quiz', 'voted-successfully'),
             ephemeral: true
         });

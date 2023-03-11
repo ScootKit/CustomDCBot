@@ -10,7 +10,7 @@ module.exports.run = async (client) => {
         });
     });
 
-    if (client.configurations['quiz']['config']['leaderboardChannel']) {
+    if (client.configurations['quiz']['config'].leaderboardChannel) {
         await updateLeaderboard(client, true);
         const interval = setInterval(() => {
             updateLeaderboard(client);

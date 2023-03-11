@@ -11,10 +11,10 @@
 	"filename": "quizList.json",
 	"content": [
 		{
-			"name": "title",
+			"name": "description",
 			"humanName": {
-			  "en": "Title",
-			  "de": "Titel"
+			  "en": "Question or statement",
+			  "de": "Frage oder Behauptung"
 			},
 			"default": {
 			  "en": ""
