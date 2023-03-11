@@ -2,7 +2,7 @@ const {updateMessage, updateLeaderboard} = require('../quizUtil');
 const {scheduleJob} = require('node-schedule');
 
 module.exports.run = async (client) => {
-    const quizList = await client.models['quiz']['Quiz'].findAll();
+    const quizList = await client.models['quiz']['QuizList'].findAll();
 
     quizList.forEach(quiz => {
         if (quiz.expiresAt && new Date(quiz.expiresAt).getTime() > new Date().getTime()) scheduleJob(new Date(quiz.expiresAt), async () => {

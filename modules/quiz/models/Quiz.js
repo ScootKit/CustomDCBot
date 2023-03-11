@@ -1,6 +1,6 @@
 const {DataTypes, Model} = require('sequelize');
 
-module.exports = class Quiz extends Model {
+module.exports = class QuizList extends Model {
     static init(sequelize) {
         return super.init({
             messageID: {
@@ -13,6 +13,7 @@ module.exports = class Quiz extends Model {
             expiresAt: DataTypes.DATE,
             channelID: DataTypes.STRING,
             canChangeVote: DataTypes.BOOLEAN,
+            private: DataTypes.BOOLEAN,
             type: DataTypes.STRING // normal, bool
         }, {
             tableName: 'quiz_Quiz',
@@ -23,6 +24,6 @@ module.exports = class Quiz extends Model {
 };
 
 module.exports.config = {
-    'name': 'Quiz',
+    'name': 'QuizList',
     'module': 'quiz'
 };

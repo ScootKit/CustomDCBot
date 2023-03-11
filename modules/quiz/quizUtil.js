@@ -24,7 +24,7 @@ async function createQuiz(data, client, interaction) {
     data.votes = votes;
     const id = await updateMessage(data.channel, data, null, data.private ? interaction : null);
 
-    await client.models['quiz']['Quiz'].create({
+    await client.models['quiz']['QuizList'].create({
         messageID: id,
         description: data.description,
         options: data.options,
@@ -32,12 +32,13 @@ async function createQuiz(data, client, interaction) {
         expiresAt: data.endAt,
         votes,
         canChangeVote: data.canChangeVote,
+        private: data.private || false,
         type: data.type
     });
 
     if (data.endAt) {
         client.jobs.push(scheduleJob(data.endAt, async () => {
-            await updateMessage(data.channel, await client.models['quiz']['Quiz'].findOne({where: {messageID: id}}), id);
+            await updateMessage(data.channel, await client.models['quiz']['QuizList'].findOne({where: {messageID: id}}), id);
         }));
     }
 }
@@ -51,8 +52,8 @@ async function createQuiz(data, client, interaction) {
  * @return {Promise<*>}
  */
 async function updateMessage(channel, data, mID = null, interaction = null) {
-    const strings = channel.client.configurations.quiz.strings;
-    const config = channel.client.configurations.quiz.config;
+    const strings = channel.client.configurations['quiz']['strings'];
+    const config = channel.client.configurations['quiz']['config'];
     let emojis = config.emojis;
     if (data.type === 'bool') emojis = [undefined, emojis.true, emojis.false];
 
@@ -140,7 +141,7 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
  * @return {Promise<Discord.Message>}
  */
 async function updateLeaderboard(client, force = false) {
-    if (!client.configurations['quiz']['config']['leaderboardChannel']) return;
+    if (!client.configurations['quiz']['config'].leaderboardChannel) return;
     if (!force && !changed) return;
     const moduleStrings = client.configurations['quiz']['strings'];
     const channel = await client.channels.fetch(client.configurations['quiz']['config']['leaderboardChannel']).catch(() => {

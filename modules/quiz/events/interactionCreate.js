@@ -13,7 +13,7 @@ module.exports.run = async (client, interaction) => {
         else return interaction.reply({content: '⚠️ ' + localize('quiz', 'no-rank'), ephemeral: true});
     }
 
-    const quiz = await client.models['quiz']['Quiz'].findOne({
+    const quiz = await client.models['quiz']['QuizList'].findOne({
         where: {
             messageID: interaction.message.id
         }

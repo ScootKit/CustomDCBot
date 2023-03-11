@@ -84,6 +84,7 @@ module.exports.subcommands = {
             ...quiz.wrongOptions.map(o => ({text: o})),
             ...quiz.correctOptions.map(o => ({text: o, correct: true}))
         ];
+        quiz.endAt = new Date(new Date().getTime() + durationParser(quiz.duration));
         quiz.private = true;
         createQuiz(quiz, interaction.client, interaction);
         interaction.client.models['quiz']['QuizUser'].update({dailyQuiz: user[0].dailyQuiz + 1}, {where: {userID: interaction.user.id}});
