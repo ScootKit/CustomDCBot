@@ -87,7 +87,7 @@ module.exports.run = async (client, interaction) => {
         quiz.votes = o;
         quiz.save();
 
-        updateMessage(interaction.channel, quiz, interaction.message.id, interaction);
+        updateMessage(interaction.channel, quiz, interaction.message.id);
         interaction.reply({
             content: localize('quiz', 'voted-successfully'),
             ephemeral: true
