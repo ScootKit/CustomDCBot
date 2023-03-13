@@ -8,6 +8,7 @@ const {renderProgressbar, formatDate} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 
 let changed = false;
+
 /**
  * Sets the changed variable to true
  */
@@ -94,7 +95,7 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
         const finishhighlight = data.options[id].correct ? '✅' : '❌';
         const percentage = 100 / allVotes * data.votes[(parseInt(id) + 1).toString()].length;
 
-        s = s + highlight + (expired ? finishhighlight : '') + emojis[parseInt(id) + 1] + ': ' + data.options[id].text + ' `' + data.votes[(parseInt(id) + 1).toString()].length + '`' + highlight + '\n';
+        s = s + highlight + (expired ? finishhighlight : '') + emojis[parseInt(id) + 1] + ': ' + data.options[id].text + (data.private ? '' : ' `' + data.votes[(parseInt(id) + 1).toString()].length + '`') + highlight + '\n';
         p = p + highlight + emojis[parseInt(id) + 1] + ' ' + renderProgressbar(percentage) + ' ' + (percentage ? percentage.toFixed(0) : '0') +
             '% (' + data.votes[(parseInt(id) + 1).toString()].length + '/' + allVotes + ')' + highlight + '\n';
     }

@@ -18,6 +18,10 @@ module.exports = class QuizUser extends Model {
             dailyQuiz: {
                 type: DataTypes.INTEGER,
                 defaultValue: 0
+            },
+            nextQuizID: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0
             }
         }, {
             tableName: 'quiz_users',

@@ -93,6 +93,25 @@
         "GUILD_ANNOUNCEMENT"
       ],
       "allowNull": true
+    },
+    {
+      "name": "mode",
+      "humanName": {
+        "en": "Mode for quiz selection",
+        "de": "Modus zur Quizauswahl"
+      },
+      "default": {
+        "en": "Random"
+      },
+      "description": {
+        "en": "How a /quiz play quiz is selected for users",
+        "de": "Wie ein /quiz-play-Quiz für Nutzer ausgewählt wird"
+      },
+      "type": "select",
+      "content": [
+        "Random",
+        "Continuous"
+      ]
     }
   ]
 }

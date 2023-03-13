@@ -54,7 +54,7 @@ module.exports.run = async (client, interaction) => {
                     userID: interaction.user.id
                 }
             });
-            if (user.length == 0) return;
+            if (user.length === 0) return;
 
             let extra = localize('quiz', 'answer-wrong');
             if (quiz.options[interaction.isSelectMenu() ? interaction.values[0] : interaction.customId.split('-')[2]].correct) {

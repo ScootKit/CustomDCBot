@@ -84,14 +84,19 @@ module.exports.subcommands = {
             now.setSeconds(0);
 
             return interaction.reply({
-                content: localize('quiz', 'daily-quiz-limit', {l: interaction.client.configurations['quiz']['config'].dailyQuizLimit, timestamp: "<t:" + Math.round(now.getTime() / 1000) + ":R>"}),
+                content: localize('quiz', 'daily-quiz-limit', {l: interaction.client.configurations['quiz']['config'].dailyQuizLimit, timestamp: '<t:' + Math.round(now.getTime() / 1000) + ':R>'}),
                 ephemeral: true
             });
         }
-        if (!interaction.client.configurations['quiz']['quizList'] || interaction.client.configurations['quiz']['quizList'].length === 0)
-            return interaction.reply({content: localize('quiz', 'no-quiz'), ephemeral: true});
+        if (!interaction.client.configurations['quiz']['quizList'] || interaction.client.configurations['quiz']['quizList'].length === 0) return interaction.reply({content: localize('quiz', 'no-quiz'), ephemeral: true});
 
-        const quiz = interaction.client.configurations['quiz']['quizList'][Math.floor(Math.random() * interaction.client.configurations['quiz']['quizList'].length)];
+        const updatedUser = {dailyQuiz: user.dailyQuiz + 1};
+        let quiz = {};
+        if (interaction.client.configurations['quiz']['config'].mode.toLowerCase() === 'continuous') {
+            quiz = interaction.client.configurations['quiz']['quizList'][user.nextQuizID] || interaction.client.configurations['quiz']['quizList'][0];
+            updatedUser.nextQuizID = interaction.client.configurations['quiz']['quizList'][user.nextQuizID + 1] ? user.nextQuizID + 1 : 0;
+        } else quiz = interaction.client.configurations['quiz']['quizList'][Math.floor(Math.random() * interaction.client.configurations['quiz']['quizList'].length)];
+
         quiz.channel = interaction.channel;
         quiz.options = [
             ...quiz.wrongOptions.map(o => ({text: o})),
@@ -101,7 +106,8 @@ module.exports.subcommands = {
         quiz.canChangeVote = false;
         quiz.private = true;
         createQuiz(quiz, interaction.client, interaction);
-        interaction.client.models['quiz']['QuizUser'].update({dailyQuiz: user.dailyQuiz + 1}, {where: {userID: interaction.user.id}});
+
+        interaction.client.models['quiz']['QuizUser'].update(updatedUser, {where: {userID: interaction.user.id}});
     },
     'leaderboard': async function (interaction) {
         const moduleStrings = interaction.client.configurations['quiz']['strings'];
