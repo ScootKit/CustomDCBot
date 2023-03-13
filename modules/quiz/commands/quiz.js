@@ -8,7 +8,9 @@ const {createQuiz} = require('../quizUtil');
  * @param {Discord.ApplicationCommandInteraction} interaction
  */
 async function create(interaction) {
-    const config = interaction.client.configurations.quiz.config;
+    const config = interaction.client.configurations['quiz']['config'];
+    if (!interaction.member.roles.cache.has(config.createAllowedRole)) return interaction.reply({content: localize('quiz', 'no-permission'), ephemeral: true});
+
     let endAt;
     let options = [];
     let emojis = config.emojis;

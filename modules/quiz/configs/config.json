@@ -95,6 +95,21 @@
       "allowNull": true
     },
     {
+      "name": "createAllowedRole",
+      "humanName": {
+        "en": "Role needed to create quizzes",
+        "de": "Rolle zum Erstellen von Quiz"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Which role a user needs to have to be able to create quizzes with /quiz create/create-bool",
+        "de": "Welche Rolle ein Nutzer haben muss, um Quiz mit /quiz create/create-bool erstellen zu können"
+      },
+      "type": "roleID"
+    },
+    {
       "name": "mode",
       "humanName": {
         "en": "Mode for quiz selection",
