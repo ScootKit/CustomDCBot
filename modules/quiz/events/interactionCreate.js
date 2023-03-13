@@ -1,4 +1,4 @@
-const {updateMessage} = require('../quizUtil');
+const {updateMessage, setChanged} = require('../quizUtil');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async (client, interaction) => {
@@ -47,10 +47,33 @@ module.exports.run = async (client, interaction) => {
     }
     if ((interaction.isSelectMenu() && interaction.customId === 'quiz-vote') || (interaction.isButton() && interaction.customId.startsWith('quiz-vote-'))) {
         if (quiz.expiresAt && new Date(quiz.expiresAt).getTime() <= new Date().getTime()) return;
+
+        if (quiz.private) {
+            const user = await interaction.client.models['quiz']['QuizUser'].findAll({
+                where: {
+                    userID: interaction.user.id
+                }
+            });
+            if (user.length == 0) return;
+
+            let extra = localize('quiz', 'answer-wrong');
+            if (quiz.options[interaction.isSelectMenu() ? interaction.values[0] : interaction.customId.split('-')[2]].correct) {
+                extra = localize('quiz', 'answer-correct');
+                interaction.client.models['quiz']['QuizUser'].update({dailyXp: user[0].dailyXp + 1, xp: user[0].xp + 1}, {where: {userID: interaction.user.id}});
+                setChanged();
+            }
+
+            return interaction.update({
+                content: localize('quiz', 'you-voted', {o: quiz.options[interaction.isSelectMenu() ? interaction.values[0] : interaction.customId.split('-')[2]].text}) + '\n\n' + extra,
+                embeds: [],
+                components: []
+            });
+        }
+
         const o = quiz.votes;
         quiz.votes = {};
-
         let back = false;
+
         for (const id in o) {
             if (o[id].includes(interaction.user.id) && !quiz.canChangeVote) {
                 interaction.reply({content: localize('quiz', 'cannot-change-opinion'), ephemeral: true});
@@ -63,8 +86,9 @@ module.exports.run = async (client, interaction) => {
         o[(parseInt(interaction.isSelectMenu() ? interaction.values[0] : interaction.customId.split('-')[2]) + 1).toString()].push(interaction.user.id);
         quiz.votes = o;
         quiz.save();
-        await updateMessage(interaction.channel, quiz, interaction.message.id, interaction);
-        interaction[quiz.private ? 'followUp' : 'reply']({
+
+        updateMessage(interaction.channel, quiz, interaction.message.id, interaction);
+        interaction.reply({
             content: localize('quiz', 'voted-successfully'),
             ephemeral: true
         });

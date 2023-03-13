@@ -8,6 +8,12 @@ const {renderProgressbar, formatDate} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 
 let changed = false;
+/**
+ * Sets the changed variable to true
+ */
+function setChanged() {
+    changed = true;
+}
 
 /**
  * Creates a new quiz
@@ -36,7 +42,7 @@ async function createQuiz(data, client, interaction) {
         type: data.type
     });
 
-    if (data.endAt) {
+    if (!data.private && data.endAt) {
         client.jobs.push(scheduleJob(data.endAt, async () => {
             await updateMessage(data.channel, await client.models['quiz']['QuizList'].findOne({where: {messageID: id}}), id);
         }));
@@ -93,7 +99,7 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
             '% (' + data.votes[(parseInt(id) + 1).toString()].length + '/' + allVotes + ')' + highlight + '\n';
     }
     embed.addField(strings.embed.options, s);
-    embed.addField(strings.embed.liveView, p);
+    if (!data.private) embed.addField(strings.embed.liveView, p);
 
     const options = [];
     for (const vId in data.options) {
@@ -123,13 +129,11 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
         {type: 'BUTTON', customId: 'quiz-vote-1', label: localize('quiz', 'bool-false'), style: 'DANGER', disabled: expired}
     ]});
     else components.push({type: 'ACTION_ROW', components: [{type: 'SELECT_MENU', disabled: expired, customId: 'quiz-vote', min_values: 1, max_values: 1, placeholder: localize('quiz', 'vote'), options}]});
-    components.push({type: 'ACTION_ROW', components: [{type: 'BUTTON', customId: 'quiz-own-vote', label: localize('quiz', 'what-have-i-voted'), style: 'SECONDARY'}]});
+    if (!data.private) components.push({type: 'ACTION_ROW', components: [{type: 'BUTTON', customId: 'quiz-own-vote', label: localize('quiz', 'what-have-i-voted'), style: 'SECONDARY'}]});
 
     let r;
-    if (data.private && interaction) {
-        if (mID) r = await interaction.update({embeds: [embed], components, fetchReply: true});
-        else r = await interaction.reply({embeds: [embed], components, fetchReply: true, ephemeral: true});
-    } else if (m) r = await m.edit({embeds: [embed], components});
+    if (data.private && interaction) r = await interaction.reply({embeds: [embed], components, fetchReply: true, ephemeral: true});
+    else if (m) r = await m.edit({embeds: [embed], components});
     else r = await channel.send({embeds: [embed], components});
     return r.id;
 }
@@ -194,6 +198,7 @@ async function updateLeaderboard(client, force = false) {
 }
 
 module.exports = {
+    setChanged,
     createQuiz,
     updateMessage,
     updateLeaderboard
