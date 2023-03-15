@@ -1,0 +1,59 @@
+{
+  "description": {
+    "en": "Edit the messages and strings of the module here",
+    "de": "Stelle hier die Nachrichten des Modules ein"
+  },
+  "humanName": {
+    "en": "Nachrichten",
+    "de": "Nachrichten"
+  },
+  "filename": "strings.json",
+  "content": [
+    {
+      "name": "embed",
+      "humanName": {
+        "de": "Embed"
+      },
+      "default": {
+        "en": {
+          "title": "New quiz - What's right?",
+          "color": "BLUE",
+          "options": "Today's options",
+          "liveView": "Live view of the results",
+          "expiresOn": "End of this quiz",
+          "thisQuizExpiresOn": "This quiz expires on %date%.",
+          "endedQuizTitle": "Quiz ended",
+          "endedQuizColor": "RED",
+          "leaderboardTitle": "The best quiz players",
+          "leaderboardSubtitle": "Quiz leaderboard",
+          "leaderboardColor": "GREEN",
+          "leaderboardButton": "View my ranking"
+        },
+        "de": {
+          "title": "Neues Quiz - Was ist richtig?",
+          "color": "BLUE",
+          "options": "Mögliche antworten",
+          "liveView": "Live-Anzeige der Ergebnisse",
+          "expiresOn": "Ende dieses Quiz",
+          "thisQuizExpiresOn": "Dieses Quiz endet am %date%.",
+          "endedQuizTitle": "Quiz beendet",
+          "endedQuizColor": "RED",
+          "leaderboardTitle": "Die besten Quiz-Spieler",
+          "leaderboardSubtitle": "Quiz-Rangliste",
+          "leaderboardColor": "GREEN",
+          "leaderboardButton": "Meine Platzierung ansehen"
+        }
+      },
+      "description": {
+        "en": "You can edit the settings of your embed here",
+        "de": "Du kannst die Einstellungen des Embeds hier bearbeiten"
+      },
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    }
+  ]
+}
