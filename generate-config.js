@@ -18,8 +18,8 @@ try {
 } catch (e) {
     console.log('[INFO] Starting generation...');
     exampleFile.content.forEach(async field => {
-        if (!field.field_name) return;
-        config[field.field_name] = field.default;
+        if (!field.name) return;
+        config[field.name] = field.default.en;
     });
 
     if (!fs.existsSync(`${confDir}`)) {
