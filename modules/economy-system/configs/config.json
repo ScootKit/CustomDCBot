@@ -13,7 +13,7 @@
       "name": "admins",
       "humanName": {
         "en": "Administrators",
-        "de": "Administartoren"
+        "de": "Administratoren"
       },
       "default": {
         "en": []
