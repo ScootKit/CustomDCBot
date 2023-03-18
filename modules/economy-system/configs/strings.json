@@ -661,7 +661,7 @@
         "de": "Es gibt schon ein Item mit der ID %id% oder dem Namen %name%"
       },
       "description": {
-        "en": "The message thag gets send when an item with the specified id or name already exists",
+        "en": "The message that gets send when an item with the specified id or name already exists",
         "de": "Die Nachricht, die gesendet wird, wenn ein Item mit dem angegebenen Namen oder der angegebenen ID schon existiert"
       },
       "type": "string",
