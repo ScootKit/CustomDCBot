@@ -857,6 +857,7 @@
     "confirm-option-remove-description": "Do you really want to delete your custom role? This will not reset any running cooldowns"
   },
     "rock-paper-scissors": {
+        "command-description": "Play rock-paper-scissors against the bot or someone in the chat",
         "stone": "Stone",
         "paper": "Paper",
         "scissors": "Scissors",
@@ -869,10 +870,10 @@
         "invite-denied": "Sorry, %u, but %i denied your request to play a round of rock-paper-scissors ):",
         "rps-title": "Rock Paper Scissors",
         "rps-description": "Choose your weapon!",
-        "its-a-tie-try-again": "It's a tie! Try again!",
-        "command-description": "Play rock-paper-scissors against the bot or someone in the chat"
+        "its-a-tie-try-again": "It's a tie! Try again!"
     },
     "connect-four": {
+        "command-description": "Play Connect Four against the bot or someone in the chat",
         "tie": "It's a tie!",
         "win": "%u has won the game!",
         "not-turn": "Sorry, but it's not your turn!",
@@ -880,7 +881,40 @@
         "challenge-message": "%t, %u challenged you to a game of Connect Four! Hit the button below to join the game! This invitation will expire in about 2 minutes, so don't hesitate to much.",
         "invite-expired": "Sorry, %u, %i didn't accept your request to play Connect Four in time ):",
         "invite-denied": "Sorry, %u, but %i denied your request to play a round of Connect Four ):",
-        "command-description": "Play Connect Four against the bot or someone in the chat",
-        "field-size-description": "The size of the playfield (default: 7)"
+        "field-size-description": "The size of the playfield (default: 7)",
+        "challenge-yourself": "You cannot challenge yourself!",
+        "challenge-bot": "You cannot challenge bots!"
+    },
+    "uno": {
+        "command-description": "Play Uno against users in the chat",
+        "challenge-message": "%u invites to a round of Uno! Click the button below this message to join! The game starts %timestamp with %count players.",
+        "not-enough-players": "Not enough players joined for a round of Uno!",
+        "user-cards": "%u: %cards cards",
+        "already-joined": "You're already in!",
+        "view-deck": "View deck",
+        "draw": "Draw card",
+        "uno": "Uno!",
+        "turn": "It's %u turn!",
+        "update-button": "Update",
+        "use-drawn": "Do you want to use the drawn card?",
+        "dont-use-drawn": "Dont use",
+        "win": "%u won the game! %turns cards were played.",
+        "win-you": "You've won the game!",
+        "missing-uno": ":warning: You must use the Uno! button before you use your second last card!",
+        "choose-color": "Select a color:",
+        "pending-draws": "Use a Draw 2/4 card, otherwise you have to draw %count cards!",
+        "not-ingame": "You're not in this game!",
+        "skip": "Skip",
+        "reverse": "Reverse",
+        "color": "Color choice",
+        "draw2": "Draw 2",
+        "colordraw4": "Color choice and draw 4",
+        "cant-uno": "You cannot use Uno currently.",
+        "done-uno": "You've called Uno!",
+        "auto-drawn-skip": "Your turn was skipped because you would have had to draw the cards anyway.",
+        "start-game": "Start game now",
+        "not-host": "You're not the host of the game!",
+        "max-players": "The game is full!",
+        "previous-cards": "Previous cards: "
     }
 }
