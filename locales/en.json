@@ -833,7 +833,7 @@
     "command-group-description-msg-drop-msg": "Enable/ Disable the Message-Drop-Message",
     "command-description-msg-drop-msg-enable": "Enable the Message-Drop-Message",
     "command-description-msg-drop-msg-disable": "Disable the Message-Drop-Message",
-    "command-description-destroy": "Destroy the whole economy (deletes all Database-Entrys)",
+    "command-description-destroy": "Destroy the whole economy (deletes all Database-Entries)",
     "option-description-confirm": "Confirm, that you really want to destroy the whole economy",
     "destroy-cancel-reply": "You're lucky. You stppoed me in the last moment before I destroyed the economy",
     "destroy-reply": "Ok... I'll destroy the whole economy",
