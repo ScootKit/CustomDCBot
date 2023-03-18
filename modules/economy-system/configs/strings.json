@@ -590,7 +590,7 @@
         "de": "Erneutkaufen Nachricht"
       },
       "default": {
-        "en": "You alread own this Item",
+        "en": "You already own this Item",
         "de": "Du hast diese Item bereits gekauft"
       },
       "description": {
