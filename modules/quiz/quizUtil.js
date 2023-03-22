@@ -70,8 +70,7 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
         .setTitle(strings.embed.title)
         .setColor(strings.embed.color)
         .setDescription(data.description);
-    let s = '';
-    let p = '';
+
     let allVotes = 0;
     const expired = (data.expiresAt || data.endAt) ? data.expiresAt <= Date.now() || data.endAt <= Date.now() : false;
     for (const vid in data.votes) {
@@ -90,17 +89,20 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
         }
     }
 
+    let s = '';
+    let p = '';
     for (const id in data.options) {
         const highlight = expired && data.options[id].correct ? '**' : '';
         const finishhighlight = data.options[id].correct ? '✅' : '❌';
         const percentage = 100 / allVotes * data.votes[(parseInt(id) + 1).toString()].length;
 
-        s = s + highlight + (expired ? finishhighlight : '') + emojis[parseInt(id) + 1] + ': ' + data.options[id].text + (data.private ? '' : ' `' + data.votes[(parseInt(id) + 1).toString()].length + '`') + highlight + '\n';
+        s = s + highlight + (expired ? finishhighlight : '') + emojis[parseInt(id) + 1] + ': ' + data.options[id].text +
+            ((config.livePreview || expired) && !data.private ? ' `' + data.votes[(parseInt(id) + 1).toString()].length + '`' : '') + highlight + '\n';
         p = p + highlight + emojis[parseInt(id) + 1] + ' ' + renderProgressbar(percentage) + ' ' + (percentage ? percentage.toFixed(0) : '0') +
             '% (' + data.votes[(parseInt(id) + 1).toString()].length + '/' + allVotes + ')' + highlight + '\n';
     }
     embed.addField(strings.embed.options, s);
-    if (!data.private) embed.addField(strings.embed.liveView, p);
+    if ((config.livePreview || expired) && !data.private) embed.addField(strings.embed.liveView, p);
 
     const options = [];
     for (const vId in data.options) {

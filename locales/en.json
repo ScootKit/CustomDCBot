@@ -918,7 +918,7 @@
         "voted-successfully": "Selected successfully.",
         "not-voted-yet": "You have not selected an option yet, so I cant show you what you selected?",
         "you-voted": "You've selected **%o** as correct answer.",
-        "change-opinion": "You can change your oponion at any time by selecting another option above the button you just clicked.",
+        "change-opinion": "You can change your opinion at any time by selecting another option above the button you just clicked.",
         "cannot-change-opinion": "You cannot change your selection as the creator of this quiz disabled it.",
         "select-correct": "Select all correct answers",
         "this-correct": "Mark this answer as correct",

@@ -68,11 +68,10 @@
         "en": 5
       },
       "description": {
-        "en": "How many quizzes can be played per day",
-        "de": "Wie viele Quiz pro Tag gespielt werden können"
+        "en": "How many quizzes can be played per day using /quiz play",
+        "de": "Wie viele Quiz pro Tag mit /quiz play gespielt werden können"
       },
-      "type": "integer",
-      "allowNull": true
+      "type": "integer"
     },
     {
       "name": "leaderboardChannel",
@@ -127,6 +126,21 @@
         "Random",
         "Continuous"
       ]
+    },
+    {
+      "name": "livePreview",
+      "humanName": {
+        "en": "Live preview of results",
+        "de": "Live-Vorschau der Ergebnisse"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Whether the live preview of results is enabled",
+        "de": "Ob die Live-Vorschau der Ergebnisse aktiviert ist"
+      },
+      "type": "boolean"
     }
   ]
 }

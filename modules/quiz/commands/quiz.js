@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const durationParser = require('parse-duration');
+const { formatDate } = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const {createQuiz} = require('../quizUtil');
 
@@ -86,7 +87,7 @@ module.exports.subcommands = {
             now.setSeconds(0);
 
             return interaction.reply({
-                content: localize('quiz', 'daily-quiz-limit', {l: interaction.client.configurations['quiz']['config'].dailyQuizLimit, timestamp: '<t:' + Math.round(now.getTime() / 1000) + ':R>'}),
+                content: localize('quiz', 'daily-quiz-limit', {l: interaction.client.configurations['quiz']['config'].dailyQuizLimit, timestamp: formatDate(now)}),
                 ephemeral: true
             });
         }
