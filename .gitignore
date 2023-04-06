@@ -3,8 +3,4 @@
 /config/
 src/functions/scnx-integration.js
 /.vscode/
-/.idea/CustomDCBot.iml
-/.idea/modules.xml
-/.idea/inspectionProfiles/Project_Default.xml
-/.idea/vcs.xml
-/.idea/workspace.xml
+/.idea/
