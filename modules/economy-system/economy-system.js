@@ -363,7 +363,7 @@ async function createShopMsg(client, guild, ephemeral) {
     const options = [];
     for (let i = 0; i < items.length; i++) {
         const roles = await guild.roles.fetch(items[i].dataValues.role);
-        string = `${string}${inputReplacer({'%id%': items[i].dataValues.id, '%itemName%': items[i].dataValues.name, '%price%': `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`, '%sellcount%': roles.members.size}, client.configurations['economy-system']['strings']['itemString'])}`;
+        string = `${string}${inputReplacer({'%id%': items[i].dataValues.id, '%itemName%': items[i].dataValues.name, '%price%': `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`, '%sellcount%': roles ? roles.members.size : '0'}, client.configurations['economy-system']['strings']['itemString'])}`;
         options.push({
             label: items[i].dataValues.name,
             description: localize('economy-system', 'select-menu-price', {

@@ -20,14 +20,12 @@ module.exports.subcommands = {
     'add': async function (interaction) {
         if (!checkPerms(interaction)) return;
         await createShopItem(interaction);
-        shopMsg(interaction.client);
+        await shopMsg(interaction.client);
     },
     'buy': async function (interaction) {
-        let name = await interaction.options.get('item-name');
-        if (name) name = name['value'];
-        let id = await interaction.options.get('item-id')['value'];
-        if (id) id = id['value'];
-        buyShopItem(interaction, id, name);
+        const name = await interaction.options.getString('item-name');
+        const id = await interaction.options.getString('item-id');
+        await buyShopItem(interaction, id, name);
     },
     'list': async function (interaction) {
         const msg = await createShopMsg(interaction.client, interaction.guild, !interaction.client.configurations['economy-system']['config']['publicCommandReplies']);
@@ -36,7 +34,7 @@ module.exports.subcommands = {
     'delete': async function (interaction) {
         if (!checkPerms(interaction)) return;
         await deleteShopItem(item['value'], interaction.client);
-        shopMsg(interaction.client);
+        await shopMsg(interaction.client);
     }
 };
 
