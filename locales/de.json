@@ -926,7 +926,10 @@
         "not-host": "Du bist nicht der Ersteller des Spiels!",
         "max-players": "Das Spiel ist voll!",
         "previous-cards": "Vorherige Karten: ",
-        "invalid-card": "Du hast die Karte %c bereits verwendet! Nutze den Aktualisieren-Button und wähle eine zulässige Karte."
+        "used-card": "Du hast die Karte %c bereits verwendet! Nutze den Aktualisieren-Button und spiele eine zulässige Karte.",
+        "invalid-card": "Du kannst die Karte %c momentan nicht spielen! Bitte spiele eine zulässige Karte.",
+        "inactive-warn": "%u, du bist bei Uno am Zug!",
+        "inactive-win": "Das Uno-Spiel wurde beendet. %u hat gewonnen, da alle anderen ausgeschieden sind!"
     },
     "quiz": {
         "what-have-i-voted": "Was habe ich gewählt?",

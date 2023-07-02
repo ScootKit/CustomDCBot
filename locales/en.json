@@ -910,7 +910,10 @@
         "not-host": "You're not the host of the game!",
         "max-players": "The game is full!",
         "previous-cards": "Previous cards: ",
-        "invalid-card": "You've already used the card %c! Use the Update button and choose a valid card."
+        "used-card": "You've already used the card %c! Use the Update button and play a valid card.",
+        "invalid-card": "You cannot play the card %c right now! Please select a valid card.",
+        "inactive-warn": "%u, it's your turn in the uno game!",
+        "inactive-win": "The uno game has ended. %u won as all others have been eliminated!"
     },
     "quiz": {
         "what-have-i-voted": "What have I voted?",
