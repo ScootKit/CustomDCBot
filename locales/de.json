@@ -910,7 +910,7 @@
         "dont-use-drawn": "Nicht verwenden",
         "win": "%u hat das Spiel gewonnen! Es wurden %turns Karten gespielt.",
         "win-you": "Du hast das Spiel gewonnen!",
-        "missing-uno": ":warning: Du musst den Uno!-Button nutzen, bevor du die vorletzte Karte legst!",
+        "missing-uno": "⚠️ Du musst den Uno!-Button nutzen, bevor du die vorletzte Karte legst!",
         "choose-color": "Wähle eine Farbe aus:",
         "pending-draws": "Lege eine Ziehe 2/4-Karte, sonst musst du %count Karten ziehen!",
         "not-ingame": "Du bist nicht in dem Uno-Spiel!",
@@ -925,7 +925,11 @@
         "start-game": "Spiel sofort starten",
         "not-host": "Du bist nicht der Ersteller des Spiels!",
         "max-players": "Das Spiel ist voll!",
-        "previous-cards": "Vorherige Karten: "
+        "previous-cards": "Vorherige Karten: ",
+        "used-card": "Du hast die Karte %c bereits verwendet! Nutze den Aktualisieren-Button und spiele eine zulässige Karte.",
+        "invalid-card": "Du kannst die Karte %c momentan nicht spielen! Bitte spiele eine zulässige Karte.",
+        "inactive-warn": "%u, du bist bei Uno am Zug!",
+        "inactive-win": "Das Uno-Spiel wurde beendet. %u hat gewonnen, da alle anderen ausgeschieden sind!"
     },
     "quiz": {
         "what-have-i-voted": "Was habe ich gewählt?",
