@@ -14,7 +14,6 @@
   "tags": [
     "tools"
   ],
-  "fa-icon": "fas fa-right-from-bracket",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/afk-system",
   "humanReadableName": {
     "en": "AFK-System"

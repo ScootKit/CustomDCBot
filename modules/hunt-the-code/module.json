@@ -8,7 +8,6 @@
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/hunt-the-code",
   "commands-dir": "/commands",
   "models-dir": "/models",
-  "fa-icon": "fa-solid fa-tags",
   "config-example-files": [
     "strings.json"
   ],

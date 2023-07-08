@@ -1,22 +1,22 @@
 {
-	"name": "uno",
-	"humanReadableName": {
-	  "en": "Uno"
-	},
-	"author": {
-	  "scnxOrgID": "60",
-	  "name": "TomatoCake",
-	  "link": "https://github.com/DEVTomatoCake"
-	},
-	"description": {
-	  "en": "Let your users play Uno against each other!",
-	  "de": "Lasse Nutzer auf deinem Server Uno gegeneinander spielen"
-	},
-	"commands-dir": "/commands",
-	"noConfig": true,
-	"releaseDate": "0",
-	"tags": [
-	  "fun"
-	],
-	"openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/uno"
+  "name": "uno",
+  "humanReadableName": {
+    "en": "Uno"
+  },
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": {
+    "en": "Let your users play Uno against each other!",
+    "de": "Lasse Nutzer auf deinem Server Uno gegeneinander spielen"
+  },
+  "commands-dir": "/commands",
+  "noConfig": true,
+  "releaseDate": "0",
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/uno"
 }

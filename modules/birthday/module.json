@@ -1,6 +1,5 @@
 {
   "name": "birthday",
-  "fa-icon": "fas fa-birthday-cake",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/birthday",
   "author": {
     "scnxOrgID": "1",
