@@ -1,4 +1,10 @@
-const {randomElementFromArray, embedType, formatDate} = require('../../../src/functions/helpers');
+const {
+    randomElementFromArray,
+    embedType,
+    formatDate,
+    embedTypeV2,
+    formatDiscordUserName
+} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     const moduleConfig = client.configurations['welcomer']['config'];
@@ -40,16 +46,16 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
             }
             if (!message) message = channelConfig.message;
 
-            await channel.send(embedType(message || 'Message not found',
+            await channel.send(await embedTypeV2(message || 'Message not found',
                 {
                     '%mention%': newGuildMember.toString(),
                     '%servername%': newGuildMember.guild.name,
-                    '%tag%': newGuildMember.user.tag,
+                    '%tag%': formatDiscordUserName(newGuildMember.user),
                     '%guildUserCount%': (await client.guild.members.fetch()).size,
                     '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
                     '%memberProfilePictureUrl%': newGuildMember.user.avatarURL() || newGuildMember.user.defaultAvatarURL,
                     '%createdAt%': formatDate(newGuildMember.user.createdAt),
-                    '%guildLevel%': client.guild.premiumTier,
+                    '%guildLevel%': localize('boostTier', client.guild.premiumTier),
                     '%boostCount%': client.guild.premiumSubscriptionCount,
                     '%joinedAt%': formatDate(newGuildMember.joinedAt)
                 }

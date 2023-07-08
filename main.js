@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({
     allowedMentions: {parse: ['users', 'roles']}, // Disables @everyone mentions because everyone hates them
-    intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
+    intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'MESSAGE_CONTENT', 'GUILD_VOICE_STATES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
 });
 client.intervals = [];
 client.jobs = [];
@@ -60,7 +60,7 @@ log4js.configure({
     }
 });
 const logger = log4js.getLogger();
-logger.level = process.env.LOGLEVEL || 'debug';
+logger.level = scnxSetup ? 'debug' : (process.env.LOGLEVEL || 'debug');
 
 // Loading config
 try {
@@ -82,7 +82,7 @@ logger.level = config.logLevel || process.env.LOGLEVEL || 'debug';
 client.logger = logger;
 module.exports.logger = logger;
 const configChecker = require('./src/functions/configuration');
-const {compareArrays, checkForUpdates} = require('./src/functions/helpers');
+const {compareArrays, checkForUpdates, formatDiscordUserName} = require('./src/functions/helpers');
 const {localize} = require('./src/functions/localize');
 logger.info(localize('main', 'startup-info', {l: logger.level}));
 
@@ -140,7 +140,7 @@ db.authenticate().then(async () => {
         logger.error(localize('main', 'not-invited', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
         process.exit(1);
     });
-    logger.info(localize('main', 'logged-in', {tag: client.user.tag}));
+    logger.info(localize('main', 'logged-in', {tag: formatDiscordUserName(client.user)}));
     loadCLIFile('/src/cli.js');
     client.models = models;
     client.moduleConf = moduleConf;
@@ -162,7 +162,11 @@ db.authenticate().then(async () => {
     });
     await loadCommandsInDir('./src/commands');
     if (client.scnxSetup) {
-        client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+        try {
+            client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+        } catch (e) {
+            client.config.customCommands = [];
+        }
         require('./src/functions/scnx-integration').verifyCustomCommands(client);
     }
     await syncCommandsIfNeeded();
@@ -369,9 +373,9 @@ async function loadEventsInDir(dir, moduleName = null) {
                     if (!events[eventName]) {
                         events[eventName] = [];
                         client.on(eventName, (...cArgs) => {
-                            if (!client.botReadyAt) return;
                             for (const eData of events[eventName]) {
                                 try {
+                                    if (!client.botReadyAt && !eData.eventFunction.ignoreBotReadyCheck) continue;
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {
@@ -455,6 +459,10 @@ async function loadModules() {
     for (const f of files) {
         logger.debug(localize('main', 'loading-module', {m: f}));
         const moduleConfig = jsonfile.readFileSync(`${__dirname}/modules/${f}/module.json`);
+        if (moduleConfig.hidden) {
+            logger.debug(localize('main', 'hidden-module', {m: f}));
+            continue;
+        }
         client.modules[f] = {};
         if (typeof moduleConf[f] === 'undefined') {
             missingModules.push(f);

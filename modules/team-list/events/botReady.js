@@ -1,9 +1,15 @@
 const isEqual = require('is-equal');
-const {disableModule} = require('../../../src/functions/helpers');
+const {disableModule, truncate} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const {MessageEmbed} = require('discord.js');
 const schedule = require('node-schedule');
 
+const statusIcons = {
+    'online': '🟢',
+    'dnd': '🔴',
+    'idle': '🟡',
+    'offline': '⚫'
+};
 
 module.exports.run = async function (client) {
     await updateEmbedsIfNeeded(client);
@@ -39,18 +45,16 @@ async function updateEmbedsIfNeeded(client) {
         const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
         const guildMembers = await channel.guild.members.fetch();
 
-        for (const rID of channelConfig.roles) {
-            const role = await channel.guild.roles.fetch(rID);
-            if (!role) return disableModule('team-list', localize('team-list', 'role-not-found', {r: rID}));
-
+        const roles = (await channel.guild.roles.fetch()).filter(f => channelConfig.roles.includes(f.id)).sort((a, b) => a.position < b.position ? 1 : -1);
+        for (const role of roles.values()) {
             let userString = '';
-            for (const member of guildMembers.filter(m => m.roles.cache.has(rID)).values()) {
-                userString = userString + `${member.user.toString()}, `;
+            for (const member of guildMembers.filter(m => m.roles.cache.has(role.id)).values()) {
+                userString = userString + (channelConfig.includeStatus ? `* ${member.user.toString()}: ${statusIcons[(member.presence || {status: 'offline'}).status]} ${localize('team-list', (member.presence || {status: 'offline'}).status)}\n` : `${member.user.toString()}, `);
             }
             if (userString === '') userString = localize('team-list', 'no-users-with-role', {r: role.toString()});
-            else userString = userString.substring(0, userString.length - 2);
+            else if (!channelConfig.includeStatus) userString = userString.substring(0, userString.length - 2);
 
-            embed.addField(channelConfig['nameOverwrites'][rID] || role.name, (channelConfig['descriptions'][rID] ? `${channelConfig['descriptions'][rID]}\n` : '') + userString);
+            embed.addField(channelConfig['nameOverwrites'][role.id] || role.name, truncate((channelConfig['descriptions'][role.id] ? `${channelConfig['descriptions'][role.id]}\n` : '') + userString, 1024));
         }
 
         if (embed.fields.length === 0) embed.addField('⚠', localize('team-list', 'no-roles-selected'));

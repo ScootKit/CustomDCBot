@@ -56,7 +56,7 @@ async function updateMessage(channel, data, mID = null) {
     const embed = new MessageEmbed()
         .setTitle(strings.embed.title)
         .setColor(strings.embed.color)
-        .setDescription(data.description);
+        .setDescription(data.description.replaceAll('[PUBLIC]', ''));
     let s = '';
     let p = '';
     let allVotes = 0;
@@ -64,12 +64,14 @@ async function updateMessage(channel, data, mID = null) {
         allVotes = allVotes + data.votes[vid].length;
     }
     for (const id in data.options) {
+        if (!data.votes[(parseInt(id) + 1).toString()]) data.votes[(parseInt(id) + 1).toString()] = [];
         s = s + `${config.reactions[parseInt(id) + 1]}: ${data.options[id]} \`${data.votes[(parseInt(id) + 1).toString()].length}\`\n`;
         const percentage = 100 / allVotes * data.votes[(parseInt(id) + 1).toString()].length;
         p = p + `${config.reactions[parseInt(id) + 1]} ` + renderProgressbar(percentage) + ` ${!percentage ? '0' : percentage.toFixed(0)}% (${data.votes[(parseInt(id) + 1).toString()].length}/${allVotes})\n`;
     }
     embed.addField(strings.embed.options, s);
     embed.addField(strings.embed.liveView, p);
+    embed.addField(strings.embed.visibility, localize('polls', `poll-${data.description.startsWith('[PUBLIC]') ? 'public' : 'private'}`));
 
     const options = [];
     for (const vId in data.options) {
@@ -95,9 +97,34 @@ async function updateMessage(channel, data, mID = null) {
 
     const components = [
         /* eslint-disable camelcase */
-        {type: 'ACTION_ROW', components: [{type: 'SELECT_MENU', disabled: expired, customId: 'polls-vote', min_values: 1, max_values: 1, placeholder: localize('polls', 'vote'), options}]},
-        {type: 'ACTION_ROW', components: [{type: 'BUTTON', customId: 'polls-own-vote', 'label': localize('polls', 'what-have-i-votet'), style: 'SUCCESS', options}]}
+        {
+            type: 'ACTION_ROW',
+            components: [{
+                type: 'SELECT_MENU',
+                disabled: expired,
+                customId: 'polls-vote',
+                min_values: 1,
+                max_values: 1,
+                placeholder: localize('polls', 'vote'),
+                options
+            }]
+        },
+        {
+            type: 'ACTION_ROW',
+            components: [{
+                type: 'BUTTON',
+                customId: 'polls-own-vote',
+                'label': localize('polls', 'what-have-i-votet'),
+                style: 'SUCCESS'
+            }]
+        }
     ];
+    if (data.description.startsWith('[PUBLIC]')) components[1].components.push({
+        type: 'BUTTON',
+        customId: 'polls-public-votes',
+        label: localize('polls', 'view-public-votes'),
+        style: 'SECONDARY'
+    });
 
     let r;
     if (m) r = await m.edit({embeds: [embed], components});

@@ -1,6 +1,5 @@
 {
   "name": "twitch-notifications",
-  "fa-icon": "fa-brands fa-twitch",
   "author": {
     "name": "jateute",
     "link": "https://github.com/jateute",
@@ -14,7 +13,7 @@
     "configs/streamers.json"
   ],
   "tags": [
-    "community"
+    "integrations"
   ],
   "humanReadableName": {
     "en": "Twitch-Notifications",

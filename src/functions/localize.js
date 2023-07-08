@@ -4,7 +4,7 @@
  */
 const {client} = require('../../main');
 const jsonfile = require('jsonfile');
-const fs = require('fs');
+const fs = require('fs')
 
 const locals = {};
 loadLocale('en');
@@ -17,7 +17,7 @@ loadLocale('en');
 function loadLocale(locale) {
     if (locals[locale]) return;
     if (!fs.existsSync(`${__dirname}/../../locales/${locale}.json`)) locale = 'en';
-    locals[locale] = jsonfile.readFileSync(`${__dirname}/../../locales/${locale}.json`);
+    locals[locale] = jsonfile.readFileSync(`${__dirname}/../../locales/${locale}.json`)
 }
 
 /**
@@ -30,7 +30,7 @@ function loadLocale(locale) {
 function localize(file, string, replace = {}) {
     loadLocale(client.locale);
     if (!locals[client.locale]) client.locale = 'en';
-    if (!locals[client.locale][file]) locals[client.locale][file] = [];
+    if (!locals[client.locale][file]) locals[client.locale][file] = {};
     let rs = locals[client.locale][file][string];
     if (!rs) rs = locals['en'][file][string];
     if (!rs) throw new Error(`String ${file}/${string} not found`);

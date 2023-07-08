@@ -16,7 +16,7 @@ module.exports.subcommands = {
             if (interaction.options.getString(`option${step}`)) options.push(interaction.options.getString(`option${step}`));
         }
         await createPoll({
-            description: interaction.options.getString('description', true),
+            description: (interaction.options.getBoolean('public') ? '[PUBLIC]' : '') + interaction.options.getString('description', true),
             channel: interaction.options.getChannel('channel', true),
             endAt: endAt,
             options
@@ -60,10 +60,10 @@ module.exports.autoComplete = {
             }
             interaction.value = interaction.value.toLowerCase();
             const returnValue = [];
-            for (const poll of polls.filter(p => p.description.toLowerCase().includes(interaction.value) || p.id.toString().includes(interaction.value))) {
+            for (const poll of polls.filter(p => p.description.toLowerCase().includes(interaction.value) || p.messageID.toString().includes(interaction.value))) {
                 if (returnValue.length !== 25) returnValue.push({
                     value: poll.messageID,
-                    name: truncate(`#${(interaction.client.guild.channels.cache.get(poll.channelID) || {name: poll.channelID}).name}: ${poll.description}`, 100)
+                    name: truncate(`#${(interaction.client.guild.channels.cache.get(poll.channelID) || {name: poll.channelID}).name}: ${poll.description.replaceAll('[PUBLIC]', '')}`, 100)
                 });
             }
             interaction.respond(returnValue);
@@ -106,12 +106,18 @@ module.exports.config = {
                     required: true,
                     description: localize('polls', 'command-poll-create-option-description', {o: 2})
                 },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('polls', 'command-poll-create-endAt-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-endAt-description')
+                    },
+                    {
+                        type: 'BOOLEAN',
+                        name: 'public',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-public-description')
+                    }
                 ]
             },
             {

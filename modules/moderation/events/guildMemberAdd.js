@@ -11,8 +11,10 @@ exports.run = async (client, guildMember) => {
     const moduleConfig = client.configurations['moderation']['config'];
 
     // Anti-Punishment-Bypass
-    if (!!memberCache.mute.get(guildMember.user.id)) await guildMember.roles.add(moduleConfig['muterole-id'], `[moderation] ${localize('moderation', 'restored-punishment-audit-log-reason')}`);
-    if (!!memberCache.quarantine.get(guildMember.user.id)) await guildMember.roles.add(moduleConfig['quarantine-role-id'], `[moderation] ${localize('moderation', 'restored-punishment-audit-log-reason')}`);
+    if (!!memberCache.quarantine.get(guildMember.user.id)) {
+        guildMember.doNotGiveWelcomeRole = true;
+        await guildMember.roles.add(moduleConfig['quarantine-role-id'], `[moderation] ${localize('moderation', 'restored-punishment-audit-log-reason')}`);
+    }
 
     // Anti-Join-Raid
     const antiJoinRaidConfig = client.configurations['moderation']['antiJoinRaid'];
@@ -83,22 +85,22 @@ exports.run = async (client, guildMember) => {
             });
             if (!channel || (channel || {}).type !== 'GUILD_TEXT') return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
             const m = await channel.send({
-                content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
+                    content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
 
-                components: [
-                    {
-                        type: 'ACTION_ROW',
-                        components: [
-                            {
-                                type: 'BUTTON',
-                                label: '📨 ' + localize('moderation', 'restart-verification-button'),
-                                customId: `mod-rvp`,
-                                style: 'PRIMARY'
-                            }
-                        ]
-                    }
-                ]
-            }
+                    components: [
+                        {
+                            type: 'ACTION_ROW',
+                            components: [
+                                {
+                                    type: 'BUTTON',
+                                    label: '📨 ' + localize('moderation', 'restart-verification-button'),
+                                    customId: `mod-rvp`,
+                                    style: 'PRIMARY'
+                                }
+                            ]
+                        }
+                    ]
+                }
             );
             setTimeout(() => {
                 m.delete().then(() => {
@@ -236,7 +238,7 @@ async function sendDMPart(verificationConfig, guildMember) {
                 });
                 col.on('end', () => {
                     if (!p) {
-                        d.delete();
+                        if (d) d.delete();
                         verificationFail(guildMember);
                     }
                 });
@@ -260,7 +262,8 @@ async function verificationPassed(guildMember) {
     const verificationConfig = guildMember.client.configurations['moderation']['verification'];
     if (verificationConfig['verification-needed-role'].length !== 0) await guildMember.roles.remove(verificationConfig['verification-needed-role'], '[' + localize('moderation', 'verification') + '] ' + localize('moderation', 'verification-completed'));
     if (verificationConfig['verification-passed-role'].length !== 0) await guildMember.roles.add(verificationConfig['verification-passed-role'], '[' + localize('moderation', 'verification') + '] ' + localize('moderation', 'verification-completed'));
-    await guildMember.user.send(embedType(verificationConfig['captcha-succeeded-message']));
+    await guildMember.user.send(embedType(verificationConfig['captcha-succeeded-message'])).catch(() => {
+    });
     if (guildMember.guild.channels.cache.get(verificationConfig['verification-log'])) await guildMember.guild.channels.cache.get(verificationConfig['verification-log']).send({
         embeds: [{
             title: localize('moderation', 'verification'),

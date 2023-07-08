@@ -1,4 +1,4 @@
-const {embedType} = require('../functions/helpers');
+const {embedType, formatDiscordUserName} = require('../functions/helpers');
 const {localize} = require('../functions/localize');
 
 module.exports.run = async (client, interaction) => {
@@ -58,13 +58,13 @@ module.exports.run = async (client, interaction) => {
                 g: group || '',
                 s: subCommand || ''
             }));
-            interaction.respond({});
+            interaction.respond([]);
         }
     }
     if (!interaction.isCommand()) return;
     if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions));
     client.logger.debug(localize('command', 'used', {
-        tag: interaction.user.tag,
+        tag: formatDiscordUserName(interaction.user),
         id: interaction.user.id,
         c: command.name,
         g: group || '',
@@ -100,7 +100,7 @@ module.exports.run = async (client, interaction) => {
         }));
         if (!interaction.deferred) {
             interaction.reply({
-                content: localize('command', 'execution-failed-message'),
+                content: localize('command', 'execution-failed-message', {e}),
                 ephemeral: true
             }).catch(() => {
             });
@@ -108,3 +108,4 @@ module.exports.run = async (client, interaction) => {
         });
     }
 };
+module.exports.ignoreBotReadyCheck = true;

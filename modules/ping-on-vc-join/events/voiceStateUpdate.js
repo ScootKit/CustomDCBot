@@ -1,4 +1,4 @@
-const {embedType, disableModule} = require('../../../src/functions/helpers');
+const {embedType, disableModule, formatDiscordUserName} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 const cooldown = new Set();
@@ -24,7 +24,7 @@ exports.run = async (client, oldState, newState) => {
         if (member.voice.channelId !== channel.id) return;
         await notifyChannel.send(embedType(configElement['message'], {
             '%vc%': channel.name,
-            '%tag%': member.user.tag,
+            '%tag%': formatDiscordUserName(member.user),
             '%mention%': `<@${member.user.id}>`
         }));
 

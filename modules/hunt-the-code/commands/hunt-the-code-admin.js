@@ -1,5 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
-const {randomString, postToSCNetworkPaste} = require('../../../src/functions/helpers');
+const {randomString, postToSCNetworkPaste, formatDiscordUserName} = require('../../../src/functions/helpers');
 
 module.exports.subcommands = {
     'create-code': function (interaction) {
@@ -64,7 +64,7 @@ async function generateReport(client) {
     for (const i in users) {
         const user = users[i];
         const u = await client.users.fetch(user.id);
-        reportString = reportString + `| ${parseInt(i) + 1}. | ${u.tag} | ${u.id} | ${user.foundCount} | ${user.foundCodes.join(', ')} |\n`;
+        reportString = reportString + `| ${parseInt(i) + 1}. | ${formatDiscordUserName(u)} | ${u.id} | ${user.foundCount} | ${user.foundCodes.join(', ')} |\n`;
     }
     reportString = reportString + `\n## ${localize('hunt-the-code', 'code-header')}\n| Rank | Code | Display-Name | Times found |\n| --- | --- | --- | --- |\n`;
     for (const i in codes) {

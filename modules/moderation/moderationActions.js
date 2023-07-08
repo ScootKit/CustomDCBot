@@ -1,8 +1,9 @@
 const {scheduleJob} = require('node-schedule');
-const {embedType, formatDate, dateToDiscordTimestamp} = require('../../src/functions/helpers');
+const {embedType, formatDate, dateToDiscordTimestamp, formatDiscordUserName} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../src/functions/localize');
 const durationParser = require('parse-duration');
+const {Op} = require('sequelize');
 
 /**
  * Performs a mod action
@@ -13,11 +14,13 @@ const durationParser = require('parse-duration');
  * @param {String} reason Reason for this action
  * @param {Object} additionalData Additional data needed for executing this action
  * @param {Date} expiringAt Date when this action should expire
+ * @param {MessageAttachment} proof Message-Attachment containing proof
  * @return {Promise<unknown>}
  */
-async function moderationAction(client, type, user, victim, reason, additionalData = {}, expiringAt = null) {
+async function moderationAction(client, type, user, victim, reason, additionalData = {}, expiringAt = null, proof = null) {
     const moduleConfig = client.configurations['moderation']['config'];
     const moduleStrings = client.configurations['moderation']['strings'];
+    const antiGriefConfig = client.configurations['moderation']['antiGrief'];
     if (!reason) reason = localize('moderation', 'no-reason');
     return new Promise(async (resolve, reject) => {
         const guild = await client.guilds.fetch(client.guildID);
@@ -27,35 +30,53 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
             client.logger.error(localize('moderation', 'quarantinerole-not-found'));
             return reject(localize('moderation', 'quarantinerole-not-found'));
         }
+        if (antiGriefConfig['enabled'] && ['warn', 'mute', 'kick', 'ban'].includes(type)) {
+            const affectedActions = await client.models['moderation']['ModerationAction'].findAll({
+                where: {
+                    createdAt: {
+                        [Op.gte]: new Date(new Date().getTime() - parseInt(antiGriefConfig['timeframe']) * 3600000)
+                    },
+                    type
+                }
+            });
+            if ((affectedActions.length + 1) > parseInt(antiGriefConfig[`max_${type}`])) {
+                await moderationAction(client, 'quarantine', {user: client.user}, user, '[ANTI-GRIEF] ' + localize('moderation', 'anti-grief-reason', {
+                    type,
+                    n: antiGriefConfig[`max_${type}`],
+                    h: antiGriefConfig['timeframe']
+                }));
+                return reject(localize('moderation', 'anti-grief-user-message'));
+            }
+        }
         switch (type) {
             case 'mute':
                 if (!expiringAt) expiringAt = new Date(new Date().getTime() + 1209600000);
                 await victim.timeout(expiringAt.getTime() - new Date().getTime(), localize('moderation', 'mute-audit-log-reason', {
-                    u: user.user.tag,
+                    u: formatDiscordUserName(user.user),
                     r: reason
                 }));
                 sendMessage(victim, embedType(expiringAt ? moduleStrings['tmpmute_message'] : moduleStrings['mute_message'], {
                     '%reason%': reason,
-                    '%user%': user.user.tag,
+                    '%user%': formatDiscordUserName(user.user),
                     '%date%': expiringAt ? formatDate(expiringAt) : null
                 }));
                 if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(moduleConfig['changeNicknameOnMute'].split('%nickname%').join(victim.nickname ? victim.nickname : victim.user.username), '[moderation] ' + localize('moderation', 'mute-audit-log-reason', {
-                    u: user.user.tag,
+                    u: formatDiscordUserName(user.user),
                     r: reason
                 })).catch(() => {
                 });
                 break;
             case 'unmute':
                 if (victim.isCommunicationDisabled()) await victim.timeout(null, localize('moderation', 'unmute-audit-log-reason', {
-                    u: user.user.tag,
+                    u: formatDiscordUserName(user.user),
                     r: reason
                 }));
                 sendMessage(victim, embedType(moduleStrings['unmute_message'], {
                     '%reason%': reason,
-                    '%user%': user.user.tag
+                    '%user%': formatDiscordUserName(user.user)
                 }));
                 if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(victim.user.username, '[moderation] ' + localize('moderation', 'unmute-audit-log-reason', {
-                    u: user.user.tag,
+                    u: formatDiscordUserName(user.user),
                     r: reason
                 }));
                 break;
@@ -63,13 +84,13 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                 if (!victim.roles.cache.get(quarantineRole.id)) {
                     if (moduleConfig['remove-all-roles-on-quarantine']) {
                         await victim.roles.set([quarantineRole], '[moderation] ' + localize('moderation', 'quarantine-audit-log-reason', {
-                            u: user.user.tag,
+                            u: formatDiscordUserName(user.user),
                             r: reason
                         })).catch(async e => {
                             client.logger.log(localize('moderation', 'batch-role-remove-failed', {i: victim.id, e}));
                             for (const role of victim.roles.cache) { // Remove as much roles as possible
                                 await victim.roles.remove(role, '[moderation] ' + localize('moderation', 'quarantine-audit-log-reason', {
-                                    u: user.user.tag,
+                                    u: formatDiscordUserName(user.user),
                                     r: reason
                                 })).catch((err) => {
                                     client.logger.warn(localize('moderation', 'could-not-remove-role'), {
@@ -79,25 +100,25 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                                 });
                             }
                             await victim.roles.add(quarantineRole, '[moderation] ' + localize('moderation', 'quarantine-audit-log-reason', {
-                                u: user.user.tag,
+                                u: formatDiscordUserName(user.user),
                                 r: reason
                             }));
                         });
                     } else await victim.roles.add(quarantineRole, '[moderation] ' + localize('moderation', 'quarantine-audit-log-reason', {
-                        u: user.user.tag,
+                        u: formatDiscordUserName(user.user),
                         r: reason
                     }));
                     sendMessage(victim, embedType(expiringAt ? moduleStrings['tmpquarantine_message'] : moduleStrings['quarantine_message'], {
                         '%reason%': reason,
-                        '%user%': user.user.tag,
+                        '%user%': formatDiscordUserName(user.user),
                         '%date%': expiringAt ? formatDate(expiringAt) : null
                     }));
                     if (victim.voice) await victim.voice.disconnect(localize('moderation', 'quarantine-audit-log-reason', {
-                        u: user.user.tag,
+                        u: formatDiscordUserName(user.user),
                         r: reason
                     }));
                     if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(moduleConfig['changeNicknameOnQuarantine'].split('%nickname%').join(victim.nickname ? victim.nickname : victim.user.username), '[moderation] ' + localize('moderation', 'quarantine-audit-log-reason', {
-                        u: user.user.tag,
+                        u: formatDiscordUserName(user.user),
                         r: reason
                     })).catch(() => {
                     });
@@ -119,7 +140,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                 }
                 sendMessage(victim, embedType(moduleStrings['unquarantine_message'], {
                     '%reason%': reason,
-                    '%user%': user.user.tag
+                    '%user%': formatDiscordUserName(user.user)
                 }));
                 if (moduleConfig['changeNicknameOnQuarantine']) await victim.setNickname(victim.user.username).catch(() => {
                 });
@@ -127,10 +148,10 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
             case 'kick':
                 sendMessage(victim, embedType(moduleStrings['kick_message'], {
                     '%reason%': reason,
-                    '%user%': user.user.tag
+                    '%user%': formatDiscordUserName(user.user)
                 }));
                 if (victim.kickable) await victim.kick('[moderation] ' + localize('moderation', 'kicked-audit-log-reason', {
-                    u: user.user.tag,
+                    u: formatDiscordUserName(user.user),
                     r: reason
                 }));
                 break;
@@ -138,14 +159,14 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                 if (!victim.notFound) {
                     await victim.send(embedType(expiringAt ? moduleStrings['tmpban_message'] : moduleStrings['ban_message'], {
                         '%reason%': reason,
-                        '%user%': user.user.tag,
+                        '%user%': formatDiscordUserName(user.user),
                         '%date%': expiringAt ? formatDate(expiringAt) : null
                     })).catch(() => {
                     });
                     if (victim.bannable) await victim.ban({
                         days: additionalData.days || 0,
                         reason: '[moderation] ' + localize('moderation', 'banned-audit-log-reason', {
-                            u: user.user.tag,
+                            u: formatDiscordUserName(user.user),
                             r: reason
                         })
                     });
@@ -156,7 +177,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     await guild.members.ban(victim.id, {
                         days: additionalData.days || 0,
                         reason: '[moderation] ' + localize('moderation', 'banned-audit-log-reason', {
-                            u: user.user.tag,
+                            u: formatDiscordUserName(user.user),
                             r: reason
                         })
                     });
@@ -165,7 +186,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
             case 'warn':
                 await victim.send(embedType(moduleStrings['warn_message'], {
                     '%reason%': reason,
-                    '%user%': user.user.tag
+                    '%user%': formatDiscordUserName(user.user)
                 })).catch(() => {
                 });
                 const warns = await client.models['moderation']['ModerationAction'].findAll({
@@ -177,34 +198,35 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                 if (moduleConfig['automod'][warns.length + 1]) {
                     const roles = [];
                     victim.roles.cache.forEach(role => roles.push(role.id));
-                    await moderationAction(client, moduleConfig['automod'][warns.length + 1].split(':')[0], {user: client.user}, victim, `[${localize('moderation', 'auto-mod')}]: ${localize('moderation', 'reached-warns', {w: warns.length + 1})}`, {roles: roles}, moduleConfig['automod'][warns.length + 1].includes(':') ? new Date(new Date().getTime() + durationParser(moduleConfig['automod'][warns.length + 1].split(':')[1])) : null);
+                    moderationAction(client, moduleConfig['automod'][warns.length + 1].split(':')[0], {user: client.user}, victim, `[${localize('moderation', 'auto-mod')}]: ${localize('moderation', 'reached-warns', {w: warns.length + 1})}`, {roles: roles}, moduleConfig['automod'][warns.length + 1].includes(':') ? new Date(new Date().getTime() + durationParser(moduleConfig['automod'][warns.length + 1].split(':')[1])) : null).then(() => {
+                    });
                 }
                 break;
             case 'channel-mute':
                 await additionalData.channel.permissionOverwrites.edit(victim, {SEND_MESSAGES: false}, {
                     reason: '[moderation] ' + localize('moderation', 'channelmute-audit-log-reason', {
-                        u: user.user.tag,
+                        u: formatDiscordUserName(user.user),
                         r: reason
                     })
                 });
                 await victim.send(embedType(moduleStrings['channel_mute'], {
                     '%reason%': reason,
-                    '%user%': user.user.tag,
+                    '%user%': formatDiscordUserName(user.user),
                     '%channel%': additionalData.channel.toString()
                 })).catch(() => {
                 });
                 break;
             case 'unchannel-mute':
-                await additionalData.channel.permissionOverwrites.delete(victim, {
+                if (additionalData.channel) await additionalData.channel.permissionOverwrites.delete(victim, {
                     reason: '[moderation] ' + localize('moderation', 'unchannelmute-audit-log-reason', {
-                        u: user.user.tag,
+                        u: formatDiscordUserName(user.user),
                         r: reason
                     })
                 });
                 await victim.send(embedType(moduleStrings['remove-channel_mute'], {
                     '%reason%': reason,
-                    '%user%': user.user.tag,
-                    '%channel%': additionalData.channel.toString()
+                    '%user%': formatDiscordUserName(user.user),
+                    '%channel%': additionalData.channel ? additionalData.channel.toString() : 'Unknown'
                 })).catch(() => {
                 });
                 break;
@@ -213,7 +235,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
             case 'unban':
                 try {
                     await guild.members.unban(victim, '[moderation] ' + localize('moderation', 'unbanned-audit-log-reason', {
-                        u: user.user.tag,
+                        u: formatDiscordUserName(user.user),
                         r: reason
                     }));
                 } catch (e) {
@@ -251,20 +273,30 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
             const fields = [];
             if (expiringAt) fields.push({
                 name: localize('moderation', 'expires-at'),
-                value: dateToDiscordTimestamp(expiringAt)
+                value: dateToDiscordTimestamp(expiringAt),
+                inline: true
+            });
+            if (proof) fields.push({
+                name: localize('moderation', 'proof'),
+                value: `[${localize('moderation', 'file')}](${proof.proxyURL || proof.url})`,
+                inline: true
+            });
+            if (additionalData.channel) fields.push({
+                name: localize('moderation', 'channel'),
+                value: additionalData.channel.toString(),
+                inline: true
             });
             await channel.send({
                 // eslint-disable-next-line
                 embeds: [new MessageEmbed().setColor(expiringAt ? 0xf1c40f : (type.includes('un') ? 0x2ecc71 : 0xe74c3c)).setFooter({
                     text: client.strings.footer,
                     iconURL: client.strings.footerImgUrl
-                }).setTimestamp().setAuthor({
-                    name: client
-                        .user.tag,
+                }).setTimestamp().setImage(proof ? (proof.proxyURL || proof.url) : null).setAuthor({
+                    name: formatDiscordUserName(client.user),
                     iconURL: client
                         .user.avatarURL()
-                }).setTitle(`${localize('moderation', 'case')} #${modAction.actionID}`).setThumbnail(client.user.avatarURL()).addField(localize('moderation', 'victim'), `${victim.user.tag}\n\`${victim.user.id}\``, true)
-                    .addField('User', `${user.user.tag}\n\`${user.user.id}\``, true).addField(localize('moderation', 'action'), expiringAt ? `tmp-${type}` : type, true).addField(localize('moderation', 'reason'), reason).addFields(fields)]
+                }).setTitle(`${localize('moderation', 'case')} #${modAction.actionID}`).setThumbnail(client.user.avatarURL()).addField(localize('moderation', 'victim'), `${formatDiscordUserName(victim.user)}\n\`${victim.user.id}\``, true)
+                    .addField('User', `${formatDiscordUserName(user.user)}\n\`${user.user.id}\``, true).addField(localize('moderation', 'action'), expiringAt ? `tmp-${type}` : type, true).addFields(fields).addField(localize('moderation', 'reason'), reason)]
             });
         }
         const {updateCache} = require('./events/botReady');
@@ -295,8 +327,19 @@ function sendMessage(user, content) {
  * @return {Promise<void>}
  */
 async function planExpiringAction(expiringDate, action, guild) {
+    if (!expiringDate) return;
     guild.client.jobs.push(scheduleJob(expiringDate, async () => {
         const undoAction = 'un' + action.type;
+        const undoneModAction = await guild.client.models['moderation']['ModerationAction'].findOne({
+            where: {
+                victimID: action.victimID,
+                type: undoAction,
+                createdAt: {
+                    [Op.gte]: action.createdAt
+                }
+            }
+        });
+        if (undoneModAction) return;
         let member = action.victimID;
         if (undoAction !== 'unban') {
             member = await guild.members.fetch(action.victimID).catch(() => {

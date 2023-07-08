@@ -1,6 +1,11 @@
 const {localize} = require('../../../src/functions/localize');
 const {MessageEmbed} = require('discord.js');
-const {lockChannel, messageLogToStringToPaste, embedType} = require('../../../src/functions/helpers');
+const {
+    lockChannel,
+    messageLogToStringToPaste,
+    embedType,
+    formatDiscordUserName
+} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, interaction) {
     if (!client.botReadyAt) return;
@@ -21,7 +26,7 @@ module.exports.run = async function (client, interaction) {
                 content: localize('tickets', 'closing-ticket', {u: interaction.user.toString()}),
                 allowedMentions: {parse: []}
             });
-            await lockChannel(interaction.channel, [], localize('tickets', 'ticket-closed-audit-log', {u: interaction.user.tag}));
+            await lockChannel(interaction.channel, [], localize('tickets', 'ticket-closed-audit-log', {u: formatDiscordUserName(interaction.user)}));
 
             interaction.reply({
                 ephemeral: true,
@@ -68,7 +73,7 @@ module.exports.run = async function (client, interaction) {
                 });
             }
             setTimeout(() => {
-                interaction.channel.delete(localize('tickets', 'ticket-closed-audit-log', {u: interaction.user.tag}));
+                interaction.channel.delete(localize('tickets', 'ticket-closed-audit-log', {u: formatDiscordUserName(interaction.user)}));
             }, 20000);
         }
         if (interaction.customId.startsWith('create-ticket-') && parseFloat(interaction.customId.replaceAll('create-ticket-', '')) === moduleConfig.indexOf(element)) {
@@ -99,18 +104,18 @@ module.exports.run = async function (client, interaction) {
                     }
                 );
             });
-            const channel = await interaction.guild.channels.create(interaction.user.tag.split('#').join('-'), {
+            const channel = await interaction.guild.channels.create(formatDiscordUserName(interaction.user).split('#').join('-'), {
                 parent: element['ticket-create-category'],
                 topic: `Ticket created by ${interaction.user.toString()} by clicking on a message in ${interaction.channel.toString()}`,
-                reason: localize('tickets', 'ticket-created-audit-log', {u: interaction.user.tag}),
+                reason: localize('tickets', 'ticket-created-audit-log', {u: formatDiscordUserName(interaction.user)}),
                 permissionOverwrites: [{
                     id: interaction.guild.roles.cache.find(r => r.name === '@everyone'),
                     deny: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
                 },
-                {
-                    id: interaction.member,
-                    allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
-                }, ...overwrites]
+                    {
+                        id: interaction.member,
+                        allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
+                    }, ...overwrites]
             });
             const ticket = await client.models['tickets']['Ticket'].create({
                 open: true,

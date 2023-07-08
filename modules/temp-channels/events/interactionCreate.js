@@ -19,8 +19,10 @@ module.exports.run = async function (client, interaction) {
 
         if (interaction.customId === 'tempc-add') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             const modal = new Modal()
@@ -37,8 +39,10 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-remove') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             const modal = new Modal()
@@ -55,8 +59,10 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-list') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -64,8 +70,10 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-private') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -73,8 +81,10 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-public') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -82,8 +92,10 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-edit') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             const vchann = interaction.guild.channels.cache.get(vc.id);
@@ -144,8 +156,10 @@ module.exports.run = async function (client, interaction) {
         });
         if (interaction.customId === 'tempc-add-modal') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -153,8 +167,10 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-remove-modal') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -162,8 +178,10 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-edit-modal') {
             if (!vc) {
-                interaction.reply({ ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']});
+                interaction.reply({
+                    ephemeral: true,
+                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
+                });
                 return;
             }
             await interaction.deferReply({ephemeral: true});

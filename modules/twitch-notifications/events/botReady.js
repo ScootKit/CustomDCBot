@@ -28,7 +28,7 @@ function twitchNotifications(client, apiClient) {
         await client.guild.members.fetch();
         const member = client.guild.members.cache.get(userID);
         if (!member) {
-            client.logger.error(localize('twitch-notifications', 'user-not-found', {u: userID}));
+            client.logger.error(localize('twitch-notifications', 'user-not-on-twitch', {u: userID}));
             return;
         }
         await member.roles.add(roleID);
@@ -105,7 +105,7 @@ function twitchNotifications(client, apiClient) {
             await client.guild.members.fetch();
             const member = client.guild.members.cache.get(streamers[index]['id']);
             if (!member) {
-                client.logger.error(localize('twitch-notifications', 'user-not-found', {u: streamers[index]['id']}));
+                client.logger.error(localize('twitch-notifications', 'user-not-on-twitch', {u: streamers[index]['id']}));
                 return;
             }
             if (member.roles.cache.has(streamers[index]['role'])) {
