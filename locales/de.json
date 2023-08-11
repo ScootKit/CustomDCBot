@@ -826,7 +826,8 @@
         "all-users": "Alle Mitglieder",
         "bots": "Bots",
         "humans": "Mitglieder (keine Bots)",
-        "add-subcommand-description": "Füge eine Rolle zu allen Mitgliedern hinzu"
+        "add-subcommand-description": "Füge eine Rolle zu allen Mitgliedern hinzu",
+        "not-admin": "⚠ Um diesen Befehl zu verwenden musst du zur adminRoles option im SCNX-Dashboard hinzugefügt werden. Falls du der Eigentümer dieses Bots bist, denk daran in deinen Servereinstellungen ebenfalls einen entsprechenden Override einzustellen um Missbrauch dieses Commands zu verhindern."
     },
     "hunt-the-code": {
         "display-name-description": "Name des Codes, der dem Mitglied angezeigt wird, wenn er den Code einlöst",

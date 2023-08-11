@@ -2,9 +2,19 @@ const {localize} = require('../../../src/functions/localize');
 const {embedType} = require('../../../src/functions/helpers');
 let target;
 let failed;
+let cancel;
+
+module.exports.beforeSubcommand = async function(interaction) {
+    if (interaction.member.roles.cache.filter(m => interaction.client.configurations['massrole']['config'].adminRoles.includes(m.id)).size === 0) {
+        cancel = true;
+        return interaction.reply({ephemeral: true, content: localize('massrole', 'not-admin')});
+    }
+};
 
 module.exports.subcommands = {
     'add': async function (interaction) {
+        if (cancel) return;
+        console.log("add");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
@@ -62,6 +72,8 @@ module.exports.subcommands = {
         }
     },
     'remove': async function (interaction) {
+        if (cancel) return;
+        console.log("remove");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
@@ -123,6 +135,8 @@ module.exports.subcommands = {
         }
     },
     'remove-all': async function (interaction) {
+        if (cancel) return;
+        console.log("remove-all");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {

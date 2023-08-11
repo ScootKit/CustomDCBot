@@ -481,7 +481,8 @@
         "target-option-description": "Determines whether bots should be included or not",
         "all-users": "All Users",
         "bots": "Bots",
-        "humans": "Humans"
+        "humans": "Humans",
+        "not-admin": "⚠ To use this command, you need to be added to the adminRoles option in the SCNX-Dashboard. If you are the owner of this bot please remember to create an override in the guild settings to prevent abuse of this command."
     },
     "twitch-notifications": {
         "channel-not-found": "Channel with ID %c could not be found",
