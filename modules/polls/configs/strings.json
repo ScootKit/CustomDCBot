@@ -23,6 +23,7 @@
           "expiresOn": "End of this poll",
           "thisPollExpiresOn": "This poll expires on %date%.",
           "endedPollTitle": "Poll ended",
+          "visibility": "Visibility of votes",
           "endedPollColor": "RED"
         },
         "de": {
@@ -31,6 +32,7 @@
           "options": "Heutige Auswahlmöglichkeiten",
           "liveView": "Live-Anzeige der Ergebnisse",
           "expiresOn": "Ende dieser Umfrage",
+          "visibility": "Sichtbarkeit der Stimmen",
           "thisPollExpiresOn": "Diese Umfrage endet am %date%.",
           "endedPollTitle": "Umfrage beendet",
           "endedPollColor": "RED"

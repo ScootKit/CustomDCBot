@@ -37,6 +37,7 @@
         "en": "Message",
         "de": "Nachricht"
       },
+      "allowGeneratedImage": true,
       "default": {
         "en": ""
       },

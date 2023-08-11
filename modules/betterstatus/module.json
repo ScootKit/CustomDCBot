@@ -5,7 +5,6 @@
     "link": "https://github.com/SCDerox",
     "scnxOrgID": "1"
   },
-  "fa-icon": "far fa-user-circle",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/betterstatus",
   "events-dir": "/events",
   "config-example-files": [

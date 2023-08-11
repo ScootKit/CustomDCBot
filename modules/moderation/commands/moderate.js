@@ -1,7 +1,7 @@
 const {localize} = require('../../../src/functions/localize');
 const {
     embedType, dateToDiscordTimestamp, lockChannel, unlockChannel,
-    sendMultipleSiteButtonMessage, truncate
+    sendMultipleSiteButtonMessage, truncate, formatDiscordUserName
 } = require('../../../src/functions/helpers');
 const {moderationAction} = require('../moderationActions');
 const durationParser = require('parse-duration');
@@ -80,7 +80,7 @@ module.exports.subcommands = {
             }
             const fields = [];
             for (const userID in byUser) {
-                const userTag = (interaction.guild.members.cache.get(userID) || {user: {tag: userID}}).user.tag;
+                const userTag = formatDiscordUserName((interaction.guild.members.cache.get(userID) || {user: {tag: userID}}).user);
                 let notesString = '';
                 for (const note of byUser[userID]) {
                     notesString = notesString + `\n#${note.id}: ${dateToDiscordTimestamp(new Date(note.lastUpdateAt), 'R')}: \`${note.content.replaceAll('`', '')}\``;
@@ -99,7 +99,7 @@ module.exports.subcommands = {
                 value: localize('moderation', 'more-notes', {x: i - 24})
             });
             const embed = new MessageEmbed()
-                .setTitle(localize('moderation', 'notes-embed-title', {u: interaction.options.getUser('user').tag}))
+                .setTitle(localize('moderation', 'notes-embed-title', {u: formatDiscordUserName(interaction.options.getUser('user'))}))
                 .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
                 .setThumbnail(interaction.options.getUser('user').avatarURL())
                 .setColor('GREEN')
@@ -188,12 +188,15 @@ module.exports.subcommands = {
             ephemeral: true,
             content: '⚠ ' + localize('moderation', 'invalid-days')
         });
-        moderationAction(interaction.client, 'ban', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {days: interaction.options.getInteger('days')}, parseDuration).then(r => {
+        moderationAction(interaction.client, 'ban', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {days: interaction.options.getInteger('days')}, parseDuration, interaction.options.getAttachment('proof')).then(r => {
             guildBanCache = null;
             if (r) {
                 if (parseDuration) interaction.reply({
                     ephemeral: true,
-                    content: localize('moderation', 'expiring-action-done', {d: dateToDiscordTimestamp(parseDuration), i: r.actionID})
+                    content: localize('moderation', 'expiring-action-done', {
+                        d: dateToDiscordTimestamp(parseDuration),
+                        i: r.actionID
+                    })
                 });
                 else interaction.reply({
                     ephemeral: true,
@@ -240,7 +243,10 @@ module.exports.subcommands = {
             if (r) {
                 if (parseDuration) interaction.reply({
                     ephemeral: true,
-                    content: localize('moderation', 'expiring-action-done', {d: dateToDiscordTimestamp(parseDuration), i: r.actionID})
+                    content: localize('moderation', 'expiring-action-done', {
+                        d: dateToDiscordTimestamp(parseDuration),
+                        i: r.actionID
+                    })
                 });
                 else interaction.reply({
                     ephemeral: true,
@@ -277,7 +283,7 @@ module.exports.subcommands = {
     'kick': async function (interaction) {
         if (interaction.replied) return;
         if (!checkRoles(interaction, 3)) return;
-        moderationAction(interaction.client, 'kick', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason')).then(r => {
+        moderationAction(interaction.client, 'kick', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {}, null, interaction.options.getAttachment('proof')).then(r => {
             if (r) interaction.reply({
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
@@ -295,7 +301,7 @@ module.exports.subcommands = {
             ephemeral: true,
             content: '⚠ ' + localize('moderation', 'mute-max-duration')
         });
-        moderationAction(interaction.client, 'mute', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {}, parseDuration).then(r => {
+        moderationAction(interaction.client, 'mute', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {}, parseDuration, interaction.options.getAttachment('proof')).then(r => {
             if (r) interaction.reply({
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
@@ -321,7 +327,7 @@ module.exports.subcommands = {
     'warn': async function (interaction) {
         if (interaction.replied) return;
         if (!checkRoles(interaction, 1)) return;
-        moderationAction(interaction.client, 'warn', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason')).then(r => {
+        moderationAction(interaction.client, 'warn', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {}, null, interaction.options.getAttachment('proof')).then(r => {
             if (r) interaction.reply({
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
@@ -334,7 +340,7 @@ module.exports.subcommands = {
     'channel-mute': async function (interaction) {
         if (interaction.replied) return;
         if (!checkRoles(interaction, 2)) return;
-        moderationAction(interaction.client, 'channel-mute', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {channel: interaction.channel}).then(r => {
+        moderationAction(interaction.client, 'channel-mute', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {channel: interaction.channel}, null, interaction.options.getAttachment('proof')).then(r => {
             if (r) interaction.reply({
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
@@ -362,7 +368,7 @@ module.exports.subcommands = {
         if (!checkRoles(interaction, 2)) return;
         await lockChannel(interaction.channel, [...interaction.client.configurations['moderation']['config']['moderator-roles_level2'], ...interaction.client.configurations['moderation']['config']['moderator-roles_level3'], ...interaction.client.configurations['moderation']['config']['moderator-roles_level4']], `[moderation] ${interaction.options.getString('reason') || localize('moderation', 'no-reason')}`);
         await interaction.channel.send(embedType(interaction.client.configurations['moderation']['strings']['lock_channel_message'], {
-            '%user%': interaction.user.tag,
+            '%user%': formatDiscordUserName(interaction.user),
             '%reason%': interaction.options.getString('reason') || localize('moderation', 'no-reason')
         }));
         await interaction.reply({
@@ -375,7 +381,7 @@ module.exports.subcommands = {
         if (!checkRoles(interaction, 2)) return;
         await unlockChannel(interaction.channel, localize('moderation', 'unlock-audit-log-reason'));
         await interaction.channel.send(embedType(interaction.client.configurations['moderation']['strings']['unlock_channel_message'], {
-            '%user%': interaction.user.tag
+            '%user%': formatDiscordUserName(interaction.user)
         }));
         await interaction.reply({
             ephemeral: true,
@@ -412,7 +418,7 @@ module.exports.subcommands = {
         if (fieldCache.length !== 0) addSite(fieldCache);
         if (sites.length === 0) addSite([{
             name: localize('moderation', 'no-actions-title'),
-            value: localize('moderation', 'no-actions-title', {u: interaction.memberToExecuteUpon.user.tag})
+            value: localize('moderation', 'no-actions-title', {u: formatDiscordUserName(interaction.memberToExecuteUpon.user)})
         }]);
 
         /**
@@ -425,10 +431,10 @@ module.exports.subcommands = {
                 .setColor('YELLOW')
                 .setAuthor({name: interaction.client.user.username, iconURL: interaction.client.user.avatarURL()})
                 .setTitle(localize('moderation', 'actions-embed-title', {
-                    u: interaction.memberToExecuteUpon.user.tag,
+                    u: formatDiscordUserName(interaction.memberToExecuteUpon.user),
                     i: sites.length + 1
                 }))
-                .setDescription(localize('moderation', 'actions-embed-description', {u: interaction.memberToExecuteUpon.user.tag}))
+                .setDescription(localize('moderation', 'actions-embed-description', {u: formatDiscordUserName(interaction.memberToExecuteUpon.user)}))
                 .setThumbnail(interaction.memberToExecuteUpon.user.avatarURL())
                 .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
                 .addFields(fs);
@@ -478,7 +484,7 @@ module.exports.autoComplete = {
             for (const action of actions.filter(a => a.reason.toLowerCase().includes(interaction.value) || a.victimID.includes(interaction.value) || a.type.toLowerCase().includes(interaction.value) || (interaction.client.guild.members.cache.get(a.victimID) || {user: {tag: a.victimID}}).user.tag.toLowerCase().includes(interaction.value))) {
                 if (returnValue.length !== 25) returnValue.push({
                     value: action.actionID.toString(),
-                    name: truncate(`[${action.type}] ${(interaction.client.guild.members.cache.get(action.victimID) || {user: {tag: action.victimID}}).user.tag}: ${action.reason}`, 100)
+                    name: truncate(`[${action.type}] ${formatDiscordUserName((interaction.client.guild.members.cache.get(action.victimID) || {user: {tag: action.victimID}}).user)}: ${action.reason}`, 100)
                 });
             }
             interaction.respond(returnValue);
@@ -494,9 +500,9 @@ module.exports.autoComplete = {
             }
             interaction.value = interaction.value.toLowerCase();
             const possibleValues = [];
-            for (const match of guildBanCache.filter(b => b.user.tag.toLowerCase().includes(interaction.value) || b.user.username.toLowerCase().includes(interaction.value) || b.user.id.includes(interaction.value)).values()) {
+            for (const match of guildBanCache.filter(b => formatDiscordUserName(b.user).toLowerCase().includes(interaction.value) || b.user.username.toLowerCase().includes(interaction.value) || b.user.id.includes(interaction.value)).values()) {
                 if (possibleValues.length !== 25) possibleValues.push({
-                    name: match.user.tag,
+                    name: formatDiscordUserName(match.user),
                     value: match.user.id
                 });
             }
@@ -632,24 +638,30 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('moderation', 'moderate-duration-description')
-                },
-                {
-                    type: 'INTEGER',
-                    name: 'days',
-                    required: false,
-                    description: localize('moderation', 'moderate-days-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    },
+                    {
+                        type: 'ATTACHMENT',
+                        name: 'proof',
+                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                        description: localize('moderation', 'moderate-proof-description')
+                    },
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: false,
+                        description: localize('moderation', 'moderate-duration-description')
+                    },
+                    {
+                        type: 'INTEGER',
+                        name: 'days',
+                        required: false,
+                        description: localize('moderation', 'moderate-days-description')
+                    }
                 ];
             }
         },
@@ -664,18 +676,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('moderation', 'moderate-duration-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    },
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: false,
+                        description: localize('moderation', 'moderate-duration-description')
+                    }
                 ];
             }
         },
@@ -691,12 +703,12 @@ module.exports.config = {
                     autocomplete: true,
                     description: localize('moderation', 'moderate-userid-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    }
                 ];
             }
         },
@@ -711,12 +723,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    }
                 ];
             }
         },
@@ -743,12 +755,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    },
+                    {
+                        type: 'ATTACHMENT',
+                        name: 'proof',
+                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                        description: localize('moderation', 'moderate-proof-description')
+                    }
                 ];
             }
         },
@@ -763,18 +781,24 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: true,
-                    description: localize('moderation', 'moderate-duration-description')
-                },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: true,
+                        description: localize('moderation', 'moderate-duration-description')
+                    },
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    },
+                    {
+                        type: 'ATTACHMENT',
+                        name: 'proof',
+                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                        description: localize('moderation', 'moderate-proof-description')
+                    }
                 ];
             }
         },
@@ -789,12 +813,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    }
                 ];
             }
         },
@@ -809,12 +833,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    },
+                    {
+                        type: 'ATTACHMENT',
+                        name: 'proof',
+                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                        description: localize('moderation', 'moderate-proof-description')
+                    }
                 ];
             }
         },
@@ -829,12 +859,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    },
+                    {
+                        type: 'ATTACHMENT',
+                        name: 'proof',
+                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                        description: localize('moderation', 'moderate-proof-description')
+                    }
                 ];
             }
         },
@@ -849,12 +885,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                {
-                    type: 'STRING',
-                    name: 'reason',
-                    required: client.configurations['moderation']['config']['require_reason'],
-                    description: localize('moderation', 'moderate-reason-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'reason',
+                        required: client.configurations['moderation']['config']['require_reason'],
+                        description: localize('moderation', 'moderate-reason-description')
+                    }
                 ];
             }
         },

@@ -1,6 +1,6 @@
 const {client} = require('../../main');
 const {Op} = require('sequelize');
-const {embedType} = require('../../src/functions/helpers');
+const {embedType, formatDiscordUserName} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 
 /**
@@ -74,7 +74,7 @@ module.exports.userAdd = async function (interaction, callerInfo) {
     if (callerInfo === 'modal') {
         const addedUserString = interaction.fields.getTextInputValue('add-modal-input');
         try {
-            addedUser = interaction.guild.members.cache.find(member => member.user.tag === addedUserString).user;
+            addedUser = interaction.guild.members.cache.find(member => formatDiscordUserName(member.user).replaceAll('@', '') === addedUserString).user;
         } catch (e) {
             try {
                 addedUser = await client.users.fetch(addedUserString);
@@ -96,7 +96,7 @@ module.exports.userAdd = async function (interaction, callerInfo) {
     if (!await vchann.permissionsFor(vchann.guild.roles.everyone).has('CONNECT')) {
         await vchann.permissionOverwrites.create(addedUser, {'CONNECT': true});
     }
-    await interaction.editReply(embedType(moduleConfig['userAdded'], {'%user%': addedUser.tag}, {ephemeral: true}));
+    await interaction.editReply(embedType(moduleConfig['userAdded'], {'%user%': formatDiscordUserName(addedUser)}, {ephemeral: true}));
 };
 
 /**
@@ -123,7 +123,7 @@ module.exports.userRemove = async function (interaction, callerInfo) {
     if (callerInfo === 'modal') {
         const removedUserString = interaction.fields.getTextInputValue('remove-modal-input');
         try {
-            removedUser = interaction.guild.members.cache.find(member => member.user.tag === removedUserString).user;
+            removedUser = interaction.guild.members.cache.find(member => formatDiscordUserName(member.user).replaceAll('@', '') === removedUserString).user;
         } catch (e) {
             try {
                 removedUser = await client.users.fetch(removedUserString);
@@ -153,7 +153,7 @@ module.exports.userRemove = async function (interaction, callerInfo) {
             return;
         }
     }
-    interaction.editReply(embedType(moduleConfig['userRemoved'], {'%user%': removedUser.tag}, {ephemeral: true}));
+    interaction.editReply(embedType(moduleConfig['userRemoved'], {'%user%': formatDiscordUserName(removedUser)}, {ephemeral: true}));
 };
 
 module.exports.usersList = async function (interaction) {
@@ -266,17 +266,53 @@ module.exports.sendMessage = async function (channel) {
     const components = [{
         type: 'ACTION_ROW',
         components: [
-            {type: 'BUTTON', label: localize('temp-channels', 'add-user'), style: 'SUCCESS', customId: 'tempc-add', emoji: '➕'},
-            {type: 'BUTTON', label: localize('temp-channels', 'remove-user'), style: 'DANGER', customId: 'tempc-remove', emoji: '➖'},
-            {type: 'BUTTON', label: localize('temp-channels', 'list-users'), style: 'PRIMARY', customId: 'tempc-list', emoji: '📃'}]
+            {
+                type: 'BUTTON',
+                label: localize('temp-channels', 'add-user'),
+                style: 'SUCCESS',
+                customId: 'tempc-add',
+                emoji: '➕'
+            },
+            {
+                type: 'BUTTON',
+                label: localize('temp-channels', 'remove-user'),
+                style: 'DANGER',
+                customId: 'tempc-remove',
+                emoji: '➖'
+            },
+            {
+                type: 'BUTTON',
+                label: localize('temp-channels', 'list-users'),
+                style: 'PRIMARY',
+                customId: 'tempc-list',
+                emoji: '📃'
+            }]
     },
-    {
-        type: 'ACTION_ROW',
-        components: [
-            {type: 'BUTTON', label: localize('temp-channels', 'private-channel'), style: 'SUCCESS', customId: 'tempc-private', emoji: '🔓'},
-            {type: 'BUTTON', label: localize('temp-channels', 'public-channel'), style: 'DANGER', customId: 'tempc-public', emoji: '🔒'},
-            {type: 'BUTTON', label: localize('temp-channels', 'edit-channel'), style: 'SECONDARY', customId: 'tempc-edit', emoji: '📝'}]
-    }];
+        {
+            type: 'ACTION_ROW',
+            components: [
+                {
+                    type: 'BUTTON',
+                    label: localize('temp-channels', 'private-channel'),
+                    style: 'SUCCESS',
+                    customId: 'tempc-private',
+                    emoji: '🔒'
+                },
+                {
+                    type: 'BUTTON',
+                    label: localize('temp-channels', 'public-channel'),
+                    style: 'DANGER',
+                    customId: 'tempc-public',
+                    emoji: '🔓'
+                },
+                {
+                    type: 'BUTTON',
+                    label: localize('temp-channels', 'edit-channel'),
+                    style: 'SECONDARY',
+                    customId: 'tempc-edit',
+                    emoji: '📝'
+                }]
+        }];
     const message = embedType(moduleConfig['settingsMessage'], {}, {components});
     channel.send(message);
 };

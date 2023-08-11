@@ -6,10 +6,11 @@
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('./localize');
 const {PrivatebinClient} = require('@pixelfactory/privatebin');
-const privatebin = new PrivatebinClient('https://paste.sc-network.net');
+const privatebin = new PrivatebinClient('https://paste.scootkit.net');
 const crypto = require('isomorphic-webcrypto');
 const {encode} = require('bs58');
 const {client} = require('../../main');
+const {formatDiscordUserName} = require('./helpers');
 
 /**
  * Will loop asynchrony through every object in the array
@@ -34,11 +35,12 @@ module.exports.asyncForEach = async function (array, callback) {
 function inputReplacer(args, input) {
     if (typeof args !== 'object') return input;
     for (const arg in args) {
+        if (typeof args[arg] !== 'string' && typeof args[arg] !== 'number') args[arg] = '';
         input = (input || '').replaceAll(arg, args[arg]);
     }
     return input;
 }
-
+module.exports.inputReplacer = inputReplacer;
 /**
  * Will turn an object or string into embeds
  * @param  {string|array} input Input in the configuration file
@@ -48,7 +50,7 @@ function inputReplacer(args, input) {
  * @author Simon Csaba <mail@scderox.de>
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
-module.exports.embedType = function (input, args = {}, optionsToKeep = {}, mergeComponentsRows = []) {
+function embedType(input, args = {}, optionsToKeep = {}, mergeComponentsRows = []) {
     if (!optionsToKeep.allowedMentions) {
         optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
         if (client.config.disableEveryoneProtection) optionsToKeep.allowedMentions.parse.push('everyone');
@@ -65,11 +67,11 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}, merge
         if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
         if (input['color']) emb.setColor(input['color']);
         if (input['url']) emb.setURL(input['url']);
-        if (input['image']) emb.setImage(inputReplacer(args, input['image']));
-        if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
+        if ((input['image'] || '').replaceAll(' ', '')) emb.setImage(inputReplacer(args, input['image']));
+        if ((input['thumbnail'] || '').replaceAll(' ', '')) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
         if (input['author'] && typeof input['author'] === 'object' && (input['author'] || {}).name) emb.setAuthor({
             name: inputReplacer(args, input['author']['name']),
-            iconURL: input['author']['img'] ? inputReplacer(args, input['author']['img']) : null
+            iconURL: (input['author']['img'] || '').replaceAll(' ', '') ? inputReplacer(args, input['author']['img']) : null
         });
         if (typeof input['fields'] === 'object') {
             input.fields.forEach(f => {
@@ -84,8 +86,16 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}, merge
         });
         optionsToKeep.embeds = [emb];
     } else optionsToKeep.embeds = [];
-    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input, mergeComponentsRows);
+    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input, mergeComponentsRows, args);
     optionsToKeep.content = input['message'] ? inputReplacer(args, input['message']) : null;
+    return optionsToKeep;
+}
+
+module.exports.embedType = embedType;
+
+module.exports.embedTypeV2 = async function (input, args, otP, mergeComponentsRows) {
+    let optionsToKeep = embedType(input, args, otP, mergeComponentsRows);
+    if (!optionsToKeep.attachments && client.scnxSetup && (input.dynamicImage || {}).enabled) optionsToKeep = await require('./scnx-integration').returnDynamicImages(input, optionsToKeep, args);
     return optionsToKeep;
 };
 
@@ -127,7 +137,7 @@ async function postToSCNetworkPaste(content, opts = {
 }) {
     const key = crypto.getRandomValues(new Uint8Array(32));
     const res = await privatebin.sendText(content, key, opts);
-    return `https://paste.sc-network.net${res.url}#${encode(key)}`;
+    return `https://paste.scootkit.net${res.url}#${encode(key)}`;
 }
 
 module.exports.postToSCNetworkPaste = postToSCNetworkPaste;
@@ -158,7 +168,7 @@ module.exports.randomString = function (length, characters = 'ABCDEFGHIJKLMNOPQR
 async function messageLogToStringToPaste(channel, limit = 100, expire = '1month') {
     let messages = '';
     (await channel.messages.fetch({limit})).forEach(m => {
-        messages = `[${m.id}] ${m.author.bot ? '[BOT] ' : ''}${m.author.tag}  (${m.author.id}): ${m.content}\n` + messages;
+        messages = `[${m.id}] ${m.author.bot ? '[BOT] ' : ''}${formatDiscordUserName(m.author)}  (${m.author.id}): ${m.content}\n` + messages;
     });
     messages = `=== CHANNEL-LOG OF ${channel.name} (${channel.id}): Last messages before report ${formatDate(new Date())} ===\n` + messages;
     return await postToSCNetworkPaste(messages,
@@ -181,7 +191,7 @@ module.exports.messageLogToStringToPaste = messageLogToStringToPaste;
  * @return {string} Truncated string
  */
 function truncate(string, length) {
-    return (string.length > length) ? string.substr(0, length - 3) + '...' : string;
+    return (string.length > length) ? string.substr(0, length - 3).trim() + '...' : string;
 }
 
 module.exports.truncate = truncate;
@@ -226,7 +236,7 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
         fetchReply: true
     });
     else m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
-    const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 40000});
+    const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 60000});
     let currentSite = 1;
     c.on('collect', async (interaction) => {
         if (!allowedUserIDs.includes(interaction.user.id)) return interaction.reply({
@@ -458,3 +468,23 @@ function disableModule(module, reason = null) {
 }
 
 module.exports.disableModule = disableModule;
+
+/**
+ * Formates a number to make it human-readable
+ * @param {Number|string} number
+ * @returns {string}
+ */
+module.exports.formatNumber = function (number) {
+    if (typeof number === 'string') number = parseInt(number);
+    return new Intl.NumberFormat(client.locale, {}).format(number);
+};
+
+/**
+ * Formates a Discord username (either #tag or username)
+ * @param {User} userData User to format
+ * @returns {string}
+ */
+module.exports.formatDiscordUserName = function (userData) {
+    if (userData.discriminator === '0') return ((client.strings || {addAtToUsernames: false}).addAtToUsernames ? '@' : '') + userData.username;
+    return userData.tag || (userData.username + '#' + userData.discriminator);
+};

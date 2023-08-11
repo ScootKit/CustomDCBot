@@ -31,7 +31,7 @@ module.exports.run = async function (client) {
         if (sent) {
             const channelMessages = await channel.messages.fetch(sent.messageID).catch(() => {
             });
-            if (channelMessages) await channelMessages.edit(message);
+            if (channelMessages && channelMessages.author.id === client.user.id) await channelMessages.edit(message);
             else await sendMessage(message, channel, messageModel, moduleConfig, element);
         } else {
             await sendMessage(message, channel, messageModel, moduleConfig, element);

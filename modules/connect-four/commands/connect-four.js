@@ -1,6 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 const {MessageActionRow, MessageButton} = require('discord.js');
-const footer = [':one:', ':two:', ':three:', ':four:', ':five:', ':six:', ':seven:', ':eight:', ':nine:', ':keycap_ten:'];
+const footer = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
 /**
  * Builds the game message
@@ -183,7 +183,7 @@ module.exports.run = async function (interaction) {
     const fieldSize = interaction.options.getInteger('field_size') || 7;
 
     const grid = new Array(fieldSize - 1).fill();
-    for (const i in grid) grid[i] = new Array(fieldSize).fill(':white_large_square:');
+    for (const i in grid) grid[i] = new Array(fieldSize).fill('⬜');
 
     const row1 = new MessageActionRow();
     const row2 = new MessageActionRow();
@@ -212,7 +212,7 @@ module.exports.run = async function (interaction) {
         const position = parseInt(i.customId.replace('c4_', '')) - 1;
 
         for (let j = grid.length - 1; j >= 0; j--) {
-            if (grid[j][position] === ':white_large_square:') {
+            if (grid[j][position] === '⬜') {
                 grid[j][position] = ':' + color + '_circle:';
                 const winner = checkWin(grid, color, position, j);
                 if (winner) {

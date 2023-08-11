@@ -1,4 +1,10 @@
-const {randomElementFromArray, embedType, formatDate} = require('../../../src/functions/helpers');
+const {
+    randomElementFromArray,
+    embedType,
+    formatDate,
+    embedTypeV2,
+    formatDiscordUserName
+} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (client, guildMember) {
@@ -24,11 +30,11 @@ module.exports.run = async function (client, guildMember) {
         }
         if (!message) message = channelConfig.message;
 
-        await channel.send(embedType(message || 'Message not found',
+        await channel.send(await embedTypeV2(message || 'Message not found',
             {
                 '%mention%': guildMember.toString(),
                 '%servername%': guildMember.guild.name,
-                '%tag%': guildMember.user.tag,
+                '%tag%': formatDiscordUserName(guildMember.user),
                 '%guildUserCount%': (await client.guild.members.fetch()).size,
                 '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
                 '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,

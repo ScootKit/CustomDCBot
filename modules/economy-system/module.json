@@ -9,7 +9,6 @@
   "openSourceURL": "https://github.com/jateute/CustomDCBot/tree/main/modules/economy-system",
   "commands-dir": "/commands",
   "events-dir": "/events",
-  "fa-icon": "fa-solid fa-bank",
   "models-dir": "/models",
   "config-example-files": [
     "configs/config.json",

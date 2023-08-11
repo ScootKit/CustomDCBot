@@ -3,9 +3,12 @@
  * @module Suggestions
  * @author Simon Csaba <mail@scderox.de>
  */
-const {embedType} = require('../../src/functions/helpers');
+const {embedType, formatDiscordUserName} = require('../../src/functions/helpers');
+const {localize} = require('../../src/functions/localize');
 
-module.exports.generateSuggestionEmbed = async function (client, suggestion) {
+module.exports.generateSuggestionEmbed = generateSuggestionEmbed;
+
+async function generateSuggestionEmbed(client, suggestion) {
     const moduleConfig = client.configurations['suggestions']['config'];
     const channel = await client.channels.fetch(moduleConfig.suggestionChannel);
     const message = await channel.messages.fetch(suggestion.messageID);
@@ -15,7 +18,7 @@ module.exports.generateSuggestionEmbed = async function (client, suggestion) {
     const params = {
         '%id%': suggestion.id,
         '%suggestion%': suggestion.suggestion,
-        '%tag%': user.tag,
+        '%tag%': formatDiscordUserName(user),
         '%avatarURL%': user.avatarURL(),
         '%adminUser%': suggestion.adminAnswer ? `<@${suggestion.adminAnswer.userID}>` : '',
         '%adminMessage%': suggestion.adminAnswer ? suggestion.adminAnswer.reason : ''
@@ -55,4 +58,20 @@ module.exports.notifyMembers = async function (client, suggestion, change, ignor
             });
         }
     }
+};
+
+module.exports.createSuggestion = async function (guild, suggestion, user) {
+    const moduleConfig = guild.client.configurations['suggestions']['config'];
+    const channel = guild.channels.cache.get(moduleConfig.suggestionChannel);
+    const suggestionMsg = await channel.send(moduleConfig.notifyRole ? `<@&${moduleConfig.notifyRole}> ` + localize('suggestions', 'loading') : localize('suggestions', 'loading'));
+    if (moduleConfig.allowUserComment) await suggestionMsg.startThread({name: moduleConfig.threadName});
+    if (moduleConfig.reactions) moduleConfig.reactions.forEach(reaction => suggestionMsg.react(reaction));
+    const suggestionElement = await guild.client.models['suggestions']['Suggestion'].create({
+        suggestion: suggestion,
+        messageID: suggestionMsg.id,
+        suggesterID: user.id,
+        comments: []
+    });
+    await generateSuggestionEmbed(guild.client, suggestionElement);
+    return suggestionElement;
 };

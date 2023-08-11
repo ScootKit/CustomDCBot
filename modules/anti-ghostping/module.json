@@ -6,7 +6,6 @@
     "link": "https://github.com/SCDerox"
   },
   "events-dir": "/events",
-  "fa-icon": "far fa-bell-slash",
   "config-example-files": [
     "config.json"
   ],

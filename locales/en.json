@@ -895,7 +895,7 @@
         "dont-use-drawn": "Dont use",
         "win": "%u won the game! %turns cards were played.",
         "win-you": "You've won the game!",
-        "missing-uno": ":warning: You must use the Uno! button before you use your second last card!",
+        "missing-uno": "⚠️ You must use the Uno! button before you use your second last card!",
         "choose-color": "Select a color:",
         "pending-draws": "Use a Draw 2/4 card, otherwise you have to draw %count cards!",
         "not-ingame": "You're not in this game!",
@@ -910,7 +910,11 @@
         "start-game": "Start game now",
         "not-host": "You're not the host of the game!",
         "max-players": "The game is full!",
-        "previous-cards": "Previous cards: "
+        "previous-cards": "Previous cards: ",
+        "used-card": "You've already used the card %c! Use the Update button and play a valid card.",
+        "invalid-card": "You cannot play the card %c right now! Please select a valid card.",
+        "inactive-warn": "%u, it's your turn in the uno game!",
+        "inactive-win": "The uno game has ended. %u won as all others have been eliminated!"
     },
     "quiz": {
         "what-have-i-voted": "What have I voted?",

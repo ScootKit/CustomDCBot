@@ -110,6 +110,21 @@
         "key": "roleID",
         "value": "string"
       }
+    },
+    {
+      "name": "includeStatus",
+      "humanName": {
+        "en": "Include Online-Status of Staff-Members",
+        "de": "Online-Status von Teammitgliedern anzeigen"
+      },
+      "description": {
+        "en": "If enabled, the current online status will be displayed in the staffmember-list",
+        "de": "Wenn aktiviert, wird der aktuelle Status in der Teammitglieder-Liste angezeigt"
+      },
+      "type": "boolean",
+      "default": {
+        "en": false
+      }
     }
   ]
 }

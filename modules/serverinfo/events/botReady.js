@@ -3,8 +3,9 @@
  * @module Partner-List
  * @author Simon Csaba <mail@scderox.de>
  */
-const {formatDate} = require('../../../src/functions/helpers');
+const {formatDate, formatDiscordUserName} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
+const {localize} = require('../../../src/functions/localize');
 
 exports.run = async (client) => {
     await generateEmbed(client);
@@ -32,7 +33,7 @@ async function generateEmbed(client) {
         .setColor(config.embed.color)
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setThumbnail(channel.guild.iconURL())
-        .setAuthor({name: client.user.tag, iconURL: client.user.avatarURL()});
+        .setAuthor({name: formatDiscordUserName(client.user), iconURL: client.user.avatarURL()});
     if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
     const guildMembers = await channel.guild.members.fetch({withPresences: true});
@@ -46,14 +47,36 @@ async function generateEmbed(client) {
      * @returns {String} String with the variables replaced
      */
     function replacer(content) {
+        /**
+         * Replaces the first member-with-role-count parameters of the input
+         * @private
+         */
+        function replaceFirst() {
+            if (content.includes('%userWithRoleCount-')) {
+                const id = content.split('%userWithRoleCount-')[1].split('%')[0];
+                if (content.includes(`%userWithRoleCount-${id}%`)) {
+                    content = content.replaceAll(`%userWithRoleCount-${id}%`, guildMembers.filter(f => f.roles.cache.has(id)).size.toString());
+                    replaceFirst();
+                }
+            }
+            if (content.includes('%onlineUserWithRoleCount-')) {
+                const id = content.split('%onlineUserWithRoleCount-')[1].split('%')[0];
+                if (content.includes(`%onlineUserWithRoleCount-${id}%`)) {
+                    content = content.replaceAll(`%onlineUserWithRoleCount-${id}%`, guildMembers.filter(f => f.roles.cache.has(id) && f.presence && (f.presence || {}).status !== 'offline').size.toString());
+                    replaceFirst();
+                }
+            }
+        }
+
+        replaceFirst();
         content = content.replaceAll('%memberCount%', guildMembers.size)
             .replaceAll('%botCount%', guildMembers.filter(m => m.user.bot).size)
             .replaceAll('%userCount%', guildMembers.filter(m => !m.user.bot).size)
-            .replaceAll('%onlineMemberCount%', guildMembers.filter(m => m.presence).size)
+            .replaceAll('%onlineMemberCount%', guildMembers.filter(m => m.presence && (m.presence || {}).status === 'offline').size)
             .replaceAll('%daysSinceCreation%', ((new Date().getTime() - guildCreationDate.getTime()) / 86400000).toFixed(0))
             .replaceAll('%guildCreationTimestamp%', formatDate(guildCreationDate))
             .replaceAll('%guildBoosts%', channel.guild.premiumSubscriptionCount)
-            .replaceAll('%boostLevel%', channel.guild.premiumTier)
+            .replaceAll('%boostLevel%', localize('boostTier', channel.guild.premiumTier))
             .replaceAll('%channelCount%', channel.guild.channels.cache.size)
             .replaceAll('%roleCount%', guildRoles.size)
             .replaceAll('%emojiCount%', channel.guild.emojis.cache.size)

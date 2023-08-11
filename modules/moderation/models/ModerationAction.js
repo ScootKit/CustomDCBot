@@ -10,7 +10,7 @@ module.exports = class ModerationAction extends Model {
             },
             victimID: DataTypes.STRING,
             additionalData: DataTypes.JSON,
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             memberID: DataTypes.STRING,
             reason: DataTypes.STRING,
             expiresOn: DataTypes.DATE

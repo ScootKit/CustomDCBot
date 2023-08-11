@@ -5,7 +5,6 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "fa-icon": "fa-regular fa-trash-can",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-delete",
   "events-dir": "/events",
   "config-example-files": [
