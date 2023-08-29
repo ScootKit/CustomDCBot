@@ -11,12 +11,12 @@ module.exports.run = async function (client, interaction) {
     const channelConfig = client.configurations['welcomer']['channels'].find(c => c.channelID === interaction.channel.id);
     if (!channelConfig) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('welcomer', 'channel-not-found', {c: channelConfig.channelID})
+        content: ':warning: ' + localize('welcomer', 'channel-not-found', {c: channelConfig.channelID})
     });
     const sendChannel = interaction.guild.channels.cache.get(channelConfig['welcome-button-channel']);
     if (!sendChannel) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('welcomer', 'channel-not-found', {c: channelConfig.sendChannel})
+        content: ':warning: ' + localize('welcomer', 'channel-not-found', {c: channelConfig.sendChannel})
     });
     await interaction.update({
         components: interaction.message.components.filter(f => f.components[0].customId !== interaction.customId)

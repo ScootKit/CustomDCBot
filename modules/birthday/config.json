@@ -38,6 +38,7 @@
     },
     {
       "name": "birthday_message",
+      "allowGeneratedImage": true,
       "humanName": {
         "en": "Giveaway-Message",
         "de": "Geburtstags-Nachricht"
@@ -60,6 +61,21 @@
           }
         },
         {
+          "name": "avatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar of the user",
+            "de": "Profilbild des Nutzers"
+          }
+        },
+        {
+          "name": "username",
+          "description": {
+            "en": "Username of the user",
+            "de": "Nutzername des Nutzers"
+          }
+        },
+        {
           "name": "mention",
           "description": {
             "en": "Mention of the user",
@@ -70,6 +86,7 @@
     },
     {
       "name": "birthday_message_with_age",
+      "allowGeneratedImage": true,
       "humanName": {
         "en": "Giveaway-Message with age",
         "de": "Geburtstags-Nachricht mit Alter"
@@ -90,6 +107,21 @@
           "description": {
             "en": "Tag of the user",
             "de": "Tag des Nutzers"
+          }
+        },
+        {
+          "name": "avatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar of the user",
+            "de": "Profilbild des Nutzers"
+          }
+        },
+        {
+          "name": "username",
+          "description": {
+            "en": "Username of the user",
+            "de": "Nutzername des Nutzers"
           }
         },
         {

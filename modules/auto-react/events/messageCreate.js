@@ -18,14 +18,13 @@ module.exports.run = async (client, msg) => {
 async function checkMembers(msg) {
     const moduleConfig = msg.client.configurations['auto-react']['config'];
     if (!msg.mentions.members) return;
-    msg.mentions.members.forEach(m => {
-        if (moduleConfig.members[m.id]) {
-            moduleConfig.members[m.id].split('|').forEach(emoji => {
-                msg.react(emoji).catch(() => {
-                });
+    for (const m of msg.mentions.members.values()) {
+        if (!msg.content.replaceAll('!', '').includes(`<@${m.id}>`) && moduleConfig.forcedMentionMatching) continue;
+        if (moduleConfig.members[m.id]) moduleConfig.members[m.id].split('|').forEach(emoji => {
+            msg.react(emoji).catch(() => {
             });
-        }
-    });
+        });
+    }
 }
 
 /**
@@ -69,6 +68,7 @@ async function checkMembersReply(msg) {
     if (!msg.mentions.users) return;
     if (msg.author.id === msg.client.user.id) return;
     for (const m of msg.mentions.users.values()) {
+        if (!msg.content.replaceAll('!', '').includes(`<@${m.id}>`) && msg.client.configurations['auto-react']['config'].forcedMentionMatching) continue;
         const matches = moduleConfig.filter(c => c.members === m.id);
         for (const element of matches) {
             await msg.reply(embedType(element.reply, {}, {ephemeral: true})).catch(() => {
