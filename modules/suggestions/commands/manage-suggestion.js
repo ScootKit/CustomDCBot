@@ -11,7 +11,7 @@ module.exports.beforeSubcommand = async function (interaction) {
     if (!interaction.suggestion) {
         await interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('suggestions', 'suggestion-not-found')
+            content: '⚠️ ' + localize('suggestions', 'suggestion-not-found')
         });
         interaction.returnEarly = true;
     } else await interaction.deferReply({ephemeral: true});

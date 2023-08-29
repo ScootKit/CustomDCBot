@@ -16,8 +16,8 @@
         "de": "Code-nicht-gefunden Nachricht"
       },
       "default": {
-        "en": "⚠ Sorry, this code is invalid ):",
-        "de": "⚠ Dieser Code ist leider ungültig"
+        "en": "⚠️ Sorry, this code is invalid ):",
+        "de": "⚠️ Dieser Code ist leider ungültig"
       },
       "description": {
         "en": "This message gets send, when an invalid code is being redeemed",

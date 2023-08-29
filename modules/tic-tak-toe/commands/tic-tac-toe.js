@@ -5,7 +5,7 @@ module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user', true);
     if (member.user.id === interaction.user.id) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('tic-tac-toe', 'self-invite-not-possible', {r: `<@${((await interaction.guild.members.fetch({withPresences: true})).filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
+        content: '⚠️ ' + localize('tic-tac-toe', 'self-invite-not-possible', {r: `<@${((await interaction.guild.members.fetch({withPresences: true})).filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
     });
     const rep = await interaction.reply({
         content: localize('tic-tac-toe', 'challenge-message', {t: member.toString(), u: interaction.user.toString()}),
@@ -173,7 +173,7 @@ module.exports.run = async function (interaction) {
         if (!started) {
             if (i.user.id !== member.id) return i.reply({
                 ephemeral: true,
-                content: '⚠ ' + localize('tic-tac-toe', 'you-are-not-the-invited-one')
+                content: '⚠️ ' + localize('tic-tac-toe', 'you-are-not-the-invited-one')
             });
             if (i.customId === 'deny-invite') {
                 endReason = localize('tic-tac-toe', 'invite-denied', {
@@ -187,7 +187,7 @@ module.exports.run = async function (interaction) {
         }
         if (!justStart && currentUser.user.id !== i.user.id) return i.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('tic-tac-toe', 'not-your-turn')
+            content: '⚠️ ' + localize('tic-tac-toe', 'not-your-turn')
         });
         if (!i.customId.includes('invite')) {
             const x = i.customId.split('-')[0];
