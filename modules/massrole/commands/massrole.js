@@ -2,18 +2,16 @@ const {localize} = require('../../../src/functions/localize');
 const {embedType} = require('../../../src/functions/helpers');
 let target;
 let failed;
-let cancel;
 
 module.exports.beforeSubcommand = async function(interaction) {
     if (interaction.member.roles.cache.filter(m => interaction.client.configurations['massrole']['config'].adminRoles.includes(m.id)).size === 0) {
-        cancel = true;
         return interaction.reply({ephemeral: true, content: localize('massrole', 'not-admin')});
     }
 };
 
 module.exports.subcommands = {
     'add': async function (interaction) {
-        if (cancel) return;
+        if (interaction.replied) return;
         console.log("add");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
@@ -21,7 +19,7 @@ module.exports.subcommands = {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 try {
-                    await member.roles.add(interaction.options.getRole('role'));
+                    await member.roles.add(interaction.options.getRole('role'), localize('massrole', 'add-reason', {u: interaction.user.tag}));
                 } catch (e) {
                     failed++;
                 }
@@ -37,7 +35,7 @@ module.exports.subcommands = {
             for (const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
                     try {
-                        await member.roles.add(interaction.options.getRole('role'));
+                        await member.roles.add(interaction.options.getRole('role'), localize('massrole', 'add-reason', {u: interaction.user.tag}));
                     } catch (e) {
                         failed++;
                     }
@@ -56,7 +54,7 @@ module.exports.subcommands = {
                     if (!member.user.bot) {
                         try {
 
-                            await member.roles.add(interaction.options.getRole('role'));
+                            await member.roles.add(interaction.options.getRole('role'), localize('massrole', 'add-reason', {u: interaction.user.tag}));
                         } catch (e) {
                             failed++;
                         }
@@ -72,7 +70,7 @@ module.exports.subcommands = {
         }
     },
     'remove': async function (interaction) {
-        if (cancel) return;
+        if (interaction.replied) return;
         console.log("remove");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
@@ -80,7 +78,7 @@ module.exports.subcommands = {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 try {
-                    await member.roles.remove(interaction.options.getRole('role'));
+                    await member.roles.remove(interaction.options.getRole('role'), localize('massrole', 'remove-reason', {u: interaction.user.tag}));
                 } catch (e) {
                     failed++;
                 }
@@ -98,7 +96,7 @@ module.exports.subcommands = {
             for (const member of interaction.guild.members.cache.values()) {
                 if (member.user.bot) {
                     try {
-                        await member.roles.remove(interaction.options.getRole('role'));
+                        await member.roles.remove(interaction.options.getRole('role'), localize('massrole', 'remove-reason', {u: interaction.user.tag}));
                     } catch (e) {
                         failed++;
                     }
@@ -118,7 +116,7 @@ module.exports.subcommands = {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         try {
-                            await member.roles.remove(interaction.options.getRole('role'));
+                            await member.roles.remove(interaction.options.getRole('role'), localize('massrole', 'remove-reason', {u: interaction.user.tag}));
                         } catch (e) {
                             failed++;
                         }
@@ -135,7 +133,7 @@ module.exports.subcommands = {
         }
     },
     'remove-all': async function (interaction) {
-        if (cancel) return;
+        if (interaction.replied) return;
         console.log("remove-all");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
@@ -143,7 +141,7 @@ module.exports.subcommands = {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
                 try {
-                    await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                    await member.roles.remove(member.roles.cache.filter(role => !role.managed), localize('massrole', 'remove-reason', {u: interaction.user.tag}));
                 } catch (e) {
                     failed++;
                 }
@@ -160,7 +158,7 @@ module.exports.subcommands = {
                 if (member.manageable) {
                     if (member.user.bot) {
                         try {
-                            await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                            await member.roles.remove(member.roles.cache.filter(role => !role.managed), localize('massrole', 'remove-reason', {u: interaction.user.tag}));
                         } catch (e) {
                             failed++;
                         }
@@ -179,7 +177,7 @@ module.exports.subcommands = {
                 if (member.manageable) {
                     if (!member.user.bot) {
                         try {
-                            await member.roles.remove(member.roles.cache.filter(role => !role.managed));
+                            await member.roles.remove(member.roles.cache.filter(role => !role.managed), localize('massrole', 'remove-reason', {u: interaction.user.tag}));
                         } catch (e) {
                             failed++;
                         }
