@@ -3,6 +3,21 @@
     "en": "You can send on a daily basic here - this can be once a week or month",
     "de": "Hier kannst du Nachrichten auf täglicher Basis versenden lassen - das kann auch nur einmal pro Woche oder Monat sein"
   },
+  "elementLimits": {
+    "STARTER": 2,
+    "ACTIVE_GUILD": 5,
+    "PRO": 15
+  },
+  "configElementName": {
+    "de": {
+      "one": "Automatische Nachricht",
+      "more": "Automatische Nachrichten"
+    },
+    "en": {
+      "one": "Automatic message",
+      "more": "Automatic messages"
+    }
+  },
   "humanName": {
     "en": "Daily Basic",
     "de": "Tägliche Basis"
@@ -13,7 +28,8 @@
     {
       "name": "channelID",
       "humanName": {
-        "de": "Kanal"
+        "de": "Kanal",
+        "en": "Channel"
       },
       "default": {
         "en": ""
@@ -27,7 +43,8 @@
     {
       "name": "message",
       "humanName": {
-        "de": "Nachricht"
+        "de": "Nachricht",
+        "en": "Message"
       },
       "default": {
         "en": ""
@@ -42,14 +59,15 @@
     {
       "name": "limitWeekDaysTo",
       "humanName": {
-        "de": "Wochentage begrenzen auf"
+        "de": "Wochentage begrenzen auf",
+        "en": "Limit Week-Days to"
       },
       "default": {
         "en": [],
         "de": []
       },
       "description": {
-        "en": "If one or more values are set, the message will only get send when the current week-day is included in this array",
+        "en": "If one or more values are set, the message will only get send when the current week-day is included in this field",
         "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Wochentag hier enthalten ist"
       },
       "type": "array",
@@ -58,14 +76,15 @@
     {
       "name": "limitDaysTo",
       "humanName": {
-        "de": "Tage begrenzen auf"
+        "de": "Tage begrenzen auf",
+        "en": "Limit days to"
       },
       "default": {
         "en": [],
         "de": []
       },
       "description": {
-        "en": "If one or more values are set, the message will only get send when the current day (of the month) is included in this array",
+        "en": "If one or more values are set, the message will only get send when the current day (of the month) is included in this field",
         "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Tag (des Monats) hier enthalten ist"
       },
       "type": "array",

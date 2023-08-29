@@ -114,6 +114,22 @@
       "content": "channelID"
     },
     {
+      "name": "blacklistedRoles",
+      "humanName": {
+        "en": "Blacklisted roles",
+        "de": "Rollen, die kein XP sammeln"
+      },
+      "type": "array",
+      "content": "roleID",
+      "default": {
+        "en": []
+      },
+      "description": {
+        "de": "Diese Rollen werden kein XP für ihre Nachrichten erhalten",
+        "en": "These roles won't receive XP when writing messages"
+      }
+    },
+    {
       "name": "reward_roles",
       "humanName": {
         "en": "Level-Reward-Roles",
@@ -135,7 +151,10 @@
     },
     {
       "name": "onlyTopLevelRole",
-      "humanName": {},
+      "humanName": {
+        "en": "Only keep highest Level-Role",
+        "de": "Nur die höchste Level-Rolle behalten"
+      },
       "default": {
         "en": false
       },
@@ -147,7 +166,10 @@
     },
     {
       "name": "reset-on-leave",
-      "humanName": {},
+      "humanName": {
+        "en": "Rest Level on leave",
+        "de": "Level beim Verlassen zurücksetzen"
+      },
       "default": {
         "en": false
       },

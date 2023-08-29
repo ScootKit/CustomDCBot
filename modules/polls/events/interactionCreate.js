@@ -22,7 +22,7 @@ module.exports.run = async (client, interaction) => {
             if (poll.votes[id].includes(interaction.user.id)) userVoteCat = id;
         }
         if (!userVoteCat) return interaction.reply({
-            content: '⚠ ' + localize('polls', 'not-voted-yet'),
+            content: ':warning: ' + localize('polls', 'not-voted-yet'),
             ephemeral: true
         });
         return interaction.reply({
@@ -47,13 +47,13 @@ module.exports.run = async (client, interaction) => {
     if (interaction.isButton() && interaction.customId === 'polls-public-votes') {
         if (!poll.description.startsWith('[PUBLIC]')) return interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('polls', 'not-public')
+            content: ':warning: ' + localize('polls', 'not-public')
         });
         const embed = new MessageEmbed()
             .setTitle(localize('polls', 'view-public-votes'))
             .setColor(0xE67E22);
         for (const vId in poll.options) {
-            let voters = [];
+            const voters = [];
             for (const voterID of poll.votes[parseInt(vId) + 1] || []) {
                 voters.push('<@' + voterID + '>');
             }

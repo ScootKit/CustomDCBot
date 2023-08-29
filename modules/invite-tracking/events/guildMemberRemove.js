@@ -1,6 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 const {MessageEmbed} = require('discord.js');
-const {dateToDiscordTimestamp} = require('../../../src/functions/helpers');
+const {dateToDiscordTimestamp, formatDiscordUserName} = require('../../../src/functions/helpers');
 const {stringNames} = require('./guildMemberJoin');
 
 module.exports.run = async (client, member) => {
@@ -29,7 +29,7 @@ module.exports.run = async (client, member) => {
             .setTitle('📤 ' + localize('invite-tracking', 'member-leave'))
             .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
             .setColor('RED')
-            .addField(localize('invite-tracking', 'member'), `${member.user.tag} (\`${member.user.id}\`)`, true)
+            .addField(localize('invite-tracking', 'member'), `${formatDiscordUserName(member.user)} (\`${member.user.id}\`)`, true)
             .addField(localize('invite-tracking', 'invite-type'), localize('invite-tracking', stringNames[invite.inviteType]), true);
         if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (invite.inviteCode) {

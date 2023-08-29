@@ -1,16 +1,17 @@
 const {reloadConfig} = require('../functions/configuration');
 const {syncCommandsIfNeeded} = require('../../main');
 const {localize} = require('../functions/localize');
+const {formatDiscordUserName} = require('../functions/helpers');
 
 module.exports.run = async function (interaction) {
     await interaction.reply({
         ephemeral: true,
         content: localize('reload', 'reloading-config')
     });
-    if (interaction.client.logChannel) interaction.client.logChannel.send('🔄 ' + localize('reload', 'reloading-config-with-name', {tag: interaction.user.tag})).then(() => {
+    if (interaction.client.logChannel) interaction.client.logChannel.send('🔄 ' + localize('reload', 'reloading-config-with-name', {tag: formatDiscordUserName(interaction.user)})).then(() => {
     });
     await reloadConfig(interaction.client).catch((async reason => {
-        if (interaction.client.logChannel) interaction.client.logChannel.send('⚠️ ' + localize('reload', 'reload-failed')).then(() => {
+        if (interaction.client.logChannel) interaction.client.logChannel.send(':warning:️ ' + localize('reload', 'reload-failed')).then(() => {
         });
         await interaction.editReply({content: localize('reload', 'reload-failed-message', {reason})});
         process.exit(1);

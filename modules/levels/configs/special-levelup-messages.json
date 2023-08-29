@@ -26,6 +26,7 @@
     },
     {
       "name": "message",
+      "allowGeneratedImage": true,
       "humanName": {
         "de": "Nachricht"
       },
@@ -44,6 +45,28 @@
           "description": {
             "en": "Mention of the user",
             "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "avatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar of the user",
+            "de": "Profilbild des Nutzers"
+          }
+        },
+        {
+          "name": "username",
+          "description": {
+            "en": "Username of the user",
+            "de": "Nutzername des Nutzers"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
           }
         },
         {

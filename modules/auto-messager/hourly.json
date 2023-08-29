@@ -7,13 +7,29 @@
     "en": "Hourly basic",
     "de": "Stündliche Basis"
   },
+  "elementLimits": {
+    "STARTER": 1,
+    "ACTIVE_GUILD": 4,
+    "PRO": 14
+  },
+  "configElementName": {
+    "de": {
+      "one": "Automatische Nachricht",
+      "more": "Automatische Nachrichten"
+    },
+    "en": {
+      "one": "Automatic message",
+      "more": "Automatic messages"
+    }
+  },
   "filename": "hourly.json",
   "configElements": true,
   "content": [
     {
       "name": "channelID",
       "humanName": {
-        "de": "Kanal"
+        "de": "Kanal",
+        "en": "Channel"
       },
       "default": {
         "en": ""
@@ -27,7 +43,8 @@
     {
       "name": "message",
       "humanName": {
-        "de": "Nachricht"
+        "de": "Nachricht",
+        "en": "Message"
       },
       "default": {
         "en": ""
@@ -42,14 +59,15 @@
     {
       "name": "limitHoursTo",
       "humanName": {
-        "de": "Stunden begrenzen auf"
+        "de": "Stunden begrenzen auf",
+        "en": "Limit hours to"
       },
       "default": {
         "en": [],
         "de": []
       },
       "description": {
-        "en": "If one or more values are set, the message will only get send when the current hour is included in this array",
+        "en": "If one or more values are set, the message will only get send when the current hour is included in this field",
         "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn die aktuelle Stunde hier enthalten ist"
       },
       "type": "array",

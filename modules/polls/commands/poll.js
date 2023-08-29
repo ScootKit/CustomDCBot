@@ -6,7 +6,7 @@ const {createPoll, updateMessage} = require('../polls');
 module.exports.subcommands = {
     'create': async function (interaction) {
         if (interaction.options.getChannel('channel', true).type !== 'GUILD_TEXT') interaction.reply({
-            content: '⚠ ' + localize('polls', 'not-text-channel'),
+            content: ':warning: ' + localize('polls', 'not-text-channel'),
             ephemeral: true
         });
         let endAt;
@@ -33,7 +33,7 @@ module.exports.subcommands = {
             }
         });
         if (!poll) return interaction.reply({
-            content: '⚠ ' + localize('polls', 'not-found'),
+            content: ':warning: ' + localize('polls', 'not-found'),
             ephemeral: true
         });
         poll.expiresAt = new Date();
@@ -106,18 +106,18 @@ module.exports.config = {
                     required: true,
                     description: localize('polls', 'command-poll-create-option-description', {o: 2})
                 },
-                    {
-                        type: 'STRING',
-                        name: 'duration',
-                        required: false,
-                        description: localize('polls', 'command-poll-create-endAt-description')
-                    },
-                    {
-                        type: 'BOOLEAN',
-                        name: 'public',
-                        required: false,
-                        description: localize('polls', 'command-poll-create-public-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'duration',
+                    required: false,
+                    description: localize('polls', 'command-poll-create-endAt-description')
+                },
+                {
+                    type: 'BOOLEAN',
+                    name: 'public',
+                    required: false,
+                    description: localize('polls', 'command-poll-create-public-description')
+                }
                 ]
             },
             {
