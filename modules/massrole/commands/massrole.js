@@ -12,7 +12,6 @@ module.exports.beforeSubcommand = async function(interaction) {
 module.exports.subcommands = {
     'add': async function (interaction) {
         if (interaction.replied) return;
-        console.log("add");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
@@ -71,7 +70,6 @@ module.exports.subcommands = {
     },
     'remove': async function (interaction) {
         if (interaction.replied) return;
-        console.log("remove");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
@@ -134,7 +132,6 @@ module.exports.subcommands = {
     },
     'remove-all': async function (interaction) {
         if (interaction.replied) return;
-        console.log("remove-all");
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
