@@ -28,12 +28,12 @@ module.exports.subcommands = {
     'setcategory': async function (interaction) {
         const channel = interaction.options.getChannel('channel', true);
         if (channel.type === 'GUILD_CATEGORY') return interaction.reply({
-            content: ':warning: ' + localize('admin-tools', 'category-can-not-have-category'),
+            content: '⚠️ ' + localize('admin-tools', 'category-can-not-have-category'),
             ephemeral: true
         });
         const category = interaction.options.getChannel('category', true);
         if (category.type !== 'GUILD_CATEGORY') return interaction.reply({
-            content: ':warning: ' + localize('admin-tools', 'not-category'),
+            content: '⚠️ ' + localize('admin-tools', 'not-category'),
             ephemeral: true
         });
         await channel.setParent(category);

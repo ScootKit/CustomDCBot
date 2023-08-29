@@ -16,7 +16,7 @@ exports.run = async (client, interaction) => {
         } catch (e) {
             client.logger.warn(localize('invite-tracking', 'invite-revoked-error', {e}));
             await interaction.editReply({
-                content: ':warning: ' + localize('invite-tracking', 'invite-revoked-error', {
+                content: '⚠️ ' + localize('invite-tracking', 'invite-revoked-error', {
                     e,
                     c
                 })
@@ -27,13 +27,13 @@ exports.run = async (client, interaction) => {
     if (!interaction.customId.startsWith('inv-rev-')) return;
     if (!interaction.member.permissions.has('MANAGE_GUILD')) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('invite-tracking', 'missing-revoke-permissions')
+        content: '⚠️ ' + localize('invite-tracking', 'missing-revoke-permissions')
     });
     const code = interaction.customId.replaceAll('inv-rev-', '');
     const invite = await client.guild.invites.fetch(code).catch(() => {});
     if (!invite) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('invite-tracking', 'invite-not-found')
+        content: '⚠️ ' + localize('invite-tracking', 'invite-not-found')
     });
     await interaction.message.edit({embeds: [interaction.message.embeds[0]], components: []});
     invite.delete(localize('invite-tracking', 'invite-revoke-audit-log', {u: formatDiscordUserName(interaction.user)})).then(() => {
@@ -42,7 +42,7 @@ exports.run = async (client, interaction) => {
         client.logger.warn(localize('invite-tracking', 'invite-revoked-error', {e, c: code}));
         interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('invite-tracking', 'invite-revoked-error', {e, c: code})
+            content: '⚠️ ' + localize('invite-tracking', 'invite-revoked-error', {e, c: code})
         });
     });
 };

@@ -16,7 +16,7 @@ module.exports.subcommands = {
     'status': async function (interaction) {
         if (!interaction.birthday) return interaction.reply({
             ephemeral: true,
-            content: ':warning:️ ' + localize('birthdays', 'no-birthday-set')
+            content: '⚠️️ ' + localize('birthdays', 'no-birthday-set')
         });
         interaction.reply({
             ephemeral: true,
@@ -35,11 +35,11 @@ module.exports.subcommands = {
         });
         if (!scnUser || typeof scnUser !== 'object' || typeof scnUser.birthday !== 'object' || !(scnUser.birthday || {}).day) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('birthdays', 'no-sync-account')
+            content: '⚠️ ' + localize('birthdays', 'no-sync-account')
         });
         if (scnUser.birthday.autoSync) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('birthdays', 'auto-sync-on')
+            content: '⚠️ ' + localize('birthdays', 'auto-sync-on')
         });
         const action = interaction.options.getString('action');
         if (action === 'enable') {
@@ -63,7 +63,7 @@ module.exports.subcommands = {
         } else {
             if (!interaction.birthday) return interaction.reply({
                 ephemeral: true,
-                content: ':warning:️ ' + localize('birthdays', 'no-birthday-set')
+                content: '⚠️️ ' + localize('birthdays', 'no-birthday-set')
             });
             interaction.birthday.sync = false;
             interaction.birthday.verified = false;
@@ -77,11 +77,11 @@ module.exports.subcommands = {
     'delete': async function (interaction) {
         if (!interaction.birthday) return interaction.reply({
             ephemeral: true,
-            content: ':warning:️ You don\'t currently have a registered birthday on this server. If you have autoSync enabled, it could take up to 24 hours to be synchronized on every server. [Learn more about birthday synchronization](<https://docs.sc-network.net/de/dashboard/birthday-sync-faq>).'
+            content: '⚠️️ You don\'t currently have a registered birthday on this server. If you have autoSync enabled, it could take up to 24 hours to be synchronized on every server. [Learn more about birthday synchronization](<https://docs.sc-network.net/de/dashboard/birthday-sync-faq>).'
         });
         if (interaction.birthday.sync) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('birthdays', 'delete-but-sync-is-on')
+            content: '⚠️ ' + localize('birthdays', 'delete-but-sync-is-on')
         });
         await interaction.birthday.destroy();
         interaction.birthday = null;
@@ -99,7 +99,7 @@ module.exports.subcommands = {
         if (interaction.client.configurations['birthday']['config'].forceSCNetworkSync) {
             return interaction.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('birthdays', 'only-sync-allowed')
+                content: '⚠️ ' + localize('birthdays', 'only-sync-allowed')
             });
         }
 
@@ -108,24 +108,24 @@ module.exports.subcommands = {
             });
             if (u && (u.birthday || {}).autoSync) return interaction.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('birthdays', 'auto-sync-on')
+                content: '⚠️ ' + localize('birthdays', 'auto-sync-on')
             });
         }
 
         if ((day > 31 || day < 1) || (month > 12 || month < 1)) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('birthdays', 'invalid-date')
+            content: '⚠️ ' + localize('birthdays', 'invalid-date')
         });
 
         if (year) {
             const age = new AgeFromDate(new Date(year, month - 1, day)).age;
             if (age < 13) return interaction.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('birthdays', 'against-tos', {waitTime: 13 - age})
+                content: '⚠️ ' + localize('birthdays', 'against-tos', {waitTime: 13 - age})
             });
             if (age > 125) return interaction.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('birthdays', 'too-old')
+                content: '⚠️ ' + localize('birthdays', 'too-old')
             });
         }
 

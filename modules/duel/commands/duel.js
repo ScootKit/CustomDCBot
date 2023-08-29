@@ -5,7 +5,7 @@ module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user', true);
     if (member.user.id === interaction.user.id) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('duel', 'self-invite-not-possible', {r: `<@${((await interaction.guild.members.fetch({withPresences: true})).filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
+        content: '⚠️ ' + localize('duel', 'self-invite-not-possible', {r: `<@${((await interaction.guild.members.fetch({withPresences: true})).filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
     });
     const rep = await interaction.reply({
         content: localize('duel', 'challenge-message', {
@@ -59,7 +59,7 @@ module.exports.run = async function (interaction) {
         if (!started) {
             if (i.user.id !== member.id) return i.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('duel', 'you-are-not-the-invited-one')
+                content: '⚠️ ' + localize('duel', 'you-are-not-the-invited-one')
             });
             if (i.customId === 'duel-deny-invite') {
                 endReason = localize('duel', 'invite-denied', {
@@ -74,7 +74,7 @@ module.exports.run = async function (interaction) {
         if (!i.customId.includes('invite')) {
             if (i.user.id !== interaction.user.id && i.user.id !== member.user.id) return i.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('duel', 'not-your-game')
+                content: '⚠️ ' + localize('duel', 'not-your-game')
             });
             const action = i.customId.replaceAll('duel-', '');
             if (currentAnswers[i.user.id]) {
@@ -84,14 +84,14 @@ module.exports.run = async function (interaction) {
             if (action === 'reload') {
                 if (bullets[i.user.id] === 5) return i.reply({
                     ephemeral: true,
-                    content: ':warning: ' + localize('duel', 'bullets-full')
+                    content: '⚠️ ' + localize('duel', 'bullets-full')
                 });
                 bullets[i.user.id]++;
             }
             if (action === 'gun') {
                 if (bullets[i.user.id] === 0) return i.reply({
                     ephemeral: true,
-                    content: ':warning: ' + localize('duel', 'no-bullets')
+                    content: '⚠️ ' + localize('duel', 'no-bullets')
                 });
                 else bullets[i.user.id]--;
             }
