@@ -11,7 +11,7 @@ module.exports.run = async function (interaction) {
     if (interaction.client.logChannel) interaction.client.logChannel.send('🔄 ' + localize('reload', 'reloading-config-with-name', {tag: formatDiscordUserName(interaction.user)})).then(() => {
     });
     await reloadConfig(interaction.client).catch((async reason => {
-        if (interaction.client.logChannel) interaction.client.logChannel.send(':warning:️ ' + localize('reload', 'reload-failed')).then(() => {
+        if (interaction.client.logChannel) interaction.client.logChannel.send('⚠️️️ ' + localize('reload', 'reload-failed')).then(() => {
         });
         await interaction.editReply({content: localize('reload', 'reload-failed-message', {reason})});
         process.exit(1);

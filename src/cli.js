@@ -34,7 +34,7 @@ module.exports.commands = [
                 await syncCommandsIfNeeded();
                 console.log('Synced commands, configuration reloaded.');
             }).catch(async () => {
-                if (inputElement.client.logChannel) await inputElement.client.logChannel.send('⚠️ Configuration reloaded failed. Bot shutting down');
+                if (inputElement.client.logChannel) await inputElement.client.logChannel.send('⚠️️ Configuration reloaded failed. Bot shutting down');
                 console.log('Reload failed. Exiting');
                 process.exit(1);
             });

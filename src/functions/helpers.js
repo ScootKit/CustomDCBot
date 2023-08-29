@@ -254,7 +254,7 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
     c.on('collect', async (interaction) => {
         if (!allowedUserIDs.includes(interaction.user.id)) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('helpers', 'you-did-not-run-this-command')
+            content: '⚠️️ ' + localize('helpers', 'you-did-not-run-this-command')
         });
         let nextSite = currentSite + 1;
         if (interaction.customId === 'back') nextSite = currentSite - 1;

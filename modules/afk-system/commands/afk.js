@@ -10,7 +10,7 @@ module.exports.subcommands = {
         });
         if (!session) return interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('afk-system', 'no-running-session')
+            content: '⚠️ ' + localize('afk-system', 'no-running-session')
         });
         if (session.nickname) await interaction.member.setNickname(session.nickname, '[afk-system] ' + localize('afk-system', 'afk-nickname-change-audit-log')).catch(e => {interaction.client.logger.warn(localize('afk-system', 'can-not-edit-nickname', {e, u: interaction.user.tag}));});
         else await interaction.member.setNickname(null, '[afk-system] ' + localize('afk-system', 'afk-nickname-change-audit-log')).catch(e => {interaction.client.logger.warn(localize('afk-system', 'can-not-edit-nickname', {e, u: interaction.user.tag}));});
@@ -25,7 +25,7 @@ module.exports.subcommands = {
         });
         if (session) return interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('afk-system', 'already-running-session')
+            content: '⚠️ ' + localize('afk-system', 'already-running-session')
         });
         await interaction.client.models['afk-system']['AFKUser'].create({
             userID: interaction.user.id,

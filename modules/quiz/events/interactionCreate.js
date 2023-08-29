@@ -10,7 +10,7 @@ module.exports.run = async (client, interaction) => {
             }
         });
         if (user) return interaction.reply({content: localize('quiz', 'your-rank', {xp: user.xp}), ephemeral: true});
-        else return interaction.reply({content: '⚠️ ' + localize('quiz', 'no-rank'), ephemeral: true});
+        else return interaction.reply({content: '⚠️️ ' + localize('quiz', 'no-rank'), ephemeral: true});
     }
 
     const quiz = await client.models['quiz']['QuizList'].findOne({
@@ -31,7 +31,7 @@ module.exports.run = async (client, interaction) => {
             if (quiz.votes[id].includes(interaction.user.id)) userVoteCat = id;
         }
         if (!userVoteCat) return interaction.reply({
-            content: '⚠ ' + localize('quiz', 'not-voted-yet'),
+            content: '⚠️ ' + localize('quiz', 'not-voted-yet'),
             ephemeral: true
         });
         let extra = '';

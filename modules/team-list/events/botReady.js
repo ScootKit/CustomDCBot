@@ -57,7 +57,7 @@ async function updateEmbedsIfNeeded(client) {
             embed.addField(channelConfig['nameOverwrites'][role.id] || role.name, truncate((channelConfig['descriptions'][role.id] ? `${channelConfig['descriptions'][role.id]}\n` : '') + userString, 1024));
         }
 
-        if (embed.fields.length === 0) embed.addField('⚠', localize('team-list', 'no-roles-selected'));
+        if (embed.fields.length === 0) embed.addField('⚠️', localize('team-list', 'no-roles-selected'));
 
         if (isEqual(lastSavedEmbed, embed.toJSON())) return;
         lastSavedEmbed = embed.toJSON();

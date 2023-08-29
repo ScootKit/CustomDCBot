@@ -15,7 +15,7 @@ module.exports.beforeSubcommand = async function (interaction) {
         if (!interaction.memberToExecuteUpon) {
             if (interaction.options['_subcommand'] !== 'ban') return interaction.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('moderation', 'user-not-on-server')
+                content: '⚠️️ ' + localize('moderation', 'user-not-on-server')
             });
             else {
                 interaction.userNotOnServer = true;
@@ -47,7 +47,7 @@ async function fetchNotesUser(interaction) {
     if (interaction.options.getUser('user').id === interaction.user.id) {
         interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('moderation', 'not-allowed-to-see-own-notes')
+            content: '⚠️️ ' + localize('moderation', 'not-allowed-to-see-own-notes')
         });
         return false;
     }
@@ -138,7 +138,7 @@ module.exports.subcommands = {
             const note = notes[noteIndex];
             if (!note || (note || {}).authorID !== interaction.user.id) return interaction.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('moderation', 'note-not-found-or-no-permissions')
+                content: '⚠️️ ' + localize('moderation', 'note-not-found-or-no-permissions')
             });
             notes[noteIndex] = {
                 content: interaction.options.getString('notes'),
@@ -163,7 +163,7 @@ module.exports.subcommands = {
             const note = notes[noteIndex];
             if (!note || (note || {}).authorID !== interaction.user.id) return interaction.reply({
                 ephemeral: true,
-                content: ':warning: ' + localize('moderation', 'note-not-found-or-no-permissions')
+                content: '⚠️️ ' + localize('moderation', 'note-not-found-or-no-permissions')
             });
             notes[noteIndex] = {
                 content: '[deleted]',
@@ -186,7 +186,7 @@ module.exports.subcommands = {
         const parseDuration = interaction.options.getString('duration') ? new Date(new Date().getTime() + durationParser(interaction.options.getString('duration'))) : null;
         if (interaction.options.getInteger('days')) if (interaction.options.getInteger('days') < 0 || interaction.options.getInteger('days') > 7) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('moderation', 'invalid-days')
+            content: '⚠️️ ' + localize('moderation', 'invalid-days')
         });
         moderationAction(interaction.client, 'ban', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {days: interaction.options.getInteger('days')}, parseDuration, interaction.options.getAttachment('proof')).then(r => {
             guildBanCache = null;
@@ -202,9 +202,9 @@ module.exports.subcommands = {
                     ephemeral: true,
                     content: localize('moderation', 'action-done', {i: r.actionID})
                 });
-            } else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            } else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'unban': async function (interaction) {
@@ -216,9 +216,9 @@ module.exports.subcommands = {
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
             });
-            else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'clear': function (interaction) {
@@ -230,7 +230,7 @@ module.exports.subcommands = {
             }).catch(() => {
                 interaction.reply({
                     ephemeral: true,
-                    content: ':warning: ' + localize('moderation', 'clear-failed')
+                    content: '⚠️️ ' + localize('moderation', 'clear-failed')
                 });
             });
         });
@@ -252,9 +252,9 @@ module.exports.subcommands = {
                     ephemeral: true,
                     content: localize('moderation', 'action-done', {i: r.actionID})
                 });
-            } else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            } else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'unquarantine': async function (interaction) {
@@ -269,15 +269,15 @@ module.exports.subcommands = {
         });
         if (!lastAction) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('moderation', 'no-quarantine-action-found')
+            content: '⚠️️ ' + localize('moderation', 'no-quarantine-action-found')
         });
         if (!(lastAction.additionalData.roles instanceof Array)) lastAction.additionalData.roles = [];
         moderationAction(interaction.client, 'unquarantine', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {roles: lastAction.additionalData.roles || []}).then(r => {
             if (r) {
                 interaction.reply({ephemeral: true, content: localize('moderation', 'action-done', {i: r.actionID})});
-            } else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            } else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'kick': async function (interaction) {
@@ -288,9 +288,9 @@ module.exports.subcommands = {
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
             });
-            else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'mute': async function (interaction) {
@@ -299,16 +299,16 @@ module.exports.subcommands = {
         const parseDuration = new Date(new Date().getTime() + durationParser(interaction.options.getString('duration')));
         if (durationParser(interaction.options.getString('duration')) > 2419200000) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('moderation', 'mute-max-duration')
+            content: '⚠️️ ' + localize('moderation', 'mute-max-duration')
         });
         moderationAction(interaction.client, 'mute', interaction.member, interaction.memberToExecuteUpon, interaction.options.getString('reason'), {}, parseDuration, interaction.options.getAttachment('proof')).then(r => {
             if (r) interaction.reply({
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
             });
-            else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'unmute': async function (interaction) {
@@ -319,9 +319,9 @@ module.exports.subcommands = {
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
             });
-            else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'warn': async function (interaction) {
@@ -332,9 +332,9 @@ module.exports.subcommands = {
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
             });
-            else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'channel-mute': async function (interaction) {
@@ -345,9 +345,9 @@ module.exports.subcommands = {
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
             });
-            else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'remove-channel-mute': async function (interaction) {
@@ -358,9 +358,9 @@ module.exports.subcommands = {
                 ephemeral: true,
                 content: localize('moderation', 'action-done', {i: r.actionID})
             });
-            else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     },
     'lock': async function (interaction) {
@@ -462,9 +462,9 @@ module.exports.subcommands = {
             if (r) {
                 await action.destroy();
                 interaction.reply({ephemeral: true, content: localize('moderation', 'action-done', {i: r.actionID})});
-            } else interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            } else interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         }).catch((r) => {
-            interaction.reply({ephemeral: true, content: ':warning: ' + r});
+            interaction.reply({ephemeral: true, content: '⚠️️ ' + r});
         });
     }
 };

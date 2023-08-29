@@ -17,7 +17,7 @@ module.exports.subcommands = {
         }).catch(() => {
             interaction.reply({
                 ephemeral: true,
-                content: '⚠ ' + localize('hunt-the-code', 'error-creating-code', {displayName: interaction.options.getString('display-name')})
+                content: '⚠️ ' + localize('hunt-the-code', 'error-creating-code', {displayName: interaction.options.getString('display-name')})
             });
         });
     },

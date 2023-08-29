@@ -4,7 +4,7 @@ const {randomIntFromInterval, embedType, lockChannel, unlockChannel} = require('
 module.exports.beforeSubcommand = async function (interaction) {
     if (interaction.member.roles.cache.filter(m => interaction.client.configurations['guess-the-number']['config'].adminRoles.includes(m.id)).size === 0) return interaction.reply({
         ephemeral: true,
-        content: ':warning: To use this command, you need to be added to the adminRoles option in the SCNX-Dashboard.'
+        content: '⚠️️ To use this command, you need to be added to the adminRoles option in the SCNX-Dashboard.'
     });
 };
 
@@ -13,7 +13,7 @@ module.exports.subcommands = {
         if (interaction.replied) return;
         const item = await interaction.client.models['guess-the-number']['Channel'].findOne({where: {channelID: interaction.channel.id, ended: false}});
         if (!item) return interaction.reply({
-            content: ':warning: ' + localize('guess-the-number', 'session-not-running'),
+            content: '⚠️️ ' + localize('guess-the-number', 'session-not-running'),
             ephemeral: true
         });
         await lockChannel(interaction.channel, interaction.client.configurations['guess-the-number']['config'].adminRoles, '[guess-the-number] ' + localize('guess-the-number', 'game-ended'));
@@ -27,7 +27,7 @@ module.exports.subcommands = {
         if (interaction.replied) return;
         const item = await interaction.client.models['guess-the-number']['Channel'].findOne({where: {channelID: interaction.channel.id, ended: false}});
         if (!item) return interaction.reply({
-            content: ':warning: ' + localize('guess-the-number', 'session-not-running'),
+            content: '⚠️️ ' + localize('guess-the-number', 'session-not-running'),
             ephemeral: true
         });
         interaction.reply({
@@ -39,12 +39,12 @@ module.exports.subcommands = {
     'create': async function(interaction) {
         if (interaction.replied) return;
         if (await interaction.client.models['guess-the-number']['Channel'].findOne({where: {channelID: interaction.channel.id, ended: false}})) return interaction.reply({
-            content: ':warning: ' + localize('guess-the-number', 'session-already-running'),
+            content: '⚠️️ ' + localize('guess-the-number', 'session-already-running'),
             ephemeral: true
         });
         if (interaction.options.getInteger('min') >= interaction.options.getInteger('max')) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('guess-the-number', 'min-max-discrepancy')
+            content: '⚠️️ ' + localize('guess-the-number', 'min-max-discrepancy')
         });
         const number = interaction.options.getInteger('number') || randomIntFromInterval(interaction.options.getInteger('min'), interaction.options.getInteger('max'));
         await interaction.client.models['guess-the-number']['Channel'].create({

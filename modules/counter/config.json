@@ -136,7 +136,7 @@
         "en": "Message on wrong input"
       },
       "default": {
-        "en": ":warning: %err%"
+        "en": "⚠️️ %err%"
       },
       "description": {
         "en": "Message that gets send if a user provides an invalid input",

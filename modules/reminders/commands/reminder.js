@@ -7,7 +7,7 @@ module.exports.run = async function (interaction) {
     const time = new Date(durationParser(interaction.options.getString('in') + new Date().getTime()));
     if (time.getTime() < new Date().getTime() + 55000) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('reminders', 'one-minute-in-future')
+        content: '⚠️ ' + localize('reminders', 'one-minute-in-future')
     });
     const reminderObject = await interaction.client.models['reminders']['Reminder'].create({
         userID: interaction.user.id,

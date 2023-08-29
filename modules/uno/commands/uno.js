@@ -264,7 +264,7 @@ function gameMsg(game) {
             (game.previousCards.length > 0 ? localize('uno', 'previous-cards') + game.previousCards.filter(c => c).join(' → ') + '\n' : '') + '\n' +
             colorEmojis[game.lastCard.color] + ' **' + game.lastCard.name + '**' +
             (game.players.some(p => p.uno) ? '\nUno: ' + game.players.filter(p => p.uno).map(p => '<@' + p.id + '>').join(' ') : '') +
-            (game.pendingDraws > 0 ? '\n\n⚠️ ' + localize('uno', 'pending-draws', {count: '**' + game.pendingDraws + '**'}) : ''),
+            (game.pendingDraws > 0 ? '\n\n⚠️️ ' + localize('uno', 'pending-draws', {count: '**' + game.pendingDraws + '**'}) : ''),
         allowedMentions: {
             users: [game.players.find(p => p.turn).id]
         },

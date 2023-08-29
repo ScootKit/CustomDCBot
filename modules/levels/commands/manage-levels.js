@@ -19,7 +19,7 @@ async function runXPAction(interaction, newXP) {
     user.xp = newXP(user.xp);
     if (user.xp < 0) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('levels', 'negative-xp')
+        content: '⚠️️ ' + localize('levels', 'negative-xp')
     });
 
     function runXPCheck() {
@@ -73,12 +73,12 @@ async function runLevelAction(interaction, newLevel) {
     });
     if (!user) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('levels', 'cheat-no-profile')
+        content: '⚠️️ ' + localize('levels', 'cheat-no-profile')
     });
     user.level = newLevel(user.level);
     if (user.level < 1) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('levels', 'negative-level')
+        content: '⚠️️ ' + localize('levels', 'negative-level')
     });
     user.xp = (user.level - 1) * 750 + ((user.level - 2) * 500);
     if (interaction.client.configurations.levels.config.reward_roles[user.level.toString()]) {
@@ -132,7 +132,7 @@ module.exports.subcommands = {
                     userID: interaction.options.getUser('user').id
                 }
             });
-            if (!user) return interaction.editReply(':warning: ' + localize('levels', 'user-not-found'));
+            if (!user) return interaction.editReply('⚠️️ ' + localize('levels', 'user-not-found'));
             interaction.client.logger.info(localize('levels', 'user-deleted-users-xp', {
                 t: formatDiscordUserName(interaction.user),
                 u: user.userID

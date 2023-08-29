@@ -95,8 +95,8 @@
         "de": {}
       },
       "description": {
-        "en": "Allow certain users with a specified role to enter multiple times.\n:warning: Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
-        "de": "Erlaubt es, Nutzern mit einer bestimmten Rollen mehre Gewinnchancen zu geben.\n:warning: Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service"
+        "en": "Allow certain users with a specified role to enter multiple times.\n⚠️️ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service",
+        "de": "Erlaubt es, Nutzern mit einer bestimmten Rollen mehre Gewinnchancen zu geben.\n⚠️️ Please remember that allowing multiple entries for users who invited other users is against Discord's Terms of Service"
       },
       "type": "keyed",
       "content": {
