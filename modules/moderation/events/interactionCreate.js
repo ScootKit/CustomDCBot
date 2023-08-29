@@ -7,7 +7,7 @@ module.exports.run = async (client, interaction) => {
         const verificationConfig = client.configurations['moderation']['verification'];
         if (interaction.member.roles.cache.filter(r => verificationConfig['verification-passed-role'].includes(r.id)).size !== 0) return interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('moderation', 'already-verified')
+            content: ':warning: ' + localize('moderation', 'already-verified')
         });
         sendDMPart(verificationConfig, interaction.member).then(() => {
             interaction.reply({
@@ -17,7 +17,7 @@ module.exports.run = async (client, interaction) => {
         }).catch(() => {
             interaction.reply({
                 ephemeral: true,
-                content: '⚠ ' + localize('moderation', 'dms-still-disabled', {g: interaction.member.guild.name})
+                content: ':warning: ' + localize('moderation', 'dms-still-disabled', {g: interaction.member.guild.name})
             });
         });
     }
@@ -28,7 +28,7 @@ module.exports.run = async (client, interaction) => {
     const member = await interaction.guild.members.fetch(id).catch(() => {});
     if (!member) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('moderation', 'member-not-found')
+        content: ':warning: ' + localize('moderation', 'member-not-found')
     });
     if (a === 'p') await verificationPassed(member);
     else await verificationFail(member);

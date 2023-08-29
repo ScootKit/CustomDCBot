@@ -81,6 +81,21 @@
         "key": "channelID",
         "value": "string"
       }
+    },
+    {
+      "name": "forcedMentionMatching",
+      "default": {
+        "en": true
+      },
+      "type": "boolean",
+      "humanName": {
+        "en": "Only react to @mentions?",
+        "de": "Nur auf @Erwähnungen reagieren?"
+      },
+      "description": {
+        "en": "If disabled, the bot will also react to mentions in inline-replies or otherwise in addition to conventional @mentions.",
+        "de": "Wenn deaktiviert, wird der Bot auch auf Erwähnungen in Inline-Antworten oder anderweitigen Erwähnungen, zusätzlich zu den gewöhnlichen @Erwähnungen, reagieren."
+      }
     }
   ]
 }

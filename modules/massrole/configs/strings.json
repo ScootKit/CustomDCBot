@@ -7,6 +7,11 @@
     "en": "Messages",
     "de": "Nachrichten"
   },
+  "commandsWarnings": {
+    "normal": [
+      "/massrole"
+    ]
+  },
   "filename": "strings.json",
   "content": [
     {

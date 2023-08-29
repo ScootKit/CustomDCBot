@@ -5,6 +5,7 @@
  */
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../src/functions/localize');
+const {formatDiscordUserName} = require('../../src/functions/helpers');
 let changed = false;
 
 /**
@@ -20,7 +21,7 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
     const channel = await client.channels.fetch(client.configurations['levels']['config']['leaderboard-channel']).catch(() => {
     });
     if (!channel || channel.type !== 'GUILD_TEXT') return client.logger.error('[levels] ' + localize('levels', 'leaderboard-channel-not-found'));
-    const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
+    const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id && !msg.system);
 
     const users = await client.models['levels']['User'].findAll({
         order: [
@@ -37,7 +38,7 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
         i++;
         leaderboardString = leaderboardString + localize('levels', 'leaderboard-notation', {
             p: i,
-            u: client.configurations['levels']['config']['useTags'] ? member.user.tag : member.user.toString(),
+            u: client.configurations['levels']['config']['useTags'] ? formatDiscordUserName(member.user) : member.user.toString(),
             l: user.level,
             xp: user.xp
         }) + '\n';

@@ -106,6 +106,7 @@
     },
     {
       "name": "level_up_message",
+      "allowGeneratedImage": true,
       "humanName": {
         "de": "Level-Up-Nachricht"
       },
@@ -128,6 +129,28 @@
           }
         },
         {
+          "name": "avatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar of the user",
+            "de": "Profilbild des Nutzers"
+          }
+        },
+        {
+          "name": "username",
+          "description": {
+            "en": "Username of the user",
+            "de": "Nutzername des Nutzers"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
+        },
+        {
           "name": "newLevel",
           "description": {
             "en": "New level of the user",
@@ -138,6 +161,7 @@
     },
     {
       "name": "level_up_message_with_reward",
+      "allowGeneratedImage": true,
       "humanName": {
         "de": "Level-Up-Nachricht mit Belohnung"
       },
@@ -157,6 +181,28 @@
           "description": {
             "en": "Mention of the user",
             "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "avatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar of the user",
+            "de": "Profilbild des Nutzers"
+          }
+        },
+        {
+          "name": "username",
+          "description": {
+            "en": "Username of the user",
+            "de": "Nutzername des Nutzers"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
           }
         },
         {

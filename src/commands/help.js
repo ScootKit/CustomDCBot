@@ -1,6 +1,7 @@
-const {truncate, formatDate, sendMultipleSiteButtonMessage} = require('../functions/helpers');
+const {truncate, formatDate, sendMultipleSiteButtonMessage, formatDiscordUserName} = require('../functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../functions/localize');
+
 module.exports.run = async function (interaction) {
     const modules = {};
     for (const command of interaction.client.commands) {
@@ -14,9 +15,9 @@ module.exports.run = async function (interaction) {
     const embedFields = [];
     for (const module in modules) {
         let content = '';
-        if (module !== 'none') content = (interaction.client.modules[module].config.description[interaction.client.locale] || interaction.client.modules[module].config.description.en || interaction.client.modules[module].config.description.de) + '\n';
+        if (module !== 'none') content = `*${(interaction.client.modules[module]['config']['description'][interaction.client.locale] || interaction.client.modules[module]['config']['description']['en'])}*\n`;
         for (let d of modules[module]) {
-            content = content + `\n\`/${d.name}\`: ${d.description}`;
+            content = content + `\n* \`/${d.name}\`: ${d.description}`;
             d = {...d};
             if (typeof d.options === 'function') d.options = await d.options(interaction.client);
             if ((d.options || []).filter(o => o.type === 'SUB_COMMAND' || o.type === 'SUB_COMMANDS_GROUP').length !== 0) {
@@ -32,22 +33,22 @@ module.exports.run = async function (interaction) {
              * @param {String} bulletPointStyle Style of bullet-points to use
              * @param {String} tab Tabs to use to make the message look good
              */
-            function addSubCommand(command, bulletPointStyle = '●', tab = '⠀') {
-                content = content + `\n${tab}${bulletPointStyle} ${command.name}: ${command.description}`;
+            function addSubCommand(command, tab = '  ') {
+                content = content + `\n${tab}* \`${command.name}\`: ${command.description}`;
                 if (command.type === 'SUB_COMMAND_GROUP' && (command.options || []).filter(o => o.type === 'SUB_COMMAND').length !== 0) {
                     for (const c of command.options) {
-                        addSubCommand(c, '◦', '⠀⠀');
+                        addSubCommand(c, '  ');
                     }
                 }
             }
         }
         embedFields.push({
-            name: module === 'none' ? interaction.client.strings.helpembed.build_in : `${interaction.client.modules[module].config.humanReadableName[interaction.client.locale] || interaction.client.modules[module].config.humanReadableName.en || interaction.client.modules[module].config.humanReadableName.de || module}`,
+            name: `**${module === 'none' ? interaction.client.strings.helpembed.build_in : (interaction.client.modules[module]['config']['humanReadableName'][interaction.client.locale] || interaction.client.modules[module]['config']['humanReadableName']['en'] || module)}**`,
             value: truncate(content, 1024)
         });
     }
 
-    embedFields.filter(f => f.name === interaction.client.strings.helpembed.build_in).forEach(f => {
+    embedFields.filter(f => f.name === '**' + interaction.client.strings.helpembed.build_in + '**').forEach(f => {
         const fields = [
             f
         ];
@@ -68,9 +69,9 @@ module.exports.run = async function (interaction) {
                 rc: interaction.client.commands.length,
                 v: interaction.client.scnxSetup ? interaction.client.scnxData.bot.version : null,
                 si: interaction.client.scnxSetup ? interaction.client.scnxData.bot.instanceID : null,
-                pl: interaction.client.scnxSetup ? interaction.client.scnxData.plan : null,
+                pl: interaction.client.scnxSetup ? localize('scnx', 'plan-' + interaction.client.scnxData.plan) : null,
                 lr: formatDate(interaction.client.readyAt),
-                lrl: formatDate(interaction.client.botReadyAt)
+                lR: formatDate(interaction.client.botReadyAt)
             })
         });
         addSite(
@@ -81,7 +82,7 @@ module.exports.run = async function (interaction) {
 
     let fieldCount = 0;
     let fieldCache = [];
-    for (const field of embedFields.filter(f => f.name !== interaction.client.strings.helpembed.build_in)) {
+    for (const field of embedFields.filter(f => f.name !== '**' + interaction.client.strings.helpembed.build_in + '**')) {
         fieldCount++;
         fieldCache.push(field);
         if (fieldCount % 3 === 0) {
@@ -102,7 +103,7 @@ module.exports.run = async function (interaction) {
         const embed = new MessageEmbed().setColor('RANDOM')
             .setDescription(interaction.client.strings.helpembed.description)
             .setThumbnail(interaction.client.user.avatarURL())
-            .setAuthor({name: interaction.user.tag, iconURL: interaction.user.avatarURL()})
+            .setAuthor({name: formatDiscordUserName(interaction.user), iconURL: interaction.user.avatarURL()})
             .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .setTitle(interaction.client.strings.helpembed.title.replaceAll('%site%', siteCount))
             .addFields(fields);

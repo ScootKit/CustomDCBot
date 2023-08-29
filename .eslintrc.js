@@ -51,7 +51,7 @@ module.exports = {
             'error',
             'last'
         ],
-        'complexity': ['error', 50],
+        'complexity': ['error', 100],
         'computed-property-spacing': [
             'error',
             'never'
@@ -67,7 +67,7 @@ module.exports = {
             'error',
             'property'
         ],
-        'require-jsdoc': ['error', {
+        'require-jsdoc': ['warn', {
             'require': {
                 'FunctionDeclaration': true,
                 'MethodDefinition': false,
@@ -180,7 +180,7 @@ module.exports = {
         'no-multi-str': 'error',
         'no-multiple-empty-lines': 'error',
         'no-negated-condition': 'off',
-        'no-nested-ternary': 'error',
+        'no-nested-ternary': 'warn',
         'no-new': 'error',
         'no-new-func': 'error',
         'no-new-object': 'error',

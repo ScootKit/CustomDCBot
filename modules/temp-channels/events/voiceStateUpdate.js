@@ -57,14 +57,14 @@ module.exports.run = async function (client, oldState, newState) {
             alreadyExistingChannel.destroy();
         });
         const newChannel = await newState.guild.channels.create(moduleConfig['channelname_format']
-                .split('%username%').join(newState.member.user.username)
-                .split('%nickname%').join(newState.member.nickname || newState.member.user.username)
-                .split('%tag%').join(formatDiscordUserName(newState.member.user)),
-            {
-                type: 'GUILD_VOICE',
-                parent: moduleConfig['category'],
-                reason: '[temp-channels] ' + localize('temp-channels', 'created-audit-log-reason', {u: formatDiscordUserName(newState.member.user)})
-            });
+            .split('%username%').join(newState.member.user.username)
+            .split('%nickname%').join(newState.member.nickname || newState.member.user.username)
+            .split('%tag%').join(formatDiscordUserName(newState.member.user)),
+        {
+            type: 'GUILD_VOICE',
+            parent: moduleConfig['category'],
+            reason: '[temp-channels] ' + localize('temp-channels', 'created-audit-log-reason', {u: formatDiscordUserName(newState.member.user)})
+        });
         await newState.setChannel(newChannel.id);
         if (moduleConfig['allowUserToChangeName']) await newChannel.permissionOverwrites.create(newState.member, {'MANAGE_CHANNELS': true}, {
             reason: '[temp-channels] ' + localize('temp-channels', 'created-audit-log-reason', {u: formatDiscordUserName(newState.member.user)})

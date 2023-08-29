@@ -45,7 +45,7 @@ async function updateEmbedsIfNeeded(client) {
         const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
         const guildMembers = await channel.guild.members.fetch();
 
-        const roles = (await channel.guild.roles.fetch()).filter(f => channelConfig.roles.includes(f.id)).sort((a, b) => a.position < b.position ? 1 : -1);
+        const roles = (await channel.guild.roles.fetch()).filter(f => channelConfig.roles.includes(f.id)).sort((a, b) => (a.position < b.position ? 1 : -1));
         for (const role of roles.values()) {
             let userString = '';
             for (const member of guildMembers.filter(m => m.roles.cache.has(role.id)).values()) {

@@ -20,8 +20,21 @@ module.exports.run = async function (client, msg) {
     if (!object) return;
 
     if (!parseInt(msg.content)) return wrongMessage(localize('counter', 'not-a-number'));
-    if (object.lastCountedUser === msg.author.id) return wrongMessage(localize('counter', 'only-one-message-per-person'));
-    if (parseInt(object.currentNumber) + 1 !== parseInt(msg.content)) return wrongMessage(localize('counter', 'not-the-next-number', {n: parseInt(object.currentNumber) + 1}), true);
+    if (object.lastCountedUser === msg.author.id && moduleConfig.onlyOneMessagePerUser) return wrongMessage(localize('counter', 'only-one-message-per-person'));
+    if (parseInt(object.currentNumber) + 1 !== parseInt(msg.content)) {
+        if (parseInt(object.currentNumber) !== parseInt(msg.content) && moduleConfig.restartOnWrongCount) {
+            object.currentNumber = 0;
+            object.lastCountedUser = null;
+            object.userCounts = {};
+            await object.save();
+            invalidMessages[msg.author.id]++;
+            return msg.reply(embedType(moduleConfig.restartOnWrongCountMessage, {
+                '%i%': 1,
+                '%mention%': msg.author.toString()
+            }));
+        }
+        return wrongMessage(localize('counter', 'not-the-next-number', {n: parseInt(object.currentNumber) + 1}), true);
+    }
 
     object.currentNumber++;
     object.lastCountedUser = msg.author.id;
@@ -63,15 +76,17 @@ module.exports.run = async function (client, msg) {
      */
     async function wrongMessage(reason, skipStrike = false) {
         const answer = await msg.reply(embedType(moduleConfig['wrong-input-message'], {'%err%': reason}));
-        if (!skipStrike) return;
+        if (!skipStrike || parseInt(moduleConfig.strikeAmount) === 0) return;
         let ban;
+        console.log(invalidMessages);
         if (!invalidMessages[msg.author.id]) invalidMessages[msg.author.id] = 0;
         invalidMessages[msg.author.id]++;
-        if (invalidMessages[msg.author.id] > 5) {
-            await msg.channel.permissionOverwrites.create(msg.author, {
+        if (invalidMessages[msg.author.id] >= parseInt(moduleConfig.strikeAmount)) {
+            if (moduleConfig.giveRoleInsteadOfPermissionRemoval) await msg.member.roles.add(moduleConfig.strikeRole, '[counter] ' + localize('counter', 'restriction-audit-log'));
+            else await msg.channel.permissionOverwrites.create(msg.author, {
                 SEND_MESSAGES: false
             }, {reason: '[counter] ' + localize('counter', 'restriction-audit-log')});
-            ban = await answer.reply(`<@${msg.author.id}>: ${localize('counter', 'banned-because-of-improper-use')}`);
+            ban = await answer.reply(embedType(moduleConfig.strikeMessage, {'%mention%': msg.author.toString()}));
         }
         setTimeout(async () => {
             await answer.delete();

@@ -5,7 +5,7 @@ module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user', true);
     if (member.user.id === interaction.user.id) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('duel', 'self-invite-not-possible', {r: `<@${((await interaction.guild.members.fetch({withPresences: true})).filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
+        content: ':warning: ' + localize('duel', 'self-invite-not-possible', {r: `<@${((await interaction.guild.members.fetch({withPresences: true})).filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
     });
     const rep = await interaction.reply({
         content: localize('duel', 'challenge-message', {
@@ -59,7 +59,7 @@ module.exports.run = async function (interaction) {
         if (!started) {
             if (i.user.id !== member.id) return i.reply({
                 ephemeral: true,
-                content: '⚠ ' + localize('duel', 'you-are-not-the-invited-one')
+                content: ':warning: ' + localize('duel', 'you-are-not-the-invited-one')
             });
             if (i.customId === 'duel-deny-invite') {
                 endReason = localize('duel', 'invite-denied', {
@@ -74,7 +74,7 @@ module.exports.run = async function (interaction) {
         if (!i.customId.includes('invite')) {
             if (i.user.id !== interaction.user.id && i.user.id !== member.user.id) return i.reply({
                 ephemeral: true,
-                content: '⚠ ' + localize('duel', 'not-your-game')
+                content: ':warning: ' + localize('duel', 'not-your-game')
             });
             const action = i.customId.replaceAll('duel-', '');
             if (currentAnswers[i.user.id]) {
@@ -84,14 +84,14 @@ module.exports.run = async function (interaction) {
             if (action === 'reload') {
                 if (bullets[i.user.id] === 5) return i.reply({
                     ephemeral: true,
-                    content: '⚠ ' + localize('duel', 'bullets-full')
+                    content: ':warning: ' + localize('duel', 'bullets-full')
                 });
                 bullets[i.user.id]++;
             }
             if (action === 'gun') {
                 if (bullets[i.user.id] === 0) return i.reply({
                     ephemeral: true,
-                    content: '⚠ ' + localize('duel', 'no-bullets')
+                    content: ':warning: ' + localize('duel', 'no-bullets')
                 });
                 else bullets[i.user.id]--;
             }
@@ -104,7 +104,7 @@ module.exports.run = async function (interaction) {
                 if (currentAnswers[member.user.id] === 'gun' && guardAfterEachOther[interaction.user.id] >= 5) currentAnswers[interaction.user.id] = 'reload';
                 if (currentAnswers[interaction.user.id] === 'gun' && guardAfterEachOther[member.user.id] >= 5) currentAnswers[member.user.id] = 'reload';
                 if ((currentAnswers[interaction.user.id] === 'gun' && guardAfterEachOther[member.user.id] >= 5) || currentAnswers[member.user.id] === 'gun' && guardAfterEachOther[interaction.user.id] >= 5) guardOver = true;
-                const answers = [currentAnswers[member.user.id], currentAnswers[interaction.user.id]].sort((a, b) => ['reload', 'guard', 'gun'].indexOf(a) - ['reload', 'guard', 'gun'].indexOf(b));
+                const answers = [currentAnswers[member.user.id], currentAnswers[interaction.user.id]].sort((t, b) => ['reload', 'guard', 'gun'].indexOf(t) - ['reload', 'guard', 'gun'].indexOf(b));
                 const params = {};
                 const actionTo = {
                     'reload': 'r',
@@ -120,9 +120,9 @@ module.exports.run = async function (interaction) {
         }
 
 
-        let stateString = '\n\n' + localize('duel', 'what-do-you-want-to-do') + `\n${member.toString()}: ${localize('duel', currentAnswers[member.user.id] ? 'ready' : 'pending')}\n${interaction.user.toString()}: ${localize('duel', currentAnswers[interaction.user.id] ? 'ready' : 'pending')}\n\n${localize('duel', 'continues-info')}`;
+        const stateString = '\n\n' + localize('duel', 'what-do-you-want-to-do') + `\n${member.toString()}: ${localize('duel', currentAnswers[member.user.id] ? 'ready' : 'pending')}\n${interaction.user.toString()}: ${localize('duel', currentAnswers[interaction.user.id] ? 'ready' : 'pending')}\n\n${localize('duel', 'continues-info')}`;
 
-        let mentions = undefined;
+        let mentions;
         if (!ended && !currentAnswers[interaction.user.id] && currentAnswers[member.user.id]) mentions = [interaction.user.id];
         if (!ended && !currentAnswers[member.user.id] && currentAnswers[interaction.user.id]) mentions = [member.user.id];
         const embed = new MessageEmbed()
@@ -170,11 +170,11 @@ module.exports.run = async function (interaction) {
         });
     });
     a.on('end', () => {
-            rep.edit({
-                content: endReason,
-                components: []
-            });
-        }
+        rep.edit({
+            content: endReason,
+            components: []
+        });
+    }
     );
 };
 
