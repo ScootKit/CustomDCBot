@@ -16,8 +16,16 @@
         "de": "Gewinnspiel-Nachricht"
       },
       "default": {
-        "en": "**NEW GIVEAWAY :tada:**\n\nPrize: %prize%\nEnds at: %endAtDiscordFormation%\nWinners: %winners%\nOrganiser: %organiser%\nCurrently valid entries: %entryCount% (%enteredCount% users)\nSponsor-Website: %sponsorLink%\n\nPress the big button below to participate!",
-        "de": "**NEUES GEWINNSPIEL :tada:**\n\nPreis: %prize%\nLäuft bis: %endAtDiscordFormation%\\nAnzahl Gewinner: %winners%\nVeranstalter: %organiser%\nSponsor-Website: %sponsorLink%\nGültige Teilnahmen: %entryCount% (von %enteredCount% Teilnehmern)\n\nKlicke den großen Knopf unten, um teilzunehmen!"
+        "en": {
+          "title": "Neues Gewinnspiel 🎉",
+          "description": "**Prize**: %prize%\n**Winners**: %winners%\n**Organiser**: %organiser%\n**Sponsor-Website**: <%sponsorLink%>\n\n**Currently valid entries**: %entryCount% (%enteredCount% users)\n**Ends at**: %endAtDiscordFormation%\n\nPress the big button below to participate!",
+          "color": "GREEN"
+        },
+        "de": {
+          "title": "New Giveaway 🎉",
+          "description": "**Preis**: %prize%\n**Anzahl Gewinner**: %winners%\n**Veranstalter**: %organiser%\n**Sponsor-Webseite**: <%sponsorLink%>\n\n**Gültige Teilnahmen**: %entryCount% (%enteredCount% Nutzer)\n**Endet am**: %endAtDiscordFormation%\n\nKlicke auf den Knopf unten, um teilzunehmen!",
+          "color": "GREEN"
+        }
       },
       "description": {
         "en": "Message that gets send in the giveaway channel if a new giveaway gets created",
@@ -98,7 +106,7 @@
         },
         "de": {
           "title": "Neues Gewinnspiel 🎉",
-          "description": "Preis: %prize%\nLäuft bis: %endAtDiscordFormation%\nAnzahl Gewinner: %winners%\nVeranstalter: %organiser%\nSponsor-Website: %sponsorLink%\n__Voraussetzungen__\n%requirements%\nGültige Teilnahmen: %entryCount% (von %enteredCount% Teilnehmern)\n\nDrücke auf den großen Knopf unten, um teilzunehmen.",
+          "description": "Preis: %prize%\nLäuft bis: %endAtDiscordFormation%\nAnzahl Gewinner: %winners%\nVeranstalter: %organiser%\nSponsor-Website: %sponsorLink%\n__3aussetzungen__\n%requirements%\nGültige Teilnahmen: %entryCount% (von %enteredCount% Teilnehmern)\n\nDrücke auf den großen Knopf unten, um teilzunehmen.",
           "color": "GREEN"
         }
       },
@@ -375,7 +383,7 @@
       },
       "default": {
         "en": "Giveaway entered successfully with **%entries% entry(s)**.",
-        "de": "Gewinnspiel mit **%entries% Teilnahmen(s)** beigetreten."
+        "de": "Gewinnspiel mit **%entries% Teilnahme(n)** beigetreten."
       },
       "description": {
         "en": "Message that gets shown to the user after they enter the giveaway successfully.",
@@ -408,7 +416,7 @@
       },
       "default": {
         "en": "You are already in this giveaway with **%entries% entry(s)**.",
-        "de": "Du nimmst bereits mit **%entries% Teilnahmen** teil."
+        "de": "Du nimmst bereits mit **%entries% Teilnahme(n)** teil."
       },
       "description": {
         "en": "Message that gets shown to the user when someone tries to enter when they already are in",

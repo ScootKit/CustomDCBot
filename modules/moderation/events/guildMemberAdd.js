@@ -85,22 +85,22 @@ exports.run = async (client, guildMember) => {
             });
             if (!channel || (channel || {}).type !== 'GUILD_TEXT') return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
             const m = await channel.send({
-                    content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
+                content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
 
-                    components: [
-                        {
-                            type: 'ACTION_ROW',
-                            components: [
-                                {
-                                    type: 'BUTTON',
-                                    label: '📨 ' + localize('moderation', 'restart-verification-button'),
-                                    customId: `mod-rvp`,
-                                    style: 'PRIMARY'
-                                }
-                            ]
-                        }
-                    ]
-                }
+                components: [
+                    {
+                        type: 'ACTION_ROW',
+                        components: [
+                            {
+                                type: 'BUTTON',
+                                label: '📨 ' + localize('moderation', 'restart-verification-button'),
+                                customId: `mod-rvp`,
+                                style: 'PRIMARY'
+                            }
+                        ]
+                    }
+                ]
+            }
             );
             setTimeout(() => {
                 m.delete().then(() => {

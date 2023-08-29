@@ -6,7 +6,7 @@ module.exports.run = async function (interaction) {
     const user = interaction.options.getMember('user');
     if (!user) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('moderation', 'report-user-not-found-on-guild', {s: interaction.guild.name})
+        content: ':warning: ' + localize('moderation', 'report-user-not-found-on-guild', {s: interaction.guild.name})
     });
     if (user.id === interaction.client.user.id) return interaction.reply({
         ephemeral: true,
@@ -14,7 +14,7 @@ module.exports.run = async function (interaction) {
     });
     if (user.roles.cache.find(r => [...interaction.client.configurations['moderation']['config']['moderator-roles_level2'], ...interaction.client.configurations['moderation']['config']['moderator-roles_level1'], ...interaction.client.configurations['moderation']['config']['moderator-roles_level3'], ...interaction.client.configurations['moderation']['config']['moderator-roles_level4']].includes(r.id))) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('moderation', 'can-not-report-mod')
+        content: ':warning: ' + localize('moderation', 'can-not-report-mod')
     });
     const logUrl = await messageLogToStringToPaste(interaction.channel);
     let logChannel = interaction.client.configurations['moderation']['config']['report-channel-id'] ? interaction.client.channels.cache.get(interaction.client.configurations['moderation']['config']['report-channel-id']) : null;

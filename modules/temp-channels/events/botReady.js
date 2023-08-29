@@ -35,31 +35,31 @@ module.exports.run = async function () {
                         emoji: '📃'
                     }]
             },
-                {
-                    type: 'ACTION_ROW',
-                    components: [
-                        {
-                            type: 'BUTTON',
-                            label: localize('temp-channels', 'public-channel'),
-                            style: 'SUCCESS',
-                            customId: 'tempc-public',
-                            emoji: '🔓'
-                        },
-                        {
-                            type: 'BUTTON',
-                            label: localize('temp-channels', 'private-channel'),
-                            style: 'DANGER',
-                            customId: 'tempc-private',
-                            emoji: '🔒'
-                        },
-                        {
-                            type: 'BUTTON',
-                            label: localize('temp-channels', 'edit-channel'),
-                            style: 'SECONDARY',
-                            customId: 'tempc-edit',
-                            emoji: '📝'
-                        }]
-                }];
+            {
+                type: 'ACTION_ROW',
+                components: [
+                    {
+                        type: 'BUTTON',
+                        label: localize('temp-channels', 'public-channel'),
+                        style: 'SUCCESS',
+                        customId: 'tempc-public',
+                        emoji: '🔓'
+                    },
+                    {
+                        type: 'BUTTON',
+                        label: localize('temp-channels', 'private-channel'),
+                        style: 'DANGER',
+                        customId: 'tempc-private',
+                        emoji: '🔒'
+                    },
+                    {
+                        type: 'BUTTON',
+                        label: localize('temp-channels', 'edit-channel'),
+                        style: 'SECONDARY',
+                        customId: 'tempc-edit',
+                        emoji: '📝'
+                    }]
+            }];
             const message = embedType(moduleConfig['settingsMessage'], {}, {components});
             await messages.first().edit(message);
         } else await sendMessage(settingsChannel);

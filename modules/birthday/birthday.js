@@ -4,7 +4,7 @@
  * @author Simon Csaba <mail@scderox.de>
  */
 const {getUser, getAutoSyncMembers} = require('@scnetwork/api');
-const {embedType, disableModule} = require('../../src/functions/helpers');
+const {disableModule, truncate, embedTypeV2, formatDiscordUserName} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {AgeFromDate} = require('age-calculator');
 const {localize} = require('../../src/functions/localize');
@@ -20,7 +20,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
 
     const channel = await client.channels.fetch(moduleConf['channelID']).catch(() => {
     });
-    if (!channel) return disableModule('birthdays', localize('birthday', 'channel-not-found', {c: moduleConf.channelID}));
+    if (!channel) return disableModule('birthdays', localize('birthdays', 'channel-not-found', {c: moduleConf.channelID}));
     if (!moduleConf.enableBirthdayEmbed) {
         if (notifyUsers) await notifyBirthdayUsers();
         return;
@@ -154,8 +154,8 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
                 }])
     ];
 
-    if (moduleConf['birthdayEmbed']['thumbnail']) embeds[0].setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
-    if (moduleConf['birthdayEmbed']['image']) embeds[0].setImage(moduleConf['birthdayEmbed']['image']);
+    if ((moduleConf['birthdayEmbed']['thumbnail'] || '').replaceAll(' ', '')) embeds[0].setThumbnail(moduleConf['birthdayEmbed']['thumbnail']);
+    if ((moduleConf['birthdayEmbed']['image'] || '').replaceAll(' ', '')) embeds[0].setImage(moduleConf['birthdayEmbed']['image']);
     if (!client.strings.disableFooterTimestamp) embeds[0].setTimestamp();
 
     if (messages.last()) await messages.last().edit({embeds});
@@ -190,14 +190,17 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
             const member = channel.guild.members.cache.get(user.id);
             if (!member) return;
             if (user.year) {
-                channel.send(embedType(moduleConf['birthday_message_with_age'], {
+                channel.send(await embedTypeV2(moduleConf['birthday_message_with_age'], {
                     '%age%': new Date().getFullYear() - user.year,
-                    '%tag%': member.user.tag,
+                    '%tag%': formatDiscordUserName(member.user),
+                    '%username%': member.user.username,
+                    '%avatarURL%': member.user.avatarURL() || member.user.defaultAvatarURL,
                     '%mention%': `<@${user.id}>`
                 }));
             } else {
-                channel.send(embedType(moduleConf['birthday_message'], {
-                    '%tag%': member.user.tag,
+                channel.send(await embedTypeV2(moduleConf['birthday_message'], {
+                    '%tag%': formatDiscordUserName(member.user),
+                    '%avatarURL%': member.user.avatarURL() || member.user.defaultAvatarURL,
                     '%mention%': `<@${user.id}>`
                 }));
             }
@@ -243,8 +246,8 @@ async function getUserStringForMonth(client, channel, month) {
         }
         const showVerifiedItem = !client.configurations['birthday']['config'].disableSync && client.toogles.getToggleValue('birthdayVerificationSymbol');
         const birthdaySyncSymbol = !client.configurations['birthday']['config'].disableSync && client.toogles.getToggleValue('birthdaySyncSymbol');
-        if (channel.guild.members.cache.get(user.id)) string = string + `${dateString}: ${client.configurations['birthday']['config'].useTags ? channel.guild.members.cache.get(user.id).user.tag : channel.guild.members.cache.get(user.id).user.toString()} ${user.sync && birthdaySyncSymbol ? `[🗘](https://sc-net.work/sy "${localize('birthdays', 'sync-enabled-hover')}")` : ''}${user.sync && user.verified && showVerifiedItem ? `[✓](https://sc-net.work/OMLDj "${localize('birthdays', 'verified-hover')}")` : ''}\n`;
+        if (channel.guild.members.cache.get(user.id)) string = string + `${dateString}: ${client.configurations['birthday']['config'].useTags ? formatDiscordUserName(channel.guild.members.cache.get(user.id).user) : channel.guild.members.cache.get(user.id).user.toString()} ${user.sync && birthdaySyncSymbol ? `[🗘](https://sc-net.work/sy "${localize('birthdays', 'sync-enabled-hover')}")` : ''}${user.sync && user.verified && showVerifiedItem ? `[✓](https://sc-net.work/OMLDj "${localize('birthdays', 'verified-hover')}")` : ''}\n`;
     }
     if (string.length === 0) string = localize('birthdays', 'no-bd-this-month');
-    return string;
+    return truncate(string, 1024);
 }

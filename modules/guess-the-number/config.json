@@ -20,7 +20,8 @@
     {
       "name": "adminRoles",
       "humanName": {
-        "de": "Adminrollen"
+        "de": "Adminrollen",
+        "en": "Admin-Roles"
       },
       "default": {
         "en": [],
@@ -36,7 +37,8 @@
     {
       "name": "startMessage",
       "humanName": {
-        "de": "Startnachricht"
+        "de": "Startnachricht",
+        "en": "Start-Message"
       },
       "default": {
         "en": {
@@ -49,7 +51,8 @@
         }
       },
       "description": {
-        "de": "Nachricht, die am Anfang einer Runde gesendet wird"
+        "de": "Nachricht, die am Anfang einer Runde gesendet wird",
+        "en": "Message that gets send when a new round gets started"
       },
       "type": "string",
       "allowEmbed": true,
@@ -73,7 +76,8 @@
     {
       "name": "endMessage",
       "humanName": {
-        "de": "Endnachricht"
+        "de": "Endnachricht",
+        "en": "End-Message"
       },
       "default": {
         "en": {
@@ -86,7 +90,8 @@
         }
       },
       "description": {
-        "de": "Nachricht, die am Ende einer Runde gesendet wird"
+        "de": "Nachricht, die am Ende einer Runde gesendet wird",
+        "en": "Message that gets send when a round ends"
       },
       "type": "string",
       "allowEmbed": true,

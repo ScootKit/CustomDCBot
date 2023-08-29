@@ -5,14 +5,14 @@ module.exports.run = async (client, interaction) => {
     if (!client.botReadyAt) {
         if (interaction.isAutocomplete()) return interaction.respond({});
         return interaction.reply({
-            content: '⚠ ' + localize('command', 'startup'),
+            content: ':warning: ' + localize('command', 'startup'),
             ephemeral: true
         });
     }
     if (client.guild.id !== interaction.guild.id) {
         if (interaction.isAutocomplete()) return interaction.respond({});
         return interaction.reply({
-            content: '⚠ ' + localize('command', 'wrong-guild', {g: client.guild.name}),
+            content: ':warning: ' + localize('command', 'wrong-guild', {g: client.guild.name}),
             ephemeral: true
         });
     }
@@ -23,11 +23,11 @@ module.exports.run = async (client, interaction) => {
     const command = client.commands.find(c => c.name.toLowerCase() === interaction.commandName.toLowerCase());
     if (!command) {
         if (client.scnxSetup) return require('./../functions/scnx-integration').customCommandSlashInteraction(interaction);
-        else return interaction.reply({content: '⚠ ' + localize('command', 'not-found'), ephemeral: true});
+        else return interaction.reply({content: ':warning: ' + localize('command', 'not-found'), ephemeral: true});
     }
     if (command.module && !client.modules[command.module].enabled) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('command', 'module-disabled', {m: command.module})
+        content: ':warning: ' + localize('command', 'module-disabled', {m: command.module})
     });
     if (command && typeof (command || {}).options === 'function') command.options = await command.options(interaction.client);
     const group = interaction.options['_group'];
@@ -66,9 +66,7 @@ module.exports.run = async (client, interaction) => {
     client.logger.debug(localize('command', 'used', {
         tag: formatDiscordUserName(interaction.user),
         id: interaction.user.id,
-        c: command.name,
-        g: group || '',
-        s: subCommand || ''
+        c: command.name + `${group ? ' ' + group : ''}${subCommand ? ' ' + subCommand : ''}`
     }));
 
     try {

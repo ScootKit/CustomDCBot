@@ -10,7 +10,6 @@ const privatebin = new PrivatebinClient('https://paste.scootkit.net');
 const crypto = require('isomorphic-webcrypto');
 const {encode} = require('bs58');
 const {client} = require('../../main');
-const {formatDiscordUserName} = require('./helpers');
 
 /**
  * Will loop asynchrony through every object in the array
@@ -24,6 +23,18 @@ module.exports.asyncForEach = async function (array, callback) {
         await callback(array[index], index, array);
     }
 };
+
+/**
+ * Formates a Discord username (either #tag or username)
+ * @param {User} userData User to format
+ * @returns {string}
+ */
+function formatDiscordUserName(userData) {
+    if (userData.discriminator === '0') return ((client.strings || {addAtToUsernames: false}).addAtToUsernames ? '@' : '') + userData.username;
+    return userData.tag || (userData.username + '#' + userData.discriminator);
+}
+
+module.exports.formatDiscordUserName = formatDiscordUserName;
 
 /**
  * Replaces every argument with a string
@@ -40,7 +51,9 @@ function inputReplacer(args, input) {
     }
     return input;
 }
+
 module.exports.inputReplacer = inputReplacer;
+
 /**
  * Will turn an object or string into embeds
  * @param  {string|array} input Input in the configuration file
@@ -241,7 +254,7 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
     c.on('collect', async (interaction) => {
         if (!allowedUserIDs.includes(interaction.user.id)) return interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('helpers', 'you-did-not-run-this-command')
+            content: ':warning: ' + localize('helpers', 'you-did-not-run-this-command')
         });
         let nextSite = currentSite + 1;
         if (interaction.customId === 'back') nextSite = currentSite - 1;
@@ -477,14 +490,4 @@ module.exports.disableModule = disableModule;
 module.exports.formatNumber = function (number) {
     if (typeof number === 'string') number = parseInt(number);
     return new Intl.NumberFormat(client.locale, {}).format(number);
-};
-
-/**
- * Formates a Discord username (either #tag or username)
- * @param {User} userData User to format
- * @returns {string}
- */
-module.exports.formatDiscordUserName = function (userData) {
-    if (userData.discriminator === '0') return ((client.strings || {addAtToUsernames: false}).addAtToUsernames ? '@' : '') + userData.username;
-    return userData.tag || (userData.username + '#' + userData.discriminator);
 };

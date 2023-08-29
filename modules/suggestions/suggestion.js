@@ -29,7 +29,7 @@ async function generateSuggestionEmbed(client, suggestion) {
         else field = 'deniedSuggestion';
     }
     await message.edit(embedType(moduleConfig[field], params));
-};
+}
 
 /**
  * Notifies subscribed members of a suggestion about a change

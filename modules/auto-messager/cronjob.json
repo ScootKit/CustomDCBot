@@ -3,9 +3,24 @@
     "en": "Advanced users can unleash the full potential of automatic message with cronejobs",
     "de": "Nur für fortgeschrittene Nutzer - mit cronjob's kannst hast du die volle Kontrolle über die Nachrichten"
   },
+  "elementLimits": {
+    "STARTER": 2,
+    "ACTIVE_GUILD": 5,
+    "PRO": 15
+  },
   "humanName": {
     "en": "Cronjob (advanced)",
     "de": "Cronjobs (fortgeschritten)"
+  },
+  "configElementName": {
+    "de": {
+      "one": "Automatische Nachricht",
+      "more": "Automatische Nachrichten"
+    },
+    "en": {
+      "one": "Automatic message",
+      "more": "Automatic messages"
+    }
   },
   "filename": "cronjob.json",
   "configElements": true,
@@ -13,7 +28,8 @@
     {
       "name": "channelID",
       "humanName": {
-        "de": "Kanal"
+        "de": "Kanal",
+        "en": "Channel"
       },
       "default": {
         "en": ""
@@ -27,7 +43,8 @@
     {
       "name": "message",
       "humanName": {
-        "de": "Nachricht"
+        "de": "Nachricht",
+        "en": "Message"
       },
       "default": {
         "en": ""
@@ -42,7 +59,8 @@
     {
       "name": "expression",
       "humanName": {
-        "de": "Ausdruck"
+        "de": "Ausdruck",
+        "en": "Expression"
       },
       "default": {
         "en": "1 6 1-31 * *",

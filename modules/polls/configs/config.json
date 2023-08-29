@@ -17,7 +17,8 @@
     {
       "name": "reactions",
       "humanName": {
-        "de": "Reaktionen"
+        "de": "Emojis",
+        "en": "Emojis"
       },
       "default": {
         "en": {
@@ -44,8 +45,8 @@
         }
       },
       "description": {
-        "en": "You can set the different reactions to use",
-        "de": "Du kannst die verschiedenen Reaktionen, die benutzt werden sollen, einstellen"
+        "en": "You can set the different emojis to use",
+        "de": "Du kannst die verschiedenen Emojis, die benutzt werden sollen, einstellen"
       },
       "type": "keyed",
       "content": {

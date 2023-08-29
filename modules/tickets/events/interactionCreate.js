@@ -112,10 +112,10 @@ module.exports.run = async function (client, interaction) {
                     id: interaction.guild.roles.cache.find(r => r.name === '@everyone'),
                     deny: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
                 },
-                    {
-                        id: interaction.member,
-                        allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
-                    }, ...overwrites]
+                {
+                    id: interaction.member,
+                    allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
+                }, ...overwrites]
             });
             const ticket = await client.models['tickets']['Ticket'].create({
                 open: true,

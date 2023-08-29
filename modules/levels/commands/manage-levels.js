@@ -19,7 +19,7 @@ async function runXPAction(interaction, newXP) {
     user.xp = newXP(user.xp);
     if (user.xp < 0) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('levels', 'negative-xp')
+        content: ':warning: ' + localize('levels', 'negative-xp')
     });
 
     function runXPCheck() {
@@ -78,7 +78,7 @@ async function runLevelAction(interaction, newLevel) {
     user.level = newLevel(user.level);
     if (user.level < 1) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('levels', 'negative-level')
+        content: ':warning: ' + localize('levels', 'negative-level')
     });
     user.xp = (user.level - 1) * 750 + ((user.level - 2) * 500);
     if (interaction.client.configurations.levels.config.reward_roles[user.level.toString()]) {
@@ -120,9 +120,9 @@ module.exports.subcommands = {
         if (!interaction.options.getBoolean('confirm')) return interaction.reply({
             ephemeral: 'true',
             content: type === 'user' ? localize('levels', 'are-you-sure-you-want-to-delete-user-xp', {
-                    u: interaction.options.getUser('user').toString(),
-                    ut: formatDiscordUserName(interaction.options.getUser('user'))
-                })
+                u: interaction.options.getUser('user').toString(),
+                ut: formatDiscordUserName(interaction.options.getUser('user'))
+            })
                 : localize('levels', 'are-you-sure-you-want-to-delete-server-xp')
         });
         await interaction.deferReply();
