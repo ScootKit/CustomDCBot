@@ -710,7 +710,7 @@
         "not-found": "This custom-command does not longer exist. It might have been deleted or deactivated.",
         "parameter-not-set": "This parameter did not get specified",
         "true": "True",
-        "fix-no-reply": "**:warning: This Custom-Command is not properly set up**\nTo fix this, add the \"Reply to message or interaction\"-Action to this Custom-Command and reload your configuration.",
+        "fix-no-reply": "**⚠️ This Custom-Command is not properly set up**\nTo fix this, add the \"Reply to message or interaction\"-Action to this Custom-Command and reload your configuration.",
         "false": "False"
     },
     "reminders": {
@@ -943,7 +943,7 @@
         "dont-use-drawn": "Dont use",
         "win": "%u won the game! %turns cards were played.",
         "win-you": "You've won the game!",
-        "missing-uno": ":warning:️ You must use the Uno! button before you use your second last card!",
+        "missing-uno": "⚠️️ You must use the Uno! button before you use your second last card!",
         "choose-color": "Select a color:",
         "pending-draws": "Use a Draw 2/4 card, otherwise you have to draw %count cards!",
         "not-ingame": "You're not in this game!",

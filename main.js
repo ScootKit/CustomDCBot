@@ -155,7 +155,7 @@ db.authenticate().then(async () => {
         }
     }
     await configChecker.loadAllConfigs(client).catch(async (e) => {
-        if (client.logChannel) await client.logChannel.send(':warning: ' + localize('main', 'config-check-failed'));
+        if (client.logChannel) await client.logChannel.send('⚠️ ' + localize('main', 'config-check-failed'));
         console.log(e);
         logger.fatal(localize('main', 'config-check-failed'));
         process.exit(1);

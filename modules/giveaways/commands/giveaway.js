@@ -7,15 +7,15 @@ module.exports.subcommands = {
     'start': async function (interaction) {
         if (interaction.options.getString('duration') === 0) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('giveaways', 'duration-parsing-failed')
+            content: '⚠️ ' + localize('giveaways', 'duration-parsing-failed')
         });
         if (interaction.options.getChannel('channel').type !== 'GUILD_TEXT' && interaction.options.getChannel('channel').type !== 'GUILD_NEWS') return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('giveaways', 'duration-parsing-failed')
+            content: '⚠️ ' + localize('giveaways', 'duration-parsing-failed')
         });
         if (interaction.options.getInteger('winner-count') < 1 || interaction.options.getString('prize').length < 2) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('giveaways', 'parameter-parsing-failed')
+            content: '⚠️ ' + localize('giveaways', 'parameter-parsing-failed')
         });
         const requirements = [];
         if (interaction.options.getInteger('required-messages')) requirements.push({
@@ -38,7 +38,7 @@ module.exports.subcommands = {
         });
         if (!giveaway) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('giveaways', 'no-giveaways-found')
+            content: '⚠️ ' + localize('giveaways', 'no-giveaways-found')
         });
         await endGiveaway(giveaway.id, null, false, interaction.options.getInteger('winner-count'));
         await interaction.reply({
@@ -52,7 +52,7 @@ module.exports.subcommands = {
         });
         if (!giveaway) return interaction.reply({
             ephemeral: true,
-            content: ':warning: ' + localize('giveaways', 'no-giveaways-found')
+            content: '⚠️ ' + localize('giveaways', 'no-giveaways-found')
         });
         await endGiveaway(giveaway.id, null, true);
         await interaction.reply({

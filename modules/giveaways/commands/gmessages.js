@@ -10,7 +10,7 @@ module.exports.run = async function (interaction) {
     });
     if (giveaways.length === 0) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('giveaways', 'no-giveaways-found')
+        content: '⚠️ ' + localize('giveaways', 'no-giveaways-found')
     });
     let gwMessages = '';
     for (const giveaway of giveaways) {

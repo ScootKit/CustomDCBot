@@ -16,8 +16,8 @@
         "de": "Nutzer nicht gefunden"
       },
       "default": {
-        "en": ":warning: We do not have any records of this user",
-        "de": ":warning: Dieser Nutzer hat anscheinend noch keine Nachricht verschickt"
+        "en": "⚠️ We do not have any records of this user",
+        "de": "⚠️ Dieser Nutzer hat anscheinend noch keine Nachricht verschickt"
       },
       "description": {
         "en": "This messages gets send if someone checks a profile of a user when the user never send a message",

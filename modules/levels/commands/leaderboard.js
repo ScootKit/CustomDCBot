@@ -18,7 +18,7 @@ module.exports.run = async function (interaction) {
     });
     if (users.length === 0) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('levels', 'no-user-on-leaderboard')
+        content: '⚠️ ' + localize('levels', 'no-user-on-leaderboard')
     });
     const thisUser = users.find(u => u.userID === interaction.user.id);
 

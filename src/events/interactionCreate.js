@@ -5,14 +5,14 @@ module.exports.run = async (client, interaction) => {
     if (!client.botReadyAt) {
         if (interaction.isAutocomplete()) return interaction.respond({});
         return interaction.reply({
-            content: ':warning: ' + localize('command', 'startup'),
+            content: '⚠️ ' + localize('command', 'startup'),
             ephemeral: true
         });
     }
     if (client.guild.id !== interaction.guild.id) {
         if (interaction.isAutocomplete()) return interaction.respond({});
         return interaction.reply({
-            content: ':warning: ' + localize('command', 'wrong-guild', {g: client.guild.name}),
+            content: '⚠️ ' + localize('command', 'wrong-guild', {g: client.guild.name}),
             ephemeral: true
         });
     }
@@ -23,11 +23,11 @@ module.exports.run = async (client, interaction) => {
     const command = client.commands.find(c => c.name.toLowerCase() === interaction.commandName.toLowerCase());
     if (!command) {
         if (client.scnxSetup) return require('./../functions/scnx-integration').customCommandSlashInteraction(interaction);
-        else return interaction.reply({content: ':warning: ' + localize('command', 'not-found'), ephemeral: true});
+        else return interaction.reply({content: '⚠️ ' + localize('command', 'not-found'), ephemeral: true});
     }
     if (command.module && !client.modules[command.module].enabled) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('command', 'module-disabled', {m: command.module})
+        content: '⚠️ ' + localize('command', 'module-disabled', {m: command.module})
     });
     if (command && typeof (command || {}).options === 'function') command.options = await command.options(interaction.client);
     const group = interaction.options['_group'];
@@ -74,7 +74,7 @@ module.exports.run = async (client, interaction) => {
         if (!command.subcommands) {
             interaction.client.logger.error(`Command ${interaction.commandName} has subcommands but does not use the subcommands handler (required).`);
             return interaction.reply({
-                content: ':warning: This command is not configured correctly and can not be executed, please contact the developer.',
+                content: '⚠️ This command is not configured correctly and can not be executed, please contact the developer.',
                 ephemeral: true
             });
         }

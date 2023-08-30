@@ -6,7 +6,7 @@ module.exports.run = async function (interaction) {
     let emote = content.replace('<', '').replace('>', '');
     emote = emote.split(':');
     if (!emote[2] || !emote[1]) return interaction.reply({
-        content: ':warning: ' + localize('admin-tools', 'emoji-too-much-data'),
+        content: '⚠️ ' + localize('admin-tools', 'emoji-too-much-data'),
         ephemeral: true
     });
     emote = await interaction.guild.emojis.create(`https://cdn.discordapp.com/emojis/${emote[2]}`, emote[1], {reason: `Emoji imported by ${formatDiscordUserName(interaction.user)}`});
