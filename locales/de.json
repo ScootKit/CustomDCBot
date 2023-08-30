@@ -827,7 +827,7 @@
         "bots": "Bots",
         "humans": "Mitglieder (keine Bots)",
         "add-subcommand-description": "Füge eine Rolle zu allen Mitgliedern hinzu",
-        "not-admin": "⚠ Um diesen Befehl zu verwenden musst du zur adminRoles option im SCNX-Dashboard hinzugefügt werden. Falls du der Eigentümer dieses Bots bist, denk daran in deinen Servereinstellungen ebenfalls einen entsprechenden Override einzustellen um Missbrauch dieses Commands zu verhindern.",
+        "not-admin": "⚠️ Um diesen Befehl zu verwenden musst du zur adminRoles option im SCNX-Dashboard hinzugefügt werden. Falls du der Eigentümer dieses Bots bist, denk daran in deinen Servereinstellungen ebenfalls einen entsprechenden Override einzustellen um Missbrauch dieses Commands zu verhindern.",
         "add-reason": "Massen-Rollenvergabe durch %u",
         "remove-reason": "Massen-Rollenentfernung durch %u"
     },
