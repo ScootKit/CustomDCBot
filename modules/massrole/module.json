@@ -11,6 +11,7 @@
   "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/massrole",
   "commands-dir": "/commands",
   "config-example-files": [
+    "configs/config.json",
     "configs/strings.json"
   ],
   "tags": [
