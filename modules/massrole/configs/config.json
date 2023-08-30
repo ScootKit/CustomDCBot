@@ -1,0 +1,40 @@
+{
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
+  "filename": "config.json",
+  "commandsWarnings": {
+    "special": [
+      {
+        "name": "/massrole",
+        "info": {
+          "en": "You need to first set the permissions in your server settings for this command and after that add them under \"adminRoles\" here.",
+          "de": "Du musst zuerst die Rechte in deinen Server-Einstellungen einstellen und danach diese unter \"AdminRollen\" hinzufügen."
+        }
+      }
+    ]
+  },
+  "content": [
+    {
+      "name": "adminRoles",
+      "humanName": {
+        "de": "Adminrollen"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Every role that can use the massrole command",
+        "de": "Jede Rolle, welche den Massrole command verwenden kann"
+      },
+      "type": "array",
+      "content": "roleID"
+    }
+  ]
+}
