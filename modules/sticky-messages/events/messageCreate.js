@@ -9,7 +9,7 @@ const channelData = {};
 async function deleteMessage(client, msg) {
     let message;
     message = await msg.channel.messages.fetch(channelData[msg.channel.id].msg).catch(async () => {
-        const msgs = await msg.channel.messages.fetch({limit: 50});
+        const msgs = await msg.channel.messages.fetch({limit: 20});
         message = msgs.find(m => m.author.id === client.user.id);
     });
 
@@ -23,6 +23,11 @@ async function deleteMessage(client, msg) {
  * @param {Object} configMsg The configured message
  */
 async function sendMessage(client, msg, configMsg) {
+    channelData[msg.channel.id] = {
+        msg: null,
+        timeout: null,
+        time: client.uptime
+    };
     const sentMessage = await msg.channel.send(await embedTypeV2(configMsg || 'Message not found',
         {},
         {},
@@ -42,23 +47,22 @@ module.exports.run = async (client, msg) => {
     if (!msg.member) return;
     if (msg.author.bot) return;
 
-    const stickyChannels = client.configurations['sticky-messages']['channels'];
+    const stickyChannels = client.configurations['sticky-messages']['sticky-messages'];
     if (!stickyChannels) return;
 
     const currentConfig = stickyChannels.find(c => c.channelId === msg.channel.id);
     if (!currentConfig || !currentConfig.message) return;
 
     if (channelData[msg.channel.id]) {
-        if (channelData[msg.channel.id].time + 3000 > bot.uptime) {
+        if (channelData[msg.channel.id].time + 5000 > client.uptime) {
             if (!channelData[msg.channel.id].timeout) channelData[msg.channel.id].timeout = setTimeout(() => {
                 deleteMessage(client, msg);
                 sendMessage(client, msg, currentConfig.message);
-            });
+            }, 5000);
             return;
         }
 
         deleteMessage(client, msg);
-    }
-
-    sendMessage(client, msg, currentConfig.message);
+        sendMessage(client, msg, currentConfig.message);
+    } else sendMessage(client, msg, currentConfig.message);
 };
