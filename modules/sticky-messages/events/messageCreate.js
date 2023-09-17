@@ -18,11 +18,10 @@ async function deleteMessage(client, msg) {
 
 /**
  * Sends the message to the channel
- * @param {Discord.Client} client
  * @param {Discord.Message} msg
  * @param {Object} configMsg The configured message
  */
-async function sendMessage(client, msg, configMsg) {
+async function sendMessage(msg, configMsg) {
     channelData[msg.channel.id] = {
         msg: null,
         timeout: null,
@@ -53,12 +52,12 @@ module.exports.run = async (client, msg) => {
         if (channelData[msg.channel.id].time + 5000 > Date.now()) {
             if (!channelData[msg.channel.id].timeout) channelData[msg.channel.id].timeout = setTimeout(() => {
                 deleteMessage(client, msg);
-                sendMessage(client, msg, currentConfig.message);
+                sendMessage(msg, currentConfig.message);
             }, 5000);
             return;
         }
 
         deleteMessage(client, msg);
-        sendMessage(client, msg, currentConfig.message);
-    } else sendMessage(client, msg, currentConfig.message);
+        sendMessage(msg, currentConfig.message);
+    } else sendMessage(msg, currentConfig.message);
 };
