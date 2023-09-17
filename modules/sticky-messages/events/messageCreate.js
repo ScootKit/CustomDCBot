@@ -26,17 +26,13 @@ async function sendMessage(client, msg, configMsg) {
     channelData[msg.channel.id] = {
         msg: null,
         timeout: null,
-        time: client.uptime
+        time: Date.now()
     };
-    const sentMessage = await msg.channel.send(await embedTypeV2(configMsg || 'Message not found',
-        {},
-        {},
-        []
-    ));
+    const sentMessage = await msg.channel.send(await embedTypeV2(configMsg));
     channelData[msg.channel.id] = {
         msg: sentMessage.id,
         timeout: null,
-        time: client.uptime // Much smaller number compared to Date.now()
+        time: Date.now()
     };
 }
 
@@ -54,7 +50,7 @@ module.exports.run = async (client, msg) => {
     if (!currentConfig || !currentConfig.message) return;
 
     if (channelData[msg.channel.id]) {
-        if (channelData[msg.channel.id].time + 5000 > client.uptime) {
+        if (channelData[msg.channel.id].time + 5000 > Date.now()) {
             if (!channelData[msg.channel.id].timeout) channelData[msg.channel.id].timeout = setTimeout(() => {
                 deleteMessage(client, msg);
                 sendMessage(client, msg, currentConfig.message);
