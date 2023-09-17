@@ -9,10 +9,11 @@
     "link": "https://github.com/DEVTomatoCake"
   },
   "description": {
-    "en": "Let a set message always appear at the end of a channel.",
-    "de": "Lasse eine festgelegte Nachricht immer am Ende eines Kanals erscheinen."
+    "en": "Let users highlight messages into a starboard channel by reacting.",
+    "de": "Lass Nutzer Nachrichten durch eine Reaktion in einem Starboard-Kanal hervorheben."
   },
   "events-dir": "/events",
+  "models-dir": "/models",
   "config-example-files": [
     "configs/config.json"
   ],

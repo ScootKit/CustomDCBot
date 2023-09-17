@@ -7,47 +7,62 @@
 	"filename": "config.json",
 	"content": [
 		{
-			"name": "channelID",
+			"name": "channelId",
 			"humanName": {
-				"de": "Kanal-ID"
+				"en": "Channel",
+				"de": "Kanal"
 			},
 			"default": {
 				"en": ""
 			},
 			"description": {
-				"en": "Channel-ID to run all operations in it",
-				"de": "Kanal-ID, in welchem alle Aktionen ausgeführt werden"
+				"en": "In which channel starred messages are sent",
+				"de": "In welchen Kanal gestarrte Nachrichten gesendet werden"
 			},
 			"type": "channelID"
 		},
 		{
-			"name": "byePartnerDM",
+			"name": "emoji",
 			"humanName": {
-				"de": "Partner-Entfernungs-PN"
+				"de": "Emoji"
 			},
 			"default": {
-				"en": "Sorry, but you are no longer a partner ):",
-				"de": "Leider bist du nicht länger Partner ):"
+				"en": "⭐"
 			},
 			"description": {
-					"en": "This message gets send to the partner (if enabled)",
-					"de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)"
+				"en": "Which emoji should be used to star messages",
+				"de": "Mit welchem Emoji Nachrichten gestarrt werden sollen"
 			},
-			"type": "string",
+			"type": "string"
+		},
+		{
+			"name": "message",
+			"humanName": {
+				"en": "Message",
+				"de": "Nachricht"
+			},
+			"default": {
+				"en": ""
+			},
+			"description": {
+				"en": "This message gets send into the selected channel",
+				"de": "Diese Nachricht wird in den ausgewählten Kanal gesendet"
+			},
 			"allowEmbed": true,
+			"type": "string",
 			"params": [
 				{
-					"name": "name",
+					"name": "stars",
 					"description": {
-						"en": "Name of the added partner",
-						"de": "Name des hinzugefügten Partners"
+						"en": "Amount of reactions on the message",
+						"de": "Anzahl der Reaktionen auf die Nachricht"
 					}
 				},
 				{
-					"name": "category",
+					"name": "content",
 					"description": {
-						"en": "Category of the partner",
-						"de": "Kategorie des Partners"
+						"en": "The content of the starred message",
+						"de": "Der Inhalt der gestarrten Nachricht"
 					}
 				}
 			]
