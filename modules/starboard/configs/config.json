@@ -1,0 +1,56 @@
+{
+	"description": {},
+	"humanName": {
+		"en": "Configuration",
+		"de": "Konfiguration"
+	},
+	"filename": "config.json",
+	"content": [
+		{
+			"name": "channelID",
+			"humanName": {
+				"de": "Kanal-ID"
+			},
+			"default": {
+				"en": ""
+			},
+			"description": {
+				"en": "Channel-ID to run all operations in it",
+				"de": "Kanal-ID, in welchem alle Aktionen ausgeführt werden"
+			},
+			"type": "channelID"
+		},
+		{
+			"name": "byePartnerDM",
+			"humanName": {
+				"de": "Partner-Entfernungs-PN"
+			},
+			"default": {
+				"en": "Sorry, but you are no longer a partner ):",
+				"de": "Leider bist du nicht länger Partner ):"
+			},
+			"description": {
+					"en": "This message gets send to the partner (if enabled)",
+					"de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)"
+			},
+			"type": "string",
+			"allowEmbed": true,
+			"params": [
+				{
+					"name": "name",
+					"description": {
+						"en": "Name of the added partner",
+						"de": "Name des hinzugefügten Partners"
+					}
+				},
+				{
+					"name": "category",
+					"description": {
+						"en": "Category of the partner",
+						"de": "Kategorie des Partners"
+					}
+				}
+			]
+		}
+	]
+}
