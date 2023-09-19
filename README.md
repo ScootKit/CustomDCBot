@@ -7,13 +7,14 @@ should only use it if you have some experience with Javascript, discord.js and J
 
 ## Get your own Custom-Bot completely free and with a modern webinterface and a lot more features!
 
-Go check it out on our [website](https://scnx.xyz) (currently only german; the [dashboard](https://scnx.app) and bot are
-fully translated). In addition to the here
+Go check it out on our [website](https://scnx.xyz) or get started in the [dashboard](https://scnx.app).
+In addition to the here
 available features we offer:
 
 * Free hosting
 * Custom-Commands
 * Easy-to-use Embed-Editor
+* Self-Roles
 * Send and edit messages in specific channels
 * Easy-to-use Configuration-Editor
 * Human-Readable Issue Reporting - never look at logs again
@@ -22,30 +23,36 @@ available features we offer:
 
 [Get started now](https://scnx.xyz) - it's free - forever!
 
-## Please read the [license](LICENSE) if you use this bot.
+## Applicable [license](LICENSE) terms if you use this bot
 
-We really love open-source. Please read the license and follow it.\
-In short words: You have to
+We really love open-source. 
+While this project does not fit [definition of Open Source](https://opensource.org/osd-annotated)
+set forward by the Open Source Initiative,
+we are committed to allowing you as much freedom as possible.
+Please read the [license](LICENSE) and follow it.\
 
-* Disclose the source (Your source code has made available when using this bot)
-* State changes (*every* change to the source code must be documented and published)\
+Here's a summary:
 
-Please read the full [license](LICENSE). This is not legal advice.
+* You may use the bot on your server and change the source code (as long as you follow the license).
+* You have to retain a link to the [LICENSE](LICENSE) and this repository in your bot, most likely in your `/help` command.
+* All changes you make to this codebase are subject to these license terms, you cannot remove the link to the license, even if you change large parts of the bot.
+* You may not create a competitor to [SCNX](https://scnx.xyz) or other ScootKit products using this source code.
+* You do not use the "ScootKit" brand name or any other trademarks outside the LICENSE notice.
 
-You may ask yourself, how this could align with our closed-source-version at [SCNX](https://scnx.xyz), you can find more
-information about that in [this issue](https://github.com/SCNetwork/CustomDCBot/issues/13).
+Please read the full [license](LICENSE), as the terms laid out there apply. This is not legal advice.
+
+Failure to abide by these terms might result in deactivation of your bot from Discord or legal action being taken
+(but we'll act in good faith and usually try to solve the issue before doing anything drastically).
 
 ## Support development
 
-As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
-product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-, [get a membership](https://membership.sc-network.net) (also on [Patreon](https://patreon.com/scnetwork)), or
-donate [via Creditcard](https://scnx.app/scam) or [PayPal](https://paypal.me/therealscderox). Thank you so much <3
+As mentioned above, our business model is to host these bots for servers - it does not really make sense to publish our
+product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md) or becoming a [GitHub Sponsor](https://github.com/sponsors/ScootKit/). Thank you so much <3
 
 ## Need help?
 
 Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in
-the [discussions-tab](https://github.com/SCNetwork/CustomDCBot/discussions).
+the [discussions-tab](https://github.com/ScootKit/CustomDCBot/discussions).
 
 ## Need something even more custom?
 
@@ -327,6 +334,8 @@ for hosting) of this money. Here are the main ways to earn some pocket-cash with
   pull-requests and contributions
   We support a lot of payout-methods, learn more [here](https://faq.scnx.app/scnx-referrals-faq/#payout-methods).
 
-© Simon Csaba, 2020-2022
+© Simon Csaba, 2020-2023
 
-Love ya <3
+ScootKit is a trademark, registered in Germany.
+
+We ♥ you - yes you.
