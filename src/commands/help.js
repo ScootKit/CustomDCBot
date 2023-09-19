@@ -59,6 +59,12 @@ module.exports.run = async function (interaction) {
             });
             fields.push({
                 name: localize('help', 'bot-info-titel'),
+                /*
+                    IMPORTANT WARNING:
+                    Changing or removing the license notice might be a violation of the Business Source License the bot was licensed under.
+                    Violating the license might lead to deactivation of your bot on Discord and legal action being taken against you.
+                    Please read the license carefully: https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE
+                 */
                 value: localize('help', 'bot-info-description', {g: interaction.guild.name})
             });
         }
@@ -116,6 +122,12 @@ module.exports.run = async function (interaction) {
         value: '\u200b'
     }, {
         name: localize('help', 'bot-info-titel'),
+        /*
+                IMPORTANT WARNING:
+                Changing or removing the license notice might be a violation of the Business Source License the bot was licensed under.
+                Violating the license might lead to deactivation of your bot on Discord and legal action being taken against you.
+                Please read the license carefully: https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE
+             */
         value: localize('help', 'bot-info-description', {g: interaction.guild.name})
     });
 

@@ -95,7 +95,7 @@
     },
     "help": {
         "bot-info-titel": "ℹ️ Bot-Infos",
-        "bot-info-description": "Dieser Bot wurde vom [SC Network](https://sc-network.net)-Team und einigen [Open-Source-Contributoren](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) entwickelt und wird kostenfrei ihm Rahmen von [SCNX](https://scnx.xyz) für \"%g\" angeboten.",
+        "bot-info-description": "Dieser Bot wurde vom [ScootKit](https://scootkit.net)-Team und unseren geliebten [Open-Source-Beitragenden](https://github.com/ScootKit/CustomDCBot/graphs/contributors) entwickelt und ist unter der [Business Source License](https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE] lizenziert.",
         "stats-title": "📊 Statistiken",
         "stats-content": "Aktive Module: %am\nRegistrierte Befehle: %rc\nBot-Version: %v\nLäuft auf Server %si\n[Server-Plan](https://scnx.xyz/plan): %pl\nLetzter Neustart: %lr\nLetze Neuladung: %lrl",
         "command-description": "Zeigt dir alle Befehle an",
