@@ -25,11 +25,11 @@ available features we offer:
 
 ## Applicable [license](LICENSE) terms if you use this bot
 
-We really love open-source. 
-While this project does not fit [definition of Open Source](https://opensource.org/osd-annotated)
+We really love open-source. It does not make sense financially to publish this Source-Code publicly (as our business model is to host these bots on [SCNX](https://scnx.xyz), but we still do it.
+While this project does not fit the [definition of Open Source](https://opensource.org/osd-annotated)
 set forward by the Open Source Initiative,
 we are committed to allowing you as much freedom as possible.
-Please read the [license](LICENSE) and follow it.\
+Please read the [license](LICENSE) and follow it.
 
 Here's a summary:
 
@@ -37,12 +37,12 @@ Here's a summary:
 * You have to retain a link to the [LICENSE](LICENSE) and this repository in your bot, most likely in your `/help` command.
 * All changes you make to this codebase are subject to these license terms, you cannot remove the link to the license, even if you change large parts of the bot.
 * You may not create a competitor to [SCNX](https://scnx.xyz) or other ScootKit products using this source code.
-* You do not use the "ScootKit" brand name or any other trademarks outside the LICENSE notice.
+* You may not use the "ScootKit" brand name or any other trademarks outside of the LICENSE notice.
 
 Please read the full [license](LICENSE), as the terms laid out there apply. This is not legal advice.
 
 Failure to abide by these terms might result in deactivation of your bot from Discord or legal action being taken
-(but we'll act in good faith and usually try to solve the issue before doing anything drastically).
+(but we'll act in good faith and usually try to solve the issue before doing anything drastic).
 
 ## Support development
 
