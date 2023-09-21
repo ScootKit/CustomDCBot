@@ -22,9 +22,18 @@ module.exports.run = async (client, msgReaction) => {
 
 	let reactioncount = msgReaction.count;
 	if (!starConfig.selfStar && msgReaction.users.cache.has(msg.author.id)) reactioncount--;
-	if (reactioncount < starConfig.minStars) return;
 
     const starboardMsg = starMsg ? await channel.messages.fetch(starMsg.starMsg).catch(() => {}) : undefined;
+	if (reactioncount < starConfig.minStars) {
+		if (starboardMsg) starboardMsg.delete();
+		client.models['starboard']['StarMsg'].destroy({
+			where: {
+				msgId: msg.id
+			}
+		});
+		return;
+	}
+
     const generatedMsg = await embedTypeV2(starConfig.message, {
         "%stars%": msgReaction.count,
         "%content%": msg.content,
