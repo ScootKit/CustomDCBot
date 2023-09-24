@@ -18,7 +18,7 @@
     "SCDerox <scderox@sc-network.net>"
   ],
   "funding": "https://github.com/ScootKit/CustomDCBot?sponsor=1",
-  "license": "GPL-3.0-or-later",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@androz2091/discord-invites-tracker": "1.1.1",
     "@haileybot/captcha-generator": "1.7.0",
