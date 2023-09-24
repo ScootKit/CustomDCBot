@@ -1,4 +1,5 @@
-const { embedTypeV2, formatDiscordUserName } = require('../../src/functions/helpers');
+const { embedTypeV2, disableModule, formatDiscordUserName } = require('../../src/functions/helpers');
+const { localize } = require('../../src/functions/localize');
 
 module.exports = async (client, msgReaction, isReactionRemove = false) => {
     if (!client.botReadyAt) return;

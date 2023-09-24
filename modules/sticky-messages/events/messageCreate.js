@@ -7,6 +7,8 @@ const channelData = {};
  * @param {Discord.TextBasedChannel} channel
  */
 async function deleteMessage(clientId, channel) {
+    if (!channelData[channel.id]) return;
+
     let message;
     message = await channel.messages.fetch(channelData[channel.id].msg).catch(async () => {
         const msgs = await channel.messages.fetch({limit: 20});
@@ -19,7 +21,7 @@ module.exports.deleteMessage = deleteMessage;
 /**
  * Sends the message to the channel
  * @param {Discord.TextBasedChannel} channel
- * @param {Object} configMsg The configured message
+ * @param {Object|String} configMsg The configured message
  */
 async function sendMessage(channel, configMsg) {
     channelData[channel.id] = {
