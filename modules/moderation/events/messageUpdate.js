@@ -6,6 +6,7 @@ exports.run = async (client, oldMsg, msg) => {
     if (msg.guild.id !== client.guildID) return;
     if (!msg.member) return;
     if (msg.author.bot) return;
+    if (msg.partial) return;
 
     await performBadWordAndInviteProtection(msg);
 };

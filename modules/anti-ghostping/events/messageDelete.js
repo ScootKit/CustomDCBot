@@ -2,6 +2,10 @@ const {embedType} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, msg) {
     if (!client.botReadyAt) return;
+    if (!msg.guild) return;
+    if (msg.guild.id !== client.guildID) return;
+    if (msg.partial) return;
+
     const {messageWithMentions} = require(`${__dirname}/messageCreate.js`);
     if (!messageWithMentions[msg.id]) return;
     const moduleStrings = client.configurations['anti-ghostping']['config'];
