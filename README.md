@@ -104,13 +104,13 @@ configuration options. Every module has example files. Inside these files are mo
 option.
 Some config values also support [embeds](https://discordjs.guide/popular-topics/embeds.html). This is the case
 if `allowEmbed` is true.\
-You either input a string (normal discord message), or an embed object with the following values:
+You either input a string (normal Discord message), or an embed object with the following values:
 
 * `title`: Title of the embed
 * `message`: Message outside the embed (optional)
 * `description`: Description of the embed (optional)
 * `color`: Color of the embed, must be
-  a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable) (optional)
+  a [ColorResolvable](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ColorResolvable) (optional)
 * `url`: URL of the embed (optional)
 * `image`: Image of the embed, should be an url (optional)
 * `thumbnail`: Thumbnail-Image of the embed, should be an url (optional)
@@ -118,7 +118,7 @@ You either input a string (normal discord message), or an embed object with the 
     * `name`: Name of the author
     * `img`: Image of the author, should be an url
 * `fields`: Fields of the embed, must be an array
-  of [EmbedFieldData](https://discord.js.org/#/docs/main/stable/typedef/EmbedFieldData) (optional)
+  of [EmbedFieldData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/EmbedFieldData) (optional)
 * `footer`:  Footer value (optional, default: global footer value)
 * `footerImgUrl`:  URL to image of the footer (optional, default: global footer value)
 
@@ -224,13 +224,13 @@ An interaction-command ("slash command") file has to export the following things
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
-    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command and your
+    * `defaultPermission`: Boolean (default: `true`): If enabled everyone on the guild can use this command and your
       command's permissions can not be synced
     * `options`:
-        * [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
+        * [ApplicationCommandOptionData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ApplicationCommandData)
           OR
         * Async function
-          returning [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData) (
+          returning [ApplicationCommandOptionData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ApplicationCommandData) (
           gets called with `client` as argument)
 
 #### Message-Command
@@ -244,13 +244,13 @@ An event file should export the following things:
 
 * `run`: Function that gets triggered if the event gets executed (provided arguments: `client` (discord.js Client) and
   all the arguments that gets past by discord.js for this event)
-* `allowPartial` (default: `false`): Boolean determining whether the `run` function should be called if the event
+* `allowPartial` (optional, default: `false`): Boolean determining whether the `run` function should be called if the event
   has [partial structures](https://discordjs.guide/popular-topics/partials.html#enabling-partials). When enabling,
   please make sure you handle partial data correctly.
 
 #### CLI-Files
 
-An CLI-File should export the following things:
+A CLI-File should export the following things:
 
 * `commands`: Array of the following objects:
     * `command`: Command which should be entered in the CLI
@@ -259,10 +259,10 @@ An CLI-File should export the following things:
       of following structure as argument:
         * `input`: The whole input
         * `args`: Array of arguments (split by spaces)
-        * `client`: [Client](https://discord.js.org/#/docs/main/stable/class/Client)
+        * `client`: [Client](https://old.discordjs.dev/#/docs/discord.js/13.16.0/class/Client)
         * `cliCommands`: Array of all CLICommands
 
-Note: We might allow users to execute CLI-Commands via the Dashboard in future. This is not supported right now.
+Note: We might allow users to execute CLI-Commands via the Dashboard in the future. This is not supported right now.
 
 #### Config-Elements
 
@@ -277,9 +277,9 @@ use `node add-config-element-object.js <Path to example config file> <Path to yo
 An example config file should include the following things:
 
 * `filename`: Name of the generated config file
-* `humanname`: [Localized](#localization)  name of the file, shown to users
-* `description`: [Localized](#localization)  description of the file, shown to users
-* `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
+* `humanname`: [Localized](#localization) name of the file, shown to users
+* `description`: [Localized](#localization) description of the file, shown to users
+* `configElements` (boolean, default: `false`): If enabled the configuration-file will be an array of an object of the
   content-fields
 * `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements
   that guilds with a specific plan
@@ -303,7 +303,7 @@ An example config file should include the following things:
       use the build-in function in `src/functions/helpers.js`)
     * `content` (if type === `array`): Type (see `type` above) of every value
     * `content` (if type === `channelID`): Array of
-      supported [ChannelType](https://discord.js.org/#/docs/discord.js/13.9.1/typedef/ChannelType)s (
+      supported [ChannelType](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ChannelType)s (
       default: `['GUILD_TEXT', 'GUILD_VOICE', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']`). To improve user
       experience, we recommend adding information about supported types into `description`. The bot will verify that the
       channel is inside the bot's guild.
@@ -329,7 +329,7 @@ An example config file should include the following things:
 
 #### `botReady`-Event and Config-Reload
 
-If you plan to use the [ready](https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready) event of
+If you plan to use the [ready](https://old.discordjs.dev/#/docs/discord.js/13.16.0/class/Client?scrollTo=e-ready) event of
 discord.js to run some action when the client is ready, and you need to load some configuration-files you should use
 the `botReady`-event instead. Please remember that this event gets re-emitted on configuration reloading. If you set
 callbacks that get executed later or similar please remember to remove them on `configReload`. If you set intervals,
@@ -346,7 +346,7 @@ for hosting) of this money. Here are the main ways to earn some pocket-cash with
 
 * [Open-Source-Developer-Pool](https://faq.scnx.app/open-source-developer-pool/): We give you a monthly amount for each
   paying server using your module
-* [Bounties](https://faq.scnx.app/open-source-developer-pool/#bounties): We giv you a small amount of money for merged
+* [Bounties](https://faq.scnx.app/open-source-developer-pool/#bounties): We give you a small amount of money for merged
   pull-requests and contributions
   We support a lot of payout-methods, learn more [here](https://faq.scnx.app/scnx-referrals-faq/#payout-methods).
 
