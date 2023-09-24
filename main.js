@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({
+    partials: ['MESSAGE', 'GUILD_MEMBER', 'GUILD_SCHEDULED_EVENT', 'MESSAGE', 'REACTION', 'USER', 'CHANNEL'], // Most of these are not needed, but enabling them does not increase CPU / RAM usage and does not introduce problems, as we handle them in the event emitter system
     allowedMentions: {parse: ['users', 'roles']}, // Disables @everyone mentions because everyone hates them
     intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'MESSAGE_CONTENT', 'GUILD_VOICE_STATES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS'],
     partials: ['MESSAGE', 'REACTION']
@@ -377,6 +378,7 @@ async function loadEventsInDir(dir, moduleName = null) {
                             for (const eData of events[eventName]) {
                                 try {
                                     if (!client.botReadyAt && !eData.eventFunction.ignoreBotReadyCheck) continue;
+                                    if (!eData.eventFunction.allowPartial && cArgs.filter(f => f.partial).length !== 0) continue;
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {
