@@ -40,7 +40,16 @@
 				"de": "Nachricht"
 			},
 			"default": {
-				"en": ""
+				"en": {
+					"message": "**%stars%** %emoji% in %channelmention%",
+					"color": "#f5c91b",
+					"description": "%content%",
+					"author": {
+						"name": "%username%",
+						"img": "%authoravatar%",
+						"url": "%link%"
+					}
+				}
 			},
 			"description": {
 				"en": "This message gets send into the selected channel",
@@ -80,16 +89,34 @@
 						"de": "Der Nickname des Autors"
 					}
 				},{
+					"name": "authortag",
+					"description": {
+						"en": "The tag of the author of the starred message",
+						"de": "Der Tag des Autors der gestarrten Nachricht"
+					}
+				},{
+					"name": "authoravatar",
+					"description": {
+						"en": "The avatar URL of the message author",
+						"de": "Die Avatar-URL des Nachrichtenautors"
+					}
+				},{
 					"name": "channelname",
 					"description": {
 						"en": "The name of the channel the starred message was sent in",
 						"de": "Der Name des Kanals, in dem die gestarrte Nachricht gesendet wurde"
 					}
 				},{
-					"name": "channellink",
+					"name": "channelmention",
 					"description": {
-						"en": "The link of the channel",
-						"de": "Der Kanallink"
+						"en": "A mention of the channel",
+						"de": "Eine Erwähnung des Kanals"
+					}
+				},{
+					"name": "emoji",
+					"description": {
+						"en": "The set starboard emoji for lazy users",
+						"de": "Das festgelegte Starboard-Emoji für faule Nutzer"
 					}
 				}
 			]
