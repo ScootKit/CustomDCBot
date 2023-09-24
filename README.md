@@ -25,7 +25,8 @@ available features we offer:
 
 ## Applicable [license](LICENSE) terms if you use this bot
 
-We really love open-source. It does not make sense financially to publish this Source-Code publicly (as our business model is to host these bots on [SCNX](https://scnx.xyz), but we still do it.
+We really love open-source. It does not make sense financially to publish this Source-Code publicly (as our business
+model is to host these bots on [SCNX](https://scnx.xyz), but we still do it.
 While this project does not fit the [definition of Open Source](https://opensource.org/osd-annotated)
 set forward by the Open Source Initiative,
 we are committed to allowing you as much freedom as possible.
@@ -34,8 +35,10 @@ Please read the [license](LICENSE) and follow it.
 Here's a summary:
 
 * You may use the bot on your server and change the source code (as long as you follow the license).
-* You have to retain a link to the [LICENSE](LICENSE) and this repository in your bot, most likely in your `/help` command.
-* All changes you make to this codebase are subject to these license terms, you cannot remove the link to the license, even if you change large parts of the bot.
+* You have to retain a link to the [LICENSE](LICENSE) and this repository in your bot, most likely in your `/help`
+  command.
+* All changes you make to this codebase are subject to these license terms, you cannot remove the link to the license,
+  even if you change large parts of the bot.
 * You may not create a competitor to [SCNX](https://scnx.xyz) or other ScootKit products using this source code.
 * You may not use the "ScootKit" brand name or any other trademarks outside of the LICENSE notice.
 
@@ -47,7 +50,8 @@ Failure to abide by these terms might result in deactivation of your bot from Di
 ## Support development
 
 As mentioned above, our business model is to host these bots for servers - it does not really make sense to publish our
-product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md) or becoming a [GitHub Sponsor](https://github.com/sponsors/ScootKit/). Thank you so much <3
+product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md) or
+becoming a [GitHub Sponsor](https://github.com/sponsors/ScootKit/). Thank you so much <3
 
 ## Need help?
 
@@ -133,7 +137,8 @@ As per the [License](LICENSE) you *have* to make *every* of your modules publicl
 Please read the license for more information.
 
 **Before you make a module**:
-Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same thing (;\
+Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same
+thing (;\
 Also please read the [Rules for modules](#rules-for-modules).\
 **Submit a module**: Simply create a pull request, and we will check your module and merge it then (;
 
@@ -168,7 +173,10 @@ translationable systems in your module.
       works)
     * `string`: Name of the string
     * `replace` (optional, object): Will replace `%<key>` in the source string by `<value>`
-* Localizations of configuration-files and user-editable strings: All localizable configuration fields are an object with values keyed based on language codes. Example: `{"description": {"de": "Beschreibung des Feldes", "en": "Description of the field"}`. Each field needs to have at least an English value, as every other language will default back to English.
+* Localizations of configuration-files and user-editable strings: All localizable configuration fields are an object
+  with values keyed based on language codes.
+  Example: `{"description": {"de": "Beschreibung des Feldes", "en": "Description of the field"}`. Each field needs to
+  have at least an English value, as every other language will default back to English.
 
 #### module.json
 
@@ -236,6 +244,9 @@ An event file should export the following things:
 
 * `run`: Function that gets triggered if the event gets executed (provided arguments: `client` (discord.js Client) and
   all the arguments that gets past by discord.js for this event)
+* `allowPartial` (default: `false`): Boolean determining whether the `run` function should be called if the event
+  has [partial structures](https://discordjs.guide/popular-topics/partials.html#enabling-partials). When enabling,
+  please make sure you handle partial data correctly.
 
 #### CLI-Files
 
@@ -270,7 +281,8 @@ An example config file should include the following things:
 * `description`: [Localized](#localization)  description of the file, shown to users
 * `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
   content-fields
-* `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements that guilds with a specific plan
+* `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements
+  that guilds with a specific plan
 * `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
   their discord-server-settings
     * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
@@ -281,7 +293,8 @@ An example config file should include the following things:
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
     * `default`: [Localized](#localization) default value of this field
-    * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
+    * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity
+      before using), `roleID`
       , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
       or `string`
     * `description`: [Localized](#localization) description of this field
@@ -305,11 +318,14 @@ An example config file should include the following things:
           of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
-    * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file will not be rendered in the dashboard
-    * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in the dashboard
+    * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file
+      will not be rendered in the dashboard
+    * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option
+      should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in
+      the dashboard
     * `links` (optional): Array of links displayed below the field description in the SCNX Dashboard
-      * `label`: [Localized](#localization) label of the link displayed to the user
-      * `url`: URL the user will be redirected to on click
+        * `label`: [Localized](#localization) label of the link displayed to the user
+        * `url`: URL the user will be redirected to on click
 
 #### `botReady`-Event and Config-Reload
 
