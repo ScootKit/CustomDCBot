@@ -77,40 +77,46 @@
 						"de": "Ein Link zur gestarrten Nachricht"
 					}
 				},{
-					"name": "username",
+					"name": "userID",
+					"description": {
+						"en": "The user ID of the author of the starred message",
+						"de": "Die Nutzer-ID des Autors der gestarrten Nachricht"
+					}
+				},{
+					"name": "userName",
 					"description": {
 						"en": "The username of the author of the starred message",
 						"de": "Der Benutzername des Autors der gestarrten Nachricht"
 					}
 				},{
-					"name": "nickname",
+					"name": "displayName",
 					"description": {
 						"en": "The nickname of the author",
 						"de": "Der Nickname des Autors"
 					}
 				},{
-					"name": "authortag",
+					"name": "userTag",
 					"description": {
 						"en": "The tag of the author of the starred message",
 						"de": "Der Tag des Autors der gestarrten Nachricht"
 					}
 				},{
-					"name": "authoravatar",
+					"name": "userAvatar",
 					"description": {
 						"en": "The avatar URL of the message author",
 						"de": "Die Avatar-URL des Nachrichtenautors"
 					}
 				},{
-					"name": "channelname",
+					"name": "channelName",
 					"description": {
 						"en": "The name of the channel the starred message was sent in",
 						"de": "Der Name des Kanals, in dem die gestarrte Nachricht gesendet wurde"
 					}
 				},{
-					"name": "channelmention",
+					"name": "channelMention",
 					"description": {
-						"en": "A mention of the channel",
-						"de": "Eine Erwähnung des Kanals"
+						"en": "The channel mention of the channel the starred message was sent in",
+						"de": "Die Kanalerwähnung des Kanals, in dem die gestarrte Nachricht gesendet wurde"
 					}
 				},{
 					"name": "emoji",
@@ -165,6 +171,20 @@
 			},
 			"type": "integer"
 		},{
+			"name": "starsPerHour",
+			"humanName": {
+				"en": "Stars per user per hour",
+				"de": "Sterne pro Nutzer pro Stunde"
+			},
+			"default": {
+				"en": 5
+			},
+			"description": {
+				"en": "How many messages a user can star per hour",
+				"de": "Wie viele Nachrichten ein Nutzer pro Stunde starren kann"
+			},
+			"type": "integer"
+		},{
 			"name": "selfStar",
 			"humanName": {
 				"en": "Self-Star"
@@ -173,8 +193,8 @@
 				"en": true
 			},
 			"description": {
-				"en": "Whether self-starring own messages is allowed",
-				"de": "Ob das selbst-Starren eigener Nachrichten erlaubt ist"
+				"en": "Whether users can star their own messages",
+				"de": "Ob Nutzer ihre eigenen Nachrichten starren können"
 			},
 			"type": "boolean"
 		}

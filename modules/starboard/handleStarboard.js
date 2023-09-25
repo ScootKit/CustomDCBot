@@ -1,7 +1,7 @@
 const { embedTypeV2, disableModule, formatDiscordUserName } = require('../../src/functions/helpers');
 const { localize } = require('../../src/functions/localize');
 
-module.exports = async (client, msgReaction, isReactionRemove = false) => {
+module.exports = async (client, msgReaction, user, isReactionRemove = false) => {
     if (!client.botReadyAt) return;
     const msg = msgReaction.message;
     if (!msg.guild) return;
@@ -22,6 +22,17 @@ module.exports = async (client, msgReaction, isReactionRemove = false) => {
     if (!channel) return disableModule('starboard', localize('partner-list', 'channel-not-found', {c: starConfig.channelId}));
     if ((msg.channel.nsfw && !channel.nsfw) || starConfig.excludedChannels.includes(msg.channel.id) || starConfig.excludedRoles.some(r => msg.member.roles.cache.has(r))) return;
 
+    const starUser = await client.models['starboard']['StarUser'].findOne({
+        where: {
+            userId: user.id
+        }
+    });
+    if (starUser.recentStars.length >= starConfig.starsPerHour) {
+        return msgReaction.users.remove(user.id).catch(() => {}).then(() => {
+            user.send(localize('starboard', 'star-limit')).catch(() => {});
+        });
+    }
+
     let reactioncount = msgReaction.count;
     if (!starConfig.selfStar && msgReaction.users.cache.has(msg.author.id)) reactioncount--;
 
@@ -41,14 +52,14 @@ module.exports = async (client, msgReaction, isReactionRemove = false) => {
     const generatedMsg = await embedTypeV2(starConfig.message, {
         '%stars%': msgReaction.count,
         '%content%': msg.content,
-        '%username%': msg.author.username,
-        '%usertag%': formatDiscordUserName(msg.author),
-        '%nickname%': msg.member ? msg.member.displayName : msg.author.username,
-        '%authoravatar%': msg.author.displayAvatarURL({dynamic: true}),
-        '%userid%': msg.author.id,
-        '%channelname%': msg.channel.name,
-        '%channelmention%': '<#' + msg.channel.id + '>',
         '%link%': msg.url,
+        '%userID%': msg.author.id,
+        '%userName%': msg.author.username,
+        '%displayName%': msg.member.displayName,
+        '%userTag%': formatDiscordUserName(msg.author),
+        '%userAvatar%': msg.member.displayAvatarURL({dynamic: true}),
+        '%channelName%': msg.channel.name,
+        '%channelMention%': '<#' + msg.channel.id + '>',
         '%emoji%': msgReaction.emoji.toString()
     });
 
