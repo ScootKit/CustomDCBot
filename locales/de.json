@@ -970,6 +970,7 @@
         "no-permission": "Du hast keine Berechtigung, um Quiz mit dem Befehl zu erstellen."
     },
     "starboard": {
-        "invalid-minstars": "Ungültige Mindestanzahl an Sternen %stars"
+        "invalid-minstars": "Ungültige Mindestanzahl an Sternen %stars",
+        "star-limit": "Du hast das stündliche Limit von %limit Sternen erreicht"
     }
 }

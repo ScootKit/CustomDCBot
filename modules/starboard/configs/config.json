@@ -41,12 +41,12 @@
 			},
 			"default": {
 				"en": {
-					"message": "**%stars%** %emoji% in %channelmention%",
+					"message": "**%stars%** %emoji% in %channelMention%",
 					"color": "#f5c91b",
 					"description": "%content%",
 					"author": {
-						"name": "%username%",
-						"img": "%authoravatar%",
+						"name": "%displayName%",
+						"img": "%userAvatar%",
 						"url": "%link%"
 					}
 				}

@@ -1000,6 +1000,7 @@
         "no-permission": "You don't have enough permissions to create quiz using the command."
     },
     "starboard": {
-        "invalid-minstars": "Invalid minimum stars %stars"
+        "invalid-minstars": "Invalid minimum stars %stars",
+        "star-limit": "You've reached the hourly limit of %limit stars"
     }
 }

@@ -7,7 +7,10 @@ module.exports = class StarUser extends Model {
                 type: DataTypes.STRING,
                 primaryKey: true
             },
-            recentStars: DataTypes.ARRAY
+            recentStars: {
+                type: DataTypes.JSON,
+                defaultValue: []
+            }
         }, {
             tableName: 'starboard_StarUser',
             timestamps: true,
