@@ -15,7 +15,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
     const channel = client.channels.cache.get(starConfig.channelId);
     if (!channel) return disableModule('starboard', localize('partner-list', 'channel-not-found', {c: starConfig.channelId}));
     if ((msg.channel.nsfw && !channel.nsfw) || starConfig.excludedChannels.includes(msg.channel.id) || starConfig.excludedRoles.some(r => msg.member.roles.cache.has(r))) return;
-    if (!starConfig.selfStar && user.id == msg.author.id) return msgReaction.users.remove(user.id).catch(() => {});
+    if (!starConfig.selfStar && user.id === msg.author.id) return msgReaction.users.remove(user.id).catch(() => {});
 
     const starUser = await client.models['starboard']['StarUser'].findOne({
         where: {
@@ -24,7 +24,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
     });
 
     const oneHourAgo = Date.now() - 1000 * 60 * 60;
-    const recentStars = starUser && JSON.parse(starUser.recentStars) ? JSON.parse(starUser.recentStars).filter(star => star.date > oneHourAgo && star.msg != msg.id) : [];
+    const recentStars = starUser && JSON.parse(starUser.recentStars) ? JSON.parse(starUser.recentStars).filter(star => star.date > oneHourAgo && star.msg !== msg.id) : [];
 
     if (recentStars.length >= starConfig.starsPerHour) {
         if (!isReactionRemove) {
