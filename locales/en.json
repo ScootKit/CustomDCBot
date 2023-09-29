@@ -1001,6 +1001,6 @@
     },
     "starboard": {
         "invalid-minstars": "Invalid minimum stars %stars",
-        "star-limit": "You've reached the hourly limit of %limit stars"
+        "star-limit": "You've reached the hourly starboard limit of %limitEmoji on the server which is why you cannot react on the message %msgUrl .\nTry again %time!"
     }
 }

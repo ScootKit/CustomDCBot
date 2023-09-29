@@ -27,15 +27,36 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
     const recentStars = starUser && JSON.parse(starUser.recentStars) ? JSON.parse(starUser.recentStars).filter(star => star.date > oneHourAgo && star.msg != msg.id) : [];
 
     if (recentStars.length >= starConfig.starsPerHour) {
-        user.send(localize('starboard', 'star-limit', {limit: starConfig.starsPerHour})).catch(() => {});
-        msgReaction.users.remove(user.id).catch(() => {});
+        if (!isReactionRemove) {
+            user.send(localize('starboard', 'star-limit', {
+                limitEmoji: '**' + starConfig.starsPerHour + '** ' + starConfig.emoji,
+                msgUrl: msg.url,
+                time: '<t:' + Math.floor((recentStars[0].date + 1000 * 60 * 60) / 1000) + ':R>'
+            })).catch(() => {});
+            msgReaction.users.remove(user.id).catch(() => {});
+        }
         return;
     }
-    recentStars.push({date: Date.now(), msg: msg.id});
-    await client.models['starboard']['StarUser'].create({
-        userId: user.id,
-        recentStars: JSON.stringify(recentStars)
-    });
+
+    if (!isReactionRemove) {
+        recentStars.push({date: Date.now(), msg: msg.id});
+
+        if (starUser) {
+            await client.models['starboard']['StarUser'].update({
+                userId: user.id,
+                recentStars: JSON.stringify(recentStars)
+            }, {
+                where: {
+                    userId: user.id
+                }
+            });
+        } else {
+            await client.models['starboard']['StarUser'].create({
+                userId: user.id,
+                recentStars: JSON.stringify(recentStars)
+            });
+        }
+    }
 
     let reactioncount = msgReaction.count;
     if (!starConfig.selfStar && msgReaction.users.cache.has(msg.author.id)) reactioncount--;
