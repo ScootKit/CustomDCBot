@@ -80,6 +80,12 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
         return;
     }
 
+    let image = msg.attachments.size > 0 ? msg.attachments.first().url : null;
+    if (!image) {
+        const matches = msg.content.match(/(https?:\/\/.*\.(?:png|jpg|gif|jpeg|webp))/i);
+        if (matches) image = matches[0];
+    }
+
     const generatedMsg = await embedTypeV2(starConfig.message, {
         '%stars%': msgReaction.count,
         '%content%': msg.content,
@@ -91,7 +97,8 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
         '%userAvatar%': msg.member.displayAvatarURL({dynamic: true}),
         '%channelName%': msg.channel.name,
         '%channelMention%': '<#' + msg.channel.id + '>',
-        '%emoji%': msgReaction.emoji.toString()
+        '%emoji%': msgReaction.emoji.toString(),
+        '%image%': image
     });
 
     if (starboardMsg) starboardMsg.edit(generatedMsg);

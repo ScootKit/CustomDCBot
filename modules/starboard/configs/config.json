@@ -44,6 +44,7 @@
 					"message": "**%stars%** %emoji% in %channelMention%",
 					"color": "#f5c91b",
 					"description": "%content%",
+					"image": "%image%",
 					"author": {
 						"name": "%displayName%",
 						"img": "%userAvatar%",
@@ -123,6 +124,12 @@
 					"description": {
 						"en": "The set starboard emoji for lazy users",
 						"de": "Das festgelegte Starboard-Emoji für faule Nutzer"
+					}
+				},{
+					"name": "image",
+					"description": {
+						"en": "The first attachment or the first image url in the message",
+						"de": "Der erste Anhang oder die erste Bild-URL in der Nachricht"
 					}
 				}
 			]
