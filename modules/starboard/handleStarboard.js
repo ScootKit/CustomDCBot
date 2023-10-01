@@ -82,7 +82,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
 
     let image = msg.attachments.size > 0 ? msg.attachments.first().url : null;
     if (!image) {
-        const matches = msg.content.match(/(https?:\/\/.*\.(?:png|jpg|gif|jpeg|webp))/i);
+        const matches = msg.content.match(/https?:\/\/.*\.(?:png|jpg|gif|jpeg|webp)/i);
         if (matches) image = matches[0];
     }
 
