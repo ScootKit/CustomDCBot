@@ -968,5 +968,9 @@
         "no-rank": "Du hast noch nie ein Quiz erfolgreich beendet!",
         "no-quiz": "Es wurden noch keine Quiz erstellt. Serveradmins können auf https://scnx.app/glink?page=bot/configuration?query=quiz&file=quiz%7Cconfigs%2FquizList Quiz hinzufügen.",
         "no-permission": "Du hast keine Berechtigung, um Quiz mit dem Befehl zu erstellen."
+    },
+    "starboard": {
+        "invalid-minstars": "Ungültige Mindestanzahl an Sternen %stars",
+        "star-limit": "Du hast das stündliche Starboard-Limit von %limitEmoji auf dem Server erreicht, deswegen kannst du nicht auf die Nachricht %msgUrl reagieren.\nProbiers doch %time nochmal!"
     }
 }

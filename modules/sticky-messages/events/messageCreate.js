@@ -3,37 +3,40 @@ const channelData = {};
 
 /**
  * Deletes the sticky message sent by the bot
- * @param {Discord.Client} client
- * @param {Discord.Message} msg
+ * @param {Snowflake} clientId User ID of the bot
+ * @param {Discord.TextBasedChannel} channel
  */
-async function deleteMessage(client, msg) {
-    let message;
-    message = await msg.channel.messages.fetch(channelData[msg.channel.id].msg).catch(async () => {
-        const msgs = await msg.channel.messages.fetch({limit: 20});
-        message = msgs.find(m => m.author.id === client.user.id);
-    });
+async function deleteMessage(clientId, channel) {
+    if (!channelData[channel.id]) return;
 
+    let message;
+    message = await channel.messages.fetch(channelData[channel.id].msg).catch(async () => {
+        const msgs = await channel.messages.fetch({limit: 20});
+        message = msgs.find(m => m.author.id === clientId);
+    });
     if (message) message.delete().catch(() => {});
 }
+module.exports.deleteMessage = deleteMessage;
 
 /**
  * Sends the message to the channel
- * @param {Discord.Message} msg
- * @param {Object} configMsg The configured message
+ * @param {Discord.TextBasedChannel} channel
+ * @param {Object|String} configMsg The configured message
  */
-async function sendMessage(msg, configMsg) {
-    channelData[msg.channel.id] = {
+async function sendMessage(channel, configMsg) {
+    channelData[channel.id] = {
         msg: null,
         timeout: null,
         time: Date.now()
     };
-    const sentMessage = await msg.channel.send(await embedTypeV2(configMsg));
-    channelData[msg.channel.id] = {
+    const sentMessage = await channel.send(await embedTypeV2(configMsg));
+    channelData[channel.id] = {
         msg: sentMessage.id,
         timeout: null,
         time: Date.now()
     };
 }
+module.exports.sendMessage = sendMessage;
 
 module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
@@ -51,13 +54,13 @@ module.exports.run = async (client, msg) => {
     if (channelData[msg.channel.id]) {
         if (channelData[msg.channel.id].time + 5000 > Date.now()) {
             if (!channelData[msg.channel.id].timeout) channelData[msg.channel.id].timeout = setTimeout(() => {
-                deleteMessage(client, msg);
-                sendMessage(msg, currentConfig.message);
+                deleteMessage(client.user.id, msg.channel);
+                sendMessage(msg.channel, currentConfig.message);
             }, 5000);
             return;
         }
 
-        deleteMessage(client, msg);
-        sendMessage(msg, currentConfig.message);
-    } else sendMessage(msg, currentConfig.message);
+        deleteMessage(client.user.id, msg.channel);
+        sendMessage(msg.channel, currentConfig.message);
+    } else sendMessage(msg.channel, currentConfig.message);
 };

@@ -1,0 +1,211 @@
+{
+	"description": {},
+	"humanName": {
+		"en": "Configuration",
+		"de": "Konfiguration"
+	},
+	"filename": "config.json",
+	"content": [
+		{
+			"name": "channelId",
+			"humanName": {
+				"en": "Starboard channel",
+				"de": "Starboard-Kanal"
+			},
+			"default": {
+				"en": ""
+			},
+			"description": {
+				"en": "In which channel starred messages are sent",
+				"de": "In welchen Kanal gestarrte Nachrichten gesendet werden"
+			},
+			"type": "channelID"
+		},{
+			"name": "emoji",
+			"humanName": {
+				"de": "Emoji"
+			},
+			"default": {
+				"en": "⭐"
+			},
+			"description": {
+				"en": "Which emoji should be used to star messages",
+				"de": "Mit welchem Emoji Nachrichten gestarrt werden sollen"
+			},
+			"type": "string"
+		},{
+			"name": "message",
+			"humanName": {
+				"en": "Message",
+				"de": "Nachricht"
+			},
+			"default": {
+				"en": {
+					"message": "**%stars%** %emoji% in %channelMention%",
+					"color": "#f5c91b",
+					"description": "%content%",
+					"image": "%image%",
+					"author": {
+						"name": "%displayName%",
+						"img": "%userAvatar%",
+						"url": "%link%"
+					}
+				}
+			},
+			"description": {
+				"en": "This message gets send into the selected channel",
+				"de": "Diese Nachricht wird in den ausgewählten Kanal gesendet"
+			},
+			"allowEmbed": true,
+			"type": "string",
+			"params": [
+				{
+					"name": "stars",
+					"description": {
+						"en": "Amount of reactions on the message",
+						"de": "Anzahl der Reaktionen auf die Nachricht"
+					}
+				},{
+					"name": "content",
+					"description": {
+						"en": "The content of the starred message",
+						"de": "Der Inhalt der gestarrten Nachricht"
+					}
+				},{
+					"name": "link",
+					"description": {
+						"en": "A link to the starred message",
+						"de": "Ein Link zur gestarrten Nachricht"
+					}
+				},{
+					"name": "userID",
+					"description": {
+						"en": "The user ID of the author of the starred message",
+						"de": "Die Nutzer-ID des Autors der gestarrten Nachricht"
+					}
+				},{
+					"name": "userName",
+					"description": {
+						"en": "The username of the author of the starred message",
+						"de": "Der Benutzername des Autors der gestarrten Nachricht"
+					}
+				},{
+					"name": "displayName",
+					"description": {
+						"en": "The nickname of the author",
+						"de": "Der Nickname des Autors"
+					}
+				},{
+					"name": "userTag",
+					"description": {
+						"en": "The tag of the author of the starred message",
+						"de": "Der Tag des Autors der gestarrten Nachricht"
+					}
+				},{
+					"name": "userAvatar",
+					 "isImage": true,
+					"description": {
+						"en": "The avatar URL of the message author",
+						"de": "Die Avatar-URL des Nachrichtenautors"
+					}
+				},{
+					"name": "channelName",
+					"description": {
+						"en": "The name of the channel the starred message was sent in",
+						"de": "Der Name des Kanals, in dem die gestarrte Nachricht gesendet wurde"
+					}
+				},{
+					"name": "channelMention",
+					"description": {
+						"en": "The channel mention of the channel the starred message was sent in",
+						"de": "Die Kanalerwähnung des Kanals, in dem die gestarrte Nachricht gesendet wurde"
+					}
+				},{
+					"name": "emoji",
+					"description": {
+						"en": "The set starboard emoji for lazy users",
+						"de": "Das festgelegte Starboard-Emoji für faule Nutzer"
+					}
+				},{
+					"name": "image",
+				       "isImage": true,
+					"description": {
+						"en": "The first attachment or the first image url in the message",
+						"de": "Der erste Anhang oder die erste Bild-URL in der Nachricht"
+					}
+				}
+			]
+		},{
+			"name": "excludedChannels",
+			"humanName": {
+				"en": "Excluded channels",
+				"de": "Ausgenommene Kanäle"
+			},
+			"default": {
+				"en": []
+			},
+			"description": {
+				"en": "In which channels messages cannot be starred",
+				"de": "In welchen Kanälen Nachrichten nicht gestarrt werden können"
+			},
+			"type": "array",
+			"content": "channelID"
+		},{
+			"name": "excludedRoles",
+			"humanName": {
+				"en": "Excluded roles",
+				"de": "Ausgenommene Rollen"
+			},
+			"default": {
+				"en": []
+			},
+			"description": {
+				"en": "Users with these roles cannot star messages",
+				"de": "Nutzer mit diesen Rollen können keine Nachrichten starren"
+			},
+			"type": "array",
+			"content": "roleID"
+		},{
+			"name": "minStars",
+			"humanName": {
+				"en": "Minimum stars",
+				"de": "Mindestanzahl Sterne"
+			},
+			"default": {
+				"en": 3
+			},
+			"description": {
+				"en": "How many star reactions are needed for a message to land on the starboard",
+				"de": "Wie viele Star-Reaktionen benötigt werden, damit eine Nachricht auf dem Starboard landet"
+			},
+			"type": "integer"
+		},{
+			"name": "starsPerHour",
+			"humanName": {
+				"en": "Stars per user per hour",
+				"de": "Sterne pro Nutzer pro Stunde"
+			},
+			"default": {
+				"en": 5
+			},
+			"description": {
+				"en": "How many messages a user can star per hour",
+				"de": "Wie viele Nachrichten ein Nutzer pro Stunde starren kann"
+			},
+			"type": "integer"
+		},{
+			"name": "selfStar",
+			"humanName": {
+				"en": "Self-Star"
+			},
+			"default": {
+				"en": true
+			},
+			"description": {
+				"en": "Whether users can star their own messages",
+				"de": "Ob Nutzer ihre eigenen Nachrichten starren können"
+			},
+			"type": "boolean"
+		}
+	]
+}

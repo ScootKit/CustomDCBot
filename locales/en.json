@@ -998,5 +998,9 @@
         "no-rank": "You've never finished a quiz successfully!",
         "no-quiz": "No quizzes have been created for this server. Trusted admins can create them on https://scnx.app/glink?page=bot/configuration?query=quiz&file=quiz%7Cconfigs%2FquizList .",
         "no-permission": "You don't have enough permissions to create quiz using the command."
+    },
+    "starboard": {
+        "invalid-minstars": "Invalid minimum stars %stars",
+        "star-limit": "You've reached the hourly starboard limit of %limitEmoji on the server which is why you cannot react on the message %msgUrl .\nTry again %time!"
     }
 }
