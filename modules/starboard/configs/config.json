@@ -103,6 +103,7 @@
 					}
 				},{
 					"name": "userAvatar",
+					 "isImage": true,
 					"description": {
 						"en": "The avatar URL of the message author",
 						"de": "Die Avatar-URL des Nachrichtenautors"
