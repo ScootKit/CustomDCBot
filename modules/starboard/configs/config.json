@@ -103,6 +103,7 @@
 					}
 				},{
 					"name": "userAvatar",
+					 "isImage": true,
 					"description": {
 						"en": "The avatar URL of the message author",
 						"de": "Die Avatar-URL des Nachrichtenautors"
@@ -127,6 +128,7 @@
 					}
 				},{
 					"name": "image",
+				       "isImage": true,
 					"description": {
 						"en": "The first attachment or the first image url in the message",
 						"de": "Der erste Anhang oder die erste Bild-URL in der Nachricht"
