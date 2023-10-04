@@ -27,19 +27,17 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
         }
     });
 
-    if (starUser.length >= starConfig.starsPerHour) {
-        if (!isReactionRemove) {
+    if (!isReactionRemove) {
+        if (starUser.length >= starConfig.starsPerHour) {
             user.send(localize('starboard', 'star-limit', {
                 limitEmoji: '**' + starConfig.starsPerHour + '** ' + starConfig.emoji,
                 msgUrl: msg.url,
                 time: '<t:' + Math.floor((new Date(starUser[0].dataValues.createdAt).getTime() + 1000 * 60 * 60) / 1000) + ':R>'
             })).catch(() => {});
             msgReaction.users.remove(user.id).catch(() => {});
+            return;
         }
-        return;
-    }
 
-    if (!isReactionRemove) {
         await client.models['starboard']['StarUser'].create({
             userId: user.id,
             msgId: msg.id
