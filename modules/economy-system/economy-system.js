@@ -233,8 +233,8 @@ async function leaderboard(client) {
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
 
     if (model.length !== 0) embed.addField('Leaderboard:', await topTen(model, client));
-    if (moduleStr['leaderboardEmbed']['thumbnail']) embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
-    if (moduleStr['leaderboardEmbed']['image']) embed.setImage(moduleStr['leaderboardEmbed']['image']);
+    if (moduleStr['leaderboardEmbed']['thumbnail'] !== ' ') embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
+    if (moduleStr['leaderboardEmbed']['image'] !== ' ') embed.setImage(moduleStr['leaderboardEmbed']['image']);
 
     if (messages.last()) await messages.last().edit({embeds: [embed]});
     else channel.send({embeds: [embed]});
