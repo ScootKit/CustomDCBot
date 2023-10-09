@@ -40,6 +40,20 @@
 			},
 			"type": "string",
 			"allowEmbed": true
+		},{
+			"name": "respondBots",
+			"humanName": {
+				"en": "Respond to bots",
+				"de": "Antworten auf Bots"
+			},
+			"default": {
+				"en": false
+			},
+			"description": {
+				"en": "Whether your bot reacts to messages from other bots in the channel",
+				"de": "Ob dein Bot auf Nachrichten von anderen Bots in dem Kanal reagiert"
+			},
+			"type": "boolean"
 		}
 	]
 }

@@ -1,5 +1,6 @@
 const { embedTypeV2 } = require('../../../src/functions/helpers');
 const channelData = {};
+const sendPending = new Set();
 
 /**
  * Deletes the sticky message sent by the bot
@@ -24,17 +25,20 @@ module.exports.deleteMessage = deleteMessage;
  * @param {Object|String} configMsg The configured message
  */
 async function sendMessage(channel, configMsg) {
+    sendPending.add(channel.id);
     channelData[channel.id] = {
         msg: null,
         timeout: null,
         time: Date.now()
     };
+
     const sentMessage = await channel.send(await embedTypeV2(configMsg));
     channelData[channel.id] = {
         msg: sentMessage.id,
         timeout: null,
         time: Date.now()
     };
+    sendPending.delete(channel.id);
 }
 module.exports.sendMessage = sendMessage;
 
@@ -43,13 +47,14 @@ module.exports.run = async (client, msg) => {
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
     if (!msg.member) return;
-    if (msg.author.bot) return;
+    if (msg.author.id === client.user.id && sendPending.has(msg.channel.id)) return;
 
     const stickyChannels = client.configurations['sticky-messages']['sticky-messages'];
     if (!stickyChannels) return;
 
     const currentConfig = stickyChannels.find(c => c.channelId === msg.channel.id);
     if (!currentConfig || !currentConfig.message) return;
+    if (!currentConfig.respondBots && msg.author.bot) return;
 
     if (channelData[msg.channel.id]) {
         if (channelData[msg.channel.id].time + 5000 > Date.now()) {
