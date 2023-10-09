@@ -36,7 +36,7 @@ module.exports.subcommands = {
             }
         });
         if (!item) {
-            interaction.reply({
+            return interaction.reply({
                 content: interaction.client.configurations['economy-system']['strings']['notFound'],
                 ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
             });
