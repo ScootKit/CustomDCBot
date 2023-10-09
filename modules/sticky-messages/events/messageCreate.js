@@ -1,6 +1,6 @@
 const { embedTypeV2 } = require('../../../src/functions/helpers');
 const channelData = {};
-let isSending = false;
+const sendPending = new Set();
 
 /**
  * Deletes the sticky message sent by the bot
@@ -25,7 +25,7 @@ module.exports.deleteMessage = deleteMessage;
  * @param {Object|String} configMsg The configured message
  */
 async function sendMessage(channel, configMsg) {
-    isSending = true;
+    sendPending.add(channel.id);
     channelData[channel.id] = {
         msg: null,
         timeout: null,
@@ -38,7 +38,7 @@ async function sendMessage(channel, configMsg) {
         timeout: null,
         time: Date.now()
     };
-    isSending = false;
+    sendPending.delete(channel.id);
 }
 module.exports.sendMessage = sendMessage;
 
@@ -47,7 +47,7 @@ module.exports.run = async (client, msg) => {
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
     if (!msg.member) return;
-    if (msg.author.id === client.user.id && isSending) return;
+    if (msg.author.id === client.user.id && sendPending.has(msg.channel.id)) return;
 
     const stickyChannels = client.configurations['sticky-messages']['sticky-messages'];
     if (!stickyChannels) return;
