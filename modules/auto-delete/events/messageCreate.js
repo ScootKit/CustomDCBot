@@ -16,7 +16,7 @@ module.exports.run = async function (client, msg) {
         const oldMessages = (await msg.channel.messages.fetch({
             before: msg.id,
             limit: parseInt(channel.keepMessageCount)
-        })).sort((a, b) => a.createdAt < b.createdAt ? 1 : -1);
+        })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
         if (oldMessages.length < parseInt(channel.keepMessageCount)) return;
         if (oldMessages.last().deletable && !oldMessages.last().pinned) await oldMessages.last().delete();
     }, parseInt(channel.timeout) * 60000);

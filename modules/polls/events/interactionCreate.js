@@ -53,7 +53,7 @@ module.exports.run = async (client, interaction) => {
             .setTitle(localize('polls', 'view-public-votes'))
             .setColor(0xE67E22);
         for (const vId in poll.options) {
-            let voters = [];
+            const voters = [];
             for (const voterID of poll.votes[parseInt(vId) + 1] || []) {
                 voters.push('<@' + voterID + '>');
             }

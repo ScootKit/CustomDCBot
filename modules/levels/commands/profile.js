@@ -1,11 +1,9 @@
 const {embedType, formatDate, formatNumber} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
-const {getUser} = require('@scnetwork/api');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (interaction) {
     const moduleStrings = interaction.client.configurations['levels']['strings'];
-    const moduleConfig = interaction.client.configurations['levels']['config'];
 
     let member = interaction.member;
     if (interaction.options.getUser('user')) member = await interaction.guild.members.fetch(interaction.options.getUser('user').id);
@@ -18,9 +16,6 @@ module.exports.run = async function (interaction) {
     if (!user) return interaction.reply(embedType(moduleStrings['user_not_found'], {}, {ephemeral: true}));
 
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
-
-    let scnUser = moduleConfig.disableSCNetworkProfile ? null : await getUser(member.user.id).catch(() => {
-    });
 
     const embed = new MessageEmbed()
         .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})

@@ -4,7 +4,7 @@
  * @author Simon Csaba <mail@scderox.de>
  */
 const {getUser, getAutoSyncMembers} = require('@scnetwork/api');
-const {embedType, disableModule, truncate, embedTypeV2, formatDiscordUserName} = require('../../src/functions/helpers');
+const {disableModule, truncate, embedTypeV2, formatDiscordUserName} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {AgeFromDate} = require('age-calculator');
 const {localize} = require('../../src/functions/localize');

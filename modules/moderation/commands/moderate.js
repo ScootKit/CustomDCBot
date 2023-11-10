@@ -621,30 +621,30 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    },
-                    {
-                        type: 'ATTACHMENT',
-                        name: 'proof',
-                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
-                        description: localize('moderation', 'moderate-proof-description')
-                    },
-                    {
-                        type: 'STRING',
-                        name: 'duration',
-                        required: false,
-                        description: localize('moderation', 'moderate-duration-description')
-                    },
-                    {
-                        type: 'INTEGER',
-                        name: 'days',
-                        required: false,
-                        description: localize('moderation', 'moderate-days-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                },
+                {
+                    type: 'ATTACHMENT',
+                    name: 'proof',
+                    required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                    description: localize('moderation', 'moderate-proof-description')
+                },
+                {
+                    type: 'STRING',
+                    name: 'duration',
+                    required: false,
+                    description: localize('moderation', 'moderate-duration-description')
+                },
+                {
+                    type: 'INTEGER',
+                    name: 'days',
+                    required: false,
+                    description: localize('moderation', 'moderate-days-description')
+                }
                 ];
             }
         },
@@ -659,18 +659,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    },
-                    {
-                        type: 'STRING',
-                        name: 'duration',
-                        required: false,
-                        description: localize('moderation', 'moderate-duration-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                },
+                {
+                    type: 'STRING',
+                    name: 'duration',
+                    required: false,
+                    description: localize('moderation', 'moderate-duration-description')
+                }
                 ];
             }
         },
@@ -686,12 +686,12 @@ module.exports.config = {
                     autocomplete: true,
                     description: localize('moderation', 'moderate-userid-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
                 ];
             }
         },
@@ -706,12 +706,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
                 ];
             }
         },
@@ -738,18 +738,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    },
-                    {
-                        type: 'ATTACHMENT',
-                        name: 'proof',
-                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
-                        description: localize('moderation', 'moderate-proof-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                },
+                {
+                    type: 'ATTACHMENT',
+                    name: 'proof',
+                    required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                    description: localize('moderation', 'moderate-proof-description')
+                }
                 ];
             }
         },
@@ -764,24 +764,24 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'duration',
-                        required: true,
-                        description: localize('moderation', 'moderate-duration-description')
-                    },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    },
-                    {
-                        type: 'ATTACHMENT',
-                        name: 'proof',
-                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
-                        description: localize('moderation', 'moderate-proof-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'duration',
+                    required: true,
+                    description: localize('moderation', 'moderate-duration-description')
+                },
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                },
+                {
+                    type: 'ATTACHMENT',
+                    name: 'proof',
+                    required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                    description: localize('moderation', 'moderate-proof-description')
+                }
                 ];
             }
         },
@@ -796,12 +796,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
                 ];
             }
         },
@@ -816,18 +816,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    },
-                    {
-                        type: 'ATTACHMENT',
-                        name: 'proof',
-                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
-                        description: localize('moderation', 'moderate-proof-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                },
+                {
+                    type: 'ATTACHMENT',
+                    name: 'proof',
+                    required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                    description: localize('moderation', 'moderate-proof-description')
+                }
                 ];
             }
         },
@@ -842,18 +842,18 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    },
-                    {
-                        type: 'ATTACHMENT',
-                        name: 'proof',
-                        required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
-                        description: localize('moderation', 'moderate-proof-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                },
+                {
+                    type: 'ATTACHMENT',
+                    name: 'proof',
+                    required: (client.configurations['moderation']['config']['require_proof'] && client.configurations['moderation']['config']['require_reason']),
+                    description: localize('moderation', 'moderate-proof-description')
+                }
                 ];
             }
         },
@@ -868,12 +868,12 @@ module.exports.config = {
                     required: true,
                     description: localize('moderation', 'moderate-user-description')
                 },
-                    {
-                        type: 'STRING',
-                        name: 'reason',
-                        required: client.configurations['moderation']['config']['require_reason'],
-                        description: localize('moderation', 'moderate-reason-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'reason',
+                    required: client.configurations['moderation']['config']['require_reason'],
+                    description: localize('moderation', 'moderate-reason-description')
+                }
                 ];
             }
         },

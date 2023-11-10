@@ -19,7 +19,7 @@ module.exports.run = async function (client) {
         if (!dcChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channel.channelID})}`);
 
         const channelMessages = (await dcChannel.messages.fetch().catch(() => {
-        })).sort((a, b) => a.createdAt < b.createdAt ? 1 : -1);
+        })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
         if (!channelMessages) {
             return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: channel.channelID})}`);
         }

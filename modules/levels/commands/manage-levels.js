@@ -2,6 +2,12 @@ const {registerNeededEdit} = require('../leaderboardChannel');
 const {localize} = require('../../../src/functions/localize');
 const {formatDiscordUserName} = require('../../../src/functions/helpers');
 
+/**
+ * Runs an XP Action
+ * @param {Interaction} interaction
+ * @param {function} newXP
+ * @return {Promise<*>}
+ */
 async function runXPAction(interaction, newXP) {
     const member = interaction.options.getMember('user');
     let user = await interaction.client.models['levels']['User'].findOne({
@@ -22,6 +28,9 @@ async function runXPAction(interaction, newXP) {
         content: '⚠️ ' + localize('levels', 'negative-xp')
     });
 
+    /**
+     * Checks and grants roles to the user
+     */
     function runXPCheck() {
         const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
         if (nextLevelXp <= user.xp) {
@@ -64,6 +73,12 @@ async function runXPAction(interaction, newXP) {
     });
 }
 
+/**
+ * Run a level action
+ * @param {Interaction} interaction
+ * @param {function} newLevel
+ * @return {Promise<*>}
+ */
 async function runLevelAction(interaction, newLevel) {
     const member = interaction.options.getMember('user');
     const user = await interaction.client.models['levels']['User'].findOne({
@@ -120,9 +135,9 @@ module.exports.subcommands = {
         if (!interaction.options.getBoolean('confirm')) return interaction.reply({
             ephemeral: 'true',
             content: type === 'user' ? localize('levels', 'are-you-sure-you-want-to-delete-user-xp', {
-                    u: interaction.options.getUser('user').toString(),
-                    ut: formatDiscordUserName(interaction.options.getUser('user'))
-                })
+                u: interaction.options.getUser('user').toString(),
+                ut: formatDiscordUserName(interaction.options.getUser('user'))
+            })
                 : localize('levels', 'are-you-sure-you-want-to-delete-server-xp')
         });
         await interaction.deferReply();

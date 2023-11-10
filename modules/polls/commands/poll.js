@@ -107,18 +107,18 @@ module.exports.config = {
                     required: true,
                     description: localize('polls', 'command-poll-create-option-description', {o: 2})
                 },
-                    {
-                        type: 'STRING',
-                        name: 'duration',
-                        required: false,
-                        description: localize('polls', 'command-poll-create-endAt-description')
-                    },
-                    {
-                        type: 'BOOLEAN',
-                        name: 'public',
-                        required: false,
-                        description: localize('polls', 'command-poll-create-public-description')
-                    }
+                {
+                    type: 'STRING',
+                    name: 'duration',
+                    required: false,
+                    description: localize('polls', 'command-poll-create-endAt-description')
+                },
+                {
+                    type: 'BOOLEAN',
+                    name: 'public',
+                    required: false,
+                    description: localize('polls', 'command-poll-create-public-description')
+                }
                 ]
             },
             {

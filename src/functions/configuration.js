@@ -199,16 +199,16 @@ async function checkConfigFile(file, moduleName) {
  */
 async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
     return new Promise(async (resolve, reject) => {
-            const moduleConf = require(`../../modules/${moduleName}/module.json`);
-            if ((moduleConf['config-example-files'] || []).length === 0) return resolve();
-            try {
-                for (const v of moduleConf['config-example-files']) await checkConfigFile(v, moduleName);
-                resolve();
-            } catch (r) {
-                reject(r);
-            }
-            if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
+        const moduleConf = require(`../../modules/${moduleName}/module.json`);
+        if ((moduleConf['config-example-files'] || []).length === 0) return resolve();
+        try {
+            for (const v of moduleConf['config-example-files']) await checkConfigFile(v, moduleName);
+            resolve();
+        } catch (r) {
+            reject(r);
         }
+        if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
+    }
     );
 }
 

@@ -397,7 +397,7 @@ async function loadEventsInDir(dir, moduleName = null) {
                             for (const eData of events[eventName]) {
                                 try {
                                     if (!client.botReadyAt && !eData.eventFunction.ignoreBotReadyCheck) continue;
-                                    if (!eData.eventFunction.allowPartial && cArgs.filter(f => f && f.partial).length !== 0) continue;
+                                    if (!eData.eventFunction.allowPartial && cArgs.filter(z => z && z.partial).length !== 0) continue;
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {

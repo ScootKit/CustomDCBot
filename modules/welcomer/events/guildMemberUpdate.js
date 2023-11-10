@@ -1,6 +1,5 @@
 const {
     randomElementFromArray,
-    embedType,
     formatDate,
     embedTypeV2,
     formatDiscordUserName
