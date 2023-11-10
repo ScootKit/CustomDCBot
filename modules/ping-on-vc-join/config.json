@@ -1,8 +1,11 @@
 {
-  "description": {},
+  "description": {
+    "en": "Configure messages that should get send when a user joins a Voice-Channel",
+    "de": "Stelle hier Nachrichten ein, die versendet werden, wenn ein Nutzer einem Sprachkanal beitritt"
+  },
   "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
+    "en": "Message on Voice Join",
+    "de": "Nachricht beim Kanalbeitritt"
   },
   "filename": "config.json",
   "configElements": true,
@@ -27,11 +30,12 @@
     {
       "name": "message",
       "humanName": {
-        "de": "Nachricht"
+        "de": "Nachricht",
+        "en": "Message"
       },
       "default": {
         "en": "The user %tag% joined the voicechat %vc%",
-        "de": "Der Nutzer %tag% ist dem Voicechat %vc% beigetreten.n"
+        "de": "Der Nutzer %tag% ist dem Voicechat %vc% beigetreten."
       },
       "description": {
         "en": "Here you can set the message that should be send if someone joins a selected voicechat",
@@ -66,7 +70,8 @@
     {
       "name": "notify_channel_id",
       "humanName": {
-        "de": "Benachrichtigungskanal"
+        "de": "Benachrichtigungskanal",
+        "en": "Notification-Channel"
       },
       "default": {
         "en": ""

@@ -47,7 +47,6 @@ async function generateEmbed(client) {
      * @returns {String} String with the variables replaced
      */
     function replacer(content) {
-
         /**
          * Replaces the first member-with-role-count parameters of the input
          * @private

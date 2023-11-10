@@ -130,7 +130,8 @@ module.exports.run = async function (interaction) {
 module.exports.config = {
     name: 'partner',
     description: localize('partner-list', 'command-description'),
-    defaultPermission: false,
+
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     options: function (client) {
         const cats = [];
         for (const category of client.configurations['partner-list']['config']['categories']) {

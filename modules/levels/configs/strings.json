@@ -39,8 +39,7 @@
           "xp": "XP",
           "level": "Level",
           "joinedAt": "Joined server",
-          "color": "GREEN",
-          "bio": "Bio"
+          "color": "GREEN"
         },
         "de": {
           "title": "%username%'s Profil",
@@ -49,8 +48,7 @@
           "xp": "XP",
           "level": "Level",
           "joinedAt": "Server beigetreten",
-          "color": "GREEN",
-          "bio": "Bio"
+          "color": "GREEN"
         }
       },
       "description": {

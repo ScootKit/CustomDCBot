@@ -104,7 +104,7 @@ module.exports.run = async function (interaction) {
                 if (currentAnswers[member.user.id] === 'gun' && guardAfterEachOther[interaction.user.id] >= 5) currentAnswers[interaction.user.id] = 'reload';
                 if (currentAnswers[interaction.user.id] === 'gun' && guardAfterEachOther[member.user.id] >= 5) currentAnswers[member.user.id] = 'reload';
                 if ((currentAnswers[interaction.user.id] === 'gun' && guardAfterEachOther[member.user.id] >= 5) || currentAnswers[member.user.id] === 'gun' && guardAfterEachOther[interaction.user.id] >= 5) guardOver = true;
-                const answers = [currentAnswers[member.user.id], currentAnswers[interaction.user.id]].sort((t, b) => ['reload', 'guard', 'gun'].indexOf(t) - ['reload', 'guard', 'gun'].indexOf(b));
+                const answers = [currentAnswers[member.user.id], currentAnswers[interaction.user.id]].sort((a, b) => ['reload', 'guard', 'gun'].indexOf(a) - ['reload', 'guard', 'gun'].indexOf(b));
                 const params = {};
                 const actionTo = {
                     'reload': 'r',
@@ -120,9 +120,9 @@ module.exports.run = async function (interaction) {
         }
 
 
-        const stateString = '\n\n' + localize('duel', 'what-do-you-want-to-do') + `\n${member.toString()}: ${localize('duel', currentAnswers[member.user.id] ? 'ready' : 'pending')}\n${interaction.user.toString()}: ${localize('duel', currentAnswers[interaction.user.id] ? 'ready' : 'pending')}\n\n${localize('duel', 'continues-info')}`;
+        let stateString = '\n\n' + localize('duel', 'what-do-you-want-to-do') + `\n${member.toString()}: ${localize('duel', currentAnswers[member.user.id] ? 'ready' : 'pending')}\n${interaction.user.toString()}: ${localize('duel', currentAnswers[interaction.user.id] ? 'ready' : 'pending')}\n\n${localize('duel', 'continues-info')}`;
 
-        let mentions;
+        let mentions = undefined;
         if (!ended && !currentAnswers[interaction.user.id] && currentAnswers[member.user.id]) mentions = [interaction.user.id];
         if (!ended && !currentAnswers[member.user.id] && currentAnswers[interaction.user.id]) mentions = [member.user.id];
         const embed = new MessageEmbed()
@@ -170,11 +170,11 @@ module.exports.run = async function (interaction) {
         });
     });
     a.on('end', () => {
-        rep.edit({
-            content: endReason,
-            components: []
-        });
-    }
+            rep.edit({
+                content: endReason,
+                components: []
+            });
+        }
     );
 };
 
@@ -182,7 +182,7 @@ module.exports.run = async function (interaction) {
 module.exports.config = {
     name: 'duel',
     description: localize('duel', 'command-description'),
-    defaultPermission: true,
+
     options: [
         {
             type: 'USER',

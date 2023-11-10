@@ -43,7 +43,7 @@ module.exports.formatDiscordUserName = formatDiscordUserName;
  * @returns {String}
  * @private
  */
-function inputReplacer(args, input) {
+function inputReplacer(args, input = '') {
     if (typeof args !== 'object') return input;
     for (const arg in args) {
         if (typeof args[arg] !== 'string' && typeof args[arg] !== 'number') args[arg] = '';
@@ -469,7 +469,10 @@ function disableModule(module, reason = null) {
     if (!client.modules[module]) throw new Error(`${module} got never loaded`);
     client.modules[module].enabled = false;
     client.logger.error(localize('main', 'module-disable', {r: reason}));
-    if (client.logChannel) client.logChannel.send(localize('main', 'module-disable', {r: reason})).then(() => {
+    if (client.logChannel) client.logChannel.send(localize('main', 'module-disable', {
+        m: module,
+        r: reason
+    })).then(() => {
     });
     if (client.scnxSetup) require('./scnx-integration').reportIssue(client, {
         type: 'MODULE_FAILURE',

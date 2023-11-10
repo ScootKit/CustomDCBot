@@ -84,8 +84,9 @@ async function generateReport(client) {
 
 module.exports.config = {
     name: 'hunt-the-code-admin',
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     description: localize('hunt-the-code', 'admin-command-description'),
-    defaultPermission: false,
+
     options: [
         {
             type: 'SUB_COMMAND',

@@ -1,4 +1,5 @@
 const {
+    embedType,
     randomIntFromInterval,
     randomElementFromArray,
     embedTypeV2, formatDiscordUserName

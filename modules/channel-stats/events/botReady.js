@@ -66,8 +66,8 @@ async function channelNameReplacer(client, channel, input) {
         .split('%awayCount%').join(members.filter(m => m.presence && (m.presence || {}).status === 'idle').size)
         .split('%offlineCount%').join(members.filter(m => !m.presence || (m.presence || {}).status === 'offline').size)
         .split('%guildBoosts%').join(channel.guild.premiumSubscriptionCount || '0')
-        .split('%boostLevel%').join(channel.guild.premiumTier)
+        .split('%boostLevel%').join(localize('boostTier', channel.guild.premiumTier))
         .split('%boosterCount%').join(members.filter(m => !!m.premiumSinceTimestamp).size)
         .split('%emojiCount%').join(channel.guild.emojis.cache.size)
-        .split('%currentTime%').join(formatDate(new Date(), true));
+        .split('%currentTime%').join(formatDate(new Date(), true)).trim();
 }

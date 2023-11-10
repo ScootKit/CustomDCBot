@@ -61,8 +61,9 @@ module.exports.run = async function (interaction) {
 
 module.exports.config = {
     name: 'trace-invites',
+    defaultMemberPermissions: ['MODERATE_MEMBERS'],
     description: localize('invite-tracking', 'trace-command-description'),
-    defaultPermission: false,
+
     options: [
         {
             type: 'USER',

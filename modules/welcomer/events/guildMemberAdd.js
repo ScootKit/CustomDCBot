@@ -1,5 +1,6 @@
 const {
     randomElementFromArray,
+    embedType,
     formatDate,
     embedTypeV2,
     formatDiscordUserName
@@ -12,6 +13,22 @@ module.exports.run = async function (client, guildMember) {
     const moduleConfig = client.configurations['welcomer']['config'];
     const moduleModel = client.models['welcomer']['User'];
     if (guildMember.user.bot && moduleConfig['not-send-messages-if-member-is-bot']) return;
+
+    const args = {
+        '%mention%': guildMember.toString(),
+        '%servername%': guildMember.guild.name,
+        '%tag%': formatDiscordUserName(guildMember.user),
+        '%guildUserCount%': (await client.guild.members.fetch()).size,
+        '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
+        '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
+        '%createdAt%': formatDate(guildMember.user.createdAt),
+        '%guildLevel%': localize('boostTier', client.guild.premiumTier),
+        '%boostCount%%': client.guild.premiumSubscriptionCount,
+        '%joinedAt%': formatDate(guildMember.joinedAt)
+    };
+    if (moduleConfig.sendDirectMessageOnJoin) guildMember.user.send(await embedTypeV2(moduleConfig.joinDM, args)).then(() => {
+    }).catch(() => {
+    });
 
     const moduleChannels = client.configurations['welcomer']['channels'];
 
@@ -53,18 +70,7 @@ module.exports.run = async function (client, guildMember) {
             });
         }
         const sentMessage = await channel.send(await embedTypeV2(message || 'Message not found',
-            {
-                '%mention%': guildMember.toString(),
-                '%servername%': guildMember.guild.name,
-                '%tag%': formatDiscordUserName(guildMember.user),
-                '%guildUserCount%': (await client.guild.members.fetch()).size,
-                '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
-                '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
-                '%createdAt%': formatDate(guildMember.user.createdAt),
-                '%guildLevel%': localize('boostTier', client.guild.premiumTier),
-                '%boostCount%%': client.guild.premiumSubscriptionCount,
-                '%joinedAt%': formatDate(guildMember.joinedAt)
-            },
+            args,
             {},
             components
         ));

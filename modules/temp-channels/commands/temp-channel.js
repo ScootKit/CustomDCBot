@@ -46,7 +46,7 @@ module.exports.subcommands = {
 module.exports.config = {
     name: 'temp-channel',
     description: localize('temp-channels', 'command-description'),
-    defaultPermission: false,
+
     options: function () {
         const moduleConfig = client.configurations['temp-channels']['config'];
         const conf = [];

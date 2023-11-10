@@ -15,6 +15,9 @@ exports.run = async (client, interaction) => {
 
 let processing = false;
 
+/**
+ * This is here to prevent race conditions leading to unregistered entries. It's bad I know, but it gets the job done. I should rewrite the whole system
+ */
 async function startProcessing() {
     if (processing) return;
     for (const k in toBeProcessed) {
@@ -24,6 +27,7 @@ async function startProcessing() {
     processing = false;
     if (toBeProcessed.filter(f => f !== null).length !== 0) await startProcessing();
 }
+
 async function processReply(interaction) {
     const client = interaction.client;
     const moduleStrings = interaction.client.configurations['giveaways']['strings'];
@@ -97,51 +101,51 @@ async function processReply(interaction) {
         }));
     }
 
-    async function updateGiveaway(gway, message) {
+    async function updateGiveaway(giveaway, message) {
         const enteredUsers = [];
         let totalEntries = 0;
-        for (const userID in gway.entries) {
-            totalEntries = totalEntries + gway.entries[userID];
+        for (const userID in giveaway.entries) {
+            totalEntries = totalEntries + giveaway.entries[userID];
             if (!enteredUsers.includes(userID)) enteredUsers.push(userID);
         }
         const components = [{
             type: 'ACTION_ROW',
-            components: [{type: 'BUTTON', label: moduleStrings.buttonContent, style: 'PRIMARY', customId: 'gway'}]
+            components: [{type: 'BUTTON', label: moduleStrings.buttonContent, style: 'PRIMARY', customId: 'giveaway'}]
         }];
-        const endAt = new Date(parseInt(gway.endAt));
+        const endAt = new Date(parseInt(giveaway.endAt));
 
-        if (gway.requirements.length !== 0) {
+        if (giveaway.requirements.length !== 0) {
             let requirementString = '';
-            gway.requirements.forEach((r) => {
-                if (r.type === 'messages') requirementString = requirementString + `• ${localize('gways', 'required-messages', {mc: r.messageCount})}\n`;
+            giveaway.requirements.forEach((r) => {
+                if (r.type === 'messages') requirementString = requirementString + `• ${localize('giveaways', 'required-messages', {mc: r.messageCount})}\n`;
                 if (r.type === 'roles') {
                     let rolesString = ''; // Surely there is a better way to to this kind of stuff, but I am to stupid to find it
                     r.roles.forEach(rID => rolesString = rolesString + `<@&${rID}> `);
-                    requirementString = rolesString + `• ${localize('gways', 'roles-required', {r: rolesString})}\n`;
+                    requirementString = rolesString + `• ${localize('giveaways', 'roles-required', {r: rolesString})}\n`;
                 }
             });
 
-            await message.edit(embedType(moduleStrings['gway_message_with_requirements'], {
-                '%prize%': gway.prize,
-                '%winners%': gway.winnerCount,
+            await message.edit(embedType(moduleStrings['giveaway_message_with_requirements'], {
+                '%prize%': giveaway.prize,
+                '%winners%': giveaway.winnerCount,
                 '%requirements%': requirementString,
-                '%sponsorLink%': gway.sponsorWebsite || localize('gways', 'no-link'),
+                '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
                 '%endAt%': formatDate(endAt),
                 '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
-                '%organiser%': `<@${gway.organiser}>`,
-                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('gways', 'not-supported-for-news-channel') : totalEntries,
-                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('gways', 'not-supported-for-news-channel') : enteredUsers.length
+                '%organiser%': `<@${giveaway.organiser}>`,
+                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : totalEntries,
+                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : enteredUsers.length
             }, {components}));
         } else {
-            await message.edit(embedType(moduleStrings['gway_message'], {
-                '%prize%': gway.prize,
-                '%winners%': gway.winnerCount,
+            await message.edit(embedType(moduleStrings['giveaway_message'], {
+                '%prize%': giveaway.prize,
+                '%winners%': giveaway.winnerCount,
                 '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
                 '%endAt%': formatDate(endAt),
-                '%sponsorLink%': gway.sponsorWebsite || localize('gways', 'no-link'),
-                '%organiser%': `<@${gway.organiser}>`,
-                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('gways', 'not-supported-for-news-channel') : totalEntries,
-                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('gways', 'not-supported-for-news-channel') : enteredUsers.length
+                '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
+                '%organiser%': `<@${giveaway.organiser}>`,
+                '%entryCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : totalEntries,
+                '%enteredCount%': interaction.channel.type === 'GUILD_NEWS' ? localize('giveaways', 'not-supported-for-news-channel') : enteredUsers.length
             }, {components}));
         }
     }

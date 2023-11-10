@@ -120,9 +120,9 @@ module.exports.subcommands = {
         if (!interaction.options.getBoolean('confirm')) return interaction.reply({
             ephemeral: 'true',
             content: type === 'user' ? localize('levels', 'are-you-sure-you-want-to-delete-user-xp', {
-                u: interaction.options.getUser('user').toString(),
-                ut: formatDiscordUserName(interaction.options.getUser('user'))
-            })
+                    u: interaction.options.getUser('user').toString(),
+                    ut: formatDiscordUserName(interaction.options.getUser('user'))
+                })
                 : localize('levels', 'are-you-sure-you-want-to-delete-server-xp')
         });
         await interaction.deferReply();
@@ -193,8 +193,9 @@ module.exports.run = function () {
 
 module.exports.config = {
     name: 'manage-levels',
+    defaultMemberPermissions: ['MODERATE_MEMBERS'],
     description: localize('levels', 'edit-xp-command-description'),
-    defaultPermission: false,
+
     options: function (client) {
         const array = [{
             type: 'SUB_COMMAND',

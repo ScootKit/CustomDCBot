@@ -85,7 +85,7 @@ module.exports.subcommands = {
 module.exports.config = {
     name: 'hunt-the-code',
     description: localize('hunt-the-code', 'command-description'),
-    defaultPermission: true,
+
     options: [
         {
             type: 'SUB_COMMAND',

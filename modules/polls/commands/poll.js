@@ -73,8 +73,9 @@ module.exports.autoComplete = {
 
 module.exports.config = {
     name: 'poll',
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     description: localize('polls', 'command-poll-description'),
-    defaultPermission: false,
+
     options: function () {
         const options = [
             {
@@ -106,18 +107,18 @@ module.exports.config = {
                     required: true,
                     description: localize('polls', 'command-poll-create-option-description', {o: 2})
                 },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('polls', 'command-poll-create-endAt-description')
-                },
-                {
-                    type: 'BOOLEAN',
-                    name: 'public',
-                    required: false,
-                    description: localize('polls', 'command-poll-create-public-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-endAt-description')
+                    },
+                    {
+                        type: 'BOOLEAN',
+                        name: 'public',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-public-description')
+                    }
                 ]
             },
             {

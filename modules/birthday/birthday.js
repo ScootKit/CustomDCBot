@@ -4,7 +4,7 @@
  * @author Simon Csaba <mail@scderox.de>
  */
 const {getUser, getAutoSyncMembers} = require('@scnetwork/api');
-const {disableModule, truncate, embedTypeV2, formatDiscordUserName} = require('../../src/functions/helpers');
+const {embedType, disableModule, truncate, embedTypeV2, formatDiscordUserName} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {AgeFromDate} = require('age-calculator');
 const {localize} = require('../../src/functions/localize');
@@ -28,7 +28,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     await channel.guild.members.fetch({force: true});
 
-    if (notifyUsers) {
+    if (notifyUsers && !moduleConf.notificationChannelOverwriteID) {
         for (const m of messages.filter(msg => msg.id !== messages.last().id)) {
             if (m.deletable) await m.delete(); // Removing old messages
         }
@@ -186,11 +186,13 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
             }
         }
 
+        const birthdayMessageChannel = moduleConf.notificationChannelOverwriteID ? await client.guild.channels.fetch(moduleConf.notificationChannelOverwriteID) : channel;
+
         for (const user of birthdayUsers) {
             const member = channel.guild.members.cache.get(user.id);
             if (!member) return;
             if (user.year) {
-                channel.send(await embedTypeV2(moduleConf['birthday_message_with_age'], {
+                birthdayMessageChannel.send(await embedTypeV2(moduleConf['birthday_message_with_age'], {
                     '%age%': new Date().getFullYear() - user.year,
                     '%tag%': formatDiscordUserName(member.user),
                     '%username%': member.user.username,
@@ -198,7 +200,7 @@ generateBirthdayEmbed = async function (client, notifyUsers = false) {
                     '%mention%': `<@${user.id}>`
                 }));
             } else {
-                channel.send(await embedTypeV2(moduleConf['birthday_message'], {
+                birthdayMessageChannel.send(await embedTypeV2(moduleConf['birthday_message'], {
                     '%tag%': formatDiscordUserName(member.user),
                     '%avatarURL%': member.user.avatarURL() || member.user.defaultAvatarURL,
                     '%mention%': `<@${user.id}>`

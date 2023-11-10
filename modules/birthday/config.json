@@ -10,16 +10,32 @@
       "name": "channelID",
       "humanName": {
         "en": "Birthday-Channel",
-        "de": "Geburtstag-Channel"
+        "de": "Geburtstag-Kanal"
       },
       "default": {
         "en": ""
       },
       "description": {
-        "en": "Channel-ID to run all operations in it",
-        "de": "Channel-ID des Geburtstags-Channels"
+        "en": "Channel to run send the Birthday-Embed (and notifications, if not overwritten) in",
+        "de": "Kanal, in welchem das Geburtstags-Embed (und Benachrichtigung, falls nicht überschrieben) versendet werden soll"
       },
       "type": "channelID"
+    },
+    {
+      "name": "notificationChannelOverwriteID",
+      "allowNull": true,
+      "humanName": {
+        "en": "(optional) Notification-Channel",
+        "de": "(optional) Benachrichtigung-Kanal"
+      },
+      "type": "channelID",
+      "description": {
+        "de": "Kanal, in welchen Nutzern zu ihrem Geburtstag gratuliert werden soll. Wenn dieses Feld leer ist, wird der Geburtstags-Kanal verwendet. In diesem Kanal werden die Geburtstags-Nachrichten vom Vortag, im Gegensatz zum Geburtstags-Kanal, nicht jeden Tag automatisch geleert.",
+        "en": "Channel in which \"Happy birthday\"-messages should get send. If this field is empty, the message will get send in the Birthday-Channel. Old birthday notifications won't get removed automatically from this channel, in contrast to the Birthday-Channel."
+      },
+      "default": {
+        "en": ""
+      }
     },
     {
       "name": "enableBirthdayEmbed",

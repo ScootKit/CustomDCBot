@@ -21,7 +21,6 @@ module.exports.run = async function (interaction) {
 
     let scnUser = moduleConfig.disableSCNetworkProfile ? null : await getUser(member.user.id).catch(() => {
     });
-    if (!(scnUser || {}).bio) scnUser = {bio: interaction.user.id === member.user.id ? localize('levels', 'no-bio-author') : localize('levels', 'no-bio')};
 
     const embed = new MessageEmbed()
         .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
@@ -33,9 +32,6 @@ module.exports.run = async function (interaction) {
         .addField(moduleStrings.embed.xp, `${formatNumber(user.xp)}/${formatNumber(nextLevelXp)}`, true)
         .addField(moduleStrings.embed.level, user.level.toString(), true)
         .addField(moduleStrings.embed.joinedAt, formatDate(member.joinedAt), true);
-
-    if (!moduleConfig.disableSCNetworkProfile) embed.addField(moduleStrings.embed.bio.replaceAll('%username%', member.user.username), scnUser.bio);
-
 
     interaction.reply({ephemeral: true, embeds: [embed]});
 };
