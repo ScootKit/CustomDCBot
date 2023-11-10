@@ -16,8 +16,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
     const channel = client.channels.cache.get(starConfig.channelId);
     if (!channel) return disableModule('starboard', localize('partner-list', 'channel-not-found', {c: starConfig.channelId}));
     if ((msg.channel.nsfw && !channel.nsfw) || starConfig.excludedChannels.includes(msg.channel.id) || starConfig.excludedRoles.some(r => msg.member.roles.cache.has(r))) return;
-    if (!starConfig.selfStar && user.id === msg.author.id) return msgReaction.users.remove(user.id).catch(() => {
-    });
+    if (!starConfig.selfStar && user.id === msg.author.id) return msgReaction.users.remove(user.id).catch(() => {});
 
     const starUser = await client.models['starboard']['StarUser'].findAll({
         where: {
@@ -30,21 +29,15 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
 
     if (!isReactionRemove) {
         if (starUser.length >= starConfig.starsPerHour) {
-            if (!isReactionRemove) {
-                user.send(localize('starboard', 'star-limit', {
-                    limitEmoji: '**' + starConfig.starsPerHour + '** ' + starConfig.emoji,
-                    msgUrl: msg.url,
-                    time: '<t:' + Math.floor((new Date(starUser[0].dataValues.createdAt).getTime() + 1000 * 60 * 60) / 1000) + ':R>'
-                })).catch(() => {
-                });
-                msgReaction.users.remove(user.id).catch(() => {
-                });
-            }
+            user.send(localize('starboard', 'star-limit', {
+                limitEmoji: '**' + starConfig.starsPerHour + '** ' + starConfig.emoji,
+                msgUrl: msg.url,
+                time: '<t:' + Math.floor((new Date(starUser[0].dataValues.createdAt).getTime() + 1000 * 60 * 60) / 1000) + ':R>'
+            })).catch(() => {});
+            msgReaction.users.remove(user.id).catch(() => {});
+            return;
         }
-        return;
-    }
 
-    if (!isReactionRemove) {
         await client.models['starboard']['StarUser'].create({
             userId: user.id,
             msgId: msg.id
@@ -60,8 +53,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
         }
     });
 
-    const starboardMsg = starMsg ? await channel.messages.fetch(starMsg.starMsg).catch(() => {
-    }) : null;
+    const starboardMsg = starMsg ? await channel.messages.fetch(starMsg.starMsg).catch(() => {}) : null;
     if (reactioncount < starConfig.minStars) {
         if (isReactionRemove) {
             if (starboardMsg) starboardMsg.delete();
