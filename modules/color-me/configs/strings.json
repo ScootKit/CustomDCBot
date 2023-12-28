@@ -38,7 +38,7 @@
       },
       "description": {
         "en": "This message gets send when a booster successfully created their custom role, but the guild has not enough boosts to use role icons",
-        "de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle erstellt hat, der Server aber nicht genug boosts hat um Rollenicons zu verwenden"
+        "de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle erstellt hat, der Server aber nicht ausreichend Boosts hat, um Rollenicons zu verwenden"
       },
       "type": "string",
       "allowEmbed": true
