@@ -2,9 +2,11 @@ const {localize} = require('../../../src/functions/localize');
 const {client} = require('../../../main');
 const {embedType, dateToDiscordTimestamp} = require('../../../src/functions/helpers');
 let roleColor;
+let roleIcon;
 let pos;
 let cooldownModel;
 let cancel = false;
+let iconW = true;
 
 module.exports.beforeSubcommand = async function (interaction) {
     await interaction.deferReply({ephemeral: true});
@@ -12,6 +14,14 @@ module.exports.beforeSubcommand = async function (interaction) {
 
 module.exports.subcommands = {
     'manage': async function (interaction) {
+        if (interaction.options.getAttachment('icon') !== null) {
+            if (client.guild.features.includes('ROLE_ICONS')) {
+                roleIcon = interaction.options.getAttachment('icon').url;
+            } else {
+                roleIcon = null;
+                iconW = false;
+            }
+        }
         const moduleConf = interaction.client.configurations['color-me']['config'];
         const moduleStrings = interaction.client.configurations['color-me']['strings'];
         const moduleModel = interaction.client.models['color-me']['Role'];
@@ -39,19 +49,24 @@ module.exports.subcommands = {
                         {
                             name: interaction.options.getString('name'),
                             color: roleColor,
+                            icon: roleIcon,
                             reason: localize('color-me', 'edit-log-reason', {
                                 user: interaction.user.username
                             })
                         }
                     );
-                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, {ephemeral: true}));
+                    if (iconW) {
+                        await interaction.editReply(embedType(moduleStrings['updated'], {}, {ephemeral: true}));
+                    } else {
+                        await interaction.editReply(embedType(moduleStrings['updatedNoIcon'], {}, {ephemeral: true}));
+                    }
                 } else {
                     if (interaction.guild.roles.cache.size < 250) {
-
                         role = await interaction.guild.roles.create(
                             {
                                 name: interaction.options.getString('name'),
                                 color: roleColor,
+                                icon: roleIcon,
                                 hoist: moduleConf.listRoles,
                                 permissions: '',
                                 position: pos,
@@ -62,7 +77,7 @@ module.exports.subcommands = {
                             }
                         );
                     } else {
-                        await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
                     }
                     await moduleModel.update({
                         userID: interaction.user.id,
@@ -78,7 +93,11 @@ module.exports.subcommands = {
                     if (!interaction.member.roles.cache.has(role)) {
                         await interaction.member.roles.add(role);
                     }
-                    await interaction.editReply(await embedType(moduleStrings['updated'], {}, {ephemeral: true}));
+                    if (iconW) {
+                        await interaction.editReply(embedType(moduleStrings['updated'], {}, {ephemeral: true}));
+                    } else {
+                        await interaction.editReply(embedType(moduleStrings['updatedNoIcon'], {}, {ephemeral: true}));
+                    }
                 }
             } else {
                 await color(interaction, moduleStrings);
@@ -88,6 +107,7 @@ module.exports.subcommands = {
                         {
                             name: interaction.options.getString('name'),
                             color: roleColor,
+                            icon: roleIcon,
                             hoist: moduleConf.listRoles,
                             permissions: '',
                             position: pos,
@@ -105,9 +125,13 @@ module.exports.subcommands = {
                         timestamp: new Date()
                     });
                     await interaction.member.roles.add(role);
-                    await interaction.editReply(await embedType(moduleStrings['created'], {}, {ephemeral: true}));
+                    if (iconW) {
+                        await interaction.editReply(embedType(moduleStrings['created'], {}, {ephemeral: true}));
+                    } else {
+                        await interaction.editReply(embedType(moduleStrings['createdNoIcon'], {}, {ephemeral: true}));
+                    }
                 } catch (e) {
-                    await interaction.editReply(await embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
+                    await interaction.editReply(embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
                 }
 
             }
@@ -117,7 +141,7 @@ module.exports.subcommands = {
                     userId: interaction.member.id
                 }
             });
-            await interaction.editReply((await embedType(moduleStrings['cooldown'], {
+            await interaction.editReply((embedType(moduleStrings['cooldown'], {
                 '%cooldown%': dateToDiscordTimestamp(new Date(cooldownModel.timestamp.getTime() + moduleConf['updateCooldown'] * 3600000), 'R')
             }, {ephemeral: true})));
         }
@@ -168,6 +192,12 @@ module.exports.config = {
                     required: false,
                     name: 'color',
                     description: localize('color-me', 'color-option-description')
+                },
+                {
+                    type: 'ATTACHMENT',
+                    required: false,
+                    name: 'icon',
+                    description: localize('color-me', 'icon-option-description')
                 }
             ]
         },
@@ -208,7 +238,7 @@ async function color(interaction, moduleStrings) {
 /**
  ** Function to handle the cooldown stuff
  * @private
- * @param {integer} duration The duration of the cooldown (in ms)
+ * @param {number} duration The duration of the cooldown (in ms)
  * @param {userId} userId Id of the User
  * @returns {Promise<boolean>}
  */

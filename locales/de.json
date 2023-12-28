@@ -866,6 +866,7 @@
         "manage-subcommand-description": "Erstelle oder editiere deine Custom Rolle",
         "name-option-description": "Der Name deiner Custom Rolle",
         "color-option-description": "Die Farbe deiner Custom Rolle",
+        "icon-option-description": "Dein Rollenicon",
         "remove-subcommand-description": "Entferne deine Custom Rolle",
         "confirm-option-remove-description": "Willst du deine Custom Rolle wirklich löschen? Dies wird keine laufenden Cooldowns zurücksetzen"
     },
