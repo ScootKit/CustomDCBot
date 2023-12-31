@@ -56,9 +56,9 @@ module.exports.subcommands = {
                         }
                     );
                     if (iconW) {
-                        await interaction.editReply(embedType(moduleStrings['updated'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['updated'], {}));
                     } else {
-                        await interaction.editReply(embedType(moduleStrings['updatedNoIcon'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['updatedNoIcon'], {}));
                     }
                 } else {
                     if (interaction.guild.roles.cache.size < 250) {
@@ -77,7 +77,7 @@ module.exports.subcommands = {
                             }
                         );
                     } else {
-                        await interaction.editReply(embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['roleLimit'], {}));
                     }
                     await moduleModel.update({
                         userID: interaction.user.id,
@@ -94,9 +94,9 @@ module.exports.subcommands = {
                         await interaction.member.roles.add(role);
                     }
                     if (iconW) {
-                        await interaction.editReply(embedType(moduleStrings['updated'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['updated'], {}));
                     } else {
-                        await interaction.editReply(embedType(moduleStrings['updatedNoIcon'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['updatedNoIcon'], {}));
                     }
                 }
             } else {
@@ -126,12 +126,12 @@ module.exports.subcommands = {
                     });
                     await interaction.member.roles.add(role);
                     if (iconW) {
-                        await interaction.editReply(embedType(moduleStrings['created'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['created'], {}));
                     } else {
-                        await interaction.editReply(embedType(moduleStrings['createdNoIcon'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['createdNoIcon'], {}));
                     }
                 } catch (e) {
-                    await interaction.editReply(embedType(moduleStrings['roleLimit'], {}, {ephemeral: true}));
+                    await interaction.editReply(embedType(moduleStrings['roleLimit'], {}));
                 }
 
             }
@@ -143,7 +143,7 @@ module.exports.subcommands = {
             });
             await interaction.editReply((embedType(moduleStrings['cooldown'], {
                 '%cooldown%': dateToDiscordTimestamp(new Date(cooldownModel.timestamp.getTime() + moduleConf['updateCooldown'] * 3600000), 'R')
-            }, {ephemeral: true})));
+            })));
         }
     },
 
@@ -165,7 +165,7 @@ module.exports.subcommands = {
                 role.delete(localize('color-me', 'delete-manual-log-reason', {
                     user: interaction.member.user.username
                 }));
-                await interaction.editReply(await embedType(moduleStrings['removed'], {}, {ephemeral: true}));
+                await interaction.editReply(embedType(moduleStrings['removed'], {}));
             }
         }
     }
@@ -227,7 +227,7 @@ async function color(interaction, moduleStrings) {
             roleColor = '#' + roleColor;
         }
         if (!(/^#[0-9A-F]{6}$/i).test(roleColor)) {
-            await interaction.editReply(await embedType(moduleStrings['invalidColor'], {}, {ephemeral: true}));
+            await interaction.editReply(embedType(moduleStrings['invalidColor'], {}));
             cancel = true;
         }
     } else {
