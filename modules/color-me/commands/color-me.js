@@ -56,7 +56,7 @@ module.exports.subcommands = {
                         }
                     );
                     if (iconW) {
-                        await interaction.editReply(embedType(moduleStrings['updated'], {}, {ephemeral: true}));
+                        await interaction.editReply(embedType(moduleStrings['updated']));
                     } else {
                         await interaction.editReply(embedType(moduleStrings['updatedNoIcon'], {}, {ephemeral: true}));
                     }
