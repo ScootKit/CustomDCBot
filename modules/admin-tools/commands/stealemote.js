@@ -18,8 +18,9 @@ module.exports.run = async function (interaction) {
 
 module.exports.config = {
     name: 'stealemote',
+    defaultMemberPermissions: ['MANAGE_EMOJIS_AND_STICKERS'],
     description: localize('admin-tools', 'stealemote-description'),
-    defaultPermission: false,
+
     options: [
         {
             type: 'STRING',

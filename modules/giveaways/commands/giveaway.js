@@ -98,8 +98,9 @@ async function autoCompleteMsgID(interaction) {
 
 module.exports.config = {
     name: 'gmanage',
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     description: localize('giveaways', 'gmanage-description'),
-    defaultPermission: false,
+
     options: [
         {
             type: 'SUB_COMMAND',

@@ -76,8 +76,11 @@ module.exports.run = async function (client, msg) {
      */
     async function wrongMessage(reason, skipStrike = false) {
         const answer = await msg.reply(embedType(moduleConfig['wrong-input-message'], {'%err%': reason}));
+        setTimeout(async () => {
+            await answer.delete();
+            await msg.delete();
+        }, 8000);
         if (!skipStrike || parseInt(moduleConfig.strikeAmount) === 0) return;
-        let ban;
         console.log(invalidMessages);
         if (!invalidMessages[msg.author.id]) invalidMessages[msg.author.id] = 0;
         invalidMessages[msg.author.id]++;
@@ -86,12 +89,10 @@ module.exports.run = async function (client, msg) {
             else await msg.channel.permissionOverwrites.create(msg.author, {
                 SEND_MESSAGES: false
             }, {reason: '[counter] ' + localize('counter', 'restriction-audit-log')});
-            ban = await answer.reply(embedType(moduleConfig.strikeMessage, {'%mention%': msg.author.toString()}));
+            const ban = await answer.reply(embedType(moduleConfig.strikeMessage, {'%mention%': msg.author.toString()}));
+            setTimeout(async () => {
+                await ban.delete();
+            }, 8000);
         }
-        setTimeout(async () => {
-            await answer.delete();
-            await msg.delete();
-            if (ban) await ban.delete();
-        }, 8000);
     }
 };

@@ -16,6 +16,7 @@ module.exports.run = async function (interaction) {
         ephemeral: true,
         content: '⚠️ ' + localize('moderation', 'can-not-report-mod')
     });
+    await interaction.deferReply({ephemeral: true});
     const logUrl = await messageLogToStringToPaste(interaction.channel);
     let logChannel = interaction.client.configurations['moderation']['config']['report-channel-id'] ? interaction.client.channels.cache.get(interaction.client.configurations['moderation']['config']['report-channel-id']) : null;
     if (!logChannel) logChannel = interaction.client.configurations['moderation']['config']['logchannel-id'] ? interaction.client.channels.cache.get(interaction.client.configurations['moderation']['config']['logchannel-id']) : null;
@@ -51,7 +52,10 @@ module.exports.run = async function (interaction) {
         ],
         content: pingContent
     });
-    interaction.reply(embedType(interaction.client.configurations['moderation']['strings']['submitted-report-message'], {'%mURL%': logUrl, '%user%': interaction.options.getUser('user').toString()}, {ephemeral: true}));
+    interaction.editReply(embedType(interaction.client.configurations['moderation']['strings']['submitted-report-message'], {
+        '%mURL%': logUrl,
+        '%user%': interaction.options.getUser('user').toString()
+    }));
 };
 
 module.exports.config = {

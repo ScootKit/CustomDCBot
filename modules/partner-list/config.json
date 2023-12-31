@@ -14,21 +14,22 @@
     {
       "name": "channelID",
       "humanName": {
-        "de": "Kanal-ID"
+        "de": "Kanal",
+        "en": "Channel"
       },
       "default": {
         "en": ""
       },
       "description": {
-        "en": "Channel-ID to run all operations in it",
-        "de": "Kanal-ID, in welchem alle Aktionen ausgeführt werden"
+        "en": "Channel in which the partner-list lives",
+        "de": "Kanal, in welchem die Partner-Liste sein wird"
       },
       "type": "channelID"
     },
     {
       "name": "embed",
       "humanName": {
-        "de": "Partner-Embed"
+        "en": "Partner-List-Embed"
       },
       "default": {
         "en": {
@@ -88,6 +89,7 @@
     {
       "name": "categories",
       "humanName": {
+        "en": "Categories",
         "de": "Kategorien"
       },
       "default": {
@@ -112,6 +114,7 @@
     {
       "name": "category-roles",
       "humanName": {
+        "en": "Category-Roles",
         "de": "Kategorie-Rollen"
       },
       "default": {
@@ -131,7 +134,8 @@
     {
       "name": "sendNotificationToPartner",
       "humanName": {
-        "de": "Partner-Benachrichtigung"
+        "en": "Send Partner-Notifications?",
+        "de": "Partner-Benachrichtigung senden?"
       },
       "default": {
         "en": false
@@ -144,16 +148,18 @@
     },
     {
       "name": "newPartnerDM",
+      "dependsOn": "sendNotificationToPartner",
       "humanName": {
-        "de": "Partner-Hinzufügungs-PN"
+        "de": "Partner-Willkommens-PN",
+        "en": "Partner-Welcome-DM"
       },
       "default": {
         "en": "Hello, Hello! You are now a partner - congratulations",
         "de": "Hi. Du bist jetzt Partner - Herzlichen Glückwunsch"
       },
       "description": {
-        "en": "This message gets send to the partner (if enabled)",
-        "de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)"
+        "en": "This message gets send to new partners.",
+        "de": "Diese Nachricht wird an neue Partner gesendet."
       },
       "type": "string",
       "allowEmbed": true,
@@ -176,16 +182,18 @@
     },
     {
       "name": "byePartnerDM",
+      "dependsOn": "sendNotificationToPartner",
       "humanName": {
-        "de": "Partner-Entfernungs-PN"
+        "de": "Partner-Entfernung-PN",
+        "en": "Partner-Removal-DM"
       },
       "default": {
         "en": "Sorry, but you are no longer a partner ):",
         "de": "Leider bist du nicht länger Partner ):"
       },
       "description": {
-        "en": "This message gets send to the partner (if enabled)",
-        "de": "Diese Nachricht wird an den Partner gesendet (wenn aktiviert)"
+        "en": "This message gets send to the partner when they get removed.",
+        "de": "Diese Nachricht wird an den Partner gesendet, wenn dieser entfernt wird."
       },
       "type": "string",
       "allowEmbed": true,

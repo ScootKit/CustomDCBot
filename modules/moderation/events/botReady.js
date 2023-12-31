@@ -71,6 +71,11 @@ async function updateCache(client) {
     memberCache['quarantine'] = (await (await client.guilds.fetch(client.guildID)).members.fetch()).filter(m => !!m.roles.cache.get(moduleConfig['quarantine-role-id']));
 }
 
+/**
+ * Removes expired warns
+ * @param {Client} client
+ * @return {Promise<void>}
+ */
 async function deleteExpiredWarns(client) {
     const aD = await client.models['moderation']['ModerationAction'].findAll({
         where: {

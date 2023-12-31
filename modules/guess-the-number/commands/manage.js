@@ -47,6 +47,14 @@ module.exports.subcommands = {
             content: '⚠️ ' + localize('guess-the-number', 'min-max-discrepancy')
         });
         const number = interaction.options.getInteger('number') || randomIntFromInterval(interaction.options.getInteger('min'), interaction.options.getInteger('max'));
+        if (number > interaction.options.getInteger('max')) return interaction.reply({
+            ephemeral: true,
+            content: '⚠️ ' + localize('guess-the-number', 'max-discrepancy')
+        });
+        if (number < interaction.options.getInteger('min')) return interaction.reply({
+            ephemeral: true,
+            content: '⚠️ ' + localize('guess-the-number', 'min-discrepancy')
+        });
         await interaction.client.models['guess-the-number']['Channel'].create({
             channelID: interaction.channel.id,
             number,
@@ -83,7 +91,8 @@ module.exports.subcommands = {
 module.exports.config = {
     name: 'guess-the-number',
     description: localize('guess-the-number', 'command-description'),
-    defaultPermission: false,
+
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     options: [
         {
             type: 'SUB_COMMAND',

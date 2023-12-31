@@ -132,6 +132,14 @@ db.authenticate().then(async () => {
         } else logger.fatal(localize('main', 'login-error', {e}));
         process.exit();
     });
+    if ((await client.application.fetch()).botRequireCodeGrant) {
+        if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+            type: 'CORE_ISSUE',
+            errorDescription: 'require_code_grant_active',
+            errorData: {settingsURL: `https://discord.com/developers/applications/${client.user.id}/bot`}
+        });
+        logger.error(localize('main', 'require-code-grant-active', {d: `https://discord.com/developers/applications/${client.user.id}/bot`}));
+    }
     client.guild = await client.guilds.fetch(config.guildID).catch(async () => {
         if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
             type: 'CORE_FAILURE',
@@ -264,9 +272,21 @@ async function syncCommandsIfNeeded() {
                 break;
             }
 
-            if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length || oldCommand.defaultPermission !== (typeof command.defaultPermission === 'undefined' ? true : command.defaultPermission)) {
+            if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length) {
                 needSync = true;
                 break;
+            }
+
+            if (oldCommand.defaultMemberPermissions) oldCommand.defaultMemberPermissions = oldCommand.defaultMemberPermissions.toArray();
+            if ((command.defaultMemberPermissions || []).length !== (oldCommand.defaultMemberPermissions || []).length) {
+                needSync = true;
+                break;
+            }
+            for (const permission of (command.defaultMemberPermissions || [])) {
+                if (!(oldCommand.defaultMemberPermissions || []).includes(permission)) {
+                    needSync = true;
+                    break;
+                }
             }
 
             for (const option of (command.options || [])) {
@@ -377,7 +397,7 @@ async function loadEventsInDir(dir, moduleName = null) {
                             for (const eData of events[eventName]) {
                                 try {
                                     if (!client.botReadyAt && !eData.eventFunction.ignoreBotReadyCheck) continue;
-                                    if (!eData.eventFunction.allowPartial && cArgs.filter(arg => arg.partial).length !== 0) continue;
+                                    if (!eData.eventFunction.allowPartial && cArgs.filter(z => z && z.partial).length !== 0) continue;
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {
@@ -433,16 +453,15 @@ async function loadCommandsInDir(dir, moduleName = null) {
         if (!stats) return logger.error('No stats returned');
         if (stats.isFile()) {
             const props = require(`${__dirname}/${dir}/${f}`);
-            if (props.config.restricted) props.config.defaultPermission = false;
             commands.push({
                 name: props.config.name,
                 description: props.config.description,
                 restricted: props.config.restricted,
+                defaultMemberPermissions: props.config.defaultMemberPermissions || null,
                 options: props.config.options || [],
                 subcommands: props.subcommands,
                 beforeSubcommand: props.beforeSubcommand,
                 run: props.run,
-                defaultPermission: props.config.defaultPermission,
                 autoComplete: props.autoComplete,
                 module: moduleName
             });

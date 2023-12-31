@@ -1,0 +1,46 @@
+{
+  "description": {
+    "en": "Configure messages that should get send when a user joins a Voice-Channel",
+    "de": "Stelle hier Nachrichten ein, die versendet werden, wenn ein Nutzer einem Sprachkanal beitritt"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
+  "filename": "actual-config.json",
+  "content": [
+    {
+      "name": "assignRoleToUsersInVoiceChannels",
+      "humanName": {
+        "en": "Assign roles to members connected to voice channels?",
+        "de": "Nutzer, die mit Sprachkanälen verbunden sind, Rollen zuweisen?"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, users will receive a role when they join a voice channel. This role will be removed when they leave the voice channel (switching voice channels does not trigger a role removal).",
+        "de": "Wenn aktiviert, werden Nutzer beim Beitritt eines Sprachkanals eine Rolle erhalten. Diese Rolle wird entfernt, wenn sie den Sprachkanal verlassen (Sprachkanäle wechseln zählt nicht)."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "voiceRoles",
+      "dependsOn": "assignRoleToUsersInVoiceChannels",
+      "humanName": {
+        "en": "Roles for users that are connected to voice channels",
+        "de": "Nutzer, die mit Sprachkanälen verbunden sind, Rollen zuweisen?"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Users that are currently connected to a voice channel will be assigned these roles.",
+        "de": "Nutzer, die aktuell mit einem Sprachkanal verbunden sind, erhalten diese Rolen."
+      },
+      "type": "array",
+      "content": "roleID"
+    }
+  ]
+}

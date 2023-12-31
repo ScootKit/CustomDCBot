@@ -73,8 +73,9 @@ module.exports.autoComplete = {
 
 module.exports.config = {
     name: 'poll',
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     description: localize('polls', 'command-poll-description'),
-    defaultPermission: false,
+
     options: function () {
         const options = [
             {
