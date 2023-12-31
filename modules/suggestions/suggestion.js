@@ -8,6 +8,12 @@ const {localize} = require('../../src/functions/localize');
 
 module.exports.generateSuggestionEmbed = generateSuggestionEmbed;
 
+/**
+ * Generates the suggestion embed
+ * @param {Client} client
+ * @param {SuggestionObject} suggestion
+ * @return {Promise<void>}
+ */
 async function generateSuggestionEmbed(client, suggestion) {
     const moduleConfig = client.configurations['suggestions']['config'];
     const channel = await client.channels.fetch(moduleConfig.suggestionChannel);

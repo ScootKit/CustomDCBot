@@ -63,7 +63,7 @@
         "en": "Reaction which the bot should give when someone counts successfully",
         "de": "Reaktion welche der Bot geben soll, wenn jemand erfolgreich gezählt hat"
       },
-      "type": "string"
+      "type": "emoji"
     },
     {
       "name": "restartOnWrongCount",

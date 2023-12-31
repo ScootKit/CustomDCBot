@@ -127,37 +127,20 @@ module.exports.run = async function (client, interaction) {
             let pingMsg = '';
             element.ticketRoles.forEach(rID => pingMsg = pingMsg + `<@&${rID}> `);
             if (pingMsg === '') pingMsg = localize('tickets', 'no-admin-pings');
-            const msg = await channel.send({
-                embeds: [
-                    new MessageEmbed()
-                        .setTitle(localize('tickets', 'new-ticket-embed-title', {i: ticket.id}))
-                        .setFooter({
-                            text: client.strings.footer,
-                            iconURL: client.strings.footerImgUrl
-                        })
-                        .setThumbnail(interaction.user.authorTag)
-                        .setAuthor({
-                            name: client.user.username,
-                            iconURL: client.user.avatarURL()
-                        })
-                        .addField(localize('tickets', 'new-ticket-embed-user'), interaction.user.toString(), true)
-                        .addField(localize('tickets', 'ticket-type'), element.name, true)
-                        .addField(localize('tickets', 'new-ticket-embed-info'), localize('tickets', 'close-info'))
-                        .setDescription(element['ticket-description'])
-                        .setColor('GREEN')
-                        .setTimestamp()
-                ],
-                content: pingMsg,
+            const msg = await channel.send(embedType(element['creation-message'], {
+                '%id%': ticket.id,
+                '%userMention%': interaction.user.toString(),
+                '%ticketTopic%': element.name,
+                '%userTag%': formatDiscordUserName(interaction.user)
+            }, {}, [{
+                type: 'ACTION_ROW',
                 components: [{
-                    type: 'ACTION_ROW',
-                    components: [{
-                        type: 'BUTTON',
-                        label: element['ticket-close-button'],
-                        style: 'PRIMARY',
-                        customId: `close-ticket` + moduleConfig.indexOf(element)
-                    }]
+                    type: 'BUTTON',
+                    label: element['ticket-close-button'],
+                    style: 'PRIMARY',
+                    customId: `close-ticket` + moduleConfig.indexOf(element)
                 }]
-            });
+            }]));
             await msg.pin();
             interaction.reply({
                 ephemeral: true,

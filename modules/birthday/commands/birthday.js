@@ -153,7 +153,7 @@ module.exports.run = async function (interaction) {
 module.exports.config = {
     name: 'birthday',
     description: localize('birthdays', 'command-description'),
-    defaultPermission: true,
+
     options: function (client) {
         const commands = [{
             type: 'SUB_COMMAND',

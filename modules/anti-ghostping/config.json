@@ -9,7 +9,8 @@
     {
       "name": "awaitBotMessages",
       "humanName": {
-        "de": "Botnachrichten abwarten"
+        "de": "Botnachrichten abwarten",
+        "en": "Wait for Bot-Messages"
       },
       "default": {
         "en": true,
@@ -41,6 +42,7 @@
     {
       "name": "youJustGotGhostPinged",
       "humanName": {
+        "en": "Ghostping-Message",
         "de": "Ghostping-Nachricht"
       },
       "default": {
