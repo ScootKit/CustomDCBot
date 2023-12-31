@@ -1,6 +1,6 @@
-const { embedTypeV2, disableModule, formatDiscordUserName } = require('../../src/functions/helpers');
-const { localize } = require('../../src/functions/localize');
-const { Op } = require('sequelize');
+const {embedTypeV2, disableModule, formatDiscordUserName} = require('../../src/functions/helpers');
+const {localize} = require('../../src/functions/localize');
+const {Op} = require('sequelize');
 
 module.exports = async (client, msgReaction, user, isReactionRemove = false) => {
     if (!client.botReadyAt) return;
@@ -10,7 +10,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
     if (msgReaction.partial) msgReaction = await msgReaction.fetch();
 
     const starConfig = client.configurations['starboard']['config'];
-    if (!starConfig || (starConfig.emoji !== msgReaction.emoji.name && starConfig.emoji !== msgReaction.emoji.id)) return;
+    if (!starConfig || starConfig.emoji !== msgReaction.emoji.toString()) return;
     if (isNaN(starConfig.minStars)) return disableModule('starboard', localize('starboard', 'invalid-minstars', {stars: starConfig.minStars}));
 
     const channel = client.channels.cache.get(starConfig.channelId);

@@ -20,10 +20,11 @@
 				"de": "In welchen Kanal gestarrte Nachrichten gesendet werden"
 			},
 			"type": "channelID"
-		},{
+		},
+		{
 			"name": "emoji",
 			"humanName": {
-				"de": "Emoji"
+				"en": "Emoji"
 			},
 			"default": {
 				"en": "⭐"
@@ -32,8 +33,9 @@
 				"en": "Which emoji should be used to star messages",
 				"de": "Mit welchem Emoji Nachrichten gestarrt werden sollen"
 			},
-			"type": "string"
-		},{
+			"type": "emoji"
+		},
+		{
 			"name": "message",
 			"humanName": {
 				"en": "Message",
@@ -65,77 +67,87 @@
 						"en": "Amount of reactions on the message",
 						"de": "Anzahl der Reaktionen auf die Nachricht"
 					}
-				},{
+				},
+				{
 					"name": "content",
 					"description": {
 						"en": "The content of the starred message",
 						"de": "Der Inhalt der gestarrten Nachricht"
 					}
-				},{
+				},
+				{
 					"name": "link",
 					"description": {
 						"en": "A link to the starred message",
 						"de": "Ein Link zur gestarrten Nachricht"
 					}
-				},{
+				},
+				{
 					"name": "userID",
 					"description": {
 						"en": "The user ID of the author of the starred message",
 						"de": "Die Nutzer-ID des Autors der gestarrten Nachricht"
 					}
-				},{
+				},
+				{
 					"name": "userName",
 					"description": {
 						"en": "The username of the author of the starred message",
 						"de": "Der Benutzername des Autors der gestarrten Nachricht"
 					}
-				},{
+				},
+				{
 					"name": "displayName",
 					"description": {
 						"en": "The nickname of the author",
 						"de": "Der Nickname des Autors"
 					}
-				},{
+				},
+				{
 					"name": "userTag",
 					"description": {
 						"en": "The tag of the author of the starred message",
 						"de": "Der Tag des Autors der gestarrten Nachricht"
 					}
-				},{
+				},
+				{
 					"name": "userAvatar",
-					 "isImage": true,
 					"description": {
 						"en": "The avatar URL of the message author",
 						"de": "Die Avatar-URL des Nachrichtenautors"
 					}
-				},{
+				},
+				{
 					"name": "channelName",
 					"description": {
 						"en": "The name of the channel the starred message was sent in",
 						"de": "Der Name des Kanals, in dem die gestarrte Nachricht gesendet wurde"
 					}
-				},{
+				},
+				{
 					"name": "channelMention",
 					"description": {
 						"en": "The channel mention of the channel the starred message was sent in",
 						"de": "Die Kanalerwähnung des Kanals, in dem die gestarrte Nachricht gesendet wurde"
 					}
-				},{
+				},
+				{
 					"name": "emoji",
 					"description": {
 						"en": "The set starboard emoji for lazy users",
 						"de": "Das festgelegte Starboard-Emoji für faule Nutzer"
 					}
-				},{
+				},
+				{
 					"name": "image",
-				       "isImage": true,
 					"description": {
 						"en": "The first attachment or the first image url in the message",
 						"de": "Der erste Anhang oder die erste Bild-URL in der Nachricht"
 					}
 				}
 			]
-		},{
+		},
+		{
 			"name": "excludedChannels",
 			"humanName": {
 				"en": "Excluded channels",
@@ -150,7 +162,8 @@
 			},
 			"type": "array",
 			"content": "channelID"
-		},{
+		},
+		{
 			"name": "excludedRoles",
 			"humanName": {
 				"en": "Excluded roles",
@@ -165,7 +178,8 @@
 			},
 			"type": "array",
 			"content": "roleID"
-		},{
+		},
+		{
 			"name": "minStars",
 			"humanName": {
 				"en": "Minimum stars",
@@ -179,7 +193,8 @@
 				"de": "Wie viele Star-Reaktionen benötigt werden, damit eine Nachricht auf dem Starboard landet"
 			},
 			"type": "integer"
-		},{
+		},
+		{
 			"name": "starsPerHour",
 			"humanName": {
 				"en": "Stars per user per hour",
@@ -193,7 +208,8 @@
 				"de": "Wie viele Nachrichten ein Nutzer pro Stunde starren kann"
 			},
 			"type": "integer"
-		},{
+		},
+		{
 			"name": "selfStar",
 			"humanName": {
 				"en": "Self-Star"

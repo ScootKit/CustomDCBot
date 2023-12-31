@@ -37,8 +37,8 @@
         "de": "Deine Rolle wurde erfolgreich erstellt, aber dein Rollen-Icon wurde nicht verwendet, da hierfür der Server mindestens Boostlevel 2 besitzen muss."
       },
       "description": {
-        "en": "This messages gets send when a booster sucessfully created their custom role, but the guild has not enough boosts to use role icons",
-        "de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle erstellt hat, der Server aber nicht genug boosts hat um Rollenicons zu verwenden"
+        "en": "This message gets send when a booster successfully created their custom role, but the guild has not enough boosts to use role icons",
+        "de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle erstellt hat, der Server aber nicht ausreichend Boosts hat, um Rollenicons zu verwenden"
       },
       "type": "string",
       "allowEmbed": true

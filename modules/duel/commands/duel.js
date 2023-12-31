@@ -127,7 +127,7 @@ module.exports.run = async function (interaction) {
         if (!ended && !currentAnswers[member.user.id] && currentAnswers[interaction.user.id]) mentions = [member.user.id];
         const embed = new MessageEmbed()
             .setTitle(localize('duel', ended ? 'game-ended' : 'game-running-header'))
-            .setColor(ended ? 0x2ECC71 : (!mentions ? 0xD35400 : 0xE67E22))
+            .setColor(ended ? 0x2ECC71 : (!mentions ? 0xD35400 : 0xE67E22)) // eslint-disable-line
             .setDescription(lastRoundString + (!ended ? stateString : '\n\n' + localize('duel', 'ended-state')) + '\n*' + localize('duel', 'how-does-this-game-work') + '*')
             .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl});
 
@@ -182,7 +182,7 @@ module.exports.run = async function (interaction) {
 module.exports.config = {
     name: 'duel',
     description: localize('duel', 'command-description'),
-    defaultPermission: true,
+
     options: [
         {
             type: 'USER',

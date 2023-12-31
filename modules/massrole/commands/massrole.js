@@ -3,7 +3,7 @@ const {embedType} = require('../../../src/functions/helpers');
 let target;
 let failed;
 
-module.exports.beforeSubcommand = async function(interaction) {
+module.exports.beforeSubcommand = async function (interaction) {
     if (interaction.member.roles.cache.filter(m => interaction.client.configurations['massrole']['config'].adminRoles.includes(m.id)).size === 0) {
         return interaction.reply({ephemeral: true, content: localize('massrole', 'not-admin')});
     }
@@ -15,7 +15,7 @@ module.exports.subcommands = {
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
         if (target === 'all') {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ephemeral: true});
             for (const member of interaction.guild.members.cache.values()) {
                 try {
                     await member.roles.add(interaction.options.getRole('role'), localize('massrole', 'add-reason', {u: interaction.user.tag}));
@@ -208,8 +208,9 @@ function checkTarget(interaction) {
 
 module.exports.config = {
     name: 'massrole',
+    defaultMemberPermissions: ['ADMINISTRATOR'],
     description: localize('massrole', 'command-description'),
-    defaultPermission: false,
+
     options: [
         {
             type: 'SUB_COMMAND',

@@ -47,7 +47,7 @@ module.exports.subcommands = {
 module.exports.config = {
     name: 'admin',
     description: localize('admin-tools', 'command-description'),
-    defaultPermission: false,
+    defaultMemberPermissions: ['ADMINISTRATOR'],
     options: [
         {
             type: 'SUB_COMMAND',
@@ -101,7 +101,7 @@ module.exports.config = {
                 },
                 {
                     type: 'CHANNEL',
-                    required: false,
+                    required: true,
                     name: 'category',
                     description: localize('admin-tools', 'category-description')
                 }

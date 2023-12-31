@@ -1,3 +1,4 @@
+const {formatDiscordUserName} = require('../../../src/functions/helpers');
 exports.run = async (client, member) => {
     const moduleConf = client.configurations['betterstatus']['config'];
 
@@ -8,7 +9,7 @@ exports.run = async (client, member) => {
      * @returns {String}
      */
     function replaceMemberJoinStatusString(configElement) {
-        return configElement.replaceAll('%tag%', member.user.tag)
+        return configElement.replaceAll('%tag%', formatDiscordUserName(member.user))
             .replaceAll('%username%', member.user.username)
             .replaceAll('%memberCount%', member.guild.memberCount);
     }

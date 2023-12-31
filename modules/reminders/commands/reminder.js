@@ -25,7 +25,7 @@ module.exports.run = async function (interaction) {
 module.exports.config = {
     name: 'remind-me',
     description: localize('reminders', 'command-description'),
-    defaultPermission: true,
+
     options: [
         {
             type: 'STRING',

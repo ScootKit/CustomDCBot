@@ -157,6 +157,8 @@ Every module should
 * Process and Store only needed user information and data
 * Support localization (you don't need to translate everything, you only need to support translations, read
   more [here](#Localization)
+* protect sensitive slash-commands with the proper [`defaultMemberPermissions`](#interaction-command) settings
+* must comply with our [end-user documentation requirements](https://docs.scnx.xyz/oss/create-module-docs)
 * follow our [terms of service](https://sc-net.work/tos), [Discord's Terms of Service](https://discord.com/tos) and
   the [Discord Developer Terms of Service](https://discord.com/developers/docs/legal). A module should not allow users
   to bypass or break the mentioned documents. This includes but is not limited to Nitro-Only-Features.
@@ -224,8 +226,7 @@ An interaction-command ("slash command") file has to export the following things
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
-    * `defaultPermission`: Boolean (default: `true`): If enabled everyone on the guild can use this command and your
-      command's permissions can not be synced
+    * `defaultMemberPermissions`: This will determine which users can use your commands by default - leave `null` (or `undefined`) to allow usage by @everyone, otherwise, use [PermissionsResolvable](https://old.discordjs.dev/#/docs/discord.js/main/typedef/PermissionResolvable).
     * `options`:
         * [ApplicationCommandOptionData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ApplicationCommandData)
           OR
@@ -295,7 +296,7 @@ An example config file should include the following things:
     * `default`: [Localized](#localization) default value of this field
     * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity
       before using), `roleID`
-      , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
+      , `boolean`, `integer`, `array`, `emoji`, `keyed` (codename for an JS-Object)
       or `string`
     * `description`: [Localized](#localization) description of this field
     * `humanname`: [Localized](#localization) name of this field show to users
@@ -310,7 +311,7 @@ An example config file should include the following things:
     * `content` (if type === `select`): Array of the possible options
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value
-        * `value`: Type (see `type` above) of the value of every value
+        * `value`: Type as string (see `type` above) of the value of every value
     * `params`: (if type === `string`, array, optional) Possible parameters
         * `name`: Name of the parameter (e.g. `%mention%`)
         * `description`: [Localized](#localization) Description of the parameter (e.g. `Mention of the user`)

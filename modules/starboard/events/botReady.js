@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const {Op} = require('sequelize');
 const schedule = require('node-schedule');
 
 module.exports.run = async function (client) {

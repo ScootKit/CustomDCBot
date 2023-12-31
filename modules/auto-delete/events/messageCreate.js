@@ -11,12 +11,13 @@ module.exports.run = async function (client, msg) {
         if (parseInt(channel.keepMessageCount) === 0) {
             if (msg.deletable && !msg.pinned) msg.delete().catch(() => {
             });
+            return;
         }
-        const oldMessages = await msg.channel.messages.fetch({
+        const oldMessages = (await msg.channel.messages.fetch({
             before: msg.id,
             limit: parseInt(channel.keepMessageCount)
-        });
+        })).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
         if (oldMessages.length < parseInt(channel.keepMessageCount)) return;
-        if (oldMessages.last().deltable && !oldMessages.last().pinned) await oldMessages.last().delete();
+        if (oldMessages.last().deletable && !oldMessages.last().pinned) await oldMessages.last().delete();
     }, parseInt(channel.timeout) * 60000);
 };
