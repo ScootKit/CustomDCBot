@@ -896,6 +896,7 @@
         "manage-subcommand-description": "Create or edit your custom role",
         "name-option-description": "The name of your custom role",
         "color-option-description": "The color of your custom role",
+        "icon-option-description": "Your role-icon",
         "remove-subcommand-description": "Remove your custom role",
         "confirm-option-remove-description": "Do you really want to delete your custom role? This will not reset any running cooldowns"
     },
