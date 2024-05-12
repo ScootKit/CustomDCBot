@@ -85,7 +85,6 @@ module.exports.logger = logger;
 const configChecker = require('./src/functions/configuration');
 const {compareArrays, checkForUpdates, formatDiscordUserName} = require('./src/functions/helpers');
 const {localize} = require('./src/functions/localize');
-const {reportIssue} = require('./src/functions/scnx-integration');
 logger.info(localize('main', 'startup-info', {l: logger.level}));
 
 let moduleConf = {};
