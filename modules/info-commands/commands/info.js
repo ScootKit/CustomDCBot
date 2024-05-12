@@ -5,7 +5,6 @@ const {
     dateToDiscordTimestamp,
     formatDiscordUserName, formatNumber
 } = require('../../../src/functions/helpers');
-const {getUser} = require('@scnetwork/api');
 const {MessageEmbed} = require('discord.js');
 const {AgeFromDate} = require('age-calculator');
 const {stringNames} = require('../../invite-tracking/events/guildMemberJoin');
@@ -146,12 +145,6 @@ module.exports.subcommands = {
             });
         }
 
-        const scNetworkUser = await getUser(member.user.id).catch(() => {
-        }) || {};
-        if ((scNetworkUser || {}).birthday && ((scNetworkUser || {}).birthday || {}).day) birthday = (scNetworkUser || {}).birthday;
-        const showVerifiedItem = interaction.client.scnxSetup ? interaction.client.toogles.getToggleValue('birthdayVerificationSymbol') : true;
-        const birthdaySyncSymbol = interaction.client.scnxSetup ? interaction.client.toogles.getToggleValue('birthdaySyncSymbol') : true;
-
         const embed = new MessageEmbed()
             .setTitle(localize('info-commands', 'information-about-user', {u: formatDiscordUserName(member.user)}))
             .setColor(member.displayColor || 'GREEN')
@@ -175,7 +168,7 @@ module.exports.subcommands = {
                 const age = new AgeFromDate(new Date(birthday.year, birthday.month - 1, birthday.day)).age;
                 dateString = `[${dateString}](https://sc-network.net/age?age=${age} "${localize('birthdays', 'age-hover', {a: age})}")`;
             }
-            embed.addField(moduleStrings.userinfo.birthday, `${dateString} ${((scNetworkUser || {}).birthday || {}).day && birthdaySyncSymbol ? `[🗘](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "${localize('birthdays', 'sync-enabled-hover')}")` : ''}${((scNetworkUser || {}).birthday || {}).day && ((scNetworkUser || {}).birthday || {}).verfied && showVerifiedItem ? `[✓](https://docs.sc-network.net/de/dashboard/birthday-sync-faq "${localize('birthdays', 'verified-hover')}")` : ''}`, true);
+            embed.addField(moduleStrings.userinfo.birthday, dateString, true);
         }
         if (levelUserData) {
             embed.addField(moduleStrings.userinfo.xp, `${formatNumber(levelUserData.xp)}/${formatNumber(levelUserData.level * 750 + ((levelUserData.level - 1) * 500))}`, true);

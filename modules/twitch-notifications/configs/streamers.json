@@ -7,6 +7,11 @@
     "en": "Streamers",
     "de": "Streamers"
   },
+  "elementLimits": {
+    "STARTER": 2,
+    "ACTIVE_GUILD": 5,
+    "PRO": 15
+  },
   "filename": "streamers.json",
   "configElements": true,
   "content": [

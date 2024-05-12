@@ -26,7 +26,7 @@ module.exports.createGiveaway = async function (organiser, channel, prize, endAt
         type: 'ACTION_ROW',
         components: [{type: 'BUTTON', label: moduleStrings.buttonContent, style: 'PRIMARY', customId: 'giveaway'}]
     }];
-    if (requirements.length === 0) m = await channel.send(await embedType(moduleStrings['giveaway_message'], {
+    if (requirements.length === 0) m = await channel.send(embedType(moduleStrings['giveaway_message'], {
         '%prize%': prize,
         '%winners%': winners,
         '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
@@ -39,14 +39,14 @@ module.exports.createGiveaway = async function (organiser, channel, prize, endAt
     else {
         let requirementString = '';
         requirements.forEach((r) => {
-            if (r.type === 'messages') requirementString = requirementString + `• ${localize('giveaways', 'required-messages', {mc: r.messageCount})}\n`;
+            if (r.type === 'messages') requirementString = requirementString + `* ${localize('giveaways', 'required-messages', {mc: r.messageCount})}\n`;
             if (r.type === 'roles') {
                 let rolesString = ''; // Surely there is a better way to to this kind of stuff, but I am to stupid to find it
                 r.roles.forEach(rID => rolesString = rolesString + `<@&${rID}> `);
-                requirementString = rolesString + `• ${localize('giveaways', 'roles-required', {r: rolesString})}\n`;
+                requirementString = requirementString + `* ${localize('giveaways', 'roles-required', {r: rolesString})}\n`;
             }
         });
-        m = await channel.send(await embedType(moduleStrings['giveaway_message_with_requirements'], {
+        m = await channel.send(embedType(moduleStrings['giveaway_message_with_requirements'], {
             '%prize%': prize,
             '%winners%': winners,
             '%requirements%': requirementString,
@@ -144,11 +144,11 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
 
 
     let winnersstring = '';
-    winners.forEach(winner => {
+    for (const winner of winners) {
         winnersstring = winnersstring + `<@${winner}> `;
-    });
+    }
 
-    await message.reply(await embedType(moduleStrings['winner_message'], {
+    await message.reply(embedType(moduleStrings['winner_message'], {
         '%prize%': giveaway.prize,
         '%winners%': winnersstring,
         '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
@@ -157,17 +157,23 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
 
     await editMessage(winnersstring);
 
-    if (moduleConfig.sendDMOnWin) {
-        for (const winnerID of winners) {
-            const member = channel.guild.members.cache.get(winnerID);
-            if (member) member.send(await embedType(moduleStrings['winner_DM_message'], {
-                '%prize%': giveaway.prize,
-                '%winners%': winnersstring,
-                '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
-                '%organiser%': `<@${giveaway.organiser}>`,
-                '%url%': message.url
-            })).catch(() => {
+    for (const winnerID of winners) {
+        const member = channel.guild.members.cache.get(winnerID);
+        if (member) {
+            if (moduleConfig.winRoles) member.roles.add(moduleConfig.winRoles).then(() => {
+            }).catch(() => {
             });
+            if (moduleConfig.sendDMOnWin) {
+                member.send(embedType(moduleStrings['winner_DM_message'], {
+                    '%prize%': giveaway.prize,
+                    '%winners%': winnersstring,
+                    '%sponsorLink%': giveaway.sponsorWebsite || localize('giveaways', 'no-link'),
+                    '%organiser%': `<@${giveaway.organiser}>`,
+                    '%url%': message.url
+                })).then(() => {
+                }).catch(() => {
+                });
+            }
         }
     }
 
@@ -191,7 +197,7 @@ async function endGiveaway(gID, job = null, checkIfGiveawayEnded = false, maxWin
                 }]
             }];
             await message.edit(
-                await embedType(moduleStrings['giveaway_message_edit_after_winning'], {
+                embedType(moduleStrings['giveaway_message_edit_after_winning'], {
                     '%prize%': giveaway.prize,
                     '%endAt%': formatDate(endAt),
                     '%endAtDiscordFormation%': `<t:${(endAt.getTime() / 1000).toFixed(0)}:R>`,
@@ -218,6 +224,7 @@ async function checkRequirements(member, giveaway) {
     let failedRequirements = false;
     let notPassedRequirementsString = '';
     const moduleConfig = member.client.configurations['giveaways']['config'];
+    if (member.roles.cache.find(r => (moduleConfig.entryDeniedRoles || []).includes(r.id))) return [true, ''];
     if (member.roles.cache.find(r => (moduleConfig.bypassRoles || []).includes(r.id))) {
         return [failedRequirements, notPassedRequirementsString];
     }
@@ -238,7 +245,10 @@ async function checkRequirements(member, giveaway) {
             case 'messages':
                 if (!giveaway.messageCount[member.user.id]) giveaway.messageCount[member.user.id] = 0;
                 if (parseInt(giveaway.messageCount[member.user.id]) < parseInt(requirement.messageCount)) {
-                    notPassedRequirementsString = notPassedRequirementsString + `\t• ${localize('giveaways', 'required-messages-user', {um: giveaway.messageCount[member.user.id], mc: requirement.messageCount})}\n`;
+                    notPassedRequirementsString = notPassedRequirementsString + `\t• ${localize('giveaways', 'required-messages-user', {
+                        um: giveaway.messageCount[member.user.id],
+                        mc: requirement.messageCount
+                    })}\n`;
                     failedRequirements = true;
                 }
                 break;

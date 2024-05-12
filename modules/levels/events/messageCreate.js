@@ -1,4 +1,5 @@
 const {
+    embedType,
     randomIntFromInterval,
     randomElementFromArray,
     embedTypeV2, formatDiscordUserName
@@ -8,7 +9,17 @@ const {localize} = require('../../../src/functions/localize');
 const cooldown = new Set();
 let currentlyLevelingUp = [];
 
-exports.run = async (client, msg) => {
+function getMemberRoleFactor(member) {
+    let roleFactor = 1;
+    for (const role of member.roles.cache.filter(f => member.client.configurations['levels']['config']['multiplication_roles'][f.id]).values()) {
+        roleFactor = roleFactor * parseFloat(member.client.configurations['levels']['config']['multiplication_roles'][role.id]);
+    }
+    return roleFactor;
+}
+
+module.exports.getMemberRoleFactor = getMemberRoleFactor;
+
+module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
     if (msg.author.bot || msg.system) return;
     if (!msg.guild) return;
@@ -21,7 +32,7 @@ exports.run = async (client, msg) => {
     if (msg.content.includes(client.config.prefix)) return;
     if (moduleConfig.blacklisted_channels.includes(msg.channel.id) || moduleConfig.blacklisted_channels.includes(msg.channel.parentId)) return;
     if (msg.member.roles.cache.filter(r => moduleConfig.blacklistedRoles.includes(r.id)).size !== 0) return;
-    const xp = randomIntFromInterval(moduleConfig['min-xp'], moduleConfig['max-xp']);
+    let xp = randomIntFromInterval(moduleConfig['min-xp'], moduleConfig['max-xp']);
     let user = await client.models['levels']['User'].findOne({
         where: {
             userID: msg.author.id
@@ -36,6 +47,8 @@ exports.run = async (client, msg) => {
     }
     user.messages = user.messages + 1;
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
+
+    xp = xp * getMemberRoleFactor(msg.member);
     user.xp = user.xp + xp;
 
     if (nextLevelXp <= user.xp && !currentlyLevelingUp.includes(msg.author.id)) {

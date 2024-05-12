@@ -86,6 +86,7 @@ module.exports.config = {
                     type: 'STRING',
                     name: 'description',
                     required: true,
+                    maxLength: 4096,
                     description: localize('polls', 'command-poll-create-description-description')
                 },
                 {
@@ -99,26 +100,28 @@ module.exports.config = {
                     type: 'STRING',
                     name: 'option1',
                     required: true,
+                    maxLength: 100,
                     description: localize('polls', 'command-poll-create-option-description', {o: 1})
                 },
                 {
                     type: 'STRING',
                     name: 'option2',
                     required: true,
+                    maxLength: 100,
                     description: localize('polls', 'command-poll-create-option-description', {o: 2})
                 },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('polls', 'command-poll-create-endAt-description')
-                },
-                {
-                    type: 'BOOLEAN',
-                    name: 'public',
-                    required: false,
-                    description: localize('polls', 'command-poll-create-public-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-endAt-description')
+                    },
+                    {
+                        type: 'BOOLEAN',
+                        name: 'public',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-public-description')
+                    }
                 ]
             },
             {
@@ -141,6 +144,7 @@ module.exports.config = {
                 type: 'STRING',
                 name: `option${2 + step}`,
                 required: false,
+                maxLength: 100,
                 description: localize('polls', 'command-poll-create-option-description', {o: 2 + step})
             });
         }

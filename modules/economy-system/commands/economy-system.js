@@ -1,5 +1,10 @@
 const {editBalance, editBank, createleaderboard} = require('../economy-system');
-const {embedType, randomIntFromInterval, randomElementFromArray} = require('../../../src/functions/helpers');
+const {
+    embedType,
+    randomIntFromInterval,
+    randomElementFromArray,
+    formatDiscordUserName
+} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.beforeSubcommand = async function (interaction) {
@@ -48,33 +53,54 @@ module.exports.subcommands = {
         await editBalance(interaction.client, interaction.user.id, 'add', moneyToAdd);
         interaction.reply(embedType(randomElementFromArray(interaction.str['workSuccess']), {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
         createleaderboard(interaction.client);
-        interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'work-earned-money', {u: interaction.user.tag, m: moneyToAdd, c: interaction.config['currencySymbol']}));
-        if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'work-earned-money', {u: interaction.user.tag, m: moneyToAdd, c: interaction.config['currencySymbol']}));
+        interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'work-earned-money', {
+            u: formatDiscordUserName(interaction.user),
+            m: moneyToAdd,
+            c: interaction.config['currencySymbol']
+        }));
+        if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'work-earned-money', {
+            u: formatDiscordUserName(interaction.user),
+            m: moneyToAdd,
+            c: interaction.config['currencySymbol']
+        }));
     },
     'crime': async function (interaction) {
         if (!await cooldown('crime', interaction.config['crimeCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, {ephemeral: !interaction.config['publicCommandReplies']}));
+        let money;
         if (Math.floor(Math.random() * 2) === 0) {
             const user = await interaction.client.models['economy-system']['Balance'].findOne({
                 where: {
                     id: interaction.user.id
                 }
             });
-            money = user.balance / 2;
+            money = (user?.balance || 0) / 2;
             await editBalance(interaction.client, interaction.user.id, 'remove', money);
             interaction.reply(embedType(randomElementFromArray(interaction.str['crimeFail']), {'%loose%': `${money} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
             interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-loose-money', {
-                u: interaction.user.tag,
+                u: formatDiscordUserName(interaction.user),
                 m: money,
                 c: interaction.config['currencySymbol']
             }));
-            if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-loose-money', {u: interaction.user.tag, m: money, c: interaction.config['currencySymbol']}));
+            if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-loose-money', {
+                u: formatDiscordUserName(interaction.user),
+                m: money,
+                c: interaction.config['currencySymbol']
+            }));
         } else {
             const money = randomIntFromInterval(parseInt(interaction.config['maxCrimeMoney']), parseInt(interaction.config['minCrimeMoney']));
             await editBalance(interaction.client, interaction.user.id, 'add', money);
             interaction.reply(embedType(randomElementFromArray(interaction.str['crimeSuccess']), {'%earned%': `${money} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
             createleaderboard(interaction.client);
-            interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {u: interaction.user.tag, m: money, c: interaction.config['currencySymbol']}));
-            if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-earned-money', {u: interaction.user.tag, m: money, c: interaction.config['currencySymbol']}));
+            interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
+                u: formatDiscordUserName(interaction.user),
+                m: money,
+                c: interaction.config['currencySymbol']
+            }));
+            if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
+                u: formatDiscordUserName(interaction.user),
+                m: money,
+                c: interaction.config['currencySymbol']
+            }));
         }
     },
     'rob': async function (interaction) {
@@ -96,14 +122,14 @@ module.exports.subcommands = {
         }, {ephemeral: !interaction.config['publicCommandReplies']}));
         createleaderboard(interaction.client);
         interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
-            u: interaction.user.tag,
-            v: user.tag,
+            u: formatDiscordUserName(interaction.user),
+            v: formatDiscordUserName(user),
             m: toRob,
             c: interaction.config['currencySymbol']
         }));
         if (interaction.client.logChannel) interaction.client.logChannel.send('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
-            v: user.tag,
-            u: interaction.user.tag,
+            v: formatDiscordUserName(user),
+            u: formatDiscordUserName(interaction.user),
             m: toRob,
             c: interaction.config['currencySymbol']
         }));
@@ -121,12 +147,26 @@ module.exports.subcommands = {
         }
         await editBalance(interaction.client, await interaction.options.getUser('user').id, 'add', parseInt(interaction.options.get('amount')['value']));
         interaction.reply({
-            content: localize('economy-system', 'added-money', {i: interaction.options.get('amount')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.options.getUser('user').tag}),
+            content: localize('economy-system', 'added-money', {
+                i: interaction.options.get('amount')['value'],
+                c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+                u: formatDiscordUserName(interaction.options.getUser('user'))
+            }),
             ephemeral: !interaction.config['publicCommandReplies']
         });
 
-        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'added-money-log', {v: interaction.options.getUser('user').tag, i: interaction.options.get('amount')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.user.tag}));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'added-money-log', {v: interaction.options.getUser('user').tag, i: interaction.options.get('amount')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.user.tag}));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'added-money-log', {
+            v: formatDiscordUserName(interaction.options.getUser('user')),
+            i: interaction.options.get('amount')['value'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+            u: formatDiscordUserName(interaction.user)
+        }));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'added-money-log', {
+            v: formatDiscordUserName(interaction.options.getUser('user')),
+            i: interaction.options.get('amount')['value'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+            u: formatDiscordUserName(interaction.user)
+        }));
     },
     'remove': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) return interaction.reply(embedType(interaction.client.strings['not_enough_permissions'], {}, {ephemeral: !interaction.config['publicCommandReplies']}));
@@ -139,11 +179,25 @@ module.exports.subcommands = {
         }
         await editBalance(interaction.client, interaction.options.getUser('user').id, 'remove', parseInt(interaction.options.get('amount')['value']));
         interaction.reply({
-            content: localize('economy-system', 'removed-money', {i: interaction.options.get('amount')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.options.getUser('user').tag}),
+            content: localize('economy-system', 'removed-money', {
+                i: interaction.options.get('amount')['value'],
+                c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+                u: formatDiscordUserName(interaction.options.getUser('user'))
+            }),
             ephemeral: !interaction.config['publicCommandReplies']
         });
-        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'removed-money-log', {v: interaction.options.getUser('user').tag, i: interaction.options.get('amount')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.user.tag}));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'removed-money-log', {v: interaction.options.getUser('user').tag, i: interaction.options.get('amount')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.user.tag}));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'removed-money-log', {
+            v: formatDiscordUserName(interaction.options.getUser('user')),
+            i: interaction.options.get('amount')['value'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+            u: formatDiscordUserName(interaction.user)
+        }));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'removed-money-log', {
+            v: formatDiscordUserName(interaction.options.getUser('user')),
+            i: interaction.options.get('amount')['value'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+            u: formatDiscordUserName(interaction.user)
+        }));
     },
     'set': async function (interaction) {
         if (!interaction.client.configurations['economy-system']['config']['admins'].includes(interaction.user.id) && !interaction.client.config['botOperators'].includes(interaction.user.id)) return interaction.reply(embedType(interaction.client.strings['not_enough_permissions'], {}, {ephemeral: !interaction.config['publicCommandReplies']}));
@@ -156,33 +210,55 @@ module.exports.subcommands = {
         }
         await editBalance(interaction.client, interaction.options.getUser('user').id, 'set', parseInt(interaction.options.get('balance')['value']));
         interaction.reply({
-            content: localize('economy-system', 'set-money', {i: interaction.options.get('balance')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.options.getUser('user').tag}),
+            content: localize('economy-system', 'set-money', {
+                i: interaction.options.get('balance')['value'],
+                c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+                u: formatDiscordUserName(interaction.options.getUser('user'))
+            }),
             ephemeral: !interaction.config['publicCommandReplies']
         });
-        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'set-money-log', {v: interaction.options.getUser('user').tag, i: interaction.options.get('balance')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.user.tag}));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'set-money-log', {v: interaction.options.getUser('user').tag, i: interaction.options.get('balance')['value'], c: interaction.client.configurations['economy-system']['config']['currencySymbol'], u: interaction.user.tag}));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'set-money-log', {
+            v: formatDiscordUserName(interaction.options.getUser('user')),
+            i: interaction.options.get('balance')['value'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+            u: formatDiscordUserName(interaction.user)
+        }));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'set-money-log', {
+            v: formatDiscordUserName(interaction.options.getUser('user')),
+            i: interaction.options.get('balance')['value'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol'],
+            u: formatDiscordUserName(interaction.user)
+        }));
     },
     'daily': async function (interaction) {
         if (!await cooldown('daily', 86400000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, {ephemeral: !interaction.config['publicCommandReplies']}));
         await editBalance(interaction.client, interaction.user.id, 'add', parseInt(interaction.client.configurations['economy-system']['config']['dailyReward']));
         interaction.reply(embedType(interaction.str['dailyReward'], {'%earned%': `${interaction.client.configurations['economy-system']['config']['dailyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
         interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'daily-earned-money', {
-            u: interaction.user.tag,
+            u: formatDiscordUserName(interaction.user),
             m: interaction.client.configurations['economy-system']['config']['dailyReward'],
             c: interaction.client.configurations['economy-system']['config']['currencySymbol']
         }));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'daily-earned-money', {u: interaction.user.tag, m: interaction.client.configurations['economy-system']['config']['dailyReward'], c: interaction.client.configurations['economy-system']['config']['currencySymbol']}));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'daily-earned-money', {
+            u: formatDiscordUserName(interaction.user),
+            m: interaction.client.configurations['economy-system']['config']['dailyReward'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol']
+        }));
     },
     'weekly': async function (interaction) {
         if (!await cooldown('weekly', 604800000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, {ephemeral: !interaction.config['publicCommandReplies']}));
         await editBalance(interaction.client, interaction.user.id, 'add', parseInt(interaction.client.configurations['economy-system']['config']['weeklyReward']));
         interaction.reply(embedType(interaction.str['weeklyReward'], {'%earned%': `${interaction.client.configurations['economy-system']['config']['weeklyReward']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
         interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'weekly-earned-money', {
-            u: interaction.user.tag,
+            u: formatDiscordUserName(interaction.user),
             m: interaction.client.configurations['economy-system']['config']['dailyReward'],
             c: interaction.client.configurations['economy-system']['config']['currencySymbol']
         }));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'weekly-earned-money', {u: interaction.user.tag, m: interaction.client.configurations['economy-system']['config']['dailyReward'], c: interaction.client.configurations['economy-system']['config']['currencySymbol']}));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'weekly-earned-money', {
+            u: formatDiscordUserName(interaction.user),
+            m: interaction.client.configurations['economy-system']['config']['dailyReward'],
+            c: interaction.client.configurations['economy-system']['config']['currencySymbol']
+        }));
     },
     'balance': async function (interaction) {
         let user = interaction.options.getUser('user');
@@ -284,15 +360,15 @@ module.exports.subcommands = {
                 await element.destroy();
             });
         }
-        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'destroy', {u: interaction.user.tag}));
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'destroy', {u: interaction.user.tag}));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'destroy', {u: formatDiscordUserName(interaction.user)}));
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'destroy', {u: formatDiscordUserName(interaction.user)}));
     }
 };
 
 module.exports.config = {
     name: 'economy',
     description: localize('economy-system', 'command-description-main'),
-    defaultPermission: true,
+
     options: function (client) {
         const array = [{
             type: 'SUB_COMMAND',

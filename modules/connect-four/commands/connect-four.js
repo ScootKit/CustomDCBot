@@ -147,8 +147,14 @@ function checkWin(grid, color, position, y) {
 
 module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user');
-    if (member.id === interaction.user.id) return interaction.reply({content: localize('connect-four', 'challenge-yourself'), ephemeral: true});
-    if (member.user.bot) return interaction.reply({content: localize('connect-four', 'challenge-bot'), ephemeral: true});
+    if (member.id === interaction.user.id) return interaction.reply({
+        content: localize('connect-four', 'challenge-yourself'),
+        ephemeral: true
+    });
+    if (member.user.bot) return interaction.reply({
+        content: localize('connect-four', 'challenge-bot'),
+        ephemeral: true
+    });
 
     const msg = await interaction.reply({
         content: localize('connect-four', 'challenge-message', {t: member.toString(), u: interaction.user.toString()}),
@@ -176,9 +182,24 @@ module.exports.run = async function (interaction) {
             }
         ]
     });
-    const confirmed = await msg.awaitMessageComponent({filter: i => i.user.id === member.id, componentType: 'BUTTON', time: 120000}).catch(() => {});
-    if (!confirmed) return msg.edit({content: localize('connect-four', 'invite-expired', {u: interaction.user.toString(), i: '<@' + member.id + '>'}), components: []});
-    if (confirmed.customId === 'deny-invite') return confirmed.update({content: localize('connect-four', 'invite-denied', {u: interaction.user.toString(), i: '<@' + member.id + '>'}), components: []});
+    const confirmed = await msg.awaitMessageComponent({
+        filter: i => i.user.id === member.id,
+        componentType: 'BUTTON',
+        time: 120000
+    }).catch(() => {
+    });
+    if (!confirmed) return msg.edit({
+        content: localize('connect-four', 'invite-expired', {
+            u: interaction.user.toString(),
+            i: '<@' + member.id + '>'
+        }), components: []
+    });
+    if (confirmed.customId === 'deny-invite') return confirmed.update({
+        content: localize('connect-four', 'invite-denied', {
+            u: interaction.user.toString(),
+            i: '<@' + member.id + '>'
+        }), components: []
+    });
 
     const fieldSize = interaction.options.getInteger('field_size') || 7;
 
@@ -206,9 +227,15 @@ module.exports.run = async function (interaction) {
         components: fieldSize > 5 ? [row1, row2] : [row1]
     });
 
-    const collector = msg.createMessageComponentCollector({componentType: 'BUTTON', filter: i => i.user.id === interaction.user.id || i.user.id === member.id});
+    const collector = msg.createMessageComponentCollector({
+        componentType: 'BUTTON',
+        filter: i => i.user.id === interaction.user.id || i.user.id === member.id
+    });
     collector.on('collect', i => {
-        if ((color === 'blue' && i.user.id !== interaction.user.id) || (color === 'red' && i.user.id !== member.id)) return i.reply({content: localize('connect-four', 'not-turn'), ephemeral: true});
+        if ((color === 'blue' && i.user.id !== interaction.user.id) || (color === 'red' && i.user.id !== member.id)) return i.reply({
+            content: localize('connect-four', 'not-turn'),
+            ephemeral: true
+        });
         const position = parseInt(i.customId.replace('c4_', '')) - 1;
 
         for (let j = grid.length - 1; j >= 0; j--) {
@@ -220,7 +247,10 @@ module.exports.run = async function (interaction) {
                     if (winner === 'blue') wintext = localize('connect-four', 'win', {u: '<@' + interaction.user.id + '>'});
                     else if (winner === 'red') wintext = localize('connect-four', 'win', {u: '<@' + member.id + '>'});
 
-                    return i.update({content: wintext + '\n\n' + grid.map(k => k.join('')).join('\n') + '\n' + footer.slice(0, fieldSize).join(''), components: []});
+                    return i.update({
+                        content: wintext + '\n\n' + grid.map(k => k.join('')).join('\n') + '\n' + footer.slice(0, fieldSize).join(''),
+                        components: []
+                    });
                 }
 
                 if (color === 'blue') {
@@ -240,7 +270,7 @@ module.exports.run = async function (interaction) {
 module.exports.config = {
     name: 'connect-four',
     description: localize('connect-four', 'command-description'),
-    defaultPermission: true,
+
     options: [
         {
             type: 'USER',

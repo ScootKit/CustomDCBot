@@ -132,7 +132,7 @@
     {
       "name": "reward_roles",
       "humanName": {
-        "en": "Level-Reward-Roles",
+        "en": "Level Reward roles",
         "de": "Level-Belohnung-Rollen"
       },
       "default": {
@@ -147,6 +147,26 @@
       "content": {
         "key": "integer",
         "value": "roleID"
+      }
+    },
+    {
+      "name": "multiplication_roles",
+      "humanName": {
+        "en": "XP Multiplication Roles",
+        "de": "XP-Multiplikator Rollen"
+      },
+      "default": {
+        "en": {},
+        "de": {}
+      },
+      "description": {
+        "en": "Allows you to configure roles that have a higher multiplication factor than normal (default value is 1). If a user has more than one of the configured roles, the multiplication factors get multiplied together before multiplying the result with the amount of XP the user receives for their message.",
+        "de": "Erlaubt es dir, den Multiplikationsfaktor von bestimmten Rollen anzupassen. Standardmäßig haben Rollen einen Wert von 1. Bevor der XP Wert für eine Nachricht an den Nutzer gegeben wird, werden alle Faktoren von Rollen miteinander multipliziert und das Ergebnis dann mal den XP-Wert genommen."
+      },
+      "type": "keyed",
+      "content": {
+        "key": "roleID",
+        "value": "float"
       }
     },
     {

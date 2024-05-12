@@ -1,5 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
-const {embedType} = require('../../../src/functions/helpers');
+const {embedType, formatNumber} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, interaction) {
     if (!interaction.client.botReadyAt) return;
@@ -18,7 +18,7 @@ module.exports.run = async function (client, interaction) {
     interaction.reply(embedType(client.configurations['levels']['strings']['leaderboard-button-answer'], {
         '%name%': interaction.user.username,
         '%level%': user.level,
-        '%userXP%': user.xp,
-        '%nextLevelXP%': nextLevelXp
+        '%userXP%': formatNumber(user.xp),
+        '%nextLevelXP%': formatNumber(nextLevelXp)
     }, {ephemeral: true}));
 };

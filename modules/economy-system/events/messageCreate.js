@@ -1,5 +1,6 @@
 const {editBalance} = require('../economy-system');
 const {localize} = require('../../../src/functions/localize');
+const {formatDiscordUserName} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, message) {
     if (!client.botReadyAt) return;
@@ -27,12 +28,12 @@ module.exports.run = async function (client, message) {
     }
     client.logger.info(`[economy-system] ` + localize('economy-system', 'message-drop-earned-money', {
         m: toAdd,
-        u: message.author.tag,
+        u: formatDiscordUserName(message.author),
         c: config['currencySymbol']
     }));
     if (client.logChannel) client.logChannel.send(`[economy-system] ` + localize('economy-system', 'message-drop-earned-money', {
         m: toAdd,
-        u: message.author.tag,
+        u: formatDiscordUserName(message.author),
         c: config['currencySymbol']
     }));
 };

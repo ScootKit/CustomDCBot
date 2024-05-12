@@ -4,7 +4,6 @@ module.exports.run = async function (client, msg) {
     if (!client.botReadyAt) return;
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
-
     const {messageWithMentions} = require(`${__dirname}/messageCreate.js`);
     if (!messageWithMentions[msg.id]) return;
     const moduleStrings = client.configurations['anti-ghostping']['config'];
@@ -24,14 +23,14 @@ module.exports.run = async function (client, msg) {
      */
     async function executeGhostPingMessage() {
         let mentionString = '';
-        messageWithMentions[msg.id].mentions.members.forEach(m => {
-            mentionString = `<@${m.id}>, `;
+        messageWithMentions[msg.id].mentions.members.filter(f => f.id !== messageWithMentions[msg.id].author.id && !f.user.bot).forEach(m => {
+            mentionString = mentionString + `<@${m.id}>, `;
         });
         mentionString = mentionString.substring(0, mentionString.length - 2);
         await msg.channel.send(embedType(moduleStrings.youJustGotGhostPinged, {
             '%mentions%': mentionString,
             '%msgContent%': messageWithMentions[msg.id].content,
-            '%authorMention%': messageWithMentions[msg.id].author
+            '%authorMention%': messageWithMentions[msg.id].author.toString()
         }));
     }
 };

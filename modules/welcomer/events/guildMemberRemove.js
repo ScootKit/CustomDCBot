@@ -1,5 +1,6 @@
 const {
     randomElementFromArray,
+    embedType,
     formatDate,
     embedTypeV2,
     formatDiscordUserName
@@ -39,7 +40,7 @@ module.exports.run = async function (client, guildMember) {
                 '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
                 '%createdAt%': formatDate(guildMember.user.createdAt),
                 '%guildLevel%': client.guild.premiumTier,
-                '%boostCount%%': client.guild.premiumSubscriptionCount,
+                '%boostCount%': client.guild.premiumSubscriptionCount,
                 '%joinedAt%': formatDate(guildMember.joinedAt)
             }
         ));

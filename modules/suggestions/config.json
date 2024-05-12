@@ -60,7 +60,7 @@
         "de": "Emojis mit denen der Bot auf neue Vorschläge reagieren soll"
       },
       "type": "array",
-      "content": "string"
+      "content": "emoji"
     },
     {
       "name": "allowUserComment",

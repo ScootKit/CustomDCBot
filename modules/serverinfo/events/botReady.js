@@ -47,7 +47,6 @@ async function generateEmbed(client) {
      * @returns {String} String with the variables replaced
      */
     function replacer(content) {
-
         /**
          * Replaces the first member-with-role-count parameters of the input
          * @private
@@ -73,7 +72,7 @@ async function generateEmbed(client) {
         content = content.replaceAll('%memberCount%', guildMembers.size)
             .replaceAll('%botCount%', guildMembers.filter(m => m.user.bot).size)
             .replaceAll('%userCount%', guildMembers.filter(m => !m.user.bot).size)
-            .replaceAll('%onlineMemberCount%', guildMembers.filter(m => m.presence && (m.presence || {}).status === 'offline').size)
+            .replaceAll('%onlineMemberCount%', guildMembers.filter(m => m.presence && (m.presence || {}).status !== 'offline').size)
             .replaceAll('%daysSinceCreation%', ((new Date().getTime() - guildCreationDate.getTime()) / 86400000).toFixed(0))
             .replaceAll('%guildCreationTimestamp%', formatDate(guildCreationDate))
             .replaceAll('%guildBoosts%', channel.guild.premiumSubscriptionCount)

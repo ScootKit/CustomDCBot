@@ -41,7 +41,7 @@ module.exports.run = async function (client) {
         const random = members.filter(m => !m.user.bot).random();
         return statusString.replaceAll('%memberCount%', client.guild.memberCount)
             .replaceAll('%onlineMemberCount%', members.filter(m => m.presence && !m.user.bot).size)
-            .replaceAll('%randomOnlineMemberTag%', randomOnline ? formatDiscordUserName(randomOnline) : formatDiscordUserName(client.user))
+            .replaceAll('%randomOnlineMemberTag%', randomOnline ? formatDiscordUserName(randomOnline.user) : formatDiscordUserName(client.user))
             .replaceAll('%randomMemberTag%', `${random.user.username}#${random.user.discriminator}`)
             .replaceAll('%channelCount%', client.guild.channels.cache.size)
             .replaceAll('%roleCount%', (await client.guild.roles.fetch()).size);

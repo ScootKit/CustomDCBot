@@ -93,8 +93,8 @@ module.exports.userAdd = async function (interaction, callerInfo) {
     vc.allowedUsers = allowedUsers;
     await vc.save();
     const vchann = interaction.guild.channels.cache.get(vc.id);
-    if (!await vchann.permissionsFor(vchann.guild.roles.everyone).has('CONNECT')) {
-        await vchann.permissionOverwrites.create(addedUser, {'CONNECT': true});
+    if (!await vchann.permissionsFor(vchann.guild.roles.everyone).has('CONNECT') || !await vchann.permissionsFor(vchann.guild.roles.everyone).has('VIEW_CHANNEL')) {
+        await vchann.permissionOverwrites.create(addedUser, {'CONNECT': true, 'VIEW_CHANNEL': true});
     }
     await interaction.editReply(embedType(moduleConfig['userAdded'], {'%user%': formatDiscordUserName(addedUser)}, {ephemeral: true}));
 };
@@ -288,31 +288,31 @@ module.exports.sendMessage = async function (channel) {
                 emoji: '📃'
             }]
     },
-    {
-        type: 'ACTION_ROW',
-        components: [
-            {
-                type: 'BUTTON',
-                label: localize('temp-channels', 'private-channel'),
-                style: 'SUCCESS',
-                customId: 'tempc-private',
-                emoji: '🔒'
-            },
-            {
-                type: 'BUTTON',
-                label: localize('temp-channels', 'public-channel'),
-                style: 'DANGER',
-                customId: 'tempc-public',
-                emoji: '🔓'
-            },
-            {
-                type: 'BUTTON',
-                label: localize('temp-channels', 'edit-channel'),
-                style: 'SECONDARY',
-                customId: 'tempc-edit',
-                emoji: '📝'
-            }]
-    }];
+        {
+            type: 'ACTION_ROW',
+            components: [
+                {
+                    type: 'BUTTON',
+                    label: localize('temp-channels', 'private-channel'),
+                    style: 'SUCCESS',
+                    customId: 'tempc-private',
+                    emoji: '🔒'
+                },
+                {
+                    type: 'BUTTON',
+                    label: localize('temp-channels', 'public-channel'),
+                    style: 'DANGER',
+                    customId: 'tempc-public',
+                    emoji: '🔓'
+                },
+                {
+                    type: 'BUTTON',
+                    label: localize('temp-channels', 'edit-channel'),
+                    style: 'SECONDARY',
+                    customId: 'tempc-edit',
+                    emoji: '📝'
+                }]
+        }];
     const message = embedType(moduleConfig['settingsMessage'], {}, {components});
     channel.send(message);
 };

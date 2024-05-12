@@ -59,7 +59,10 @@ module.exports.run = async (client, interaction) => {
             let extra = localize('quiz', 'answer-wrong');
             if (quiz.options[interaction.isSelectMenu() ? interaction.values[0] : interaction.customId.split('-')[2]].correct) {
                 extra = localize('quiz', 'answer-correct');
-                interaction.client.models['quiz']['QuizUser'].update({dailyXp: user[0].dailyXp + 1, xp: user[0].xp + 1}, {where: {userID: interaction.user.id}});
+                interaction.client.models['quiz']['QuizUser'].update({
+                    dailyXp: user[0].dailyXp + 1,
+                    xp: user[0].xp + 1
+                }, {where: {userID: interaction.user.id}});
                 setChanged();
             }
 
