@@ -185,6 +185,7 @@
         "en": {
           "title": "\uD83D\uDCE5 New ticket #%id%",
           "color": "#2ECC71",
+          "message": "%rolePings%",
           "fields": [
             {
               "name": "\uD83D\uDC64 User",
@@ -205,6 +206,7 @@
         "de": {
           "title": "\uD83D\uDCE5 Neues Ticket #%id%",
           "color": "#2ECC71",
+          "message": "%rolePings%",
           "fields": [
             {
               "name": "\uD83D\uDC64 Nutzer",
@@ -236,6 +238,13 @@
           "description": {
             "de": "Erwähnung des Nutzers, der das Ticket erstellt hat",
             "en": "Mention of the user who created this ticket"
+          }
+        },
+        {
+          "name": "rolePings",
+          "description": {
+            "de": "Erwähnung der Rollen, die du im \"Ticket-Rollen\"-Feld eingestellt hast",
+            "en": "Mention of the roles you have selected in the \"Ticket roles\" field"
           }
         },
         {

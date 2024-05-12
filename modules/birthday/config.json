@@ -223,21 +223,6 @@
       "disableKeyEdits": true
     },
     {
-      "name": "forceSCNetworkSync",
-      "humanName": {
-        "en": "Force SC Network Account Sync",
-        "de": "SC Network Account Synchronisierung erzwingen"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, users can not set a local birthday on this server, instead they have to use the SC Network Dashboard to set their birthday",
-        "de": "Wenn aktiviert können Nutzer ihr Geburtsdatum nur über das SC Network Dashboard anpassen - dies kann eventuellen Missbrauch verhindern und als Sicherheitsmaßnahme dienen (empfohlen, wenn Preise für Geburtstags-Kinder gegeben werden)"
-      },
-      "type": "boolean"
-    },
-    {
       "name": "useTags",
       "humanName": {
         "en": "Use User's Tags instead of their Mention",
@@ -251,22 +236,6 @@
         "de": "Wenn aktiviert, wird im Geburtags-Embed der Tag des Nutzers angezeigt und nicht eine Erwähnung (bei großen Servern empfohlen)"
       },
       "type": "boolean"
-    },
-    {
-      "name": "disableSync",
-      "humanName": {
-        "en": "Disable SC Network Account Sync & Age calculations",
-        "de": "SC Network Account Synchronization und Altersberechnungen deaktivieren"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, users can't sync their birthdays and can't calculate their age.",
-        "de": "Wenn aktiviert, werden Nutzer nicht mehr ihre Geburtstage synchronisieren oder berechnen könne."
-      },
-      "type": "boolean",
-      "pro": true
     }
   ]
 }

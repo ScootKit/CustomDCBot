@@ -319,7 +319,7 @@
       "name": "action_on_posting_blacklisted_word",
       "humanName": {
         "de": "Aktion bei gesperrtem Wort",
-        "en": "Action on blacklisted Wort"
+        "en": "Action on blacklisted Word"
       },
       "default": {
         "en": "mute",

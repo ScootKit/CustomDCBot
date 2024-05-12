@@ -1,5 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
+const {formatDiscordUserName} = require('../../../src/functions/helpers');
 
 const rpsgames = [];
 const moves = ['🪨 ' + localize('rock-paper-scissors', 'stone'), '📄 ' + localize('rock-paper-scissors', 'paper'), '✂️ ' + localize('rock-paper-scissors', 'scissors')];
@@ -97,7 +98,7 @@ function generatePlayer(user1, user2, state1, state2) {
         .addComponents(
             new MessageButton()
                 .setCustomId('rps_user1')
-                .setLabel(user1.tag)
+                .setLabel(formatDiscordUserName(user1))
                 .setEmoji(stateemoji[state1] || '')
                 .setStyle(statestyle[state1])
                 .setDisabled(true)
@@ -112,7 +113,7 @@ function generatePlayer(user1, user2, state1, state2) {
         .addComponents(
             new MessageButton()
                 .setCustomId('rps_user2')
-                .setLabel(user2.tag)
+                .setLabel(formatDiscordUserName(user2))
                 .setEmoji(stateemoji[state2] || '')
                 .setStyle(statestyle[state2])
                 .setDisabled(true)
@@ -155,7 +156,10 @@ module.exports.run = async function (interaction) {
     let confirmed;
     if (!user2.bot) {
         const confirmmsg = await interaction.reply({
-            content: localize('rock-paper-scissors', 'challenge-message', {t: member.toString(), u: interaction.user.toString()}),
+            content: localize('rock-paper-scissors', 'challenge-message', {
+                t: member.toString(),
+                u: interaction.user.toString()
+            }),
             allowedMentions: {
                 users: [user2.id]
             },
@@ -180,16 +184,36 @@ module.exports.run = async function (interaction) {
                 }
             ]
         });
-        confirmed = await confirmmsg.awaitMessageComponent({filter: i => i.user.id === user2.id, componentType: 'BUTTON', time: 120000}).catch(() => {});
-        if (!confirmed) return confirmmsg.edit({content: localize('rock-paper-scissors', 'invite-expired', {u: interaction.user.toString(), i: '<@' + user2.id + '>'}), components: []});
-        if (confirmed.customId === 'deny-invite') return confirmed.update({content: localize('rock-paper-scissors', 'invite-denied', {u: interaction.user.toString(), i: '<@' + user2.id + '>'}), components: []});
+        confirmed = await confirmmsg.awaitMessageComponent({
+            filter: i => i.user.id === user2.id,
+            componentType: 'BUTTON',
+            time: 120000
+        }).catch(() => {
+        });
+        if (!confirmed) return confirmmsg.update({
+            content: localize('rock-paper-scissors', 'invite-expired', {
+                u: interaction.user.toString(),
+                i: '<@' + user2.id + '>'
+            }), components: []
+        });
+        if (confirmed.customId === 'deny-invite') return confirmed.update({
+            content: localize('rock-paper-scissors', 'invite-denied', {
+                u: interaction.user.toString(),
+                i: '<@' + user2.id + '>'
+            }), components: []
+        });
     }
 
     const embed = new MessageEmbed()
         .setTitle(localize('rock-paper-scissors', 'rps-title'))
         .setDescription(localize('rock-paper-scissors', 'rps-description'));
 
-    const msg = await (confirmed || interaction)[confirmed ? 'update' : 'reply']({content: '<@' + interaction.user.id + '>' + (user2.bot ? '' : ' <@' + user2.id + '>'), embeds: [embed], components: [rpsrow(), generatePlayer(interaction.user, user2, 'none', user2.bot ? 'selected' : 'none')], fetchReply: true});
+    const msg = await (confirmed || interaction)[confirmed ? 'update' : 'reply']({
+        content: '<@' + interaction.user.id + '>' + (user2.bot ? '' : ' <@' + user2.id + '>'),
+        embeds: [embed],
+        components: [rpsrow(), generatePlayer(interaction.user, user2, 'none', user2.bot ? 'selected' : 'none')],
+        fetchReply: true
+    });
 
     rpsgames[msg.id] = {
         user1: interaction.user,
@@ -199,7 +223,10 @@ module.exports.run = async function (interaction) {
         state2: user2.bot ? 'selected' : 'none'
     };
 
-    const collector = msg.createMessageComponentCollector({componentType: 'BUTTON', filter: i => i.user.id === interaction.user.id || i.user.id === user2.id});
+    const collector = msg.createMessageComponentCollector({
+        componentType: 'BUTTON',
+        filter: i => i.user.id === interaction.user.id || i.user.id === user2.id
+    });
     collector.on('collect', i => {
         const game = rpsgames[i.message.id];
 
@@ -214,7 +241,10 @@ module.exports.run = async function (interaction) {
         }
 
         rpsgames[i.message.id] = game;
-        if (!game.selected1 || (!game.selected2 && !user2.bot)) return i.update({content: mentionUsers(game), components: [rpsrow(), generatePlayer(game.user1, game.user2, game.state1, game.state2)]});
+        if (!game.selected1 || (!game.selected2 && !user2.bot)) return i.update({
+            content: mentionUsers(game),
+            components: [rpsrow(), generatePlayer(game.user1, game.user2, game.state1, game.state2)]
+        });
 
         let resU1 = '';
         let winResult = {};
@@ -267,7 +297,7 @@ module.exports.run = async function (interaction) {
 module.exports.config = {
     name: 'rock-paper-scissors',
     description: localize('rock-paper-scissors', 'command-description'),
-    defaultPermission: true,
+
     options: [
         {
             type: 'USER',

@@ -15,7 +15,7 @@ module.exports.run = async function (interaction) {
     const embedFields = [];
     for (const module in modules) {
         let content = '';
-        if (module !== 'none') content = `*${(interaction.client.modules[module]['config']['description'][interaction.client.locale] || interaction.client.modules[module]['config']['description']['en'])}*\n`;
+        if (module !== 'none') content = `*${(interaction.client.modules[module]['config']['description'][interaction.client.locale] || interaction.client.modules[module]['config']['description']['en'])}*` + '\n';
         for (let d of modules[module]) {
             content = content + `\n* \`/${d.name}\`: ${d.description}`;
             d = {...d};
@@ -59,13 +59,6 @@ module.exports.run = async function (interaction) {
             });
             fields.push({
                 name: localize('help', 'bot-info-titel'),
-
-                /*
-                 *IMPORTANT WARNING:
-                 *Changing or removing the license notice might be a violation of the Business Source License the bot was licensed under.
-                 *Violating the license might lead to deactivation of your bot on Discord and legal action being taken against you.
-                 *Please read the license carefully: https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE
-                 */
                 value: localize('help', 'bot-info-description', {g: interaction.guild.name})
             });
         }
@@ -117,21 +110,6 @@ module.exports.run = async function (interaction) {
         if (atBeginning) sites.unshift(embed);
         else sites.push(embed);
     }
-
-    if (interaction.client.strings['putBotInfoOnLastSite']) sites[sites.length - 1].setFields(...sites[sites.length - 1].fields, {
-        name: '\u200b',
-        value: '\u200b'
-    }, {
-        name: localize('help', 'bot-info-titel'),
-
-        /*
-         *IMPORTANT WARNING:
-         *Changing or removing the license notice might be a violation of the Business Source License the bot was licensed under.
-         *Violating the license might lead to deactivation of your bot on Discord and legal action being taken against you.
-         *Please read the license carefully: https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE
-         */
-        value: localize('help', 'bot-info-description', {g: interaction.guild.name})
-    });
 
     sendMultipleSiteButtonMessage(interaction.channel, sites, [interaction.user.id], interaction);
 };

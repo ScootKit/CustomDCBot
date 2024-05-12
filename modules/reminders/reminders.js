@@ -1,13 +1,8 @@
 const {scheduleJob} = require('node-schedule');
 const {embedType, formatDiscordUserName} = require('../../src/functions/helpers');
 
-/**
- * Plans a reminder
- * @param {Client} client
- * @param {NotifcationObject} notificationObject
- */
 function planReminder(client, notificationObject) {
-    if (notificationObject.date.getTime() <= new Date().getTime()) return;
+    if (!notificationObject.date || isNaN(notificationObject.date) || notificationObject.date.getTime() <= new Date().getTime()) return;
     const bj = scheduleJob(notificationObject.date, async () => {
         const member = await client.guild.members.fetch(notificationObject.userID).catch(() => {
         });

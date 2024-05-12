@@ -65,7 +65,8 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
     if (data.type === 'bool') emojis = [null, emojis.true, emojis.false];
 
     let m;
-    if (mID && !interaction) m = await channel.messages.fetch(mID).catch(() => {});
+    if (mID && !interaction) m = await channel.messages.fetch(mID).catch(() => {
+    });
     const embed = new MessageEmbed()
         .setTitle(strings.embed.title)
         .setColor(strings.embed.color)
@@ -82,7 +83,10 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
                         userID: voter
                     }
                 });
-                if (user.length > 0) channel.client.models['quiz']['QuizUser'].update({dailyXp: user[0].dailyXp + 1, xp: user[0].xp + 1}, {where: {userID: voter}});
+                if (user.length > 0) channel.client.models['quiz']['QuizUser'].update({
+                    dailyXp: user[0].dailyXp + 1,
+                    xp: user[0].xp + 1
+                }, {where: {userID: voter}});
                 else channel.client.models['quiz']['QuizUser'].create({userID: voter, dailyXp: 1, xp: 1});
                 changed = true;
             });
@@ -127,15 +131,53 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
 
     const components = [];
     /* eslint-disable camelcase */
-    if (data.type === 'bool') components.push({type: 'ACTION_ROW', components: [
-        {type: 'BUTTON', customId: 'quiz-vote-0', label: localize('quiz', 'bool-true'), style: 'SUCCESS', disabled: expired},
-        {type: 'BUTTON', customId: 'quiz-vote-1', label: localize('quiz', 'bool-false'), style: 'DANGER', disabled: expired}
-    ]});
-    else components.push({type: 'ACTION_ROW', components: [{type: 'SELECT_MENU', disabled: expired, customId: 'quiz-vote', min_values: 1, max_values: 1, placeholder: localize('quiz', 'vote'), options}]});
-    if (!data.private) components.push({type: 'ACTION_ROW', components: [{type: 'BUTTON', customId: 'quiz-own-vote', label: localize('quiz', 'what-have-i-voted'), style: 'SECONDARY'}]});
+    if (data.type === 'bool') components.push({
+        type: 'ACTION_ROW', components: [
+            {
+                type: 'BUTTON',
+                customId: 'quiz-vote-0',
+                label: localize('quiz', 'bool-true'),
+                style: 'SUCCESS',
+                disabled: expired
+            },
+            {
+                type: 'BUTTON',
+                customId: 'quiz-vote-1',
+                label: localize('quiz', 'bool-false'),
+                style: 'DANGER',
+                disabled: expired
+            }
+        ]
+    });
+    else components.push({
+        type: 'ACTION_ROW',
+        components: [{
+            type: 'SELECT_MENU',
+            disabled: expired,
+            customId: 'quiz-vote',
+            min_values: 1,
+            max_values: 1,
+            placeholder: localize('quiz', 'vote'),
+            options
+        }]
+    });
+    if (!data.private) components.push({
+        type: 'ACTION_ROW',
+        components: [{
+            type: 'BUTTON',
+            customId: 'quiz-own-vote',
+            label: localize('quiz', 'what-have-i-voted'),
+            style: 'SECONDARY'
+        }]
+    });
 
     let r;
-    if (data.private && interaction) r = await interaction.reply({embeds: [embed], components, fetchReply: true, ephemeral: true});
+    if (data.private && interaction) r = await interaction.reply({
+        embeds: [embed],
+        components,
+        fetchReply: true,
+        ephemeral: true
+    });
     else if (m) r = await m.edit({embeds: [embed], components});
     else r = await channel.send({embeds: [embed], components});
     return r.id;

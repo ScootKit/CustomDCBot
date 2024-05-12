@@ -1,4 +1,4 @@
-const { deleteMessage, sendMessage } = require('./messageCreate.js');
+const {deleteMessage, sendMessage} = require('./messageCreate.js');
 let configCache = [];
 
 module.exports.run = async function (client) {

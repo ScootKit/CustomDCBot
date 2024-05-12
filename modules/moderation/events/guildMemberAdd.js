@@ -1,8 +1,9 @@
 const {memberCache} = require('./botReady');
 const {moderationAction} = require('../moderationActions');
 const {localize} = require('../../../src/functions/localize');
-const Captcha = require('@haileybot/captcha-generator');
 const {embedType} = require('../../../src/functions/helpers');
+const {MessageAttachment} = require('discord.js');
+const {client} = require('../../../main');
 
 let joinCache = [];
 
@@ -85,22 +86,22 @@ exports.run = async (client, guildMember) => {
             });
             if (!channel || (channel || {}).type !== 'GUILD_TEXT') return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
             const m = await channel.send({
-                content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
+                    content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
 
-                components: [
-                    {
-                        type: 'ACTION_ROW',
-                        components: [
-                            {
-                                type: 'BUTTON',
-                                label: '📨 ' + localize('moderation', 'restart-verification-button'),
-                                customId: `mod-rvp`,
-                                style: 'PRIMARY'
-                            }
-                        ]
-                    }
-                ]
-            }
+                    components: [
+                        {
+                            type: 'ACTION_ROW',
+                            components: [
+                                {
+                                    type: 'BUTTON',
+                                    label: '📨 ' + localize('moderation', 'restart-verification-button'),
+                                    customId: `mod-rvp`,
+                                    style: 'PRIMARY'
+                                }
+                            ]
+                        }
+                    ]
+                }
             );
             setTimeout(() => {
                 m.delete().then(() => {
@@ -186,14 +187,10 @@ async function sendDMPart(verificationConfig, guildMember) {
         try {
             if (verificationConfig.type === 'manual') await guildMember.user.send(embedType(verificationConfig['manual-verification-message'], {}));
             else {
-                const captcha = new Captcha();
+                if (!guildMember.client.scnxSetup) return guildMember.client.logger.error('[moderation] Captcha Generation is only available if your bot has an SCNX Integration set up.');
+                const captcha = await require('../../../src/functions/scnx-integration').generateCaptcha(verificationConfig.captchaLevel);
                 await guildMember.user.send(embedType(verificationConfig['captcha-message'], {}, {
-                    files: [
-                        {
-                            attachment: captcha.PNGStream,
-                            name: 'you-call-it-captcha-we-call-it-ai-training.png'
-                        }
-                    ]
+                    files: [new MessageAttachment(captcha.buffer, 'you-call-it-captcha-we-call-it-ai-training.png')]
                 }));
                 const c = await guildMember.user.createDM();
                 const col = c.createMessageCollector({time: 120000});
@@ -231,15 +228,20 @@ async function sendDMPart(verificationConfig, guildMember) {
                 col.on('collect', (m) => {
                     if (m.author.id === guildMember.user.id && !p) {
                         p = true;
-                        if (d) d.delete();
-                        if (m.content.toUpperCase() === captcha.value.toUpperCase()) verificationPassed(guildMember);
-                        else verificationFail(guildMember);
+                        if (m.content.toUpperCase() === captcha.solution.toUpperCase()) verificationPassed(guildMember);
+                        else {
+                            client.logger.log(`${guildMember.user.id} failed verification. Entered: "${m.content.toUpperCase()}", expected: "${captcha.solution.toUpperCase()}"`);
+                            verificationFail(guildMember);
+                        }
+                        if (d && !d.deleted) d.delete().catch(() => {
+                        });
                     }
                 });
                 col.on('end', () => {
                     if (!p) {
-                        if (d) d.delete();
                         verificationFail(guildMember);
+                        if (d && !d.deleted) d.delete().catch(() => {
+                        });
                     }
                 });
             }

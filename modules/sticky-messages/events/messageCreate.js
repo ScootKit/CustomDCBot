@@ -1,4 +1,4 @@
-const { embedTypeV2 } = require('../../../src/functions/helpers');
+const {embedTypeV2} = require('../../../src/functions/helpers');
 const channelData = {};
 const sendPending = new Set();
 
@@ -15,8 +15,10 @@ async function deleteMessage(clientId, channel) {
         const msgs = await channel.messages.fetch({limit: 20});
         message = msgs.find(m => m.author.id === clientId);
     });
-    if (message) message.delete().catch(() => {});
+    if (message) message.delete().catch(() => {
+    });
 }
+
 module.exports.deleteMessage = deleteMessage;
 
 /**
@@ -31,7 +33,6 @@ async function sendMessage(channel, configMsg) {
         timeout: null,
         time: Date.now()
     };
-
     const sentMessage = await channel.send(await embedTypeV2(configMsg));
     channelData[channel.id] = {
         msg: sentMessage.id,
@@ -40,6 +41,7 @@ async function sendMessage(channel, configMsg) {
     };
     sendPending.delete(channel.id);
 }
+
 module.exports.sendMessage = sendMessage;
 
 module.exports.run = async (client, msg) => {

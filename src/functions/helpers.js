@@ -3,12 +3,13 @@
  * @module Helpers
  */
 
-const {MessageEmbed} = require('discord.js');
+const {MessageEmbed, MessageAttachment} = require('discord.js');
 const {localize} = require('./localize');
 const {PrivatebinClient} = require('@pixelfactory/privatebin');
 const privatebin = new PrivatebinClient('https://paste.scootkit.net');
-const crypto = require('isomorphic-webcrypto');
+const isoCrypto = require('isomorphic-webcrypto');
 const {encode} = require('bs58');
+const crypto = require('crypto');
 const {client} = require('../../main');
 
 /**
@@ -40,15 +41,19 @@ module.exports.formatDiscordUserName = formatDiscordUserName;
  * Replaces every argument with a string
  * @param {Object<String>} args Arguments to replace
  * @param {String} input Input
+ * @param {Boolean} returnNull Allows returning null if input is null
  * @returns {String}
  * @private
  */
-function inputReplacer(args, input = '') {
+function inputReplacer(args, input, returnNull = false) {
+    if (returnNull && !input) return null;
+    else if (!input) input = '';
     if (typeof args !== 'object') return input;
     for (const arg in args) {
         if (typeof args[arg] !== 'string' && typeof args[arg] !== 'number') args[arg] = '';
         input = (input || '').replaceAll(arg, args[arg]);
     }
+    if (returnNull && !input) return null;
     return input;
 }
 
@@ -68,13 +73,65 @@ function embedType(input, args = {}, optionsToKeep = {}, mergeComponentsRows = [
         optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
         if (client.config.disableEveryoneProtection) optionsToKeep.allowedMentions.parse.push('everyone');
     }
-    if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
     if (typeof input === 'string') {
         optionsToKeep.content = inputReplacer(args, input);
-        optionsToKeep.embeds = [];
         return optionsToKeep;
     }
-    if (input.title || input.description || (input.author || {}).name) {
+    const schemaVersion = input['_schema'] || 'v2';
+    if (schemaVersion === 'v2') return embedTypeSchemaV2(input, args, optionsToKeep, mergeComponentsRows);
+
+    optionsToKeep.embeds = [];
+    for (const embedData of input.embeds || []) {
+        if (client.scnxSetup) embedData.footer = require('./scnx-integration').verifySchemaV3Embed(client, embedData.footer);
+        let footer = null;
+        if (!embedData.footer?.disabled) footer = {
+            text: inputReplacer(args, embedData.footer?.text, true) || client.strings.footer,
+            iconURL: embedData.footer?.iconURL || client.strings.footerImgUrl
+        };
+        const fields = [];
+
+        for (const fieldData of embedData.fields || []) fields.push({
+            name: inputReplacer(args, fieldData.name, true) || '\u200B',
+            value: inputReplacer(args, fieldData.value, true) || '\u200B',
+            inline: fieldData.inline
+        });
+
+        const embed = new MessageEmbed({
+            title: inputReplacer(args, embedData.title, true),
+            description: inputReplacer(args, embedData.description, true),
+            color: embedData.color,
+            thumbnail: embedData.thumbnailURL ? {url: inputReplacer(args, embedData.thumbnailURL)} : null,
+            image: embedData.imageURL ? {url: inputReplacer(args, embedData.imageURL)} : null,
+            timestamp: (embedData.footer?.hideTime || embedData.footer?.disabled) ? null : new Date(),
+            author: embedData.author?.name ? {
+                name: inputReplacer(args, embedData.author.name),
+                iconURL: inputReplacer(args, embedData.author.imageURL, null),
+                url: inputReplacer(args, embedData.author.url, null)
+            } : null,
+            footer,
+            fields
+        });
+        optionsToKeep.embeds.push(embed);
+    }
+
+    optionsToKeep.files = [...(optionsToKeep.files || [])];
+    for (const url of input.attachmentURLs || []) {
+        optionsToKeep.files.push({attachment: url});
+    }
+
+    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input, mergeComponentsRows, args);
+    if (!optionsToKeep.content) optionsToKeep.content = inputReplacer(args, input['content'], true);
+
+    return optionsToKeep;
+}
+
+function embedTypeSchemaV2(input, args = {}, optionsToKeep = {}, mergeComponentsRows = []) {
+    if (!optionsToKeep.allowedMentions) {
+        optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
+        if (client.config.disableEveryoneProtection) optionsToKeep.allowedMentions.parse.push('everyone');
+    }
+    if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
+    if (input.title || input.description || (input.author || {}).name || input.image) {
         const emb = new MessageEmbed();
         if (input['title']) emb.setTitle(inputReplacer(args, input['title']));
         if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
@@ -148,7 +205,7 @@ async function postToSCNetworkPaste(content, opts = {
     output: 'text',
     compression: 'zlib'
 }) {
-    const key = crypto.getRandomValues(new Uint8Array(32));
+    const key = isoCrypto.getRandomValues(new Uint8Array(32));
     const res = await privatebin.sendText(content, key, opts);
     return `https://paste.scootkit.net${res.url}#${encode(key)}`;
 }
@@ -180,7 +237,7 @@ module.exports.randomString = function (length, characters = 'ABCDEFGHIJKLMNOPQR
  */
 async function messageLogToStringToPaste(channel, limit = 100, expire = '1month') {
     let messages = '';
-    (await channel.messages.fetch({limit})).forEach(m => {
+    (await channel.messages.fetch({limit: limit > 100 ? 100 : limit})).forEach(m => {
         messages = `[${m.id}] ${m.author.bot ? '[BOT] ' : ''}${formatDiscordUserName(m.author)}  (${m.author.id}): ${m.content}\n` + messages;
     });
     messages = `=== CHANNEL-LOG OF ${channel.name} (${channel.id}): Last messages before report ${formatDate(new Date())} ===\n` + messages;
@@ -468,7 +525,7 @@ module.exports.migrate = migrate;
 function disableModule(module, reason = null) {
     if (!client.modules[module]) throw new Error(`${module} got never loaded`);
     client.modules[module].enabled = false;
-    client.logger.error(localize('main', 'module-disable', {r: reason}));
+    client.logger.error(localize('main', 'module-disable', {r: reason, m: module}));
     if (client.logChannel) client.logChannel.send(localize('main', 'module-disable', {
         m: module,
         r: reason
@@ -493,4 +550,13 @@ module.exports.disableModule = disableModule;
 module.exports.formatNumber = function (number) {
     if (typeof number === 'string') number = parseInt(number);
     return new Intl.NumberFormat(client.locale, {}).format(number);
+};
+
+/**
+ * Creates a MD5 Hash String from a string
+ * @param {String} string String to hash
+ * @return {string} MD5 Hash String
+ */
+module.exports.hashMD5 = function (string) {
+    return crypto.createHash('md5').update(string).digest('hex');
 };

@@ -39,12 +39,14 @@
           "xp": "XP",
           "level": "Level",
           "joinedAt": "Joined server",
+          "roleFactor": "Role Factor(s)",
           "color": "GREEN"
         },
         "de": {
           "title": "%username%'s Profil",
           "description": "Das Profil von %username% findest du hier.",
           "messages": "Nachrichten-Anzahl",
+          "roleFactor": "Rollen-Faktor(en)",
           "xp": "XP",
           "level": "Level",
           "joinedAt": "Server beigetreten",

@@ -81,8 +81,9 @@ module.exports.autoComplete = {
 
 module.exports.config = {
     name: 'manage-suggestion',
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     description: localize('suggestions', 'manage-suggestion-command-description'),
-    defaultPermission: false,
+
     options: [
         {
             type: 'SUB_COMMAND',

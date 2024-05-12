@@ -4,7 +4,7 @@
  */
 const {client} = require('../../main');
 const jsonfile = require('jsonfile');
-const fs = require('fs');
+const fs = require('fs')
 
 const locals = {};
 loadLocale('en');
@@ -17,7 +17,7 @@ loadLocale('en');
 function loadLocale(locale) {
     if (locals[locale]) return;
     if (!fs.existsSync(`${__dirname}/../../locales/${locale}.json`)) locale = 'en';
-    locals[locale] = jsonfile.readFileSync(`${__dirname}/../../locales/${locale}.json`);
+    locals[locale] = jsonfile.readFileSync(`${__dirname}/../../locales/${locale}.json`)
 }
 
 /**

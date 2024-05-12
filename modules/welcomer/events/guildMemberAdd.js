@@ -1,5 +1,6 @@
 const {
     randomElementFromArray,
+    embedType,
     formatDate,
     embedTypeV2,
     formatDiscordUserName
@@ -22,7 +23,7 @@ module.exports.run = async function (client, guildMember) {
         '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
         '%createdAt%': formatDate(guildMember.user.createdAt),
         '%guildLevel%': localize('boostTier', client.guild.premiumTier),
-        '%boostCount%%': client.guild.premiumSubscriptionCount,
+        '%boostCount%': client.guild.premiumSubscriptionCount,
         '%joinedAt%': formatDate(guildMember.joinedAt)
     };
     if (moduleConfig.sendDirectMessageOnJoin) guildMember.user.send(await embedTypeV2(moduleConfig.joinDM, args)).then(() => {

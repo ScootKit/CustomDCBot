@@ -4,8 +4,9 @@ const {planReminder} = require('../reminders');
 const {formatDate} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (interaction) {
-    const time = new Date(durationParser(interaction.options.getString('in') + new Date().getTime()));
-    if (time.getTime() < new Date().getTime() + 55000) return interaction.reply({
+    const duration = durationParser(interaction.options.getString('in'));
+    const time = new Date(duration + new Date().getTime());
+    if (!time || isNaN(time) || time.getTime() < new Date().getTime() + 55000) return interaction.reply({
         ephemeral: true,
         content: '⚠️ ' + localize('reminders', 'one-minute-in-future')
     });

@@ -21,7 +21,7 @@
       },
       "type": "keyed",
       "content": {
-        "key": "channelID",
+        "key": "userID",
         "value": "string"
       }
     },
@@ -40,7 +40,7 @@
       },
       "type": "keyed",
       "content": {
-        "key": "integer",
+        "key": "userID",
         "value": "string"
       }
     },
@@ -59,7 +59,7 @@
       },
       "type": "keyed",
       "content": {
-        "key": "integer",
+        "key": "userID",
         "value": "string"
       }
     },

@@ -92,6 +92,27 @@
       ]
     },
     {
+      "name": "captchaLevel",
+      "humanName": {
+        "en": "Difficulty of captcha",
+        "de": "Schwäre des Captcha"
+      },
+      "default": {
+        "en": "medium",
+        "de": "medium"
+      },
+      "description": {
+        "en": "How difficult should the captcha sent to users be? (only if \"Type of verification\" = \"captcha\")",
+        "de": "Wie schwer soll das Captcha sein, dass an Nutzer gesendet wird? (Nur wenn \"Art der Verifikation\" = \"captcha\")"
+      },
+      "type": "select",
+      "content": [
+        "easy",
+        "medium",
+        "hard"
+      ]
+    },
+    {
       "name": "actionOnFail",
       "humanName": {
         "de": "Aktion bei Fehlschlagen der Verifikation",

@@ -104,13 +104,6 @@
           }
         },
         {
-          "name": "guildRegion",
-          "description": {
-            "en": "Region of this guild",
-            "de": "Discord-Region deines Servers"
-          }
-        },
-        {
           "name": "channelCount",
           "description": {
             "en": "Count of channels on this guild",

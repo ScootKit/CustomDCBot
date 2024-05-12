@@ -105,6 +105,40 @@
       }
     },
     {
+      "name": "entryDeniedRoles",
+      "humanName": {
+        "en": "Entry denied roles",
+        "de": "Teilnahme verboten Rollen"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Members with these roles won't be able to join your giveaway.",
+        "de": "Mitglieder mit diesen Rollen werden nicht an Gewinnspielen teilnehmen können."
+      },
+      "type": "array",
+      "content": "roleID"
+    },
+    {
+      "name": "winRoles",
+      "humanName": {
+        "en": "Win roles",
+        "de": "Gewinner Rollen"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "These roles will be assigned to the winners of giveaways, regardless of the giveaway price. These role will not be removed when rerolling winners.",
+        "de": "Rollen, die an die Gewinner von Gewinnspielen vergeben wird, egal was der Preis des Gewinnspiels ist. Die Rolle wird beim erneuten Auslösen nicht entfernt."
+      },
+      "type": "array",
+      "content": "roleID"
+    },
+    {
       "name": "sendDMOnWin",
       "humanName": {
         "en": "Send DM-message to winner",

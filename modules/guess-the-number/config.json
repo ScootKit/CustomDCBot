@@ -132,6 +132,21 @@
           }
         }
       ]
+    },
+    {
+      "name": "higherLowerReactions",
+      "type": "boolean",
+      "humanName": {
+        "de": "Reagiere mit Höher / Geringer Emojis",
+        "en": "React with Lower / Higher reactions"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "de": "Wenn aktiviert, reagiert der Bot bei falschen Versuchen mit ⬇ (wenn die gesuchte Zahl unter der gesendeten Zahl ist) oder mit ⬆ (wenn die gesuchte Zahl größer als die gesendete Zahl ist). Falls deaktiviert, wird der Bot nur mit ❌ bei falschen Versuchen reagieren.",
+        "en": "If enabled, the bot will react with ⬇ (if the guess is higher than the correct number) or with ⬆ (if the guess is lower than the correct number) on wrong guesses. If disabled, the bot will just react with ❌ on wrong guesses."
+      }
     }
   ]
 }

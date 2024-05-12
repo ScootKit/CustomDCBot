@@ -85,6 +85,7 @@ module.exports.logger = logger;
 const configChecker = require('./src/functions/configuration');
 const {compareArrays, checkForUpdates, formatDiscordUserName} = require('./src/functions/helpers');
 const {localize} = require('./src/functions/localize');
+const {reportIssue} = require('./src/functions/scnx-integration');
 logger.info(localize('main', 'startup-info', {l: logger.level}));
 
 let moduleConf = {};
@@ -103,8 +104,7 @@ const db = new Sequelize({
 
 const commands = [];
 
-// Starting bot
-db.authenticate().then(async () => {
+async function startUp() {
     if (config.timezone !== process.env.TZ) {
         process.env.TZ = config.timezone;
         logger.info(`Successfully set timezone to ${config.timezone}. The time is ${new Date().toLocaleString(client.locale)}.`);
@@ -140,15 +140,21 @@ db.authenticate().then(async () => {
         });
         logger.error(localize('main', 'require-code-grant-active', {d: `https://discord.com/developers/applications/${client.user.id}/bot`}));
     }
-    client.guild = await client.guilds.fetch(config.guildID).catch(async () => {
+    client.guild = await client.guilds.fetch(config.guildID).catch(() => {
+    });
+    if (!client.guild) {
         if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
             type: 'CORE_FAILURE',
             errorDescription: 'bot_not_on_guild',
             errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
         });
         logger.error(localize('main', 'not-invited', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
-        process.exit(1);
-    });
+        if (scnxSetup) {
+            console.log('Waiting for being added to server…');
+            client.once('guildCreate', () => startUp());
+            return;
+        } else process.exit(1);
+    }
     logger.info(localize('main', 'logged-in', {tag: formatDiscordUserName(client.user)}));
     loadCLIFile('/src/cli.js');
     client.models = models;
@@ -160,7 +166,10 @@ db.authenticate().then(async () => {
         client.logChannel = null;
         if (scnxSetup) {
             const {reportIssue} = require('./src/functions/scnx-integration');
-            await reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'log_channel_not_set_or_wrong_type'});
+            await reportIssue(client, {
+                type: 'CORE_FAILURE',
+                errorDescription: 'log_channel_not_set_or_wrong_type'
+            });
         }
     }
     await configChecker.loadAllConfigs(client).catch(async (e) => {
@@ -187,7 +196,10 @@ db.authenticate().then(async () => {
     logger.info(localize('main', 'bot-ready'));
     if (client.logChannel) client.logChannel.send('🚀 ' + localize('main', 'bot-ready'));
     await checkForUpdates(client);
-});
+}
+
+// Starting bot
+db.authenticate().then(startUp);
 
 // CLI-COMMANDS
 const cliCommands = [];
@@ -397,7 +409,7 @@ async function loadEventsInDir(dir, moduleName = null) {
                             for (const eData of events[eventName]) {
                                 try {
                                     if (!client.botReadyAt && !eData.eventFunction.ignoreBotReadyCheck) continue;
-                                    if (!eData.eventFunction.allowPartial && cArgs.filter(z => z && z.partial).length !== 0) continue;
+                                    if (!eData.eventFunction.allowPartial && cArgs.filter(f => f && f.partial).length !== 0) continue;
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {

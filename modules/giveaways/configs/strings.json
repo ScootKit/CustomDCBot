@@ -192,7 +192,10 @@
         "en": "I am sorry but you did not pass the requirement-check for this giveaway.\nYou need to fulfill these requirements:\n%requirements%",
         "de": "Huch, scheint als würdest du die Voraussetzungen für dieses Gewinnspiel nicht erfüllen.\nDu musst folgende Voraussetzungen noch erfüllen:\n%requirements%"
       },
-      "description": {},
+      "description": {
+        "en": "Message that will be displayed to users when they try to join a giveaway even when they do not meet the requirements.",
+        "de": "Nachrichten, die angezeigt wird, wenn ein Nutzer an einem Gewinnspiel teilnehmen will, obwohl er die Bedingungen zur Teilnahme nicht erfüllt."
+      },
       "type": "string",
       "allowEmbed": "true",
       "params": [
@@ -411,7 +414,7 @@
     {
       "name": "alreadyEnteredMessage",
       "humanName": {
-        "en": "Already-Entered-Message",
+        "en": "Already Entered Message",
         "de": "Bereits teilgenommen-Nachricht"
       },
       "default": {
@@ -440,6 +443,24 @@
           }
         }
       ]
+    },
+    {
+      "name": "deniedRoleMessage",
+      "humanName": {
+        "en": "User has forbidden roles message",
+        "de": "Nutzer mit verbotenen Rollen Nachricht"
+      },
+      "default": {
+        "en": "⚠\uFE0F You can't participate in giveaways on this server because you have one or more forbidden roles.",
+        "de": "⚠\uFE0F Du kannst an keinem Gewinnspiel auf diesem Server teilnehmen, da du eine oder mehrere Rollen hast, die die Teilnahme verbieten."
+      },
+      "description": {
+        "en": "Message that users with one of the configured entry denied roles will see when they try to join a giveaway.",
+        "de": "Nachricht, die angezeigt wird, wenn ein Nutzer teilnehmen will, obwohl er eine Rolle hat, die nicht teilnehmen dürfen"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": []
     },
     {
       "name": "buttonContent",
