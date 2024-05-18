@@ -26,12 +26,10 @@
     "@twurple/auth": "5.3.4",
     "age-calculator": "1.0.0",
     "bs58": "5.0.0",
-    "bufferutil": "4.0.7",
     "centra": "2.6.0",
     "discord-logs": "2.2.1",
     "discord.js": "13.17.1",
     "dotenv": "16.3.1",
-    "erlpack": "github:discord/erlpack",
     "fs-extra": "11.1.1",
     "html-entities": "2.4.0",
     "is-equal": "1.6.4",
@@ -42,8 +40,12 @@
     "parse-duration": "1.1.0",
     "sequelize": "6.33.0",
     "sqlite3": "5.1.6",
-    "stop-discord-phishing": "0.3.3",
-    "utf-8-validate": "6.0.3",
-    "zlib-sync": "0.1.8"
+    "stop-discord-phishing": "0.3.3"
+  },
+  "optionalDependencies": {
+    "erlpack": "github:discord/erlpack",
+    "bufferutil": "4.0.7",
+    "zlib-sync": "0.1.8",
+    "utf-8-validate": "6.0.3"
   }
 }
