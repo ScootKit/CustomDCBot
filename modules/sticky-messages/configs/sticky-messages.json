@@ -1,0 +1,60 @@
+{
+	"description": {
+		"en": "Manage the sticky messages here",
+		"de": "Passe hier die Sticky-Nachrichten an"
+	},
+	"humanName": {
+		"en": "Sticky messages",
+		"de": "Sticky-Nachrichten"
+	},
+	"filename": "sticky-messages.json",
+	"configElements": true,
+	"content": [
+		{
+			"name": "channelId",
+			"humanName": {
+				"en": "Channel",
+				"de": "Kanal"
+			},
+			"default": {
+				"en": ""
+			},
+			"description": {
+				"en": "Channel-ID in which the message should get send",
+				"de": "Kanal-ID, in welchem die Nachricht gesendet werden soll"
+			},
+			"type": "channelID"
+		},
+		{
+			"name": "message",
+			"humanName": {
+				"en": "Message",
+				"de": "Nachricht"
+			},
+			"default": {
+				"en": ""
+			},
+			"description": {
+				"en": "Message that should get send",
+				"de": "Nachricht, die gesendet werden soll"
+			},
+			"type": "string",
+			"allowEmbed": true
+		},
+		{
+			"name": "respondBots",
+			"humanName": {
+				"en": "Respond to bots",
+				"de": "Antworten auf Bots"
+			},
+			"default": {
+				"en": false
+			},
+			"description": {
+				"en": "Whether your bot reacts to messages from other bots in the channel",
+				"de": "Ob dein Bot auf Nachrichten von anderen Bots in dem Kanal reagiert"
+			},
+			"type": "boolean"
+		}
+	]
+}

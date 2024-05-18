@@ -6,7 +6,7 @@ const {createPoll, updateMessage} = require('../polls');
 module.exports.subcommands = {
     'create': async function (interaction) {
         if (interaction.options.getChannel('channel', true).type !== 'GUILD_TEXT') interaction.reply({
-            content: '⚠ ' + localize('polls', 'not-text-channel'),
+            content: '⚠️ ' + localize('polls', 'not-text-channel'),
             ephemeral: true
         });
         let endAt;
@@ -16,7 +16,7 @@ module.exports.subcommands = {
             if (interaction.options.getString(`option${step}`)) options.push(interaction.options.getString(`option${step}`));
         }
         await createPoll({
-            description: interaction.options.getString('description', true),
+            description: (interaction.options.getBoolean('public') ? '[PUBLIC]' : '') + interaction.options.getString('description', true),
             channel: interaction.options.getChannel('channel', true),
             endAt: endAt,
             options
@@ -33,7 +33,7 @@ module.exports.subcommands = {
             }
         });
         if (!poll) return interaction.reply({
-            content: '⚠ ' + localize('polls', 'not-found'),
+            content: '⚠️ ' + localize('polls', 'not-found'),
             ephemeral: true
         });
         poll.expiresAt = new Date();
@@ -60,10 +60,10 @@ module.exports.autoComplete = {
             }
             interaction.value = interaction.value.toLowerCase();
             const returnValue = [];
-            for (const poll of polls.filter(p => p.description.toLowerCase().includes(interaction.value) || p.id.toString().includes(interaction.value))) {
+            for (const poll of polls.filter(p => p.description.toLowerCase().includes(interaction.value) || p.messageID.toString().includes(interaction.value))) {
                 if (returnValue.length !== 25) returnValue.push({
                     value: poll.messageID,
-                    name: truncate(`#${(interaction.client.guild.channels.cache.get(poll.channelID) || {name: poll.channelID}).name}: ${poll.description}`, 100)
+                    name: truncate(`#${(interaction.client.guild.channels.cache.get(poll.channelID) || {name: poll.channelID}).name}: ${poll.description.replaceAll('[PUBLIC]', '')}`, 100)
                 });
             }
             interaction.respond(returnValue);
@@ -73,8 +73,9 @@ module.exports.autoComplete = {
 
 module.exports.config = {
     name: 'poll',
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     description: localize('polls', 'command-poll-description'),
-    defaultPermission: false,
+
     options: function () {
         const options = [
             {
@@ -85,6 +86,7 @@ module.exports.config = {
                     type: 'STRING',
                     name: 'description',
                     required: true,
+                    maxLength: 4096,
                     description: localize('polls', 'command-poll-create-description-description')
                 },
                 {
@@ -98,20 +100,28 @@ module.exports.config = {
                     type: 'STRING',
                     name: 'option1',
                     required: true,
+                    maxLength: 100,
                     description: localize('polls', 'command-poll-create-option-description', {o: 1})
                 },
                 {
                     type: 'STRING',
                     name: 'option2',
                     required: true,
+                    maxLength: 100,
                     description: localize('polls', 'command-poll-create-option-description', {o: 2})
                 },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('polls', 'command-poll-create-endAt-description')
-                }
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-endAt-description')
+                    },
+                    {
+                        type: 'BOOLEAN',
+                        name: 'public',
+                        required: false,
+                        description: localize('polls', 'command-poll-create-public-description')
+                    }
                 ]
             },
             {
@@ -134,6 +144,7 @@ module.exports.config = {
                 type: 'STRING',
                 name: `option${2 + step}`,
                 required: false,
+                maxLength: 100,
                 description: localize('polls', 'command-poll-create-option-description', {o: 2 + step})
             });
         }

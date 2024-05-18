@@ -4,13 +4,24 @@
     "en": "Configuration",
     "de": "Konfiguration"
   },
+  "configElementName": {
+    "de": {
+      "one": "Statistik-Kanal",
+      "more": "Statistik-Kanäle"
+    },
+    "en": {
+      "one": "Statistics-Channel",
+      "more": "Statistics-Channels"
+    }
+  },
   "filename": "channels.json",
   "configElements": true,
   "content": [
     {
       "name": "channelID",
       "humanName": {
-        "de": "Kanal"
+        "de": "Kanal",
+        "en": "Channel"
       },
       "default": {
         "en": ""
@@ -24,7 +35,8 @@
     {
       "name": "channelName",
       "humanName": {
-        "de": "Kanalname"
+        "de": "Kanalname",
+        "en": "Channel-Name"
       },
       "default": {
         "en": ""
@@ -159,7 +171,8 @@
     {
       "name": "updateInterval",
       "humanName": {
-        "de": "Aktualisierungsintervall"
+        "de": "Aktualisierungsintervall",
+        "en": "Update-Interval"
       },
       "default": {
         "en": "15",

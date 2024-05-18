@@ -1,4 +1,9 @@
-const {sendMultipleSiteButtonMessage, truncate} = require('../../../src/functions/helpers');
+const {
+    sendMultipleSiteButtonMessage,
+    truncate,
+    formatNumber,
+    formatDiscordUserName
+} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
 
@@ -13,7 +18,7 @@ module.exports.run = async function (interaction) {
     });
     if (users.length === 0) return interaction.reply({
         ephemeral: true,
-        content: ':warning: ' + localize('levels', 'no-user-on-leaderboard')
+        content: '⚠️ ' + localize('levels', 'no-user-on-leaderboard')
     });
     const thisUser = users.find(u => u.userID === interaction.user.id);
 
@@ -34,7 +39,7 @@ module.exports.run = async function (interaction) {
             .addField('\u200b', '\u200b')
             .addFields(fields)
             .addField('\u200b', '\u200b')
-            .addField(moduleStrings.leaderboardEmbed.your_level, moduleStrings.leaderboardEmbed.you_are_level_x_with_x_xp.split('%level%').join(thisUser['level']).split('%xp%').join(thisUser['xp']));
+            .addField(moduleStrings.leaderboardEmbed.your_level, moduleStrings.leaderboardEmbed.you_are_level_x_with_x_xp.split('%level%').join(thisUser['level']).split('%xp%').join(formatNumber(thisUser['xp'])));
         sites.push(embed);
     }
 
@@ -61,7 +66,7 @@ module.exports.run = async function (interaction) {
                 const member = interaction.guild.members.cache.get(user.userID);
                 if (!member) continue;
                 userCount++;
-                if (userCount < 6) userString = userString + `${moduleConfig['useTags'] ? member.user.tag : member.user.toString()}: ${user.xp}\n`;
+                if (userCount < 6) userString = userString + `${userCount}. ${moduleConfig['useTags'] ? formatDiscordUserName(member.user) : member.user.toString()}: ${formatNumber(user.xp)}\n`;
             }
             if (userCount > 5) userString = userString + localize('levels', 'and-x-other-users', {uc: userCount - 5});
             if (userCount !== 0) currentSiteFields.push({name: localize('levels', 'level', {l: level}), value: userString, inline: true});
@@ -79,9 +84,9 @@ module.exports.run = async function (interaction) {
             i++;
             userString = userString + localize('levels', 'leaderboard-notation', {
                 p: i,
-                u: moduleConfig['useTags'] ? member.user.tag : member.user.toString(),
+                u: moduleConfig['useTags'] ? formatDiscordUserName(member.user) : member.user.toString(),
                 l: user.level,
-                xp: user.xp
+                xp: formatNumber(user.xp)
             }) + '\n';
             if (i === users.filter(u => interaction.guild.members.cache.get(u.userID)).length || i % 20 === 0) {
                 addSite([{

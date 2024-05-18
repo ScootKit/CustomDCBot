@@ -1,0 +1,71 @@
+{
+  "filename": "config.json",
+  "description": {
+    "en": "Configure the behavior of this module here",
+    "de": "Passe hier die Funktionen des Modules hier an"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
+  "content": [
+    {
+      "name": "notificationMessage",
+      "type": "string",
+      "allowEmbed": true,
+      "humanName": {
+        "de": "Erinnerung-Nachricht",
+        "en": "Reminder-Message"
+      },
+      "description": {
+        "de": "Diese Nachricht wird gesendet, wenn jemand erinnert wird",
+        "en": "This message gets send when someone gets remaindered"
+      },
+      "default": {
+        "en": {
+          "title": "\uD83D\uDD14 Reminder",
+          "color": "#F1C40F",
+          "description": "%message%",
+          "message": "%mention%"
+        },
+        "de": {
+          "title": "\uD83D\uDD14 Erinnerung",
+          "color": "#F1C40F",
+          "description": "%message%",
+          "message": "%mention%"
+        }
+      },
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user",
+            "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "message",
+          "description": {
+            "en": "Reminder message set by the user",
+            "de": "Vom Nutzer gesetze Erwähnungsnachricht"
+          }
+        },
+        {
+          "name": "userTag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
+        },
+        {
+          "name": "userAvatarURL",
+          "isImage": true,
+          "description": {
+            "en": "Avatar-URL of the user",
+            "de": "Profilbild-URL des Nutzers"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,10 @@
-const {randomElementFromArray, embedType, formatDate} = require('../../../src/functions/helpers');
+const {
+    randomElementFromArray,
+    embedType,
+    formatDate,
+    embedTypeV2,
+    formatDiscordUserName
+} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async function (client, guildMember) {
@@ -8,13 +14,32 @@ module.exports.run = async function (client, guildMember) {
     const moduleModel = client.models['welcomer']['User'];
     if (guildMember.user.bot && moduleConfig['not-send-messages-if-member-is-bot']) return;
 
+    const args = {
+        '%mention%': guildMember.toString(),
+        '%servername%': guildMember.guild.name,
+        '%tag%': formatDiscordUserName(guildMember.user),
+        '%guildUserCount%': (await client.guild.members.fetch()).size,
+        '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
+        '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
+        '%createdAt%': formatDate(guildMember.user.createdAt),
+        '%guildLevel%': localize('boostTier', client.guild.premiumTier),
+        '%boostCount%': client.guild.premiumSubscriptionCount,
+        '%joinedAt%': formatDate(guildMember.joinedAt)
+    };
+    if (moduleConfig.sendDirectMessageOnJoin) guildMember.user.send(await embedTypeV2(moduleConfig.joinDM, args)).then(() => {
+    }).catch(() => {
+    });
+
     const moduleChannels = client.configurations['welcomer']['channels'];
 
     if (!guildMember.pending && moduleConfig['give-roles-on-join'].length !== 0) {
-        setTimeout(() => {
-            if (!guildMember.doNotGiveWelcomeRole) guildMember.roles.add(moduleConfig['give-roles-on-join']).then(() => {
-            });
-        }, 1000);
+        setTimeout(async () => {
+            if (!guildMember.doNotGiveWelcomeRole) {
+                const m = await guildMember.fetch(true);
+                m.roles.add(moduleConfig['give-roles-on-join']).then(() => {
+                });
+            }
+        }, 300);
     }
 
     for (const channelConfig of moduleChannels.filter(c => c.type === 'join')) {
@@ -44,19 +69,8 @@ module.exports.run = async function (client, guildMember) {
                 ]
             });
         }
-        const sentMessage = await channel.send(embedType(message || 'Message not found',
-            {
-                '%mention%': guildMember.toString(),
-                '%servername%': guildMember.guild.name,
-                '%tag%': guildMember.user.tag,
-                '%guildUserCount%': (await client.guild.members.fetch()).size,
-                '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
-                '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
-                '%createdAt%': formatDate(guildMember.user.createdAt),
-                '%guildLevel%': client.guild.premiumTier,
-                '%boostCount%%': client.guild.premiumSubscriptionCount,
-                '%joinedAt%': formatDate(guildMember.joinedAt)
-            },
+        const sentMessage = await channel.send(await embedTypeV2(message || 'Message not found',
+            args,
             {},
             components
         ));

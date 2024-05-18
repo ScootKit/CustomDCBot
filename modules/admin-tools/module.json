@@ -13,12 +13,11 @@
   "tags": [
     "administration"
   ],
-  "fa-icon": "fas fa-tools",
   "humanReadableName": {
     "en": "Admin-Tools"
   },
   "description": {
-    "en": "Simple admin-tools to move channels and roles with a command and to \"borrow\" emotes.",
+    "en": "Simple tools for admins - move channels and roles via commands or copy an emoji from another server to your server.",
     "de": "Einfache Tools für Admins, um Channel und Rollen per Command zu verschieben und Emojis zu leihen."
   }
 }

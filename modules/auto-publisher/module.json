@@ -1,6 +1,5 @@
 {
   "name": "auto-publisher",
-  "fa-icon": "fas fa-bullhorn",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -12,7 +11,7 @@
     "config.json"
   ],
   "tags": [
-    "administration"
+    "tools"
   ],
   "humanReadableName": {
     "en": "Automatic Publishing",

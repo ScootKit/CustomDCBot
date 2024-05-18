@@ -101,7 +101,7 @@
     {
       "name": "moderator-roles_level2",
       "humanName": {
-        "en": "Moderator-Level 1"
+        "en": "Moderator-Level 2"
       },
       "default": {
         "en": [],
@@ -176,6 +176,23 @@
       "description": {
         "en": "Should moderators be required to set a reason?",
         "de": "Sollen Moderatoren verpflichtet werden, eine Begründung anzugeben?"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "require_proof",
+      "humanName": {
+        "de": "Beweis-Bild erzwingen",
+        "en": "Fore moderators to upload proof"
+      },
+      "dependsOn": "require_reason",
+      "default": {
+        "en": false,
+        "de": false
+      },
+      "description": {
+        "en": "Should moderators be required to upload proof for their actions?",
+        "de": "Sollen Moderatoren verpflichtet werden, einen Beweis hochzuladen?"
       },
       "type": "boolean"
     },
@@ -302,7 +319,7 @@
       "name": "action_on_posting_blacklisted_word",
       "humanName": {
         "de": "Aktion bei gesperrtem Wort",
-        "en": "Action on blacklisted Wort"
+        "en": "Action on blacklisted Word"
       },
       "default": {
         "en": "mute",
@@ -406,6 +423,37 @@
         "key": "integer",
         "value": "string"
       }
+    },
+    {
+      "name": "warnsExpire",
+      "humanName": {
+        "de": "Sollen Warns automatisch gelöscht werden?",
+        "en": "Should warns be deleted automatically?"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, warns will be deleted automatically after a certain period of time. Warns expired this way will completely disappear and can not be viewed again after they expired.",
+        "de": "Wenn aktiviert, werden Warns automatisch nach einer bestimmten Zeitspanne gelöscht. Auf diese Weiße abgelaufene Warns werden komplett verschwinden und können nie erneut gesehen werden."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "warnExpiration",
+      "humanName": {
+        "de": "Zeit, nach der Warns automatisch ablaufen",
+        "en": "Time after which warns will be automatically removed"
+      },
+      "default": {
+        "en": "3 months"
+      },
+      "dependsOn": "warnsExpire",
+      "description": {
+        "en": "Warns will be automatically deleted after this value after it's creation. Please note that this action will delete existing warns if they expired. Enter an english value, such as  \"1y\" (= 1 year), \"3 Months\" (= 3 Months) oder \"2w\" (= 2 Weeks).",
+        "de": "Warnungen werden automatisch gelöscht, wenn sie diese Zeitspanne nach Erstellung erreicht haben. Trage einen englischen Wert, wie \"1y\" (= 1 Jahr), \"3 Months\" (= 3 Monate) oder \"2w\" (= 2 Woche) ein."
+      },
+      "type": "string"
     }
   ]
 }

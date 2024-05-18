@@ -6,7 +6,6 @@
     "link": "https://github.com/SCDerox"
   },
   "commands-dir": "/commands",
-  "fa-icon": "fas fa-dice-five",
   "models-dir": "/models",
   "events-dir": "/events",
   "config-example-files": [

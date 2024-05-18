@@ -27,6 +27,23 @@
       "allowEmbed": true
     },
     {
+      "name": "createdNoIcon",
+      "humanName": {
+        "en": "Role created without icon",
+        "de": "Rolle ohne Icon erstellt"
+      },
+      "default": {
+        "en": "Your role was created successfully, but your role icon was not used, as this requires the guild to be boost level 2 or higher.",
+        "de": "Deine Rolle wurde erfolgreich erstellt, aber dein Rollen-Icon wurde nicht verwendet, da hierfür der Server mindestens Boostlevel 2 besitzen muss."
+      },
+      "description": {
+        "en": "This message gets send when a booster successfully created their custom role, but the guild has not enough boosts to use role icons",
+        "de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle erstellt hat, der Server aber nicht ausreichend Boosts hat, um Rollenicons zu verwenden"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
       "name": "updated",
       "humanName": {
         "en": "Role updated",
@@ -39,6 +56,23 @@
       "description": {
         "en": "This messages gets send when a booster sucessfully updates their custom role",
         "de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle aktualisiert hat"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "updatedNoIcon",
+      "humanName": {
+        "en": "Role updated without icon",
+        "de": "Rolle ohne Icon aktualisiert"
+      },
+      "default": {
+        "en": "Your role was updated successfully, but your role icon was not used, as this requires the guild to be boost level 2 or higher.",
+        "de": "Deine Rolle wurde erfolgreich aktualisiert aber dein Rollen-Icon wurde nicht verwendet, da hierfür der Server mindestens Boostlevel 2 besitzen muss."
+      },
+      "description": {
+        "en": "This messages gets send when a booster sucessfully updates their custom role, but the guild has not enough boosts to use role icons",
+        "de": "Diese Nachricht wird verschickt, wenn ein Booster seine/ihre Custom-Rolle aktualisiert hat, der Server aber nicht genug boosts hat um Rollenicons zu verwenden"
       },
       "type": "string",
       "allowEmbed": true

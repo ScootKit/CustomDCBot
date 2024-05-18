@@ -73,6 +73,155 @@
         "de": "Soll die Willkommensnachricht eines Nutzers, der den Server innerhalb von 7 Tagen wieder verlässt gelöscht werden"
       },
       "type": "boolean"
+    },
+    {
+      "name": "sendDirectMessageOnJoin",
+      "humanName": {
+        "en": "Send DM on join? (often experienced by users as spam)",
+        "de": "PN beim Beitreten schicken? (von Nutzern oft als Spam empfunden)"
+      },
+      "type": "boolean",
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, a DM will be sent to new users. This is often experienced by them as spam and can decrease your new user retention metrics. Please note that not all users will receive this DM, as a huge chunk has DMs disabled.",
+        "de": "Wenn aktiviert, wird eine PN an neue Nutzer gesendet. Das wird often als Spam empfunden und kann die Anzahl an Nutzern erhöhen, die direkt nach dem Beitritt deinen Server verlassen. Bitte beachte, dass nicht alle Nutzer diese PN erhalten werden, da ein großer Anzahl diese deaktiviert hat."
+      }
+    },
+    {
+      "name": "joinDM",
+      "dependsOn": "sendDirectMessageOnJoin",
+      "humanName": {
+        "en": "Join DM Message",
+        "de": "Beitritt PN Nachricht"
+      },
+      "allowGeneratedImage": true,
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Message that should get send to new users via DMs",
+        "de": "Nachricht, die an neue Nutzer per PN geschickt werden soll"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mentions the user",
+            "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "memberProfilePictureUrl",
+          "description": {
+            "en": "URL of the user's avatar",
+            "de": "URL zum Avatar des Nutzers"
+          },
+          "isImage": true
+        },
+        {
+          "name": "servername",
+          "description": {
+            "en": "Name of the guild",
+            "de": "Servername"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
+        },
+        {
+          "name": "createdAt",
+          "description": {
+            "en": "Date when account was created",
+            "de": "Datum an dem der Account erstellt wurde"
+          }
+        },
+        {
+          "name": "tag",
+          "description": {
+            "en": "Tag of the user",
+            "de": "Tag des Nutzers"
+          }
+        },
+        {
+          "name": "memberProfilePictureUrl",
+          "description": {
+            "en": "URL of the user's avatar",
+            "de": "URL zum Avatar des Nutzers"
+          },
+          "isImage": true
+        },
+        {
+          "name": "joinedAt",
+          "description": {
+            "en": "Date when user joined guild",
+            "de": "Datum, an dem der Nutzer den Server betreten hat"
+          }
+        },
+        {
+          "name": "guildUserCount",
+          "description": {
+            "en": "Count of users on the guild",
+            "de": "Anzahl von Nutzern auf dem Server"
+          }
+        },
+        {
+          "name": "guildMemberCount",
+          "description": {
+            "en": "Count of members (without bots) on the guild",
+            "de": "Anzahl von Nutzern auf dem Server"
+          }
+        },
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user who boosted",
+            "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "boostCount",
+          "description": {
+            "en": "Total count of boosts",
+            "de": "Gesamte Anzahl an Boosts"
+          }
+        },
+        {
+          "name": "guildLevel",
+          "description": {
+            "en": "Boost-Level of the guild after the boost",
+            "de": "Boost-Level nach dem Boost"
+          }
+        },
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user who unboosted",
+            "de": "Erwähnung des Nutzers"
+          }
+        },
+        {
+          "name": "boostCount",
+          "description": {
+            "en": "Total count of boosts",
+            "de": "Gesamte Anzahl an Boosts"
+          }
+        },
+        {
+          "name": "guildLevel",
+          "description": {
+            "en": "Boost-Level of the guild after the unboost",
+            "de": "Boost-Level nach dem Boost"
+          }
+        }
+      ]
     }
   ]
 }

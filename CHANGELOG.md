@@ -2,6 +2,37 @@
 
 This changelog contains mostly API-Changes and changes for developers.
 
+## v3.8.0
+⚠️ Version numbers are not in sync with SCNX versions - v3.8.0 is equivalent to SCNX v3.17.1.
+
+### New API changes:
+* Support `defaultMemberPermissions` instead of `defaultPermission` to simply setup and usage ([docs](README.md#interaction-command))
+* Support for the new `emoji` field type. Values of this field are treated like a string, but can be expected to be an emoji string (= [`Emoji.toString()`](https://old.discordjs.dev/#/docs/discord.js/main/class/Emoji?scrollTo=toString))
+
+### New policy changes for modules: 
+
+Modules must
+* protect sensitive slash-commands with the proper [`defaultMemberPermissions`](#interaction-command) settings
+* must comply with our [end-user documentation requirements](https://docs.scnx.xyz/oss/create-module-docs)
+
+View full [rules of modules](README.md#rules-for-modules)
+
+### Additional changes:
+* Bunch of Bug-Fixes & Improvements (sync with closed-sourced version)
+* Added button-based settings for temp channels in [#96](https://github.com/ScootKit/CustomDCBot/pull/96)
+* switched locales because weird stuff in [#97](https://github.com/ScootKit/CustomDCBot/pull/97)
+* Add rock paper scissors module in [#104](https://github.com/ScootKit/CustomDCBot/pull/104)
+* Add Connect Four module in [#107](https://github.com/ScootKit/CustomDCBot/pull/107)
+* Add uno module in [#110](https://github.com/ScootKit/CustomDCBot/pull/110)
+* Add quiz module in [#113](https://github.com/ScootKit/CustomDCBot/pull/113)
+* Uno fixes in [#119](https://github.com/ScootKit/CustomDCBot/pull/119)
+* Updated to close sourced version in [#122](https://github.com/ScootKit/CustomDCBot/pull/122)
+* Added security measure for the massrole command in [#121](https://github.com/ScootKit/CustomDCBot/pull/121)
+* Add sticky messages in [#125](https://github.com/ScootKit/CustomDCBot/pull/125)
+* Add starboard feature  in [#127](https://github.com/ScootKit/CustomDCBot/pull/127)
+* Fixed a 2 things in the economy-system in [#128](https://github.com/ScootKit/CustomDCBot/pull/128)
+* Sticky messages setting to allow responses to bots in [#130](https://github.com/ScootKit/CustomDCBot/pull/130)
+
 ## v3.7.0
 * Rework of configuration localization and loading. All files got migrated.
 * Synced open source-version with close-source-SCNX-version. Please read the detailed changelog on our Discord to learn about new module functionality.
@@ -123,7 +154,7 @@ Contributors: [jateute](https://github.com/jateute/), [hfgd123](https://github.c
 * `footer` can now be set for each embed individually
 * `.eslintrc.js` added - please use this configuration if you create a pullrequest
 * Added `client.logChannel` ([TextChannel](https://discord.js.org/#/docs/main/stable/class/TextChannel)) which should be
-  used as a default for log-channels and in which some relevant information gets sent. ⚠️ In some cases this value
+  used as a default for log-channels and in which some relevant information gets sent. ⚠️️ In some cases this value
   is `null` so always catch or check the value before any calls on this property.
 * Forgot the prefix of your bot? You can now use @-mentions instead of your prefix
 * `mesageCommand.config.args` now only (!) accepts an integer which represents how many arguments are at least needed

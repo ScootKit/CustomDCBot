@@ -28,12 +28,12 @@ module.exports.subcommands = {
     'setcategory': async function (interaction) {
         const channel = interaction.options.getChannel('channel', true);
         if (channel.type === 'GUILD_CATEGORY') return interaction.reply({
-            content: '⚠ ' + localize('admin-tools', 'category-can-not-have-category'),
+            content: '⚠️ ' + localize('admin-tools', 'category-can-not-have-category'),
             ephemeral: true
         });
         const category = interaction.options.getChannel('category', true);
         if (category.type !== 'GUILD_CATEGORY') return interaction.reply({
-            content: '⚠ ' + localize('admin-tools', 'not-category'),
+            content: '⚠️ ' + localize('admin-tools', 'not-category'),
             ephemeral: true
         });
         await channel.setParent(category);
@@ -47,7 +47,7 @@ module.exports.subcommands = {
 module.exports.config = {
     name: 'admin',
     description: localize('admin-tools', 'command-description'),
-    defaultPermission: false,
+    defaultMemberPermissions: ['ADMINISTRATOR'],
     options: [
         {
             type: 'SUB_COMMAND',
@@ -101,7 +101,7 @@ module.exports.config = {
                 },
                 {
                     type: 'CHANNEL',
-                    required: false,
+                    required: true,
                     name: 'category',
                     description: localize('admin-tools', 'category-description')
                 }

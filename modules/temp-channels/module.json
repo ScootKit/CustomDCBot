@@ -8,7 +8,6 @@
   "models-dir": "/models",
   "events-dir": "/events",
   "commands-dir": "/commands",
-  "fa-icon": "fas fa-hourglass-half",
   "config-example-files": [
     "config.json"
   ],

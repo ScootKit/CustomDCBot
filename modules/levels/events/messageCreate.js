@@ -1,11 +1,27 @@
-const {embedType, randomIntFromInterval, randomElementFromArray} = require('../../../src/functions/helpers');
+const {
+    embedType,
+    randomIntFromInterval,
+    randomElementFromArray,
+    embedTypeV2, formatDiscordUserName
+} = require('../../../src/functions/helpers');
 const {registerNeededEdit} = require('../leaderboardChannel');
 const {localize} = require('../../../src/functions/localize');
 const cooldown = new Set();
+let currentlyLevelingUp = [];
 
-exports.run = async (client, msg) => {
+function getMemberRoleFactor(member) {
+    let roleFactor = 1;
+    for (const role of member.roles.cache.filter(f => member.client.configurations['levels']['config']['multiplication_roles'][f.id]).values()) {
+        roleFactor = roleFactor * parseFloat(member.client.configurations['levels']['config']['multiplication_roles'][role.id]);
+    }
+    return roleFactor;
+}
+
+module.exports.getMemberRoleFactor = getMemberRoleFactor;
+
+module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
-    if (msg.author.bot) return;
+    if (msg.author.bot || msg.system) return;
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
     if (cooldown.has(msg.author.id)) return;
@@ -14,8 +30,9 @@ exports.run = async (client, msg) => {
     const moduleStrings = client.configurations['levels']['strings'];
 
     if (msg.content.includes(client.config.prefix)) return;
-    if (moduleConfig.blacklisted_channels.includes(msg.channel.id)) return;
-    const xp = randomIntFromInterval(moduleConfig['min-xp'], moduleConfig['max-xp']);
+    if (moduleConfig.blacklisted_channels.includes(msg.channel.id) || moduleConfig.blacklisted_channels.includes(msg.channel.parentId)) return;
+    if (msg.member.roles.cache.filter(r => moduleConfig.blacklistedRoles.includes(r.id)).size !== 0) return;
+    let xp = randomIntFromInterval(moduleConfig['min-xp'], moduleConfig['max-xp']);
     let user = await client.models['levels']['User'].findOne({
         where: {
             userID: msg.author.id
@@ -30,9 +47,12 @@ exports.run = async (client, msg) => {
     }
     user.messages = user.messages + 1;
     const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
+
+    xp = xp * getMemberRoleFactor(msg.member);
     user.xp = user.xp + xp;
 
-    if (nextLevelXp <= user.xp) {
+    if (nextLevelXp <= user.xp && !currentlyLevelingUp.includes(msg.author.id)) {
+        currentlyLevelingUp.push(msg.author.id);
         user.level = user.level + 1;
         const channel = client.channels.cache.find(c => c.id === moduleConfig.level_up_channel_id);
 
@@ -58,12 +78,15 @@ exports.run = async (client, msg) => {
         }
         if (specialMessage) messageToSend = specialMessage.message;
 
-        await sendLevelUpMessage(embedType(messageToSend, {
+        await sendLevelUpMessage(await embedTypeV2(messageToSend, {
             '%mention%': `<@${msg.author.id}>`,
+            '%avatarURL%': msg.author.avatarURL() || msg.author.defaultAvatarURL,
+            '%username%': msg.author.username,
             '%newLevel%': user.level,
             '%role%': isRewardMessage ? `<@&${moduleConfig.reward_roles[user.level.toString()]}>` : localize('levels', 'no-role'),
-            '%tag%': msg.author.tag
+            '%tag%': formatDiscordUserName(msg.author)
         }, {allowedMentions: {parse: ['users']}}));
+        currentlyLevelingUp = currentlyLevelingUp.filter(f => f !== msg.author.id);
 
         /**
          * Sends the level up messages

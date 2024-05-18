@@ -14,7 +14,6 @@
   "config-example-files": [
     "config.json"
   ],
-  "fa-icon": "fa-solid fa-user-plus",
   "on-load-event": "onLoad.js",
   "tags": [
     "moderation"

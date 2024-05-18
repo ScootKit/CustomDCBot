@@ -7,6 +7,16 @@
     "en": "Milestones",
     "de": "Ziele"
   },
+  "configElementName": {
+    "de": {
+      "one": "Ziel",
+      "more": "Ziele"
+    },
+    "en": {
+      "one": "Milestone",
+      "more": "Milestones"
+    }
+  },
   "filename": "milestones.json",
   "configElements": true,
   "content": [

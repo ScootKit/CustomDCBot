@@ -8,7 +8,6 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "fa-icon": "fa-solid fa-border-all",
   "description": {
     "en": "Let your users play Tick-Tac-Toe against each other!",
     "de": "Lasse Nutzer auf deinem Server Tick-Tac-Toe gegeneinander spielen"

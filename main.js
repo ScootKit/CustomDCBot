@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({
+    partials: ['MESSAGE', 'GUILD_MEMBER', 'GUILD_SCHEDULED_EVENT', 'MESSAGE', 'REACTION', 'USER', 'CHANNEL'], // Most of these are not needed, but enabling them does not increase CPU / RAM usage and does not introduce problems, as we handle them in the event emitter system
     allowedMentions: {parse: ['users', 'roles']}, // Disables @everyone mentions because everyone hates them
-    intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
+    intents: [Discord.Intents.FLAGS.GUILDS, 'GUILD_BANS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES', 'MESSAGE_CONTENT', 'GUILD_VOICE_STATES', 'GUILD_PRESENCES', 'GUILD_INVITES', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MEMBERS', 'GUILD_WEBHOOKS']
 });
 client.intervals = [];
 client.jobs = [];
@@ -60,7 +61,7 @@ log4js.configure({
     }
 });
 const logger = log4js.getLogger();
-logger.level = process.env.LOGLEVEL || 'debug';
+logger.level = scnxSetup ? 'debug' : (process.env.LOGLEVEL || 'debug');
 
 // Loading config
 try {
@@ -82,7 +83,7 @@ logger.level = config.logLevel || process.env.LOGLEVEL || 'debug';
 client.logger = logger;
 module.exports.logger = logger;
 const configChecker = require('./src/functions/configuration');
-const {compareArrays, checkForUpdates} = require('./src/functions/helpers');
+const {compareArrays, checkForUpdates, formatDiscordUserName} = require('./src/functions/helpers');
 const {localize} = require('./src/functions/localize');
 logger.info(localize('main', 'startup-info', {l: logger.level}));
 
@@ -102,8 +103,7 @@ const db = new Sequelize({
 
 const commands = [];
 
-// Starting bot
-db.authenticate().then(async () => {
+async function startUp() {
     if (config.timezone !== process.env.TZ) {
         process.env.TZ = config.timezone;
         logger.info(`Successfully set timezone to ${config.timezone}. The time is ${new Date().toLocaleString(client.locale)}.`);
@@ -131,16 +131,30 @@ db.authenticate().then(async () => {
         } else logger.fatal(localize('main', 'login-error', {e}));
         process.exit();
     });
-    client.guild = await client.guilds.fetch(config.guildID).catch(async () => {
+    if ((await client.application.fetch()).botRequireCodeGrant) {
+        if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
+            type: 'CORE_ISSUE',
+            errorDescription: 'require_code_grant_active',
+            errorData: {settingsURL: `https://discord.com/developers/applications/${client.user.id}/bot`}
+        });
+        logger.error(localize('main', 'require-code-grant-active', {d: `https://discord.com/developers/applications/${client.user.id}/bot`}));
+    }
+    client.guild = await client.guilds.fetch(config.guildID).catch(() => {
+    });
+    if (!client.guild) {
         if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
             type: 'CORE_FAILURE',
             errorDescription: 'bot_not_on_guild',
             errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
         });
         logger.error(localize('main', 'not-invited', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
-        process.exit(1);
-    });
-    logger.info(localize('main', 'logged-in', {tag: client.user.tag}));
+        if (scnxSetup) {
+            console.log('Waiting for being added to server…');
+            client.once('guildCreate', () => startUp());
+            return;
+        } else process.exit(1);
+    }
+    logger.info(localize('main', 'logged-in', {tag: formatDiscordUserName(client.user)}));
     loadCLIFile('/src/cli.js');
     client.models = models;
     client.moduleConf = moduleConf;
@@ -151,18 +165,25 @@ db.authenticate().then(async () => {
         client.logChannel = null;
         if (scnxSetup) {
             const {reportIssue} = require('./src/functions/scnx-integration');
-            await reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'log_channel_not_set_or_wrong_type'});
+            await reportIssue(client, {
+                type: 'CORE_FAILURE',
+                errorDescription: 'log_channel_not_set_or_wrong_type'
+            });
         }
     }
     await configChecker.loadAllConfigs(client).catch(async (e) => {
-        if (client.logChannel) await client.logChannel.send('⚠ ' + localize('main', 'config-check-failed'));
+        if (client.logChannel) await client.logChannel.send('⚠️ ' + localize('main', 'config-check-failed'));
         console.log(e);
         logger.fatal(localize('main', 'config-check-failed'));
         process.exit(1);
     });
     await loadCommandsInDir('./src/commands');
     if (client.scnxSetup) {
-        client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+        try {
+            client.config.customCommands = jsonfile.readFileSync(`${client.configDir}/custom-commands.json`);
+        } catch (e) {
+            client.config.customCommands = [];
+        }
         require('./src/functions/scnx-integration').verifyCustomCommands(client);
     }
     await syncCommandsIfNeeded();
@@ -174,7 +195,10 @@ db.authenticate().then(async () => {
     logger.info(localize('main', 'bot-ready'));
     if (client.logChannel) client.logChannel.send('🚀 ' + localize('main', 'bot-ready'));
     await checkForUpdates(client);
-});
+}
+
+// Starting bot
+db.authenticate().then(startUp);
 
 // CLI-COMMANDS
 const cliCommands = [];
@@ -259,9 +283,21 @@ async function syncCommandsIfNeeded() {
                 break;
             }
 
-            if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length || oldCommand.defaultPermission !== (typeof command.defaultPermission === 'undefined' ? true : command.defaultPermission)) {
+            if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length) {
                 needSync = true;
                 break;
+            }
+
+            if (oldCommand.defaultMemberPermissions) oldCommand.defaultMemberPermissions = oldCommand.defaultMemberPermissions.toArray();
+            if ((command.defaultMemberPermissions || []).length !== (oldCommand.defaultMemberPermissions || []).length) {
+                needSync = true;
+                break;
+            }
+            for (const permission of (command.defaultMemberPermissions || [])) {
+                if (!(oldCommand.defaultMemberPermissions || []).includes(permission)) {
+                    needSync = true;
+                    break;
+                }
             }
 
             for (const option of (command.options || [])) {
@@ -369,9 +405,10 @@ async function loadEventsInDir(dir, moduleName = null) {
                     if (!events[eventName]) {
                         events[eventName] = [];
                         client.on(eventName, (...cArgs) => {
-                            if (!client.botReadyAt) return;
                             for (const eData of events[eventName]) {
                                 try {
+                                    if (!client.botReadyAt && !eData.eventFunction.ignoreBotReadyCheck) continue;
+                                    if (!eData.eventFunction.allowPartial && cArgs.filter(f => f && f.partial).length !== 0) continue;
                                     if (!eData.moduleName) return eData.eventFunction.run(client, ...cArgs);
                                     if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {
@@ -427,16 +464,15 @@ async function loadCommandsInDir(dir, moduleName = null) {
         if (!stats) return logger.error('No stats returned');
         if (stats.isFile()) {
             const props = require(`${__dirname}/${dir}/${f}`);
-            if (props.config.restricted) props.config.defaultPermission = false;
             commands.push({
                 name: props.config.name,
                 description: props.config.description,
                 restricted: props.config.restricted,
+                defaultMemberPermissions: props.config.defaultMemberPermissions || null,
                 options: props.config.options || [],
                 subcommands: props.subcommands,
                 beforeSubcommand: props.beforeSubcommand,
                 run: props.run,
-                defaultPermission: props.config.defaultPermission,
                 autoComplete: props.autoComplete,
                 module: moduleName
             });
@@ -455,6 +491,10 @@ async function loadModules() {
     for (const f of files) {
         logger.debug(localize('main', 'loading-module', {m: f}));
         const moduleConfig = jsonfile.readFileSync(`${__dirname}/modules/${f}/module.json`);
+        if (moduleConfig.hidden) {
+            logger.debug(localize('main', 'hidden-module', {m: f}));
+            continue;
+        }
         client.modules[f] = {};
         if (typeof moduleConf[f] === 'undefined') {
             missingModules.push(f);

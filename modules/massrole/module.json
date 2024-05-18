@@ -10,12 +10,12 @@
   },
   "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/massrole",
   "commands-dir": "/commands",
-  "fa-icon": "fa-solid fa-users-viewfinder",
   "config-example-files": [
+    "configs/config.json",
     "configs/strings.json"
   ],
   "tags": [
-    "administration"
+    "tools"
   ],
   "description": {
     "en": "Simple module to manage the roles of many members at once!",

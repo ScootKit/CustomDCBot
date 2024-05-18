@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const durationParser = require('parse-duration');
-const { formatDate } = require('../../../src/functions/helpers');
+const {formatDate} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const {createQuiz} = require('../quizUtil');
 
@@ -10,7 +10,10 @@ const {createQuiz} = require('../quizUtil');
  */
 async function create(interaction) {
     const config = interaction.client.configurations['quiz']['config'];
-    if (!interaction.member.roles.cache.has(config.createAllowedRole)) return interaction.reply({content: localize('quiz', 'no-permission'), ephemeral: true});
+    if (!interaction.member.roles.cache.has(config.createAllowedRole)) return interaction.reply({
+        content: localize('quiz', 'no-permission'),
+        ephemeral: true
+    });
 
     let endAt;
     let options = [];
@@ -49,7 +52,11 @@ async function create(interaction) {
         ephemeral: true,
         fetchReply: true
     });
-    const collector = msg.createMessageComponentCollector({filter: i => interaction.user.id === i.user.id, componentType: 'SELECT_MENU', max: 1});
+    const collector = msg.createMessageComponentCollector({
+        filter: i => interaction.user.id === i.user.id,
+        componentType: 'SELECT_MENU',
+        max: 1
+    });
     collector.on('collect', async i => {
         i.values.forEach(option => {
             options[option].correct = true;
@@ -77,7 +84,10 @@ module.exports.subcommands = {
     'play': async function (interaction) {
         let user = await interaction.client.models['quiz']['QuizUser'].findAll({where: {userId: interaction.user.id}});
         if (user.length > 0) user = user[0];
-        else user = await interaction.client.models['quiz']['QuizUser'].create({userID: interaction.user.id, dailyQuiz: 0});
+        else user = await interaction.client.models['quiz']['QuizUser'].create({
+            userID: interaction.user.id,
+            dailyQuiz: 0
+        });
 
         if (user.dailyQuiz >= interaction.client.configurations['quiz']['config'].dailyQuizLimit) {
             const now = new Date();
@@ -87,11 +97,17 @@ module.exports.subcommands = {
             now.setSeconds(0);
 
             return interaction.reply({
-                content: localize('quiz', 'daily-quiz-limit', {l: interaction.client.configurations['quiz']['config'].dailyQuizLimit, timestamp: formatDate(now)}),
+                content: localize('quiz', 'daily-quiz-limit', {
+                    l: interaction.client.configurations['quiz']['config'].dailyQuizLimit,
+                    timestamp: formatDate(now)
+                }),
                 ephemeral: true
             });
         }
-        if (!interaction.client.configurations['quiz']['quizList'] || interaction.client.configurations['quiz']['quizList'].length === 0) return interaction.reply({content: localize('quiz', 'no-quiz'), ephemeral: true});
+        if (!interaction.client.configurations['quiz']['quizList'] || interaction.client.configurations['quiz']['quizList'].length === 0) return interaction.reply({
+            content: localize('quiz', 'no-quiz'),
+            ephemeral: true
+        });
 
         const updatedUser = {dailyQuiz: user.dailyQuiz + 1};
         let quiz = {};
@@ -161,7 +177,7 @@ module.exports.subcommands = {
 module.exports.config = {
     name: 'quiz',
     description: localize('quiz', 'cmd-description'),
-    defaultPermission: false,
+
     options: function () {
         const options = [
             {
@@ -174,37 +190,37 @@ module.exports.config = {
                     required: true,
                     description: localize('quiz', 'cmd-create-description-description')
                 },
-                {
-                    type: 'CHANNEL',
-                    name: 'channel',
-                    required: true,
-                    channelTypes: ['GUILD_TEXT', 'GUILD_NEWS', 'GUILD_VOICE'],
-                    description: localize('quiz', 'cmd-create-channel-description')
-                },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: true,
-                    description: localize('quiz', 'cmd-create-endAt-description')
-                },
-                {
-                    type: 'STRING',
-                    name: 'option1',
-                    required: true,
-                    description: localize('quiz', 'cmd-create-option-description', {o: 1})
-                },
-                {
-                    type: 'STRING',
-                    name: 'option2',
-                    required: true,
-                    description: localize('quiz', 'cmd-create-option-description', {o: 2})
-                },
-                {
-                    type: 'BOOLEAN',
-                    name: 'canchange',
-                    required: false,
-                    description: localize('quiz', 'cmd-create-canchange-description')
-                }]
+                    {
+                        type: 'CHANNEL',
+                        name: 'channel',
+                        required: true,
+                        channelTypes: ['GUILD_TEXT', 'GUILD_NEWS', 'GUILD_VOICE'],
+                        description: localize('quiz', 'cmd-create-channel-description')
+                    },
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: true,
+                        description: localize('quiz', 'cmd-create-endAt-description')
+                    },
+                    {
+                        type: 'STRING',
+                        name: 'option1',
+                        required: true,
+                        description: localize('quiz', 'cmd-create-option-description', {o: 1})
+                    },
+                    {
+                        type: 'STRING',
+                        name: 'option2',
+                        required: true,
+                        description: localize('quiz', 'cmd-create-option-description', {o: 2})
+                    },
+                    {
+                        type: 'BOOLEAN',
+                        name: 'canchange',
+                        required: false,
+                        description: localize('quiz', 'cmd-create-canchange-description')
+                    }]
             },
             {
                 type: 'SUB_COMMAND',
@@ -216,25 +232,25 @@ module.exports.config = {
                     required: true,
                     description: localize('quiz', 'cmd-create-description-description')
                 },
-                {
-                    type: 'CHANNEL',
-                    name: 'channel',
-                    required: true,
-                    channelTypes: ['GUILD_TEXT', 'GUILD_NEWS', 'GUILD_VOICE'],
-                    description: localize('quiz', 'cmd-create-channel-description')
-                },
-                {
-                    type: 'BOOLEAN',
-                    name: 'canchange',
-                    required: false,
-                    description: localize('quiz', 'cmd-create-canchange-description')
-                },
-                {
-                    type: 'STRING',
-                    name: 'duration',
-                    required: false,
-                    description: localize('quiz', 'cmd-create-endAt-description')
-                }]
+                    {
+                        type: 'CHANNEL',
+                        name: 'channel',
+                        required: true,
+                        channelTypes: ['GUILD_TEXT', 'GUILD_NEWS', 'GUILD_VOICE'],
+                        description: localize('quiz', 'cmd-create-channel-description')
+                    },
+                    {
+                        type: 'BOOLEAN',
+                        name: 'canchange',
+                        required: false,
+                        description: localize('quiz', 'cmd-create-canchange-description')
+                    },
+                    {
+                        type: 'STRING',
+                        name: 'duration',
+                        required: false,
+                        description: localize('quiz', 'cmd-create-endAt-description')
+                    }]
             },
             {
                 type: 'SUB_COMMAND',

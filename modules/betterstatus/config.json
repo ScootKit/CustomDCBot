@@ -107,6 +107,7 @@
       },
       "type": "select",
       "content": [
+        "CUSTOM",
         "PLAYING",
         "WATCHING",
         "STREAMING",

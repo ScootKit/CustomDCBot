@@ -7,13 +7,14 @@ should only use it if you have some experience with Javascript, discord.js and J
 
 ## Get your own Custom-Bot completely free and with a modern webinterface and a lot more features!
 
-Go check it out on our [website](https://scnx.xyz) (currently only german; the [dashboard](https://scnx.app) and bot are
-fully translated). In addition to the here
+Go check it out on our [website](https://scnx.xyz) or get started in the [dashboard](https://scnx.app).
+In addition to the here
 available features we offer:
 
 * Free hosting
 * Custom-Commands
 * Easy-to-use Embed-Editor
+* Self-Roles
 * Send and edit messages in specific channels
 * Easy-to-use Configuration-Editor
 * Human-Readable Issue Reporting - never look at logs again
@@ -22,30 +23,40 @@ available features we offer:
 
 [Get started now](https://scnx.xyz) - it's free - forever!
 
-## Please read the [license](LICENSE) if you use this bot.
+## Applicable [license](LICENSE) terms if you use this bot
 
-We really love open-source. Please read the license and follow it.\
-In short words: You have to
+We really love open-source. It does not make sense financially to publish this Source-Code publicly (as our business
+model is to host these bots on [SCNX](https://scnx.xyz), but we still do it.
+While this project does not fit the [definition of Open Source](https://opensource.org/osd-annotated)
+set forward by the Open Source Initiative,
+we are committed to allowing you as much freedom as possible.
+Please read the [license](LICENSE) and follow it.
 
-* Disclose the source (Your source code has made available when using this bot)
-* State changes (*every* change to the source code must be documented and published)\
+Here's a summary:
 
-Please read the full [license](LICENSE). This is not legal advice.
+* You may use the bot on your server and change the source code (as long as you follow the license).
+* You have to retain a link to the [LICENSE](LICENSE) and this repository in your bot, most likely in your `/help`
+  command.
+* All changes you make to this codebase are subject to these license terms, you cannot remove the link to the license,
+  even if you change large parts of the bot.
+* You may not create a competitor to [SCNX](https://scnx.xyz) or other ScootKit products using this source code.
+* You may not use the "ScootKit" brand name or any other trademarks outside of the LICENSE notice.
 
-You may ask yourself, how this could align with our closed-source-version at [SCNX](https://scnx.xyz), you can find more
-information about that in [this issue](https://github.com/SCNetwork/CustomDCBot/issues/13).
+Please read the full [license](LICENSE), as the terms laid out there apply. This is not legal advice.
+
+Failure to abide by these terms might result in deactivation of your bot from Discord or legal action being taken
+(but we'll act in good faith and usually try to solve the issue before doing anything drastic).
 
 ## Support development
 
-As mentioned above our business model is to host these bots for servers - it does not really make sense to publish our
-product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md)
-, [get a membership](https://membership.sc-network.net) (also on [Patreon](https://patreon.com/scnetwork)), or
-donate [via Creditcard](https://scnx.app/scam) or [PayPal](https://paypal.me/therealscderox). Thank you so much <3
+As mentioned above, our business model is to host these bots for servers - it does not really make sense to publish our
+product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md) or
+becoming a [GitHub Sponsor](https://github.com/sponsors/ScootKit/). Thank you so much <3
 
 ## Need help?
 
 Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in
-the [discussions-tab](https://github.com/SCNetwork/CustomDCBot/discussions).
+the [discussions-tab](https://github.com/ScootKit/CustomDCBot/discussions).
 
 ## Need something even more custom?
 
@@ -93,13 +104,13 @@ configuration options. Every module has example files. Inside these files are mo
 option.
 Some config values also support [embeds](https://discordjs.guide/popular-topics/embeds.html). This is the case
 if `allowEmbed` is true.\
-You either input a string (normal discord message), or an embed object with the following values:
+You either input a string (normal Discord message), or an embed object with the following values:
 
 * `title`: Title of the embed
 * `message`: Message outside the embed (optional)
 * `description`: Description of the embed (optional)
 * `color`: Color of the embed, must be
-  a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable) (optional)
+  a [ColorResolvable](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ColorResolvable) (optional)
 * `url`: URL of the embed (optional)
 * `image`: Image of the embed, should be an url (optional)
 * `thumbnail`: Thumbnail-Image of the embed, should be an url (optional)
@@ -107,7 +118,7 @@ You either input a string (normal discord message), or an embed object with the 
     * `name`: Name of the author
     * `img`: Image of the author, should be an url
 * `fields`: Fields of the embed, must be an array
-  of [EmbedFieldData](https://discord.js.org/#/docs/main/stable/typedef/EmbedFieldData) (optional)
+  of [EmbedFieldData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/EmbedFieldData) (optional)
 * `footer`:  Footer value (optional, default: global footer value)
 * `footerImgUrl`:  URL to image of the footer (optional, default: global footer value)
 
@@ -126,7 +137,8 @@ As per the [License](LICENSE) you *have* to make *every* of your modules publicl
 Please read the license for more information.
 
 **Before you make a module**:
-Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same thing (;\
+Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same
+thing (;\
 Also please read the [Rules for modules](#rules-for-modules).\
 **Submit a module**: Simply create a pull request, and we will check your module and merge it then (;
 
@@ -145,6 +157,8 @@ Every module should
 * Process and Store only needed user information and data
 * Support localization (you don't need to translate everything, you only need to support translations, read
   more [here](#Localization)
+* protect sensitive slash-commands with the proper [`defaultMemberPermissions`](#interaction-command) settings
+* must comply with our [end-user documentation requirements](https://docs.scnx.xyz/oss/create-module-docs)
 * follow our [terms of service](https://sc-net.work/tos), [Discord's Terms of Service](https://discord.com/tos) and
   the [Discord Developer Terms of Service](https://discord.com/developers/docs/legal). A module should not allow users
   to bypass or break the mentioned documents. This includes but is not limited to Nitro-Only-Features.
@@ -161,7 +175,10 @@ translationable systems in your module.
       works)
     * `string`: Name of the string
     * `replace` (optional, object): Will replace `%<key>` in the source string by `<value>`
-* Localizations of configuration-files and user-editable strings: All localizable configuration fields are an object with values keyed based on language codes. Example: `{"description": {"de": "Beschreibung des Feldes", "en": "Description of the field"}`. Each field needs to have at least an English value, as every other language will default back to English.
+* Localizations of configuration-files and user-editable strings: All localizable configuration fields are an object
+  with values keyed based on language codes.
+  Example: `{"description": {"de": "Beschreibung des Feldes", "en": "Description of the field"}`. Each field needs to
+  have at least an English value, as every other language will default back to English.
 
 #### module.json
 
@@ -209,13 +226,12 @@ An interaction-command ("slash command") file has to export the following things
     * `description`: Description of the command
     * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
       boolean)
-    * `defaultPermission`: Boolean (default: true): If enabled everyone on the guild can use this command and your
-      command's permissions can not be synced
+    * `defaultMemberPermissions`: This will determine which users can use your commands by default - leave `null` (or `undefined`) to allow usage by @everyone, otherwise, use [PermissionsResolvable](https://old.discordjs.dev/#/docs/discord.js/main/typedef/PermissionResolvable).
     * `options`:
-        * [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData)
+        * [ApplicationCommandOptionData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ApplicationCommandData)
           OR
         * Async function
-          returning [ApplicationCommandOptionData](https://discord.js.org/#/docs/main/stable/typedef/ApplicationCommandOptionData) (
+          returning [ApplicationCommandOptionData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ApplicationCommandData) (
           gets called with `client` as argument)
 
 #### Message-Command
@@ -229,10 +245,13 @@ An event file should export the following things:
 
 * `run`: Function that gets triggered if the event gets executed (provided arguments: `client` (discord.js Client) and
   all the arguments that gets past by discord.js for this event)
+* `allowPartial` (optional, default: `false`): Boolean determining whether the `run` function should be called if the event
+  has [partial structures](https://discordjs.guide/popular-topics/partials.html#enabling-partials). When enabling,
+  please make sure you handle partial data correctly.
 
 #### CLI-Files
 
-An CLI-File should export the following things:
+A CLI-File should export the following things:
 
 * `commands`: Array of the following objects:
     * `command`: Command which should be entered in the CLI
@@ -241,10 +260,10 @@ An CLI-File should export the following things:
       of following structure as argument:
         * `input`: The whole input
         * `args`: Array of arguments (split by spaces)
-        * `client`: [Client](https://discord.js.org/#/docs/main/stable/class/Client)
+        * `client`: [Client](https://old.discordjs.dev/#/docs/discord.js/13.16.0/class/Client)
         * `cliCommands`: Array of all CLICommands
 
-Note: We might allow users to execute CLI-Commands via the Dashboard in future. This is not supported right now.
+Note: We might allow users to execute CLI-Commands via the Dashboard in the future. This is not supported right now.
 
 #### Config-Elements
 
@@ -259,11 +278,12 @@ use `node add-config-element-object.js <Path to example config file> <Path to yo
 An example config file should include the following things:
 
 * `filename`: Name of the generated config file
-* `humanname`: [Localized](#localization)  name of the file, shown to users
-* `description`: [Localized](#localization)  description of the file, shown to users
-* `configElements` (boolean, default: false): If enabled the configuration-file will be an array of an object of the
+* `humanname`: [Localized](#localization) name of the file, shown to users
+* `description`: [Localized](#localization) description of the file, shown to users
+* `configElements` (boolean, default: `false`): If enabled the configuration-file will be an array of an object of the
   content-fields
-* `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements that guilds with a specific plan
+* `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements
+  that guilds with a specific plan
 * `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
   their discord-server-settings
     * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
@@ -274,8 +294,9 @@ An example config file should include the following things:
 * `content`: Array of content fields:
     * `field_name`: Name of the config field
     * `default`: [Localized](#localization) default value of this field
-    * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity before using), `roleID`
-      , `boolean`, `integer`, `array`, `keyed` (codename for an JS-Object)
+    * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity
+      before using), `roleID`
+      , `boolean`, `integer`, `array`, `emoji`, `keyed` (codename for an JS-Object)
       or `string`
     * `description`: [Localized](#localization) description of this field
     * `humanname`: [Localized](#localization) name of this field show to users
@@ -283,14 +304,14 @@ An example config file should include the following things:
       use the build-in function in `src/functions/helpers.js`)
     * `content` (if type === `array`): Type (see `type` above) of every value
     * `content` (if type === `channelID`): Array of
-      supported [ChannelType](https://discord.js.org/#/docs/discord.js/13.9.1/typedef/ChannelType)s (
+      supported [ChannelType](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ChannelType)s (
       default: `['GUILD_TEXT', 'GUILD_VOICE', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']`). To improve user
       experience, we recommend adding information about supported types into `description`. The bot will verify that the
       channel is inside the bot's guild.
     * `content` (if type === `select`): Array of the possible options
     * `content` (if type === `keyed`):
         * `key`: Type (see `type` above) of the index of every value
-        * `value`: Type (see `type` above) of the value of every value
+        * `value`: Type as string (see `type` above) of the value of every value
     * `params`: (if type === `string`, array, optional) Possible parameters
         * `name`: Name of the parameter (e.g. `%mention%`)
         * `description`: [Localized](#localization) Description of the parameter (e.g. `Mention of the user`)
@@ -298,15 +319,18 @@ An example config file should include the following things:
           of an embed (only if `allowEmbed` is enabled)
     * `allowNull` (default: `false`, optional): If the value of this field can be empty
     * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
-    * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file will not be rendered in the dashboard
-    * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in the dashboard
+    * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file
+      will not be rendered in the dashboard
+    * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option
+      should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in
+      the dashboard
     * `links` (optional): Array of links displayed below the field description in the SCNX Dashboard
-      * `label`: [Localized](#localization) label of the link displayed to the user
-      * `url`: URL the user will be redirected to on click
+        * `label`: [Localized](#localization) label of the link displayed to the user
+        * `url`: URL the user will be redirected to on click
 
 #### `botReady`-Event and Config-Reload
 
-If you plan to use the [ready](https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-ready) event of
+If you plan to use the [ready](https://old.discordjs.dev/#/docs/discord.js/13.16.0/class/Client?scrollTo=e-ready) event of
 discord.js to run some action when the client is ready, and you need to load some configuration-files you should use
 the `botReady`-event instead. Please remember that this event gets re-emitted on configuration reloading. If you set
 callbacks that get executed later or similar please remember to remove them on `configReload`. If you set intervals,
@@ -323,10 +347,12 @@ for hosting) of this money. Here are the main ways to earn some pocket-cash with
 
 * [Open-Source-Developer-Pool](https://faq.scnx.app/open-source-developer-pool/): We give you a monthly amount for each
   paying server using your module
-* [Bounties](https://faq.scnx.app/open-source-developer-pool/#bounties): We giv you a small amount of money for merged
+* [Bounties](https://faq.scnx.app/open-source-developer-pool/#bounties): We give you a small amount of money for merged
   pull-requests and contributions
   We support a lot of payout-methods, learn more [here](https://faq.scnx.app/scnx-referrals-faq/#payout-methods).
 
-© Simon Csaba, 2020-2022
+© Simon Csaba, 2020-2023
 
-Love ya <3
+ScootKit is a trademark, registered in Germany.
+
+We ♥ you - yes you.

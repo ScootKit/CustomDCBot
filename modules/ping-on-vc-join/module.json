@@ -6,19 +6,20 @@
     "link": "https://github.com/SCDerox"
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/ping-on-vc-join",
-  "fa-icon": "fas fa-sign-in-alt",
   "events-dir": "/events",
   "config-example-files": [
-    "config.json"
+    "config.json",
+    "actual-config.json"
   ],
   "tags": [
     "support"
   ],
   "humanReadableName": {
-    "en": "Ping-On-VC-Join"
+    "en": "Voice-Channel Actions",
+    "de": "Sprachkanal-Aktionen"
   },
   "description": {
-    "en": "Sends a message when someone joins a voicechat",
-    "de": "Sendet eine PN an den Nutzer und/oder informiert das Team, wenn ein Nutzer einem bestimmten Voicechat beitritt"
+    "en": "Sends messages when someone joins a voicechat and assign roles to users in Voice-Channels",
+    "de": "Sende Nachrichten, wenn jemand einem Sprachkanal beitritt und vergebe Rollen an Nutzer in Sprachkanälen"
   }
 }

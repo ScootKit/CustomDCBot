@@ -1,6 +1,5 @@
 {
   "name": "channel-stats",
-  "fa-icon": "fas fa-stream",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -19,7 +18,7 @@
     "de": "Channel-Statistiken"
   },
   "description": {
-    "en": "Simply create channels containing some stats about your server - updated automatically",
+    "en": "Create channels containing stats about your server - updated automatically.",
     "de": "Modul, um Channel mit automatisch aktualisierenden Namen mit Statistiken zu erstellen"
   }
 }

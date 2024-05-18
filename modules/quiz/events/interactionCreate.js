@@ -10,7 +10,7 @@ module.exports.run = async (client, interaction) => {
             }
         });
         if (user) return interaction.reply({content: localize('quiz', 'your-rank', {xp: user.xp}), ephemeral: true});
-        else return interaction.reply({content: '⚠️ ' + localize('quiz', 'no-rank'), ephemeral: true});
+        else return interaction.reply({content: '⚠️️ ' + localize('quiz', 'no-rank'), ephemeral: true});
     }
 
     const quiz = await client.models['quiz']['QuizList'].findOne({
@@ -31,7 +31,7 @@ module.exports.run = async (client, interaction) => {
             if (quiz.votes[id].includes(interaction.user.id)) userVoteCat = id;
         }
         if (!userVoteCat) return interaction.reply({
-            content: '⚠ ' + localize('quiz', 'not-voted-yet'),
+            content: '⚠️ ' + localize('quiz', 'not-voted-yet'),
             ephemeral: true
         });
         let extra = '';
@@ -59,7 +59,10 @@ module.exports.run = async (client, interaction) => {
             let extra = localize('quiz', 'answer-wrong');
             if (quiz.options[interaction.isSelectMenu() ? interaction.values[0] : interaction.customId.split('-')[2]].correct) {
                 extra = localize('quiz', 'answer-correct');
-                interaction.client.models['quiz']['QuizUser'].update({dailyXp: user[0].dailyXp + 1, xp: user[0].xp + 1}, {where: {userID: interaction.user.id}});
+                interaction.client.models['quiz']['QuizUser'].update({
+                    dailyXp: user[0].dailyXp + 1,
+                    xp: user[0].xp + 1
+                }, {where: {userID: interaction.user.id}});
                 setChanged();
             }
 

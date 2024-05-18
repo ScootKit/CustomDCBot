@@ -7,7 +7,7 @@ module.exports = class Poll extends Model {
                 type: DataTypes.STRING,
                 primaryKey: true
             },
-            description: DataTypes.STRING,
+            description: DataTypes.STRING, // Can start with "[PUBLIC]" to indicate a public poll
             options: DataTypes.JSON,
             votes: DataTypes.JSON, // {1: ["userIDHere"], 2: ["as"] }
             expiresAt: DataTypes.DATE,

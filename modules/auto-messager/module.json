@@ -1,6 +1,5 @@
 {
   "name": "auto-messager",
-  "fa-icon": "fas fa-comment-dots",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -14,7 +13,7 @@
     "cronjob.json"
   ],
   "tags": [
-    "administration"
+    "tools"
   ],
   "humanReadableName": {
     "en": "Automatic Messages",

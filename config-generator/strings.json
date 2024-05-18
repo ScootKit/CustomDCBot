@@ -10,6 +10,21 @@
   "filename": "strings.json",
   "content": [
     {
+      "name": "addAtToUsernames",
+      "humanName": {
+        "en": "Add @ to usernames",
+        "de": "@ zu Nutzernamen hinzufügen"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, every username will be prefixed by an \"@\". Example: \"scderox\" -> \"@scderox\"",
+        "de": "Wenn aktiviert, wird vor jedem Nutzername ein \"@\" eingefügt. Beispiel: \"scderox\" -> \"@scderox\""
+      },
+      "type": "boolean"
+    },
+    {
       "name": "footer",
       "humanName": {
         "en": "Embed-Footer"

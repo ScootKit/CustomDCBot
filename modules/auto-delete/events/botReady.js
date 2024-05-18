@@ -18,8 +18,8 @@ module.exports.run = async function (client) {
         });
         if (!dcChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channel.channelID})}`);
 
-        const channelMessages = await dcChannel.messages.fetch().catch(() => {
-        });
+        const channelMessages = (await dcChannel.messages.fetch().catch(() => {
+        })).sort((a, b) => a.createdAt < b.createdAt ? 1 : -1);
         if (!channelMessages) {
             return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-messages', {c: channel.channelID})}`);
         }
@@ -27,7 +27,6 @@ module.exports.run = async function (client) {
 
         const idsToKeep = [];
         if (parseInt(channel.keepMessageCount) !== 0) {
-            channelMessages.reverse();
             for (const message of channelMessages.values()) {
                 if (idsToKeep.length !== parseInt(channel.keepMessageCount)) idsToKeep.push(message.id);
             }

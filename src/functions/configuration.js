@@ -5,7 +5,7 @@
  */
 const jsonfile = require('jsonfile');
 const fs = require('fs');
-const {logger} = require('../../main');
+const {logger, client} = require('../../main');
 const {localize} = require('./localize');
 const isEqual = require('is-equal');
 
@@ -82,6 +82,7 @@ async function checkConfigFile(file, moduleName) {
         let newConfig = exampleFile.configElements ? [] : {};
         if (exampleFile.elementLimits) configData = require('./scnx-integration').verifyLimitedConfigElementFile(client, exampleFile, configData);
 
+        let skipOverwrite = false;
         if (exampleFile.skipContentCheck) newConfig = configData;
         else if (exampleFile.configElements) {
             if (!Array.isArray(configData)) {
@@ -94,7 +95,10 @@ async function checkConfigFile(file, moduleName) {
                 for (const field of exampleFile.content) {
                     const dependsOnField = field.dependsOn ? exampleFile.content.find(f => f.name === field.dependsOn) : null;
                     if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
-                    if (dependsOnField && !(typeof object[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : object[dependsOnField.name])) continue;
+                    if (dependsOnField && !(typeof object[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : object[dependsOnField.name])) {
+                        objectData[field.name] = configData[field.name] || (field.default[client.locale] || field.default['en']); // Otherwise disabled fields may be overwritten
+                        continue;
+                    }
                     try {
                         objectData[field.name] = await checkField(field, object[field.name]);
                     } catch (e) {
@@ -105,10 +109,14 @@ async function checkConfigFile(file, moduleName) {
             }
         } else {
             for (const field of exampleFile.content) {
+                if (exampleFile.content.find(f => f.elementToggle) && !configData[exampleFile.content.find(f => f.elementToggle).name]) {
+                    skipOverwrite = true;
+                    continue;
+                }
                 const dependsOnField = field.dependsOn ? exampleFile.content.find(f => f.name === field.dependsOn) : null;
                 if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
                 if (dependsOnField && !(typeof configData[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : configData[dependsOnField.name])) {
-                    newConfig[field.name] = configData[field.name]; // Otherwise disabled fields may be overwritten
+                    newConfig[field.name] = configData[field.name] || (field.default[client.locale] || field.default['en']); // Otherwise disabled fields may be overwritten
                     continue;
                 }
                 try {
@@ -172,7 +180,7 @@ async function checkConfigFile(file, moduleName) {
             });
         }
 
-        if (!isEqual(configData, newConfig) || forceOverwrite) {
+        if (forceOverwrite || (!skipOverwrite && !isEqual(configData, newConfig))) {
             if (!fs.existsSync(`${client.configDir}/${moduleName}`) && moduleName) fs.mkdirSync(`${client.configDir}/${moduleName}`);
             jsonfile.writeFileSync(`${client.configDir}${builtIn ? '' : '/' + moduleName}/${exampleFile.filename}`, newConfig, {spaces: 2});
             logger.info(localize('config', 'saved-file', {
@@ -194,16 +202,16 @@ async function checkConfigFile(file, moduleName) {
  */
 async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
     return new Promise(async (resolve, reject) => {
-        const moduleConf = require(`../../modules/${moduleName}/module.json`);
-        if ((moduleConf['config-example-files'] || []).length === 0) return resolve();
-        try {
-            for (const v of moduleConf['config-example-files']) await checkConfigFile(v, moduleName);
-            resolve();
-        } catch (r) {
-            reject(r);
+            const moduleConf = require(`../../modules/${moduleName}/module.json`);
+            if ((moduleConf['config-example-files'] || []).length === 0) return resolve();
+            try {
+                for (const v of moduleConf['config-example-files']) await checkConfigFile(v, moduleName);
+                resolve();
+            } catch (r) {
+                reject(r);
+            }
+            if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
         }
-        if (afterCheckEventFile) require(`../../modules/${moduleName}/${afterCheckEventFile}`).afterCheckEvent(config);
-    }
     );
 }
 
@@ -224,7 +232,11 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
         case 'integer':
             if (parseInt(value) === 0) return true;
             return !!parseInt(value);
+        case 'float':
+            if (parseFloat(value) === 0) return true;
+            return !!parseFloat(value);
         case 'string':
+        case 'emoji':
         case 'imgURL':
         case 'timezone': // Timezones can not be checked correctly for their type currently.
             if (allowEmbed && typeof value === 'object') return true;

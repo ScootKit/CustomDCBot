@@ -1,18 +1,26 @@
-const {embedType, disableModule} = require('../../../src/functions/helpers');
+const {embedType, disableModule, formatDiscordUserName} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 const cooldown = new Set();
 
 exports.run = async (client, oldState, newState) => {
     if (!client.botReadyAt) return;
+    const roleConfig = client.configurations['ping-on-vc-join']['actual-config'];
+    if (roleConfig.assignRoleToUsersInVoiceChannels && roleConfig.voiceRoles.length !== 0) {
+        console.log(oldState.guildId, newState.guildId);
+        if (oldState.channel && !newState.channel) newState.member.roles.remove(roleConfig.voiceRoles);
+        if (!oldState.channel && newState.channel) newState.member.roles.add(roleConfig.voiceRoles);
+    }
     if (!newState.channel) return;
     const channel = await client.channels.fetch(newState.channelId);
     if (channel.guild.id !== client.guild.id) return;
 
     const moduleConfig = client.configurations['ping-on-vc-join']['config'];
+
     const configElement = moduleConfig.find(e => e.channels.includes(channel.id));
     if (!configElement) return;
     const member = await client.guild.members.fetch(newState.id);
+    if (member.user.bot) return;
 
     if (cooldown.has(member.user.id)) return;
 
@@ -24,7 +32,7 @@ exports.run = async (client, oldState, newState) => {
         if (member.voice.channelId !== channel.id) return;
         await notifyChannel.send(embedType(configElement['message'], {
             '%vc%': channel.name,
-            '%tag%': member.user.tag,
+            '%tag%': formatDiscordUserName(member.user),
             '%mention%': `<@${member.user.id}>`
         }));
 

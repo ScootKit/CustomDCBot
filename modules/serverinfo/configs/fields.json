@@ -104,13 +104,6 @@
           }
         },
         {
-          "name": "guildRegion",
-          "description": {
-            "en": "Region of this guild",
-            "de": "Discord-Region deines Servers"
-          }
-        },
-        {
           "name": "channelCount",
           "description": {
             "en": "Count of channels on this guild",
@@ -136,6 +129,20 @@
           "description": {
             "en": "Inserts a new line",
             "de": "Fügt eine neue Zeile ein (wie der Name schon sagt)"
+          }
+        },
+        {
+          "name": "userWithRoleCount-<ID>",
+          "description": {
+            "en": "Count of members with a specific role (replace \"<ID>\" with an actual role-id)",
+            "de": "Anzahl von Nutzern mit einer bestimmen Rolle (bitte \"<ID>\" mit einer echten Rollen-ID ersetzen)"
+          }
+        },
+        {
+          "name": "onlineUserWithRoleCount-<ID>",
+          "description": {
+            "en": "Count of members with a specific role who are online (replace \"<ID>\" with an actual role-id)",
+            "de": "Anzahl von Nutzern mit einer bestimmen Rolle, die online sind (bitte \"<ID>\" mit einer echten Rollen-ID ersetzen)"
           }
         }
       ]

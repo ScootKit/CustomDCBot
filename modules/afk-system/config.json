@@ -8,36 +8,51 @@
   "content": [
     {
       "name": "sessionEndedSuccessfully",
-      "humanName": {},
+      "humanName": {
+        "en": "AFK-Session ended successfully",
+        "de": "AFK-Sitzung erfolgreich beendet"
+      },
       "default": {
-        "en": "Welcome back!"
+        "en": "✅ Your AFK status has been removed. Welcome back!",
+        "de": "✅ Dein Status ist jetzt nicht mehr \"AFK\". Willkommen zurück!"
       },
       "description": {
-        "en": "This message gets send if a user ended their session successfully."
+        "en": "This message gets send if a user ended their AFK-session successfully.",
+        "de": "Diese Nachricht wird gesendet, wenn der Nutzer seine AFK-Sitzung erfolgreich beendet."
       },
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "sessionStartedSuccessfully",
-      "humanName": {},
+      "humanName": {
+        "en": "AFK-Session started successfully",
+        "de": "AFK-Sitzung erfolgreich gestartet"
+      },
       "default": {
-        "en": "You are afk, have fun!"
+        "en": "✅ Your status has been updated to AFK. If another member mentions you while your AFK, we're going to notify them about your status.",
+        "de": "✅ Dein Status wurde auf \"AFK\" aktualisiert. Wenn dich ein anderer Nutzer erwähnt, während du AFK bist, werden wir ihn über deinen Status informieren."
       },
       "description": {
-        "en": "This message gets send if a user started their session successfully."
+        "de": "This message gets send if a user started their session successfully.",
+        "en": "Diese Nachricht wird Nutzern angezeigt, wenn sie ihren Status auf AFK wechseln."
       },
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "afkUserWithReason",
-      "humanName": {},
+      "humanName": {
+        "en": "User is AFK with reason",
+        "de": "Nutzer ist mit Begründung AFK"
+      },
       "default": {
-        "en": "%user% is afk. They gave this reason: \"%reason%\""
+        "en": "ℹ %user% is currently AFK and specified the following reason: \"%reason%\".",
+        "de": "ℹ %user% ist aktuell AFK und hat folgenden Grund angegeben: \"%reason%\"."
       },
       "description": {
-        "en": "This message gets send if a pinged user is AFK and they have given a reason for it"
+        "en": "This message gets send if a pinged user is currently AFK with a previously specified reason.",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer erwähnt wird, der AFK ist und zuvor eine Begründung dafür angegeben hat."
       },
       "type": "string",
       "allowEmbed": true,
@@ -45,12 +60,14 @@
         {
           "name": "reason",
           "description": {
+            "de": "Begründung für die Abwesenheit des Nutzers",
             "en": "Reason for their absence"
           }
         },
         {
           "name": "user",
           "description": {
+            "de": "Erwähnung des AFK Nutzers",
             "en": "Mention of the user who is AFK"
           }
         }
@@ -58,12 +75,17 @@
     },
     {
       "name": "afkUserWithoutReason",
-      "humanName": {},
+      "humanName": {
+        "en": "User is AFK without reason",
+        "de": "Nutzer ist ohne Begründung AFK"
+      },
       "default": {
-        "en": "%user% is afk."
+        "en": "ℹ %user% is currently AFK.",
+        "de": "ℹ %user% ist aktuell AFK."
       },
       "description": {
-        "en": "This message gets send if a pinged user is AFK and they have given not any a reason for it"
+        "en": "This message gets send if a pinged user is currently AFK without a previously specified reason.",
+        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer erwähnt wird, der AFK ist und zuvor keine Begründung dafür angegeben hat."
       },
       "type": "string",
       "allowEmbed": true,
@@ -71,6 +93,7 @@
         {
           "name": "user",
           "description": {
+            "de": "Erwähnung des AFK Nutzers",
             "en": "Mention of the user who is AFK"
           }
         }
@@ -78,13 +101,17 @@
     },
     {
       "name": "autoEndMessage",
-      "humanName": {},
+      "humanName": {
+        "en": "AFK Session ended automatically",
+        "de": "AFK Sitzung automatisch beendet"
+      },
       "default": {
-        "en": "Welcome back! You are not longer AFK because you wrote a message. You can start a new session with `/afk start` and disable `auto-end` if you don't want your sessions to be ended automatically.",
-        "de": "Willkommen zurück! Du bist nun nicht länger AFK, da du eine Nachricht geschrieben hast. Um eine neue Sitzung zu starten gebe bitte `/afk start` ein; solltest du dieses Verhalten deaktivieren wollen, setze außerdem den `auto-end` Parameter."
+        "en": "Welcome back \uD83D\uDC4B!\nYou are not longer AFK because you wrote a message. You can start a new session with `/afk start` and disable `auto-end` if you don't want your sessions to be ended automatically.",
+        "de": "Willkommen zurück \uD83D\uDC4B!\nDu bist nun nicht mehr AFK, da du eine Nachricht geschrieben hast. Um eine neue Sitzung zu starten gebe bitte `/afk start` ein; solltest du dieses Verhalten deaktivieren wollen, setze außerdem den `auto-end` Parameter."
       },
       "description": {
-        "en": "This message gets send if a previously AFK user sends a message"
+        "en": "This message gets send if a user who is AFK and hasn't disabled auto-ending their sessions posts a message on the server.",
+        "de": "Diese Nachricht wird verschickt, wenn ein Nutzer, der aktuell AFK ist und automatisches Beenden von Sitzungen nicht deaktiviert hat, eine Nachricht auf dem Server sendet."
       },
       "type": "string",
       "allowEmbed": true,
@@ -92,7 +119,8 @@
         {
           "name": "user",
           "description": {
-            "en": "Mention of the user who was AFK"
+            "en": "Mention of the user who was AFK",
+            "de": "Erwähnung des Nutzers, der AFK war"
           }
         }
       ]

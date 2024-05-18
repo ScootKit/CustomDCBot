@@ -5,7 +5,6 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "fa-icon": "fas fa-door-open",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/welcomer",
   "events-dir": "/events",
   "models-dir": "/models",

@@ -30,6 +30,22 @@
       "type": "channelID"
     },
     {
+      "name": "createSuggestionFromMessagesInChannel",
+      "humanName": {
+        "en": "Create suggestions from messages in channel",
+        "de": "Vorschläge von Nachrichten im Kanal erstellen"
+      },
+      "default": {
+        "en": false,
+        "de": false
+      },
+      "description": {
+        "en": "If enabled, the bot will create thread under each suggestion",
+        "de": "Wenn aktiviert, wird für jede Nachricht im Vorschlag-Kanal ein Vorschlag erstellt"
+      },
+      "type": "boolean"
+    },
+    {
       "name": "reactions",
       "humanName": {
         "en": "Reactions",
@@ -44,7 +60,7 @@
         "de": "Emojis mit denen der Bot auf neue Vorschläge reagieren soll"
       },
       "type": "array",
-      "content": "string"
+      "content": "emoji"
     },
     {
       "name": "allowUserComment",
@@ -64,6 +80,7 @@
     },
     {
       "name": "threadName",
+      "dependsOn": "allowUserComment",
       "humanName": {
         "en": "Thread-Name"
       },
@@ -72,8 +89,8 @@
         "de": "Kommentare"
       },
       "description": {
-        "en": "Only if \"User-Comments in Threads\" enabled; Name of the thread",
-        "de": "Nur wenn \"Nutzerkommentare in Threads\" aktiviert; Name des Threads"
+        "en": "Name of the thread",
+        "de": "Name des Threads"
       },
       "type": "string"
     },

@@ -3,12 +3,13 @@
  * @module Helpers
  */
 
-const {MessageEmbed} = require('discord.js');
+const {MessageEmbed, MessageAttachment} = require('discord.js');
 const {localize} = require('./localize');
 const {PrivatebinClient} = require('@pixelfactory/privatebin');
-const privatebin = new PrivatebinClient('https://paste.sc-network.net');
-const crypto = require('isomorphic-webcrypto');
+const privatebin = new PrivatebinClient('https://paste.scootkit.net');
+const isoCrypto = require('isomorphic-webcrypto');
 const {encode} = require('bs58');
+const crypto = require('crypto');
 const {client} = require('../../main');
 
 /**
@@ -25,17 +26,34 @@ module.exports.asyncForEach = async function (array, callback) {
 };
 
 /**
+ * Formates a Discord username (either #tag or username)
+ * @param {User} userData User to format
+ * @returns {string}
+ */
+function formatDiscordUserName(userData) {
+    if (userData.discriminator === '0') return ((client.strings || {addAtToUsernames: false}).addAtToUsernames ? '@' : '') + userData.username;
+    return userData.tag || (userData.username + '#' + userData.discriminator);
+}
+
+module.exports.formatDiscordUserName = formatDiscordUserName;
+
+/**
  * Replaces every argument with a string
  * @param {Object<String>} args Arguments to replace
  * @param {String} input Input
+ * @param {Boolean} returnNull Allows returning null if input is null
  * @returns {String}
  * @private
  */
-function inputReplacer(args, input) {
+function inputReplacer(args, input, returnNull = false) {
+    if (returnNull && !input) return null;
+    else if (!input) input = '';
     if (typeof args !== 'object') return input;
     for (const arg in args) {
+        if (typeof args[arg] !== 'string' && typeof args[arg] !== 'number') args[arg] = '';
         input = (input || '').replaceAll(arg, args[arg]);
     }
+    if (returnNull && !input) return null;
     return input;
 }
 
@@ -50,28 +68,80 @@ module.exports.inputReplacer = inputReplacer;
  * @author Simon Csaba <mail@scderox.de>
  * @return {object} Returns [MessageOptions](https://discord.js.org/#/docs/main/stable/typedef/MessageOptions)
  */
-module.exports.embedType = function (input, args = {}, optionsToKeep = {}, mergeComponentsRows = []) {
+function embedType(input, args = {}, optionsToKeep = {}, mergeComponentsRows = []) {
+    if (!optionsToKeep.allowedMentions) {
+        optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
+        if (client.config.disableEveryoneProtection) optionsToKeep.allowedMentions.parse.push('everyone');
+    }
+    if (typeof input === 'string') {
+        optionsToKeep.content = inputReplacer(args, input);
+        return optionsToKeep;
+    }
+    const schemaVersion = input['_schema'] || 'v2';
+    if (schemaVersion === 'v2') return embedTypeSchemaV2(input, args, optionsToKeep, mergeComponentsRows);
+
+    optionsToKeep.embeds = [];
+    for (const embedData of input.embeds || []) {
+        if (client.scnxSetup) embedData.footer = require('./scnx-integration').verifySchemaV3Embed(client, embedData.footer);
+        let footer = null;
+        if (!embedData.footer?.disabled) footer = {
+            text: inputReplacer(args, embedData.footer?.text, true) || client.strings.footer,
+            iconURL: embedData.footer?.iconURL || client.strings.footerImgUrl
+        };
+        const fields = [];
+
+        for (const fieldData of embedData.fields || []) fields.push({
+            name: inputReplacer(args, fieldData.name, true) || '\u200B',
+            value: inputReplacer(args, fieldData.value, true) || '\u200B',
+            inline: fieldData.inline
+        });
+
+        const embed = new MessageEmbed({
+            title: inputReplacer(args, embedData.title, true),
+            description: inputReplacer(args, embedData.description, true),
+            color: embedData.color,
+            thumbnail: embedData.thumbnailURL ? {url: inputReplacer(args, embedData.thumbnailURL)} : null,
+            image: embedData.imageURL ? {url: inputReplacer(args, embedData.imageURL)} : null,
+            timestamp: (embedData.footer?.hideTime || embedData.footer?.disabled) ? null : new Date(),
+            author: embedData.author?.name ? {
+                name: inputReplacer(args, embedData.author.name),
+                iconURL: inputReplacer(args, embedData.author.imageURL, null),
+                url: inputReplacer(args, embedData.author.url, null)
+            } : null,
+            footer,
+            fields
+        });
+        optionsToKeep.embeds.push(embed);
+    }
+
+    optionsToKeep.files = [...(optionsToKeep.files || [])];
+    for (const url of input.attachmentURLs || []) {
+        optionsToKeep.files.push({attachment: url});
+    }
+
+    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input, mergeComponentsRows, args);
+    if (!optionsToKeep.content) optionsToKeep.content = inputReplacer(args, input['content'], true);
+
+    return optionsToKeep;
+}
+
+function embedTypeSchemaV2(input, args = {}, optionsToKeep = {}, mergeComponentsRows = []) {
     if (!optionsToKeep.allowedMentions) {
         optionsToKeep.allowedMentions = {parse: ['users', 'roles']};
         if (client.config.disableEveryoneProtection) optionsToKeep.allowedMentions.parse.push('everyone');
     }
     if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
-    if (typeof input === 'string') {
-        optionsToKeep.content = inputReplacer(args, input);
-        optionsToKeep.embeds = [];
-        return optionsToKeep;
-    }
-    if (input.title || input.description || (input.author || {}).name) {
+    if (input.title || input.description || (input.author || {}).name || input.image) {
         const emb = new MessageEmbed();
         if (input['title']) emb.setTitle(inputReplacer(args, input['title']));
         if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
         if (input['color']) emb.setColor(input['color']);
         if (input['url']) emb.setURL(input['url']);
-        if (input['image']) emb.setImage(inputReplacer(args, input['image']));
-        if (input['thumbnail']) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
+        if ((input['image'] || '').replaceAll(' ', '')) emb.setImage(inputReplacer(args, input['image']));
+        if ((input['thumbnail'] || '').replaceAll(' ', '')) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
         if (input['author'] && typeof input['author'] === 'object' && (input['author'] || {}).name) emb.setAuthor({
             name: inputReplacer(args, input['author']['name']),
-            iconURL: input['author']['img'] ? inputReplacer(args, input['author']['img']) : null
+            iconURL: (input['author']['img'] || '').replaceAll(' ', '') ? inputReplacer(args, input['author']['img']) : null
         });
         if (typeof input['fields'] === 'object') {
             input.fields.forEach(f => {
@@ -86,8 +156,16 @@ module.exports.embedType = function (input, args = {}, optionsToKeep = {}, merge
         });
         optionsToKeep.embeds = [emb];
     } else optionsToKeep.embeds = [];
-    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input, mergeComponentsRows);
+    if (!optionsToKeep.components && client.scnxSetup) optionsToKeep.components = require('./scnx-integration').returnSCNXComponents(input, mergeComponentsRows, args);
     optionsToKeep.content = input['message'] ? inputReplacer(args, input['message']) : null;
+    return optionsToKeep;
+}
+
+module.exports.embedType = embedType;
+
+module.exports.embedTypeV2 = async function (input, args, otP, mergeComponentsRows) {
+    let optionsToKeep = embedType(input, args, otP, mergeComponentsRows);
+    if (!optionsToKeep.attachments && client.scnxSetup && (input.dynamicImage || {}).enabled) optionsToKeep = await require('./scnx-integration').returnDynamicImages(input, optionsToKeep, args);
     return optionsToKeep;
 };
 
@@ -127,9 +205,9 @@ async function postToSCNetworkPaste(content, opts = {
     output: 'text',
     compression: 'zlib'
 }) {
-    const key = crypto.getRandomValues(new Uint8Array(32));
+    const key = isoCrypto.getRandomValues(new Uint8Array(32));
     const res = await privatebin.sendText(content, key, opts);
-    return `https://paste.sc-network.net${res.url}#${encode(key)}`;
+    return `https://paste.scootkit.net${res.url}#${encode(key)}`;
 }
 
 module.exports.postToSCNetworkPaste = postToSCNetworkPaste;
@@ -159,8 +237,8 @@ module.exports.randomString = function (length, characters = 'ABCDEFGHIJKLMNOPQR
  */
 async function messageLogToStringToPaste(channel, limit = 100, expire = '1month') {
     let messages = '';
-    (await channel.messages.fetch({limit})).forEach(m => {
-        messages = `[${m.id}] ${m.author.bot ? '[BOT] ' : ''}${m.author.tag}  (${m.author.id}): ${m.content}\n` + messages;
+    (await channel.messages.fetch({limit: limit > 100 ? 100 : limit})).forEach(m => {
+        messages = `[${m.id}] ${m.author.bot ? '[BOT] ' : ''}${formatDiscordUserName(m.author)}  (${m.author.id}): ${m.content}\n` + messages;
     });
     messages = `=== CHANNEL-LOG OF ${channel.name} (${channel.id}): Last messages before report ${formatDate(new Date())} ===\n` + messages;
     return await postToSCNetworkPaste(messages,
@@ -183,7 +261,7 @@ module.exports.messageLogToStringToPaste = messageLogToStringToPaste;
  * @return {string} Truncated string
  */
 function truncate(string, length) {
-    return (string.length > length) ? string.substr(0, length - 3) + '...' : string;
+    return (string.length > length) ? string.substr(0, length - 3).trim() + '...' : string;
 }
 
 module.exports.truncate = truncate;
@@ -228,12 +306,12 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
         fetchReply: true
     });
     else m = await channel.send({components: [{type: 'ACTION_ROW', components: getButtons(1)}], embeds: [sites[0]]});
-    const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 40000});
+    const c = m.createMessageComponentCollector({componentType: 'BUTTON', time: 60000});
     let currentSite = 1;
     c.on('collect', async (interaction) => {
         if (!allowedUserIDs.includes(interaction.user.id)) return interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('helpers', 'you-did-not-run-this-command')
+            content: '⚠️ ' + localize('helpers', 'you-did-not-run-this-command')
         });
         let nextSite = currentSite + 1;
         if (interaction.customId === 'back') nextSite = currentSite - 1;
@@ -447,8 +525,11 @@ module.exports.migrate = migrate;
 function disableModule(module, reason = null) {
     if (!client.modules[module]) throw new Error(`${module} got never loaded`);
     client.modules[module].enabled = false;
-    client.logger.error(localize('main', 'module-disable', {r: reason}));
-    if (client.logChannel) client.logChannel.send(localize('main', 'module-disable', {r: reason})).then(() => {
+    client.logger.error(localize('main', 'module-disable', {r: reason, m: module}));
+    if (client.logChannel) client.logChannel.send(localize('main', 'module-disable', {
+        m: module,
+        r: reason
+    })).then(() => {
     });
     if (client.scnxSetup) require('./scnx-integration').reportIssue(client, {
         type: 'MODULE_FAILURE',
@@ -460,3 +541,22 @@ function disableModule(module, reason = null) {
 }
 
 module.exports.disableModule = disableModule;
+
+/**
+ * Formates a number to make it human-readable
+ * @param {Number|string} number
+ * @returns {string}
+ */
+module.exports.formatNumber = function (number) {
+    if (typeof number === 'string') number = parseInt(number);
+    return new Intl.NumberFormat(client.locale, {}).format(number);
+};
+
+/**
+ * Creates a MD5 Hash String from a string
+ * @param {String} string String to hash
+ * @return {string} MD5 Hash String
+ */
+module.exports.hashMD5 = function (string) {
+    return crypto.createHash('md5').update(string).digest('hex');
+};

@@ -95,7 +95,7 @@
     },
     "help": {
         "bot-info-titel": "ℹ️ Bot-Infos",
-        "bot-info-description": "Dieser Bot wurde vom [SC Network](https://sc-network.net)-Team und einigen [Open-Source-Contributoren](https://github.com/SCNetwork/CustomDCBot/graphs/contributors) entwickelt und wird kostenfrei ihm Rahmen von [SCNX](https://scnx.xyz) für \"%g\" angeboten.",
+        "bot-info-description": "Dieser Bot wurde vom [ScootKit](https://scootkit.net)-Team und unseren geliebten [Open-Source-Beitragenden](https://github.com/ScootKit/CustomDCBot/graphs/contributors) entwickelt und ist unter der [Business Source License](https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE] lizenziert.",
         "stats-title": "📊 Statistiken",
         "stats-content": "Aktive Module: %am\nRegistrierte Befehle: %rc\nBot-Version: %v\nLäuft auf Server %si\n[Server-Plan](https://scnx.xyz/plan): %pl\nLetzter Neustart: %lr\nLetze Neuladung: %lrl",
         "command-description": "Zeigt dir alle Befehle an",
@@ -832,7 +832,10 @@
         "all-users": "Alle Mitglieder",
         "bots": "Bots",
         "humans": "Mitglieder (keine Bots)",
-        "add-subcommand-description": "Füge eine Rolle zu allen Mitgliedern hinzu"
+        "add-subcommand-description": "Füge eine Rolle zu allen Mitgliedern hinzu",
+        "not-admin": "⚠️ Um diesen Befehl zu verwenden musst du zur adminRoles option im SCNX-Dashboard hinzugefügt werden. Falls du der Eigentümer dieses Bots bist, denk daran in deinen Servereinstellungen ebenfalls einen entsprechenden Override einzustellen um Missbrauch dieses Commands zu verhindern.",
+        "add-reason": "Massen-Rollenvergabe durch %u",
+        "remove-reason": "Massen-Rollenentfernung durch %u"
     },
     "hunt-the-code": {
         "display-name-description": "Name des Codes, der dem Mitglied angezeigt wird, wenn er den Code einlöst",
@@ -916,7 +919,7 @@
         "dont-use-drawn": "Nicht verwenden",
         "win": "%u hat das Spiel gewonnen! Es wurden %turns Karten gespielt.",
         "win-you": "Du hast das Spiel gewonnen!",
-        "missing-uno": ":warning: Du musst den Uno!-Button nutzen, bevor du die vorletzte Karte legst!",
+        "missing-uno": "⚠️️ Du musst den Uno!-Button nutzen, bevor du die vorletzte Karte legst!",
         "choose-color": "Wähle eine Farbe aus:",
         "pending-draws": "Lege eine Ziehe 2/4-Karte, sonst musst du %count Karten ziehen!",
         "not-ingame": "Du bist nicht in dem Uno-Spiel!",
@@ -931,7 +934,11 @@
         "start-game": "Spiel sofort starten",
         "not-host": "Du bist nicht der Ersteller des Spiels!",
         "max-players": "Das Spiel ist voll!",
-        "previous-cards": "Vorherige Karten: "
+        "previous-cards": "Vorherige Karten: ",
+        "used-card": "Du hast die Karte %c bereits verwendet! Nutze den Aktualisieren-Button und spiele eine zulässige Karte.",
+        "invalid-card": "Du kannst die Karte %c momentan nicht spielen! Bitte spiele eine zulässige Karte.",
+        "inactive-warn": "%u, du bist bei Uno am Zug!",
+        "inactive-win": "Das Uno-Spiel wurde beendet. %u hat gewonnen, da alle anderen ausgeschieden sind!"
     },
     "quiz": {
         "what-have-i-voted": "Was habe ich gewählt?",
@@ -967,5 +974,9 @@
         "no-rank": "Du hast noch nie ein Quiz erfolgreich beendet!",
         "no-quiz": "Es wurden noch keine Quiz erstellt. Serveradmins können auf https://scnx.app/glink?page=bot/configuration?query=quiz&file=quiz%7Cconfigs%2FquizList Quiz hinzufügen.",
         "no-permission": "Du hast keine Berechtigung, um Quiz mit dem Befehl zu erstellen."
+    },
+    "starboard": {
+        "invalid-minstars": "Ungültige Mindestanzahl an Sternen %stars",
+        "star-limit": "Du hast das stündliche Starboard-Limit von %limitEmoji auf dem Server erreicht, deswegen kannst du nicht auf die Nachricht %msgUrl reagieren.\nProbiers doch %time nochmal!"
     }
 }

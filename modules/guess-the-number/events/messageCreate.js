@@ -15,11 +15,18 @@ module.exports.run = async (client, msg) => {
     if (!game) return;
     if (msg.member.roles.cache.filter(m => m.client.configurations['guess-the-number']['config'].adminRoles.includes(m.id)).size !== 0) return msg.react('⛔');
     const parsedInt = parseInt(msg.content);
-    if (parsedInt === 'NaN') return msg.react('🚫');
+    if (isNaN(parsedInt)) return msg.react('🚫');
     if (parsedInt < game.min || parsedInt > game.max) return msg.react('🚫');
     game.guessCount++;
     await game.save();
-    if (parsedInt !== game.number) return msg.react('❌');
+    if (parsedInt !== game.number) {
+        if (client.configurations['guess-the-number']['config']['higherLowerReactions']) {
+            if (game.number < parsedInt) await msg.react('⬇');
+            else await msg.react('⬆');
+            return;
+        }
+        return msg.react('❌');
+    }
     await msg.react('✅');
     game.ended = true;
     await game.save();

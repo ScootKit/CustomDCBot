@@ -1,0 +1,24 @@
+{
+  "name": "starboard",
+  "humanReadableName": {
+    "en": "Starboard"
+  },
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": {
+    "en": "Let users highlight messages into a starboard channel by reacting.",
+    "de": "Lass Nutzer Nachrichten durch eine Reaktion in einem Starboard-Kanal hervorheben."
+  },
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json"
+  ],
+  "tags": [
+    "community"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/starboard"
+}

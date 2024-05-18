@@ -20,7 +20,8 @@
     {
       "name": "adminRoles",
       "humanName": {
-        "de": "Adminrollen"
+        "de": "Adminrollen",
+        "en": "Admin-Roles"
       },
       "default": {
         "en": [],
@@ -36,7 +37,8 @@
     {
       "name": "startMessage",
       "humanName": {
-        "de": "Startnachricht"
+        "de": "Startnachricht",
+        "en": "Start-Message"
       },
       "default": {
         "en": {
@@ -49,7 +51,8 @@
         }
       },
       "description": {
-        "de": "Nachricht, die am Anfang einer Runde gesendet wird"
+        "de": "Nachricht, die am Anfang einer Runde gesendet wird",
+        "en": "Message that gets send when a new round gets started"
       },
       "type": "string",
       "allowEmbed": true,
@@ -73,7 +76,8 @@
     {
       "name": "endMessage",
       "humanName": {
-        "de": "Endnachricht"
+        "de": "Endnachricht",
+        "en": "End-Message"
       },
       "default": {
         "en": {
@@ -86,7 +90,8 @@
         }
       },
       "description": {
-        "de": "Nachricht, die am Ende einer Runde gesendet wird"
+        "de": "Nachricht, die am Ende einer Runde gesendet wird",
+        "en": "Message that gets send when a round ends"
       },
       "type": "string",
       "allowEmbed": true,
@@ -127,6 +132,21 @@
           }
         }
       ]
+    },
+    {
+      "name": "higherLowerReactions",
+      "type": "boolean",
+      "humanName": {
+        "de": "Reagiere mit Höher / Geringer Emojis",
+        "en": "React with Lower / Higher reactions"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "de": "Wenn aktiviert, reagiert der Bot bei falschen Versuchen mit ⬇ (wenn die gesuchte Zahl unter der gesendeten Zahl ist) oder mit ⬆ (wenn die gesuchte Zahl größer als die gesendete Zahl ist). Falls deaktiviert, wird der Bot nur mit ❌ bei falschen Versuchen reagieren.",
+        "en": "If enabled, the bot will react with ⬇ (if the guess is higher than the correct number) or with ⬆ (if the guess is lower than the correct number) on wrong guesses. If disabled, the bot will just react with ❌ on wrong guesses."
+      }
     }
   ]
 }

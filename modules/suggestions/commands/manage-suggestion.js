@@ -1,6 +1,6 @@
 const {generateSuggestionEmbed, notifyMembers} = require('../suggestion');
 const {localize} = require('../../../src/functions/localize');
-const {truncate} = require('../../../src/functions/helpers');
+const {truncate, formatDiscordUserName} = require('../../../src/functions/helpers');
 
 module.exports.beforeSubcommand = async function (interaction) {
     interaction.suggestion = await interaction.client.models['suggestions']['Suggestion'].findOne({
@@ -11,7 +11,7 @@ module.exports.beforeSubcommand = async function (interaction) {
     if (!interaction.suggestion) {
         await interaction.reply({
             ephemeral: true,
-            content: '⚠ ' + localize('suggestions', 'suggestion-not-found')
+            content: '⚠️ ' + localize('suggestions', 'suggestion-not-found')
         });
         interaction.returnEarly = true;
     } else await interaction.deferReply({ephemeral: true});
@@ -57,10 +57,10 @@ async function autoCompleteSuggestionID(interaction) {
     });
     const returnValue = [];
     interaction.value = interaction.value.toLowerCase();
-    for (const suggestion of suggestions.filter(s => (interaction.client.guild.members.cache.get(s.suggesterID) || {user: {tag: s.suggesterID}}).user.tag.toLowerCase().includes(interaction.value) || s.suggestion.toLowerCase().includes(interaction.value) || s.id.toString().includes(interaction.value) || s.messageID.includes(interaction.value))) {
+    for (const suggestion of suggestions.filter(s => formatDiscordUserName((interaction.client.guild.members.cache.get(s.suggesterID) || {user: {tag: s.suggesterID}}).user).toLowerCase().includes(interaction.value) || s.suggestion.toLowerCase().includes(interaction.value) || s.id.toString().includes(interaction.value) || s.messageID.includes(interaction.value))) {
         if (returnValue.length !== 25) returnValue.push({
             value: suggestion.id.toString(),
-            name: truncate(`${(interaction.client.guild.members.cache.get(suggestion.suggesterID) || {user: {tag: suggestion.suggesterID}}).user.tag}: ${suggestion.suggestion}`, 100)
+            name: truncate(`${formatDiscordUserName((interaction.client.guild.members.cache.get(suggestion.suggesterID) || {user: {tag: suggestion.suggesterID}}).user)}: ${suggestion.suggestion}`, 100)
         });
     }
     interaction.respond(returnValue);
@@ -81,8 +81,9 @@ module.exports.autoComplete = {
 
 module.exports.config = {
     name: 'manage-suggestion',
+    defaultMemberPermissions: ['MANAGE_MESSAGES'],
     description: localize('suggestions', 'manage-suggestion-command-description'),
-    defaultPermission: false,
+
     options: [
         {
             type: 'SUB_COMMAND',

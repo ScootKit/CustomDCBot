@@ -1,14 +1,14 @@
 {
   "name": "quiz",
-	"humanReadableName": {
-	  "en": "Quiz Module",
+  "humanReadableName": {
+    "en": "Quiz Module",
     "de": "Quiz-Modul"
-	},
-	"author": {
-	  "scnxOrgID": "60",
-	  "name": "TomatoCake",
-	  "link": "https://github.com/DEVTomatoCake"
-	},
+  },
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
   "description": {
     "en": "Create quiz for your users and let them compete against each other.",
     "de": "Erstelle Quiz für deine Nutzer und lasse sie gegeneinander antreten."
@@ -22,7 +22,7 @@
     "configs/quizList.json"
   ],
   "tags": [
-    "community"
+    "fun"
   ],
   "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/quiz"
 }

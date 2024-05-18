@@ -96,6 +96,31 @@
       ]
     },
     {
+      "name": "coinFlipMessage",
+      "humanName": {
+        "de": "Münzwurf-Nachricht"
+      },
+      "default": {
+        "en": "\uD83E\uDE99 %site%",
+        "de": "\uD83E\uDE99 %site%"
+      },
+      "description": {
+        "en": "Message that gets send when someone uses /random coinfilp",
+        "de": "Nachricht, welche gesendet wird, wenn jemand /random coinfilp  benutzt"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "site",
+          "description": {
+            "de": "Seite, auf den die Münze gefallen ist",
+            "en": "Site on which the coin landed"
+          }
+        }
+      ]
+    },
+    {
       "name": "hugMessage",
       "humanName": {
         "de": "Umarmungsnachricht"

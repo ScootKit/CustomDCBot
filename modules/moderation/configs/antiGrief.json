@@ -1,0 +1,112 @@
+{
+  "description": {
+    "en": "This system can prevent moderation-tool-abuse by staff-members",
+    "de": "Dieses System kann Moderation-Tool-Missbrauch von Teammitgliedern verhindern"
+  },
+  "humanName": {
+    "en": "Anti-Grief-Configuration",
+    "de": "Anti-Grief-Konfiguration"
+  },
+  "informationBanner": {
+    "en": "This feature can automatically quarantine moderators that abuse their permissions (banning / warning / kicking more people than you set up). For this to work, place your bot above all other roles and make sure that the quarantine-role is right below it. This ensures that moderators / admins can not just give permissions to the quarantine-role or remove permissions from the bot.",
+    "de": "Diese Funktion kann automatisch Moderatoren in Quarantäne versetzen, wenn sie ihre Berechtigungen (wenn sie mehr Leute Bannen / Warnen / Kicken als du einstellst). Damit das fehlerfrei funktioniert, musst dein Bot über alle anderen Rollen platziert sein und direkt darunter muss die Quarantäne-Rolle sein. Das stellt sicher, dass Moderatoren / Administratoren nicht einfach der Quarantäne-Rolle Rechte geben können oder dem Bot Rechte entfernen können."
+  },
+  "warningBanner": {
+    "en": "This feature is currently limited to actions run by the moderation-module. If you've given your moderators native discord-permissions, they can bypass this. We plan to support native actions (+ channel-deletes and other griefing actions) in future.",
+    "de": "Diese Funktion ist aktuell nur für Aktionen, die mit dem Moderations-Modul durchgeführt wurden, verfügbar. Wenn du deinen Moderatoren native Discord-Berechtigungen gegeben hast, können sie das ganz einfach umgehen. Wir planen, native Aktionen (und Channel-Löschungen oder andere Grief-Aktionen) in der Zukunft zu unterstützen."
+  },
+  "filename": "antiGrief.json",
+  "content": [
+    {
+      "name": "enabled",
+      "humanName": {
+        "de": "Aktiviert",
+        "en": "Enabled?"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Enables or disables the anti-join-grief-system",
+        "de": "Aktiviert oder deaktiviert das Anti-Join-Grief-System"
+      },
+      "type": "boolean",
+      "elementToggle": true
+    },
+    {
+      "name": "timeframe",
+      "humanName": {
+        "de": "Zeitfenster",
+        "en": "Timeframe"
+      },
+      "default": {
+        "en": 3
+      },
+      "description": {
+        "en": "Timeframe in hours in which the limits can not be overstepped",
+        "de": "Zeitfenster in Stunden, in welchem die Limits nicht übertragen werden dürfen"
+      },
+      "type": "integer"
+    },
+    {
+      "name": "max_warn",
+      "humanName": {
+        "de": "Maximale Anzahl von Verwarnungen in dem Zeitfenster",
+        "en": "Maximal amount of warns in the timeframe"
+      },
+      "default": {
+        "en": 15
+      },
+      "description": {
+        "en": "Maximal amount of warns a moderator can give in the timeframe until they get quarantined",
+        "de": "Maximale Anzahl von Verwarnungen, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
+      },
+      "type": "integer"
+    },
+    {
+      "name": "max_mute",
+      "humanName": {
+        "de": "Maximale Anzahl von Mutes in dem Zeitfenster",
+        "en": "Maximal amount of mutes in the timeframe"
+      },
+      "default": {
+        "en": 20
+      },
+      "description": {
+        "en": "Maximal amount of mutes a moderator can give in the timeframe until they get quarantined",
+        "de": "Maximale Anzahl von Mutes, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
+      },
+      "type": "integer"
+    },
+    {
+      "name": "max_kick",
+      "humanName": {
+        "de": "Maximale Anzahl von Kicks in dem Zeitfenster",
+        "en": "Maximal amount of kicks in the timeframe"
+      },
+      "default": {
+        "en": 10
+      },
+      "description": {
+        "en": "Maximal amount of kicks a moderator can give in the timeframe until they get quarantined",
+        "de": "Maximale Anzahl von Kicks, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
+      },
+      "type": "integer"
+    },
+    {
+      "name": "max_ban",
+      "humanName": {
+        "de": "Maximale Anzahl von Bans in dem Zeitfenster",
+        "en": "Maximal amount of bans in the timeframe"
+      },
+      "default": {
+        "en": 5
+      },
+      "description": {
+        "en": "Maximal amount of bans a moderator can give in the timeframe until they get quarantined",
+        "de": "Maximale Anzahl von Bans, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
+      },
+      "type": "integer"
+    }
+  ]
+}

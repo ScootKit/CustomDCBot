@@ -7,6 +7,16 @@
     "en": "Configuration",
     "de": "Konfiguration"
   },
+  "configElementName": {
+    "de": {
+      "one": "Ticket-Kategorie",
+      "more": "Ticket-Kategorien"
+    },
+    "en": {
+      "one": "Ticket-Category",
+      "more": "Ticket-Categories"
+    }
+  },
   "configElements": true,
   "filename": "config.json",
   "content": [
@@ -110,22 +120,6 @@
       "allowEmbed": true
     },
     {
-      "name": "ticket-description",
-      "humanName": {
-        "en": "Ticket description",
-        "de": "Ticketbeschreibung"
-      },
-      "default": {
-        "en": "Welcome to our support! We notified our staff and they will be with you shortly.",
-        "de": "Willkommen in unserem Support! Wir haben unser Team benachrichtigt. Bitte habe etwas Geduld."
-      },
-      "description": {
-        "en": "Embed-Description of a new ticket",
-        "de": "Embed-Beschreibung eines neuen Tickets"
-      },
-      "type": "string"
-    },
-    {
       "name": "sendUserDMAfterTicketClose",
       "humanName": {
         "en": "Send user DM after ticket is closed",
@@ -160,11 +154,112 @@
       "params": [
         {
           "name": "transcriptURL",
-          "description": {}
+          "description": {
+            "de": "URL zum Transcript",
+            "en": "URL to transcript"
+          }
         },
         {
           "name": "type",
-          "description": {}
+          "description": {
+            "de": "Name des dieses Ticket Typen",
+            "en": "Name of this ticket type"
+          }
+        }
+      ]
+    },
+    {
+      "name": "creation-message",
+      "humanName": {
+        "en": "Ticket-Created Message",
+        "de": "Ticket-Erstellt Nachricht"
+      },
+      "pro": true,
+      "type": "string",
+      "allowEmbed": true,
+      "description": {
+        "en": "This message will get sent in new tickets. The close buttons will be added.",
+        "de": "Diese Nachricht wird in neue Tickets gesendet. Der Schließ-Knopf wird hinzugefügt."
+      },
+      "default": {
+        "en": {
+          "title": "\uD83D\uDCE5 New ticket #%id%",
+          "color": "#2ECC71",
+          "message": "%rolePings%",
+          "fields": [
+            {
+              "name": "\uD83D\uDC64 User",
+              "value": "%userMention%",
+              "inline": true
+            },
+            {
+              "name": "☕ Ticket-Topic",
+              "value": "%ticketTopic%",
+              "inline": true
+            },
+            {
+              "name": "ℹ\uFE0F Information",
+              "value": "Your issue got solved? Click the button below. You can always find this message pinned."
+            }
+          ]
+        },
+        "de": {
+          "title": "\uD83D\uDCE5 Neues Ticket #%id%",
+          "color": "#2ECC71",
+          "message": "%rolePings%",
+          "fields": [
+            {
+              "name": "\uD83D\uDC64 Nutzer",
+              "value": "%userMention%",
+              "inline": true
+            },
+            {
+              "name": "☕ Ticket-Thema",
+              "value": "%ticketTopic%",
+              "inline": true
+            },
+            {
+              "name": "ℹ\uFE0F Information",
+              "value": "Dein Problem wurde behoben? Klicke den Knopf unten. Du kannst diese Nachricht immer in den angepinnten Nachrichten finden."
+            }
+          ]
+        }
+      },
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "de": "Eindeutige Identifikationsnummer des Tickets",
+            "en": "Unique identification number of the ticket"
+          }
+        },
+        {
+          "name": "userMention",
+          "description": {
+            "de": "Erwähnung des Nutzers, der das Ticket erstellt hat",
+            "en": "Mention of the user who created this ticket"
+          }
+        },
+        {
+          "name": "rolePings",
+          "description": {
+            "de": "Erwähnung der Rollen, die du im \"Ticket-Rollen\"-Feld eingestellt hast",
+            "en": "Mention of the roles you have selected in the \"Ticket roles\" field"
+          }
+        },
+        {
+          "name": "ticketTopic",
+          "description": {
+            "de": "Name des Ticket-Themas",
+            "en": "Name of the Ticket-Topic"
+          }
+        },
+        {
+          "name": "userTag",
+          "description": {
+            "de": "Tag des Nutzers, der das Ticket erstellt hat",
+            "en": "Tag of the user who created this ticket"
+          }
         }
       ]
     },

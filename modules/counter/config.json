@@ -9,7 +9,8 @@
     {
       "name": "channels",
       "humanName": {
-        "de": "Kanäle"
+        "de": "Kanäle",
+        "en": "Channels"
       },
       "default": {
         "en": [],
@@ -25,7 +26,8 @@
     {
       "name": "channelDescription",
       "humanName": {
-        "de": "Kanalbeschreibung"
+        "de": "Kanalbeschreibung",
+        "en": "Channel-Description"
       },
       "default": {
         "en": "Next number %x%",
@@ -50,7 +52,8 @@
     {
       "name": "success-reaction",
       "humanName": {
-        "de": "Erfolgsreaktion"
+        "de": "Erfolgsreaktion",
+        "en": "Success-Reaction"
       },
       "default": {
         "en": "✅",
@@ -60,16 +63,80 @@
         "en": "Reaction which the bot should give when someone counts successfully",
         "de": "Reaktion welche der Bot geben soll, wenn jemand erfolgreich gezählt hat"
       },
-      "type": "string"
+      "type": "emoji"
+    },
+    {
+      "name": "restartOnWrongCount",
+      "default": {
+        "en": false
+      },
+      "humanName": {
+        "de": "Spiel neustarten, wenn sich jemand verzählt",
+        "en": "Restart game, if user miscounts"
+      },
+      "description": {
+        "en": "If enabled, the game will restarts if a user sends a number that is not in ordner",
+        "de": "Wenn aktiviert, wird das Spiel neustarten, wenn ein Nutzer eine Zahl sendet, die nicht in die Reihenfolge passt"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "restartOnWrongCountMessage",
+      "dependsOn": "restartOnWrongCount",
+      "default": {
+        "de": "Aufgrund der Inkompetenz von %mention% muss das Spiel neugestartet werden - die nächste Zahl ist **%i%**.",
+        "en": "Due to the incompetence of %mention%, the game had to restart - the next number is **%i%**."
+      },
+      "humanName": {
+        "en": "Message when game gets restarted",
+        "de": "Nachricht, wenn das Spiel neugestartet werden"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "description": {
+        "en": "This message will be sent when the game gets restarted due to a miscount.",
+        "de": "Diese Nachricht wird gesendet, wenn das Spiel aufgrund einer Verzählung neugestartet wird."
+      },
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "de": "Erwähnung des Nutzers",
+            "en": "Mention of the users"
+          }
+        },
+        {
+          "name": "i",
+          "description": {
+            "de": "Nächste Nummer",
+            "en": "Next number"
+          }
+        }
+      ]
+    },
+    {
+      "name": "onlyOneMessagePerUser",
+      "default": {
+        "en": true
+      },
+      "humanName": {
+        "de": "Nutzer müssen abwechselnd zählen",
+        "en": "Only one continuous message per user"
+      },
+      "description": {
+        "en": "If enabled, users can not count more than one number continuously",
+        "de": "Wenn aktiviert, können Nutzer nicht mehr als eine Nummer nacheinander zählen"
+      },
+      "type": "boolean"
     },
     {
       "name": "wrong-input-message",
       "humanName": {
-        "de": "Nachricht bei falscher Eingabe"
+        "de": "Nachricht bei falscher Eingabe",
+        "en": "Message on wrong input"
       },
       "default": {
-        "en": "⚠ %err%",
-        "de": "⚠ %err%"
+        "en": "⚠️ %err%"
       },
       "description": {
         "en": "Message that gets send if a user provides an invalid input",
@@ -83,6 +150,78 @@
           "description": {
             "en": "Description of what they did wrong",
             "de": "Beschreibung, was der Nutzer falsch gemacht hat"
+          }
+        }
+      ]
+    },
+    {
+      "name": "strikeAmount",
+      "default": {
+        "en": 5
+      },
+      "humanName": {
+        "de": "Amount of wrong messages to trigger action",
+        "en": "Anzahl von falschen Nachrichten, um eine Aktion auszulösen"
+      },
+      "description": {
+        "en": "This is the amount of wrong messages a user has to send to trigger action. Once this amount is reached, the bot will either, depending on your configuration, give a role or disable the SEND_MESSAGES permission for a user (set to 0 to disable)",
+        "de": "Dies ist die Anzahl von falschen Nachrichten, die ein Nutzer senden muss, um eine Aktion auszulösen. Sobald diese Anzahl erreicht ist, wird der Bot, je nach Konfiguration, entweder dem Nutzer eine Rolle geben oder ihm die \"Nachrichten verfassen\"-Berechtigung entfernen (auf 0 setzen zum Deaktivieren)"
+      },
+      "type": "integer"
+    },
+    {
+      "name": "giveRoleInsteadOfPermissionRemoval",
+      "default": {
+        "en": false
+      },
+      "humanName": {
+        "de": "Rolle bei Sperrung vergeben, anstatt Rechte zu entfernen",
+        "en": "Give role on action, instead of removing permission"
+      },
+      "description": {
+        "en": "If enabled, a role will be given to the user (once their reach the configured action amount of wrong messages) instead of the removal of the \"Send Messages\"-permission in the counter channel",
+        "de": "Wenn aktiviert, wird dem Nutzer (sobald er die benötigte Anzahl von falschen Nachrichten erreicht hat) eine Rolle gegeben, anstatt die \"Nachrichten verfassen\"-Berechtigung im Kanal zu entfernen"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "strikeRole",
+      "dependsOn": "giveRoleInsteadOfPermissionRemoval",
+      "default": {
+        "en": false
+      },
+      "humanName": {
+        "de": "Rolle, die bei Sperrung vergeben wird",
+        "en": "Role given when amount is being reached"
+      },
+      "description": {
+        "en": "This role will be given to users when they reach the configured amount of wrong messages",
+        "de": "Diese Rolle wird dem Nutzer gegeben, sobald die konfigurierte Anzahl von falschen Nachrichten erreicht wird"
+      },
+      "type": "roleID"
+    },
+    {
+      "name": "strikeMessage",
+      "default": {
+        "de": "%mention%, ich musste dir den Zugriff auf diesen Kanal verbieten, da du ihn mehrmals falsch verwendet hast.",
+        "en": "%mention%, I had to restrict your access to this channel because you repeatedly used it improperly."
+      },
+      "humanName": {
+        "en": "Message when user gets actioned",
+        "de": "Nachricht, wenn ein Nutzer gesperrt wird"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "description": {
+        "en": "This message will be sent when a user reach the configured amount of wrong messages and gets actioned",
+        "de": "Diese Rolle wird versendet, sobald die konfigurierte Anzahl von falschen Nachrichten erreicht wird und ein Nutzer bestraft wird"
+      },
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "de": "Erwähnung des Nutzers",
+            "en": "Mention of the users"
           }
         }
       ]

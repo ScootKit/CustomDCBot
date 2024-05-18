@@ -1,3 +1,4 @@
+const {formatDiscordUserName} = require('../../../src/functions/helpers');
 module.exports.run = async function (client) {
     const moduleConf = client.configurations['betterstatus']['config'];
 
@@ -10,7 +11,7 @@ module.exports.run = async function (client) {
             await client.user.setActivity(await replaceStatusString(moduleConf['intervalStatuses'][moduleConf['intervalStatuses'].length * Math.random() | 0]),
                 {
                     type: moduleConf['activityType'],
-                    url: moduleConf['streamingLink']
+                    url: (moduleConf['streamingLink'] && moduleConf.activityType === 'STREAMING') ? moduleConf['streamingLink'] : null
                 });
         }, moduleConf.interval < 5 ? 5000 : moduleConf.interval * 1000); // At least 5 seconds to prevent rate limiting
         client.intervals.push(interval);
@@ -23,7 +24,7 @@ module.exports.run = async function (client) {
     if (moduleConf.activityType !== 'PLAYING' && !moduleConf.enableInterval) {
         await client.user.setActivity(client.config.user_presence, {
             type: moduleConf.activityType,
-            url: moduleConf['streamingLink']
+            url: (moduleConf['streamingLink'] && moduleConf.activityType === 'STREAMING') ? moduleConf['streamingLink'] : null
         });
     }
 
@@ -40,7 +41,7 @@ module.exports.run = async function (client) {
         const random = members.filter(m => !m.user.bot).random();
         return statusString.replaceAll('%memberCount%', client.guild.memberCount)
             .replaceAll('%onlineMemberCount%', members.filter(m => m.presence && !m.user.bot).size)
-            .replaceAll('%randomOnlineMemberTag%', randomOnline ? `${randomOnline.user.username}#${randomOnline.user.discriminator}` : client.user.tag)
+            .replaceAll('%randomOnlineMemberTag%', randomOnline ? formatDiscordUserName(randomOnline.user) : formatDiscordUserName(client.user))
             .replaceAll('%randomMemberTag%', `${random.user.username}#${random.user.discriminator}`)
             .replaceAll('%channelCount%', client.guild.channels.cache.size)
             .replaceAll('%roleCount%', (await client.guild.roles.fetch()).size);

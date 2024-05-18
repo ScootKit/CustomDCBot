@@ -6,11 +6,11 @@ module.exports.run = async function (interaction) {
             countMessages: true
         },
         order: [['createdAt', 'DESC']],
-        max: 15
+        limit: 15
     });
     if (giveaways.length === 0) return interaction.reply({
         ephemeral: true,
-        content: '⚠ ' + localize('giveaways', 'no-giveaways-found')
+        content: '⚠️ ' + localize('giveaways', 'no-giveaways-found')
     });
     let gwMessages = '';
     for (const giveaway of giveaways) {
