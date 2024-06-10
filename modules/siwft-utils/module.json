@@ -1,0 +1,26 @@
+{
+  "name": "siwft-utils",
+  "humanReadableName": {
+    "en": "SIWFT Utils",
+    "de": "SIWFT Utils"
+  },
+  "author": {
+    "name": "Akami Solutions",
+    "link": "https://akama-aka.akami-solutions.cc"
+  },
+  "openSourceURL": "https://github.com/akami-solutions/siwft_scnx_module",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/config.json"
+  ],
+  "tags": [
+    "utils",
+    "shop",
+    "financial",
+    "siwft"
+  ],
+  "description": {
+    "en": "A module to interact with the SIWFT API",
+    "de": "Ein Modul um mit der SIWFT API zu Interagieren"
+  }
+}
