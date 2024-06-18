@@ -9,7 +9,7 @@ module.exports = class User extends Model {
             },
             nickname: DataTypes.JSON
         }, {
-            tableName: 'nickname_User',
+            tableName: 'nicknames_User',
             timestamps: true,
             sequelize
         });

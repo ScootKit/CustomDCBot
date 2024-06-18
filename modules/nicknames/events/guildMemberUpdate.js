@@ -3,15 +3,15 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
     if (!client.botReadyAt) return;
     if (newGuildMember.guild.id !== client.guild.id) return;
-    if (newGuildMember.nickname === oldGuildMember.nickname && newGuildMember.roles.highest.position === oldGuildMember.guild.me.roles.highest.position) return;
+    if (newGuildMember.nickname === oldGuildMember.nickname && newGuildMember.roles.cache.size === oldGuildMember.guild.me.roles.cache.size) return;
 
-    const roles = client.configurations['nickname']['config'];
-    const moduleModel = client.models['nickname']['User'];
+    const roles = client.configurations['nicknames']['config'];
+    const moduleModel = client.models['nicknames']['User'];
 
-    let hoistrole;
-    if (newGuildMember.roles.hoist) hoistrole = newGuildMember.roles.hoist.id;
+    let prefixRole;
+    if (newGuildMember.roles.highest) prefixRole = newGuildMember.roles.highest.id;
 
-    let rolePrefix = roles.find(r => r.roleID === hoistrole)?.prefix || '';
+    let rolePrefix = roles.find(r => r.roleID === prefixRole)?.prefix || '';
 
     let user = await moduleModel.findOne({
         attributes: ['userID', 'nickname'],
