@@ -1,3 +1,4 @@
+const {truncate} = require("../../../src/functions/helpers");
 module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
     if (!client.botReadyAt) return;
@@ -8,12 +9,8 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     const moduleModel = client.models['nickname']['User'];
 
     let rolePrefix = "";
-    let hoistrole
-    if (newGuildMember.roles.hoist === null) {
-        hoistrole = null;
-    } else {
-        hoistrole = newGuildMember.roles.hoist.id;
-    }
+    let hoistrole;
+    if (newGuildMember.roles.hoist) hoistrole = newGuildMember.roles.hoist.id;
 
     for (const role of roles) {
         if (role.roleID === hoistrole) {
@@ -23,13 +20,12 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
     let user = await moduleModel.findOne({
         attributes: ['userID', 'nickname'],
-        raw: true,
         where: {
             userID: newGuildMember.id
         }
     });
     let memberName;
-    if (newGuildMember.nickname === null) {
+    if (!newGuildMember.nickname) {
         memberName = newGuildMember.user.displayName;
     } else {
         memberName = newGuildMember.nickname;
@@ -60,8 +56,13 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
     }
 
+    if (rolePrefix.length + memberName.length > 32) {
+        memberName = truncate(memberName, 32 - rolePrefix.length);
+    }
+
     try {
         await newGuildMember.setNickname(rolePrefix + memberName);
     } catch (e) {
+
     }
 };
