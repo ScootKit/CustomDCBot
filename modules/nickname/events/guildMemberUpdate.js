@@ -8,15 +8,10 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     const roles = client.configurations['nickname']['config'];
     const moduleModel = client.models['nickname']['User'];
 
-    let rolePrefix = "";
     let hoistrole;
     if (newGuildMember.roles.hoist) hoistrole = newGuildMember.roles.hoist.id;
 
-    for (const role of roles) {
-        if (role.roleID === hoistrole) {
-            rolePrefix = role.prefix;
-        }
-    }
+    let rolePrefix = roles.find(r => r.roleID === hoistrole)?.prefix || '';
 
     let user = await moduleModel.findOne({
         attributes: ['userID', 'nickname'],
@@ -39,14 +34,8 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
     if (user) {
         if (memberName !== user.nickname) {
-            await moduleModel.update({
-                userID: newGuildMember.id,
-                nickname: memberName
-            }, {
-                where: {
-                    userID: newGuildMember.id
-                }
-            });
+            user.nickname = memberName;
+            await user.save();
         }
     } else {
         await moduleModel.create({
@@ -56,13 +45,9 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
     }
 
-    if (rolePrefix.length + memberName.length > 32) {
-        memberName = truncate(memberName, 32 - rolePrefix.length);
-    }
-
     try {
-        await newGuildMember.setNickname(rolePrefix + memberName);
+        await newGuildMember.setNickname(truncate(rolePrefix + memberName, 32));
     } catch (e) {
-
+        client.logger.error(e);
     }
 };
