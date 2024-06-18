@@ -9,7 +9,6 @@
     "scnxOrgID": "2"
   },
   "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/nicknames",
-  "commands-dir": "/commands",
   "events-dir": "/events",
   "models-dir": "/models",
   "config-example-files": [
