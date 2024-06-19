@@ -7,11 +7,22 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
 
     const roles = client.configurations['nicknames']['config'];
     const moduleModel = client.models['nicknames']['User'];
-
+/*
     let prefixRole;
     if (newGuildMember.roles.highest) prefixRole = newGuildMember.roles.highest.id;
 
     let rolePrefix = roles.find(r => r.roleID === prefixRole)?.prefix || '';
+*/
+    let rolePrefix = '';
+    let userRoles = newGuildMember.roles.cache.map(r => r.id);
+    for (const userRole of userRoles) {
+        let role = roles.find(r => r.roleID === userRole);
+        if (role) {
+            rolePrefix = role.prefix;
+            break;
+        }
+    }
+
 
     let user = await moduleModel.findOne({
         attributes: ['userID', 'nickname'],
