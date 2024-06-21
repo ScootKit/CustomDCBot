@@ -9,7 +9,7 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     const moduleModel = client.models['nicknames']['User'];
 
     let rolePrefix = '';
-    let userRoles = newGuildMember.roles.cache.map(r => r.id);
+    let userRoles = newGuildMember.roles.cache.sort((a, b) => a.position - b.position).map(r => r.id);
     for (const userRole of userRoles) {
         let role = roles.find(r => r.roleID === userRole);
         if (role) {
