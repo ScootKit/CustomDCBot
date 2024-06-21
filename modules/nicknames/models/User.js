@@ -18,5 +18,5 @@ module.exports = class User extends Model {
 
 module.exports.config = {
     'name': 'User',
-    'module': 'nickname'
+    'module': 'nicknames'
 };
