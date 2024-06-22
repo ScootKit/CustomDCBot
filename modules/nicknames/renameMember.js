@@ -5,7 +5,7 @@ renameMember = async function (client, guildMember) {
     const moduleModel = client.models['nicknames']['User'];
 
     let rolePrefix = '';
-    let userRoles = guildMember.roles.cache.sort((a, b) => a.position - b.position).map(r => r.id);
+    let userRoles = guildMember.roles.cache.sort((a, b) => b.position - a.position).map(r => r.id);
     for (const userRole of userRoles) {
         let role = roles.find(r => r.roleID === userRole);
         if (role) {
