@@ -1007,5 +1007,9 @@
     "starboard": {
         "invalid-minstars": "Invalid minimum stars %stars",
         "star-limit": "You've reached the hourly starboard limit of %limitEmoji on the server which is why you cannot react on the message %msgUrl .\nTry again %time!"
+    },
+    "nicknames": {
+        "owner-cannot-be-renamed": "The owner of the server (%u) cannot be renamed.",
+        "nickname-error": "An error occurred while trying to change the nickname of %u: %e"
     }
 }
