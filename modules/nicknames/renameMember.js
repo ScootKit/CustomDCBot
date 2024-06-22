@@ -53,6 +53,10 @@ renameMember = async function (client, guildMember) {
        client.logger.error('[nicknames] ' + localize('nicknames', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
        return;
     }
+    if (guildMember.guild.ownerId === guildMember.id) {
+       client.logger.error('[nicknames] ' + localize('nicknames', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
+       return;
+    }
     try {
         await guildMember.setNickname(truncate(rolePrefix + memberName, 32));
     } catch (e) {
