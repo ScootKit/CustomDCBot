@@ -1,8 +1,14 @@
-const {truncate} = require("../../src/functions/helpers");
+const {truncate} = require('../../src/functions/helpers');
+const {localize} = require('../../src/functions/localize');
 
 renameMember = async function (client, guildMember) {
     const roles = client.configurations['nicknames']['config'];
     const moduleModel = client.models['nicknames']['User'];
+
+    if (guildMember.guild.ownerId === guildMember.id) {
+        client.logger.error(localize('nicknames', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
+        return;
+    }
 
     let rolePrefix = '';
     let userRoles = guildMember.roles.cache.sort((a, b) => b.position - a.position).map(r => r.id);
@@ -30,7 +36,7 @@ renameMember = async function (client, guildMember) {
 
     for (const role of roles) {
         if (memberName.startsWith(role.prefix)) {
-            memberName = memberName.replace(role.prefix, "");
+            memberName = memberName.replace(role.prefix, '');
         }
     }
 
@@ -47,10 +53,11 @@ renameMember = async function (client, guildMember) {
 
     }
 
+    if (guildMember.nickname === truncate(rolePrefix + memberName, 32)) return;
     try {
         await guildMember.setNickname(truncate(rolePrefix + memberName, 32));
     } catch (e) {
-        client.logger.error(e);
+        client.logger.error(localize('nicknames', 'nickname-error', {u: guildMember.username, e: e}))
     }
 }
 module.exports.renameMember = renameMember;
