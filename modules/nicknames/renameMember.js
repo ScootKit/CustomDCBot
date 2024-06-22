@@ -57,7 +57,7 @@ renameMember = async function (client, guildMember) {
     try {
         await guildMember.setNickname(truncate(rolePrefix + memberName, 32));
     } catch (e) {
-        client.logger.error('[nicknames] ' + localize('nicknames', 'nickname-error', {u: guildMember.username, e: e}))
+        client.logger.error('[nicknames] ' + localize('nicknames', 'nickname-error', {u: guildMember.user.username, e: e}))
     }
 }
 module.exports.renameMember = renameMember;
