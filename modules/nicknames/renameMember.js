@@ -6,7 +6,7 @@ renameMember = async function (client, guildMember) {
     const moduleModel = client.models['nicknames']['User'];
 
     if (guildMember.guild.ownerId === guildMember.id) {
-        client.logger.error(localize('nicknames', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
+        client.logger.error('[nicknames] ' + localize('nicknames', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
         return;
     }
 
@@ -57,7 +57,7 @@ renameMember = async function (client, guildMember) {
     try {
         await guildMember.setNickname(truncate(rolePrefix + memberName, 32));
     } catch (e) {
-        client.logger.error(localize('nicknames', 'nickname-error', {u: guildMember.username, e: e}))
+        client.logger.error('[nicknames] ' + localize('nicknames', 'nickname-error', {u: guildMember.username, e: e}))
     }
 }
 module.exports.renameMember = renameMember;
