@@ -5,11 +5,6 @@ renameMember = async function (client, guildMember) {
     const roles = client.configurations['nicknames']['config'];
     const moduleModel = client.models['nicknames']['User'];
 
-    if (guildMember.guild.ownerId === guildMember.id) {
-        client.logger.error('[nicknames] ' + localize('nicknames', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
-        return;
-    }
-
     let rolePrefix = '';
     let userRoles = guildMember.roles.cache.sort((a, b) => b.position - a.position).map(r => r.id);
     for (const userRole of userRoles) {
