@@ -126,10 +126,10 @@ async function editBank(client, id, action, value) {
 /**
  * Function to create a new Item for the shop
  * @param {*} interaction Interaction (if you specify a name and ID, set this to an empty string)
- * @param {string} id The id of the item
- * @param {string} name The name of the item
- * @param {number} price The price of the item
- * @param {Role} role The role which is added to everyone who buys this item
+ * @param {string} pId The id of the item
+ * @param {string} pName The name of the item
+ * @param {number} pPrice The price of the item
+ * @param {Role} pRole The role which is added to everyone who buys this item
  * @param {Client} client Client
  * @returns {Promise}
  */
@@ -404,9 +404,9 @@ async function shopMsg(client) {
 
 /**
  * Gets the ten users with the most money
- * @param {object} object Objetc of the users
+ * @param {object} object Object of the users
  * @param {Client} client Client
- * @returns {array}
+ * @returns {string}
  * @private
  */
 async function topTen(object, client) {
@@ -447,7 +447,7 @@ async function leaderboard(client) {
         .setAuthor({name: client.user.username, iconURL: client.user.avatarURL()})
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
 
-    if (model.length !== 0) embed.addField('Leaderboard:', await topTen(model, client));
+    if (model.length !== 0) embed.addFields({name: 'Leaderboard:', value: await topTen(model, client)});
     if ((moduleStr['leaderboardEmbed']['thumbnail'] || '').replaceAll(' ', '')) embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
     if ((moduleStr['leaderboardEmbed']['image'] || '').replaceAll(' ', '')) embed.setImage(moduleStr['leaderboardEmbed']['image']);
 

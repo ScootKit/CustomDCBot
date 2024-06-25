@@ -297,7 +297,7 @@
         "en": 25
       },
       "description": {
-        "en": "Chance to become money for a message (Chance: 1/ This value). Set to 0 to disable message drops"
+        "en": "Chance to get money for a message (Chance: 1/ This value). Set to 0 to disable message drops"
       },
       "type": "integer"
     },

@@ -297,7 +297,6 @@
       "default": {
         "en": {
           "title": "Balance of %user%",
-          "description": "%shopItems%",
           "fields": [
             {
               "name": "Balance:",
