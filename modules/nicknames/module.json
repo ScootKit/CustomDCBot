@@ -1,0 +1,25 @@
+{
+  "name": "nicknames",
+  "humanReadableName": {
+    "en": "Role-Nicknames",
+    "de": "Rollen-Nicknamen"
+  },
+  "author": {
+    "name": "hfgd",
+    "link": "https://github.com/hfgd123",
+    "scnxOrgID": "2"
+  },
+  "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/nicknames",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json"
+  ],
+  "tags": [
+    "community"
+  ],
+  "description": {
+    "en": "Simple module to edit user nicknames based on roles!",
+    "de": "Einfaches Modul, um die Nicknames von Nutzern basierend auf ihren Rollen zu bearbeiten!"
+  }
+}

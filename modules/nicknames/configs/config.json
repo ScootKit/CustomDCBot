@@ -1,0 +1,44 @@
+{
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
+  "filename": "config.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "roleID",
+      "humanName": {
+        "en": "Role",
+        "de": "Rolle"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The role you want to set a prefix for.",
+        "de": "Die Rolle, für die ein Präfix vergeben werden soll."
+      },
+      "type": "roleID"
+    },
+    {
+      "name": "prefix",
+      "humanName": {
+        "en": "Prefix",
+        "de": "Präfix"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The Prefix to be set.",
+        "de": "Das Präfix."
+      },
+      "type": "string"
+    }
+  ]
+}

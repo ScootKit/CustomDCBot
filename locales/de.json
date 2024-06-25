@@ -978,5 +978,9 @@
     "starboard": {
         "invalid-minstars": "Ungültige Mindestanzahl an Sternen %stars",
         "star-limit": "Du hast das stündliche Starboard-Limit von %limitEmoji auf dem Server erreicht, deswegen kannst du nicht auf die Nachricht %msgUrl reagieren.\nProbiers doch %time nochmal!"
+    },
+    "nicknames": {
+        "owner-cannot-be-renamed": "Der Serverbesitzer (%u) kann nicht umbenannt werden.",
+        "nickname-error": "Fehler beim Ändern des Nicknamens von %u: %e"
     }
 }
