@@ -74,7 +74,11 @@ module.exports.subcommands = {
                 }
             });
             money = (user?.balance || 0) / 2;
-            await editBalance(interaction.client, interaction.user.id, 'remove', money);
+            if (money === 0) {
+                await editBank(interaction.client, interaction.user.id, 'remove', parseInt(interaction.config['maxCrimeMoney']));
+            } else {
+                await editBalance(interaction.client, interaction.user.id, 'remove', money);
+            }
             interaction.reply(embedType(randomElementFromArray(interaction.str['crimeFail']), {'%loose%': `${money} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
             interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-loose-money', {
                 u: formatDiscordUserName(interaction.user),

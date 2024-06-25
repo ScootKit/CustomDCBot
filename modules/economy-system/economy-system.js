@@ -24,14 +24,12 @@ async function createUser(client, id) {
 }
 
 /**
- * Add/ Remove xyz from balance/ set balance to
- * @param {Client} client Client
- * @param {string} id UserId of the user which is effected
- * @param {string} action The action which is should be performed (add/ remove/ set)
- * @param {number} value The value which is added/ removed to/ from the balance/ to which the balance gets set
- * @returns {Promise<void>}
+ * Trys to find a user and if the user doesn't exists, creates the user
+ * @param {Client} client client
+ * @param {string} id ID of the user
+ * @returns {Promise<Model|null>}
  */
-async function editBalance(client, id, action, value) {
+async function getUser(client, id) {
     let user = await client.models['economy-system']['Balance'].findOne({
         where: {
             id: id
@@ -45,6 +43,19 @@ async function editBalance(client, id, action, value) {
             }
         });
     }
+    return user;
+}
+
+/**
+ * Add/ Remove xyz from balance/ set balance to
+ * @param {Client} client Client
+ * @param {string} id UserId of the user which is effected
+ * @param {string} action The action which is should be performed (add/ remove/ set)
+ * @param {number} value The value which is added/ removed to/ from the balance/ to which the balance gets set
+ * @returns {Promise<void>}
+ */
+async function editBalance(client, id, action, value) {
+    const user = await getUser(client, id);
     let newBalance = 0;
     switch (action) {
         case 'add':
@@ -83,19 +94,7 @@ async function editBalance(client, id, action, value) {
  * @returns {Promise<void>}
  */
 async function editBank(client, id, action, value) {
-    let user = await client.models['economy-system']['Balance'].findOne({
-        where: {
-            id: id
-        }
-    });
-    if (!user) {
-        await createUser(client, id);
-        user = await client.models['economy-system']['Balance'].findOne({
-            where: {
-                id: id
-            }
-        });
-    }
+    const user = await getUser(client, id);
     let newBank = 0;
     switch (action) {
         case 'deposit':
@@ -125,7 +124,6 @@ async function editBank(client, id, action, value) {
 
 /**
  * Function to create a new Item for the shop
- * @param {*} interaction Interaction (if you specify a name and ID, set this to an empty string)
  * @param {string} pId The id of the item
  * @param {string} pName The name of the item
  * @param {number} pPrice The price of the item
@@ -133,86 +131,95 @@ async function editBank(client, id, action, value) {
  * @param {Client} client Client
  * @returns {Promise}
  */
-async function createShopItem(interaction, pId, pName, pPrice, pRole, client) {
+async function createShopItemAPI(pId, pName, pPrice, pRole, client) {
     return new Promise(async (resolve) => {
-        if (interaction !== '') {
-            const name = await interaction.options.get('item-name')['value'];
-            const id = await interaction.options.get('item-id', true)['value'];
-            const role = await interaction.options.getRole('role', true);
-            const price = await interaction.options.getInteger('price');
-            const model = interaction.client.models['economy-system']['Shop'];
-            if (interaction.guild.me.roles.highest.comparePositionTo(role) <= 0) return interaction.reply(localize('economy-system', 'role-to-high'));
-            const itemModel = await model.findOne({
-                where: {
-                    [Op.or]: [
-                        {name: name},
-                        {id: id}
-                    ]
-                }
-            });
-            if (itemModel) {
-                interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
-                    '%id%': id,
-                    '%name%': name
-                }, {ephemeral: interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-                resolve(localize('economy-system', 'item-duplicate'));
-            } else {
-                await model.create({
-                    id: id,
-                    name: name,
-                    price: price,
-                    role: role['id']
-                });
-                interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {
-                    '%name%': name,
-                    '%id%': id,
-                    '%price%': price,
-                    '%role%': role.name
-                }, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-
-                interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
-                    u: interaction.user.tag,
-                    n: name,
-                    i: id
-                }));
-                if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'created-item', {
-                    u: interaction.user.tag,
-                    n: name,
-                    i: id
-                }));
-                resolve(localize('economy-system', 'created-item'));
+        const model = client.models['economy-system']['Shop'];
+        const itemModel = await model.findOne({
+            where: {
+                [Op.or]: [
+                    {name: pName},
+                    {id: pId}
+                ]
             }
+        });
+        if (itemModel) {
+            resolve(localize('economy-system', 'item-duplicate'));
         } else {
-            const model = client.models['economy-system']['Shop'];
-            const itemModel = await model.findOne({
-                where: {
-                    [Op.or]: [
-                        {name: pName},
-                        {id: pId}
-                    ]
-                }
+            await model.create({
+                id: pId,
+                name: pName,
+                price: pPrice,
+                role: pRole
             });
-            if (itemModel) {
-                resolve(localize('economy-system', 'item-duplicate'));
-            } else {
-                await model.create({
-                    id: pId,
-                    name: pName,
-                    price: pPrice,
-                    role: pRole
-                });
-                client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
-                    u: 'API/ CLI',
-                    n: pName,
-                    i: pId
-                }));
-                if (client.logChannel) client.logChannel.send(`[economy-system] ` + localize('economy-system', 'created-item', {
-                    u: 'API/ CLI',
-                    n: pName,
-                    i: pId
-                }));
-                resolve(localize('economy-system', 'created-item'));
+            client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
+                u: 'API/ CLI',
+                n: pName,
+                i: pId
+            }));
+            if (client.logChannel) client.logChannel.send(`[economy-system] ` + localize('economy-system', 'created-item', {
+                u: 'API/ CLI',
+                n: pName,
+                i: pId
+            }));
+            await shopMsg(client);
+            resolve(localize('economy-system', 'created-item'));
+        }
+    });
+}
+
+/**
+ * Function to create a new Item for the shop
+ * @param {*} interaction Interaction
+ * @returns {Promise}
+ */
+async function createShopItem(interaction) {
+    return new Promise(async (resolve) => {
+        const name = await interaction.options.get('item-name')['value'];
+        const id = await interaction.options.get('item-id', true)['value'];
+        const role = await interaction.options.getRole('role', true);
+        const price = await interaction.options.getInteger('price');
+        const model = interaction.client.models['economy-system']['Shop'];
+        if (interaction.guild.me.roles.highest.comparePositionTo(role) <= 0) return interaction.reply(localize('economy-system', 'role-to-high'));
+        const itemModel = await model.findOne({
+            where: {
+                [Op.or]: [
+                    {name: name},
+                    {id: id}
+                ]
             }
+        });
+        if (itemModel) {
+            interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
+                '%id%': id,
+                '%name%': name
+            }, {ephemeral: interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            resolve(localize('economy-system', 'item-duplicate'));
+        } else {
+            await model.create({
+                id: id,
+                name: name,
+                price: price,
+                role: role['id']
+            });
+            interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {
+                '%name%': name,
+                '%id%': id,
+                '%price%': price,
+                '%role%': role.name
+            }, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+
+            interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
+                u: interaction.user.tag,
+                n: name,
+                i: id
+            }));
+            if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'created-item', {
+                u: interaction.user.tag,
+                n: name,
+                i: id
+            }));
+            await shopMsg(interaction.client);
+            resolve(localize('economy-system', 'created-item'));
         }
     });
 }
@@ -278,74 +285,83 @@ async function buyShopItem(interaction, id, name) {
         i: item[0]['name'],
         p: item[0]['price']
     }));
-    shopMsg(interaction.client);
+    await shopMsg(interaction.client);
 }
 
 /**
  * Function to delete a shop-item
- * @param {*} interaction Interaction (if you specify a name or ID, set this to an empty string)
  * @param {string} pName Name of the item
  * @param {string} pId ID if the item
+ * @param {Client} client Client
  * @returns {Promise}
  */
-async function deleteShopItem(interaction, pName, pId, client) {
+async function deleteShopItemAPI(pName, pId, client) {
     return new Promise(async (resolve) => {
-        if (interaction !== '') { // interaction mode
-            const name = interaction.options.get('item-name')['value'];
-            const id = interaction.options.get('item-id')['value'];
-            const model = await interaction.client.models['economy-system']['Shop'].findAll({
-                where: {
-                    [Op.or]: [
-                        {name: name},
-                        {id: id}
-                    ]
-                }
-            });
-            if (model.length > 1) {
-                await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['multipleMatches'], {}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-                resolve();
-            } else if (model.length < 1) {
-                await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {'%id%': id, '%name%': name}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-                resolve();
-            } else {
-                await model[0].destroy();
-                await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%name%': model[0]['name'], '%id%': model[0]['id']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
-                interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
-                    u: interaction.user.tag,
-                    i: name
-                }));
-                if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'delete-item', {
-                    u: interaction.user.tag,
-                    i: name
-                }));
-                resolve(`Deleted the item ${name} successfully`);
+        const model = await client.models['economy-system']['Shop'].findAll({
+            where: {
+                [Op.or]: [
+                    {name: pName},
+                    {id: pId}
+                ]
             }
+        });
+        if (model.length > 1) {
+            resolve('More than one item was found');
+        } else if (model.length < 1) {
+            resolve('No item was found');
         } else {
-            if (!client) return resolve('Please pass a client');
-            const model = await client.models['economy-system']['Shop'].findAll({
-                where: {
-                    [Op.or]: [
-                        {name: pName},
-                        {id: pId}
-                    ]
-                }
-            });
-            if (model.length > 1) {
-                resolve('More than one item was found');
-            } else if (model.length < 1) {
-                resolve('No item was found');
-            } else {
-                await model[0].destroy();
-                client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
-                    u: 'API/ CLI',
-                    i: pName
-                }));
-                if (client.logChannel) client.logChannel.send(`[economy-system] ` + localize('economy-system', 'delete-item', {
-                    u: 'API/ CLI',
-                    i: pName
-                }));
-                resolve(`Deleted the item ${pName}/ ${pId} successfully`);
+            await model[0].destroy();
+            client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
+                u: 'API/ CLI',
+                i: pName
+            }));
+            if (client.logChannel) client.logChannel.send(`[economy-system] ` + localize('economy-system', 'delete-item', {
+                u: 'API/ CLI',
+                i: pName
+            }));
+            await shopMsg(client);
+            resolve(`Deleted the item ${pName}/ ${pId} successfully`);
+        }
+    });
+}
+
+
+/**
+ * Function to delete a shop-item
+ * @param {*} interaction Interaction
+ * @returns {Promise}
+ */
+async function deleteShopItem(interaction) {
+    return new Promise(async (resolve) => {
+        const name = interaction.options.get('item-name')['value'];
+        const id = interaction.options.get('item-id')['value'];
+        const model = await interaction.client.models['economy-system']['Shop'].findAll({
+            where: {
+                [Op.or]: [
+                    {name: name},
+                    {id: id}
+                ]
             }
+        });
+        if (model.length > 1) {
+            await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['multipleMatches'], {}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            resolve();
+        } else if (model.length < 1) {
+            await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {'%id%': id, '%name%': name}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            resolve();
+        } else {
+            await model[0].destroy();
+            await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%name%': model[0]['name'], '%id%': model[0]['id']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
+                u: interaction.user.tag,
+                i: name
+            }));
+            if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'delete-item', {
+                u: interaction.user.tag,
+                i: name
+            }));
+            await shopMsg(interaction.client);
+            resolve(`Deleted the item ${name} successfully`);
         }
     });
 }
@@ -460,7 +476,9 @@ module.exports.editBalance = editBalance;
 module.exports.editBank = editBank;
 module.exports.createUser = createUser;
 module.exports.buyShopItem = buyShopItem;
+module.exports.createShopItemAPI = createShopItemAPI;
 module.exports.createShopItem = createShopItem;
+module.exports.deleteShopItemAPI = deleteShopItemAPI;
 module.exports.deleteShopItem = deleteShopItem;
 module.exports.createShopMsg = createShopMsg;
 module.exports.shopMsg = shopMsg;
