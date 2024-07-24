@@ -20,7 +20,7 @@
       },
       "description": {
         "en": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
-        "de": "Benutzer*innen die Admin only Aktionen ausführen können, wie z.B. die Balance von Benutzern ändern (Bot-Operatoren haben immer diese Berrechtigung)"
+        "de": "Benutzer*innen die Admin only Aktionen ausführen können, wie z.B. die Balance von Benutzern ändern (Bot-Operatoren haben immer diese Berechtigung)"
       },
       "type": "array",
       "content": "integer"

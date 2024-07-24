@@ -8,8 +8,8 @@ module.exports.commands = [
             const client = input.client;
             const args = input.args;
             if (!client.configurations['economy-system']['config']['allowCheats']) return console.log('This command isn`t activated.');
-            editBalance(client, args[1], 'add', parseInt(args[2]));
-            client.logger.debug(`Receved CLI Command: ${input}`);
+            await editBalance(client, args[1], 'add', parseInt(args[2]));
+            client.logger.debug(`Received CLI Command: ${input}`);
             client.logger.info(`[economy-system] ${args[2]} has been added to the balance of the user ${args[1]}`);
             if (client.logChannel) client.logChannel.send(`[economy-system] ${args[2]} has been added to the balance of the user ${args[1]}`);
         }

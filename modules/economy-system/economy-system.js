@@ -271,7 +271,6 @@ async function buyShopItem(interaction, id, name) {
         ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
     });
     await editBalance(interaction.client, interaction.user.id, 'remove', item[0]['price']);
-    console.log(item[0]['role']);
     await interaction.member.roles.add(item[0]['role']);
     leaderboard(interaction.client);
     interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': item[0]['name']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
@@ -412,7 +411,7 @@ async function createShopMsg(client, guild, ephemeral) {
 async function shopMsg(client) {
     if (!client.configurations['economy-system']['config']['shopChannel'] || client.configurations['economy-system']['config']['shopChannel'] === '') return;
     const channel = await client.channels.fetch(client.configurations['economy-system']['config']['shopChannel']);
-    if (!channel) return client.logger.fatal(`[economy-system] ` + localize('economy-system', 'channel-not-found'));
+    if (!channel) return client.logger.error(`[economy-system] ` + localize('economy-system', 'channel-not-found', {c: moduleConfig['leaderboardChannel']}));
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
     if (messages.last()) await messages.last().edit(await createShopMsg(client, channel.guild, false));
     else channel.send(await createShopMsg(client, channel.guild, false));
