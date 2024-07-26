@@ -19,6 +19,10 @@ async function checkPerms(interaction) {
 module.exports.subcommands = {
     'add': async function (interaction) {
         if (!checkPerms(interaction)) return;
+        interaction.reply({
+            content: localize('economy-system', 'creating-item'),
+            ephemeral: true
+        });
         await createShopItem(interaction);
         await shopMsg(interaction.client);
     },
@@ -33,6 +37,10 @@ module.exports.subcommands = {
     },
     'delete': async function (interaction) {
         if (!checkPerms(interaction)) return;
+        interaction.reply({
+            content: localize('economy-system', 'deleting'),
+            ephemeral: true
+        });
         await deleteShopItem(item['value'], interaction.client);
         await shopMsg(interaction.client);
     }

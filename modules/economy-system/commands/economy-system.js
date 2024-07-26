@@ -1,4 +1,4 @@
-const {editBalance, editBank, createleaderboard} = require('../economy-system');
+const {editBalance, editBank, createLeaderboard} = require('../economy-system');
 const {
     embedType,
     randomIntFromInterval,
@@ -52,7 +52,7 @@ module.exports.subcommands = {
         const moneyToAdd = randomIntFromInterval(parseInt(interaction.config['maxWorkMoney']), parseInt(interaction.config['minWorkMoney']));
         await editBalance(interaction.client, interaction.user.id, 'add', moneyToAdd);
         interaction.reply(embedType(randomElementFromArray(interaction.str['workSuccess']), {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
-        createleaderboard(interaction.client);
+        createLeaderboard(interaction.client);
         interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'work-earned-money', {
             u: formatDiscordUserName(interaction.user),
             m: moneyToAdd,
@@ -94,7 +94,7 @@ module.exports.subcommands = {
             const money = randomIntFromInterval(parseInt(interaction.config['maxCrimeMoney']), parseInt(interaction.config['minCrimeMoney']));
             await editBalance(interaction.client, interaction.user.id, 'add', money);
             interaction.reply(embedType(randomElementFromArray(interaction.str['crimeSuccess']), {'%earned%': `${money} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
-            createleaderboard(interaction.client);
+            createLeaderboard(interaction.client);
             interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
                 u: formatDiscordUserName(interaction.user),
                 m: money,
@@ -124,7 +124,7 @@ module.exports.subcommands = {
             '%earned%': `${toRob} ${interaction.config['currencySymbol']}`,
             '%user%': `<@${user.id}>`
         }, {ephemeral: !interaction.config['publicCommandReplies']}));
-        createleaderboard(interaction.client);
+        createLeaderboard(interaction.client);
         interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
             u: formatDiscordUserName(interaction.user),
             v: formatDiscordUserName(user),

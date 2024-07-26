@@ -270,8 +270,8 @@ async function buyShopItem(interaction, id, name) {
         content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
         ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
     });
-    await editBalance(interaction.client, interaction.user.id, 'remove', item[0]['price']);
     await interaction.member.roles.add(item[0]['role']);
+    await editBalance(interaction.client, interaction.user.id, 'remove', item[0]['price']);
     leaderboard(interaction.client);
     interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': item[0]['name']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
     interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'user-purchase', {
@@ -446,6 +446,7 @@ async function topTen(object, client) {
 async function leaderboard(client) {
     const moduleConfig = client.configurations['economy-system']['config'];
     const moduleStr = client.configurations['economy-system']['strings'];
+    if (!moduleConfig['leaderboardChannel'] || moduleConfig['leaderboardChannel'] === '') return;
     const channel = await client.channels.fetch(moduleConfig['leaderboardChannel']).catch(() => {
     });
     if (!channel) return client.logger.fatal(`[economy-system] ` + localize('economy-system', 'channel-not-found'));
@@ -481,4 +482,4 @@ module.exports.deleteShopItemAPI = deleteShopItemAPI;
 module.exports.deleteShopItem = deleteShopItem;
 module.exports.createShopMsg = createShopMsg;
 module.exports.shopMsg = shopMsg;
-module.exports.createleaderboard = leaderboard;
+module.exports.createLeaderboard = leaderboard;
