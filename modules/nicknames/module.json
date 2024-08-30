@@ -13,6 +13,7 @@
   "events-dir": "/events",
   "models-dir": "/models",
   "config-example-files": [
+    "configs/strings.json",
     "configs/config.json"
   ],
   "tags": [
