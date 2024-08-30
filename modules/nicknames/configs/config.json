@@ -39,6 +39,21 @@
         "de": "Das Präfix."
       },
       "type": "string"
+    },
+    {
+      "name": "forceDisplayname",
+      "humanName": {
+        "en": "Force display name",
+        "de": "Anzeigenamen erzwingen"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Use display names of users instead of custom nicknames.",
+        "de": "Anzeigenamen von Benutzern anstelle von benutzerdefinierten Nicknamen verwenden."
+      },
+      "type": "boolean"
     }
   ]
 }

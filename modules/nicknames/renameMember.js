@@ -2,6 +2,7 @@ const {truncate} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 
 renameMember = async function (client, guildMember) {
+    let forceDisplayname = false;
     const roles = client.configurations['nicknames']['config'];
     const moduleModel = client.models['nicknames']['User'];
 
@@ -11,6 +12,7 @@ renameMember = async function (client, guildMember) {
         let role = roles.find(r => r.roleID === userRole);
         if (role) {
             rolePrefix = role.prefix;
+            forceDisplayname = role.forceDisplayname;
             break;
         }
     }
@@ -23,10 +25,12 @@ renameMember = async function (client, guildMember) {
         }
     });
     let memberName;
-    if (!guildMember.nickname) {
+    if (!guildMember.nickname || forceDisplayname) {
         memberName = guildMember.user.displayName;
+        console.log("A " + forceDisplayname)
     } else {
         memberName = guildMember.nickname;
+        console.log("B " + forceDisplayname)
     }
 
     for (const role of roles) {
