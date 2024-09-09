@@ -8,37 +8,21 @@
     "de": "Konfiguration"
   },
   "filename": "config.json",
-  "configElements": true,
   "content": [
     {
-      "name": "roleID",
+      "name": "forceDisplayname",
       "humanName": {
-        "en": "Role",
-        "de": "Rolle"
+        "en": "Force display name",
+        "de": "Anzeigenamen erzwingen"
       },
       "default": {
-        "en": ""
+        "en": false
       },
       "description": {
-        "en": "The role you want to set a prefix for.",
-        "de": "Die Rolle, für die ein Präfix vergeben werden soll."
+        "en": "Use display names of users instead of custom nicknames.",
+        "de": "Anzeigenamen von Benutzern anstelle von benutzerdefinierten Nicknamen verwenden."
       },
-      "type": "roleID"
-    },
-    {
-      "name": "prefix",
-      "humanName": {
-        "en": "Prefix",
-        "de": "Präfix"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "The Prefix to be set.",
-        "de": "Das Präfix."
-      },
-      "type": "string"
+      "type": "boolean"
     }
   ]
 }

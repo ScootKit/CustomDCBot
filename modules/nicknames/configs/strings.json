@@ -1,0 +1,59 @@
+{
+  "description": {
+    "en": "Set a prefixes and/or suffixes for roles.",
+    "de": "Setze Präfixe und/oder Suffixe für Rollen."
+  },
+  "humanName": {
+    "en": "Roles",
+    "de": "Rollen"
+  },
+  "filename": "strings.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "roleID",
+      "humanName": {
+        "en": "Role",
+        "de": "Rolle"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The role you want to set a prefix/suffix for.",
+        "de": "Die Rolle, für die ein Präfix/Suffix vergeben werden soll."
+      },
+      "type": "roleID"
+    },
+    {
+      "name": "prefix",
+      "humanName": {
+        "en": "Prefix",
+        "de": "Präfix"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The Prefix to be set.",
+        "de": "Das Präfix."
+      },
+      "type": "string"
+    },
+    {
+      "name": "suffix",
+      "humanName": {
+        "en": "Suffix",
+        "de": "Suffix"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "The Suffix to be set.",
+        "de": "Das Suffix."
+      },
+      "type": "string"
+    }
+  ]
+}
