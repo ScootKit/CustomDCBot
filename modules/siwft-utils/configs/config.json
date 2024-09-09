@@ -1,0 +1,26 @@
+{
+  "filename": "config.json",
+  "humanName": {
+    "en": "Configuration"
+  },
+  "description": {
+    "en": "Configure the SIWFT Utils"
+  },
+  "content": [
+    {
+      "name": "iwan",
+      "humanName": {
+        "en": "IWAN String"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "de": "Deine IWAN an der die Transaktionen gesendet werden",
+        "en": "Your IWAN to which the transactions are sent"
+      },
+      "type": "string",
+      "allowNull": false
+    }
+  ]
+}
