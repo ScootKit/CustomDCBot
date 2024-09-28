@@ -10,19 +10,42 @@
   "filename": "config.json",
   "content": [
     {
-      "name": "startMoney",
+      "name": "admins",
       "humanName": {
-        "en": "Start Money",
-        "de": "Start Geld"
+        "en": "Administrators",
+        "de": "Administratoren"
       },
       "default": {
-        "en": 100
+        "en": []
       },
       "description": {
-        "en": "The amount of money that is given to a new user",
-        "de": "Das Geld, welches einem neuen Benutzer gegeben wird"
+        "en": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
+        "de": "Benutzer*innen die Admin only Aktionen ausführen können, wie z.B. die Balance von Benutzern ändern (Bot-Operatoren haben immer diese Berechtigung)"
       },
-      "type": "integer"
+      "type": "array",
+      "content": "integer"
+    },
+    {
+      "name": "allowCheats",
+      "humanName": {},
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Allow admins to edit the balance of users (for a fair system not recommended!)"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "selfBalance",
+      "humanName": {},
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "Allow admins to edit their own balance (for a fair system not recommended! DON'T DO THIS!!!!!)"
+      },
+      "type": "boolean"
     },
     {
       "name": "shopManagers",
@@ -39,6 +62,21 @@
       },
       "type": "array",
       "content": "integer"
+    },
+    {
+      "name": "startMoney",
+      "humanName": {
+        "en": "Start Money",
+        "de": "Start Geld"
+      },
+      "default": {
+        "en": 100
+      },
+      "description": {
+        "en": "The amount of money that is given to a new user",
+        "de": "Das Geld, welches einem neuen Benutzer gegeben wird"
+      },
+      "type": "integer"
     },
     {
       "name": "currencyName",
@@ -215,48 +253,26 @@
         "en": ""
       },
       "description": {
-        "en": "The ID if the channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
+        "en": "The if of the channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
         "de": "Die ID des Kanals für das Leaderboard. Hier kann jeder sehen, wer das meiste Geld hat"
       },
       "type": "channelID"
     },
     {
-      "name": "admins",
+      "name": "shopChannel",
       "humanName": {
-        "en": "Administrators",
-        "de": "Administartoren"
+        "en": "shop channel",
+        "de": "Shop Kanal"
       },
       "default": {
-        "en": []
+        "en": ""
       },
       "description": {
-        "en": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
-        "de": "Benutzer*innen die Admin only Aktionen ausführen können, wie z.B. die Balance von Benutzern ändern (Bot-Operatoren haben immer diese Berrechtigung)"
+        "en": "The id of the channel for the shop-Message. This message shows the items of the shop",
+        "de": "Die ID des Kanals für die Shop-Nachricht. Diese Nachricht zeigt alle Items des Shops"
       },
-      "type": "array",
-      "content": "integer"
-    },
-    {
-      "name": "allowCheats",
-      "humanName": {},
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Allow admins to edit the balance of users (for a fair system not recommended!)"
-      },
-      "type": "boolean"
-    },
-    {
-      "name": "selfBalance",
-      "humanName": {},
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Allow admins to edit their own balance (for a fair system not recommended! DON'T DO THIS!!!!!)"
-      },
-      "type": "boolean"
+      "type": "channelID",
+      "allowNull": true
     },
     {
       "name": "msgDropsIgnoredChannels",
@@ -281,7 +297,7 @@
         "en": 25
       },
       "description": {
-        "en": "Chance to become money for a message (Chance: 1/ This value). Set to 0 to disable message drops"
+        "en": "Chance to get money for a message (Chance: 1/ This value). Set to 0 to disable message drops"
       },
       "type": "integer"
     },
