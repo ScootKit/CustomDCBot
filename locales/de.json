@@ -814,9 +814,7 @@
         "migration-happening": "Datenbank-Schema nicht aktuell. Datenbank wird migriert. Starte deinen Bot nicht neu, um Datenverlust zu vermeiden.",
         "migration-done": "Datenbank wurde erfolgreich migriert.",
         "nothing-selected": "Nichts ausgewählt",
-        "select-menu-price": "Preis: %p",
-        "creating-item": "Erstelle das Item...",
-        "deleting": "Löschen..."
+        "select-menu-price": "Preis: %p"
     },
     "team-list": {
         "channel-not-found": "Kanal mit der ID %c konnte nicht gefunden werden, oder hat den falschen Typ (es werden nur Textkanäle unterstützt)",

@@ -179,7 +179,7 @@ async function createShopItem(interaction) {
         const role = await interaction.options.getRole('role', true);
         const price = await interaction.options.getInteger('price');
         const model = interaction.client.models['economy-system']['Shop'];
-        if (interaction.guild.me.roles.highest.comparePositionTo(role) <= 0) return interaction.reply(localize('economy-system', 'role-to-high'));
+        if (interaction.guild.me.roles.highest.comparePositionTo(role) <= 0) return await interaction.editReply(localize('economy-system', 'role-to-high'));
         const itemModel = await model.findOne({
             where: {
                 [Op.or]: [
@@ -189,10 +189,10 @@ async function createShopItem(interaction) {
             }
         });
         if (itemModel) {
-            interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
                 '%id%': id,
                 '%name%': name
-            }, {ephemeral: interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            }));
             resolve(localize('economy-system', 'item-duplicate'));
         } else {
             await model.create({
@@ -201,12 +201,12 @@ async function createShopItem(interaction) {
                 price: price,
                 role: role['id']
             });
-            interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemCreate'], {
                 '%name%': name,
                 '%id%': id,
                 '%price%': price,
                 '%role%': role.name
-            }, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            }));
 
             interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'created-item', {
                 u: interaction.user.tag,
@@ -240,18 +240,15 @@ async function buyShopItem(interaction, id, name) {
             ]
         }
     });
-    if (item.length < 1) return interaction.reply({
-        content: interaction.client.configurations['economy-system']['strings']['notFound'],
-        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    if (item.length < 1) return await interaction.editReply({
+        content: interaction.client.configurations['economy-system']['strings']['notFound']
     });
-    else if (item.length > 1) return interaction.reply({
-        content: interaction.client.configurations['economy-system']['strings']['multipleMatches'],
-        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    else if (item.length > 1) return await interaction.editReply({
+        content: interaction.client.configurations['economy-system']['strings']['multipleMatches']
     });
 
-    if (interaction.member.roles.cache.has(item[0]['role'])) return interaction.reply({
-        content: interaction.client.configurations['economy-system']['strings']['rebuyItem'],
-        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    if (interaction.member.roles.cache.has(item[0]['role'])) return await interaction.editReply({
+        content: interaction.client.configurations['economy-system']['strings']['rebuyItem']
     });
     let user = await interaction.client.models['economy-system']['Balance'].findOne({
         where: {
@@ -266,14 +263,13 @@ async function buyShopItem(interaction, id, name) {
             }
         });
     }
-    if (user.balance < item[0]['price']) return interaction.reply({
-        content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney'],
-        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    if (user.balance < item[0]['price']) return await interaction.editReply({
+        content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney']
     });
     await interaction.member.roles.add(item[0]['role']);
     await editBalance(interaction.client, interaction.user.id, 'remove', item[0]['price']);
     leaderboard(interaction.client);
-    interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': item[0]['name']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+    await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['buyMsg'], {'%item%': item[0]['name']}));
     interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'user-purchase', {
         u: interaction.user.tag,
         i: item[0]['name'],
@@ -343,14 +339,14 @@ async function deleteShopItem(interaction) {
             }
         });
         if (model.length > 1) {
-            await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['multipleMatches'], {}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['multipleMatches']));
             resolve();
         } else if (model.length < 1) {
-            await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {'%id%': id, '%name%': name}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {'%id%': id, '%name%': name}));
             resolve();
         } else {
             await model[0].destroy();
-            await interaction.reply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%name%': model[0]['name'], '%id%': model[0]['id']}, {ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']}));
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%name%': model[0]['name'], '%id%': model[0]['id']}));
             interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
                 u: interaction.user.tag,
                 i: name

@@ -891,9 +891,7 @@
         "migration-happening": "Database not up-to-date. Migrating database...",
         "migration-done": "Migrated database successfully.",
         "nothing-selected": "Select an item to buy it",
-        "select-menu-price": "Price: %p",
-        "creating-item": "The item is being created...",
-        "deleting": "Deleting..."
+        "select-menu-price": "Price: %p"
     },
     "status-role": {
         "fulfilled": "Status-role condition is fulfilled",

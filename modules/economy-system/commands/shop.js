@@ -19,16 +19,14 @@ async function checkPerms(interaction) {
 module.exports.subcommands = {
     'add': async function (interaction) {
         if (!checkPerms(interaction)) return;
-        interaction.reply({
-            content: localize('economy-system', 'creating-item'),
-            ephemeral: true
-        });
+        await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
         await createShopItem(interaction);
         await shopMsg(interaction.client);
     },
     'buy': async function (interaction) {
         const name = await interaction.options.getString('item-name');
         const id = await interaction.options.getString('item-id');
+        await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
         await buyShopItem(interaction, id, name);
     },
     'list': async function (interaction) {
@@ -37,11 +35,8 @@ module.exports.subcommands = {
     },
     'delete': async function (interaction) {
         if (!checkPerms(interaction)) return;
-        interaction.reply({
-            content: localize('economy-system', 'deleting'),
-            ephemeral: true
-        });
-        await deleteShopItem(item['value'], interaction.client);
+        await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
+        await deleteShopItem(interaction.client);
         await shopMsg(interaction.client);
     }
 };
