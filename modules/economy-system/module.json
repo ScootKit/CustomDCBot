@@ -10,6 +10,7 @@
   "commands-dir": "/commands",
   "events-dir": "/events",
   "models-dir": "/models",
+  "cli": "cli.js",
   "config-example-files": [
     "configs/config.json",
     "configs/strings.json"

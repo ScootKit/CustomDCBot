@@ -1,4 +1,4 @@
-const {editBalance, editBank, createleaderboard} = require('../economy-system');
+const {editBalance, editBank, createLeaderboard} = require('../economy-system');
 const {
     embedType,
     randomIntFromInterval,
@@ -16,7 +16,7 @@ module.exports.beforeSubcommand = async function (interaction) {
  * Function to handle the cooldown stuff
  * @private
  * @param {string} command The command
- * @param {integer} duration The duration of the cooldown (in ms)
+ * @param {int} duration The duration of the cooldown (in ms)
  * @param {userId} userId Id of the User
  * @param {Client} client Client
  * @returns {Promise<boolean>}
@@ -52,7 +52,7 @@ module.exports.subcommands = {
         const moneyToAdd = randomIntFromInterval(parseInt(interaction.config['maxWorkMoney']), parseInt(interaction.config['minWorkMoney']));
         await editBalance(interaction.client, interaction.user.id, 'add', moneyToAdd);
         interaction.reply(embedType(randomElementFromArray(interaction.str['workSuccess']), {'%earned%': `${moneyToAdd} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
-        createleaderboard(interaction.client);
+        createLeaderboard(interaction.client);
         interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'work-earned-money', {
             u: formatDiscordUserName(interaction.user),
             m: moneyToAdd,
@@ -74,7 +74,11 @@ module.exports.subcommands = {
                 }
             });
             money = (user?.balance || 0) / 2;
-            await editBalance(interaction.client, interaction.user.id, 'remove', money);
+            if (money === 0) {
+                await editBank(interaction.client, interaction.user.id, 'remove', parseInt(interaction.config['maxCrimeMoney']));
+            } else {
+                await editBalance(interaction.client, interaction.user.id, 'remove', money);
+            }
             interaction.reply(embedType(randomElementFromArray(interaction.str['crimeFail']), {'%loose%': `${money} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
             interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-loose-money', {
                 u: formatDiscordUserName(interaction.user),
@@ -90,7 +94,7 @@ module.exports.subcommands = {
             const money = randomIntFromInterval(parseInt(interaction.config['maxCrimeMoney']), parseInt(interaction.config['minCrimeMoney']));
             await editBalance(interaction.client, interaction.user.id, 'add', money);
             interaction.reply(embedType(randomElementFromArray(interaction.str['crimeSuccess']), {'%earned%': `${money} ${interaction.config['currencySymbol']}`}, {ephemeral: !interaction.config['publicCommandReplies']}));
-            createleaderboard(interaction.client);
+            createLeaderboard(interaction.client);
             interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
                 u: formatDiscordUserName(interaction.user),
                 m: money,
@@ -110,7 +114,7 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!robbedUser) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, {ephemeral: !interaction.config['publicCommandReplies']});
+        if (!robbedUser) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': formatDiscordUserName(user)}, {ephemeral: !interaction.config['publicCommandReplies']});
         if (!await cooldown('rob', interaction.config['robCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, {ephemeral: !interaction.config['publicCommandReplies']}));
         let toRob = parseInt(robbedUser.balance) * (parseInt(interaction.config['robPercent']) / 100);
         if (toRob >= parseInt(interaction.config['maxRobAmount'])) toRob = parseInt(interaction.config['maxRobAmount']);
@@ -120,7 +124,7 @@ module.exports.subcommands = {
             '%earned%': `${toRob} ${interaction.config['currencySymbol']}`,
             '%user%': `<@${user.id}>`
         }, {ephemeral: !interaction.config['publicCommandReplies']}));
-        createleaderboard(interaction.client);
+        createLeaderboard(interaction.client);
         interaction.client.logger.info('[economy-system] ' + localize('economy-system', 'crime-earned-money', {
             u: formatDiscordUserName(interaction.user),
             v: formatDiscordUserName(user),
@@ -268,9 +272,9 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': `${interaction.user.username}#${interaction.user.discriminator}`}, {ephemeral: !interaction.config['publicCommandReplies']});
+        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': formatDiscordUserName(user)}, {ephemeral: !interaction.config['publicCommandReplies']});
         interaction.reply(embedType(interaction.str['balanceReply'], {
-            '%user%': `${user.username}#${user.discriminator}`,
+            '%user%': formatDiscordUserName(user),
             '%balance%': `${balanceV['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`,
             '%bank%': `${balanceV['bank']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`,
             '%total%': `${parseInt(balanceV['balance']) + parseInt(balanceV['bank'])} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`
@@ -334,8 +338,8 @@ module.exports.subcommands = {
             content: localize('economy-system', 'destroy-reply'),
             ephemeral: !interaction.config['publicCommandReplies']
         });
-        interaction.client.logger.info(`[economy-system] Destroying the whole economy, as requested by ${interaction.user.username}#${interaction.user.discriminator}`);
-        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] Destroying the whole economy, as requested by ${interaction.user.username}#${interaction.user.discriminator}`);
+        interaction.client.logger.info(`[economy-system] Destroying the whole economy, as requested by ${formatDiscordUserName(interaction.user)}`);
+        if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] Destroying the whole economy, as requested by ${formatDiscordUserName(interaction.user)}`);
         const cooldownModels = await interaction.client.models['economy-system']['cooldown'].findAll();
         if (cooldownModels.length !== 0) {
             cooldownModels.forEach(async (element) => {

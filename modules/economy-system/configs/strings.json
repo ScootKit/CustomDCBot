@@ -64,7 +64,57 @@
       "params": [
         {
           "name": "shopItems",
-          "description": {}
+          "description": {
+            "en": "All items of the shop (format specified below)",
+            "de": "Alle Items des Shops (Format wird unten angegeben)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "itemString",
+      "humanName": {
+        "en": "item string",
+        "de": "Item Text"
+      },
+      "default": {
+        "en": "**%id%** %itemName%, **price**: %price%, **sellcount**: %sellcount%\n",
+        "de": "**%id%** %itemName%: **Preis**: %price%, **Verkäufe**: %sellcount%\n"
+      },
+      "description": {
+        "en": "String for the items for the shop message",
+        "de": "Text für die Items für die Shop-Nachricht"
+      },
+      "type": "string",
+      "allowEmbed": false,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the item",
+            "de": "ID des Items"
+          }
+        },
+        {
+          "name": "itemName",
+          "description": {
+            "en": "Name of the item",
+            "de": "Name des Items"
+          }
+        },
+        {
+          "name": "price",
+          "description": {
+            "en": "Price of the item",
+            "de": "Preis des Items"
+          }
+        },
+        {
+          "name": "sellcount",
+          "description": {
+            "en": "Count of the sales of the item",
+            "de": "Anzahl, wie häufig das Item verkauft wurde"
+          }
         }
       ]
     },
@@ -247,7 +297,6 @@
       "default": {
         "en": {
           "title": "Balance of %user%",
-          "description": "%shopItems%",
           "fields": [
             {
               "name": "Balance:",
@@ -340,7 +389,7 @@
       "name": "itemCreate",
       "humanName": {},
       "default": {
-        "en": "Successfully created the item %item%. It costs %price% and you get the role %role%"
+        "en": "Successfully created the item %name% with the id %id%. It costs %price% and you get the role %role%"
       },
       "description": {
         "en": "Message that gets send when a new shop item gets created"
@@ -349,9 +398,15 @@
       "allowEmbed": true,
       "params": [
         {
-          "name": "item",
+          "name": "name",
           "description": {
             "en": "Name of the created item"
+          }
+        },
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the created item"
           }
         },
         {
@@ -372,7 +427,7 @@
       "name": "itemDelete",
       "humanName": {},
       "default": {
-        "en": "Successfully deleted the item %item%."
+        "en": "Successfully deleted the item %name%."
       },
       "description": {
         "en": "Message that gets send when a new shop item gets deleted"
@@ -381,9 +436,17 @@
       "allowEmbed": true,
       "params": [
         {
-          "name": "item",
+          "name": "name",
           "description": {
-            "en": "Name of the deleted item"
+            "en": "Name of the deleted item",
+            "de": "Name des gelöschten Items"
+          }
+        },
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the deleted item",
+            "de": "ID des gelöschten Items"
           }
         }
       ]
@@ -518,6 +581,106 @@
         "en": "Message that gets send when a User disables the Message-Drop message"
       },
       "type": "string"
+    },
+    {
+      "name": "rebuyItem",
+      "humanName": {
+        "en": "rebuy message",
+        "de": "Erneutkaufen Nachricht"
+      },
+      "default": {
+        "en": "You already own this Item",
+        "de": "Du hast dieses Item bereits gekauft"
+      },
+      "description": {
+        "en": "The message that is send when the user trys to buy an Item that he already own",
+        "de": "Die Nachricht, die gesendet wird, wenn der Nutzer das Item bereits besitzt"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "multipleMatches",
+      "humanName": {
+        "en": "multiple matches",
+        "de": "mehrere Treffer"
+      },
+      "default": {
+        "en": "Multiple items match the query",
+        "de": "Mehrere Items entsprechen der Suche"
+      },
+      "description": {
+        "en": "The message that gets send when multiple items match the query",
+        "de": "Die Nachricht, die gesendet wird, wenn mehrere Items der Suche entsprechen"
+      },
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "noMatches",
+      "humanName": {
+        "en": "no matches",
+        "de": "keine Treffer"
+      },
+      "default": {
+        "en": "The item with the id %id%/ the name %name% doesn't exists",
+        "de": "Das Item mit der ID %id%/ dem Namen %name% wurde nicht gefunden"
+      },
+      "description": {
+        "en": "The message that gets send when the item can't be found",
+        "de": "Die Nachricht, die gesendet wird, wenn das Item nicht gefunden wird"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "The specified ID",
+            "de": "Die angegebene ID"
+          }
+        },
+        {
+          "name": "name",
+          "description": {
+            "en": "The specified name",
+            "de": "Der angegebene Name"
+          }
+        }
+      ]
+    },
+    {
+      "name": "itemDuplicate",
+      "humanName": {
+        "en": "item duplicate",
+        "de": "Item Duplikat"
+      },
+      "default": {
+        "en": "There's already an item with the id %id% or the name %name%",
+        "de": "Es gibt schon ein Item mit der ID %id% oder dem Namen %name%"
+      },
+      "description": {
+        "en": "The message that gets send when an item with the specified id or name already exists",
+        "de": "Die Nachricht, die gesendet wird, wenn ein Item mit dem angegebenen Namen oder der angegebenen ID schon existiert"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "id",
+          "description": {
+            "en": "The specified ID",
+            "de": "Die angegebene ID"
+          }
+        },
+        {
+          "name": "name",
+          "description": {
+            "en": "The specified name",
+            "de": "Der angegebene Name"
+          }
+        }
+      ]
     }
   ]
 }
