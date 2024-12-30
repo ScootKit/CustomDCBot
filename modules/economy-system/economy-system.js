@@ -328,35 +328,54 @@ async function deleteShopItemAPI(pName, pId, client) {
  */
 async function deleteShopItem(interaction) {
     return new Promise(async (resolve) => {
-        const name = interaction.options.get('item-name')['value'];
-        const id = interaction.options.get('item-id')['value'];
-        const model = await interaction.client.models['economy-system']['Shop'].findAll({
-            where: {
-                [Op.or]: [
-                    {name: name},
-                    {id: id}
-                ]
-            }
-        });
+        const nameOption = interaction.options.get('item-name');
+        const idOption = interaction.options.get('item-id');
+        let model;
+        if (nameOption && idOption) {
+            model = await interaction.client.models['economy-system']['Shop'].findAll({
+                where: {
+                    [Op.or]: [
+                        {name: nameOption['value']},
+                        {id: idOption['value']}
+                    ]
+                }
+            });
+        }else if (nameOption) {
+            model = await interaction.client.models['economy-system']['Shop'].findAll({
+                where: {
+                    name: nameOption['value']
+                }
+            });
+        }
+        else if (idOption) {
+            model = await interaction.client.models['economy-system']['Shop'].findAll({
+                where: {
+                    id: idOption['value']
+                }
+            });
+        } else {
+            await interaction.editReply("Please use the id or the name!")
+        }
+
         if (model.length > 1) {
             await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['multipleMatches']));
             resolve();
         } else if (model.length < 1) {
-            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {'%id%': id, '%name%': name}));
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {'%id%': idOption ? idOption['value'] : '-', '%name%': nameOption ? nameOption['value'] : '-'}));
             resolve();
         } else {
             await model[0].destroy();
             await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%name%': model[0]['name'], '%id%': model[0]['id']}));
             interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
                 u: interaction.user.tag,
-                i: name
+                i: model.name
             }));
             if (interaction.client.logChannel) interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'delete-item', {
                 u: interaction.user.tag,
-                i: name
+                i: model.name
             }));
             await shopMsg(interaction.client);
-            resolve(`Deleted the item ${name} successfully`);
+            resolve(`Deleted the item ${model.name} successfully`);
         }
     });
 }
@@ -452,12 +471,12 @@ async function leaderboard(client) {
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
 
     const embed = new MessageEmbed()
-        .setTitle(moduleStr['leaderboardEmbed']['title'])
-        .setDescription(moduleStr['leaderboardEmbed']['description'])
-        .setTimestamp()
-        .setColor(moduleStr['leaderboardEmbed']['color'])
-        .setAuthor({name: client.user.username, iconURL: client.user.avatarURL()})
-        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
+      .setTitle(moduleStr['leaderboardEmbed']['title'])
+      .setDescription(moduleStr['leaderboardEmbed']['description'])
+      .setTimestamp()
+      .setColor(moduleStr['leaderboardEmbed']['color'])
+      .setAuthor({name: client.user.username, iconURL: client.user.avatarURL()})
+      .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
 
     if (model.length !== 0) embed.addFields({name: 'Leaderboard:', value: await topTen(model, client)});
     if ((moduleStr['leaderboardEmbed']['thumbnail'] || '').replaceAll(' ', '')) embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
