@@ -36,7 +36,7 @@ module.exports.subcommands = {
     'delete': async function (interaction) {
         if (!checkPerms(interaction)) return;
         await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
-        await deleteShopItem(interaction.client);
+        await deleteShopItem(interaction);
         await shopMsg(interaction.client);
     }
 };
