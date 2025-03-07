@@ -100,7 +100,7 @@ module.exports.run = async function (client, interaction) {
                     {
                         id: rID,
                         type: 'ROLE',
-                        allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
+                        allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_FILES']
                     }
                 );
             });
