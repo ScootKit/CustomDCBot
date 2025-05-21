@@ -7,7 +7,6 @@ const {localize} = require('../../../src/functions/localize');
  */
 async function checkPerms(interaction) {
     const result = interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) || interaction.client.config['botOperators'].includes(interaction.user.id);
-    console.log(result);
     if (!result) {
         await interaction.reply({
             content: interaction.client.strings['not_enough_permissions'],
