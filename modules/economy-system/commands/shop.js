@@ -18,7 +18,7 @@ async function checkPerms(interaction) {
 
 module.exports.subcommands = {
     'add': async function (interaction) {
-        if (!checkPerms(interaction)) return;
+        if (!await checkPerms(interaction)) return;
         await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
         await createShopItem(interaction);
         await shopMsg(interaction.client);
@@ -34,7 +34,7 @@ module.exports.subcommands = {
         interaction.reply(msg);
     },
     'delete': async function (interaction) {
-        if (!checkPerms(interaction)) return;
+        if (!await checkPerms(interaction)) return;
         await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
         await deleteShopItem(interaction);
         await shopMsg(interaction.client);
