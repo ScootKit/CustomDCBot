@@ -6,7 +6,7 @@
   },
   "filename": "config.json",
   "configElements": true,
-  "content": [
+    "content": [
     {
       "name": "channelID",
       "humanName": {
@@ -103,7 +103,7 @@
       },
       "description": {
         "en": "optional; Allows to overwrite the displayed name of roles (Field 1: Role-ID, Field 2: Displayed Name)",
-        "de": "optional; Allows to overwrite the displayed name of a role (Feld 1: Rollen-ID, Feld 2: Angezeigter Name)"
+        "de": "optional; Erlaubt das Überschreiben des angezeigten Rollennamens (Feld 1: Rollen-ID, Feld 2: Angezeigter Name)"
       },
       "type": "keyed",
       "content": {
@@ -125,6 +125,22 @@
       "default": {
         "en": false
       }
+    },
+    {
+      "name": "sortByRolePosition",
+      "humanName": {
+        "en": "Sort Members by Role Position",
+        "de": "Mitglieder nach Rollenposition sortieren"
+      },
+      "description": {
+        "en": "If enabled, members are listed by the hierarchy of their highest role (from top to bottom).",
+        "de": "Wenn aktiviert, werden Mitglieder nach der Hierarchie ihrer höchsten Rolle gelistet (von oben nach unten)."
+      },
+      "type": "boolean",
+      "default": {
+        "en": true
+      }
     }
   ]
 }
+
