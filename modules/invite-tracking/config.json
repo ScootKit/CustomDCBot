@@ -4,7 +4,7 @@
   "filename": "config.json",
   "commandsWarnings": {
     "normal": [
-      "/trace-invites"
+      "/invites"
     ]
   },
   "content": [
