@@ -1,0 +1,60 @@
+{
+  "description": {
+    "en": "Configure reward roles per level",
+    "de": "Belohnungsrollen pro Level konfigurieren"
+  },
+  "humanName": {
+    "en": "Reward roles",
+    "de": "Belohnungsrollen"
+  },
+  "filename": "reward-roles.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "level",
+      "humanName": {
+        "en": "Level",
+        "de": "Level"
+      },
+      "default": {
+        "en": ""
+      },
+      "description": {
+        "en": "Level at which the reward should be granted",
+        "de": "Level, bei dem die Belohnung vergeben wird"
+      },
+      "type": "integer"
+    },
+    {
+      "name": "roles",
+      "humanName": {
+        "en": "Reward roles",
+        "de": "Belohnungsrollen"
+      },
+      "default": {
+        "en": []
+      },
+      "description": {
+        "en": "Roles that should be granted at this level",
+        "de": "Rollen, die bei diesem Level vergeben werden"
+      },
+      "type": "array",
+      "content": "roleID"
+    },
+    {
+      "name": "replacePrevious",
+      "humanName": {
+        "en": "Replace previous reward roles",
+        "de": "Vorherige Belohnungsrollen ersetzen"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If enabled, previous reward roles will be removed when this reward is granted",
+        "de": "Wenn aktiviert, werden vorherige Belohnungsrollen entfernt"
+      },
+      "type": "boolean"
+    }
+  ]
+}

@@ -6,6 +6,7 @@ const {
 } = require('../../../src/functions/helpers');
 const {registerNeededEdit} = require('../leaderboardChannel');
 const {localize} = require('../../../src/functions/localize');
+const {getReplaceableRewardRoleIds, getRewardForLevel} = require('../rewards');
 const cooldown = new Set();
 let currentlyLevelingUp = [];
 
@@ -57,7 +58,8 @@ module.exports.run = async (client, msg) => {
         const channel = client.channels.cache.find(c => c.id === moduleConfig.level_up_channel_id);
 
         const specialMessage = client.configurations['levels']['special-levelup-messages'].find(m => m.level === user.level);
-        const isRewardMessage = !!moduleConfig.reward_roles[user.level.toString()];
+        const rewardConfig = getRewardForLevel(client, user.level);
+        const isRewardMessage = !!rewardConfig;
         const randomMessages = client.configurations['levels']['random-levelup-messages'].filter(m => m.type === (isRewardMessage ? 'with-reward' : 'normal'));
 
         let messageToSend = moduleStrings.level_up_message;
@@ -68,13 +70,15 @@ module.exports.run = async (client, msg) => {
             else if (randomMessages.length !== 0) messageToSend = randomElementFromArray(randomMessages).message;
         }
 
-        if (isRewardMessage) {
-            if (moduleConfig.onlyTopLevelRole) {
-                for (const role of Object.values(moduleConfig.reward_roles)) {
-                    if (msg.member.roles.cache.has(role)) await msg.member.roles.remove(role, '[levels] ' + localize('levels', 'granted-rewards-audit-log')).catch();
+        if (rewardConfig) {
+            if (rewardConfig.replacePrevious) {
+                for (const role of getReplaceableRewardRoleIds(client)) {
+                    if (msg.member.roles.cache.has(role)) {
+                        await msg.member.roles.remove(role, '[levels] ' + localize('levels', 'granted-rewards-audit-log')).catch();
+                    }
                 }
             }
-            await msg.member.roles.add(moduleConfig.reward_roles[user.level.toString()], '[levels]' + localize('levels', 'granted-rewards-audit-log')).catch();
+            await msg.member.roles.add(rewardConfig.roles, '[levels]' + localize('levels', 'granted-rewards-audit-log')).catch();
         }
         if (specialMessage) messageToSend = specialMessage.message;
 
@@ -83,7 +87,7 @@ module.exports.run = async (client, msg) => {
             '%avatarURL%': msg.author.avatarURL() || msg.author.defaultAvatarURL,
             '%username%': msg.author.username,
             '%newLevel%': user.level,
-            '%role%': isRewardMessage ? `<@&${moduleConfig.reward_roles[user.level.toString()]}>` : localize('levels', 'no-role'),
+            '%role%': rewardConfig ? rewardConfig.roles.map(r => `<@&${r}>`).join(', ') : localize('levels', 'no-role'),
             '%tag%': formatDiscordUserName(msg.author)
         }, {allowedMentions: {parse: ['users']}}));
         currentlyLevelingUp = currentlyLevelingUp.filter(f => f !== msg.author.id);
