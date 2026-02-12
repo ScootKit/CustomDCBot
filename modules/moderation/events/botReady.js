@@ -68,7 +68,17 @@ exports.run = async (client) => {
  */
 async function updateCache(client) {
     const moduleConfig = client.configurations['moderation']['config'];
-    memberCache['quarantine'] = (await (await client.guilds.fetch(client.guildID)).members.fetch()).filter(m => !!m.roles.cache.get(moduleConfig['quarantine-role-id']));
+    const guild = await client.guilds.fetch(client.guildID);
+    const roleId = moduleConfig['quarantine-role-id'];
+    let members;
+    if (guild.members && typeof guild.members.fetch === 'function') {
+        members = await guild.members.fetch().catch(() => null);
+    }
+    if (!members) {
+        memberCache['quarantine'] = new Map();
+        return;
+    }
+    memberCache['quarantine'] = members.filter(m => !!m.roles.cache.get(roleId));
 }
 
 /**

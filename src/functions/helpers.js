@@ -319,12 +319,14 @@ async function sendMultipleSiteButtonMessage(channel, sites = [], allowedUserIDs
         await interaction.update({
             components: [{type: 'ACTION_ROW', components: getButtons(nextSite)}],
             embeds: [sites[nextSite - 1]]
+        }).catch(() => {
         });
     });
     c.on('end', () => {
         m.edit({
             components: [{type: 'ACTION_ROW', components: getButtons(currentSite, true)}],
             embeds: [sites[currentSite - 1]]
+        }).catch(() => {
         });
     });
 

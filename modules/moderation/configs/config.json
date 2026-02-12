@@ -147,6 +147,271 @@
       "content": "roleID"
     },
     {
+      "name": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Linked Accounts",
+        "de": "Verknuepfte Accounts"
+      },
+      "default": {
+        "en": false,
+        "de": false
+      },
+      "description": {
+        "en": "Enable linking multiple accounts to a single dossier",
+        "de": "Erlaubt das Verknuepfen mehrerer Accounts zu einer Akte"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "linked_accounts_mode",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Linked Account Mode",
+        "de": "Modus fuer verknuepfte Accounts"
+      },
+      "default": {
+        "en": "mirror",
+        "de": "mirror"
+      },
+      "description": {
+        "en": "single: only one account allowed; mirror: actions are mirrored across linked accounts",
+        "de": "single: nur ein Account erlaubt; mirror: Aktionen werden auf verknuepfte Accounts gespiegelt"
+      },
+      "type": "select",
+      "content": [
+        "single",
+        "mirror"
+      ]
+    },
+    {
+      "name": "linked_accounts_single_action",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Action for secondary accounts (single mode)",
+        "de": "Aktion fuer Zweitaccounts (single Modus)"
+      },
+      "default": {
+        "en": "none",
+        "de": "none"
+      },
+      "description": {
+        "en": "Action applied to non-main accounts when linking in single mode",
+        "de": "Aktion, die bei Verknuepfung im single Modus auf Zweitaccounts angewendet wird"
+      },
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "quarantine",
+        "ban"
+      ]
+    },
+    {
+      "name": "linked_accounts_mirror_actions",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Mirror actions",
+        "de": "Aktionen spiegeln"
+      },
+      "default": {
+        "en": [
+          "warn",
+          "mute",
+          "kick",
+          "quarantine",
+          "unquarantine",
+          "ban",
+          "channel-mute"
+        ],
+        "de": [
+          "warn",
+          "mute",
+          "kick",
+          "quarantine",
+          "unquarantine",
+          "ban",
+          "channel-mute"
+        ]
+      },
+      "description": {
+        "en": "Actions that should be mirrored to linked accounts in mirror mode",
+        "de": "Aktionen, die im mirror Modus auf verknuepfte Accounts uebertragen werden"
+      },
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "linked_accounts_suppress_log_channel",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Suppress log channel for mirrored actions",
+        "de": "Log-Kanal fuer gespiegelte Aktionen unterdruecken"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled, mirrored actions won't be sent to the moderation log channel",
+        "de": "Wenn aktiviert, werden gespiegelte Aktionen nicht im Log-Kanal gesendet"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "linked_accounts_group_log",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Group linked accounts in log",
+        "de": "Verknuepfte Accounts im Log gruppieren"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled, a single log entry includes all linked accounts for mirrored actions",
+        "de": "Wenn aktiviert, werden verknuepfte Accounts bei gespiegelten Aktionen in einem Log-Eintrag zusammengefasst"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "linked_accounts_group_log_show_linked",
+      "dependsOn": "linked_accounts_group_log",
+      "humanName": {
+        "en": "Show linked accounts in grouped log",
+        "de": "Verknuepfte Accounts im Gruppen-Log anzeigen"
+      },
+      "default": {
+        "en": false,
+        "de": false
+      },
+      "description": {
+        "en": "If enabled, the grouped log entry lists linked accounts",
+        "de": "Wenn aktiviert, listet der gruppierte Log-Eintrag verknuepfte Accounts"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "dossier_show_linked_accounts",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Show linked accounts in dossier",
+        "de": "Verlinkte Accounts in Akte anzeigen"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Show linked accounts section in /moderate actions",
+        "de": "Zeigt verlinkte Accounts in /moderate actions an"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "dossier_show_notes",
+      "humanName": {
+        "en": "Show notes in dossier",
+        "de": "Notizen in Akte anzeigen"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "Show notes section in /moderate actions",
+        "de": "Zeigt Notizen in /moderate actions an"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "dossier_notes_require_opt_in",
+      "dependsOn": "dossier_show_notes",
+      "humanName": {
+        "en": "Require show-notes parameter",
+        "de": "show-notes Parameter erforderlich"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled, notes are only shown when show-notes is set in /moderate actions",
+        "de": "Wenn aktiviert, werden Notizen nur angezeigt, wenn show-notes in /moderate actions gesetzt ist"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "dossier_include_alt_notes",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Include alt account notes",
+        "de": "Notizen von Alt-Accounts einbeziehen"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled, notes from linked accounts are listed",
+        "de": "Wenn aktiviert, werden Notizen verlinkter Accounts angezeigt"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "actions_restrict_channels",
+      "humanName": {
+        "en": "Restrict /moderate actions to channels",
+        "de": "/moderate actions auf Kanaele begrenzen"
+      },
+      "default": {
+        "en": false,
+        "de": false
+      },
+      "description": {
+        "en": "If enabled, /moderate actions can only be used in allowed channels",
+        "de": "Wenn aktiviert, kann /moderate actions nur in erlaubten Kanaelen genutzt werden"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "actions_allowed_channels",
+      "dependsOn": "actions_restrict_channels",
+      "humanName": {
+        "en": "Allowed channels for /moderate actions",
+        "de": "Erlaubte Kanaele fuer /moderate actions"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Channels where /moderate actions is allowed",
+        "de": "Kanaele, in denen /moderate actions erlaubt ist"
+      },
+      "type": "array",
+      "content": "channelID"
+    },
+    {
+      "name": "dossier_include_alt_actions",
+      "dependsOn": "linked_accounts_enabled",
+      "humanName": {
+        "en": "Include alt account actions",
+        "de": "Aktionen von Alt-Accounts einbeziehen"
+      },
+      "default": {
+        "en": false,
+        "de": false
+      },
+      "description": {
+        "en": "If enabled, actions from linked accounts are listed in /moderate actions",
+        "de": "Wenn aktiviert, werden Aktionen verlinkter Accounts in /moderate actions angezeigt"
+      },
+      "type": "boolean"
+    },
+    {
       "name": "roles-to-ping-on-report",
       "humanName": {
         "de": "Rollenpings bei Report",
@@ -405,24 +670,78 @@
       ]
     },
     {
+      "name": "debug_clear_punishments_enabled",
+      "humanName": {
+        "de": "Debug: Strafen loeschen",
+        "en": "Debug: Clear punishments"
+      },
+      "default": {
+        "en": false,
+        "de": false
+      },
+      "description": {
+        "en": "Enable the debug command to clear all moderation actions for a user",
+        "de": "Aktiviert den Debug-Befehl zum Loeschen aller Moderationsaktionen eines Nutzers"
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "automod_enabled",
+      "humanName": {
+        "de": "Warn-Automod aktiv",
+        "en": "Warn automod enabled"
+      },
+      "default": {
+        "en": true,
+        "de": true
+      },
+      "description": {
+        "en": "If enabled, actions defined in Automod will be executed when warn thresholds are reached",
+        "de": "Wenn aktiviert, werden die in Automod definierten Aktionen beim Erreichen der Warn-Grenzen ausgefuehrt"
+      },
+      "type": "boolean"
+    },
+    {
       "name": "automod",
+      "dependsOn": "automod_enabled",
       "humanName": {
         "de": "Automod",
         "en": "Automod"
       },
       "default": {
-        "en": {},
-        "de": {}
+        "en": {
+          "7": "quarantine:2d"
+        },
+        "de": {
+          "7": "quarantine:2d"
+        }
       },
       "description": {
-        "en": "You can define here what should happen (options: mute, kick, ban, quarantine) when someone gets x warns. Specify duration by writing :<Duration> after the action.",
-        "de": "Du kannst hier festlegen, was passieren soll (optionen: mute, kick, ban), wenn jemand x Verwarnungen bekommt. Länge festlegen, indem :<Länge> hinter die Aktion geschrieben wird."
+        "en": "Define what should happen (options: mute, kick, ban, quarantine) when someone reaches x warns. Specify duration by writing :<Duration> after the action (e.g. 3:mute:5h).",
+        "de": "Lege fest, was passieren soll (Optionen: mute, kick, ban, quarantine), wenn jemand x Verwarnungen erreicht. Dauer mit :<Dauer> angeben (z.B. 3:mute:5h)."
       },
       "type": "keyed",
       "content": {
         "key": "integer",
         "value": "string"
       }
+    },
+    {
+      "name": "automod_reason",
+      "dependsOn": "automod_enabled",
+      "humanName": {
+        "de": "Automod Begruendung",
+        "en": "Automod reason"
+      },
+      "default": {
+        "en": "User exceeded the warn limit of %w. Action: %a.",
+        "de": "User hat die Warn-Grenze von %w ueberschritten. Aktion: %a."
+      },
+      "description": {
+        "en": "Reason template for automod actions. Placeholders: %w (warn count), %a (action).",
+        "de": "Begruendungstext fuer Automod-Aktionen. Platzhalter: %w (Warn-Anzahl), %a (Aktion)."
+      },
+      "type": "string"
     },
     {
       "name": "warnsExpire",
