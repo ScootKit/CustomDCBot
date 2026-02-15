@@ -34,8 +34,8 @@
         "en": []
       },
       "description": {
-        "en": "A list of characters that should be allowed (whitelist) or blocked (blacklist) in usernames. If the list is empty, all non-alphanumeric characters will be removed.",
-        "de": "Eine Liste von Zeichen, die in Benutzernamen erlaubt (Whitelist) oder blockiert (Blacklist) werden sollen. Wenn die Liste leer ist, werden alle nicht-alphanumerischen Zeichen entfernt."
+        "en": "A list of characters that should be allowed (whitelist) or blocked (blacklist) at the start of usernames. If the list is empty, all non-alphanumeric characters will be removed.",
+        "de": "Eine Liste von Zeichen, die am Anfang von Benutzernamen erlaubt (Whitelist) oder blockiert (Blacklist) werden sollen. Wenn die Liste leer ist, werden alle nicht-alphanumerischen Zeichen entfernt."
       },
       "type": "array",
       "content": "string"
@@ -50,8 +50,8 @@
         "en": false
       },
       "description": {
-        "en": "If yes: the list of characters will be treated as a blacklist (characters in the list will be blocked); if no: the list will be treated as a whitelist (only characters in the list will be allowed).",
-        "de": "Wenn ja: die Liste der Zeichen wird als Blacklist behandelt (Zeichen in der Liste werden blockiert); wenn nein: die Liste wird als Whitelist behandelt (nur Zeichen in der Liste werden erlaubt)."
+        "en": "If yes: the list of characters will be treated as a blacklist (characters in the list will be blocked); if no: the list will be treated as a whitelist (only characters in the list and alphanumeric characters will be allowed).",
+        "de": "Wenn ja: die Liste der Zeichen wird als Blacklist behandelt (Zeichen in der Liste werden blockiert); wenn nein: die Liste wird als Whitelist behandelt (nur Zeichen in der Liste und alphanumerische Zeichen werden erlaubt)."
       },
       "type": "boolean"
     },

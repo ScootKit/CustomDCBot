@@ -1,7 +1,7 @@
 const {localize} = require("../../src/functions/localize");
 renameMember = async function (client, guildMember) {
     let newName;
-    const moduleConf = client.configurations['username-check']['config'];
+    const moduleConf = client.configurations['name-list-cleaner']['config'];
     if (moduleConf.userWhitelist.includes(guildMember.user.id)) return;
 
 
@@ -17,17 +17,17 @@ renameMember = async function (client, guildMember) {
         try {
             await guildMember.setNickname(newName);
         } catch (e) {
-            client.logger.error('[username-check] ' + localize('username-check', 'nickname-error', {u: guildMember.user.username, e: e}))
+            client.logger.error('[name-list-cleaner] ' + localize('name-list-cleaner', 'nickname-error', {u: guildMember.user.username, e: e}))
         }
     } else {
-        await guildMember.setNickname(null, localize('username-check', 'nickname-reset', {u: guildMember.user.username}));
+        await guildMember.setNickname(null, localize('name-list-cleaner', 'nickname-reset', {u: guildMember.user.username}));
     }
 }
 
 module.exports.renameMember = renameMember;
 
 async function checkUsername(client, name) {
-    const moduleConf = client.configurations['username-check']['config'];
+    const moduleConf = client.configurations['name-list-cleaner']['config'];
     if (name.length === 0) return 'INVALID NAME';
     if (moduleConf.symbolWhitelist === []) {
         if (name.charAt(0).match(/^[a-zA-Z0-9]$/)) {
