@@ -12,7 +12,10 @@ renameMember = async function (client, guildMember) {
         newName = await checkUsername(client, guildMember.user.username);
         if (newName === guildMember.user.username) return;
     } else return;
-
+    if (guildMember.guild.ownerId === guildMember.id) {
+        client.logger.error('[nicknames] ' + localize('name-list-cleaner', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
+        return;
+    }
     if (moduleConf.keepNickname) {
         try {
             await guildMember.setNickname(newName);

@@ -985,6 +985,7 @@
     },
     "name-list-cleaner": {
         "nickname-error": "Fehler beim Ändern des Nicknames von %u: %e",
-        "nickname-reset": "Der Nickname von %u wurde zurückgesetzt, da er mit einem ungültigen Zeichen begann."
+        "nickname-reset": "Der Nickname von %u wurde zurückgesetzt, da er mit einem ungültigen Zeichen begann.",
+        "owner-cannot-be-renamed": "Der Serverbesitzer (%u) kann nicht umbenannt werden."
     }
 }
