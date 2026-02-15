@@ -1,7 +1,8 @@
 {
-  "name": "username-check",
+  "name": "name-list-cleaner",
   "humanReadableName": {
-    "en": "Username Check"
+    "en": "Name List Cleaner",
+    "de": "Namenslisten Cleaner"
   },
   "author": {
     "name": "hfgd",
