@@ -1,0 +1,90 @@
+{
+  "description": {
+    "en": "Configure the function of the module here",
+    "de": "Stelle hier die Funktionen des Modules ein"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "keepNickname",
+      "humanName": {
+        "en": "Keep nickname",
+        "de": "Nickname behalten"
+      },
+      "default": {
+        "en": true
+      },
+      "description": {
+        "en": "If yes: special characters will be removed from nicknames; if no: the nickname will be removed and the username will be shown instead.",
+        "de": "Wenn ja: Sonderzeichen werden aus den Nicknames entfernt; wenn nein: der Nickname wird entfernt und stattdessen der Benutzername angezeigt."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "symbolWhitelist",
+      "humanName": {
+        "en": "Character Whitelist/Blacklist",
+        "de": "Zeichen Whitelist/Blacklist"
+      },
+      "default": {
+        "en": []
+      },
+      "description": {
+        "en": "A list of characters that should be allowed (whitelist) or blocked (blacklist) at the start of usernames. If the list is empty, all non-alphanumeric characters will be removed.",
+        "de": "Eine Liste von Zeichen, die am Anfang von Benutzernamen erlaubt (Whitelist) oder blockiert (Blacklist) werden sollen. Wenn die Liste leer ist, werden alle nicht-alphanumerischen Zeichen entfernt."
+      },
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "isBlacklist",
+      "humanName": {
+        "en": "Use blacklist instead of whitelist",
+        "de": "Blacklist statt Whitelist verwenden"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If yes: the list of characters will be treated as a blacklist (characters in the list will be blocked); if no: the list will be treated as a whitelist (only characters in the list and alphanumeric characters will be allowed).",
+        "de": "Wenn ja: die Liste der Zeichen wird als Blacklist behandelt (Zeichen in der Liste werden blockiert); wenn nein: die Liste wird als Whitelist behandelt (nur Zeichen in der Liste und alphanumerische Zeichen werden erlaubt)."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "userWhitelist",
+      "humanName": {
+        "en": "User Whitelist",
+        "de": "Benutzer-Whitelist"
+      },
+      "default": {
+        "en": []
+      },
+      "description": {
+        "en": "A list of user IDs that should be exempt from the username check. Usernames of these users will not be modified.",
+        "de": "Eine Liste von Benutzer-IDs, die von der Benutzernamenprüfung ausgenommen werden sollen. Die Benutzernamen dieser Benutzer werden nicht geändert."
+      },
+      "type": "array",
+      "content": "userID"
+    },
+    {
+      "name": "alsoCheckUsernames",
+      "humanName": {
+        "en": "Also check usernames",
+        "de": "Auch Benutzernamen überprüfen"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "en": "If yes: not only nicknames but also usernames will be checked for special characters and modified accordingly. If no: only nicknames will be checked and modified, usernames will be left unchanged.",
+        "de": "Wenn ja: nicht nur Nicknames, sondern auch Benutzernamen werden auf Sonderzeichen überprüft und entsprechend geändert. Wenn nein: nur Nicknames werden überprüft und geändert, Benutzernamen bleiben unverändert."
+      },
+      "type": "boolean"
+    }
+  ]
+}
