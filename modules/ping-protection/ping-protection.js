@@ -604,7 +604,15 @@ async function processPing(client, userId, targetId, isRole, messageUrl, originC
         : (retentionWeeks * 7);
 
         const pingCount = await getPingCountInWindow(client, userId, timeframeDays);
-        const requiredCount = rule.pingsCount;
+        const requiredCount =
+            rule.pingsCount ??
+            rule.pingsCountAdvanced ??
+            rule.pingsCountBasic;
+        
+        // Skip this rule if no valid threshold is configured
+        if (typeof requiredCount !== 'number' || !Number.isFinite(requiredCount)) {
+            continue;
+        }
 
         if (pingCount >= requiredCount) {
             const oneMinuteAgo = new Date(Date.now() - 60000);
