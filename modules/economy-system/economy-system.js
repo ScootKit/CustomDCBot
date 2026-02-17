@@ -383,11 +383,97 @@ async function deleteShopItem(interaction) {
 }
 
 /**
+* Function to update a shop-item
+* @param {*} interaction Interaction
+* @returns {Promise}
+*/
+async function updateShopItem(interaction) {
+    return new Promise(async (resolve) => {
+        const id = interaction.options.get('item-id')['value'];
+
+        if (!id) {
+            await interaction.editReply('Please use the id!'); //IDK how this should happen
+            return resolve();
+        }
+
+        const item = await interaction.client.models['economy-system']['Shop'].findOne({
+            where: {
+                id: id
+            }
+        });
+
+        if (!item) {
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {
+                '%id%': id,
+                '%name%': '-'
+            }));
+            return resolve();
+        }
+
+        const newNameOption = interaction.options.get('item-new-name');
+        const newPrice = interaction.options.getInteger('new-price');
+        const newRole = interaction.options.getRole('new-role');
+        if (newRole && interaction.guild.me.roles.highest.comparePositionTo(newRole) <= 0) {
+            return await interaction.editReply(localize('economy-system', 'role-to-high'));
+        }
+
+        if (newNameOption) {
+            const collidingItem = await interaction.client.models['economy-system']['Shop'].findOne({
+                where: {
+                    name: newNameOption['value']
+                }
+            });
+            if (collidingItem && collidingItem['id'] !== id) {
+                await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
+                    '%id%': id,
+                    '%name%': "-"
+                }));
+                return resolve(localize('economy-system', 'item-duplicate'));
+            }
+        }
+
+        if (newNameOption) {
+            item.name = newNameOption['value'];
+        }
+        if (newPrice) {
+            item.price = newPrice;
+        }
+        if (newRole) {
+            item.role = newRole['id'];
+        }
+
+        console.log(item);
+
+        await item.save();
+
+        await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemEdit'], {
+            '%name%': item.name,
+            '%id%': item.id
+        }));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'edit-item', {
+            u: interaction.user.tag,
+            i: id,
+            n: newNameOption ? newNameOption['value'] : "-",
+            p: newPrice ? newPrice : "-",
+            r: newRole ? newRole['name'] : "-",
+        }));
+        if (interaction.client.logChannel) await interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'edit-item', {
+            u: interaction.user.tag,
+            i: id,
+            n: newNameOption ? newNameOption['value'] : "-",
+            p: newPrice ? newPrice : "-",
+            r: newRole ? newRole['name'] : "-",
+        }));
+        resolve(`Edited the item ${item.name} successfully`);
+    });
+}
+
+/**
  * Create the shop message
  * @param {Client} client Client
  * @param {object} guild Object of the guild
  * @param {boolean} ephemeral Should the message be ephemeral?
- * @returns {string}
+ * @returns {Promise<string>}
  */
 async function createShopMsg(client, guild, ephemeral) {
     const items = await client.models['economy-system']['Shop'].findAll();
@@ -515,6 +601,7 @@ module.exports.createShopItemAPI = createShopItemAPI;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItemAPI = deleteShopItemAPI;
 module.exports.deleteShopItem = deleteShopItem;
+module.exports.updateShopItem = updateShopItem;
 module.exports.createShopMsg = createShopMsg;
 module.exports.shopMsg = shopMsg;
 module.exports.createLeaderboard = leaderboard;
