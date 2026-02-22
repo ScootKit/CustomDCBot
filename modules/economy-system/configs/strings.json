@@ -458,7 +458,7 @@
         "en": "Successfully edited the item %name%. Check it out using `/shop list`"
       },
       "description": {
-        "en": "Message that gets send when a shop item gets edited"
+        "en": "Message that gets sent when a shop item gets edited"
       },
       "type": "string",
       "allowEmbed": true,

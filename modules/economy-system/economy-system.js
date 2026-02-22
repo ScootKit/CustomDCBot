@@ -183,7 +183,16 @@ async function createShopItem(interaction) {
         const role = await interaction.options.getRole('role', true);
         const price = await interaction.options.getInteger('price');
         const model = interaction.client.models['economy-system']['Shop'];
-        if (interaction.guild.me.roles.highest.comparePositionTo(role) <= 0) return await interaction.editReply(localize('economy-system', 'role-to-high'));
+        if (interaction.guild.members.me.roles.highest.comparePositionTo(role) <= 0) {
+            await interaction.editReply(localize('economy-system', 'role-to-high'));
+            return resolve(localize('economy-system', 'role-to-high'));
+        }
+
+        if(price<=0) {
+            await interaction.editReply(localize('economy-system', 'price-less-than-zero'));
+            return resolve(localize('economy-system', 'price-less-than-zero'));
+        }
+
         const itemModel = await model.findOne({
             where: {
                 [Op.or]: [
@@ -413,8 +422,14 @@ async function updateShopItem(interaction) {
         const newNameOption = interaction.options.get('item-new-name');
         const newPrice = interaction.options.getInteger('new-price');
         const newRole = interaction.options.getRole('new-role');
-        if (newRole && interaction.guild.me.roles.highest.comparePositionTo(newRole) <= 0) {
-            return await interaction.editReply(localize('economy-system', 'role-to-high'));
+        if (newRole && interaction.guild.members.me.roles.highest.comparePositionTo(newRole) <= 0) {
+            await interaction.editReply(localize('economy-system', 'role-to-high'));
+            return resolve(localize('economy-system', 'role-to-high'));
+        }
+
+        if(newPrice !== null && newPrice<=0) {
+            await interaction.editReply(localize('economy-system', 'price-less-than-zero'));
+            return resolve(localize('economy-system', 'price-less-than-zero'));
         }
 
         if (newNameOption) {
@@ -435,14 +450,12 @@ async function updateShopItem(interaction) {
         if (newNameOption) {
             item.name = newNameOption['value'];
         }
-        if (newPrice) {
+        if (newPrice !== null) {
             item.price = newPrice;
         }
         if (newRole) {
             item.role = newRole['id'];
         }
-
-        console.log(item);
 
         await item.save();
 
