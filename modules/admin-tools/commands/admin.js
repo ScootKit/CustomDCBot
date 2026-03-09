@@ -37,7 +37,7 @@ module.exports.subcommands = {
             content: '⚠️ ' + localize('admin-tools', 'not-category'),
             ephemeral: true
         });
-        await channel.setParent(category);
+        await channel.setParent(category, { lockPermissions: false });
         interaction.reply({
             ephemeral: true,
             content: localize('admin-tools', 'changed-category', {cat: category.toString(), c: channel.toString()})
