@@ -1,11 +1,11 @@
-const {createShopItem, createShopMsg, deleteShopItem, shopMsg, buyShopItem} = require('../economy-system');
+const {createShopItem, createShopMsg, deleteShopItem, shopMsg, buyShopItem, updateShopItem} = require('../economy-system');
 const {localize} = require('../../../src/functions/localize');
 
 /**
  * @param {*} interaction Interaction
  * @returns {Promise<boolean>} Result
  */
-async function checkPerms(interaction) {
+async function checkPermsAndSendReplyOnFail(interaction) {
     const result = interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) || interaction.client.config['botOperators'].includes(interaction.user.id);
     if (!result) await interaction.reply({
             content: interaction.client.strings['not_enough_permissions'],
@@ -16,7 +16,7 @@ async function checkPerms(interaction) {
 
 module.exports.subcommands = {
     'add': async function (interaction) {
-        if (!await checkPerms(interaction)) return;
+        if (!await checkPermsAndSendReplyOnFail(interaction)) return;
         await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
         await createShopItem(interaction);
         await shopMsg(interaction.client);
@@ -32,9 +32,15 @@ module.exports.subcommands = {
         interaction.reply(msg);
     },
     'delete': async function (interaction) {
-        if (!await checkPerms(interaction)) return;
+        if (!await checkPermsAndSendReplyOnFail(interaction)) return;
         await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
         await deleteShopItem(interaction);
+        await shopMsg(interaction.client);
+    },
+    'edit': async function (interaction) {
+        if (!await checkPermsAndSendReplyOnFail(interaction)) return;
+        await interaction.deferReply({ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']});
+        await updateShopItem(interaction);
         await shopMsg(interaction.client);
     }
 };
@@ -117,6 +123,37 @@ module.exports.config = {
                     required: false
                 }
             ]
-        }
+        },
+        {
+            type: 'SUB_COMMAND',
+            name: 'edit',
+            description: localize('economy-system', 'shop-command-description-edit'),
+            options: [
+                {
+                    type: 'STRING',
+                    required: true,
+                    name: 'item-id',
+                    description: localize('economy-system', 'shop-option-description-itemID')
+                },
+                {
+                    type: 'STRING',
+                    required: false,
+                    name: 'item-new-name',
+                    description: localize('economy-system', 'shop-option-description-newItemName')
+                },
+                {
+                    type: 'INTEGER',
+                    required: false,
+                    name: 'new-price',
+                    description: localize('economy-system', 'shop-option-description-price')
+                },
+                {
+                    type: 'ROLE',
+                    required: false,
+                    name: 'new-role',
+                    description: localize('economy-system', 'shop-option-description-role')
+                }
+            ]
+        },
     ]
 };
