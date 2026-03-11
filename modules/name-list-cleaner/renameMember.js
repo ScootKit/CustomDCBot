@@ -42,6 +42,7 @@ module.exports.renameMember = renameMember;
 
 function checkUsername(client, name, isUsername) {
     const moduleConf = client.configurations['name-list-cleaner']['config'];
+    const regEx = /^[a-zA-Z0-9]$/;
     if (name.length === 0) {
         if (isUsername) {
             return 'User'
@@ -50,13 +51,13 @@ function checkUsername(client, name, isUsername) {
         }
     }
     if (moduleConf.symbolWhitelist.length === 0) {
-        if (name.charAt(0).match(/^[a-zA-Z0-9]$/)) {
+        if (name.charAt(0).match(regEx)) {
             return name;
         } else {
             return checkUsername(client, name.substring(1), isUsername);
         }
     } else if (!moduleConf.symbolWhitelist.includes(name.charAt(0)) && !moduleConf.isBlacklist) {
-        if (name.charAt(0).match(/^[a-zA-Z0-9]$/)) {
+        if (name.charAt(0).match(regEx)) {
             return name;
         } else {
             return checkUsername(client, name.substring(1), isUsername);
