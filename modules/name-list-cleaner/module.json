@@ -1,0 +1,24 @@
+{
+  "name": "name-list-cleaner",
+  "humanReadableName": {
+    "en": "Name List Cleaner",
+    "de": "Namenslisten Cleaner"
+  },
+  "author": {
+    "name": "hfgd",
+    "link": "https://github.com/hfgd123",
+    "scnxOrgID": "2"
+  },
+  "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/name-list-cleaner",
+  "config-example-files": [
+    "configs/config.json"
+  ],
+  "events-dir": "/events",
+  "tags": [
+    "tools"
+  ],
+  "description": {
+    "en": "Remove special characters from the beginning of usernames",
+    "de": "Entferne Sonderzeichen vom Anfang von Benutzernamen"
+  }
+}
