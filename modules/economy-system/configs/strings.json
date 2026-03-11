@@ -452,6 +452,34 @@
       ]
     },
     {
+      "name": "itemEdit",
+      "humanName": {},
+      "default": {
+        "en": "Successfully edited the item %name%. Check it out using `/shop list`"
+      },
+      "description": {
+        "en": "Message that gets sent when a shop item gets edited"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "name",
+          "description": {
+            "en": "Name of the edited item",
+            "de": "Name des bearbeiteten Items"
+          }
+        },
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the edited item",
+            "de": "ID des bearbeiteten Items"
+          }
+        }
+      ]
+    },
+    {
       "name": "depositMsg",
       "humanName": {
         "en": "deposit message"
