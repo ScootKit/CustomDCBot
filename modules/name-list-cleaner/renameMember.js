@@ -6,16 +6,20 @@ renameMember = async function (client, guildMember) {
 
 
     if (hasNickname) {
-        let newName = await checkUsername(client, guildMember.nickname, false);
+        let newName = checkUsername(client, guildMember.nickname, false);
         if (newName === guildMember.nickname) return;
     } else if (moduleConf.alsoCheckUsernames) {
-        let newName = await checkUsername(client, guildMember.user.username, true);
+        let newName = checkUsername(client, guildMember.user.username, true);
         if (newName === guildMember.user.username) return;
-    } else return;
+    } else {
+        return;
+    }
+
     if (guildMember.guild.ownerId === guildMember.id) {
         client.logger.error('[name-list-cleaner] ' + localize('name-list-cleaner', 'owner-cannot-be-renamed', {u: guildMember.user.username}))
         return;
     }
+
     if (moduleConf.keepNickname) {
         try {
             await guildMember.setNickname(newName, localize('name-list-cleaner', 'nickname-changed', {u: guildMember.user.username}));
@@ -36,7 +40,7 @@ renameMember = async function (client, guildMember) {
 
 module.exports.renameMember = renameMember;
 
-async function checkUsername(client, name, isUsername) {
+function checkUsername(client, name, isUsername) {
     const moduleConf = client.configurations['name-list-cleaner']['config'];
     if (name.length === 0) {
         if (isUsername) {
@@ -49,16 +53,16 @@ async function checkUsername(client, name, isUsername) {
         if (name.charAt(0).match(/^[a-zA-Z0-9]$/)) {
             return name;
         } else {
-            return await checkUsername(client, name.substring(1), isUsername);
+            return checkUsername(client, name.substring(1), isUsername);
         }
     } else if (!moduleConf.symbolWhitelist.includes(name.charAt(0)) && !moduleConf.isBlacklist) {
         if (name.charAt(0).match(/^[a-zA-Z0-9]$/)) {
             return name;
         } else {
-            return await checkUsername(client, name.substring(1), isUsername);
+            return checkUsername(client, name.substring(1), isUsername);
         }
     } else if (moduleConf.symbolWhitelist.includes(name.charAt(0)) && moduleConf.isBlacklist) {
-        return await checkUsername(client, name.substring(1), isUsername);
+        return checkUsername(client, name.substring(1), isUsername);
     } else {
         return name;
     }
