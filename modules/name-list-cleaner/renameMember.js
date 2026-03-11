@@ -1,15 +1,15 @@
 const {localize} = require("../../src/functions/localize");
 renameMember = async function (client, guildMember) {
-    let newName;
     const moduleConf = client.configurations['name-list-cleaner']['config'];
     if (moduleConf.userWhitelist.includes(guildMember.user.id)) return;
+    let hasNickname = guildMember.nickname !== null;
 
 
-    if (guildMember.nickname !== null) {
-        newName = await checkUsername(client, guildMember.nickname, false);
+    if (hasNickname) {
+        let newName = await checkUsername(client, guildMember.nickname, false);
         if (newName === guildMember.nickname) return;
     } else if (moduleConf.alsoCheckUsernames) {
-        newName = await checkUsername(client, guildMember.user.username, true);
+        let newName = await checkUsername(client, guildMember.user.username, true);
         if (newName === guildMember.user.username) return;
     } else return;
     if (guildMember.guild.ownerId === guildMember.id) {
@@ -23,7 +23,7 @@ renameMember = async function (client, guildMember) {
             client.logger.error('[name-list-cleaner] ' + localize('name-list-cleaner', 'nickname-error', {u: guildMember.user.username, e: e}))
         }
     } else {
-        if (guildMember.nickname === null) {
+        if (!hasNickname) {
             return;
         }
         try {
