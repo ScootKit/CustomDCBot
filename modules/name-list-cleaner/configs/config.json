@@ -19,8 +19,8 @@
         "en": true
       },
       "description": {
-        "en": "If yes: special characters will be removed from nicknames; if no: the nickname will be removed and the username will be shown instead.",
-        "de": "Wenn ja: Sonderzeichen werden aus den Nicknames entfernt; wenn nein: der Nickname wird entfernt und stattdessen der Benutzername angezeigt."
+        "en": "When activated, special characters will be removed from nicknames. If left disabled, the nickname will be removed and the username will be shown instead.",
+        "de": "Wenn aktiviert, werden Sonderzeichen aus den Nicknamen entfernt. Wenn deaktiviert, wird der Nickname entfernt und stattdessen der Benutzername angezeigt."
       },
       "type": "boolean"
     },
@@ -50,8 +50,8 @@
         "en": false
       },
       "description": {
-        "en": "If yes: the list of characters will be treated as a blacklist (characters in the list will be blocked); if no: the list will be treated as a whitelist (only characters in the list and alphanumeric characters will be allowed).",
-        "de": "Wenn ja: die Liste der Zeichen wird als Blacklist behandelt (Zeichen in der Liste werden blockiert); wenn nein: die Liste wird als Whitelist behandelt (nur Zeichen in der Liste und alphanumerische Zeichen werden erlaubt)."
+        "en": "When activated, the list of characters will be treated as a blacklist (characters in the list will be blocked). If left disabled, the list will be treated as a whitelist (only characters in the list and alphanumeric characters will be allowed).",
+        "de": "Wenn aktiviert, wird die Liste der Zeichen als Blacklist behandelt (Zeichen in der Liste werden blockiert). Wenn deaktiviert, wird die Liste als Whitelist behandelt (nur Zeichen in der Liste und alphanumerische Zeichen werden erlaubt)."
       },
       "type": "boolean"
     },
@@ -81,8 +81,8 @@
         "en": false
       },
       "description": {
-        "en": "If yes: not only nicknames but also usernames will be checked for special characters and modified accordingly. If no: only nicknames will be checked and modified, usernames will be left unchanged.",
-        "de": "Wenn ja: nicht nur Nicknames, sondern auch Benutzernamen werden auf Sonderzeichen überprüft und entsprechend geändert. Wenn nein: nur Nicknames werden überprüft und geändert, Benutzernamen bleiben unverändert."
+        "en": "When activated, not only nicknames but also usernames will be checked for special characters and modified accordingly. If left disabled, only nicknames will be checked and modified, usernames will be left unchanged.",
+        "de": "Wenn aktiviert, werden nicht nur Nicknamen, sondern auch Benutzernamen auf Sonderzeichen überprüft und entsprechend geändert. Wenn deaktiviert, werden nur Nicknamen überprüft und geändert, Benutzernamen bleiben unverändert."
       },
       "type": "boolean"
     }
