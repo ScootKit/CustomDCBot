@@ -5,9 +5,22 @@
  */
 const jsonfile = require('jsonfile');
 const fs = require('fs');
-const {logger, client} = require('../../main');
+const {ChannelType} = require('discord.js');
+const {
+    logger,
+    client
+} = require('../../main');
 const {localize} = require('./localize');
 const isEqual = require('is-equal');
+
+const channelTypeMap = {
+    GUILD_TEXT: ChannelType.GuildText,
+    GUILD_CATEGORY: ChannelType.GuildCategory,
+    GUILD_NEWS: ChannelType.GuildAnnouncement,
+    GUILD_VOICE: ChannelType.GuildVoice,
+    GUILD_FORUM: ChannelType.GuildForum,
+    GUILD_STAGE_VOICE: ChannelType.GuildStageVoice
+};
 
 /**
  * Check every (including module) configuration and load them
@@ -19,7 +32,7 @@ const isEqual = require('is-equal');
 async function loadAllConfigs(client) {
     logger.info(localize('config', 'checking-config'));
     return new Promise(async (resolve, reject) => {
-        await fs.readdir(`${__dirname}/../../config-generator`, async (err, files) => {
+        fs.readdir(`${__dirname}/../../config-generator`, async (err, files) => {
             for (const f of files) {
                 await checkConfigFile(f).catch((reason) => {
                     logger.error(reason);
@@ -80,29 +93,35 @@ async function checkConfigFile(file, moduleName) {
             }));
         }
         let newConfig = exampleFile.configElements ? [] : {};
+        if (exampleFile.configElements && !Array.isArray(configData)) {
+            client.logger.warn(`${builtIn ? '' : '/' + moduleName}/${exampleFile.filename}: This file should be a config-element, but is not. Converting to config-element.`);
+            if (typeof configData === 'object') configData = [configData];
+            else configData = [];
+        }
         if (exampleFile.elementLimits) configData = require('./scnx-integration').verifyLimitedConfigElementFile(client, exampleFile, configData);
 
         let skipOverwrite = false;
         if (exampleFile.skipContentCheck) newConfig = configData;
         else if (exampleFile.configElements) {
-            if (!Array.isArray(configData)) {
-                client.logger.warn(`${builtIn ? '' : '/' + moduleName}/${exampleFile.filename}: This file should be a config-element, but is not. Converting to config-element.`);
-                if (typeof configData === 'object') configData = [configData];
-                else configData = [];
-            }
             for (const object of configData) {
                 const objectData = {};
                 for (const field of exampleFile.content) {
                     const dependsOnField = field.dependsOn ? exampleFile.content.find(f => f.name === field.dependsOn) : null;
+                    const dependsOnNotField = field.dependsOnNot ? exampleFile.content.find(f => f.name === field.dependsOnNot) : null;
                     if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
+                    if (field.dependsOnNot && !dependsOnNotField) return reject(`Depends-On-Field ${field.dependsOnNotField} does not exist.`);
                     if (dependsOnField && !(typeof object[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : object[dependsOnField.name])) {
+                        objectData[field.name] = configData[field.name] || (field.default[client.locale] || field.default['en']); // Otherwise disabled fields may be overwritten
+                        continue;
+                    }
+                    if (dependsOnNotField && (typeof object[dependsOnNotField.name] === 'undefined' ? (dependsOnNotField.default[client.locale] || dependsOnNotField.default['en']) : object[dependsOnNotField.name])) {
                         objectData[field.name] = configData[field.name] || (field.default[client.locale] || field.default['en']); // Otherwise disabled fields may be overwritten
                         continue;
                     }
                     try {
                         objectData[field.name] = await checkField(field, object[field.name]);
                     } catch (e) {
-                        return reject(e);
+                        reject(e);
                     }
                 }
                 newConfig.push(objectData);
@@ -122,7 +141,8 @@ async function checkConfigFile(file, moduleName) {
                 try {
                     newConfig[field.name] = await checkField(field, configData[field.name]);
                 } catch (e) {
-                    return reject(e);
+                    if (field.name === 'logChannelID' && builtIn && file === 'config') newConfig[field.name] = null;
+                    else return reject(e);
                 }
             }
         }
@@ -148,7 +168,7 @@ async function checkConfigFile(file, moduleName) {
                     return res(fieldValue);
                 } else if (field.type === 'keyed' && field.disableKeyEdits) for (const key in field.default) if (typeof fieldValue[key] === 'undefined') fieldValue[key] = field.default[key];
                 if (field.allowNull && field.type !== 'boolean' && !fieldValue) return res(fieldValue);
-                if (!await checkType(field.type, fieldValue, field.content, field.allowEmbed)) {
+                if (!await checkType(field, fieldValue)) {
                     if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
                         type: 'CONFIGURATION_ISSUE',
                         module: moduleName,
@@ -219,33 +239,35 @@ module.exports.loadAllConfigs = loadAllConfigs;
 
 /**
  * Check type of one field
- * @param {FieldType<String>} type Type of the field
+ * @param {ConfigField<Object>} field Full field value
  * @param {String} value Value in the configuration file
- * @param {ConfigFormat<Object>} contentFormat Format of the content
- * @param {Boolean} allowEmbed If embeds are allowed
  * @returns {Promise<boolean|*>}
  * @private
  */
-async function checkType(type, value, contentFormat = null, allowEmbed = false) {
+async function checkType(field, value) {
     const {client} = require('../../main');
-    switch (type) {
+    switch (field.type) {
         case 'integer':
             if (parseInt(value) === 0) return true;
+            if (field.maxValue && parseInt(value) > field.maxValue) return false;
+            if (field.minValue && parseInt(value) < field.minValue) return false;
             return !!parseInt(value);
         case 'float':
             if (parseFloat(value) === 0) return true;
+            if (field.maxValue && parseFloat(value) > field.maxValue) return false;
+            if (field.minValue && parseFloat(value) < field.minValue) return false;
             return !!parseFloat(value);
         case 'string':
         case 'emoji':
         case 'imgURL':
         case 'timezone': // Timezones can not be checked correctly for their type currently.
-            if (allowEmbed && typeof value === 'object') return true;
+            if (field.allowEmbed && typeof value === 'object') return true;
             return typeof value === 'string';
         case 'array':
             if (!Array.isArray(value)) return false;
             let errored = false;
             for (const v of value) {
-                if (!errored) errored = !(await checkType(contentFormat, v, null, allowEmbed));
+                if (!errored) errored = !(await checkType({type: field.content}, v));
             }
             return !errored;
         case 'userID':
@@ -267,7 +289,8 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
                 logger.error(localize('config', 'channel-not-on-guild', {id: value}));
                 return false;
             }
-            if (!(contentFormat || ['GUILD_TEXT', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_VOICE', 'GUILD_STAGE_VOICE']).includes(channel.type)) {
+            const allowedTypes = (field.content || ['GUILD_TEXT', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_VOICE', 'GUILD_STAGE_VOICE']).map(t => typeof t === 'string' ? (channelTypeMap[t] !== undefined ? channelTypeMap[t] : t) : t);
+            if (!allowedTypes.includes(channel.type)) {
                 logger.error(localize('config', 'channel-invalid-type', {id: value}));
                 return false;
             }
@@ -291,18 +314,19 @@ async function checkType(type, value, contentFormat = null, allowEmbed = false) 
             let returnValue = true;
             for (const v in value) {
                 if (returnValue) {
-                    returnValue = await checkType(contentFormat.key, v);
-                    returnValue = await checkType(contentFormat.value, value[v]);
+                    returnValue = await checkType({type: field.content.key}, v);
+                    returnValue = await checkType({type: field.content.value}, value[v]);
                 }
             }
             return returnValue;
         case 'select':
-            return contentFormat.includes(value);
+            return typeof field.content[0] !== 'string' ? field.content.find(f => f.value === value) : field.content.includes(value);
         case 'boolean':
             return typeof value === 'boolean';
         default:
-            logger.error(`Unknown type: ${type}`);
-            process.exit(1);
+            logger.error(`Unknown type: ${field.type}`);
+            process.exit(0);
+            ;
     }
 }
 

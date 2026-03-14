@@ -24,7 +24,8 @@
         "de": "Aktiviere oder deaktiviere das Join-Gate"
       },
       "type": "boolean",
-      "elementToggle": true
+      "elementToggle": true,
+      "category": "general"
     },
     {
       "name": "allUsers",
@@ -39,7 +40,8 @@
         "en": "If enabled all users action against all new users will be taken",
         "de": "Wenn aktiviert, werden Aktionen gegen alle neuen Nutzer ausgefüht"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "general"
     },
     {
       "name": "action",
@@ -62,7 +64,8 @@
         "quarantine",
         "ban",
         "give-role"
-      ]
+      ],
+      "category": "roles"
     },
     {
       "name": "roleID",
@@ -77,7 +80,8 @@
         "en": "Only if action = give-role. Role that gets given to users who fail the join gate",
         "de": "Nur verfügbar, wenn Aktion = give-role. Rolle, die Nutzern gegeben wird, die das Join-Gate nicht bestehen"
       },
-      "type": "roleID"
+      "type": "roleID",
+      "category": "roles"
     },
     {
       "name": "removeOtherRoles",
@@ -93,7 +97,8 @@
         "en": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
         "de": "Nur verfügbar, wenn Aktion = give-role. Wenn aktiviert, werden andere Rollen die der Nutzer hat nach einem kurzen Zeitraum entfernt (und das Vergeben der Rolle von \"Rolle\" wird verzögert)"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "roles"
     },
     {
       "name": "minAccountAge",
@@ -109,7 +114,8 @@
         "en": "Age of the account of a new user that is required to be set to pass the join gate (in days)",
         "de": "Alter des Accounts eines neuen Nutzers, der beitritt, welches benötigt wird um das Join-Gate zu bestehen (in Tagen)"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "general"
     },
     {
       "name": "requireProfilePicture",
@@ -125,7 +131,8 @@
         "en": "If enabled users are required to have a profile picture set to pass the join gate",
         "de": "Wenn aktiviert, brauchen Nutzer ein Profilbild um das Join-Gate zu bestehen"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "general"
     },
     {
       "name": "ignoreBots",
@@ -141,7 +148,26 @@
         "en": "If enabled bots are allowed to pass the join gate without any restrictions",
         "de": "Wenn aktiviert, bestehen Bots das Join-Gate ohne Beschränkungen"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "general"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-door-open",
+      "displayName": {
+        "en": "General Settings",
+        "de": "Allgemeine Einstellungen"
+      }
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": {
+        "en": "Roles",
+        "de": "Rollen"
+      }
     }
   ]
 }

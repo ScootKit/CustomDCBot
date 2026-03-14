@@ -1,4 +1,5 @@
 const {moderationAction} = require('../moderationActions');
+const {activateLockdown, isLockdownActive} = require('../lockdown');
 const {embedType} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const stopPhishing = require('stop-discord-phishing');
@@ -16,7 +17,7 @@ module.exports.run = async (client, msg) => {
     const antiSpamConfig = client.configurations['moderation']['antiSpam'];
     if (msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level2'].includes(r.id) || moduleConfig['moderator-roles_level3'].includes(r.id) || moduleConfig['moderator-roles_level4'].includes(r.id))) return;
     const roles = [];
-    msg.member.roles.cache.forEach(r => roles.push(r.id));
+    msg.member.roles.cache.filter(f => !f.managed).forEach(r => roles.push(r.id));
 
     // Anti-Spam
     if (antiSpamConfig.enabled) if (!antiSpamConfig.ignoredChannels.includes(msg.channel.id)) {
@@ -72,6 +73,10 @@ module.exports.run = async (client, msg) => {
                 '%reason%': reason,
                 '%userid%': msg.author.id
             }));
+            const lockdownConfig = client.configurations['moderation']['lockdown'];
+            if (lockdownConfig && lockdownConfig.enabled && lockdownConfig.autoTriggerOnSpam && !await isLockdownActive(client)) {
+                await activateLockdown(client, localize('moderation', 'lockdown-spam-trigger'), localize('moderation', 'lockdown-system'), true);
+            }
         }
     }
 
@@ -86,11 +91,12 @@ module.exports.run = async (client, msg) => {
  */
 async function performBadWordAndInviteProtection(msg) {
     const moduleConfig = msg.client.configurations['moderation']['config'];
+    const roles = Array.from(msg.member.roles.cache.filter(f => !f.managed).keys());
     if (msg.member.roles.cache.find(r => moduleConfig['moderator-roles_level2'].includes(r.id) || moduleConfig['moderator-roles_level3'].includes(r.id) || moduleConfig['moderator-roles_level4'].includes(r.id))) return;
     if (moduleConfig['action_on_scam_link'] !== 'none') {
         if (await stopPhishing.checkMessage(msg.content, moduleConfig['action_on_scam_link'] === 'suspicious')) {
             await msg.delete();
-            await moderationAction(msg.client, moduleConfig['action_on_scam_link'], msg.client, msg.member, localize('moderation', 'scam-url-sent', {c: msg.channel.toString()}), {roles: msg.member.roles.cache.keys()});
+            await moderationAction(msg.client, moduleConfig['action_on_scam_link'], msg.client, msg.member, localize('moderation', 'scam-url-sent', {c: msg.channel.toString()}), {roles});
             return;
         }
     }
@@ -101,7 +107,7 @@ async function performBadWordAndInviteProtection(msg) {
     if (containsBlacklistedWord && !msg.channel.nsfw) {
         if (moduleConfig['action_on_posting_blacklisted_word'] !== 'none') {
             await msg.delete();
-            await moderationAction(msg.client, moduleConfig['action_on_posting_blacklisted_word'], msg.client, msg.member, localize('moderation', 'blacklisted-word', {c: msg.channel.toString()}), {roles: msg.member.roles.cache.keys()});
+            await moderationAction(msg.client, moduleConfig['action_on_posting_blacklisted_word'], msg.client, msg.member, localize('moderation', 'blacklisted-word', {c: msg.channel.toString()}), {roles});
         }
     }
     if (moduleConfig['whitelisted_channels_for_invite_blocking'].includes(msg.channel.id) || moduleConfig['whitelisted_channels_for_invite_blocking'].includes(msg.channel.parentId)) return;
@@ -109,7 +115,7 @@ async function performBadWordAndInviteProtection(msg) {
     if (moduleConfig['action_on_invite'] !== 'none') {
         if (msg.content.includes('discord.gg/') || msg.content.includes('discordapp.com/invite/')) {
             await msg.delete();
-            await moderationAction(msg.client, moduleConfig['action_on_invite'], msg.client, msg.member, localize('moderation', 'invite-sent', {c: msg.channel.toString()}), {roles: msg.member.roles.cache.keys()});
+            await moderationAction(msg.client, moduleConfig['action_on_invite'], msg.client, msg.member, localize('moderation', 'invite-sent', {c: msg.channel.toString()}), {roles});
         }
     }
 }

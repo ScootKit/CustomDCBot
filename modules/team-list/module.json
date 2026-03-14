@@ -1,5 +1,6 @@
 {
   "name": "team-list",
+  "fa-icon": "fa-user-tie",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -18,7 +19,7 @@
     "de": "Teammitglieder-Liste"
   },
   "description": {
-    "en": "List all your staff and explain team-roles in a always up-to-date embed",
-    "de": "Liste alle deine Teammitglieder und erkläre sie in einem immer up-to-date Embed "
+    "en": "List all your staff members and explain team roles in always up-to-date embed",
+    "de": "Liste alle deine Teammitglieder und erkläre sie in einem immer aktuellem Embed"
   }
 }

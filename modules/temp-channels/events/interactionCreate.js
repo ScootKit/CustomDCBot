@@ -1,4 +1,4 @@
-const {MessageActionRow, Modal, TextInputComponent} = require('discord.js');
+const {ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle} = require('discord.js');
 const {usersList, channelMode, userAdd, userRemove, channelEdit} = require('../channel-settings');
 const {localize} = require('../../../src/functions/localize');
 const {Op} = require('sequelize');
@@ -25,15 +25,15 @@ module.exports.run = async function (client, interaction) {
                 });
                 return;
             }
-            const modal = new Modal()
+            const modal = new ModalBuilder()
                 .setCustomId('tempc-add-modal')
                 .setTitle(localize('temp-channels', 'add-modal-title'));
-            const userInput = new TextInputComponent()
+            const userInput = new TextInputBuilder()
                 .setCustomId('add-modal-input')
                 .setLabel(localize('temp-channels', 'add-modal-prompt'))
-                .setStyle('SHORT')
-                .setPlaceholder('User#1234');
-            const actionRow = new MessageActionRow().addComponents(userInput);
+                .setStyle(TextInputStyle.Short)
+                .setPlaceholder(localize('temp-channels', 'edit-modal-username-placeholder'));
+            const actionRow = new ActionRowBuilder().addComponents(userInput);
             modal.addComponents(actionRow);
             await interaction.showModal(modal);
         }
@@ -45,15 +45,15 @@ module.exports.run = async function (client, interaction) {
                 });
                 return;
             }
-            const modal = new Modal()
+            const modal = new ModalBuilder()
                 .setCustomId('tempc-remove-modal')
                 .setTitle(localize('temp-channels', 'remove-modal-title'));
-            const userInput = new TextInputComponent()
+            const userInput = new TextInputBuilder()
                 .setCustomId('remove-modal-input')
                 .setLabel(localize('temp-channels', 'remove-modal-prompt'))
-                .setStyle('SHORT')
-                .setPlaceholder('User#1234');
-            const actionRow = new MessageActionRow().addComponents(userInput);
+                .setStyle(TextInputStyle.Short)
+                .setPlaceholder(localize('temp-channels', 'edit-modal-username-placeholder'));
+            const actionRow = new ActionRowBuilder().addComponents(userInput);
             modal.addComponents(actionRow);
             await interaction.showModal(modal);
         }
@@ -99,46 +99,46 @@ module.exports.run = async function (client, interaction) {
                 return;
             }
             const vchann = interaction.guild.channels.cache.get(vc.id);
-            const modal = new Modal()
+            const modal = new ModalBuilder()
                 .setCustomId('tempc-edit-modal')
                 .setTitle(localize('temp-channels', 'edit-modal-title'));
-            const nsfwInput = new TextInputComponent()
+            const nsfwInput = new TextInputBuilder()
                 .setCustomId('edit-modal-nsfw-input')
                 .setLabel(localize('temp-channels', 'edit-modal-nsfw-prompt'))
                 .setRequired(true)
-                .setStyle('SHORT')
+                .setStyle(TextInputStyle.Short)
                 .setPlaceholder(localize('temp-channels', 'edit-modal-nsfw-placeholder'))
                 .setValue(vchann.nsfw.toString());
 
 
-            const bitrateInput = new TextInputComponent()
+            const bitrateInput = new TextInputBuilder()
                 .setCustomId('edit-modal-bitrate-input')
                 .setLabel(localize('temp-channels', 'edit-modal-bitrate-prompt'))
                 .setRequired(true)
-                .setStyle('SHORT')
+                .setStyle(TextInputStyle.Short)
                 .setPlaceholder(localize('temp-channels', 'edit-modal-bitrate-placeholder'))
                 .setValue(vchann.bitrate.toString());
 
-            const limitInput = new TextInputComponent()
+            const limitInput = new TextInputBuilder()
                 .setCustomId('edit-modal-limit-input')
                 .setLabel(localize('temp-channels', 'edit-modal-limit-prompt'))
                 .setRequired(true)
-                .setStyle('SHORT')
+                .setStyle(TextInputStyle.Short)
                 .setPlaceholder(localize('temp-channels', 'edit-modal-limit-placeholder'))
                 .setValue(vchann.userLimit.toString());
 
-            const nameInput = new TextInputComponent()
+            const nameInput = new TextInputBuilder()
                 .setCustomId('edit-modal-name-input')
                 .setLabel(localize('temp-channels', 'edit-modal-name-prompt'))
                 .setRequired(true)
-                .setStyle('SHORT')
+                .setStyle(TextInputStyle.Short)
                 .setPlaceholder(localize('temp-channels', 'edit-modal-name-placeholder'))
                 .setValue(vchann.name);
 
-            const nsfwRow = new MessageActionRow().addComponents(nsfwInput);
-            const bitrateRow = new MessageActionRow().addComponents(bitrateInput);
-            const limitRow = new MessageActionRow().addComponents(limitInput);
-            const nameRow = new MessageActionRow().addComponents(nameInput);
+            const nsfwRow = new ActionRowBuilder().addComponents(nsfwInput);
+            const bitrateRow = new ActionRowBuilder().addComponents(bitrateInput);
+            const limitRow = new ActionRowBuilder().addComponents(limitInput);
+            const nameRow = new ActionRowBuilder().addComponents(nameInput);
             modal.addComponents(bitrateRow);
             modal.addComponents(limitRow);
             modal.addComponents(nameRow);

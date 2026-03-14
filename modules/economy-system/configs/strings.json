@@ -78,8 +78,8 @@
         "de": "Item Text"
       },
       "default": {
-        "en": "**%id%** %itemName%, **price**: %price%, **sellcount**: %sellcount%\n",
-        "de": "**%id%** %itemName%: **Preis**: %price%, **Verkäufe**: %sellcount%\n"
+        "en": "**%id%** %itemName%, **price**: %price%, **sellcount**: %sellcount%",
+        "de": "**%id%** %itemName%: **Preis**: %price%, **Verkäufe**: %sellcount%"
       },
       "description": {
         "en": "String for the items for the shop message",
@@ -452,6 +452,34 @@
       ]
     },
     {
+      "name": "itemEdit",
+      "humanName": {},
+      "default": {
+        "en": "Successfully edited the item %name%. Check it out using `/shop list`"
+      },
+      "description": {
+        "en": "Message that gets sent when a shop item gets edited"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "name",
+          "description": {
+            "en": "Name of the edited item",
+            "de": "Name des bearbeiteten Items"
+          }
+        },
+        {
+          "name": "id",
+          "description": {
+            "en": "Id of the edited item",
+            "de": "ID des bearbeiteten Items"
+          }
+        }
+      ]
+    },
+    {
       "name": "depositMsg",
       "humanName": {
         "en": "deposit message"
@@ -506,7 +534,7 @@
       "content": "string",
       "params": [
         {
-          "name": "erned",
+          "name": "earned",
           "description": {}
         }
       ]

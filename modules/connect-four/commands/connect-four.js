@@ -1,5 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
-const {MessageActionRow, MessageButton} = require('discord.js');
+const {ActionRowBuilder, ButtonBuilder, ComponentType, ButtonStyle} = require('discord.js');
 const footer = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
 /**
@@ -184,7 +184,7 @@ module.exports.run = async function (interaction) {
     });
     const confirmed = await msg.awaitMessageComponent({
         filter: i => i.user.id === member.id,
-        componentType: 'BUTTON',
+        componentType: ComponentType.Button,
         time: 120000
     }).catch(() => {
     });
@@ -206,14 +206,14 @@ module.exports.run = async function (interaction) {
     const grid = new Array(fieldSize - 1).fill();
     for (const i in grid) grid[i] = new Array(fieldSize).fill('⬜');
 
-    const row1 = new MessageActionRow();
-    const row2 = new MessageActionRow();
+    const row1 = new ActionRowBuilder();
+    const row2 = new ActionRowBuilder();
     for (let i = 1; i < fieldSize + 1; i++) {
         (i <= 5 ? row1 : row2).addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('c4_' + i)
                 .setLabel('' + i)
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
         );
     }
 
@@ -224,11 +224,11 @@ module.exports.run = async function (interaction) {
 
     confirmed.update({
         content: gameMessage(grid, fieldSize, color, user, member.user.username, interaction.user.username),
-        components: fieldSize > 5 ? [row1, row2] : [row1]
+        components: fieldSize > 5 ? [row1.toJSON(), row2.toJSON()] : [row1.toJSON()]
     });
 
     const collector = msg.createMessageComponentCollector({
-        componentType: 'BUTTON',
+        componentType: ComponentType.Button,
         filter: i => i.user.id === interaction.user.id || i.user.id === member.id
     });
     collector.on('collect', i => {

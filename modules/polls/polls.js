@@ -4,7 +4,11 @@
  */
 const {scheduleJob} = require('node-schedule');
 const {MessageEmbed} = require('discord.js');
-const {renderProgressbar, formatDate} = require('../../src/functions/helpers');
+const {
+    renderProgressbar,
+    formatDate,
+    parseEmbedColor
+} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 
 /**
@@ -55,7 +59,7 @@ async function updateMessage(channel, data, mID = null) {
     });
     const embed = new MessageEmbed()
         .setTitle(strings.embed.title)
-        .setColor(strings.embed.color)
+        .setColor(parseEmbedColor(strings.embed.color))
         .setDescription(data.description.replaceAll('[PUBLIC]', ''));
     let s = '';
     let p = '';
@@ -86,7 +90,7 @@ async function updateMessage(channel, data, mID = null) {
     if (data.expiresAt || data.endAt) {
         const date = new Date(data.expiresAt || data.endAt);
         if (date.getTime() <= new Date().getTime()) {
-            embed.setColor(strings.embed.endedPollColor);
+            embed.setColor(parseEmbedColor(strings.embed.endedPollColor));
             embed.setTitle(strings.embed.endedPollTitle);
             expired = true;
         } else {

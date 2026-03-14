@@ -17,8 +17,8 @@
         "de": []
       },
       "description": {
-        "en": "ID of channels with the counter game",
-        "de": "ID der Kanäle mit dem Zählspiel"
+        "en": "Channels in which users can participate in the counting game",
+        "de": "Kanäle, in welchem Nutzer am Zählspiel teilnehmen können."
       },
       "type": "array",
       "content": "channelID"
@@ -75,7 +75,7 @@
         "en": "Restart game, if user miscounts"
       },
       "description": {
-        "en": "If enabled, the game will restarts if a user sends a number that is not in ordner",
+        "en": "If enabled, the game will restarts if a user sends a number that is not in order",
         "de": "Wenn aktiviert, wird das Spiel neustarten, wenn ein Nutzer eine Zahl sendet, die nicht in die Reihenfolge passt"
       },
       "type": "boolean"
@@ -130,6 +130,70 @@
       "type": "boolean"
     },
     {
+      "name": "protectAgainstDeletion",
+      "default": {
+        "en": true
+      },
+      "humanName": {
+        "de": "Verhindern, dass Nutzer die letzte Zählungsnachricht löschen?",
+        "en": "Protect against users deleting the last counting message?"
+      },
+      "description": {
+        "en": "If enabled, the bot will send a message when the last correct counting message gets deleted so that other counters can't be fooled into counting an already counted number again.",
+        "de": "Wenn aktiviert, wird der Bot eine Nachricht in den Kanal schicken, wenn die letzte korrekte Zählnachricht gelöscht wird - das verhindert, dass andere Nutzer nicht dazu gebracht werden können, eine korrekte Nummer erneut zu zählen."
+      },
+      "type": "boolean"
+    },
+    {
+      "name": "protectionMessage",
+      "dependsOn": "protectAgainstDeletion",
+      "humanName": {
+        "de": "Löschschutznachricht",
+        "en": "Deletion protection message"
+      },
+      "default": {
+        "de": "Scheint als hätte %mention% seine letzte Nachricht gelöscht - die zuletzt gezählte Zahl ist **%number%**.",
+        "en": "It seems like %mention% deleted their last message - the last counted number is **%number%**."
+      },
+      "description": {
+        "en": "Message that gets send if a user deletes the last correct counting message.",
+        "de": "Nachricht, welche verschickt wird, wenn die letzte korrekte Zahlnachricht gelöscht wird."
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention of the user who's message got removed",
+            "de": "Erwähnung des Nutzers, dessen Nachricht gelöscht wurde"
+          }
+        },
+        {
+          "name": "number",
+          "description": {
+            "en": "Last counted number in this the channel",
+            "de": "Zuletzt gezählte Nummer in diesem Kanal"
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeReactions",
+      "default": {
+        "en": true
+      },
+      "humanName": {
+        "de": "Reaktionen nach 5 Sekunden entfernen?",
+        "en": "Remove reactions after 5 seconds?"
+      },
+      "description": {
+        "en": "If enabled, the reactions the bot gives will be removed after 5 seconds. This will free up space in the counting channel",
+        "de": "Wenn aktiviert, werden die Reaktionen des Bots nach 5 Sekunden entfernt. Das lässt mehr Platz im Kanal."
+      },
+      "type": "boolean"
+    },
+    {
       "name": "wrong-input-message",
       "humanName": {
         "de": "Nachricht bei falscher Eingabe",
@@ -160,8 +224,8 @@
         "en": 5
       },
       "humanName": {
-        "de": "Amount of wrong messages to trigger action",
-        "en": "Anzahl von falschen Nachrichten, um eine Aktion auszulösen"
+        "en": "Amount of wrong messages to trigger action",
+        "de": "Anzahl von falschen Nachrichten, um eine Aktion auszulösen"
       },
       "description": {
         "en": "This is the amount of wrong messages a user has to send to trigger action. Once this amount is reached, the bot will either, depending on your configuration, give a role or disable the SEND_MESSAGES permission for a user (set to 0 to disable)",
@@ -214,7 +278,7 @@
       "allowEmbed": true,
       "description": {
         "en": "This message will be sent when a user reach the configured amount of wrong messages and gets actioned",
-        "de": "Diese Rolle wird versendet, sobald die konfigurierte Anzahl von falschen Nachrichten erreicht wird und ein Nutzer bestraft wird"
+        "de": "Diese Nachricht wird versendet, sobald die konfigurierte Anzahl von falschen Nachrichten erreicht wird und ein Nutzer bestraft wird"
       },
       "params": [
         {
@@ -225,6 +289,36 @@
           }
         }
       ]
+    },
+    {
+      "name": "allowCharactersInMessage",
+      "default": {
+        "en": false
+      },
+      "type": "boolean",
+      "humanName": {
+        "en": "Allow text characters in messages?",
+        "de": "Textcharaktere in der Nachricht erlauben?"
+      },
+      "description": {
+        "en": "If enabled, users may write additional content into their messages instead of forcing them to just write a number. Messages without a number will still lead to an error.",
+        "de": "Wenn aktiviert, können Nutzer weitere Inhalte in ihre Nachrichten schreiben, statt sie zu zwingen, nur eine Nachricht zu posten. Nachrichten ohne Zahlen werden weiterhin zu einem Fehler führen."
+      }
+    },
+    {
+      "name": "allowMaths",
+      "default": {
+        "en": true
+      },
+      "type": "boolean",
+      "humanName": {
+        "en": "Allow users to use maths in their messages?",
+        "de": "Nutzern erlauben, Mathematik in ihren Nachrichten zu verwenden?"
+      },
+      "description": {
+        "en": "If enabled, users can use maths in messages, as long as the result of their formula is the correct next number.",
+        "de": "If enabled, können Nutzer Mathematik in ihren Nachrichten verwenden, solange das Ergebnis des Termes der korrekten nächsten Zahl entspricht."
+      }
     }
   ]
 }

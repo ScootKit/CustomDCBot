@@ -1,18 +1,19 @@
 const {memberCache} = require('./botReady');
 const {moderationAction} = require('../moderationActions');
+const {activateLockdown, isLockdownActive} = require('../lockdown');
 const {localize} = require('../../../src/functions/localize');
 const {embedType} = require('../../../src/functions/helpers');
-const {MessageAttachment} = require('discord.js');
+const {ChannelType, MessageAttachment} = require('discord.js');
 const {client} = require('../../../main');
 
 let joinCache = [];
 
-exports.run = async (client, guildMember) => {
+module.exports.run = async (client, guildMember) => {
     if (guildMember.guild.id !== client.config.guildID) return;
     const moduleConfig = client.configurations['moderation']['config'];
 
     // Anti-Punishment-Bypass
-    if (!!memberCache.quarantine.get(guildMember.user.id)) {
+    if (memberCache.quarantine && !!memberCache.quarantine.get(guildMember.user.id)) {
         guildMember.doNotGiveWelcomeRole = true;
         await guildMember.roles.add(moduleConfig['quarantine-role-id'], `[moderation] ${localize('moderation', 'restored-punishment-audit-log-reason')}`);
     }
@@ -46,7 +47,7 @@ exports.run = async (client, guildMember) => {
                     await member.roles.add(antiJoinRaidConfig.roleID, `[moderation] [${localize('moderation', 'anti-join-raid')}] ${localize('moderation', 'raid-detected')}`);
                 } else {
                     const roles = [];
-                    member.roles.cache.forEach(r => roles.push(r.id));
+                    member.roles.cache.filter(f => !f.managed).forEach(r => roles.push(r.id));
                     await moderationAction(client, antiJoinRaidConfig.action, {user: client.user}, member, `[${localize('moderation', 'anti-join-raid')}] ${localize('moderation', 'raid-detected')}`, {roles: roles});
                 }
             }
@@ -62,12 +63,16 @@ exports.run = async (client, guildMember) => {
             const roles = [];
             guildMember.roles.cache.forEach(r => roles.push(r.id));
             await moderationAction(client, antiJoinRaidConfig.action, {user: client.user}, guildMember, `[${localize('moderation', 'anti-join-raid')}] ${localize('moderation', 'raid-detected')}`, {roles: roles});
+            const lockdownConfig = client.configurations['moderation']['lockdown'];
+            if (lockdownConfig && lockdownConfig.enabled && lockdownConfig.autoTriggerOnJoinRaid && !await isLockdownActive(client)) {
+                await activateLockdown(client, localize('moderation', 'lockdown-joinraid-trigger'), localize('moderation', 'lockdown-system'), true);
+            }
         }
     }
 
     // JoinGate
     const joinGateConfig = client.configurations['moderation']['joinGate'];
-    if (joinGateConfig.enabled) await runJoinGate();
+    if (joinGateConfig.enabled && !(guildMember.pending && !['kick', 'ban'].includes(joinGateConfig.action))) await runJoinGate(guildMember);
 
     // Verification
     const verificationConfig = client.configurations['moderation']['verification'];
@@ -84,7 +89,7 @@ exports.run = async (client, guildMember) => {
         async function dmFail() {
             const channel = await client.channels.fetch(verificationConfig['restart-verification-channel'] || '').catch(() => {
             });
-            if (!channel || (channel || {}).type !== 'GUILD_TEXT') return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
+            if (!channel || (channel || {}).type !== ChannelType.GuildText) return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
             const m = await channel.send({
                     content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
 
@@ -139,42 +144,52 @@ exports.run = async (client, guildMember) => {
         }
     }
 
-    /**
-     * Runs joingate on this GuildMember
-     * @returns {Promise<void>}
-     */
-    async function runJoinGate() {
-        if (guildMember.user.bot && joinGateConfig.ignoreBots) return;
-        if (joinGateConfig.allUsers) return performJoinGateAction(localize('moderation', 'joingate-for-everyone'));
-        const daysSinceCreation = (new Date().getTime() / 86400000).toFixed(0) - (guildMember.user.createdTimestamp / 86400000).toFixed(0);
-        if (daysSinceCreation <= joinGateConfig.minAccountAge) return performJoinGateAction(localize('moderation', 'account-age-to-low', {
-            a: daysSinceCreation,
-            c: joinGateConfig.minAccountAge
-        }));
-        if (!guildMember.user.avatarURL() && joinGateConfig.requireProfilePicture) return performJoinGateAction(localize('moderation', 'no-profile-picture'));
 
-        /**
-         * Performs the join gate action
-         * @private
-         * @param {String} reason Reason for executing the join gate action
-         * @return {Promise<void>}
-         */
-        async function performJoinGateAction(reason) {
-            guildMember.joinGateTriggered = true;
-            if (joinGateConfig.action === 'give-role') {
-                if (joinGateConfig.removeOtherRoles) {
-                    guildMember.doNotGiveWelcomeRole = true;
-                    await guildMember.roles.remove(guildMember.roles.cache, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
-                }
-                await guildMember.roles.add(joinGateConfig.roleID, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
-                return;
+};
+
+/**
+ * Runs joingate on this GuildMember
+ * @returns {Promise<void>}
+ */
+async function runJoinGate(guildMember) {
+    const joinGateConfig = client.configurations['moderation']['joinGate'];
+    if (guildMember.user.bot && joinGateConfig.ignoreBots) return;
+    if (joinGateConfig.allUsers) return performJoinGateAction(localize('moderation', 'joingate-for-everyone'));
+    const daysSinceCreation = (new Date().getTime() / 86400000).toFixed(0) - (guildMember.user.createdTimestamp / 86400000).toFixed(0);
+    if (daysSinceCreation <= joinGateConfig.minAccountAge) return performJoinGateAction(localize('moderation', 'account-age-to-low', {
+        a: daysSinceCreation,
+        c: joinGateConfig.minAccountAge
+    }));
+    if (!guildMember.user.avatarURL() && joinGateConfig.requireProfilePicture) return performJoinGateAction(localize('moderation', 'no-profile-picture'));
+
+    /**
+     * Performs the join gate action
+     * @private
+     * @param {String} reason Reason for executing the join gate action
+     * @return {Promise<void>}
+     */
+    async function performJoinGateAction(reason) {
+        guildMember.joinGateTriggered = true;
+        if (joinGateConfig.action === 'give-role') {
+            if (joinGateConfig.removeOtherRoles) {
+                guildMember.doNotGiveWelcomeRole = true;
+                await guildMember.roles.remove(guildMember.roles.cache, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
             }
+            await guildMember.roles.add(joinGateConfig.roleID, `[moderation] [${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`);
+        } else {
             const roles = [];
             guildMember.roles.cache.forEach(r => roles.push(r.id));
             await moderationAction(client, joinGateConfig.action, {user: client.user}, guildMember, `[${localize('moderation', 'join-gate')}] ${localize('moderation', 'join-gate-fail', {r: reason})}`, {roles: roles});
         }
+
+        const lockdownConfig = client.configurations['moderation']['lockdown'];
+        if (lockdownConfig && lockdownConfig.enabled && lockdownConfig.autoTriggerOnJoinGate && !await isLockdownActive(client)) {
+            await activateLockdown(client, localize('moderation', 'lockdown-joingate-trigger'), localize('moderation', 'lockdown-system'), true);
+        }
     }
-};
+}
+
+module.exports.runJoinGate = runJoinGate;
 
 /**
  * Sends a user a DM about their verification
@@ -190,7 +205,7 @@ async function sendDMPart(verificationConfig, guildMember) {
                 if (!guildMember.client.scnxSetup) return guildMember.client.logger.error('[moderation] Captcha Generation is only available if your bot has an SCNX Integration set up.');
                 const captcha = await require('../../../src/functions/scnx-integration').generateCaptcha(verificationConfig.captchaLevel);
                 await guildMember.user.send(embedType(verificationConfig['captcha-message'], {}, {
-                    files: [new MessageAttachment(captcha.buffer, 'you-call-it-captcha-we-call-it-ai-training.png')]
+                    files: [new MessageAttachment(captcha.buffer, {name: 'you-call-it-captcha-we-call-it-ai-training.png'})]
                 }));
                 const c = await guildMember.user.createDM();
                 const col = c.createMessageCollector({time: 120000});

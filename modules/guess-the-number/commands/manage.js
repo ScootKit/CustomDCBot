@@ -1,10 +1,15 @@
 const {localize} = require('../../../src/functions/localize');
 const {randomIntFromInterval, embedType, lockChannel, unlockChannel} = require('../../../src/functions/helpers');
+const {startGame} = require('../guessTheNumber');
 
 module.exports.beforeSubcommand = async function (interaction) {
     if (interaction.member.roles.cache.filter(m => interaction.client.configurations['guess-the-number']['config'].adminRoles.includes(m.id)).size === 0) return interaction.reply({
         ephemeral: true,
         content: '⚠️ To use this command, you need to be added to the adminRoles option in the SCNX-Dashboard.'
+    });
+    if (interaction.client.configurations['guess-the-number']['channel'].enabled && interaction.client.configurations['guess-the-number']['channel'].channel === interaction.channel.id) return interaction.reply({
+        content: '⚠️ ' + localize('guess-the-number', 'gamechannel-modus'),
+        ephemeral: true
     });
 };
 
@@ -55,31 +60,8 @@ module.exports.subcommands = {
             ephemeral: true,
             content: '⚠️ ' + localize('guess-the-number', 'min-discrepancy')
         });
-        await interaction.client.models['guess-the-number']['Channel'].create({
-            channelID: interaction.channel.id,
-            number,
-            min: interaction.options.getInteger('min'),
-            max: interaction.options.getInteger('max'),
-            ownerID: interaction.user.id,
-            ended: false
-        });
-        const pins = await interaction.channel.messages.fetchPinned();
-        for (const pin of pins.values()) {
-            if (pin.author.id !== interaction.client.user.id) continue;
-            await pin.unpin();
-        }
-        const m = await interaction.channel.send(embedType(interaction.client.configurations['guess-the-number']['config'].startMessage, {'%min%': interaction.options.getInteger('min'), '%max%': interaction.options.getInteger('max')}, {components: [{
-            type: 'ACTION_ROW',
-            components: [{
-                type: 'BUTTON',
-                label: localize('guess-the-number', 'emoji-guide-button'),
-                style: 'SECONDARY',
-                customId: 'gtn-reaction-meaning'
-            }]
-        }]}));
-        await m.pin();
 
-        await unlockChannel(interaction.channel, '[guess-the-number] ' + localize('guess-the-number', 'game-started'));
+        await startGame(interaction.channel, number, interaction.options.getInteger('min'), interaction.options.getInteger('max'), interaction.user.id);
 
         await interaction.reply({
             ephemeral: true,

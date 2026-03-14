@@ -23,13 +23,14 @@
     {
       "name": "userMessageCount",
       "humanName": {
-        "de": "Nachrichtenzahl"
+        "de": "Nachrichtenzahl",
+        "en": "Message count"
       },
       "default": {
         "en": ""
       },
       "description": {
-        "en": "Count of valid counter-messages the users has to archive this goal",
+        "en": "Count of valid counter-messages the users has to achieve this goal",
         "de": "Anzahl der gültigen Zähl-Nachrichten, die der Nutzer schreiben muss, um dieses Ziel zu erreichen"
       },
       "type": "integer"
@@ -37,14 +38,15 @@
     {
       "name": "giveRoles",
       "humanName": {
-        "de": "Rollen"
+        "de": "Rollen",
+        "en": "Roles"
       },
       "default": {
         "en": [],
         "de": []
       },
       "description": {
-        "en": "These roles are given to the user if they archive this goal (optional)",
+        "en": "These roles are given to the user if they achieve this goal (optional)",
         "de": "Diese Rollen werden an den Nutzer vergeben, wenn er dieses Ziel erreicht (optional)"
       },
       "type": "array",
@@ -53,13 +55,31 @@
     {
       "name": "sendMessage",
       "humanName": {
-        "de": "Nachricht"
+        "de": "Nachricht",
+        "en": "Message"
       },
       "default": {
-        "en": ""
+        "en": "Congrats %mention% for counting %milestone% times!",
+        "de": "Herzlichen Glückwunsch, %mention%, für %milestone%-mal zählen!!"
       },
+      "params": [
+        {
+          "name": "mention",
+          "description": {
+            "en": "Mention the user who achieved the milestone",
+            "de": "Erwähnt den Nutzer, der das Ziel erreicht hat"
+          }
+        },
+        {
+          "name": "milestone",
+          "description": {
+            "en": "The milestone (the number of message) that was reached",
+            "de": "Das Ziel (also die Zahl der Nachrichten, die verschickt), das erreicht wurde"
+          }
+        }
+      ],
       "description": {
-        "en": "This message gets send when they archive this goal",
+        "en": "This message gets send when they achieve this goal",
         "de": "Diese Nachricht wird gesendet, wenn er dieses Ziel erreicht"
       },
       "type": "string",

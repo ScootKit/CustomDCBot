@@ -1,5 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 const {embedType, formatNumber} = require('../../../src/functions/helpers');
+const {calculateLevelXP, displayLevel, isMaxLevel} = require('./messageCreate');
 
 module.exports.run = async function (client, interaction) {
     if (!interaction.client.botReadyAt) return;
@@ -14,11 +15,11 @@ module.exports.run = async function (client, interaction) {
         ephemeral: true,
         content: localize('levels', 'please-send-a-message')
     });
-    const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
+    const nextLevelXp = calculateLevelXP(client, user.level + 1);
     interaction.reply(embedType(client.configurations['levels']['strings']['leaderboard-button-answer'], {
         '%name%': interaction.user.username,
-        '%level%': user.level,
-        '%userXP%': formatNumber(user.xp),
-        '%nextLevelXP%': formatNumber(nextLevelXp)
+        '%level%': displayLevel(user.level, client),
+        '%userXP%': formatNumber(isMaxLevel(user.level, client) ? calculateLevelXP(client, client.configurations['levels']['config'].maximumLevel - 1) : user.xp),
+        '%nextLevelXP%': isMaxLevel(user.level, client) ? '∞' : formatNumber(nextLevelXp)
     }, {ephemeral: true}));
 };

@@ -10,7 +10,9 @@
   "elementLimits": {
     "STARTER": 1,
     "ACTIVE_GUILD": 4,
-    "PRO": 14
+    "PRO": 14,
+    "UNLIMITED": 4,
+    "PROFESSIONAL": 14
   },
   "configElementName": {
     "de": {

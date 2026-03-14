@@ -37,6 +37,7 @@
         "de": "Jede Rolle, die im Embed gelistet werden soll"
       },
       "type": "array",
+      "maxLength": 25,
       "content": "roleID"
     },
     {
@@ -120,6 +121,21 @@
       "description": {
         "en": "If enabled, the current online status will be displayed in the staffmember-list",
         "de": "Wenn aktiviert, wird der aktuelle Status in der Teammitglieder-Liste angezeigt"
+      },
+      "type": "boolean",
+      "default": {
+        "en": false
+      }
+    },
+    {
+      "name": "onlineShowHighestRole",
+      "humanName": {
+        "en": "Only list the highest role of a user?",
+        "de": "Nur die höchste Rolle eines Nutzers anzeigen?"
+      },
+      "description": {
+        "en": "If enabled, a staff member will only be listed under their highest role in the list.",
+        "de": "Wenn aktiviert, wird ein Teammitglied nur unter seiner höchsten Rolle in der Liste angezeigt."
       },
       "type": "boolean",
       "default": {

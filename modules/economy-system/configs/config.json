@@ -252,9 +252,10 @@
       "default": {
         "en": ""
       },
+      "allowNull": true,
       "description": {
-        "en": "The if of the channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
-        "de": "Die ID des Kanals für das Leaderboard. Hier kann jeder sehen, wer das meiste Geld hat"
+        "en": "The channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
+        "de": "Der Kanals für das Leaderboard. Hier kann jeder sehen, wer das meiste Geld hat"
       },
       "type": "channelID"
     },

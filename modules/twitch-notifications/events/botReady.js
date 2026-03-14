@@ -25,7 +25,6 @@ function twitchNotifications(client, apiClient) {
     async function addLiveRole(userID, roleID, liveRole) {
         if (!liveRole) return;
         if (!userID || userID === '' || !roleID || roleID === '') return;
-        await client.guild.members.fetch();
         const member = client.guild.members.cache.get(userID);
         if (!member) {
             client.logger.error(localize('twitch-notifications', 'user-not-on-twitch', {u: userID}));
@@ -102,7 +101,6 @@ function twitchNotifications(client, apiClient) {
         } else if (stream === null) {
             if (!streamers[index]['liveRole']) return;
             if (!streamers[index]['id'] || streamers[index]['id'] === '' || !streamers[index]['role'] || streamers[index]['role'] === '') return;
-            await client.guild.members.fetch();
             const member = client.guild.members.cache.get(streamers[index]['id']);
             if (!member) {
                 client.logger.error(localize('twitch-notifications', 'user-not-on-twitch', {u: streamers[index]['id']}));

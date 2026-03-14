@@ -1,5 +1,16 @@
 const {formatDiscordUserName} = require('../../../src/functions/helpers');
-exports.run = async (client, member) => {
+const {ActivityType} = require('discord.js');
+
+const activityTypes = {
+    'PLAYING': ActivityType.Playing,
+    'STREAMING': ActivityType.Streaming,
+    'WATCHING': ActivityType.Watching,
+    'COMPETING': ActivityType.Competing,
+    'LISTENING': ActivityType.Listening,
+    'CUSTOM': ActivityType.Custom
+};
+
+module.exports.run = async (client, member) => {
     const moduleConf = client.configurations['betterstatus']['config'];
 
     /**
@@ -16,7 +27,7 @@ exports.run = async (client, member) => {
 
     if (moduleConf['changeOnUserJoin']) {
         await client.user.setActivity(replaceMemberJoinStatusString(moduleConf['userJoinStatus']), {
-            type: moduleConf['activityType']
+            type: activityTypes[moduleConf['activityType']]
         });
     }
 };

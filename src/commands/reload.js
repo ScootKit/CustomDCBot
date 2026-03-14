@@ -14,7 +14,7 @@ module.exports.run = async function (interaction) {
         if (interaction.client.logChannel) interaction.client.logChannel.send('⚠️️ ' + localize('reload', 'reload-failed')).then(() => {
         });
         await interaction.editReply({content: localize('reload', 'reload-failed-message', {reason})});
-        process.exit(1);
+        process.exit(0);
     })).then(async (res) => {
         if (interaction.client.logChannel) interaction.client.logChannel.send('✅ ' + localize('reload', 'reloaded-config', res)).then(() => {
         });

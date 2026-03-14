@@ -3,9 +3,15 @@
  * @module Levels-Leaderboard
  * @author Simon Csaba <mail@scderox.de>
  */
-const {MessageEmbed} = require('discord.js');
+const {ChannelType, MessageEmbed} = require('discord.js');
 const {localize} = require('../../src/functions/localize');
-const {formatDiscordUserName} = require('../../src/functions/helpers');
+const {
+    formatDiscordUserName,
+    formatNumber,
+    parseEmbedColor
+} = require('../../src/functions/helpers');
+const {displayLevel, isMaxLevel, calculateLevelXP} = require('./events/messageCreate');
+const {client} = require('../../main');
 let changed = false;
 
 /**
@@ -20,14 +26,24 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
     const moduleStrings = client.configurations['levels']['strings'];
     const channel = await client.channels.fetch(client.configurations['levels']['config']['leaderboard-channel']).catch(() => {
     });
-    if (!channel || channel.type !== 'GUILD_TEXT') return client.logger.error('[levels] ' + localize('levels', 'leaderboard-channel-not-found'));
-    const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id && !msg.system);
+    if (!channel || channel.type !== ChannelType.GuildText) return client.logger.error('[levels] ' + localize('levels', 'leaderboard-channel-not-found'));
+    const [messageData] = await client.models['levels']['LiveLeaderboard'].findOrCreate({
+        where: {
+            channelID: channel.id
+        },
+        defaults: {
+            channelID: channel.id
+        }
+    });
+    let message = messageData.messageID ? await channel.messages.fetch(messageData.messageID).catch(() => {
+    }) : null;
+
 
     const users = await client.models['levels']['User'].findAll({
         order: [
             ['xp', 'DESC']
         ],
-        limit: 15
+        limit: 60
     });
 
     let leaderboardString = '';
@@ -35,12 +51,13 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
     for (const user of users) {
         const member = channel.guild.members.cache.get(user.userID);
         if (!member) continue;
+        if (i >= client.configurations['levels']['config']['leaderboard-channel-max-amount']) continue;
         i++;
         leaderboardString = leaderboardString + localize('levels', 'leaderboard-notation', {
             p: i,
             u: client.configurations['levels']['config']['useTags'] ? formatDiscordUserName(member.user) : member.user.toString(),
-            l: user.level,
-            xp: user.xp
+            l: displayLevel(user.level, client),
+            xp: formatNumber(isMaxLevel(user.level, client) ? calculateLevelXP(client, client.configurations['levels']['config'].maximumLevel - 1) : user.xp)
         }) + '\n';
     }
     if (leaderboardString.length === 0) leaderboardString = localize('levels', 'no-user-on-leaderboard');
@@ -48,7 +65,7 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
     const embed = new MessageEmbed()
         .setTitle(moduleStrings.liveLeaderBoardEmbed.title)
         .setDescription(moduleStrings.liveLeaderBoardEmbed.description)
-        .setColor(moduleStrings.liveLeaderBoardEmbed.color)
+        .setColor(parseEmbedColor(moduleStrings.liveLeaderBoardEmbed.color))
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setThumbnail(channel.guild.iconURL())
         .addField(localize('levels', 'leaderboard'), leaderboardString);
@@ -65,8 +82,20 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
         }]
     }];
 
-    if (messages.first()) await messages.first().edit({embeds: [embed], components});
-    else await channel.send({embeds: [embed], components});
+    if (message) {
+        await message.edit({
+            embeds: [embed],
+            components
+        });
+        if (force) client.logger.info(localize('levels', 'list-location', {l: message.url}));
+    } else {
+        message = await channel.send({
+            embeds: [embed],
+            components
+        });
+        messageData.messageID = message.id;
+        await messageData.save();
+    }
 };
 
 /**

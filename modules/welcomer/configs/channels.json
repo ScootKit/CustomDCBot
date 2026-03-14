@@ -115,17 +115,10 @@
           }
         },
         {
-          "name": "tag",
+          "name": "memberProfileBannerUrl",
           "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
-        },
-        {
-          "name": "memberProfilePictureUrl",
-          "description": {
-            "en": "URL of the user's avatar",
-            "de": "URL zum Avatar des Nutzers"
+            "en": "URL of the banner's avatar",
+            "de": "URL zum Banner des Nutzers"
           },
           "isImage": true
         },
@@ -151,13 +144,6 @@
           }
         },
         {
-          "name": "mention",
-          "description": {
-            "en": "Mention of the user who boosted",
-            "de": "Erwähnung des Nutzers"
-          }
-        },
-        {
           "name": "boostCount",
           "description": {
             "en": "Total count of boosts",
@@ -176,20 +162,6 @@
           "description": {
             "en": "Mention of the user who unboosted",
             "de": "Erwähnung des Nutzers"
-          }
-        },
-        {
-          "name": "boostCount",
-          "description": {
-            "en": "Total count of boosts",
-            "de": "Gesamte Anzahl an Boosts"
-          }
-        },
-        {
-          "name": "guildLevel",
-          "description": {
-            "en": "Boost-Level of the guild after the unboost",
-            "de": "Boost-Level nach dem Boost"
           }
         }
       ]

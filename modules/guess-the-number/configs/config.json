@@ -1,0 +1,155 @@
+{
+  "description": {
+    "en": "Adjust messages and permissions here",
+    "de": "Passe Nachrichten und Rechte hier an"
+  },
+  "humanName": {
+    "en": "Configuration",
+    "de": "Konfiguration"
+  },
+  "filename": "config.json",
+  "commandsWarnings": {
+    "special": [
+      {
+        "name": "/guess-the-number",
+        "info": {
+          "en": "You need to first set the permissions in your server settings for this command and after that add them under \"adminRoles\" here.",
+          "de": "Du musst zuerst die Rechte in deinen Server-Einstellungen einstellen und danach diese unter \"AdminRollen\" hinzufügen."
+        }
+      }
+    ]
+  },
+  "content": [
+    {
+      "name": "adminRoles",
+      "humanName": {
+        "de": "Adminrollen",
+        "en": "Admin-Roles"
+      },
+      "default": {
+        "en": [],
+        "de": []
+      },
+      "description": {
+        "en": "Every role that can manage game sessions.",
+        "de": "Jede Rolle, welche Spielrunden verwalten kann"
+      },
+      "type": "array",
+      "content": "roleID"
+    },
+    {
+      "name": "startMessage",
+      "humanName": {
+        "de": "Startnachricht",
+        "en": "Start-Message"
+      },
+      "default": {
+        "en": {
+          "title": "Guess the Number - Game started",
+          "description": "Guess a number between %min% and %max%. Good luck!"
+        },
+        "de": {
+          "title": "Errate die Zahl - Das Spiel beginnt",
+          "description": "Errate eine Zahl zwischen %min% und %max%. Viel Glück!"
+        }
+      },
+      "description": {
+        "de": "Nachricht, die am Anfang einer Runde gesendet wird",
+        "en": "Message that gets send when a new round gets started"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "min",
+          "description": {
+            "en": "Minimal value to guess",
+            "de": "Niedrigester möglichster Wert"
+          }
+        },
+        {
+          "name": "max",
+          "description": {
+            "en": "Maximal value to guess",
+            "de": "Höchster möglichster Wert"
+          }
+        }
+      ]
+    },
+    {
+      "name": "endMessage",
+      "humanName": {
+        "de": "Endnachricht",
+        "en": "End-Message"
+      },
+      "default": {
+        "en": {
+          "title": "Guess the Number - Game ended",
+          "description": "Good game everyone!\nThe winner is %winner%.\nThe number was **%number%**.\nThere were around **%guessCount% guesses** in total."
+        },
+        "de": {
+          "title": "Errate die Zahl - Das Spiel ist beendet",
+          "description": "Gutes Spiel!\nDer Gewinner ist %winner%.\nDie Zahl war **%number%**.\nInsgesamt wurde **%guessCount% mal** geraten."
+        }
+      },
+      "description": {
+        "de": "Nachricht, die am Ende einer Runde gesendet wird",
+        "en": "Message that gets send when a round ends"
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "min",
+          "description": {
+            "en": "Minimal value to guess",
+            "de": "Niedrigester möglichster Wert"
+          }
+        },
+        {
+          "name": "max",
+          "description": {
+            "en": "Maximal value to guess",
+            "de": "Höchster möglichster Wert"
+          }
+        },
+        {
+          "name": "winner",
+          "description": {
+            "en": "@-mention of the winner",
+            "de": "@-Erwähnung des Gewinners"
+          }
+        },
+        {
+          "name": "guessCount",
+          "description": {
+            "en": "Count of guesses in this game session",
+            "de": "Anzahl der Versuche in dieser Runde"
+          }
+        },
+        {
+          "name": "number",
+          "description": {
+            "en": "Winning number",
+            "de": "Nummer, die gesucht wurde"
+          }
+        }
+      ]
+    },
+    {
+      "name": "higherLowerReactions",
+      "type": "boolean",
+      "humanName": {
+        "de": "Reagiere mit Höher / Geringer Emojis",
+        "en": "React with Lower / Higher reactions"
+      },
+      "default": {
+        "en": false
+      },
+      "description": {
+        "de": "Wenn aktiviert, reagiert der Bot bei falschen Versuchen mit ⬇ (wenn die gesuchte Zahl unter der gesendeten Zahl ist) oder mit ⬆ (wenn die gesuchte Zahl größer als die gesendete Zahl ist). Falls deaktiviert, wird der Bot nur mit ❌ bei falschen Versuchen reagieren.",
+        "en": "If enabled, the bot will react with ⬇ (if the guess is higher than the correct number) or with ⬆ (if the guess is lower than the correct number) on wrong guesses. If disabled, the bot will just react with ❌ on wrong guesses."
+      }
+    }
+  ]
+}

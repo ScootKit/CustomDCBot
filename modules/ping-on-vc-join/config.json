@@ -76,6 +76,9 @@
       "default": {
         "en": ""
       },
+      "content": [
+        "GUILD_TEXT"
+      ],
       "description": {
         "en": "Channel where the message should be send",
         "de": "Kanal, in welchen die Nachricht gesendet werden soll"

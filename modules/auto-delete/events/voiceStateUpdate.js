@@ -1,3 +1,4 @@
+const {ChannelType} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
 module.exports.run = async function (client, oldState) {
     if (!client.botReadyAt) return;
@@ -12,7 +13,7 @@ module.exports.run = async function (client, oldState) {
     if (!channel) {
         return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channelConfigEntry.channelID})}`);
     }
-    if (channel.type !== 'GUILD_VOICE') return;
+    if (channel.type !== ChannelType.GuildVoice) return;
     if (channel.members.size > 0) return;
 
     const channelMessages = await channel.messages.fetch().catch(() => {

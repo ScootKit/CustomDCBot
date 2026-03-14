@@ -1,3 +1,4 @@
+const {ChannelType} = require('discord.js');
 const {embedType, disableModule, migrate} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
@@ -11,7 +12,7 @@ module.exports.run = async function (client) {
         }
         const channel = await client.channels.fetch(element['ticket-create-channel']).catch(() => {
         });
-        if (!channel || channel.guild.id !== client.config.guildID || channel.type !== 'GUILD_TEXT') return disableModule('tickets', localize('tickets', 'channel-not-found', {c: element['ticket-create-channel']}));
+        if (!channel || channel.guild.id !== client.config.guildID || channel.type !== ChannelType.GuildText) return disableModule('tickets', localize('tickets', 'channel-not-found', {c: element['ticket-create-channel']}));
         const components = [{
             type: 'ACTION_ROW',
             components: [{

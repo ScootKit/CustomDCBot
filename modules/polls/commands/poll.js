@@ -1,3 +1,4 @@
+const {ChannelType} = require('discord.js');
 const {truncate} = require('../../../src/functions/helpers');
 const durationParser = require('parse-duration');
 const {localize} = require('../../../src/functions/localize');
@@ -5,10 +6,11 @@ const {createPoll, updateMessage} = require('../polls');
 
 module.exports.subcommands = {
     'create': async function (interaction) {
-        if (interaction.options.getChannel('channel', true).type !== 'GUILD_TEXT') interaction.reply({
+        if (interaction.options.getChannel('channel', true).type !== ChannelType.GuildText) return interaction.reply({
             content: '⚠️ ' + localize('polls', 'not-text-channel'),
             ephemeral: true
         });
+        await interaction.deferReply({ephemeral: true});
         let endAt;
         if (interaction.options.getString('duration')) endAt = new Date(new Date().getTime() + durationParser(interaction.options.getString('duration')));
         const options = [];
@@ -21,9 +23,8 @@ module.exports.subcommands = {
             endAt: endAt,
             options
         }, interaction.client);
-        interaction.reply({
-            content: localize('polls', 'created-poll', {c: interaction.options.getChannel('channel').toString()}),
-            ephemeral: true
+        await interaction.editReply({
+            content: localize('polls', 'created-poll', {c: interaction.options.getChannel('channel').toString()})
         });
     },
     'end': async function (interaction) {
@@ -36,12 +37,12 @@ module.exports.subcommands = {
             content: '⚠️ ' + localize('polls', 'not-found'),
             ephemeral: true
         });
+        await interaction.deferReply({ephemeral: true});
         poll.expiresAt = new Date();
         await poll.save();
         await updateMessage(await interaction.guild.channels.cache.get(poll.channelID), poll, interaction.options.getString('msg-id'));
-        interaction.reply({
-            content: localize('polls', 'ended-poll'),
-            ephemeral: true
+        await interaction.editReply({
+            content: localize('polls', 'ended-poll')
         });
     }
 };
@@ -93,7 +94,7 @@ module.exports.config = {
                     type: 'CHANNEL',
                     name: 'channel',
                     required: true,
-                    channelTypes: ['GUILD_TEXT'],
+                    channelTypes: [ChannelType.GuildText],
                     description: localize('polls', 'command-poll-create-channel-description')
                 },
                 {

@@ -3,6 +3,8 @@ const {Op} = require('sequelize');
 const {localize} = require('../../../src/functions/localize');
 const {embedType} = require('../../../src/functions/helpers');
 const {scheduleJob} = require('node-schedule');
+const {ChannelType} = require('discord.js');
+const {restoreLockdownState} = require('../lockdown');
 const memberCache = {};
 const durationParser = require('parse-duration');
 
@@ -33,11 +35,13 @@ exports.run = async (client) => {
         });
     }
 
+    await restoreLockdownState(client);
+
     const verificationConfig = client.configurations['moderation']['verification'];
     if (!verificationConfig.enabled || !verificationConfig['restart-verification-channel']) return;
     const channel = await client.channels.fetch(verificationConfig['restart-verification-channel']).catch(() => {
     });
-    if (!channel || (channel || {}).type !== 'GUILD_TEXT') return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
+    if (!channel || (channel || {}).type !== ChannelType.GuildText) return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
     let message = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id).last();
     if (!message) {
         message = await channel.send(localize('moderation', 'generating-message'));
@@ -81,11 +85,6 @@ async function updateCache(client) {
     memberCache['quarantine'] = members.filter(m => !!m.roles.cache.get(roleId));
 }
 
-/**
- * Removes expired warns
- * @param {Client} client
- * @return {Promise<void>}
- */
 async function deleteExpiredWarns(client) {
     const aD = await client.models['moderation']['ModerationAction'].findAll({
         where: {

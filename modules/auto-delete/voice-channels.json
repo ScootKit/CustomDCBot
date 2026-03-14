@@ -42,21 +42,6 @@
         "de": "Timeout (in Minuten), nachdem die Nachrichten gelöscht werden, wenn das letzte Mitglied den Sprachkanal verlassen hat. Wenn du eine '0' verwendest, werden die Nachrichten sofort gelöscht."
       },
       "type": "integer"
-    },
-    {
-      "name": "purgeOnStart",
-      "humanName": {
-        "en": "Purge On Start",
-        "de": "Kanal leeren beim Bot Start"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled every message (max 100) in this channel gets deleted when the bot starts and no members are left in the channel",
-        "de": "Wenn aktiviert, werden alle Nachrichten (max 100) aus dem gewälten Sprachkanal gelöscht (beim Start des Bots), sofern keine Mitglieder in dem Sprachkanal sind."
-      },
-      "type": "boolean"
     }
   ]
 }

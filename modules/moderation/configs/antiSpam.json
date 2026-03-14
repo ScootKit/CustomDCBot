@@ -24,23 +24,25 @@
         "de": "Aktiviert oder deaktiviert das Anti-Spam-System"
       },
       "type": "boolean",
-      "elementToggle": true
+      "elementToggle": true,
+      "category": "settings"
     },
     {
       "name": "timeframe",
       "humanName": {
-        "de": "Zeitfenster",
-        "en": "Timeframe"
+        "de": "Zeitfenster (in Sekunden)",
+        "en": "Timeframe (in seconds)"
       },
       "default": {
         "en": 5,
         "de": 5
       },
       "description": {
-        "en": "Timeframe after which message objects get deleted (and can not longer be used to detect spam)",
-        "de": "Zeitfenster, in dem Nachrichten gelöscht werden (und nicht länger zur Erkennung von Spam verwendet werden können)"
+        "en": "Timeframe in seconds after which message objects get deleted (and can not longer be used to detect spam)",
+        "de": "Zeitfenster in Sekunden, in dem Nachrichten gelöscht werden (und nicht länger zur Erkennung von Spam verwendet werden können)"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "maxMessagesInTimeframe",
@@ -56,7 +58,8 @@
         "en": "Count of messages that are allowed to be sent in the selected timeframe",
         "de": "Anzahl an Nachrichten, die im ausgewählten Zeitfenster erlaubt sind"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "maxDuplicatedMessagesInTimeframe",
@@ -72,7 +75,8 @@
         "en": "Count of identical messages that are allowed to be sent in the selected timeframe",
         "de": "Anzahl an gleichen Nachrichten, die im ausgewählten Zeitfenster erlaubt sind"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "maxPingsInTimeframe",
@@ -88,7 +92,8 @@
         "en": "Count of pings (also counts replies) that are allowed to be sent in the selected timeframe",
         "de": "Anzahl an Erwähnungen (zählt auch Antworten), die im ausgewählten Zeitfenster erlaubt sind"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "maxMassPings",
@@ -104,7 +109,8 @@
         "en": "Count of mass pings (= @everyone, @here and roles) that are allowed to be sent in the selected timeframe",
         "de": "Anzahl an Massenerwähnungen (= @everyone, @here und Rollen), die im ausgewählten Zeitfenster erlaubt sind"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "action",
@@ -127,7 +133,8 @@
         "kick",
         "quarantine",
         "ban"
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "sendChatMessage",
@@ -143,7 +150,8 @@
         "en": "If enabled the bot will send a chat message if it has to take action agains a bot",
         "de": "Wenn aktiviert, wird der Bot eine Nachricht in den Chat senden, wenn er eine Aktion gegen einen Bot ausführen musste"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "actions"
     },
     {
       "name": "message",
@@ -177,7 +185,8 @@
             "de": "Grund der Aktion"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "ignoredChannels",
@@ -194,7 +203,8 @@
         "de": "Du kannst hier Kanäle einstellen, die ignoriert werden sollen"
       },
       "type": "array",
-      "content": "channelID"
+      "content": "channelID",
+      "category": "exemptions"
     },
     {
       "name": "ignoredRoles",
@@ -211,7 +221,34 @@
         "de": "Du kannst hier Rollen einstellen, die ignoriert werden sollen"
       },
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "exemptions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fas fa-gears",
+      "displayName": {
+        "en": "Detection Settings",
+        "de": "Erkennungseinstellungen"
+      }
+    },
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": {
+        "en": "Actions",
+        "de": "Aktionen"
+      }
+    },
+    {
+      "id": "exemptions",
+      "icon": "fa-solid fa-shield",
+      "displayName": {
+        "en": "Exemptions",
+        "de": "Ausnahmen"
+      }
     }
   ]
 }

@@ -31,22 +31,24 @@
         "de": "Aktiviert oder deaktiviert das Anti-Join-Grief-System"
       },
       "type": "boolean",
-      "elementToggle": true
+      "elementToggle": true,
+      "category": "settings"
     },
     {
       "name": "timeframe",
       "humanName": {
-        "de": "Zeitfenster",
-        "en": "Timeframe"
+        "de": "Zeitfenster (in Stunden)",
+        "en": "Timeframe (in hours)"
       },
       "default": {
         "en": 3
       },
       "description": {
         "en": "Timeframe in hours in which the limits can not be overstepped",
-        "de": "Zeitfenster in Stunden, in welchem die Limits nicht übertragen werden dürfen"
+        "de": "Zeitfenster in Stunden, in welchem die Limits nicht überschritten werden dürfen"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "max_warn",
@@ -61,7 +63,8 @@
         "en": "Maximal amount of warns a moderator can give in the timeframe until they get quarantined",
         "de": "Maximale Anzahl von Verwarnungen, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "actions"
     },
     {
       "name": "max_mute",
@@ -76,7 +79,8 @@
         "en": "Maximal amount of mutes a moderator can give in the timeframe until they get quarantined",
         "de": "Maximale Anzahl von Mutes, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "actions"
     },
     {
       "name": "max_kick",
@@ -91,7 +95,8 @@
         "en": "Maximal amount of kicks a moderator can give in the timeframe until they get quarantined",
         "de": "Maximale Anzahl von Kicks, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "actions"
     },
     {
       "name": "max_ban",
@@ -106,7 +111,26 @@
         "en": "Maximal amount of bans a moderator can give in the timeframe until they get quarantined",
         "de": "Maximale Anzahl von Bans, die ein Moderator in dem Zeitfenster vergeben kann, bis sie in Quarantäne gesteckt werden"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "actions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fas fa-gears",
+      "displayName": {
+        "en": "Detection Settings",
+        "de": "Erkennungseinstellungen"
+      }
+    },
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": {
+        "en": "Actions",
+        "de": "Aktionen"
+      }
     }
   ]
 }

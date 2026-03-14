@@ -31,14 +31,19 @@ module.exports.channelMode = async function (interaction, callerInfo) {
     }
     if (publicTemp) {
 
-        await vchann.lockPermissions;
+        await vchann.lockPermissions();
         await vchann.permissionOverwrites.delete(vchann.guild.roles.everyone);
         await interaction.editReply(embedType(moduleConfig['modeSwitched'], {'%mode%': 'public'}, {ephemeral: true}));
 
     } else if (!publicTemp) {
 
-        await vchann.lockPermissions;
-        await vchann.permissionOverwrites.create(vchann.guild.roles.everyone, {'CONNECT': false});
+        await vchann.lockPermissions();
+        const guildRoles = await interaction.guild.roles.fetch();
+        for (const [, role] of guildRoles) {
+            await vchann.permissionOverwrites.create(role, {'CONNECT': false});
+        }
+        await vchann.permissionOverwrites.create(interaction.guild.members.me, {'CONNECT': true});
+        await vchann.permissionOverwrites.create(interaction.member, {'CONNECT': true});
         if (allowedUsers.at(0) !== '') {
             for (const user of allowedUsers) {
                 await vchann.permissionOverwrites.create(interaction.guild.members.cache.get(user), {'CONNECT': true});
@@ -313,6 +318,20 @@ module.exports.sendMessage = async function (channel) {
                     emoji: '📝'
                 }]
         }];
-    const message = embedType(moduleConfig['settingsMessage'], {}, {components});
-    channel.send(message);
+    const messagePayload = embedType(moduleConfig['settingsMessage'], {}, {components});
+
+    const [messageData] = await client.models['temp-channels']['SettingsMessage'].findOrCreate({
+        where: {channelID: channel.id},
+        defaults: {channelID: channel.id}
+    });
+
+    let message = messageData.messageID ? await channel.messages.fetch(messageData.messageID).catch(() => {
+    }) : null;
+    if (message) {
+        await message.edit(messagePayload);
+    } else {
+        message = await channel.send(messagePayload);
+        messageData.messageID = message.id;
+        await messageData.save();
+    }
 };

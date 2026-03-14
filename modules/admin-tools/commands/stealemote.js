@@ -9,7 +9,11 @@ module.exports.run = async function (interaction) {
         content: '⚠️ ' + localize('admin-tools', 'emoji-too-much-data'),
         ephemeral: true
     });
-    emote = await interaction.guild.emojis.create(`https://cdn.discordapp.com/emojis/${emote[2]}`, emote[1], {reason: `Emoji imported by ${formatDiscordUserName(interaction.user)}`});
+    emote = await interaction.guild.emojis.create({
+        attachment: `https://cdn.discordapp.com/emojis/${emote[2]}`,
+        name: emote[1],
+        reason: `Emoji imported by ${formatDiscordUserName(interaction.user)}`
+    });
     await interaction.reply({
         content: localize('admin-tools', 'emoji-import', {e: emote.toString()}),
         ephemeral: true

@@ -1,5 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 const {embedType, formatDiscordUserName} = require('../../../src/functions/helpers');
+
 module.exports.run = async function (client, interaction) {
     if (!interaction.isButton()) return;
     if (!interaction.customId.startsWith('welcome-')) return;
@@ -8,7 +9,7 @@ module.exports.run = async function (client, interaction) {
         ephemeral: true,
         content: '👋 ' + localize('welcomer', 'welcome-yourself-error')
     });
-    const channelConfig = client.configurations['welcomer']['channels'].find(c => c.channelID === interaction.channel.id);
+    const channelConfig = client.configurations['welcomer']['channels'].find(c => c.channelID === interaction.channel.id && c.type === 'join');
     if (!channelConfig) return interaction.reply({
         ephemeral: true,
         content: '⚠️ ' + localize('welcomer', 'channel-not-found', {c: channelConfig.channelID})

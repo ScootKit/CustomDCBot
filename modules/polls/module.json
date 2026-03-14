@@ -6,7 +6,8 @@
     "link": "https://github.com/SCDerox"
   },
   "description": {
-    "en": "Simple module to create fresh polls on your server!"
+    "en": "Simple module to create fresh polls on your server! Supports anonymous polls and more.",
+    "de": "Einfaches Modul, um coole Umfragen auf deinem Server zu erstellen! Unterstützt anonyme Umfragen und mehr."
   },
   "events-dir": "/events",
   "commands-dir": "/commands",

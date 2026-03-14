@@ -20,7 +20,7 @@
     "de": "Temporäre Channel"
   },
   "description": {
-    "en": "Allow users to quickly create voice channels by joining a voicechannel",
+    "en": "Allow users to quickly create voice channels by joining a voice channel",
     "de": "Erlaube es Nutzern, ihren eigenen Voice-Channel zu erstellen, indem sie einem VC joinen"
   }
 }

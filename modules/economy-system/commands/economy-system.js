@@ -114,7 +114,7 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!robbedUser) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': formatDiscordUserName(user)}, {ephemeral: !interaction.config['publicCommandReplies']});
+        if (!robbedUser) return interaction.reply(embedType(interaction.str['userNotFound'], {'%user%': formatDiscordUserName(user)}), {ephemeral: !interaction.config['publicCommandReplies']});
         if (!await cooldown('rob', interaction.config['robCooldown'] * 60000, interaction.user.id, interaction.client)) return interaction.reply(embedType(interaction.str['cooldown'], {}, {ephemeral: !interaction.config['publicCommandReplies']}));
         let toRob = parseInt(robbedUser.balance) * (parseInt(interaction.config['robPercent']) / 100);
         if (toRob >= parseInt(interaction.config['maxRobAmount'])) toRob = parseInt(interaction.config['maxRobAmount']);
@@ -145,7 +145,7 @@ module.exports.subcommands = {
         if (interaction.options.getUser('user').id === interaction.user.id && !interaction.client.configurations['economy-system']['config']['selfBalance']) {
             if (interaction.client.logChannel) interaction.client.logChannel.send(localize('economy-system', 'admin-self-abuse'));
             return interaction.reply({
-                content: localize('economy-system', 'admin-self-abuse-answer'),
+                content: localize('economy-system', 'admin-self-abuse-answer', {u: interaction.user.toString()}),
                 ephemeral: !interaction.config['publicCommandReplies']
             });
         }
@@ -177,7 +177,7 @@ module.exports.subcommands = {
         if (interaction.options.getUser('user').id === interaction.user.id && !interaction.client.configurations['economy-system']['config']['selfBalance']) {
             if (interaction.client.logChannel) interaction.client.logChannel.send(localize('economy-system', 'admin-self-abuse'));
             return interaction.reply({
-                content: localize('economy-system', 'admin-self-abuse-answer'),
+                content: localize('economy-system', 'admin-self-abuse-answer', {u: interaction.user.toString()}),
                 ephemeral: !interaction.config['publicCommandReplies']
             });
         }
@@ -208,7 +208,7 @@ module.exports.subcommands = {
         if (interaction.options.getUser('user').id === interaction.user.id && !interaction.client.configurations['economy-system']['config']['selfBalance']) {
             if (interaction.client.logChannel) interaction.client.logChannel.send(localize('economy-system', 'admin-self-abuse'));
             return interaction.reply({
-                content: localize('economy-system', 'admin-self-abuse-answer'),
+                content: localize('economy-system', 'admin-self-abuse-answer', {u: interaction.user.toString()}),
                 ephemeral: !interaction.config['publicCommandReplies']
             });
         }
@@ -272,7 +272,7 @@ module.exports.subcommands = {
                 id: user.id
             }
         });
-        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound']), {'%user%': formatDiscordUserName(user)}, {ephemeral: !interaction.config['publicCommandReplies']});
+        if (!balanceV) return interaction.reply(embedType(interaction.str['userNotFound'], {'%user%': formatDiscordUserName(user)}), {ephemeral: !interaction.config['publicCommandReplies']});
         interaction.reply(embedType(interaction.str['balanceReply'], {
             '%user%': formatDiscordUserName(user),
             '%balance%': `${balanceV['balance']} ${interaction.client.configurations['economy-system']['config']['currencySymbol']}`,

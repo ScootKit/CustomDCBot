@@ -57,6 +57,21 @@
         "de": "Entferne alle anderen Rollen von Nutzern mit einem der Wörter im Status"
       },
       "type": "boolean"
+    },
+    {
+      "name": "ignoreOfflineUsers",
+      "humanName": {
+        "en": "Do not remove roles from offline users",
+        "de": "Rollen von offline Nutzern nicht entfernen"
+      },
+      "type": "boolean",
+      "default": {
+        "en": true
+      },
+      "description": {
+        "en": "When users are offline, they don't have a status, leading to the role being removed. If enabled, the status role won't be removed from offline users, only users that have a different status. Recommended on servers with more than 500 members.",
+        "de": "Wenn Nutzer offline sind, haben sie keinen Status, was dazu führt, dass die Rolle entfernt wird. Wenn aktiviert, wird die Status-Rolle nicht von offline Nutzern entfernt, nur von Nutzern mit anderem Status. Empfohlen auf Servern mit 500+ Nutzern."
+      }
     }
   ]
 }

@@ -1,5 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 const {embedType} = require('../../../src/functions/helpers');
+let Formula;
 
 const invalidMessages = {};
 
@@ -19,10 +20,11 @@ module.exports.run = async function (client, msg) {
     });
     if (!object) return;
 
-    if (!parseInt(msg.content)) return wrongMessage(localize('counter', 'not-a-number'));
+    const parsedNumber = await parseMessageNumber(msg.content, client);
+    if (!parsedNumber) return wrongMessage(localize('counter', 'not-a-number'));
     if (object.lastCountedUser === msg.author.id && moduleConfig.onlyOneMessagePerUser) return wrongMessage(localize('counter', 'only-one-message-per-person'));
-    if (parseInt(object.currentNumber) + 1 !== parseInt(msg.content)) {
-        if (parseInt(object.currentNumber) !== parseInt(msg.content) && moduleConfig.restartOnWrongCount) {
+    if (parseInt(object.currentNumber) + 1 !== parsedNumber) {
+        if (parseInt(object.currentNumber) !== parsedNumber && moduleConfig.restartOnWrongCount) {
             object.currentNumber = 0;
             object.lastCountedUser = null;
             object.userCounts = {};
@@ -48,10 +50,13 @@ module.exports.run = async function (client, msg) {
     for (const benefit of benefits.filter(b => parseInt(b.userMessageCount) === userCounts[msg.author.id])) {
         if (benefit.giveRoles.length !== 0) await msg.member.roles.add(benefit.giveRoles);
         if (benefit.sendMessage) {
-            const ben = await msg.reply(embedType(benefit.sendMessage));
+            const ben = await msg.reply(embedType(benefit.sendMessage, {
+                '%mention%': msg.author.toString(),
+                '%milestone%': userCounts[msg.author.id]
+            }));
             setTimeout(() => {
                 ben.delete();
-            }, 5000);
+            }, 10000);
         }
     }
 
@@ -59,10 +64,12 @@ module.exports.run = async function (client, msg) {
     if (msg.content === '42') reactions = [await msg.react('❓')];
     else if (msg.content === '420') reactions = [await msg.react('🚬')];
     else if (msg.content === '100') reactions = [await msg.react('💯')];
-    else if (msg.content === '112' || msg.content === '911') reactions = [await msg.react('🚑')];
+    else if (msg.content === '110') reactions = [await msg.react('🚓')];
+    else if (msg.content === '112' || msg.content === '911') reactions = [await msg.react('🚑'), await msg.react('🚒')];
     else if (msg.content === '69') reactions = [await msg.react('🇳'), await msg.react('🇮'), await msg.react('🇨'), await msg.react('🇪')];
     else reactions = [await msg.react(moduleConfig['success-reaction'])];
-    setTimeout(async () => {
+
+    if (moduleConfig.removeReactions) setTimeout(async () => {
         for (const reaction of reactions) await reaction.remove();
     }, 5000);
     if (moduleConfig.channelDescription) await msg.channel.setTopic(moduleConfig.channelDescription.split('%x%').join(object.currentNumber + 1), '[counter] ' + localize('counter', 'channel-topic-change-reason'));
@@ -96,3 +103,22 @@ module.exports.run = async function (client, msg) {
         }
     }
 };
+
+async function parseMessageNumber(content, client) {
+    if (client.configurations['counter']['config'].allowCharactersInMessage) content = content.replace(/[^\d\+\-\*\+()\/\.^]/g, '');
+    if (client.configurations['counter']['config'].allowMaths) {
+        if (!Formula) Formula = (await import('fparser')).default;
+        try {
+            const math = new Formula(content);
+            content = math.evaluate({});
+        } catch (e) {
+
+        }
+    }
+
+    if (!parseInt(content)) return null;
+
+    return parseInt(content);
+}
+
+module.exports.countingGameParseContent = parseMessageNumber;

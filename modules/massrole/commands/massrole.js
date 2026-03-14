@@ -14,6 +14,7 @@ module.exports.subcommands = {
         if (interaction.replied) return;
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
+        await interaction.guild.members.fetch({time: 600000});
         if (target === 'all') {
             await interaction.deferReply({ephemeral: true});
             for (const member of interaction.guild.members.cache.values()) {
@@ -72,6 +73,7 @@ module.exports.subcommands = {
         if (interaction.replied) return;
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
+        await interaction.guild.members.fetch({time: 600000});
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {
@@ -134,6 +136,7 @@ module.exports.subcommands = {
         if (interaction.replied) return;
         const moduleStrings = interaction.client.configurations['massrole']['strings'];
         checkTarget(interaction);
+        await interaction.guild.members.fetch({time: 600000});
         if (target === 'all') {
             await interaction.deferReply({ ephemeral: true });
             for (const member of interaction.guild.members.cache.values()) {

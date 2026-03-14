@@ -33,7 +33,8 @@
         "en": "Moderative actions will get logged in this channel",
         "de": "Moderative Aktionen werden in diesem Kanal geloggt"
       },
-      "type": "channelID"
+      "type": "channelID",
+      "category": "general"
     },
     {
       "name": "quarantine-role-id",
@@ -48,7 +49,8 @@
         "en": "When a user gets quarantined, all of their roles will get removed and this quarantine-role wil get assigned",
         "de": "Wenn ein Nutzer in Quarantäne gesteckt wird, werden alle Rollen von diesem entfernt und nur diese hinzugefügt"
       },
-      "type": "roleID"
+      "type": "roleID",
+      "category": "roles"
     },
     {
       "name": "report-channel-id",
@@ -64,7 +66,8 @@
         "de": "Kanal, in welchem Nutzer-Reports should get send. (optional, default: Log-Kanal)"
       },
       "type": "channelID",
-      "allowNull": true
+      "allowNull": true,
+      "category": "reports"
     },
     {
       "name": "remove-all-roles-on-quarantine",
@@ -80,7 +83,8 @@
         "en": "If enabled all roles from a user get removed if they get quarantined (they get saved an can be restored with /unquarantine)",
         "de": "Wenn diese Option aktiviert ist, werden alle Rollen eines Nutzers entfernt, wenn er in Quarantäne gesetzt wird (sie werden gespeichert und mit /unquarantine wiederhergestellt)"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "roles"
     },
     {
       "name": "moderator-roles_level1",
@@ -96,7 +100,8 @@
         "de": "Rollen, die folgende Aktionen ausführen können: Warn"
       },
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "roles"
     },
     {
       "name": "moderator-roles_level2",
@@ -112,7 +117,8 @@
         "de": "Rollen, die folgende Aktionen ausführen können: Warn, Mute, Unmute, Channelmute, Channel-Mute entfernen"
       },
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "roles"
     },
     {
       "name": "moderator-roles_level3",
@@ -128,7 +134,8 @@
         "de": "Rollen, die folgende Aktionen ausführen können: Warn, Mute, Unmute, Kick, Clear"
       },
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "roles"
     },
     {
       "name": "moderator-roles_level4",
@@ -144,7 +151,8 @@
         "de": "Rollen, die folgende Aktionen ausführen können: Warn, Mute, Unmute, Kick, Clear, Ban, Unban"
       },
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "roles"
     },
     {
       "name": "linked_accounts_enabled",
@@ -426,13 +434,14 @@
         "de": "Rollen, die im log-Kanal gepingt werden sollen, wenn ein Nutzer jemanden Reportet"
       },
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "reports"
     },
     {
       "name": "require_reason",
       "humanName": {
         "de": "Begründung erzwingen",
-        "en": "Fore moderators to set a reason"
+        "en": "Force moderators to set a reason"
       },
       "default": {
         "en": true,
@@ -442,13 +451,14 @@
         "en": "Should moderators be required to set a reason?",
         "de": "Sollen Moderatoren verpflichtet werden, eine Begründung anzugeben?"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "reports"
     },
     {
       "name": "require_proof",
       "humanName": {
         "de": "Beweis-Bild erzwingen",
-        "en": "Fore moderators to upload proof"
+        "en": "Force moderators to upload proof"
       },
       "dependsOn": "require_reason",
       "default": {
@@ -459,7 +469,8 @@
         "en": "Should moderators be required to upload proof for their actions?",
         "de": "Sollen Moderatoren verpflichtet werden, einen Beweis hochzuladen?"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "reports"
     },
     {
       "name": "action_on_invite",
@@ -483,7 +494,8 @@
         "kick",
         "quarantine",
         "ban"
-      ]
+      ],
+      "category": "automod"
     },
     {
       "name": "action_on_scam_link",
@@ -507,7 +519,8 @@
         "kick",
         "quarantine",
         "ban"
-      ]
+      ],
+      "category": "automod"
     },
     {
       "name": "scam_link_level",
@@ -527,7 +540,8 @@
       "content": [
         "confirmed",
         "suspicious"
-      ]
+      ],
+      "category": "automod"
     },
     {
       "name": "whitelisted_channels_for_invite_blocking",
@@ -544,7 +558,8 @@
         "de": "Kanäle oder Kategorien, in welchen die Invitesperre deaktiviert ist"
       },
       "type": "array",
-      "content": "channelID"
+      "content": "channelID",
+      "category": "automod"
     },
     {
       "name": "whitelisted_roles_for_invite_blocking",
@@ -561,7 +576,8 @@
         "de": "Rollen, welche die Invitesperre umgehen dürfen"
       },
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "automod"
     },
     {
       "name": "blacklisted_words",
@@ -578,7 +594,8 @@
         "de": "Wörter, die blockiert sind"
       },
       "type": "array",
-      "content": "string"
+      "content": "string",
+      "category": "automod"
     },
     {
       "name": "action_on_posting_blacklisted_word",
@@ -602,7 +619,24 @@
         "kick",
         "ban",
         "quarantine"
-      ]
+      ],
+      "category": "automod"
+    },
+    {
+      "name": "defaultMuteDuration",
+      "humanName": {
+        "de": "Standardmäßige Mute-Länge",
+        "en": "Default Mute-Duration"
+      },
+      "type": "string",
+      "default": {
+        "en": "14d"
+      },
+      "description": {
+        "en": "Default mute duration when none was configured. Will also be used for automod features (e.g. when someone posts a blacklisted word). Maximum value of 28 days.",
+        "de": "Standardmäßige Mute-Länge, wenn keine eingestellt wurde. Wird auch für Automod-Funktionen verwendet (also wenn z.B. jemand ein gesperrtes Wort postet). Höchstlänge von 28 Tagen."
+      },
+      "category": "actions"
     },
     {
       "name": "changeNicknames",
@@ -618,7 +652,8 @@
         "en": "If enabled, the user will get renamed when they get muted or quarantined",
         "de": "Wenn aktiviert, wird der Nutzer umbenannt, wenn er gemutet oder in Quarantäne gesteckt wird"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "nicknames"
     },
     {
       "name": "changeNicknameOnMute",
@@ -643,7 +678,8 @@
             "en": "Original nickname of the user"
           }
         }
-      ]
+      ],
+      "category": "nicknames"
     },
     {
       "name": "changeNicknameOnQuarantine",
@@ -667,7 +703,8 @@
             "en": "Original nickname of the user"
           }
         }
-      ]
+      ],
+      "category": "nicknames"
     },
     {
       "name": "debug_clear_punishments_enabled",
@@ -724,7 +761,8 @@
       "content": {
         "key": "integer",
         "value": "string"
-      }
+      },
+      "category": "automod"
     },
     {
       "name": "automod_reason",
@@ -756,7 +794,8 @@
         "en": "If enabled, warns will be deleted automatically after a certain period of time. Warns expired this way will completely disappear and can not be viewed again after they expired.",
         "de": "Wenn aktiviert, werden Warns automatisch nach einer bestimmten Zeitspanne gelöscht. Auf diese Weiße abgelaufene Warns werden komplett verschwinden und können nie erneut gesehen werden."
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "actions"
     },
     {
       "name": "warnExpiration",
@@ -772,7 +811,58 @@
         "en": "Warns will be automatically deleted after this value after it's creation. Please note that this action will delete existing warns if they expired. Enter an english value, such as  \"1y\" (= 1 year), \"3 Months\" (= 3 Months) oder \"2w\" (= 2 Weeks).",
         "de": "Warnungen werden automatisch gelöscht, wenn sie diese Zeitspanne nach Erstellung erreicht haben. Trage einen englischen Wert, wie \"1y\" (= 1 Jahr), \"3 Months\" (= 3 Monate) oder \"2w\" (= 2 Woche) ein."
       },
-      "type": "string"
+      "type": "string",
+      "category": "actions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": {
+        "en": "General Settings",
+        "de": "Allgemeine Einstellungen"
+      }
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": {
+        "en": "Roles & Permissions",
+        "de": "Rollen & Berechtigungen"
+      }
+    },
+    {
+      "id": "reports",
+      "icon": "fa-solid fa-flag",
+      "displayName": {
+        "en": "Reports",
+        "de": "Meldungen"
+      }
+    },
+    {
+      "id": "automod",
+      "icon": "far fa-robot",
+      "displayName": {
+        "en": "Auto-Moderation",
+        "de": "Auto-Moderation"
+      }
+    },
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": {
+        "en": "Actions & Punishments",
+        "de": "Aktionen & Bestrafungen"
+      }
+    },
+    {
+      "id": "nicknames",
+      "icon": "fa-solid fa-user-pen",
+      "displayName": {
+        "en": "Nickname Management",
+        "de": "Nicknamen-Verwaltung"
+      }
     }
   ]
 }

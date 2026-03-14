@@ -175,7 +175,7 @@
         "en": "Update-Interval"
       },
       "default": {
-        "en": "15",
+        "en": 15,
         "de": 15
       },
       "description": {

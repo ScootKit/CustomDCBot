@@ -1,3 +1,4 @@
+const {ChannelType} = require('discord.js');
 const {formatDate} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
@@ -7,7 +8,7 @@ module.exports.run = async (client) => {
         const dcChannel = await client.channels.fetch(channel.channelID).catch(() => {
         });
         if (!dcChannel) continue;
-        if (dcChannel.type !== 'GUILD_VOICE' && dcChannel.type !== 'GUILD_CATEGORY') client.logger.warn(`[channel-stats] ` + localize('channel-stats', 'not-voice-channel-info', {
+        if (dcChannel.type !== ChannelType.GuildVoice && dcChannel.type !== ChannelType.GuildCategory) client.logger.warn(`[channel-stats] ` + localize('channel-stats', 'not-voice-channel-info', {
             c: dcChannel.name,
             id: dcChannel.id,
             t: dcChannel.type
@@ -17,7 +18,7 @@ module.exports.run = async (client) => {
         client.intervals.push(setInterval(async () => {
             const repName = await channelNameReplacer(client, dcChannel, channel.channelName);
             if (repName !== dcChannel.name) dcChannel.setName(repName, '[channel-stats] ' + localize('channel-stats', 'audit-log-reason-interval'));
-        }, (channel.updateInterval || 5) < 5 * 60000 ? 5 * 60000 : channel.updateInterval * 60000));
+        }, (channel.updateInterval || 5) < 5 ? 5 * 60000 : (channel.updateInterval || 5) * 60000));
     }
 };
 
@@ -30,7 +31,7 @@ module.exports.run = async (client) => {
  * @return {Promise<string>}
  */
 async function channelNameReplacer(client, channel, input) {
-    const users = await channel.guild.members.fetch();
+    const users = client.guild.members.cache;
     const members = users.filter(u => !u.user.bot);
 
     /**

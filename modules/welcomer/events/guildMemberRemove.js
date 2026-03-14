@@ -19,7 +19,7 @@ module.exports.run = async function (client, guildMember) {
     for (const channelConfig of moduleChannels.filter(c => c.type === 'leave')) {
         const channel = await guildMember.guild.channels.fetch(channelConfig.channelID).catch(() => {
         });
-        if (!channel) {
+        if (!channel || !channelConfig.channelID) {
             client.logger.error(localize('welcomer', 'channel-not-found', {c: channelConfig.channelID}));
             continue;
         }
@@ -30,13 +30,15 @@ module.exports.run = async function (client, guildMember) {
         }
         if (!message) message = channelConfig.message;
 
+        await guildMember.user.fetch();
         await channel.send(await embedTypeV2(message || 'Message not found',
             {
                 '%mention%': guildMember.toString(),
                 '%servername%': guildMember.guild.name,
+                '%memberProfileBannerUrl%': guildMember.user.bannerURL({size: 1024}),
                 '%tag%': formatDiscordUserName(guildMember.user),
-                '%guildUserCount%': (await client.guild.members.fetch()).size,
-                '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
+                '%guildUserCount%': client.guild.members.cache.size,
+                '%guildMemberCount%': client.guild.members.cache.filter(m => !m.user.bot).size,
                 '%memberProfilePictureUrl%': guildMember.user.avatarURL() || guildMember.user.defaultAvatarURL,
                 '%createdAt%': formatDate(guildMember.user.createdAt),
                 '%guildLevel%': client.guild.premiumTier,

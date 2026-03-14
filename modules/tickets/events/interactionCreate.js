@@ -4,7 +4,8 @@ const {
     lockChannel,
     messageLogToStringToPaste,
     embedType,
-    formatDiscordUserName
+    formatDiscordUserName,
+    parseEmbedColor
 } = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, interaction) {
@@ -52,7 +53,7 @@ module.exports.run = async function (client, interaction) {
                 await logChannel.send({
                     embeds: [
                         new MessageEmbed()
-                            .setColor('DARK_GREEN')
+                            .setColor(parseEmbedColor('DARK_GREEN'))
                             .setTitle(localize('tickets', 'ticket-log-embed-title', {i: ticket.id}))
                             .setFooter({
                                 text: client.strings.footer,
@@ -100,11 +101,12 @@ module.exports.run = async function (client, interaction) {
                     {
                         id: rID,
                         type: 'ROLE',
-                        allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY' , 'SEND_FILES']
+                        allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
                     }
                 );
             });
-            const channel = await interaction.guild.channels.create(formatDiscordUserName(interaction.user).split('#').join('-'), {
+            const channel = await interaction.guild.channels.create({
+                name: formatDiscordUserName(interaction.user).split('#').join('-'),
                 parent: element['ticket-create-category'],
                 topic: `Ticket created by ${interaction.user.toString()} by clicking on a message in ${interaction.channel.toString()}`,
                 reason: localize('tickets', 'ticket-created-audit-log', {u: formatDiscordUserName(interaction.user)}),

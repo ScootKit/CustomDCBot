@@ -7,11 +7,10 @@ exports.run = async (client, oldState, newState) => {
     if (!client.botReadyAt) return;
     const roleConfig = client.configurations['ping-on-vc-join']['actual-config'];
     if (roleConfig.assignRoleToUsersInVoiceChannels && roleConfig.voiceRoles.length !== 0) {
-        console.log(oldState.guildId, newState.guildId);
         if (oldState.channel && !newState.channel) newState.member.roles.remove(roleConfig.voiceRoles);
         if (!oldState.channel && newState.channel) newState.member.roles.add(roleConfig.voiceRoles);
     }
-    if (!newState.channel) return;
+    if (!newState.channel || newState.channel.id === oldState?.channel?.id) return;
     const channel = await client.channels.fetch(newState.channelId);
     if (channel.guild.id !== client.guild.id) return;
 

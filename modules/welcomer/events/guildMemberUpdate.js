@@ -6,13 +6,13 @@ const {
     formatDiscordUserName
 } = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
+const {assignJoinRoles} = require('./guildMemberAdd');
+
 module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     const moduleConfig = client.configurations['welcomer']['config'];
 
     if (!client.botReadyAt) return;
-    if (oldGuildMember.pending && !newGuildMember.pending) {
-        await newGuildMember.roles.add(moduleConfig['give-roles-on-join']);
-    }
+    if (oldGuildMember.pending && !newGuildMember.pending && !moduleConfig['assign-roles-immediately']) assignJoinRoles(newGuildMember, moduleConfig);
 
     if (newGuildMember.guild.id !== client.guild.id) return;
 
@@ -36,7 +36,7 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
         for (const channelConfig of moduleChannels.filter(c => c.type === type)) {
             const channel = await newGuildMember.guild.channels.fetch(channelConfig.channelID).catch(() => {
             });
-            if (!channel) {
+            if (!channel || !channelConfig.channelID) {
                 client.logger.error(localize('welcomer', 'channel-not-found', {c: channelConfig.channelID}));
                 continue;
             }
@@ -46,13 +46,15 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
             }
             if (!message) message = channelConfig.message;
 
+            await newGuildMember.user.fetch();
             await channel.send(await embedTypeV2(message || 'Message not found',
                 {
                     '%mention%': newGuildMember.toString(),
                     '%servername%': newGuildMember.guild.name,
                     '%tag%': formatDiscordUserName(newGuildMember.user),
-                    '%guildUserCount%': (await client.guild.members.fetch()).size,
-                    '%guildMemberCount%': (await client.guild.members.fetch()).filter(m => !m.user.bot).size,
+                    '%guildUserCount%': client.guild.members.cache.size,
+                    '%guildMemberCount%': client.guild.members.cache.filter(m => !m.user.bot).size,
+                    '%memberProfileBannerUrl%': newGuildMember.user.bannerURL({size: 1024}),
                     '%memberProfilePictureUrl%': newGuildMember.user.avatarURL() || newGuildMember.user.defaultAvatarURL,
                     '%createdAt%': formatDate(newGuildMember.user.createdAt),
                     '%guildLevel%': localize('boostTier', client.guild.premiumTier),

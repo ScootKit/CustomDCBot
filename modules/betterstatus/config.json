@@ -5,16 +5,6 @@
     "de": "Konfiguration"
   },
   "filename": "config.json",
-  "categories": [
-    {
-      "name": "interval",
-      "humanname-de": "Intervalle",
-      "humanname-en": "Intervall",
-      "description-de": "Intervalle erlauben es dir, den Status des Bots alle paar Sekunden automatisch zu ändern!",
-      "description-en": "You can use intervalls to automatically change the Status of the bot",
-      "categoryToggle": "enableInterval"
-    }
-  ],
   "content": [
     {
       "name": "enableInterval",
@@ -148,6 +138,7 @@
         "en": "The interval in seconds (at least 10 seconds)",
         "de": "Das Intervall der Statusänderungen in Sekunden (mindestens 10 Sekunden)"
       },
+      "minValue": 10,
       "type": "integer"
     },
     {
@@ -208,7 +199,7 @@
       "name": "streamingLink",
       "type": "string",
       "humanName": {
-        "en": "Steaming-Link",
+        "en": "Streaming Link",
         "de": "Stream-Link"
       },
       "default": {

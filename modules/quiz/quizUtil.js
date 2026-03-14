@@ -3,8 +3,12 @@
  * @module quiz
  */
 const {scheduleJob} = require('node-schedule');
-const {MessageEmbed} = require('discord.js');
-const {renderProgressbar, formatDate} = require('../../src/functions/helpers');
+const {ChannelType, MessageEmbed} = require('discord.js');
+const {
+    renderProgressbar,
+    formatDate,
+    parseEmbedColor
+} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 
 let changed = false;
@@ -69,7 +73,7 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
     });
     const embed = new MessageEmbed()
         .setTitle(strings.embed.title)
-        .setColor(strings.embed.color)
+        .setColor(parseEmbedColor(strings.embed.color))
         .setDescription(data.description);
 
     let allVotes = 0;
@@ -120,7 +124,7 @@ async function updateMessage(channel, data, mID = null, interaction = null) {
     if (data.expiresAt || data.endAt) {
         const date = new Date(data.expiresAt || data.endAt);
         if (date.getTime() <= Date.now()) {
-            embed.setColor(strings.embed.endedQuizColor);
+            embed.setColor(parseEmbedColor(strings.embed.endedQuizColor));
             embed.setTitle(strings.embed.endedQuizTitle);
             embed.addField('\u200b', localize('quiz', 'correct-highlighted'));
         } else {
@@ -195,7 +199,7 @@ async function updateLeaderboard(client, force = false) {
     const moduleStrings = client.configurations['quiz']['strings'];
     const channel = await client.channels.fetch(client.configurations['quiz']['config']['leaderboardChannel']).catch(() => {
     });
-    if (!channel || channel.type !== 'GUILD_TEXT') return client.logger.error('[quiz] ' + localize('quiz', 'leaderboard-channel-not-found'));
+    if (!channel || channel.type !== ChannelType.GuildText) return client.logger.error('[quiz] ' + localize('quiz', 'leaderboard-channel-not-found'));
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
 
     const users = await client.models['quiz']['QuizUser'].findAll({
@@ -221,7 +225,7 @@ async function updateLeaderboard(client, force = false) {
 
     const embed = new MessageEmbed()
         .setTitle(moduleStrings.embed.leaderboardTitle)
-        .setColor(moduleStrings.embed.leaderboardColor)
+        .setColor(parseEmbedColor(moduleStrings.embed.leaderboardColor))
         .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setThumbnail(channel.guild.iconURL())
         .addField(moduleStrings.embed.leaderboardSubtitle, leaderboardString);

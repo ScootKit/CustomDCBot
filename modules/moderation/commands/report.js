@@ -1,5 +1,10 @@
 const {localize} = require('../../../src/functions/localize');
-const {embedType, messageLogToStringToPaste} = require('../../../src/functions/helpers');
+const {
+    embedType,
+    messageLogToStringToPaste,
+    parseEmbedColor,
+    safeSetFooter
+} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 
 module.exports.run = async function (interaction) {
@@ -33,23 +38,23 @@ module.exports.run = async function (interaction) {
         value: `[${localize('moderation', 'file')}](${proof.proxyURL || proof.url})`,
         inline: true
     });
+    const reportEmbed = new MessageEmbed()
+        .setTitle(localize('moderation', 'report-embed-title'))
+        .setDescription(localize('moderation', 'report-embed-description'))
+        .addField(localize('moderation', 'reported-user'), interaction.options.getUser('user').toString() + ` \`${interaction.options.getUser('user').id}\``, true)
+        .addField(localize('moderation', 'message-log'), localize('moderation', 'message-log-description', {u: logUrl}), true)
+        .addField(localize('moderation', 'channel'), interaction.channel.toString(), true)
+        .addField(localize('moderation', 'report-reason'), interaction.options.getString('reason'))
+        .addField(localize('moderation', 'report-user'), interaction.user.toString() + ` \`${interaction.user.id}\``)
+        .addFields(fields)
+        .setColor(parseEmbedColor('RED'))
+        .setImage(proof ? (proof.proxyURL || proof.url) : null)
+        .setAuthor({name: interaction.client.user.username, iconURL: interaction.client.user.avatarURL()})
+        .setTimestamp();
+    safeSetFooter(reportEmbed, interaction.client);
+
     logChannel.send({
-        embeds: [
-            new MessageEmbed()
-                .setTitle(localize('moderation', 'report-embed-title'))
-                .setDescription(localize('moderation', 'report-embed-description'))
-                .addField(localize('moderation', 'reported-user'), interaction.options.getUser('user').toString() + ` \`${interaction.options.getUser('user').id}\``, true)
-                .addField(localize('moderation', 'message-log'), localize('moderation', 'message-log-description', {u: logUrl}), true)
-                .addField(localize('moderation', 'channel'), interaction.channel.toString(), true)
-                .addField(localize('moderation', 'report-reason'), interaction.options.getString('reason'))
-                .addField(localize('moderation', 'report-user'), interaction.user.toString() + ` \`${interaction.user.id}\``)
-                .addFields(fields)
-                .setColor('RED')
-                .setImage(proof ? (proof.proxyURL || proof.url) : null)
-                .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
-                .setAuthor({name: interaction.client.user.username, iconURL: interaction.client.user.avatarURL()})
-                .setTimestamp()
-        ],
+        embeds: [reportEmbed],
         content: pingContent
     });
     interaction.editReply(embedType(interaction.client.configurations['moderation']['strings']['submitted-report-message'], {

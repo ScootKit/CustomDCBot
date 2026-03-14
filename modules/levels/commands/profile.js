@@ -1,7 +1,18 @@
-const {embedType, formatDate, formatNumber} = require('../../../src/functions/helpers');
+const {
+    embedType,
+    formatDate,
+    formatNumber,
+    parseEmbedColor
+} = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
-const {getMemberRoleFactor} = require('../events/messageCreate');
+const {
+    getMemberRoleFactor,
+    calculateLevelXP,
+    displayLevel,
+    isMaxLevel
+} = require('../events/messageCreate');
+const {client} = require('../../../main');
 
 module.exports.run = async function (interaction) {
     const moduleStrings = interaction.client.configurations['levels']['strings'];
@@ -17,28 +28,34 @@ module.exports.run = async function (interaction) {
     });
     if (!user) return interaction.reply(embedType(moduleStrings['user_not_found'], {}, {ephemeral: true}));
 
-    const nextLevelXp = user.level * 750 + ((user.level - 1) * 500);
+    const nextLevelXp = calculateLevelXP(interaction.client, user.level + 1);
 
     const embed = new MessageEmbed()
-        .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
-        .setColor(moduleStrings.embed.color || 'GREEN')
-        .setThumbnail(member.user.avatarURL({dynamic: true}))
+        .setFooter({
+            text: interaction.client.strings.footer,
+            iconURL: interaction.client.strings.footerImgUrl
+        })
+        .setColor(parseEmbedColor(moduleStrings.embed.color || 'GREEN'))
+        .setThumbnail(member.user.avatarURL({forceStatic: false}))
         .setTitle(moduleStrings.embed.title.replaceAll('%username%', member.user.username))
         .setDescription(moduleStrings.embed.description.replaceAll('%username%', member.user.username))
         .addField(moduleStrings.embed.messages, formatNumber(user.messages), true)
-        .addField(moduleStrings.embed.xp, `${formatNumber(user.xp)}/${formatNumber(nextLevelXp)}`, true)
-        .addField(moduleStrings.embed.level, user.level.toString(), true);
+        .addField(moduleStrings.embed.xp, `${formatNumber(isMaxLevel(user.level, interaction.client) ? calculateLevelXP(interaction.client, interaction.client.configurations['levels']['config'].maximumLevel) : user.xp)}/${isMaxLevel(user.level, interaction.client) ? '∞' : formatNumber(nextLevelXp)}`, true)
+        .addField(moduleStrings.embed.level, displayLevel(user.level, interaction.client), true);
 
-    const roleFactor = getMemberRoleFactor(interaction.member);
+    const roleFactor = getMemberRoleFactor(member);
     if (roleFactor !== 1) {
         let roleString = '';
-        for (const role of interaction.member.roles.cache.filter(f => moduleConfig['multiplication_roles'][f.id]).values()) {
+        for (const role of member.roles.cache.filter(f => moduleConfig['multiplication_roles'][f.id]).values()) {
             roleString = roleString + `\n* <@&${role.id}>: ${moduleConfig['multiplication_roles'][role.id]}x`;
         }
         embed.addField(moduleStrings.embed.roleFactor, `${roleString}\n${localize('levels', 'role-factors-total', {f: roleFactor})}`, true);
     }
     embed.addField(moduleStrings.embed.joinedAt, formatDate(member.joinedAt), true);
-    interaction.reply({ephemeral: true, embeds: [embed]});
+    interaction.reply({
+        ephemeral: true,
+        embeds: [embed]
+    });
 };
 
 module.exports.config = {

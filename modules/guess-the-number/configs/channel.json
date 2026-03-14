@@ -1,0 +1,79 @@
+{
+  "description": {
+    "en": "Enable the Gamechannel mode to automatically re-start games",
+    "de": "Aktiviere den Spielkanalmodus, um das Spiel automatisch neuzustarten"
+  },
+  "humanName": {
+    "en": "Gamechannel Mode",
+    "de": "Spielkanal-Modus"
+  },
+  "filename": "channel.json",
+  "content": [
+    {
+      "default": {
+        "en": false
+      },
+      "name": "enabled",
+      "description": {
+        "en": "If enabled, you can configure a game channel, in which a new guess the number game will be started if a number got guessed correctly. You still will be able to manually start games in other channels. Everyone, including admins, can guess in game channels.",
+        "de": "Wenn aktiviert, kannst du einen Spielkanal konfigurieren, in welchem neue Nummer-Erraten-Spiele gestartet werden, sobald eine Zahl korrekt erraten wurde. Du kannst auch weiterhin manuell Spiele in anderen Kanälen starten. In Spielkanälen kann jeder, also auch Admins, raten."
+      },
+      "humanName": {
+        "en": "Enable Gamechannel mode?",
+        "de": "Spielkanalmodus aktivieren?"
+      },
+      "type": "boolean"
+    },
+    {
+      "default": {
+        "en": ""
+      },
+      "dependsOn": "enabled",
+      "description": {
+        "en": "In this channel, games will be automatically started if a game ends or no game is currently running",
+        "de": "In diesem Kanal werden Spiele automatisch gestartet, wenn ein Spiel endet oder gerade kein Spiel läuft."
+      },
+      "humanName": {
+        "en": "Gamechannel",
+        "de": "Spielkanal"
+      },
+      "content": [
+        "GUILD_TEXT"
+      ],
+      "type": "channelID",
+      "name": "channel"
+    },
+    {
+      "type": "integer",
+      "dependsOn": "enabled",
+      "default": {
+        "en": 1
+      },
+      "name": "minInt",
+      "humanName": {
+        "en": "Minimum number",
+        "de": "Kleinste Nummer"
+      },
+      "description": {
+        "en": "A number between this and the highest number will be selected at random when a game starts.",
+        "de": "Eine Nummer zwischen dieser under der höchsten Nummer wird automatisch ausgewählt, wenn das Spiel startet."
+      }
+    },
+    {
+      "type": "integer",
+      "dependsOn": "enabled",
+      "default": {
+        "en": 1000
+      },
+      "name": "maxInt",
+      "humanName": {
+        "en": "Highest number",
+        "de": "Höchste Nummer"
+      },
+      "description": {
+        "en": "A number between this and the minimum number will be selected at random when a game starts.",
+        "de": "Eine Nummer zwischen dieser under der kleinsten Nummer wird automatisch ausgewählt, wenn das Spiel startet."
+      }
+    }
+  ]
+}

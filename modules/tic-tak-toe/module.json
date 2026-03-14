@@ -1,7 +1,8 @@
 {
   "name": "tic-tak-toe",
   "humanReadableName": {
-    "en": "Tick-Tack-Toe"
+    "en": "Tic Tac Toe",
+    "de": "Tic-Tac-Toe"
   },
   "author": {
     "scnxOrgID": "1",

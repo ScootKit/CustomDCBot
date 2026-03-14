@@ -11,7 +11,9 @@ module.exports.generateSuggestionEmbed = generateSuggestionEmbed;
 async function generateSuggestionEmbed(client, suggestion) {
     const moduleConfig = client.configurations['suggestions']['config'];
     const channel = await client.channels.fetch(moduleConfig.suggestionChannel);
-    const message = await channel.messages.fetch(suggestion.messageID);
+    const message = await channel.messages.fetch(suggestion.messageID).catch(() => {
+    });
+    if (!message) return;
     const user = await client.users.fetch(suggestion.suggesterID).catch(() => {
     });
 

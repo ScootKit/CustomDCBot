@@ -24,13 +24,14 @@
         "de": "Aktiviert oder deaktiviert das Anti-Join-Raid-System"
       },
       "type": "boolean",
-      "elementToggle": true
+      "elementToggle": true,
+      "category": "settings"
     },
     {
       "name": "timeframe",
       "humanName": {
-        "de": "Zeitfenster",
-        "en": "Timeframe"
+        "de": "Zeitfenster (in Minuten)",
+        "en": "Timeframe (in minutes)"
       },
       "default": {
         "en": 5,
@@ -40,7 +41,8 @@
         "en": "Timeframe in which join actions should be recorded (in minutes)",
         "de": "Zeitfenster, in welchem Serverbeitritte gezählt werden sollen (in Minuten)"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "maxJoinsInTimeframe",
@@ -56,7 +58,8 @@
         "en": "Count of joins that are allowed to happen in the selected timeframe",
         "de": "Anzahl an Serverbeitritten, die im ausgewählten Zeitfenster zugelassen werden"
       },
-      "type": "integer"
+      "type": "integer",
+      "category": "settings"
     },
     {
       "name": "action",
@@ -79,7 +82,8 @@
         "quarantine",
         "ban",
         "give-role"
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "roleID",
@@ -94,7 +98,8 @@
         "en": "Only if action = give-role. Role that gets given to users who trigger the antiJoinRaid-System",
         "de": "Nur verfügbar, wenn Aktion = give-role. Rolle, die Nutzern gegeben wird, die das Anti-Join-Raid-System auslösen"
       },
-      "type": "roleID"
+      "type": "roleID",
+      "category": "actions"
     },
     {
       "name": "removeOtherRoles",
@@ -110,7 +115,26 @@
         "en": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
         "de": "Nur verfügbar, wenn Aktion = give-role. Wenn aktiviert, werden andere Rollen die der Nutzer hat nach einem kurzen Zeitraum entfernt (und das Vergeben der Rolle von \"Rolle\" wird verzögert)"
       },
-      "type": "boolean"
+      "type": "boolean",
+      "category": "actions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fas fa-gears",
+      "displayName": {
+        "en": "Detection Settings",
+        "de": "Erkennungseinstellungen"
+      }
+    },
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": {
+        "en": "Actions",
+        "de": "Aktionen"
+      }
     }
   ]
 }

@@ -276,7 +276,8 @@
         "rewards-level-not-found": "Keine Belohnungen für Level %l konfiguriert",
         "rewards-list-empty": "Noch keine Level-Belohnungen konfiguriert",
         "rewards-list-one": "Level %l: %roles (%replace)",
-        "rewards-list-line": "Level %l: %roles (%replace)"
+        "rewards-list-line": "Level %l: %roles (%replace)",
+        "rewards-commands-disabled": "Belohnungs-Befehle sind in der Konfiguration deaktiviert."
     },
     "partner-list": {
         "could-not-give-role": "%u konnte keine Rolle gegeben werden",

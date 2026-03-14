@@ -9,25 +9,24 @@ module.exports.subcommands = {
                 '%min%': interaction.options.getNumber('min') || 1,
                 '%max%': interaction.options.getNumber('max') || 42,
                 '%number%': randomIntFromInterval(interaction.options.getNumber('min') || 1, interaction.options.getNumber('max') || 42)
-            },
-            {ephemeral: true}
+            }
         ));
     },
     'ikea-name': function (interaction) {
         let count = interaction.options.getNumber('syllable-count') || Math.floor(Math.random() * 4) + 1;
         if (count && count > 20) count = 20;
-        interaction.reply(embedType(interaction.client.configurations['fun']['config']['ikeaMessage'], {'%name%': generateIkeaName(count)}, {ephemeral: true}));
+        interaction.reply(embedType(interaction.client.configurations['fun']['config']['ikeaMessage'], {'%name%': generateIkeaName(count)}));
     },
     'dice': function (interaction) {
-        interaction.reply(embedType(interaction.client.configurations['fun']['config']['diceRollMessage'], {'%number%': randomIntFromInterval(1, 6)}, {ephemeral: true}));
+        interaction.reply(embedType(interaction.client.configurations['fun']['config']['diceRollMessage'], {'%number%': randomIntFromInterval(1, 6)}));
     },
     'coinflip': function (interaction) {
-        interaction.reply(embedType(interaction.client.configurations['fun']['config']['coinFlipMessage'], {'%site%': localize('fun', `dice-site-${randomIntFromInterval(1, 2)}`)}, {ephemeral: true}));
+        interaction.reply(embedType(interaction.client.configurations['fun']['config']['coinFlipMessage'], {'%site%': localize('fun', `dice-site-${randomIntFromInterval(1, 2)}`)}));
     },
     '8ball': function (interaction) {
         interaction.reply(embedType(interaction.client.configurations['fun']['config']['8ballMessage'], {
             '%answer%': randomElementFromArray(interaction.client.configurations['fun']['config']['8BallMessages'])
-        }, {ephemeral: true}));
+        }));
     }
 };
 

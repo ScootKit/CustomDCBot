@@ -34,6 +34,7 @@
         "en": "Set the prefix of your bot here",
         "de": "Dein eigener Prefix - Wir empfehlen ihn einfach bei ! zu belassen."
       },
+      "hidden": true,
       "type": "string"
     },
     {
@@ -82,8 +83,8 @@
         "en": "Bot-Status"
       },
       "default": {
-        "en": "Change this in your Bot-Configuration on scnx.app",
-        "de": "Ändere das in deiner Bot-Konfiguration auf scnx.app"
+        "en": "Change this in your Bot-Configuration on scnx.app: https://scootk.it/change-status",
+        "de": "Ändere das in deiner Bot-Konfiguration auf scnx.app: https://scootk.it/change-status"
       },
       "description": {
         "en": "This will show up in Discord as \"Playing <YourValue>\"",
@@ -103,6 +104,7 @@
         "en": "Log-Level of the bot. Leave it as it is, if you don't know what this means",
         "de": "Log-Level des Bots. Belasse es wie es ist, wenn du nicht weißt, was das bedeutet."
       },
+      "hidden": true,
       "type": "select",
       "content": [
         "debug",
@@ -157,8 +159,7 @@
         "en": "Allows @everyone and @here pings for messages configurable in the dashboard",
         "de": "Erlaubt @everyone und @here pings in im Dashboard anpassbaren Nachrichten"
       },
-      "type": "boolean",
-      "pro": true
+      "type": "boolean"
     },
     {
       "name": "syncCommandGlobally",

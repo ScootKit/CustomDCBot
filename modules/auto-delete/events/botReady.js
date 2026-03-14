@@ -12,8 +12,6 @@ module.exports.run = async function (client) {
     });
 
     for (const channel of client.modules['auto-delete'].uniqueChannels) {
-        if (!channel.purgeOnStart) continue;
-
         const dcChannel = await client.channels.fetch(channel.channelID).catch(() => {
         });
         if (!dcChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: channel.channelID})}`);
@@ -35,8 +33,6 @@ module.exports.run = async function (client) {
     }
 
     for (const voiceChannel of uniqueConfigVoiceChannels) {
-        if (!voiceChannel.purgeOnStart) continue;
-
         const dcVoiceChannel = await client.channels.fetch(voiceChannel.channelID).catch(() => {
         });
         if (!dcVoiceChannel) return client.logger.error(`[auto-delete] ${localize('auto-delete', 'could-not-fetch-channel', {c: voiceChannel.channelID})}`);

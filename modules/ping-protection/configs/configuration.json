@@ -1,0 +1,273 @@
+{
+  "filename": "configuration.json",
+  "humanName": {
+    "en": "General Configuration"
+  },
+  "commandsWarnings": {
+    "normal": [
+      "/ping-protection user history",
+      "/ping-protection user actions-history",
+      "/ping-protection list roles",
+      "/ping-protection list users",
+      "/ping-protection list whitelisted"
+    ]
+  },
+  "description": {
+    "en": "Configure protected users/roles, whitelisted roles/members, ignored channels and the notification message."
+  },
+  "categories": [
+    {
+      "id": "protection",
+      "icon": "fa-solid fa-shield",
+      "displayName": {
+        "en": "Protected"
+      }
+    },
+    {
+      "id": "whitelisted",
+      "icon": "fa-solid fa-badge-check",
+      "displayName": {
+        "en": "Whitelists"
+      }
+    },
+    {
+      "id": "rules",
+      "icon": "fas fa-gears",
+      "displayName": {
+        "en": "Ping rules"
+      }
+    },
+    {
+      "id": "automod",
+      "icon": "far fa-robot",
+      "displayName": {
+        "en": "AutoMod settings"
+      }
+    },
+    {
+      "id": "messages",
+      "icon": "fa-duotone fa-regular fa-triangle-exclamation",
+      "displayName": {
+        "en": "Warning message"
+      }
+    }
+  ],
+  "content": [
+    {
+      "name": "protectedRoles",
+      "category": "protection",
+      "humanName": { 
+        "en": "Protected Roles"
+      },
+      "description": { 
+        "en": "Specific roles which are protected from pings."
+      },
+      "type": "array",
+      "content": "roleID",
+      "default": { 
+        "en": [] 
+      }
+    },
+    {
+      "name": "protectAllUsersWithProtectedRole",
+      "category": "protection",
+      "humanName": { 
+        "en": "Protect all users with a protected role" 
+      },
+      "description": {
+        "en": "if enabled, all users with at least one protected role will be protected from pings, even if they are not specifically listed as protected users."
+      },
+      "type": "boolean",
+      "default": { 
+        "en": true 
+      }
+    },
+    {
+      "name": "protectedUsers",
+      "category": "protection",
+      "humanName": { 
+        "en": "Protected Users"
+      },
+      "description": { 
+        "en": "Specific users who are protected from pings."
+      },
+      "type": "array",
+      "content": "userID",
+      "default": { 
+        "en": [] 
+      }
+    },
+    {
+      "name": "ignoredRoles",
+      "category": "whitelisted",
+      "humanName": { 
+        "en": "Whitelisted Roles"
+      },
+      "description": { 
+        "en": "Roles allowed to ping protected members or roles."
+      },
+      "type": "array",
+      "content": "roleID",
+      "default": { 
+        "en": [] 
+      }
+    },
+    {
+      "name": "ignoredChannels",
+      "category": "whitelisted",
+      "humanName": { 
+        "en": "Whitelisted Channels" 
+      },
+      "description": { 
+        "en": "Pings in these channels are ignored."
+      },
+      "type": "array",
+      "content": "channelID",
+      "default": { 
+        "en": [] 
+      }
+    },
+    {
+      "name": "ignoredUsers",
+      "category": "whitelisted",
+      "humanName": { 
+        "en": "Whitelisted Users" 
+      },
+      "description": { 
+        "en": "Pings from these users are ignored."
+      },
+      "type": "array",
+      "content": "userID",
+      "default": { 
+        "en": [] 
+      }
+    },
+    {
+      "name": "allowReplyPings",
+      "category": "rules",
+      "humanName": { 
+        "en": "Allow Reply Pings" 
+      },
+      "description": { 
+        "en": "If enabled, replying to a protected user (with mention ON) is allowed."
+      },
+      "type": "boolean",
+      "default": { 
+        "en": false 
+      }
+    },
+    {
+      "name": "selfPingConfiguration",
+      "category": "rules",
+      "humanName": { 
+        "en": "Self-Ping configuration" 
+      },
+      "description": { 
+        "en": "Configure what happens when a protected user pings themselves. Note: Automod overrides this setting meaning this setting will not apply if Automod is enabled."
+      },
+      "type": "select",
+      "content": [
+        "Get punished like normal members",
+        "Ignored",
+        "Get fun easter eggs when pinging themselves"
+      ],
+      "default": { 
+        "en": "Ignored" 
+      }
+    },
+    {
+      "name": "enableAutomod",
+      "category": "automod",
+      "humanName": { 
+        "en": "Enable automod" 
+      },
+      "description": { 
+        "en": "If enabled, the bot will utilise Discord's native AutoMod to block the message with a ping of a protected user/role." 
+      },
+      "type": "boolean",
+      "default": { 
+        "en": true 
+      }
+    },
+    {
+      "name": "autoModLogChannel",
+      "category": "automod",
+      "humanName": { 
+        "en": "AutoMod Log Channel" 
+      },
+      "description": { 
+        "en": "Channel where AutoMod alerts are sent." 
+      },
+      "type": "channelID",
+      "default": { 
+        "en": [] 
+      },
+      "channelTypes": [
+        "GUILD_TEXT"
+      ],
+      "dependsOn": "enableAutomod"
+    },
+    {
+      "name": "autoModBlockMessage",
+      "category": "automod",
+      "humanName": { 
+        "en": "AutoMod custom message for message block" 
+      },
+      "description": { 
+        "en": "Custom text shown to the user when blocked (Max 150 characters)." 
+      },
+      "type": "string",
+      "maxLength": 150,
+      "default": { 
+        "en": "Your message was blocked because you are trying to ping a protected user/role. The message content might be logged depending on the configuration." 
+      },
+      "dependsOn": "enableAutomod"
+    },
+    {
+      "name": "pingWarningMessage",
+      "category": "messages",
+      "humanName": { 
+        "en": "Warning Message"
+      },
+      "description": {
+        "en": "The message that gets sent to the user when they ping someone."
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "target-name",
+          "description": { 
+            "en": "Name of the pinged user/role" 
+          }
+        },
+        {
+          "name": "target-mention",
+          "description": { 
+            "en": "Mention of the pinged user/role" 
+          }
+        },
+        {
+          "name": "target-id",
+          "description": { 
+            "en": "ID of the pinged user/role"
+          }
+        },
+        {
+          "name": "pinger-id",
+          "description": { 
+            "en": "ID of the user who pinged" 
+          }
+        }
+      ],
+      "default": {
+        "en": {
+          "title": "You are not allowed to ping %target-name%!",
+          "description": "<@%pinger-id%>, You are not allowed to ping %target-mention% due to your role. You can view which roles/members you are not allowed to ping by using the `/ping-protection list protected` command.\n\nIf you were replying, make sure to turn off the mention in the reply.",
+          "image": "https://scnx-cdn.scootkit.net/1769198862209-rJfCVKzAuo6uQLhPUe9o2P6ArJkDBSVUCEyUQM6bqt5WFKWK.gif",
+          "color": "#ed4245"
+        }
+      }
+    }
+  ]
+}

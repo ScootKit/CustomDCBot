@@ -45,21 +45,6 @@
       "type": "integer"
     },
     {
-      "name": "purgeOnStart",
-      "humanName": {
-        "en": "Purge On Start",
-        "de": "Kanal leeren beim Bot Start"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled every (excluding pinned) message (max 100) in this channel gets deleted when the bot starts.",
-        "de": "Wenn aktiviert, werden alle (außer angepinnte) Nachrichten (max 100) aus dem gewälten Kanal, beim Start des Bots, gelöscht."
-      },
-      "type": "boolean"
-    },
-    {
       "name": "keepMessageCount",
       "default": {
         "en": 0

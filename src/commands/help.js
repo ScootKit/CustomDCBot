@@ -1,139 +1,308 @@
-const {truncate, formatDate, sendMultipleSiteButtonMessage, formatDiscordUserName} = require('../functions/helpers');
-const {MessageEmbed} = require('discord.js');
+const {
+    truncate,
+    formatDate,
+    parseEmbedColor
+} = require('../functions/helpers');
+const {
+    ContainerBuilder,
+    SectionBuilder,
+    TextDisplayBuilder,
+    SeparatorBuilder,
+    SeparatorSpacingSize,
+    ThumbnailBuilder,
+    ActionRowBuilder,
+    StringSelectMenuBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    MessageFlags
+} = require('discord.js');
 const {localize} = require('../functions/localize');
+
+const SELECT_MENU_MAX = 25;
 
 module.exports.run = async function (interaction) {
     const modules = {};
     for (const command of interaction.client.commands) {
         if (command.module && !interaction.client.modules[command.module].enabled) continue;
+        if (typeof command.disabled === 'function' && command.disabled(interaction.client)) continue;
         if (!modules[command.module || 'none']) modules[command.module || 'none'] = [];
         modules[command.module || 'none'].push(command);
     }
-    const sites = [];
-    let siteCount = 0;
 
-    const embedFields = [];
-    for (const module in modules) {
-        let content = '';
-        if (module !== 'none') content = `*${(interaction.client.modules[module]['config']['description'][interaction.client.locale] || interaction.client.modules[module]['config']['description']['en'])}*\n`;
-        for (let d of modules[module]) {
-            content = content + `\n* \`/${d.name}\`: ${d.description}`;
+    const moduleKeys = Object.keys(modules);
+    const allSelectOptions = [];
+    for (const mod of moduleKeys) {
+        const label = mod === 'none'
+            ? interaction.client.strings.helpembed.build_in
+            : (interaction.client.modules[mod]['config']['humanReadableName'][interaction.client.locale] ||
+                interaction.client.modules[mod]['config']['humanReadableName']['en'] || mod);
+        allSelectOptions.push({
+            label: truncate(label, 100),
+            value: mod,
+            description: mod !== 'none'
+                ? truncate(interaction.client.modules[mod]['config']['description'][interaction.client.locale] ||
+                    interaction.client.modules[mod]['config']['description']['en'] || '', 100)
+                : localize('help', 'built-in-description'),
+            emoji: mod === 'none' ? '⚙️' : '📦'
+        });
+    }
+
+    const selectPages = [];
+    for (let i = 0; i < allSelectOptions.length; i = i + SELECT_MENU_MAX) {
+        selectPages.push(allSelectOptions.slice(i, i + SELECT_MENU_MAX));
+    }
+    let currentSelectPage = 0;
+
+    /**
+     * Build the overview using Components V2
+     * @private
+     * @param {number} page Current select menu page index
+     * @returns {Array} Array of V2 component objects
+     */
+    function buildOverviewComponents(page) {
+        const headerContainer = new ContainerBuilder()
+            .setAccentColor(parseEmbedColor('GREEN'));
+
+        const headerSection = new SectionBuilder()
+            .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(`# ${interaction.client.strings.helpembed.title.replaceAll('%site%', '')}\n${interaction.client.strings.helpembed.description}`)
+            )
+            .setThumbnailAccessory(
+                new ThumbnailBuilder().setURL(interaction.client.user.displayAvatarURL())
+            );
+        headerContainer.addSectionComponents(headerSection);
+        headerContainer.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
+        headerContainer.addTextDisplayComponents(new TextDisplayBuilder().setContent(`### ${localize('help', 'modules-overview')}`));
+
+        let moduleList = '';
+        for (const mod of moduleKeys) {
+            const label = mod === 'none'
+                ? interaction.client.strings.helpembed.build_in
+                : (interaction.client.modules[mod]['config']['humanReadableName'][interaction.client.locale] ||
+                    interaction.client.modules[mod]['config']['humanReadableName']['en'] || mod);
+            const cmdNames = modules[mod].map(c => `\`/${c.name}\``).join(', ');
+            moduleList = moduleList + `${mod === 'none' ? '⚙️' : '📦'} **${label}**: ${truncate(cmdNames, 200)}\n`;
+        }
+        headerContainer.addTextDisplayComponents(new TextDisplayBuilder().setContent(truncate(moduleList, 4000)));
+        headerContainer.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
+        headerContainer.addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# ${localize('help', 'select-module-hint')}`));
+
+        const placeholder = selectPages.length > 1
+            ? localize('help', 'select-module-placeholder') + ` (${page + 1}/${selectPages.length})`
+            : localize('help', 'select-module-placeholder');
+
+        const selectRow = new ActionRowBuilder().addComponents(
+            new StringSelectMenuBuilder()
+                .setCustomId('help-module-select')
+                .setPlaceholder(truncate(placeholder, 150))
+                .addOptions(selectPages[page])
+        );
+        headerContainer.addActionRowComponents(selectRow);
+
+        if (selectPages.length > 1) {
+            const navRow = new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                    .setCustomId('help-page-prev')
+                    .setLabel('◀')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(page === 0),
+                new ButtonBuilder()
+                    .setCustomId('help-page-next')
+                    .setLabel('▶')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(page >= selectPages.length - 1)
+            );
+            headerContainer.addActionRowComponents(navRow);
+        }
+
+        const result = [headerContainer];
+
+        if (!interaction.client.strings['putBotInfoOnLastSite'] || !interaction.client.strings['disableHelpEmbedStats']) {
+            const infoContainer = new ContainerBuilder()
+                .setAccentColor(parseEmbedColor('BLUE'));
+
+            if (!interaction.client.strings['putBotInfoOnLastSite']) {
+                infoContainer.addTextDisplayComponents(new TextDisplayBuilder().setContent(
+                    `### ${localize('help', 'bot-info-titel')}\n${localize('help', 'bot-info-description', {g: interaction.guild.name})}`
+                ));
+            }
+            if (!interaction.client.strings['disableHelpEmbedStats']) {
+                if (!interaction.client.strings['putBotInfoOnLastSite']) {
+                    infoContainer.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
+                }
+                infoContainer.addTextDisplayComponents(new TextDisplayBuilder().setContent(
+                    `### ${localize('help', 'stats-title')}\n${localize('help', 'stats-content', {
+                        am: Object.keys(interaction.client.modules).length,
+                        rc: interaction.client.commands.length,
+                        v: interaction.client.scnxSetup ? interaction.client.scnxData.bot.version : null,
+                        si: interaction.client.scnxSetup ? interaction.client.scnxData.bot.instanceID : null,
+                        pl: interaction.client.scnxSetup ? localize('scnx', 'plan-' + interaction.client.scnxData.plan) : null,
+                        lr: formatDate(interaction.client.readyAt),
+                        lR: formatDate(interaction.client.botReadyAt)
+                    })}`
+                ));
+            }
+            result.push(infoContainer);
+        }
+
+        return result;
+    }
+
+    /**
+     * Build a module detail view using Components V2
+     * @private
+     * @param {string} mod Module key
+     * @returns {Promise<Array>} Array of V2 component objects
+     */
+    async function buildModuleComponents(mod) {
+        const label = mod === 'none'
+            ? interaction.client.strings.helpembed.build_in
+            : (interaction.client.modules[mod]['config']['humanReadableName'][interaction.client.locale] ||
+                interaction.client.modules[mod]['config']['humanReadableName']['en'] || mod);
+        const description = mod !== 'none'
+            ? (interaction.client.modules[mod]['config']['description'][interaction.client.locale] ||
+                interaction.client.modules[mod]['config']['description']['en'] || '')
+            : '';
+
+        const container = new ContainerBuilder()
+            .setAccentColor(parseEmbedColor('GREEN'));
+
+        const headerSection = new SectionBuilder()
+            .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(`# ${mod === 'none' ? '⚙️' : '📦'} ${label}${description ? '\n*' + description + '*' : ''}`)
+            )
+            .setThumbnailAccessory(
+                new ThumbnailBuilder().setURL(interaction.client.user.displayAvatarURL())
+            );
+        container.addSectionComponents(headerSection);
+        container.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
+
+        for (let d of modules[mod]) {
+            let content = `### \`/${d.name}\`\n${d.description}`;
             d = {...d};
             if (typeof d.options === 'function') d.options = await d.options(interaction.client);
             if ((d.options || []).filter(o => o.type === 'SUB_COMMAND' || o.type === 'SUB_COMMANDS_GROUP').length !== 0) {
                 for (const c of d.options) {
-                    addSubCommand(c);
+                    content = content + formatSubCommand(c, '\n');
                 }
             }
-
-            /**
-             * Add a bullet-point for a subcommand
-             * @private
-             * @param {Object} command Command to add
-             * @param {String} bulletPointStyle Style of bullet-points to use
-             * @param {String} tab Tabs to use to make the message look good
-             */
-            function addSubCommand(command, tab = '  ') {
-                content = content + `\n${tab}* \`${command.name}\`: ${command.description}`;
-                if (command.type === 'SUB_COMMAND_GROUP' && (command.options || []).filter(o => o.type === 'SUB_COMMAND').length !== 0) {
-                    for (const c of command.options) {
-                        addSubCommand(c, '  ');
-                    }
-                }
-            }
+            container.addTextDisplayComponents(new TextDisplayBuilder().setContent(truncate(content, 4000)));
         }
-        embedFields.push({
-            name: `**${module === 'none' ? interaction.client.strings.helpembed.build_in : (interaction.client.modules[module]['config']['humanReadableName'][interaction.client.locale] || interaction.client.modules[module]['config']['humanReadableName']['en'] || module)}**`,
-            value: truncate(content, 1024)
-        });
+
+        container.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
+
+        const pageForMod = selectPages.findIndex(p => p.some(o => o.value === mod));
+        const selectPage = pageForMod !== -1 ? pageForMod : 0;
+
+        const placeholder = selectPages.length > 1
+            ? localize('help', 'select-module-placeholder') + ` (${selectPage + 1}/${selectPages.length})`
+            : localize('help', 'select-module-placeholder');
+
+        const selectRow = new ActionRowBuilder().addComponents(
+            new StringSelectMenuBuilder()
+                .setCustomId('help-module-select')
+                .setPlaceholder(truncate(placeholder, 150))
+                .addOptions(selectPages[selectPage])
+        );
+        container.addActionRowComponents(selectRow);
+
+        const navRow = new ActionRowBuilder();
+        if (selectPages.length > 1) {
+            navRow.addComponents(
+                new ButtonBuilder()
+                    .setCustomId('help-page-prev')
+                    .setLabel('◀')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(selectPage === 0),
+                new ButtonBuilder()
+                    .setCustomId('help-page-next')
+                    .setLabel('▶')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(selectPage >= selectPages.length - 1)
+            );
+        }
+        navRow.addComponents(
+            new ButtonBuilder()
+                .setCustomId('help-overview')
+                .setLabel(localize('help', 'back-to-overview'))
+                .setStyle(ButtonStyle.Secondary)
+                .setEmoji('🏠')
+        );
+        container.addActionRowComponents(navRow);
+
+        return [container];
     }
-
-    embedFields.filter(f => f.name === '**' + interaction.client.strings.helpembed.build_in + '**').forEach(f => {
-        const fields = [
-            f
-        ];
-        if (!interaction.client.strings['putBotInfoOnLastSite']) {
-            fields.push({
-                name: '\u200b',
-                value: '\u200b'
-            });
-            fields.push({
-                name: localize('help', 'bot-info-titel'),
-
-                /*
-                 *IMPORTANT WARNING:
-                 *Changing or removing the license notice might be a violation of the Business Source License the bot was licensed under.
-                 *Violating the license might lead to deactivation of your bot on Discord and legal action being taken against you.
-                 *Please read the license carefully: https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE
-                 */
-                value: localize('help', 'bot-info-description', {g: interaction.guild.name})
-            });
-        }
-        if (!interaction.client.strings['disableHelpEmbedStats']) fields.push({
-            name: localize('help', 'stats-title'),
-            value: localize('help', 'stats-content', {
-                am: Object.keys(interaction.client.modules).length,
-                rc: interaction.client.commands.length,
-                v: interaction.client.scnxSetup ? interaction.client.scnxData.bot.version : null,
-                si: interaction.client.scnxSetup ? interaction.client.scnxData.bot.instanceID : null,
-                pl: interaction.client.scnxSetup ? localize('scnx', 'plan-' + interaction.client.scnxData.plan) : null,
-                lr: formatDate(interaction.client.readyAt),
-                lR: formatDate(interaction.client.botReadyAt)
-            })
-        });
-        addSite(
-            fields,
-            true);
-    });
-
-
-    let fieldCount = 0;
-    let fieldCache = [];
-    for (const field of embedFields.filter(f => f.name !== '**' + interaction.client.strings.helpembed.build_in + '**')) {
-        fieldCount++;
-        fieldCache.push(field);
-        if (fieldCount % 3 === 0) {
-            addSite(fieldCache);
-            fieldCache = [];
-        }
-    }
-    if (fieldCache.length !== 0) addSite(fieldCache);
 
     /**
-     * Adds a site to the embed
-     * @param {Array<Field>} fields Fields to add
-     * @param atBeginning If this site needs to go at the beginning of the array
+     * Format a subcommand for display
      * @private
+     * @param {Object} command Subcommand object
+     * @param {String} prefix Line prefix
+     * @returns {string}
      */
-    function addSite(fields, atBeginning = false) {
-        siteCount++;
-        const embed = new MessageEmbed().setColor('RANDOM')
-            .setDescription(interaction.client.strings.helpembed.description)
-            .setThumbnail(interaction.client.user.avatarURL())
-            .setAuthor({name: formatDiscordUserName(interaction.user), iconURL: interaction.user.avatarURL()})
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
-            .setTitle(interaction.client.strings.helpembed.title.replaceAll('%site%', siteCount))
-            .addFields(fields);
-        if (atBeginning) sites.unshift(embed);
-        else sites.push(embed);
+    function formatSubCommand(command, prefix = '\n') {
+        let result = `${prefix}> • \`${command.name}\`: ${command.description}`;
+        if (command.type === 'SUB_COMMAND_GROUP' && (command.options || []).filter(o => o.type === 'SUB_COMMAND').length !== 0) {
+            for (const c of command.options) {
+                result = result + formatSubCommand(c, '\n');
+            }
+        }
+        return result;
     }
 
-    if (interaction.client.strings['putBotInfoOnLastSite']) sites[sites.length - 1].setFields(...sites[sites.length - 1].fields, {
-        name: '\u200b',
-        value: '\u200b'
-    }, {
-        name: localize('help', 'bot-info-titel'),
-
-        /*
-         *IMPORTANT WARNING:
-         *Changing or removing the license notice might be a violation of the Business Source License the bot was licensed under.
-         *Violating the license might lead to deactivation of your bot on Discord and legal action being taken against you.
-         *Please read the license carefully: https://github.com/ScootKit/CustomDCBot/blob/main/LICENSE
-         */
-        value: localize('help', 'bot-info-description', {g: interaction.guild.name})
+    const overviewComponents = buildOverviewComponents(currentSelectPage);
+    const m = await interaction.reply({
+        components: overviewComponents,
+        flags: MessageFlags.IsComponentsV2,
+        fetchReply: true
     });
 
-    sendMultipleSiteButtonMessage(interaction.channel, sites, [interaction.user.id], interaction);
+    const collector = m.createMessageComponentCollector({time: 120000});
+    collector.on('collect', async (i) => {
+        if (i.user.id !== interaction.user.id) return i.reply({
+            ephemeral: true,
+            content: '⚠️ ' + localize('helpers', 'you-did-not-run-this-command')
+        });
+
+        if (i.isStringSelectMenu() && i.customId === 'help-module-select') {
+            const selectedModule = i.values[0];
+            const moduleComponents = await buildModuleComponents(selectedModule);
+            await i.update({
+                components: moduleComponents,
+                flags: MessageFlags.IsComponentsV2
+            });
+        }
+
+        if (i.isButton() && i.customId === 'help-overview') {
+            await i.update({
+                components: buildOverviewComponents(currentSelectPage),
+                flags: MessageFlags.IsComponentsV2
+            });
+        }
+
+        if (i.isButton() && i.customId === 'help-page-prev') {
+            if (currentSelectPage > 0) currentSelectPage--;
+            await i.update({
+                components: buildOverviewComponents(currentSelectPage),
+                flags: MessageFlags.IsComponentsV2
+            });
+        }
+
+        if (i.isButton() && i.customId === 'help-page-next') {
+            if (currentSelectPage < selectPages.length - 1) currentSelectPage++;
+            await i.update({
+                components: buildOverviewComponents(currentSelectPage),
+                flags: MessageFlags.IsComponentsV2
+            });
+        }
+    });
+
+    collector.on('end', () => {
+        m.edit({
+            components: buildOverviewComponents(currentSelectPage),
+            flags: MessageFlags.IsComponentsV2
+        }).catch(() => {});
+    });
 };
 
 module.exports.config = {

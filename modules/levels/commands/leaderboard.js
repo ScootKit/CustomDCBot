@@ -2,10 +2,13 @@ const {
     sendMultipleSiteButtonMessage,
     truncate,
     formatNumber,
-    formatDiscordUserName
+    formatDiscordUserName,
+    parseEmbedColor
 } = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
+const {displayLevel, isMaxLevel, calculateLevelXP} = require('../events/messageCreate');
+const {client} = require('../../../main');
 
 module.exports.run = async function (interaction) {
     const moduleStrings = interaction.client.configurations['levels']['strings'];
@@ -32,14 +35,13 @@ module.exports.run = async function (interaction) {
     function addSite(fields) {
         const embed = new MessageEmbed()
             .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
-            .setColor('GREEN')
+            .setColor(parseEmbedColor(moduleStrings.leaderboardEmbed.color || 'GREEN'))
             .setThumbnail(interaction.guild.iconURL())
             .setTitle(moduleStrings.leaderboardEmbed.title)
             .setDescription(moduleStrings.leaderboardEmbed.description)
             .addField('\u200b', '\u200b')
-            .addFields(fields)
-            .addField('\u200b', '\u200b')
-            .addField(moduleStrings.leaderboardEmbed.your_level, moduleStrings.leaderboardEmbed.you_are_level_x_with_x_xp.split('%level%').join(thisUser['level']).split('%xp%').join(formatNumber(thisUser['xp'])));
+            .addFields(fields);
+        if (thisUser) embed.addField('\u200b', '\u200b').addField(moduleStrings.leaderboardEmbed.your_level, moduleStrings.leaderboardEmbed.you_are_level_x_with_x_xp.split('%level%').join(displayLevel(thisUser['level'], client)).split('%xp%').join(formatNumber(thisUser['xp'])));
         sites.push(embed);
     }
 
@@ -66,10 +68,19 @@ module.exports.run = async function (interaction) {
                 const member = interaction.guild.members.cache.get(user.userID);
                 if (!member) continue;
                 userCount++;
-                if (userCount < 6) userString = userString + `${userCount}. ${moduleConfig['useTags'] ? formatDiscordUserName(member.user) : member.user.toString()}: ${formatNumber(user.xp)}\n`;
+                if (userCount < 6) userString = userString + localize('levels', 'leaderboard-notation', {
+                    p: userCount,
+                    u: moduleConfig['useTags'] ? formatDiscordUserName(member.user) : member.user.toString(),
+                    l: displayLevel(user.level, client),
+                    xp: formatNumber(isMaxLevel(user.level, client) ? calculateLevelXP(client, client.configurations['levels']['config'].maximumLevel) : user.xp)
+                }) + '\n';
             }
             if (userCount > 5) userString = userString + localize('levels', 'and-x-other-users', {uc: userCount - 5});
-            if (userCount !== 0) currentSiteFields.push({name: localize('levels', 'level', {l: level}), value: userString, inline: true});
+            if (userCount !== 0) currentSiteFields.push({
+                name: localize('levels', 'level', {l: displayLevel(level, client)}),
+                value: userString,
+                inline: true
+            });
             if (i === Object.keys(levels).length || currentSiteFields.length === 6) {
                 addSite(currentSiteFields);
                 currentSiteFields = [];
@@ -85,8 +96,8 @@ module.exports.run = async function (interaction) {
             userString = userString + localize('levels', 'leaderboard-notation', {
                 p: i,
                 u: moduleConfig['useTags'] ? formatDiscordUserName(member.user) : member.user.toString(),
-                l: user.level,
-                xp: formatNumber(user.xp)
+                l: displayLevel(user.level, client),
+                xp: formatNumber(isMaxLevel(user.level, client) ? calculateLevelXP(client, client.configurations['levels']['config'].maximumLevel) : user.xp)
             }) + '\n';
             if (i === users.filter(u => interaction.guild.members.cache.get(u.userID)).length || i % 20 === 0) {
                 addSite([{

@@ -9,15 +9,16 @@
     {
       "name": "ikeaMessage",
       "humanName": {
-        "de": "IKEA-Nachricht"
+        "de": "IKEA-Nachricht",
+        "en": "IKEA Message"
       },
       "default": {
         "en": "Here's a ikea-product-name: %name%",
         "de": "Hier ist ein IKEA-Produkt-Name: %name%"
       },
       "description": {
-        "en": "Message that gets send when someone uses !ikea",
-        "de": "Nachricht welche gesendet wird, wenn jemand /random ikea benutzt"
+        "en": "Message that gets send when someone uses /random ikea-name",
+        "de": "Nachricht welche gesendet wird, wenn jemand /random ikea-name benutzt"
       },
       "type": "string",
       "allowEmbed": true,
@@ -34,14 +35,15 @@
     {
       "name": "randomNumberMessage",
       "humanName": {
-        "de": "Zufallszahl-Nachricht"
+        "de": "Zufallszahl-Nachricht",
+        "en": "Random numer message"
       },
       "default": {
         "en": "Here your random number between %min% and %max%: %number%",
         "de": "Hier ist deine Zufallszahl zwischen %min% und %max%: %number%"
       },
       "description": {
-        "en": "Message that gets send when someone uses !random",
+        "en": "Message that gets send when someone uses /random number",
         "de": "Nachricht, welche gesendet wird, wenn jemand /random number benutzt"
       },
       "type": "string",
@@ -73,15 +75,16 @@
     {
       "name": "diceRollMessage",
       "humanName": {
-        "de": "Würfel-Nachricht"
+        "de": "Würfel-Nachricht",
+        "en": "Dice Roll message"
       },
       "default": {
         "en": "🎲 %number%",
         "de": "🎲 %number%"
       },
       "description": {
-        "en": "Message that gets send when someone uses !dice",
-        "de": "Nachricht, welche gesendet wird, wenn jemand /random dice  benutzt"
+        "en": "Message that gets send when someone uses /random dice",
+        "de": "Nachricht, welche gesendet wird, wenn jemand /random dice benutzt"
       },
       "type": "string",
       "allowEmbed": true,
@@ -98,7 +101,8 @@
     {
       "name": "coinFlipMessage",
       "humanName": {
-        "de": "Münzwurf-Nachricht"
+        "de": "Münzwurf-Nachricht",
+        "en": "Coin toss message"
       },
       "default": {
         "en": "\uD83E\uDE99 %site%",
@@ -106,7 +110,7 @@
       },
       "description": {
         "en": "Message that gets send when someone uses /random coinfilp",
-        "de": "Nachricht, welche gesendet wird, wenn jemand /random coinfilp  benutzt"
+        "de": "Nachricht, welche gesendet wird, wenn jemand /random coinfilp benutzt"
       },
       "type": "string",
       "allowEmbed": true,
@@ -123,14 +127,16 @@
     {
       "name": "hugMessage",
       "humanName": {
-        "de": "Umarmungsnachricht"
+        "de": "Umarmungsnachricht",
+        "en": "Hug message"
       },
       "default": {
-        "en": "<@%authorID%> hugs <@%userID%>\n%imgUrl%",
-        "de": "<@%authorID%> umarmt <@%userID%>\n%imgUrl%"
+        "en": "<@%authorID%> hugs <@%userID%>",
+        "de": "<@%authorID%> umarmt <@%userID%>"
       },
       "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /hug  benutzt"
+        "de": "Nachricht, welche gesendet wird, wenn jemand /hug benutzt",
+        "en": "Message that gets send when someone uses /hug"
       },
       "type": "string",
       "allowEmbed": true,
@@ -148,36 +154,25 @@
             "en": "ID of the user that gets hugged",
             "de": "ID des umarmten Nutzers"
           }
-        },
-        {
-          "name": "imgUrl",
-          "description": {
-            "en": "Randomly selected URL to a image",
-            "de": "Zufällig ausgewählte URL zu einem Bild"
-          },
-          "isImage": true
         }
       ]
     },
     {
       "name": "hugImages",
       "humanName": {
-        "de": "Umarmungsbilder"
+        "de": "Umarmungsbilder",
+        "en": "Hug images"
       },
       "default": {
         "en": [
-          "https://media1.tenor.com/images/94989f6312726739893d41231942bb1b/tenor.gif?itemid=14106856",
-          "https://media1.tenor.com/images/d7529f6003b20f3b21f1c992dffb8617/tenor.gif?itemid=4782499",
-          "https://media1.tenor.com/images/fd47e55dfb49ae1d39675d6eff34a729/tenor.gif?itemid=12687187"
-        ],
-        "de": [
-          "https://media1.tenor.com/images/94989f6312726739893d41231942bb1b/tenor.gif?itemid=14106856",
-          "https://media1.tenor.com/images/d7529f6003b20f3b21f1c992dffb8617/tenor.gif?itemid=4782499",
-          "https://media1.tenor.com/images/fd47e55dfb49ae1d39675d6eff34a729/tenor.gif?itemid=12687187"
+          "https://scnx-cdn.scootkit.net/1723477011519-tjCfeHPcYYzFe3jRnoUVI7dn.gif",
+          "https://scnx-cdn.scootkit.net/1723477171157-3wGistN45zd9kwrP67YKfRgU.gif",
+          "https://scnx-cdn.scootkit.net/1753891037940-pdaiqed4ffL4XHbLe2N0j6fbW6zRvPDzy0ZCwKIRwmOz85yX.gif"
         ]
       },
       "description": {
-        "de": "Bilder aus welchen, wenn jemand /hug ausführt, zufällig ausgewählt wird"
+        "de": "Bilder aus welchen, wenn jemand /hug ausführt, zufällig ausgewählt wird",
+        "en": "Images that one will be randomly selected from when someone uses /hug."
       },
       "type": "array",
       "content": "imgURL"
@@ -185,13 +180,15 @@
     {
       "name": "kissMessage",
       "humanName": {
+        "en": "Kiss message",
         "de": "Kuss-Nachrichten"
       },
       "default": {
-        "en": "<@%authorID%> kissed <@%userID%>\n%imgUrl%",
-        "de": "<@%authorID%> küsst <@%userID%>\n%imgUrl%"
+        "en": "<@%authorID%> kissed <@%userID%>",
+        "de": "<@%authorID%> küsst <@%userID%>"
       },
       "description": {
+        "en": "Message that gets send when someone uses /kiss",
         "de": "Nachricht, welche gesendet wird, wenn jemand /kiss  benutzt"
       },
       "type": "string",
@@ -210,35 +207,24 @@
             "en": "ID of the user that gets kissed",
             "de": "ID des geküssten Nutzers"
           }
-        },
-        {
-          "name": "imgUrl",
-          "description": {
-            "en": "Randomly selected URL to a image",
-            "de": "Zufällig ausgewählte URL zu einem Bild"
-          },
-          "isImage": true
         }
       ]
     },
     {
       "name": "kissImages",
       "humanName": {
-        "de": "Kussbilder"
+        "de": "Kussbilder",
+        "en": "Kiss images"
       },
       "default": {
         "en": [
-          "https://media1.tenor.com/images/ef9687b36e36605b375b4e9b0cde51db/tenor.gif?itemid=12498627",
-          "https://media1.tenor.com/images/2d2a1af1568277f2bc52467f984cb697/tenor.gif?itemid=14190535",
-          "https://media1.tenor.com/images/78095c007974aceb72b91aeb7ee54a71/tenor.gif?itemid=5095865"
-        ],
-        "de": [
-          "https://media1.tenor.com/images/ef9687b36e36605b375b4e9b0cde51db/tenor.gif?itemid=12498627",
-          "https://media1.tenor.com/images/2d2a1af1568277f2bc52467f984cb697/tenor.gif?itemid=14190535",
-          "https://media1.tenor.com/images/78095c007974aceb72b91aeb7ee54a71/tenor.gif?itemid=5095865"
+          "https://scnx-cdn.scootkit.net/1743549285215-t9x4Fm9ZqE0f4vxyKfrTNo7JlGLO2hFHae8R8arRQHjQeylk.gif",
+          "https://scnx-cdn.scootkit.net/1695864480892-EVwr6ighEdpxY22G8jUweAPt.gif",
+          "https://scnx-cdn.scootkit.net/1743549267626-cSru5Kn1Dg2zv5KAefHMtRL5XuWqCW84hegW40aty4b8iFH7.gif"
         ]
       },
       "description": {
+        "en": "Images that one will be randomly selected from when someone uses /kiss.",
         "de": "Bilder aus welchen, wenn jemand /kiss ausführt, zufällig ausgewählt wird"
       },
       "type": "array",
@@ -247,14 +233,16 @@
     {
       "name": "slapMessage",
       "humanName": {
-        "de": "Schlag-Nachricht"
+        "de": "Schlag-Nachricht",
+        "en": "Slap message"
       },
       "default": {
-        "en": "<@%authorID%> slapped <@%userID%>\n%imgUrl%",
-        "de": "<@%authorID%> schlägt <@%userID%>\n%imgUrl%"
+        "en": "<@%authorID%> slapped <@%userID%>",
+        "de": "<@%authorID%> schlägt <@%userID%>"
       },
       "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /slap  benutzt"
+        "de": "Nachricht, welche gesendet wird, wenn jemand /slap benutzt",
+        "en": "Message that gets send when someone uses /slap"
       },
       "type": "string",
       "allowEmbed": true,
@@ -272,40 +260,26 @@
             "en": "ID of the user that gets slapped",
             "de": "ID des geschlagenen Nutzers"
           }
-        },
-        {
-          "name": "imgUrl",
-          "description": {
-            "en": "Randomly selected URL to a image",
-            "de": "Zufällig ausgewählte URL zu einem Bild"
-          },
-          "isImage": true
         }
       ]
     },
     {
       "name": "slapImages",
       "humanName": {
-        "de": "Schlag-Bilder"
+        "de": "Schlag-Bilder",
+        "en": "Slap images"
       },
       "default": {
         "en": [
-          "https://media1.tenor.com/images/3c161bd7d6c6fba17bb3e5c5ecc8493e/tenor.gif?itemid=5196956",
-          "https://media1.tenor.com/images/73adef04dadf613cb96ed3b2c8a192b4/tenor.gif?itemid=9631495",
-          "https://media.tenor.com/images/bfda4a429071a7fa51c7e45685849f76/tenor.gif",
-          "https://media1.tenor.com/images/97624764cb41414ad2c60d2028c19394/tenor.gif?itemid=16739345",
-          "https://media1.tenor.com/images/03ea2379718496fbbd144c5bc50f8e96/tenor.gif?itemid=18908545"
-        ],
-        "de": [
-          "https://media1.tenor.com/images/3c161bd7d6c6fba17bb3e5c5ecc8493e/tenor.gif?itemid=5196956",
-          "https://media1.tenor.com/images/73adef04dadf613cb96ed3b2c8a192b4/tenor.gif?itemid=9631495",
-          "https://media.tenor.com/images/bfda4a429071a7fa51c7e45685849f76/tenor.gif",
-          "https://media1.tenor.com/images/97624764cb41414ad2c60d2028c19394/tenor.gif?itemid=16739345",
-          "https://media1.tenor.com/images/03ea2379718496fbbd144c5bc50f8e96/tenor.gif?itemid=18908545"
+          "https://scnx-cdn.scootkit.net/1744620013783-xEkcviAsrCZulbhoVoPPWtTUWlJbQda6kk43eQb58CMLFvDU.gif",
+          "https://scnx-cdn.scootkit.net/1744620140479-qz6nc8xzCSW2TB6Yy40vj6WzCBi31ezRZVElFrKuKCIfc6vZ.gif",
+          "https://scnx-cdn.scootkit.net/1744620083811-RYado8KTb7E8AzCVfncyNgUxD2GyQFdhjH4YxzVc5aLkGvN4.gif",
+          "https://scnx-cdn.scootkit.net/1744620244031-0JO1dEMxvKBAz12dj08BIVw8njCxgj8CJ89SnUihMZxnzyDE.gif"
         ]
       },
       "description": {
-        "de": "Bilder aus welchen, wenn jemand /slap ausführt, zufällig ausgewählt wird"
+        "de": "Bilder aus welchen, wenn jemand /slap ausführt, zufällig ausgewählt wird",
+        "en": "Images that one will be randomly selected from when someone uses /slap."
       },
       "type": "array",
       "content": "imgURL"
@@ -313,14 +287,16 @@
     {
       "name": "patMessage",
       "humanName": {
-        "de": "Tätschel-Nachricht"
+        "de": "Tätschel-Nachricht",
+        "en": "Pat message"
       },
       "default": {
-        "en": "<@%authorID%> patted <@%userID%>\n%imgUrl%",
-        "de": "<@%authorID%> tätschelt <@%userID%>\n%imgUrl%"
+        "en": "<@%authorID%> patted <@%userID%>",
+        "de": "<@%authorID%> tätschelt <@%userID%>"
       },
       "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /pat  benutzt"
+        "de": "Nachricht, welche gesendet wird, wenn jemand /pat benutzt",
+        "en": "Message that gets send when someone uses /pat"
       },
       "type": "string",
       "allowEmbed": true,
@@ -338,38 +314,26 @@
             "en": "ID of the user that gets patted",
             "de": "ID des getätschelten Nutzers"
           }
-        },
-        {
-          "name": "imgUrl",
-          "description": {
-            "en": "Randomly selected URL to a image",
-            "de": "Zufällig ausgewählte URL zu einem Bild"
-          },
-          "isImage": true
         }
       ]
     },
     {
       "name": "patImages",
       "humanName": {
-        "de": "Tätschel-Bilder"
+        "de": "Tätschel-Bilder",
+        "en": "Pat images"
       },
       "default": {
         "en": [
-          "https://media1.tenor.com/images/da8f0e8dd1a7f7db5298bda9cc648a9a/tenor.gif?itemid=12018819",
-          "https://media1.tenor.com/images/f5176d4c5cbb776e85af5dcc5eea59be/tenor.gif?itemid=5081286",
-          "https://media.tenor.com/images/0e5b7f4be25e309ecaafff8700438a72/tenor.gif",
-          "https://media1.tenor.com/images/be0c22e0af951aa7fa8753381663eb2c/tenor.gif?itemid=15824856"
-        ],
-        "de": [
-          "https://media1.tenor.com/images/da8f0e8dd1a7f7db5298bda9cc648a9a/tenor.gif?itemid=12018819",
-          "https://media1.tenor.com/images/f5176d4c5cbb776e85af5dcc5eea59be/tenor.gif?itemid=5081286",
-          "https://media.tenor.com/images/0e5b7f4be25e309ecaafff8700438a72/tenor.gif",
-          "https://media1.tenor.com/images/be0c22e0af951aa7fa8753381663eb2c/tenor.gif?itemid=15824856"
+          "https://scnx-cdn.scootkit.net/1744619869697-AYVUENwLWjusxCOKvJLOnpdSiiiQZJC2dmSwnHMSOLr7eLbH.gif",
+          "https://scnx-cdn.scootkit.net/1744619643063-Iw3QdOJ9LsQLKv3Moe3zvMfakKu0NVfqlrmmd2ssrBqLEJai.gif",
+          "https://scnx-cdn.scootkit.net/1671631825485-6eaH1p3ngebQigoVjBicgaRy.gif",
+          "https://scnx-cdn.scootkit.net/1744619413990-auYiCEqSxZnp2QldAOgav77oVb2EiXnPS83icTlX7AkV1JzV.gif"
         ]
       },
       "description": {
-        "de": "Bilder aus welchen, wenn jemand /pat ausführt, zufällig ausgewählt wird"
+        "de": "Bilder aus welchen, wenn jemand /pat ausführt, zufällig ausgewählt wird",
+        "en": "Images that one will be randomly selected from when someone uses /pat."
       },
       "type": "array",
       "content": "imgURL"
@@ -377,22 +341,25 @@
     {
       "name": "8ballMessage",
       "humanName": {
-        "de": "8ball-Nachricht"
+        "de": "8ball-Nachricht",
+        "en": "8ball Message"
       },
       "default": {
-        "en": "%answer%",
+        "en": "The oracle has spoken... %answer%",
         "de": "Das Orakel hat gesprochen... %answer%"
       },
       "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /random 8ball  benutzt"
+        "de": "Nachricht, welche gesendet wird, wenn jemand /random 8ball benutzt",
+        "en": "Message that gets send when someone uses /random 8ball"
       },
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
-          "name": "The oracle has spoken... answer",
+          "name": "%answer",
           "description": {
-            "en": "Answer to the question"
+            "en": "Answer to the question",
+            "de": "Antwort auf die Frage"
           }
         }
       ]
@@ -400,26 +367,28 @@
     {
       "name": "8BallMessages",
       "humanName": {
-        "de": "8ball-Antworten"
+        "de": "8ball-Antworten",
+        "en": "8ball responses"
       },
       "default": {
         "en": [
-          "Yes",
+          "<Yes>",
           "No",
           "Maybe",
           "Try again",
           "42 is the answer"
         ],
         "de": [
-          "Yes",
-          "No",
-          "Maybe",
-          "Try again",
-          "42 is the answer"
+          "Ja",
+          "Nein",
+          "Vielleicht",
+          "Bitte versuche es erneut",
+          "42 ist die Antwort"
         ]
       },
       "description": {
-        "de": "Mögliche Antworten für /random 8ball"
+        "de": "Mögliche Antworten für /random 8ball",
+        "en": "Possible answers for /random 8ball"
       },
       "type": "array",
       "content": "string"

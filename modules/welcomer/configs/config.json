@@ -27,6 +27,21 @@
       "content": "roleID"
     },
     {
+      "name": "assign-roles-immediately",
+      "humanName": {
+        "en": "Immediately give roles, instead of waiting for rules acceptance?",
+        "de": "Rollen sofort geben statt Regelbestätigung abzuwarten?"
+      },
+      "default": {
+        "en": true
+      },
+      "description": {
+        "en": "If enabled, roles will be granted immediately when a user joins your server. Otherwise, no roles will be assigned to users before they complete the Discord onboarding.",
+        "de": "Wenn aktiviert, werden die Rollen sofort vergeben, wenn ein Nutzer deinem Server beitritt. Ansonsten werden Rollen erst zugewiesen, wenn das Discord onboarding abgeschlossen wurde."
+      },
+      "type": "boolean"
+    },
+    {
       "name": "not-send-messages-if-member-is-bot",
       "humanName": {
         "en": "Ignore bots?",
@@ -45,8 +60,8 @@
     {
       "name": "give-roles-on-boost",
       "humanName": {
-        "en": "Zusätzliche Rollen beim Boost geben",
-        "de": "Give additional roles to boosters"
+        "de": "Zusätzliche Rollen beim Boost geben",
+        "en": "Give additional roles to boosters"
       },
       "default": {
         "en": [],
@@ -86,7 +101,7 @@
       },
       "description": {
         "en": "If enabled, a DM will be sent to new users. This is often experienced by them as spam and can decrease your new user retention metrics. Please note that not all users will receive this DM, as a huge chunk has DMs disabled.",
-        "de": "Wenn aktiviert, wird eine PN an neue Nutzer gesendet. Das wird often als Spam empfunden und kann die Anzahl an Nutzern erhöhen, die direkt nach dem Beitritt deinen Server verlassen. Bitte beachte, dass nicht alle Nutzer diese PN erhalten werden, da ein großer Anzahl diese deaktiviert hat."
+        "de": "Wenn aktiviert, wird eine PN an neue Nutzer gesendet. Das wird often als Spam empfunden und kann die Anzahl an Nutzern erhöhen, die direkt nach dem Beitritt deinen Server verlassen. Bitte beachte, dass nicht alle Nutzer diese PN erhalten werden, da eine großer Anzahl diese deaktiviert hat."
       }
     },
     {

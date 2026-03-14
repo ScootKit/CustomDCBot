@@ -1,3 +1,4 @@
+const {ChannelType} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.subcommands = {
@@ -27,12 +28,12 @@ module.exports.subcommands = {
     },
     'setcategory': async function (interaction) {
         const channel = interaction.options.getChannel('channel', true);
-        if (channel.type === 'GUILD_CATEGORY') return interaction.reply({
+        if (channel.type === ChannelType.GuildCategory) return interaction.reply({
             content: '⚠️ ' + localize('admin-tools', 'category-can-not-have-category'),
             ephemeral: true
         });
         const category = interaction.options.getChannel('category', true);
-        if (category.type !== 'GUILD_CATEGORY') return interaction.reply({
+        if (category.type !== ChannelType.GuildCategory) return interaction.reply({
             content: '⚠️ ' + localize('admin-tools', 'not-category'),
             ephemeral: true
         });
@@ -96,11 +97,12 @@ module.exports.config = {
                     type: 'CHANNEL',
                     required: true,
                     name: 'channel',
-                    channelTypes: ['GUILD_TEXT', 'GUILD_VOICE', 'GUILD_NEWS', 'GUILD_STAGE_VOICE'],
+                    channelTypes: [ChannelType.GuildText, ChannelType.GuildVoice, ChannelType.GuildAnnouncement, ChannelType.GuildStageVoice],
                     description: localize('admin-tools', 'channel-description')
                 },
                 {
                     type: 'CHANNEL',
+                    channel_types: [ChannelType.GuildCategory],
                     required: true,
                     name: 'category',
                     description: localize('admin-tools', 'category-description')

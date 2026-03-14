@@ -227,11 +227,11 @@ async function color(interaction, moduleStrings) {
             roleColor = '#' + roleColor;
         }
         if (!(/^#[0-9A-F]{6}$/i).test(roleColor)) {
-            await interaction.editReply(await embedType(moduleStrings['invalidColor'], {}));
+            await interaction.editReply(embedType(moduleStrings['invalidColor'], {}));
             cancel = true;
         }
     } else {
-        roleColor = 'DEFAULT';
+        roleColor = 0xF1C40F;
     }
 }
 

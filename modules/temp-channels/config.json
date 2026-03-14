@@ -35,7 +35,7 @@
         "de": true
       },
       "description": {
-        "en": "If enabled the user has the permission to change the name and settings of the voicechanel via both, the Discord-integrated menus and the corresponding /-commands",
+        "en": "If enabled the user has the permission to change the name and settings of the voice channel via both, the Discord-integrated menus and the corresponding /-commands",
         "de": "Wenn aktiviert erhält der Ersteller des Channel die Permission \"MANAGE_CHANNEL\" auf diesem Channel, sowie Zugriff auf die entsprechenden Befehle"
       },
       "type": "boolean"
@@ -51,7 +51,7 @@
         "de": 3
       },
       "description": {
-        "en": "Set a timeout here in which the bot should wait before deleting the voicechannel (in secounds)",
+        "en": "Set a timeout here in which the bot should wait before deleting the voice channel (in seconds)",
         "de": "Die Anzahl von Sekunden nach einem Channel-Leave, die der Bot warten soll, bevor er einen Channel löscht"
       },
       "type": "integer",
@@ -106,6 +106,13 @@
           }
         },
         {
+          "name": "number",
+          "description": {
+            "en": "The current number of the channel",
+            "de": "Aktuelle Nummer des Kanals"
+          }
+        },
+        {
           "name": "tag",
           "description": {
             "en": "Tag of the user",
@@ -125,7 +132,7 @@
         "de": true
       },
       "description": {
-        "en": "If enabled the bot will create a new channel for each voicechannel which can be only seen by users in the voicechannel",
+        "en": "If enabled the bot will create a new channel for each voice channel which can be only seen by users in the voice channel",
         "de": "Wenn aktiviert wird ein No-Mic-Textchannel für jeden Temp-Channel erstellt, auf welchen nur Nutzer Zugriff haben, die im VC sind"
       },
       "type": "boolean"
@@ -171,10 +178,10 @@
       },
       "default": {
         "en": "I have created and moved you to your new voice-channel - have fun ^^",
-        "de": "Tach - ich habe dir nen eigenen Channel erstellt und  dich gemovt - Dieser wird nach Inaktivität gelöscht - Have fun^^"
+        "de": "Tach - ich habe dir nen eigenen Channel erstellt und dich verschoben - Dieser wird nach Inaktivität gelöscht - Have fun^^"
       },
       "description": {
-        "en": "Set the message that should get send to the user if they join the voicechannel",
+        "en": "Set the message that should get send to the user if they join the voice channel",
         "de": "Hier kannst du die Nachricht festlegen, die an den Nutzer geschrieben soll (wenn aktiviert)"
       },
       "type": "string",
@@ -215,7 +222,7 @@
         "de": true
       },
       "description": {
-        "en": "If enabled the user has the permission to change the access-mode of the voicechanel",
+        "en": "If enabled the user has the permission to change the access-mode of the voice chanel",
         "de": "Wenn aktiviert erhält der Ersteller des Channel die Möglichkeit die Zugriffsberechtigungen für den Kanal festzulegen"
       },
       "type": "boolean"
@@ -329,7 +336,7 @@
       "name": "edit-error",
       "humanName": {},
       "default": {
-        "en": "An error occured while editing your channel. One or more of your settings could not be applied. This could be due to missing permissions or an invalid value",
+        "en": "An error occurred while editing your channel. One or more of your settings could not be applied. This could be due to missing permissions or an invalid value",
         "de": "Beim Bearbeiten des Kanals ist ein Fehler aufgetreten. Eine oder mehr deiner Einstellungen konnten nicht angewendet werden. Dies kann an fehlenden Rechten oder einem ungültigen Eingabewert liegen"
       },
       "description": {
@@ -378,7 +385,7 @@
         "de": "Einstellungsnachricht"
       },
       "default": {
-        "en": "Change the Settings of your temp-channnel here",
+        "en": "Change the Settings of your temporary channel here",
         "de": "Ändere die Einstellungen deines Temp-Channels hier"
       },
       "description": {

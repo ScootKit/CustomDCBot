@@ -1,4 +1,15 @@
 const {formatDiscordUserName} = require('../../../src/functions/helpers');
+const {ActivityType} = require('discord.js');
+
+const activityTypes = {
+    'PLAYING': ActivityType.Playing,
+    'STREAMING': ActivityType.Streaming,
+    'WATCHING': ActivityType.Watching,
+    'COMPETING': ActivityType.Competing,
+    'LISTENING': ActivityType.Listening,
+    'CUSTOM': ActivityType.Custom
+};
+
 module.exports.run = async function (client) {
     const moduleConf = client.configurations['betterstatus']['config'];
 
@@ -10,7 +21,7 @@ module.exports.run = async function (client) {
         const interval = setInterval(async () => {
             await client.user.setActivity(await replaceStatusString(moduleConf['intervalStatuses'][moduleConf['intervalStatuses'].length * Math.random() | 0]),
                 {
-                    type: moduleConf['activityType'],
+                    type: activityTypes[moduleConf['activityType']],
                     url: (moduleConf['streamingLink'] && moduleConf.activityType === 'STREAMING') ? moduleConf['streamingLink'] : null
                 });
         }, moduleConf.interval < 5 ? 5000 : moduleConf.interval * 1000); // At least 5 seconds to prevent rate limiting
@@ -23,7 +34,7 @@ module.exports.run = async function (client) {
 
     if (moduleConf.activityType !== 'PLAYING' && !moduleConf.enableInterval) {
         await client.user.setActivity(client.config.user_presence, {
-            type: moduleConf.activityType,
+            type: activityTypes[moduleConf['activityType']],
             url: (moduleConf['streamingLink'] && moduleConf.activityType === 'STREAMING') ? moduleConf['streamingLink'] : null
         });
     }
@@ -36,8 +47,8 @@ module.exports.run = async function (client) {
      */
     async function replaceStatusString(statusString) {
         if (!statusString) return 'Invalid status';
-        const members = await (await client.guild.fetch()).members.fetch({withPresences: true, force: true});
-        const randomOnline = members.filter(m => m.presence && !m.user.bot).random();
+        const members = client.guild.members.cache;
+        const randomOnline = members.filter(m => ['online', 'dnd'].includes(m.presence?.status) && !m.user.bot).random();
         const random = members.filter(m => !m.user.bot).random();
         return statusString.replaceAll('%memberCount%', client.guild.memberCount)
             .replaceAll('%onlineMemberCount%', members.filter(m => m.presence && !m.user.bot).size)

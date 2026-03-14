@@ -7,6 +7,8 @@
   },
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/admin-tools",
   "commands-dir": "/commands",
+  "models-dir": "/models",
+  "events-dir": "/events",
   "config-example-files": [
     "config.json"
   ],
@@ -17,7 +19,7 @@
     "en": "Admin-Tools"
   },
   "description": {
-    "en": "Simple tools for admins - move channels and roles via commands or copy an emoji from another server to your server.",
-    "de": "Einfache Tools für Admins, um Channel und Rollen per Command zu verschieben und Emojis zu leihen."
+    "en": "Simple tools for admins - move channels and roles via commands, assign temporary roles or copy an emoji from another server to your server.",
+    "de": "Einfache Tools für Admins, um Channel und Rollen per Command zu verschieben, temporäre Rollen zu vergeben und Emojis zu leihen."
   }
 }

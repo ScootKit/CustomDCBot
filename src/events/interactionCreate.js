@@ -9,6 +9,7 @@ module.exports.run = async (client, interaction) => {
             ephemeral: true
         });
     }
+    if (!interaction.guild) return;
     if (client.guild.id !== interaction.guild.id) {
         if (interaction.isAutocomplete()) return interaction.respond({});
         return interaction.reply({
@@ -25,10 +26,20 @@ module.exports.run = async (client, interaction) => {
         if (client.scnxSetup) return require('./../functions/scnx-integration').customCommandSlashInteraction(interaction);
         else return interaction.reply({content: '⚠️ ' + localize('command', 'not-found'), ephemeral: true});
     }
-    if (command.module && !client.modules[command.module].enabled) return interaction.reply({
-        ephemeral: true,
-        content: '⚠️ ' + localize('command', 'module-disabled', {m: command.module})
-    });
+    if (command.module && !client.modules[command.module].enabled) {
+        if (client.scnxSetup) return require('./../functions/scnx-integration').customCommandSlashInteraction(interaction);
+        else return interaction.reply({
+            ephemeral: true,
+            content: '⚠️ ' + localize('command', 'module-disabled', {m: command.module})
+        });
+    }
+    if (typeof command.disabled === 'function' && command.disabled(client)) {
+        if (interaction.isAutocomplete()) return interaction.respond([]);
+        return interaction.reply({
+            ephemeral: true,
+            content: '⚠️ ' + localize('command', 'command-disabled')
+        });
+    }
     if (command && typeof (command || {}).options === 'function') command.options = await command.options(interaction.client);
     const group = interaction.options['_group'];
     const subCommand = interaction.options['_subcommand'];
@@ -63,9 +74,10 @@ module.exports.run = async (client, interaction) => {
     }
     if (!interaction.isCommand()) return;
     if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions));
+
     client.logger.debug(localize('command', 'used', {
-        tag: formatDiscordUserName(interaction.user),
-        id: interaction.user.id,
+        tag: command.forceAnonymous ? '????????????' : formatDiscordUserName(interaction.user),
+        id: command.forceAnonymous ? 'Hidden Anonymous User' : interaction.user.id,
         c: command.name + `${group ? ' ' + group : ''}${subCommand ? ' ' + subCommand : ''}`
     }));
 
@@ -83,7 +95,8 @@ module.exports.run = async (client, interaction) => {
         else await command.subcommands[subCommand](interaction);
         if (command.run) await command.run(interaction);
     } catch (e) {
-        if (client.captureException) client.captureException(e, {
+        let traceID = null;
+        if (client.captureException) traceID = client.captureException(e, {
             command: command.name,
             module: command.module,
             group,
@@ -93,16 +106,26 @@ module.exports.run = async (client, interaction) => {
         interaction.client.logger.error(localize('command', 'execution-failed', {
             e,
             c: command.name,
+            t: traceID || '*Not reportable*',
             g: group || '',
             s: subCommand || ''
         }));
         if (!interaction.deferred) {
             interaction.reply({
-                content: localize('command', 'execution-failed-message', {e}),
+                content: localize('command', 'execution-failed-message', {
+                    e,
+                    c: command.name,
+                    t: traceID || '*Not reportable*',
+                    g: group || '',
+                    s: subCommand || ''
+                }),
                 ephemeral: true
             }).catch(() => {
             });
-        } else await interaction.editReply(localize('command', 'execution-failed-message')).catch(() => {
+        } else await interaction.editReply(localize('command', 'execution-failed-message', {
+            e,
+            t: traceID || '*Not reportable*'
+        })).catch(() => {
         });
     }
 };

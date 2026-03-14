@@ -1,0 +1,157 @@
+{
+  "filename": "moderation.json",
+  "humanName": {
+    "en": "Moderation Actions"
+  },
+  "configElementName": {
+    "en": {
+      "one": "punishment",
+      "more": "punishment"
+    }
+  },
+  "description": {
+    "en": "Define triggers for punishments."
+  },
+  "configElements": true,
+  "content": [
+    {
+      "name": "pingsCount",
+      "humanName": {
+        "en": "Pings to trigger moderation"
+      },
+      "description": {
+        "en": "The amount of pings required to trigger a moderation action."
+      },
+      "type": "integer",
+      "default": {
+        "en": 10
+      }
+    },
+    {
+      "name": "useCustomTimeframe",
+      "humanName": {
+        "en": "Use a custom timeframe"
+      },
+      "description": {
+        "en": "If enabled, you can choose your own custom timeframe of days in which the pings must occur to trigger the moderation action."
+      },
+      "type": "boolean",
+      "default": {
+        "en": false
+      }
+    },
+    {
+      "name": "timeframeDays",
+      "humanName": {
+        "en": "Timeframe (Days)"
+      },
+      "description": {
+        "en": "In how many days must these pings occur?"
+      },
+      "type": "integer",
+      "default": {
+        "en": 7
+      },
+      "dependsOn": "useCustomTimeframe"
+    },
+    {
+      "name": "actionType",
+      "humanName": {
+        "en": "Action"
+      },
+      "description": {
+        "en": "What punishment should be applied?"
+      },
+      "type": "select",
+      "content": [
+        "MUTE",
+        "KICK"
+      ],
+      "default": {
+        "en": "MUTE"
+      }
+    },
+    {
+      "name": "muteDuration",
+      "humanName": {
+        "en": "Mute Duration (only if action type is MUTE)"
+      },
+      "description": {
+        "en": "How long to mute the user? (in minutes)"
+      },
+      "type": "integer",
+      "default": {
+        "en": 60
+      }
+    },
+    {
+      "name": "enableActionLogging",
+      "humanName": {
+        "en": "Enable action logging"
+      },
+      "description": {
+        "en": "If enabled, moderation actions will be logged in the channel where a protected user/role got pinged."
+      },
+      "type": "boolean",
+      "default": {
+        "en": true
+      }
+    },
+    {
+      "name": "actionLogMessage",
+      "humanName": {
+        "en": "Action log message"
+      },
+      "description": {
+        "en": "The message that will be sent when a user is punished for pinging protected users/roles."
+      },
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "pinger-mention",
+          "description": {
+            "en": "Mention of the user who pinged"
+          }
+        },
+        {
+          "name": "pinger-name",
+          "description": {
+            "en": "Name of the user who pinged"
+          }
+        },
+        {
+          "name": "action",
+          "description": {
+            "en": "The action that was taken (muted/kicked)"
+          }
+        },
+        {
+          "name": "pings",
+          "description": {
+            "en": "Number of pings that triggered the action"
+          }
+        },
+        {
+          "name": "timeframe",
+          "description": {
+            "en": "The timeframe in days in which the pings occurred"
+          }
+        },
+        {
+          "name": "duration",
+          "description": {
+            "en": "Duration of the mute in minutes (only for the mute action)"
+          }
+        }
+      ],
+      "default": {
+        "en": {
+          "title": "Moderation action taken against %pinger-name%",
+          "description": "I have taken action against %pinger-mention% for pinging protected users/roles %pings% times within %timeframe% days.\n **Action:** %action%\n**Duration:** %duration% minutes",
+          "color": "#ed4245"
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,10 @@
-const {MessageEmbed} = require('discord.js');
+const {ChannelType, ComponentType, MessageEmbed} = require('discord.js');
 const durationParser = require('parse-duration');
-const {formatDate} = require('../../../src/functions/helpers');
+const {
+    formatDate,
+    shuffleArray,
+    parseEmbedColor
+} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const {createQuiz} = require('../quizUtil');
 
@@ -38,10 +42,10 @@ async function create(interaction) {
     }
     const msg = await interaction.reply({
         components: [{
-            type: 'ACTION_ROW',
+            type: ComponentType.ActionRow,
             components: [{
                 /* eslint-disable camelcase */
-                type: 'SELECT_MENU',
+                type: ComponentType.StringSelect,
                 custom_id: 'quiz',
                 placeholder: localize('quiz', 'select-correct'),
                 min_values: 1,
@@ -54,7 +58,7 @@ async function create(interaction) {
     });
     const collector = msg.createMessageComponentCollector({
         filter: i => interaction.user.id === i.user.id,
-        componentType: 'SELECT_MENU',
+        componentType: ComponentType.StringSelect,
         max: 1
     });
     collector.on('collect', async i => {
@@ -117,10 +121,10 @@ module.exports.subcommands = {
         } else quiz = interaction.client.configurations['quiz']['quizList'][Math.floor(Math.random() * interaction.client.configurations['quiz']['quizList'].length)];
 
         quiz.channel = interaction.channel;
-        quiz.options = [
+        quiz.options = shuffleArray([
             ...quiz.wrongOptions.map(o => ({text: o})),
             ...quiz.correctOptions.map(o => ({text: o, correct: true}))
-        ];
+        ]);
         quiz.endAt = new Date(new Date().getTime() + durationParser(quiz.duration));
         quiz.canChangeVote = false;
         quiz.private = true;
@@ -153,7 +157,7 @@ module.exports.subcommands = {
 
         const embed = new MessageEmbed()
             .setTitle(moduleStrings.embed.leaderboardTitle)
-            .setColor(moduleStrings.embed.leaderboardColor)
+            .setColor(parseEmbedColor(moduleStrings.embed.leaderboardColor))
             .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .setThumbnail(interaction.guild.iconURL())
             .addField(moduleStrings.embed.leaderboardSubtitle, leaderboardString);
@@ -194,7 +198,7 @@ module.exports.config = {
                         type: 'CHANNEL',
                         name: 'channel',
                         required: true,
-                        channelTypes: ['GUILD_TEXT', 'GUILD_NEWS', 'GUILD_VOICE'],
+                        channelTypes: [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildVoice],
                         description: localize('quiz', 'cmd-create-channel-description')
                     },
                     {
@@ -236,7 +240,7 @@ module.exports.config = {
                         type: 'CHANNEL',
                         name: 'channel',
                         required: true,
-                        channelTypes: ['GUILD_TEXT', 'GUILD_NEWS', 'GUILD_VOICE'],
+                        channelTypes: [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildVoice],
                         description: localize('quiz', 'cmd-create-channel-description')
                     },
                     {

@@ -10,7 +10,9 @@
   "elementLimits": {
     "STARTER": 2,
     "ACTIVE_GUILD": 5,
-    "PRO": 15
+    "PRO": 15,
+    "UNLIMITED": 5,
+    "PROFESSIONAL": 15
   },
   "filename": "streamers.json",
   "configElements": true,

@@ -28,7 +28,8 @@
             "en": "Required mod-level to do this."
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "user_not_found",
@@ -41,7 +42,8 @@
         "en": "Message that gets send if the user provided an invalid userid"
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "actions"
     },
     {
       "name": "missing_reason",
@@ -54,7 +56,8 @@
         "en": "Message that gets send if the user does not provide a reason and 'require reason' is activated"
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "errors"
     },
     {
       "name": "this_is_a_mod",
@@ -67,7 +70,8 @@
         "en": "Message that gets send if the user tries to mute another moderator"
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "actions"
     },
     {
       "name": "submitted-report-message",
@@ -94,7 +98,8 @@
             "en": "URL to the message log"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "mute_message",
@@ -121,7 +126,8 @@
             "en": "Reason of the mute"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "channel_mute",
@@ -153,7 +159,8 @@
             "en": "Channel from which the user got muted"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "remove-channel_mute",
@@ -185,7 +192,8 @@
             "en": "Channel from which the user got unmuted"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "tmpmute_message",
@@ -218,7 +226,8 @@
             "en": "Timestamp when this action expires"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "quarantine_message",
@@ -245,7 +254,8 @@
             "en": "Reason of the mute"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "tmpquarantine_message",
@@ -278,7 +288,8 @@
             "en": "Date when the quarantine is going to be removed automatically"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "unquarantine_message",
@@ -305,7 +316,8 @@
             "en": "Reason of the mute"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "unmute_message",
@@ -332,7 +344,8 @@
             "en": "Reason of the unmute"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "kick_message",
@@ -359,7 +372,8 @@
             "en": "Reason of the kick"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "ban_message",
@@ -386,7 +400,8 @@
             "en": "Reason of the ban"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "tmpban_message",
@@ -419,7 +434,8 @@
             "en": "Date on which the ban expires"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "warn_message",
@@ -446,7 +462,8 @@
             "en": "Reason of the warn"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "lock_channel_message",
@@ -473,7 +490,8 @@
             "en": "Reason of the lock"
           }
         }
-      ]
+      ],
+      "category": "actions"
     },
     {
       "name": "unlock_channel_message",
@@ -494,7 +512,26 @@
             "en": "Tag of the moderator"
           }
         }
-      ]
+      ],
+      "category": "actions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": {
+        "en": "Action Messages",
+        "de": "Aktionsnachrichten"
+      }
+    },
+    {
+      "id": "errors",
+      "icon": "fa-duotone fa-regular fa-triangle-exclamation",
+      "displayName": {
+        "en": "Error Messages",
+        "de": "Fehlermeldungen"
+      }
     }
   ]
 }

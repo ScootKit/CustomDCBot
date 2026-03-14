@@ -3,20 +3,42 @@ const {
     embedType,
     pufferStringToSize,
     dateToDiscordTimestamp,
-    formatDiscordUserName, formatNumber
+    formatDiscordUserName,
+    formatNumber,
+    parseEmbedColor
 } = require('../../../src/functions/helpers');
-const {MessageEmbed} = require('discord.js');
+const {ChannelType, MessageEmbed} = require('discord.js');
 const {AgeFromDate} = require('age-calculator');
-const {stringNames} = require('../../invite-tracking/events/guildMemberJoin');
+const {calculateLevelXP, isMaxLevel, displayLevel} = require('../../levels/events/messageCreate');
+
+const legacyChannelType = (type) => {
+    const map = {
+        [ChannelType.GuildText]: 'GUILD_TEXT',
+        [ChannelType.GuildVoice]: 'GUILD_VOICE',
+        [ChannelType.GuildCategory]: 'GUILD_CATEGORY',
+        [ChannelType.GuildAnnouncement]: 'GUILD_NEWS',
+        [ChannelType.GuildStageVoice]: 'GUILD_STAGE_VOICE',
+        [ChannelType.PublicThread]: 'PUBLIC_THREAD',
+        [ChannelType.PrivateThread]: 'PRIVATE_THREAD',
+        [ChannelType.AnnouncementThread]: 'NEWS_THREAD',
+        [ChannelType.GuildForum]: 'GUILD_FORUM',
+        [ChannelType.GuildMedia]: 'GUILD_MEDIA'
+    };
+    if (typeof type === 'string') return type;
+    return map[type] || (ChannelType[type] ? ChannelType[type].toString().toUpperCase() : type);
+};
 
 // THIS IS PAIN. Rewrite it as soon as possible
+module.exports.beforeSubcommand = async function (interaction) {
+    await interaction.deferReply({ephemeral: true});
+};
 
 module.exports.subcommands = {
     'server': async function (interaction) {
         const moduleStrings = interaction.client.configurations['info-commands']['strings'];
         const embed = new MessageEmbed()
             .setTitle(localize('info-commands', 'information-about-server', {s: interaction.guild.name}))
-            .setColor('GOLD')
+            .setColor(parseEmbedColor('GOLD'))
             .setThumbnail(interaction.guild.iconURL())
             .setImage(interaction.guild.bannerURL())
             .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl});
@@ -36,9 +58,9 @@ module.exports.subcommands = {
         const bans = await interaction.guild.bans.fetch();
         embed.addField(moduleStrings.serverinfo.banCount, bans.size.toString(), true);
         embed.addField(moduleStrings.serverinfo.createdAt, `<t:${(interaction.guild.createdAt.getTime() / 1000).toFixed(0)}:d>`, true);
-        const members = await interaction.guild.members.fetch();
+        const members = interaction.guild.members.cache;
         embed.addField(moduleStrings.serverinfo.members, `\`\`\`| ${localize('info-commands', 'userCount')} | ${localize('info-commands', 'memberCount')} | Online |\n| ${pufferStringToSize(members.size, localize('info-commands', 'userCount').length)} | ${pufferStringToSize(members.filter(m => !m.user.bot).size, localize('info-commands', 'memberCount').length)} | ${pufferStringToSize(members.filter(m => m.presence && (m.presence || {}).status !== 'offline').size, localize('info-commands', 'onlineCount').length)} |\`\`\``);
-        embed.addField(moduleStrings.serverinfo.channels, `\`\`\`| ${localize('info-commands', 'textChannel')} | ${localize('info-commands', 'voiceChannel')} | ${localize('info-commands', 'categoryChannel')} | ${localize('info-commands', 'otherChannel')} |\n| ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === 'GUILD_TEXT').size.toString(), localize('info-commands', 'textChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === 'GUILD_VOICE').size.toString(), localize('info-commands', 'voiceChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === 'GUILD_CATEGORY').size.toString(), localize('info-commands', 'categoryChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type !== 'GUILD_VOICE' && c.type !== 'GUILD_TEXT' && c.type !== 'GUILD_CATEGORY').size.toString(), localize('info-commands', 'otherChannel').length)} |\`\`\``);
+        embed.addField(moduleStrings.serverinfo.channels, `\`\`\`| ${localize('info-commands', 'textChannel')} | ${localize('info-commands', 'voiceChannel')} | ${localize('info-commands', 'categoryChannel')} | ${localize('info-commands', 'otherChannel')} |\n| ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildText).size.toString(), localize('info-commands', 'textChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildVoice).size.toString(), localize('info-commands', 'voiceChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildCategory).size.toString(), localize('info-commands', 'categoryChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type !== ChannelType.GuildVoice && c.type !== ChannelType.GuildText && c.type !== ChannelType.GuildCategory).size.toString(), localize('info-commands', 'otherChannel').length)} |\`\`\``);
         let featuresstring = '';
         interaction.guild.features.forEach(f => {
             featuresstring = featuresstring + `${f[0].toUpperCase() + f.toLowerCase().substring(1)}, `;
@@ -46,35 +68,35 @@ module.exports.subcommands = {
         if (featuresstring !== '') featuresstring = featuresstring.substring(0, featuresstring.length - 2);
         else featuresstring = moduleStrings.serverinfo.noFeaturesEnabled;
         embed.addField(moduleStrings.serverinfo.features, `\`\`\`${featuresstring}\`\`\``);
-        interaction.reply({embeds: [embed], ephemeral: true});
+        interaction.editReply({embeds: [embed]});
     },
     'channel': async function (interaction) {
         const moduleStrings = interaction.client.configurations['info-commands']['strings'];
         const channel = interaction.options.getChannel('channel') || interaction.channel;
         const embed = new MessageEmbed()
             .setTitle(localize('info-commands', 'information-about-channel', {c: channel.name}))
-            .addField(moduleStrings.channelInfo.type, localize('channelType', channel.type.toString()), true)
+            .addField(moduleStrings.channelInfo.type, localize('channelType', legacyChannelType(channel.type).toString()), true)
             .addField(moduleStrings.channelInfo.id, channel.id, true)
             .addField(moduleStrings.channelInfo.createdAt, `<t:${(channel.createdAt.getTime() / 1000).toFixed(0)}:d>`, true)
             .addField(moduleStrings.channelInfo.name, channel.name, true)
             .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
-            .setColor('GREEN');
+            .setColor(parseEmbedColor('GREEN'));
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (channel.parent) embed.addField(moduleStrings.channelInfo.parent, channel.parent.name, true);
-        if (channel.position) embed.addField(moduleStrings.channelInfo.position, channel.position.toString(), true);
+        if (channel.position) embed.addField(moduleStrings.channelInfo.position, (channel.position + 1).toString(), true);
         if (channel.topic) embed.setDescription(channel.topic);
-        if (channel.type.includes('THREAD')) {
+        if (channel.isThread && channel.isThread()) {
             if (channel.archiveTimestamp !== channel.createdTimestamp) embed.addField(moduleStrings.channelInfo.threadArchivedAt, `<t:${(channel.archivedAt.getTime() / 1000).toFixed(0)}:d>`, true);
             if (channel.autoArchiveDuration) embed.addField(moduleStrings.channelInfo.threadAutoArchiveDuration, `${channel.autoArchiveDuration}min`, true);
             if (channel.ownerId) embed.addField(moduleStrings.channelInfo.threadOwner, `<@${channel.ownerId}>`, true);
             if (channel.messageCount && channel.messageCount < 50) embed.addField(moduleStrings.channelInfo.threadMessages, channel.messageCount.toString(), true);
             if (channel.memberCount && channel.memberCount < 50) embed.addField(moduleStrings.channelInfo.threadMemberCount, channel.memberCount.toString(), true);
         }
-        if (channel.type === 'GUILD_STAGE_VOICE' && channel.stageInstance && !(channel.stageInstance || {}).deleted) {
+        if (channel.type === ChannelType.GuildStageVoice && channel.stageInstance && !(channel.stageInstance || {}).deleted) {
             embed.addField(moduleStrings.channelInfo.stageInstanceName, channel.stageInstance.topic, true);
             embed.addField(moduleStrings.channelInfo.stageInstancePrivacy, localize('stagePrivacy', channel.stageInstance.privacyLevel.toString()), true);
         }
-        if (channel.members && channel.members.size !== 0 && (channel.type === 'GUILD_VOICE' || channel.type === 'GUILD_STAGE_VOICE')) {
+        if (channel.members && channel.members.size !== 0 && (channel.type === ChannelType.GuildVoice || channel.type === ChannelType.GuildStageVoice)) {
             let memberString = '';
             channel.members.forEach(m => {
                 memberString = memberString + `<@${m.user.id}>, `;
@@ -82,7 +104,7 @@ module.exports.subcommands = {
             memberString = memberString.substring(0, memberString.length - 2);
             embed.addField(moduleStrings.channelInfo.membersInChannel, memberString);
         }
-        interaction.reply({embeds: [embed], ephemeral: true});
+        interaction.editReply({embeds: [embed]});
     },
     'role': async function (interaction) {
         const moduleStrings = interaction.client.configurations['info-commands']['strings'];
@@ -94,7 +116,7 @@ module.exports.subcommands = {
             .addField(moduleStrings.roleInfo.position, role.position.toString(), true)
             .addField(moduleStrings.roleInfo.id, role.id, true)
             .addField(moduleStrings.roleInfo.name, role.name, true)
-            .setColor(role.color || 'GREEN');
+            .setColor(role.color || parseEmbedColor('GREEN'));
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (role.color) embed.addField(moduleStrings.roleInfo.color, role.hexColor, true);
         if (role.members) {
@@ -122,7 +144,7 @@ module.exports.subcommands = {
         if (role.mentionable) features = features + `• ${localize('info-commands', 'mentionable')}\n`;
         if (role.managed) features = features + `• ${localize('info-commands', 'managed')}\n`;
         embed.setDescription(features);
-        interaction.reply({ephemeral: true, embeds: [embed]});
+        interaction.editReply({embeds: [embed]});
     },
     'user': async function (interaction) {
         const moduleStrings = interaction.client.configurations['info-commands']['strings'];
@@ -147,8 +169,8 @@ module.exports.subcommands = {
 
         const embed = new MessageEmbed()
             .setTitle(localize('info-commands', 'information-about-user', {u: formatDiscordUserName(member.user)}))
-            .setColor(member.displayColor || 'GREEN')
-            .setThumbnail(member.user.avatarURL({dynamic: true}))
+            .setColor(member.displayColor || parseEmbedColor('GREEN'))
+            .setThumbnail(member.user.avatarURL({forceStatic: false}))
             .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .addField(moduleStrings.userinfo.tag, formatDiscordUserName(member.user), true)
             .addField(moduleStrings.userinfo.id, member.user.id, true)
@@ -166,30 +188,14 @@ module.exports.subcommands = {
             let dateString = `${birthday.day}.${birthday.month}${birthday.year ? `.${birthday.year}` : ''}`;
             if (birthday.year) {
                 const age = new AgeFromDate(new Date(birthday.year, birthday.month - 1, birthday.day)).age;
-                dateString = `[${dateString}](https://sc-network.net/age?age=${age} "${localize('birthdays', 'age-hover', {a: age})}")`;
+                dateString = `[${dateString}](https://scnx.xyz/${interaction.client.locale === 'de' ? 'de/' : ''}custom-bot/age-calculator?age=${age} "${localize('birthdays', 'age-hover', {a: age})}")`;
             }
             embed.addField(moduleStrings.userinfo.birthday, dateString, true);
         }
         if (levelUserData) {
-            embed.addField(moduleStrings.userinfo.xp, `${formatNumber(levelUserData.xp)}/${formatNumber(levelUserData.level * 750 + ((levelUserData.level - 1) * 500))}`, true);
-            embed.addField(moduleStrings.userinfo.level, levelUserData.level.toString(), true);
+            embed.addField(moduleStrings.userinfo.xp, `${formatNumber(isMaxLevel(levelUserData.level, interaction.client) ? calculateLevelXP(interaction.client, interaction.client.configurations['levels']['config'].maximumLevel) : levelUserData.xp)}/${isMaxLevel(levelUserData.level, interaction.client) ? '∞' : formatNumber(calculateLevelXP(interaction.client, levelUserData.level))}`, true);
+            embed.addField(moduleStrings.userinfo.level, displayLevel(levelUserData.level, interaction.client), true);
             embed.addField(moduleStrings.userinfo.messages, levelUserData.messages.toString(), true);
-        }
-        if (interaction.client.models['invite-tracking']) {
-            const invitedUsers = await interaction.client.models['invite-tracking']['UserInvite'].findAll({
-                where: {
-                    inviter: member.user.id
-                }
-            });
-            const userInvites = await interaction.client.models['invite-tracking']['UserInvite'].findAll({
-                where: {
-                    userID: member.user.id,
-                    left: false
-                },
-                order: [['createdAt', 'DESC']]
-            });
-            if (userInvites[0]) embed.addField(moduleStrings.userinfo['invited-by'], `${localize('invite-tracking', stringNames[userInvites[0].inviteType])}${userInvites[0].inviter ? ` by <@${userInvites[0].inviter}>` : ''}`, true);
-            embed.addField(moduleStrings.userinfo.invites, `\`\`\`| ${localize('info-commands', 'total-invites')} | ${localize('info-commands', 'active-invites')} | ${localize('info-commands', 'left-invites')} |\n| ${pufferStringToSize(invitedUsers.length.toString(), localize('info-commands', 'total-invites').length)} | ${pufferStringToSize(invitedUsers.filter(i => !i.left).length.toString(), localize('info-commands', 'active-invites').length)} | ${pufferStringToSize(invitedUsers.filter(i => i.left).length.toString(), localize('info-commands', 'left-invites').length)} |\`\`\``);
         }
         let permstring = '';
         member.permissions.toArray().forEach(p => {
@@ -199,9 +205,8 @@ module.exports.subcommands = {
         if (permstring !== '') permstring = permstring.substring(0, permstring.length - 2);
         else permstring = moduleStrings.userinfo.noPermissions;
         embed.addField(moduleStrings.userinfo.permissions, `\`\`\`${permstring}\`\`\``);
-        interaction.reply({
+        interaction.editReply({
             embeds: [embed],
-            ephemeral: true
         });
     }
 };

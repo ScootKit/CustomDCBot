@@ -23,7 +23,8 @@
         "de": "Wenn aktiviert, wird Verifikation auf deinem Server aktiviert"
       },
       "type": "boolean",
-      "elementToggle": true
+      "elementToggle": true,
+      "category": "general"
     },
     {
       "name": "verification-needed-role",
@@ -39,7 +40,8 @@
         "de": "Rolle, die Nutzer erhalten, bevor sie sich verifiziert haben"
       },
       "type": "roleID",
-      "allowNull": true
+      "allowNull": true,
+      "category": "roles"
     },
     {
       "name": "verification-passed-role",
@@ -55,7 +57,8 @@
         "de": "Rolle, die Nutzern gegeben werden soll, wenn sie sich erfolgreich verifiziert haben"
       },
       "type": "roleID",
-      "allowNull": true
+      "allowNull": true,
+      "category": "roles"
     },
     {
       "name": "verification-log",
@@ -69,7 +72,8 @@
         "de": "Kanal, in welchem alle Verifikation-Aktionen dokumentiert werden sollen"
       },
       "type": "channelID",
-      "allowNull": true
+      "allowNull": true,
+      "category": "general"
     },
     {
       "name": "type",
@@ -89,7 +93,8 @@
       "content": [
         "manual",
         "captcha"
-      ]
+      ],
+      "category": "general"
     },
     {
       "name": "captchaLevel",
@@ -110,7 +115,8 @@
         "easy",
         "medium",
         "hard"
-      ]
+      ],
+      "category": "messages"
     },
     {
       "name": "actionOnFail",
@@ -132,7 +138,8 @@
         "quarantine",
         "ban",
         "mute"
-      ]
+      ],
+      "category": "general"
     },
     {
       "name": "restart-verification-channel",
@@ -148,7 +155,8 @@
         "de": "(optional) Kanal in welchem Nutzer ganz einfach den Verifikationsprozess neustarten können (zum Beispiel, wenn der Nutzer PNs deaktiviert hat) und benachrichtigt werden, wenn wir sie nicht erreichen konnten"
       },
       "type": "channelID",
-      "allowNull": true
+      "allowNull": true,
+      "category": "general"
     },
     {
       "name": "captcha-message",
@@ -165,7 +173,8 @@
         "de": "Diese Nachricht wird an den Nutzer gesendet, der ein Captcha durchführen muss"
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "messages"
     },
     {
       "name": "manual-verification-message",
@@ -182,7 +191,8 @@
         "de": "Diese Nachricht wird an Nutzer geschickt, die manuell verifiziert werden müssen"
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "messages"
     },
     {
       "name": "captcha-failed-message",
@@ -199,7 +209,8 @@
         "de": "Diese Nachricht wird an Nutzer gesendet, bei denen die Verifikation fehlgeschlagen ist"
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "messages"
     },
     {
       "name": "captcha-succeeded-message",
@@ -216,7 +227,8 @@
         "de": "Diese Nachricht wird gesendet, wenn ein Nutzer die Verifikation erfolgreich abgeschlossen hat"
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "messages"
     },
     {
       "name": "verify-channel-first-message",
@@ -233,7 +245,34 @@
         "de": "Das ist die Informations-Nachricht im Verfikationskanal."
       },
       "type": "string",
-      "allowEmbed": true
+      "allowEmbed": true,
+      "category": "messages"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fa-solid fa-badge-check",
+      "displayName": {
+        "en": "General Settings",
+        "de": "Allgemeine Einstellungen"
+      }
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": {
+        "en": "Messages",
+        "de": "Nachrichten"
+      }
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": {
+        "en": "Roles",
+        "de": "Rollen"
+      }
     }
   ]
 }

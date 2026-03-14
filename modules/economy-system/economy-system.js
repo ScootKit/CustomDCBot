@@ -3,10 +3,14 @@
  * @module economy-system
  * @author jateute
  */
-const { MessageEmbed } = require('discord.js');
-const {embedType, inputReplacer} = require('../../src/functions/helpers');
+const {MessageEmbed} = require('discord.js');
+const {
+    embedType,
+    inputReplacer,
+    parseEmbedColor
+} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
-const { Op } = require('sequelize');
+const {Op} = require('sequelize');
 
 /**
  * add a User to DB
@@ -179,7 +183,16 @@ async function createShopItem(interaction) {
         const role = await interaction.options.getRole('role', true);
         const price = await interaction.options.getInteger('price');
         const model = interaction.client.models['economy-system']['Shop'];
-        if (interaction.guild.me.roles.highest.comparePositionTo(role) <= 0) return await interaction.editReply(localize('economy-system', 'role-to-high'));
+        if (interaction.guild.members.me.roles.highest.comparePositionTo(role) <= 0) {
+            await interaction.editReply(localize('economy-system', 'role-to-high'));
+            return resolve(localize('economy-system', 'role-to-high'));
+        }
+
+        if(price<=0) {
+            await interaction.editReply(localize('economy-system', 'price-less-than-zero'));
+            return resolve(localize('economy-system', 'price-less-than-zero'));
+        }
+
         const itemModel = await model.findOne({
             where: {
                 [Op.or]: [
@@ -240,16 +253,10 @@ async function buyShopItem(interaction, id, name) {
             ]
         }
     });
-    if (item.length < 1) return await interaction.editReply({
-        content: interaction.client.configurations['economy-system']['strings']['notFound']
-    });
-    else if (item.length > 1) return await interaction.editReply({
-        content: interaction.client.configurations['economy-system']['strings']['multipleMatches']
-    });
+    if (item.length < 1) return await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['notFound']));
+    else if (item.length > 1) return await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['multipleMatches']));
 
-    if (interaction.member.roles.cache.has(item[0]['role'])) return await interaction.editReply({
-        content: interaction.client.configurations['economy-system']['strings']['rebuyItem']
-    });
+    if (interaction.member.roles.cache.has(item[0]['role'])) return await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['rebuyItem']));
     let user = await interaction.client.models['economy-system']['Balance'].findOne({
         where: {
             id: interaction.user.id
@@ -263,9 +270,7 @@ async function buyShopItem(interaction, id, name) {
             }
         });
     }
-    if (user.balance < item[0]['price']) return await interaction.editReply({
-        content: interaction.client.configurations['economy-system']['strings']['notEnoughMoney']
-    });
+    if (user.balance < item[0]['price']) return await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['notEnoughMoney']));
     await interaction.member.roles.add(item[0]['role']);
     await editBalance(interaction.client, interaction.user.id, 'remove', item[0]['price']);
     leaderboard(interaction.client);
@@ -331,6 +336,7 @@ async function deleteShopItem(interaction) {
         const nameOption = interaction.options.get('item-name');
         const idOption = interaction.options.get('item-id');
         let model;
+
         if (nameOption && idOption) {
             model = await interaction.client.models['economy-system']['Shop'].findAll({
                 where: {
@@ -340,32 +346,37 @@ async function deleteShopItem(interaction) {
                     ]
                 }
             });
-        }else if (nameOption) {
+        } else if (nameOption) {
             model = await interaction.client.models['economy-system']['Shop'].findAll({
                 where: {
                     name: nameOption['value']
                 }
             });
-        }
-        else if (idOption) {
+        } else if (idOption) {
             model = await interaction.client.models['economy-system']['Shop'].findAll({
                 where: {
                     id: idOption['value']
                 }
             });
         } else {
-            await interaction.editReply("Please use the id or the name!")
+            await interaction.editReply('Please use the id or the name!');
         }
 
         if (model.length > 1) {
             await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['multipleMatches']));
             resolve();
         } else if (model.length < 1) {
-            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {'%id%': idOption ? idOption['value'] : '-', '%name%': nameOption ? nameOption['value'] : '-'}));
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {
+                '%id%': idOption ? idOption['value'] : '-',
+                '%name%': nameOption ? nameOption['value'] : '-'
+            }));
             resolve();
         } else {
             await model[0].destroy();
-            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {'%name%': model[0]['name'], '%id%': model[0]['id']}));
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDelete'], {
+                '%name%': model[0]['name'],
+                '%id%': model[0]['id']
+            }));
             interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'delete-item', {
                 u: interaction.user.tag,
                 i: model.name
@@ -381,11 +392,101 @@ async function deleteShopItem(interaction) {
 }
 
 /**
+* Function to update a shop-item
+* @param {*} interaction Interaction
+* @returns {Promise}
+*/
+async function updateShopItem(interaction) {
+    return new Promise(async (resolve) => {
+        const id = interaction.options.get('item-id')['value'];
+
+        if (!id) {
+            await interaction.editReply('Please use the id!'); //IDK how this should happen
+            return resolve();
+        }
+
+        const item = await interaction.client.models['economy-system']['Shop'].findOne({
+            where: {
+                id: id
+            }
+        });
+
+        if (!item) {
+            await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['noMatches'], {
+                '%id%': id,
+                '%name%': '-'
+            }));
+            return resolve();
+        }
+
+        const newNameOption = interaction.options.get('item-new-name');
+        const newPrice = interaction.options.getInteger('new-price');
+        const newRole = interaction.options.getRole('new-role');
+        if (newRole && interaction.guild.members.me.roles.highest.comparePositionTo(newRole) <= 0) {
+            await interaction.editReply(localize('economy-system', 'role-to-high'));
+            return resolve(localize('economy-system', 'role-to-high'));
+        }
+
+        if(newPrice !== null && newPrice<=0) {
+            await interaction.editReply(localize('economy-system', 'price-less-than-zero'));
+            return resolve(localize('economy-system', 'price-less-than-zero'));
+        }
+
+        if (newNameOption) {
+            const collidingItem = await interaction.client.models['economy-system']['Shop'].findOne({
+                where: {
+                    name: newNameOption['value']
+                }
+            });
+            if (collidingItem && collidingItem['id'] !== id) {
+                await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
+                    '%id%': id,
+                    '%name%': "-"
+                }));
+                return resolve(localize('economy-system', 'item-duplicate'));
+            }
+        }
+
+        if (newNameOption) {
+            item.name = newNameOption['value'];
+        }
+        if (newPrice !== null) {
+            item.price = newPrice;
+        }
+        if (newRole) {
+            item.role = newRole['id'];
+        }
+
+        await item.save();
+
+        await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemEdit'], {
+            '%name%': item.name,
+            '%id%': item.id
+        }));
+        interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'edit-item', {
+            u: interaction.user.tag,
+            i: id,
+            n: newNameOption ? newNameOption['value'] : "-",
+            p: newPrice ? newPrice : "-",
+            r: newRole ? newRole['name'] : "-",
+        }));
+        if (interaction.client.logChannel) await interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'edit-item', {
+            u: interaction.user.tag,
+            i: id,
+            n: newNameOption ? newNameOption['value'] : "-",
+            p: newPrice ? newPrice : "-",
+            r: newRole ? newRole['name'] : "-",
+        }));
+        resolve(`Edited the item ${item.name} successfully`);
+    });
+}
+
+/**
  * Create the shop message
  * @param {Client} client Client
  * @param {object} guild Object of the guild
  * @param {boolean} ephemeral Should the message be ephemeral?
- * @returns {string}
+ * @returns {Promise<string>}
  */
 async function createShopMsg(client, guild, ephemeral) {
     const items = await client.models['economy-system']['Shop'].findAll();
@@ -393,7 +494,13 @@ async function createShopMsg(client, guild, ephemeral) {
     const options = [];
     for (let i = 0; i < items.length; i++) {
         const roles = await guild.roles.fetch(items[i].dataValues.role);
-        string = `${string}${inputReplacer({'%id%': items[i].dataValues.id, '%itemName%': items[i].dataValues.name, '%price%': `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`, '%sellcount%': roles ? roles.members.size : '0'}, client.configurations['economy-system']['strings']['itemString'])}`;
+        string = `${string}${inputReplacer({
+            '%id%': items[i].dataValues.id,
+            '%itemName%': items[i].dataValues.name,
+            '%price%': `${items[i].dataValues.price} ${client.configurations['economy-system']['config']['currencySymbol']}`,
+            '%sellcount%': roles ? roles.members.size : '0',
+            '\n': ''
+        }, client.configurations['economy-system']['strings']['itemString'])}\n`;
         options.push({
             label: items[i].dataValues.name,
             description: localize('economy-system', 'select-menu-price', {
@@ -416,7 +523,10 @@ async function createShopMsg(client, guild, ephemeral) {
             }]
         }];
     }
-    return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, { ephemeral: ephemeral, components: components });
+    return embedType(client.configurations['economy-system']['strings']['shopMsg'], {'%shopItems%': string}, {
+        ephemeral: ephemeral,
+        components: components
+    });
 }
 
 /**
@@ -471,14 +581,23 @@ async function leaderboard(client) {
     const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
 
     const embed = new MessageEmbed()
-      .setTitle(moduleStr['leaderboardEmbed']['title'])
-      .setDescription(moduleStr['leaderboardEmbed']['description'])
-      .setTimestamp()
-      .setColor(moduleStr['leaderboardEmbed']['color'])
-      .setAuthor({name: client.user.username, iconURL: client.user.avatarURL()})
-      .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
+        .setTitle(moduleStr['leaderboardEmbed']['title'])
+        .setDescription(moduleStr['leaderboardEmbed']['description'])
+        .setTimestamp()
+        .setColor(parseEmbedColor(moduleStr['leaderboardEmbed']['color']))
+        .setAuthor({
+            name: client.user.username,
+            iconURL: client.user.avatarURL()
+        })
+        .setFooter({
+            text: client.strings.footer,
+            iconURL: client.strings.footerImgUrl
+        });
 
-    if (model.length !== 0) embed.addFields({name: 'Leaderboard:', value: await topTen(model, client)});
+    if (model.length !== 0) embed.addFields({
+        name: 'Leaderboard:',
+        value: await topTen(model, client)
+    });
     if ((moduleStr['leaderboardEmbed']['thumbnail'] || '').replaceAll(' ', '')) embed.setThumbnail(moduleStr['leaderboardEmbed']['thumbnail']);
     if ((moduleStr['leaderboardEmbed']['image'] || '').replaceAll(' ', '')) embed.setImage(moduleStr['leaderboardEmbed']['image']);
 
@@ -495,6 +614,7 @@ module.exports.createShopItemAPI = createShopItemAPI;
 module.exports.createShopItem = createShopItem;
 module.exports.deleteShopItemAPI = deleteShopItemAPI;
 module.exports.deleteShopItem = deleteShopItem;
+module.exports.updateShopItem = updateShopItem;
 module.exports.createShopMsg = createShopMsg;
 module.exports.shopMsg = shopMsg;
 module.exports.createLeaderboard = leaderboard;

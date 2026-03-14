@@ -1,11 +1,11 @@
 const {localize} = require('../../../src/functions/localize');
-const {MessageEmbed} = require('discord.js');
+const {ComponentType, MessageEmbed} = require('discord.js');
 
 module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user', true);
     if (member.user.id === interaction.user.id) return interaction.reply({
         ephemeral: true,
-        content: '⚠️ ' + localize('duel', 'self-invite-not-possible', {r: `<@${((await interaction.guild.members.fetch({withPresences: true})).filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
+        content: '⚠️ ' + localize('duel', 'self-invite-not-possible', {r: `<@${(interaction.guild.members.cache.filter(u => u.presence && u.user.id !== interaction.user.id && !u.user.bot).random() || {user: {id: 'RickAstley'}}).user.id}>`})
     });
     const rep = await interaction.reply({
         content: localize('duel', 'challenge-message', {
@@ -46,7 +46,7 @@ module.exports.run = async function (interaction) {
     bullets[member.user.id] = 0;
     guardAfterEachOther[interaction.user.id] = 0;
     guardAfterEachOther[member.user.id] = 0;
-    const a = rep.createMessageComponentCollector({componentType: 'BUTTON'});
+    const a = rep.createMessageComponentCollector({componentType: ComponentType.Button});
     setTimeout(() => {
         if (started || a.ended) return;
         endReason = localize('duel', 'invite-expired', {u: interaction.user.toString(), i: member.toString()});

@@ -1,0 +1,126 @@
+{
+  "filename": "storage.json",
+  "humanName": {
+    "en": "Data Storage"
+  },
+  "description": {
+    "en": "Configure how long moderation logs and leaver data are kept."
+  },
+  "categories": [
+    {
+      "id": "pings",
+      "icon": "fa-regular fa-clock-rotate-left",
+      "displayName": {
+        "en": "Ping History"
+      }
+    },
+    {
+      "id": "moderation",
+      "icon": "fas fa-hammer",
+      "displayName": {
+        "en": "Moderation Logs"
+      }
+    },
+    {
+      "id": "leavers",
+      "icon": "fas fa-right-from-bracket",
+      "displayName": {
+        "en": "Leaver Data"
+      }
+    }
+  ],
+  "content": [
+    {
+      "name": "enablePingHistory",
+      "category": "pings",
+      "humanName": {
+        "en": "Enable Ping History"
+      },
+      "description": {
+        "en": "If enabled, the bot will keep a history of pings to enforce moderation actions."
+      },
+      "type": "boolean",
+      "default": {
+        "en": true
+      }
+    },
+    {
+      "name": "pingHistoryRetention",
+      "category": "pings",
+      "humanName": {
+        "en": "Ping History Retention"
+      },
+      "description": {
+        "en": "Decides on how long to keep ping logs. Minimum is 4 weeks (1 month) with a maximum of 96 weeks (2 years). This is the length factor of the 'Basic' punishment timeframe."
+      },
+      "type": "integer",
+      "default": {
+        "en": 12
+      },
+      "minValue": "4",
+      "maxValue": "96",
+      "dependsOn": "enablePingHistory"
+    },
+    {
+      "name": "deleteAllPingHistoryAfterTimeframe",
+      "category": "pings",
+      "humanName": {
+        "en": "Delete all the pings in history after the timeframe?"
+      },
+      "description": {
+        "en": "If enabled, the bot will delete ALL the pings history of an user after the timeframe instead of only the ping(s) exceeding the timeframe in the history."
+      },
+      "type": "boolean",
+      "default": {
+        "en": false
+      }
+    },
+    {
+      "name": "modLogRetention",
+      "category": "moderation",
+      "humanName": {
+        "en": "Moderation Log Retention (Months)"
+      },
+      "description": {
+        "en": "How long to keep records of punishments (1 - 24 Months). This is applied when moderation actions are enabled."
+      },
+      "type": "integer",
+      "default": {
+        "en": 12
+      },
+      "minValue": "1",
+      "maxValue": "24"
+    },
+    {
+      "name": "enableLeaverDataRetention",
+      "category": "leavers",
+      "humanName": {
+        "en": "Keep user logs after they leave"
+      },
+      "description": {
+        "en": "If enabled, the bot will keep a history of the user after they leave."
+      },
+      "type": "boolean",
+      "default": {
+        "en": true
+      }
+    },
+    {
+      "name": "leaverRetention",
+      "category": "leavers",
+      "humanName": {
+        "en": "Leaver Data Retention (Days)"
+      },
+      "description": {
+        "en": "How long to keep data after a user leaves (1-7 Days)."
+      },
+      "type": "integer",
+      "default": {
+        "en": 1
+      },
+      "minValue": "1",
+      "maxValue": "7",
+      "dependsOn": "enableLeaverDataRetention"
+    }
+  ]
+}

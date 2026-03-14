@@ -84,7 +84,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
         '%userName%': msg.author.username,
         '%displayName%': msg.member.displayName,
         '%userTag%': formatDiscordUserName(msg.author),
-        '%userAvatar%': msg.member.displayAvatarURL({dynamic: true}),
+        '%userAvatar%': msg.member.displayAvatarURL({forceStatic: false}),
         '%channelName%': msg.channel.name,
         '%channelMention%': '<#' + msg.channel.id + '>',
         '%emoji%': msgReaction.emoji.toString(),

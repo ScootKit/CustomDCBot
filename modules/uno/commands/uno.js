@@ -1,5 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
-const {MessageActionRow, MessageButton} = require('discord.js');
+const {ActionRowBuilder, ButtonBuilder, ComponentType} = require('discord.js');
 
 const cards = [
     '0',
@@ -14,13 +14,13 @@ const cards = [
 const colorEmojis = {'red': '🟥', 'blue': '🟦', 'green': '🟩', 'yellow': '🟨'};
 const colors = Object.keys(colorEmojis);
 
-const publicrow = new MessageActionRow()
+const publicrow = new ActionRowBuilder()
     .addComponents(
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('uno-deck')
             .setLabel(localize('uno', 'view-deck'))
             .setStyle('PRIMARY'),
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('uno-uno')
             .setLabel(localize('uno', 'uno'))
             .setStyle('PRIMARY')
@@ -31,27 +31,27 @@ const publicrow = new MessageActionRow()
  * @param {Object} player
  * @param {Object} game
  * @param {Boolean} neutral
- * @return {MessageActionRow}
+ * @return {ActionRowBuilder}
  */
 function buildDeck(player, game, neutral = false) {
-    const controlrow = new MessageActionRow();
+    const controlrow = new ActionRowBuilder();
     if (player.turn && !player.blockRedraw) controlrow.addComponents(
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('uno-draw')
             .setLabel(localize('uno', 'draw'))
             .setStyle('SECONDARY')
     );
     else controlrow.addComponents(
-        new MessageButton()
+        new ButtonBuilder()
             .setCustomId('uno-update')
             .setLabel(localize('uno', 'update-button'))
             .setStyle('SECONDARY')
     );
 
-    const cardrow1 = new MessageActionRow();
-    const cardrow2 = new MessageActionRow();
-    const cardrow3 = new MessageActionRow();
-    const cardrow4 = new MessageActionRow();
+    const cardrow1 = new ActionRowBuilder();
+    const cardrow2 = new ActionRowBuilder();
+    const cardrow3 = new ActionRowBuilder();
+    const cardrow4 = new ActionRowBuilder();
 
     player.cards.slice(0, 20).forEach((c, i) => {
         let row = cardrow1;
@@ -59,7 +59,7 @@ function buildDeck(player, game, neutral = false) {
         if (i > 9) row = cardrow3;
         if (i > 14) row = cardrow4;
         row.addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('uno-card-' + c.name + '-' + c.color + '-' + i)
                 .setLabel(c.name)
                 .setEmoji(colorEmojis[c.color])
@@ -147,11 +147,17 @@ function perPlayerHandler(i, player, game) {
 
             nextPlayer(game, player);
             game.players[player.n] = player;
-            i.update({content: localize('uno', 'auto-drawn-skip'), components: buildDeck(player, game)});
+            i.update({
+                content: localize('uno', 'auto-drawn-skip'),
+                components: buildDeck(player, game).map(c => c.toJSON())
+            });
             return game.msg.edit(gameMsg(game));
         }
     }
-    if (i.customId === 'uno-update') return i.update({content: null, components: buildDeck(player, game)});
+    if (i.customId === 'uno-update') return i.update({
+        content: null,
+        components: buildDeck(player, game).map(c => c.toJSON())
+    });
     if (!player.turn) return i.reply({content: localize('connect-four', 'not-turn'), ephemeral: true});
     game.justChoosingColor = false;
 
@@ -178,24 +184,24 @@ function perPlayerHandler(i, player, game) {
             i.update({
                 content: localize('uno', 'use-drawn'),
                 components: [
-                    new MessageActionRow()
+                    new ActionRowBuilder()
                         .addComponents(
-                            new MessageButton()
+                            new ButtonBuilder()
                                 .setCustomId('uno-card-' + c.name + '-' + c.color)
                                 .setLabel(c.name)
                                 .setEmoji(colorEmojis[c.color])
                                 .setStyle('PRIMARY'),
-                            new MessageButton()
+                            new ButtonBuilder()
                                 .setCustomId('uno-dont-use-drawn')
                                 .setLabel(localize('uno', 'dont-use-drawn'))
                                 .setStyle('SECONDARY')
                         )
-                ],
+                ].map(c => c.toJSON()),
                 ephemeral: true
             });
         } else {
             nextPlayer(game, player);
-            i.update({components: buildDeck(player, game)});
+            i.update({components: buildDeck(player, game).map(c => c.toJSON())});
             game.msg.edit(gameMsg(game));
         }
     } else if (i.customId.startsWith('uno-card-')) {
@@ -206,7 +212,10 @@ function perPlayerHandler(i, player, game) {
                 color: colors[Math.floor(Math.random() * colors.length)]
             });
             nextPlayer(game, player);
-            i.update({content: localize('uno', 'missing-uno'), components: buildDeck(player, game)});
+            i.update({
+                content: localize('uno', 'missing-uno'),
+                components: buildDeck(player, game).map(c => c.toJSON())
+            });
             return game.msg.edit(gameMsg(game));
         }
         const name = i.customId.split('-')[2];
@@ -216,13 +225,13 @@ function perPlayerHandler(i, player, game) {
             color
         }, player.cards)) return i.update({
             content: localize('uno', 'invalid-card', {c: colorEmojis[color] + ' **' + name + '**'}),
-            components: buildDeck(player, game)
+            components: buildDeck(player, game).map(c => c.toJSON())
         });
 
         const toremove = player.cards.find(c => c.name === name && c.color === color);
         if (!toremove) return i.update({
             content: localize('uno', 'used-card', {c: colorEmojis[color] + ' **' + name + '**'}),
-            components: buildDeck(player, game)
+            components: buildDeck(player, game).map(c => c.toJSON())
         });
         player.cards.splice(player.cards.indexOf(toremove), 1);
 
@@ -245,34 +254,37 @@ function perPlayerHandler(i, player, game) {
             }
             return i.update({
                 content: localize('uno', 'choose-color'), components: [
-                    new MessageActionRow()
+                    new ActionRowBuilder()
                         .addComponents(
-                            new MessageButton()
+                            new ButtonBuilder()
                                 .setCustomId('uno-color-red-' + name)
                                 .setEmoji(colorEmojis.red)
                                 .setStyle('PRIMARY'),
-                            new MessageButton()
+                            new ButtonBuilder()
                                 .setCustomId('uno-color-blue-' + name)
                                 .setEmoji(colorEmojis.blue)
                                 .setStyle('PRIMARY'),
-                            new MessageButton()
+                            new ButtonBuilder()
                                 .setCustomId('uno-color-green-' + name)
                                 .setEmoji(colorEmojis.green)
                                 .setStyle('PRIMARY'),
-                            new MessageButton()
+                            new ButtonBuilder()
                                 .setCustomId('uno-color-yellow-' + name)
                                 .setEmoji(colorEmojis.yellow)
                                 .setStyle('PRIMARY')
                         ),
                     ...buildDeck(player, game, true).slice(1)
-                ]
+                ].map(c => c.toJSON())
             });
         } else nextPlayer(game, player, 1, name === localize('uno', 'reverse'));
         if (name === localize('uno', 'draw2')) game.pendingDraws = game.pendingDraws + 2;
 
         game.previousCards = [game.previousCards[1], game.previousCards[2], colorEmojis[game.lastCard.color] + ' ' + game.lastCard.name];
         game.lastCard = {name, color};
-        i.update({content: null, components: buildDeck(player, game)});
+        i.update({
+            content: null,
+            components: buildDeck(player, game).map(c => c.toJSON())
+        });
         game.msg.edit(gameMsg(game));
     } else if (i.customId === 'uno-dont-use-drawn' || i.customId.startsWith('uno-color-')) {
         player.blockRedraw = false;
@@ -281,7 +293,10 @@ function perPlayerHandler(i, player, game) {
             color: i.customId.split('-')[2]
         };
         nextPlayer(game, player);
-        i.update({content: null, components: buildDeck(player, game)});
+        i.update({
+            content: null,
+            components: buildDeck(player, game).map(c => c.toJSON())
+        });
         game.msg.edit(gameMsg(game));
     }
     game.players[player.n] = player;
@@ -306,7 +321,7 @@ function gameMsg(game) {
         allowedMentions: {
             users: [game.players.find(p => p.turn).id]
         },
-        components: [publicrow]
+        components: [publicrow].map(c => c.toJSON())
     };
 }
 
@@ -381,14 +396,18 @@ module.exports.run = async function (interaction) {
                 color: colors[Math.floor(Math.random() * colors.length)]
             });
 
-            const m = await p.interaction.followUp({components: buildDeck(p, game), fetchReply: true, ephemeral: true});
-            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', i => perPlayerHandler(i, p, game));
+            const m = await p.interaction.followUp({
+                components: buildDeck(p, game).map(c => c.toJSON()),
+                fetchReply: true,
+                ephemeral: true
+            });
+            m.createMessageComponentCollector({componentType: ComponentType.Button}).on('collect', i => perPlayerHandler(i, p, game));
         });
     }
 
     const timeout = setTimeout(startGame, 179000);
 
-    const collector = msg.createMessageComponentCollector({componentType: 'BUTTON'});
+    const collector = msg.createMessageComponentCollector({componentType: ComponentType.Button});
     collector.on('collect', async i => {
         if (i.customId === 'uno-join') {
             if (game.players.some(p => p.id === i.user.id)) return i.reply({
@@ -427,8 +446,12 @@ module.exports.run = async function (interaction) {
             const player = game.players.find(p => p.id === i.user.id);
             if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});
             console.log(player);
-            const m = await i.reply({components: buildDeck(player, game), fetchReply: true, ephemeral: true});
-            m.createMessageComponentCollector({componentType: 'BUTTON'}).on('collect', int => perPlayerHandler(int, player, game));
+            const m = await i.reply({
+                components: buildDeck(player, game).map(c => c.toJSON()),
+                fetchReply: true,
+                ephemeral: true
+            });
+            m.createMessageComponentCollector({componentType: ComponentType.Button}).on('collect', int => perPlayerHandler(int, player, game));
         } else if (i.customId === 'uno-uno') {
             const player = game.players.find(p => p.id === i.user.id);
             if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});

@@ -1,5 +1,9 @@
 const isEqual = require('is-equal');
-const {disableModule, truncate} = require('../../../src/functions/helpers');
+const {
+    disableModule,
+    truncate,
+    parseEmbedColor
+} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const {MessageEmbed} = require('discord.js');
 const schedule = require('node-schedule');
@@ -19,7 +23,7 @@ module.exports.run = async function (client) {
     client.jobs.push(job);
 };
 
-let lastSavedEmbed = null;
+let lastSavedEmbed = {};
 
 /**
  * Updates the embed if needed
@@ -30,7 +34,7 @@ async function updateEmbedsIfNeeded(client) {
     const channels = client.configurations['team-list']['config'];
     for (const channelConfig of channels) {
         const embed = new MessageEmbed()
-            .setColor(channelConfig.embed.color)
+            .setColor(parseEmbedColor(channelConfig.embed.color))
             .setTitle(channelConfig.embed.title)
             .setDescription(channelConfig.embed.description)
             .setTimestamp()
@@ -43,24 +47,28 @@ async function updateEmbedsIfNeeded(client) {
         });
         if (!channel) return disableModule('team-list', localize('team-list', 'channel-not-found', {c: channelConfig['channelID']}));
         const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
-        const guildMembers = await channel.guild.members.fetch();
+        const guildMembers = client.guild.members.cache;
 
         const roles = (await channel.guild.roles.fetch()).filter(f => channelConfig.roles.includes(f.id)).sort((a, b) => a.position < b.position ? 1 : -1);
+        const listedUserIDs = [];
+        let i = 0;
         for (const role of roles.values()) {
             let userString = '';
             for (const member of guildMembers.filter(m => m.roles.cache.has(role.id)).values()) {
+                if (listedUserIDs.includes(member.user.id) && channelConfig.onlineShowHighestRole) continue;
+                listedUserIDs.push(member.user.id);
                 userString = userString + (channelConfig.includeStatus ? `* ${member.user.toString()}: ${statusIcons[(member.presence || {status: 'offline'}).status]} ${localize('team-list', (member.presence || {status: 'offline'}).status)}\n` : `${member.user.toString()}, `);
             }
             if (userString === '') userString = localize('team-list', 'no-users-with-role', {r: role.toString()});
             else if (!channelConfig.includeStatus) userString = userString.substring(0, userString.length - 2);
-
+            i++;
             embed.addField(channelConfig['nameOverwrites'][role.id] || role.name, truncate((channelConfig['descriptions'][role.id] ? `${channelConfig['descriptions'][role.id]}\n` : '') + userString, 1024));
         }
 
-        if (embed.fields.length === 0) embed.addField('⚠️', localize('team-list', 'no-roles-selected'));
+        if (i === 0) embed.addField('⚠️', localize('team-list', 'no-roles-selected'));
 
-        if (isEqual(lastSavedEmbed, embed.toJSON())) return;
-        lastSavedEmbed = embed.toJSON();
+        if (isEqual(lastSavedEmbed[channelConfig['channelID']], embed.toJSON())) continue;
+        lastSavedEmbed[channelConfig['channelID']] = embed.toJSON();
 
         if (messages.last()) await messages.last().edit({embeds: [embed]});
         else channel.send({embeds: [embed]});

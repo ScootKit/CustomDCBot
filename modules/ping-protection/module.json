@@ -1,0 +1,28 @@
+{
+  "name": "ping-protection",
+  "author": {
+    "scnxOrgID": "148",
+    "name": "Kevin",
+    "link": "https://github.com/Kevinking500"
+  },
+  "openSourceURL": "https://github.com/Kevinking500/CustomDCBot/tree/main/modules/ping-protection",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/configuration.json",
+    "configs/moderation.json",
+    "configs/storage.json"
+  ],
+  "tags": [
+    "moderation"
+  ],
+  "humanReadableName": {
+    "en": "Ping-Protection",
+    "de": "Ping-Schutz"
+  },
+  "description": {
+    "en": "Powerful and highly customizable ping-protection module to protect members/roles from unwanted mentions with moderation capabilities.",
+    "de": "Leistungsstarkes und hochgradig anpassbares Ping-Schutz-Modul zum Schutz von Mitgliedern/Rollen vor unerwünschten Erwähnungen mit Moderationsfunktionen."
+  }
+}

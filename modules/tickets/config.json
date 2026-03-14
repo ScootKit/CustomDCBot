@@ -81,8 +81,8 @@
         "en": []
       },
       "description": {
-        "en": "Nutzer, die in Tickets gepingt werden und diese sehen können",
-        "de": "Users who get pinged in the tickets and who can see tickets"
+        "de": "Nutzer, die in Tickets gepingt werden und diese sehen können",
+        "en": "Users who get pinged in the tickets and who can see tickets"
       },
       "type": "array",
       "content": "roleID"
@@ -90,7 +90,7 @@
     {
       "name": "logChannel",
       "humanName": {
-        "en": "Log chanenl",
+        "en": "Log channel",
         "de": "Log-Kanal"
       },
       "default": {
@@ -105,7 +105,7 @@
     {
       "name": "ticket-create-message",
       "humanName": {
-        "en": "Ticket create message",
+        "en": "Ticket created message",
         "de": "Ticketerstellungs-Nachricht"
       },
       "default": {
@@ -275,7 +275,7 @@
       },
       "description": {
         "en": "Button for creating a ticket",
-        "de": "Button zum erstellen eines Tickets"
+        "de": "Button zum Erstellen eines Tickets"
       },
       "type": "string",
       "pro": true

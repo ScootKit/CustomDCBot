@@ -48,11 +48,12 @@
       "default": {
         "en": "https://scnx.xyz/favicon.png"
       },
+      "allowNull": true,
       "description": {
         "en": "Footer-Image of every embed",
         "de": "Footer-Bild von jedem Embed"
       },
-      "type": "string",
+      "type": "imgURL",
       "pro": true
     },
     {
@@ -66,7 +67,7 @@
         "de": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%."
       },
       "description": {
-        "en": "This message gets send if there are not enough arguments specified",
+        "en": "This message gets sent if there are not enough arguments specified",
         "de": "Diese Nachricht wird versendet, wenn eine oder mehrere Argumente für einen Befehl fehlen"
       },
       "type": "string",
@@ -99,7 +100,7 @@
         "de": "✅ Rollen-Änderungen übernommen"
       },
       "description": {
-        "en": "This message gets send after a user selects self-roles on a self-role-element.",
+        "en": "This message gets sent after a user selects self-roles on a self-role-element.",
         "de": "Diese Nachricht wird gesendet, wenn ein Nutzer eine Self-Rolle auswählt."
       },
       "type": "string",
@@ -116,7 +117,7 @@
         "de": "✅ Rolle %role% erfolgreich hinzugefügt"
       },
       "description": {
-        "en": "This message gets send when a user adds a role to themselves.",
+        "en": "This message gets sent when a user adds a role to themselves.",
         "de": "Diese Nachricht wird gesendet, wenn ein Nutzer sich selbst eine Self-Rolle hinzufügt."
       },
       "type": "string",
@@ -142,7 +143,7 @@
         "de": "✅ Rolle %role% erfolgreich entfernt"
       },
       "description": {
-        "en": "This message gets send when a user removes a role from themselves.",
+        "en": "This message gets sent when a user removes a role from themselves.",
         "de": "Diese Nachricht wird gesendet, wenn ein Nutzer sich selbst eine Self-Rolle entfernt."
       },
       "type": "string",
@@ -168,7 +169,7 @@
         "de": "Scheint als hättest du nicht genügend Rechte."
       },
       "description": {
-        "en": "This message gets send if an user don't hase enough permissions",
+        "en": "This message gets sent if an user don't hase enough permissions",
         "de": "Diese Nachricht wird versendet, wenn der Nutzer nicht genügen Rechte hat"
       },
       "type": "string",
@@ -238,15 +239,15 @@
     {
       "name": "putBotInfoOnLastSite",
       "humanName": {
-        "en": "Put Bot-Info on the last site of the Help-Embed",
-        "de": "Verschiebt die Bot-Info auf die letzte Seite im Hilfe-Embed"
+        "en": "Hides the Bot-Info in the Help-Embed",
+        "de": "Verbergt die Bot-Info Sektion im Hilfe-Embed"
       },
       "default": {
         "en": false
       },
       "description": {
-        "en": "If enabled, the Bot-Info-Section of the Help-Embed will be moved to the last site",
-        "de": "Wenn aktiviert, wird der Bot-Info-Bereich im Help-Embed auf die letzte Seite verschoben"
+        "en": "If enabled, the Bot-Info-Section of the Help-Embed will be hidden.",
+        "de": "Wenn aktiviert, wird der Bot-Info-Bereich im Help-Embed verborgen."
       },
       "type": "boolean",
       "pro": true
