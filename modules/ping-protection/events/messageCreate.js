@@ -1,6 +1,7 @@
 const { 
     processPing,
-    sendPingWarning
+    sendPingWarning,
+    isWhitelistedChannel
 } = require('../ping-protection');
 const { localize } = require('../../../src/functions/localize');
 const { randomElementFromArray } = require('../../../src/functions/helpers'); 
@@ -19,7 +20,7 @@ module.exports.run = async function (client, message) {
 
     if (message.author.bot) return;
 
-    if (config.ignoredChannels.includes(message.channel.id)) return;
+    if (isWhitelistedChannel(config, message.channel)) return;
     if (config.ignoredUsers.includes(message.author.id)) return;
     if (message.member.roles.cache.some(role => config.ignoredRoles.includes(role.id))) return;
 

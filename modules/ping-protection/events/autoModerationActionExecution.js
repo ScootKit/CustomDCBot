@@ -1,4 +1,4 @@
-const { processPing } = require('../ping-protection');
+const { processPing, isWhitelistedChannel } = require('../ping-protection');
 
 // Handles auto mod actions
 module.exports.run = async function (client, execution) {
@@ -16,6 +16,8 @@ module.exports.run = async function (client, execution) {
     if (!originChannel && execution.channelId) {
         originChannel = await execution.guild.channels.fetch(execution.channelId).catch(() => null);
     }
+    if (isWhitelistedChannel(config, originChannel)) return;
+
     const memberToPunish = await execution.guild.members.fetch(execution.userId).catch(() => null);
 
     if (!isProtected && config.protectAllUsersWithProtectedRole) {
