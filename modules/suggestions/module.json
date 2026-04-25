@@ -8,19 +8,14 @@
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/suggestions",
   "commands-dir": "/commands",
   "models-dir": "/models",
+  "fa-icon": "far fa-lightbulb",
   "config-example-files": [
     "config.json"
   ],
   "tags": [
     "administration"
   ],
-  "humanReadableName": {
-    "en": "Suggestions",
-    "de": "Vorschläge"
-  },
+  "humanReadableName": "Suggestions",
   "events-dir": "/events",
-  "description": {
-    "en": "Advanced module to manage suggestions on your guild",
-    "de": "Modul mit vielen Funktionen, um Vorschläge auf deinem Discord zu managen"
-  }
+  "description": "Advanced module to manage suggestions on your guild"
 }

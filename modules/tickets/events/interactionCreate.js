@@ -5,7 +5,8 @@ const {
     messageLogToStringToPaste,
     embedType,
     formatDiscordUserName,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter
 } = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, interaction) {
@@ -50,27 +51,23 @@ module.exports.run = async function (client, interaction) {
             const logChannel = element.logChannel ? interaction.guild.channels.cache.get(element.logChannel) : client.logChannel;
             if (!logChannel) client.logger.error('[tickets] ' + localize('tickets', 'no-log-channel'));
             else {
+                const ticketEmbed = new MessageEmbed()
+                    .setColor(parseEmbedColor('DARK_GREEN'))
+                    .setTitle(localize('tickets', 'ticket-log-embed-title', {i: ticket.id}))
+                    .setAuthor({
+                        name: client.user.username,
+                        iconURL: client.user.avatarURL()
+                    })
+                    .addField(localize('tickets', 'ticket-with-user'), `<@${ticket.userID}>`, true)
+                    .addField(localize('tickets', 'ticket-type'), element.name, true)
+                    .addField(localize('tickets', 'ticket-log'), localize('tickets', 'ticket-log-value', {
+                        u: msgLog,
+                        n: ticket.msgCount
+                    }), true)
+                    .addField(localize('tickets', 'closed-by'), interaction.user.toString(), true);
+                safeSetFooter(ticketEmbed, client);
                 await logChannel.send({
-                    embeds: [
-                        new MessageEmbed()
-                            .setColor(parseEmbedColor('DARK_GREEN'))
-                            .setTitle(localize('tickets', 'ticket-log-embed-title', {i: ticket.id}))
-                            .setFooter({
-                                text: client.strings.footer,
-                                iconURL: client.strings.footerImgUrl
-                            })
-                            .setAuthor({
-                                name: client.user.username,
-                                iconURL: client.user.avatarURL()
-                            })
-                            .addField(localize('tickets', 'ticket-with-user'), `<@${ticket.userID}>`, true)
-                            .addField(localize('tickets', 'ticket-type'), element.name, true)
-                            .addField(localize('tickets', 'ticket-log'), localize('tickets', 'ticket-log-value', {
-                                u: msgLog,
-                                n: ticket.msgCount
-                            }), true)
-                            .addField(localize('tickets', 'closed-by'), interaction.user.toString(), true)
-                    ]
+                    embeds: [ticketEmbed]
                 });
             }
             setTimeout(() => {

@@ -3,7 +3,8 @@ const durationParser = require('parse-duration');
 const {
     formatDate,
     shuffleArray,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter
 } = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const {createQuiz} = require('../quizUtil');
@@ -158,9 +159,10 @@ module.exports.subcommands = {
         const embed = new MessageEmbed()
             .setTitle(moduleStrings.embed.leaderboardTitle)
             .setColor(parseEmbedColor(moduleStrings.embed.leaderboardColor))
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .setThumbnail(interaction.guild.iconURL())
             .addField(moduleStrings.embed.leaderboardSubtitle, leaderboardString);
+
+        safeSetFooter(embed, interaction.client);
 
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
 

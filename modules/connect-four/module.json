@@ -1,18 +1,13 @@
 {
   "name": "connect-four",
-  "humanReadableName": {
-    "en": "Connect Four",
-    "de": "Vier gewinnt"
-  },
+  "humanReadableName": "Connect Four",
+  "fa-icon": "fa-solid fa-table-cells",
   "author": {
     "scnxOrgID": "60",
     "name": "TomatoCake",
     "link": "https://github.com/DEVTomatoCake"
   },
-  "description": {
-    "en": "Let your users play Connect Four against each other!",
-    "de": "Lasse Nutzer auf deinem Server Vier gewinnt gegeneinander spielen"
-  },
+  "description": "Let your users play Connect Four against each other!",
   "commands-dir": "/commands",
   "noConfig": true,
   "releaseDate": "0",

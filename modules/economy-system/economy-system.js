@@ -188,7 +188,7 @@ async function createShopItem(interaction) {
             return resolve(localize('economy-system', 'role-to-high'));
         }
 
-        if(price<=0) {
+        if (price <= 0) {
             await interaction.editReply(localize('economy-system', 'price-less-than-zero'));
             return resolve(localize('economy-system', 'price-less-than-zero'));
         }
@@ -392,10 +392,10 @@ async function deleteShopItem(interaction) {
 }
 
 /**
-* Function to update a shop-item
-* @param {*} interaction Interaction
-* @returns {Promise}
-*/
+ * Function to update a shop-item
+ * @param {*} interaction Interaction
+ * @returns {Promise}
+ */
 async function updateShopItem(interaction) {
     return new Promise(async (resolve) => {
         const id = interaction.options.get('item-id')['value'];
@@ -427,7 +427,7 @@ async function updateShopItem(interaction) {
             return resolve(localize('economy-system', 'role-to-high'));
         }
 
-        if(newPrice !== null && newPrice<=0) {
+        if (newPrice !== null && newPrice <= 0) {
             await interaction.editReply(localize('economy-system', 'price-less-than-zero'));
             return resolve(localize('economy-system', 'price-less-than-zero'));
         }
@@ -441,7 +441,7 @@ async function updateShopItem(interaction) {
             if (collidingItem && collidingItem['id'] !== id) {
                 await interaction.editReply(embedType(interaction.client.configurations['economy-system']['strings']['itemDuplicate'], {
                     '%id%': id,
-                    '%name%': "-"
+                    '%name%': '-'
                 }));
                 return resolve(localize('economy-system', 'item-duplicate'));
             }
@@ -466,16 +466,16 @@ async function updateShopItem(interaction) {
         interaction.client.logger.info(`[economy-system] ` + localize('economy-system', 'edit-item', {
             u: interaction.user.tag,
             i: id,
-            n: newNameOption ? newNameOption['value'] : "-",
-            p: newPrice ? newPrice : "-",
-            r: newRole ? newRole['name'] : "-",
+            n: newNameOption ? newNameOption['value'] : '-',
+            p: newPrice ? newPrice : '-',
+            r: newRole ? newRole['name'] : '-'
         }));
         if (interaction.client.logChannel) await interaction.client.logChannel.send(`[economy-system] ` + localize('economy-system', 'edit-item', {
             u: interaction.user.tag,
             i: id,
-            n: newNameOption ? newNameOption['value'] : "-",
-            p: newPrice ? newPrice : "-",
-            r: newRole ? newRole['name'] : "-",
+            n: newNameOption ? newNameOption['value'] : '-',
+            p: newPrice ? newPrice : '-',
+            r: newRole ? newRole['name'] : '-'
         }));
         resolve(`Edited the item ${item.name} successfully`);
     });
@@ -589,10 +589,10 @@ async function leaderboard(client) {
             name: client.user.username,
             iconURL: client.user.avatarURL()
         })
-        .setFooter({
+        .setFooter(client.strings.footer ? {
             text: client.strings.footer,
             iconURL: client.strings.footerImgUrl
-        });
+        } : null);
 
     if (model.length !== 0) embed.addFields({
         name: 'Leaderboard:',

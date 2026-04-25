@@ -1,4 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
+const {embedType} = require('../../../src/functions/helpers');
 const {client} = require('../../../main');
 const {Op} = require('sequelize');
 const {channelMode, userAdd, userRemove, usersList, channelEdit} = require('../channel-settings');
@@ -15,7 +16,7 @@ module.exports.beforeSubcommand = async function (interaction) {
     });
 
     if (!vc) {
-        interaction.editReply(interaction.client.configurations['temp-channels']['config']['notInChannel']);
+        interaction.editReply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
         interaction.cancel = true;
     } else interaction.cancel = false;
 };

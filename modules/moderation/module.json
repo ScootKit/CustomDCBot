@@ -15,18 +15,14 @@
     "configs/antiSpam.json",
     "configs/antiGrief.json",
     "configs/antiJoinRaid.json",
-    "configs/verification.json"
+    "configs/verification.json",
+    "configs/lockdown.json"
   ],
+  "fa-icon": "fas fa-hammer",
   "tags": [
     "moderation"
   ],
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/moderation",
-  "humanReadableName": {
-    "en": "Moderation & Security",
-    "de": "Moderation & Sicherheit"
-  },
-  "description": {
-    "en": "Advanced security- and moderation-system with tons of features",
-    "de": "Fortgeschrittenes Moderation- und Sicherheit-System mit vielen Funktionen"
-  }
+  "humanReadableName": "Moderation & Security",
+  "description": "Advanced security- and moderation-system with tons of features"
 }

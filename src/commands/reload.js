@@ -8,15 +8,16 @@ module.exports.run = async function (interaction) {
         ephemeral: true,
         content: localize('reload', 'reloading-config')
     });
-    if (interaction.client.logChannel) interaction.client.logChannel.send('🔄 ' + localize('reload', 'reloading-config-with-name', {tag: formatDiscordUserName(interaction.user)})).then(() => {
+    if (interaction.client.logChannel) interaction.client.logChannel.send('🔄 ' + localize('reload', 'reloading-config-with-name', {tag: formatDiscordUserName(interaction.user)})).catch(() => {
     });
     await reloadConfig(interaction.client).catch((async reason => {
-        if (interaction.client.logChannel) interaction.client.logChannel.send('⚠️️ ' + localize('reload', 'reload-failed')).then(() => {
+        if (interaction.client.logChannel) interaction.client.logChannel.send('⚠️️ ' + localize('reload', 'reload-failed')).catch(() => {
         });
         await interaction.editReply({content: localize('reload', 'reload-failed-message', {reason})});
         process.exit(0);
+        ;
     })).then(async (res) => {
-        if (interaction.client.logChannel) interaction.client.logChannel.send('✅ ' + localize('reload', 'reloaded-config', res)).then(() => {
+        if (interaction.client.logChannel) interaction.client.logChannel.send('✅ ' + localize('reload', 'reloaded-config', res)).catch(() => {
         });
         await interaction.editReply(localize('reload', 'reload-successful-syncing-commands'));
         await syncCommandsIfNeeded();

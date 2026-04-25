@@ -5,6 +5,7 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
+  "fa-icon": "fa-regular fa-trash-can",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-delete",
   "events-dir": "/events",
   "config-example-files": [
@@ -14,12 +15,6 @@
   "tags": [
     "administration"
   ],
-  "humanReadableName": {
-    "en": "Auto-Message-Delete",
-    "de": "Automatisches Löschen"
-  },
-  "description": {
-    "en": "This module allows you to delete messages from a channel after a specified timeout to keep your channel clean",
-    "de": "Halte deine Channel sauber, in dem du alle Nachrichten nach einem bestimmten Intervall in einem Channel löschst"
-  }
+  "humanReadableName": "Auto-Message-Delete",
+  "description": "This module allows you to delete messages from a channel after a specified timeout to keep your channel clean"
 }

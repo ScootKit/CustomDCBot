@@ -1,5 +1,6 @@
 {
   "name": "channel-stats",
+  "fa-icon": "fas fa-stream",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -13,12 +14,6 @@
     "administration"
   ],
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/channel-stats",
-  "humanReadableName": {
-    "en": "Channel-Stats",
-    "de": "Channel-Statistiken"
-  },
-  "description": {
-    "en": "Create channels containing stats about your server - updated automatically.",
-    "de": "Modul, um Channel mit automatisch aktualisierenden Namen mit Statistiken zu erstellen"
-  }
+  "humanReadableName": "Channel-Stats",
+  "description": "Create channels containing stats about your server - updated automatically."
 }

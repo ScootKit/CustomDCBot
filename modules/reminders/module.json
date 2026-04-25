@@ -1,18 +1,12 @@
 {
   "name": "reminders",
-  "humanReadableName": {
-    "en": "Reminders",
-    "de": "Erinnerungen"
-  },
+  "humanReadableName": "Reminders",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": {
-    "en": "Let users set reminders for themselves - either via DMs or Channels",
-    "de": "Erlaubt es deinen Nutzer Erinnerungen für sich selbst zu setzen - entweder per PNs oder direkt in den Kanal"
-  },
+  "description": "Let users set reminders for themselves - either via DMs or Channels",
   "commands-dir": "/commands",
   "events-dir": "/events",
   "config-example-files": [
@@ -22,5 +16,6 @@
     "community"
   ],
   "models-dir": "/models",
+  "fa-icon": "far fa-bell",
   "holidayGift": true
 }

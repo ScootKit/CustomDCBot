@@ -24,7 +24,7 @@ module.exports.run = async function (client) {
                     type: activityTypes[moduleConf['activityType']],
                     url: (moduleConf['streamingLink'] && moduleConf.activityType === 'STREAMING') ? moduleConf['streamingLink'] : null
                 });
-        }, moduleConf.interval < 5 ? 5000 : moduleConf.interval * 1000); // At least 5 seconds to prevent rate limiting
+        }, Math.min(moduleConf.interval < 5 ? 5000 : moduleConf.interval * 1000, 0x7FFFFFFF)); // At least 5 seconds to prevent rate limiting
         client.intervals.push(interval);
     }
 

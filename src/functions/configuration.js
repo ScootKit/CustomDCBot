@@ -13,6 +13,26 @@ const {
 const {localize} = require('./localize');
 const isEqual = require('is-equal');
 
+// Config localization: load external translation files (cached)
+const configLocalizationCache = {};
+
+function loadConfigLocalization(locale) {
+    if (configLocalizationCache[locale]) return configLocalizationCache[locale];
+    try {
+        configLocalizationCache[locale] = JSON.parse(fs.readFileSync(`${__dirname}/../../config-localizations/${locale}.json`, 'utf-8'));
+    } catch (e) {
+        configLocalizationCache[locale] = {};
+    }
+    return configLocalizationCache[locale];
+}
+
+function isLocalizedObject(value) {
+    if (value === null || value === undefined) return false;
+    if (typeof value !== 'object' || Array.isArray(value)) return false;
+    if (!('en' in value)) return false;
+    return Object.keys(value).every(k => /^[a-z]{2,3}$/.test(k));
+}
+
 const channelTypeMap = {
     GUILD_TEXT: ChannelType.GuildText,
     GUILD_CATEGORY: ChannelType.GuildCategory,
@@ -81,6 +101,24 @@ async function checkConfigFile(file, moduleName) {
             return reject(`Not found config example file: ${file}`);
         }
         if (!exampleFile) return;
+        const locScope = builtIn ? '_core' : moduleName;
+        const locFileName = exampleFile.filename.replace('.json', '');
+
+        function resolveDefault(field) {
+            if (isLocalizedObject(field.default)) {
+                return field.default[client.locale] || field.default['en'];
+            }
+            if (['string', 'emoji', 'imgURL'].includes(field.type) && client.locale && client.locale !== 'en') {
+                const locData = loadConfigLocalization(client.locale);
+                const fileLocData = locData[locScope] && locData[locScope][locFileName];
+                if (fileLocData && fileLocData.content && fileLocData.content[field.name] &&
+                    fileLocData.content[field.name].default !== undefined) {
+                    return fileLocData.content[field.name].default;
+                }
+            }
+            return field.default;
+        }
+
         let forceOverwrite = false;
         let configData = exampleFile.configElements ? [] : {};
         try {
@@ -98,7 +136,6 @@ async function checkConfigFile(file, moduleName) {
             if (typeof configData === 'object') configData = [configData];
             else configData = [];
         }
-        if (exampleFile.elementLimits) configData = require('./scnx-integration').verifyLimitedConfigElementFile(client, exampleFile, configData);
 
         let skipOverwrite = false;
         if (exampleFile.skipContentCheck) newConfig = configData;
@@ -110,12 +147,12 @@ async function checkConfigFile(file, moduleName) {
                     const dependsOnNotField = field.dependsOnNot ? exampleFile.content.find(f => f.name === field.dependsOnNot) : null;
                     if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
                     if (field.dependsOnNot && !dependsOnNotField) return reject(`Depends-On-Field ${field.dependsOnNotField} does not exist.`);
-                    if (dependsOnField && !(typeof object[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : object[dependsOnField.name])) {
-                        objectData[field.name] = configData[field.name] || (field.default[client.locale] || field.default['en']); // Otherwise disabled fields may be overwritten
+                    if (dependsOnField && !(typeof object[dependsOnField.name] === 'undefined' ? resolveDefault(dependsOnField) : object[dependsOnField.name])) {
+                        objectData[field.name] = configData[field.name] || resolveDefault(field); // Otherwise disabled fields may be overwritten
                         continue;
                     }
-                    if (dependsOnNotField && (typeof object[dependsOnNotField.name] === 'undefined' ? (dependsOnNotField.default[client.locale] || dependsOnNotField.default['en']) : object[dependsOnNotField.name])) {
-                        objectData[field.name] = configData[field.name] || (field.default[client.locale] || field.default['en']); // Otherwise disabled fields may be overwritten
+                    if (dependsOnNotField && (typeof object[dependsOnNotField.name] === 'undefined' ? resolveDefault(dependsOnNotField) : object[dependsOnNotField.name])) {
+                        objectData[field.name] = configData[field.name] || resolveDefault(field); // Otherwise disabled fields may be overwritten
                         continue;
                     }
                     try {
@@ -127,15 +164,18 @@ async function checkConfigFile(file, moduleName) {
                 newConfig.push(objectData);
             }
         } else {
+            const elementToggleField = exampleFile.content.find(f => f.elementToggle);
+            const elementToggleValue = elementToggleField ? !!(typeof configData[elementToggleField.name] === 'undefined' ? resolveDefault(elementToggleField) : configData[elementToggleField.name]) : true;
+            if (!elementToggleValue) skipOverwrite = true;
             for (const field of exampleFile.content) {
-                if (exampleFile.content.find(f => f.elementToggle) && !configData[exampleFile.content.find(f => f.elementToggle).name]) {
-                    skipOverwrite = true;
+                if (!elementToggleValue) {
+                    newConfig[field.name] = configData[field.name] !== undefined ? configData[field.name] : resolveDefault(field);
                     continue;
                 }
                 const dependsOnField = field.dependsOn ? exampleFile.content.find(f => f.name === field.dependsOn) : null;
                 if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
-                if (dependsOnField && !(typeof configData[dependsOnField.name] === 'undefined' ? (dependsOnField.default[client.locale] || dependsOnField.default['en']) : configData[dependsOnField.name])) {
-                    newConfig[field.name] = configData[field.name] || (field.default[client.locale] || field.default['en']); // Otherwise disabled fields may be overwritten
+                if (dependsOnField && !(typeof configData[dependsOnField.name] === 'undefined' ? resolveDefault(dependsOnField) : configData[dependsOnField.name])) {
+                    newConfig[field.name] = configData[field.name] || resolveDefault(field); // Otherwise disabled fields may be overwritten
                     continue;
                 }
                 try {
@@ -157,16 +197,20 @@ async function checkConfigFile(file, moduleName) {
             const field = {...fieldData};
             return new Promise(async (res, rej) => {
                 if (!field.name) return rej('missing fieldname.');
-                if (typeof field.default === 'undefined' || typeof field.default.en === 'undefined') {
-                    console.log(field.default);
+                if (typeof field.default === 'undefined') {
                     return rej('Missing default value on ' + field.name);
                 }
-                if (typeof field.default !== 'object') return rej(`${field.name} has an invalid default value. The default value needs to be localized. A possible fix could be: default = "${JSON.stringify({en: field.default})}". If you want a default value for all languages, only set the "en" key.`);
-                field.default = field.default[client.locale] || field.default['en'];
+                if (isLocalizedObject(field.default)) {
+                    // Old format: {en: ..., de: ...} — backwards compatible
+                    field.default = field.default[client.locale] || field.default['en'];
+                } else {
+                    // New format: plain value — resolve locale from external file
+                    field.default = resolveDefault(field);
+                }
                 if (typeof fieldValue === 'undefined') {
                     fieldValue = field.default;
                     return res(fieldValue);
-                } else if (field.type === 'keyed' && field.disableKeyEdits) for (const key in field.default) if (typeof fieldValue[key] === 'undefined') fieldValue[key] = field.default[key];
+                } else if (field.type === 'keyed' && field.disableKeyEdits) for (const key in field.default) if (fieldValue[key] == null) fieldValue[key] = field.default[key];
                 if (field.allowNull && field.type !== 'boolean' && !fieldValue) return res(fieldValue);
                 if (!await checkType(field, fieldValue)) {
                     if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
@@ -192,7 +236,7 @@ async function checkConfigFile(file, moduleName) {
                         if (typeof field.default[key] === 'undefined') delete fieldValue[key];
                     }
                     for (const key in field.default) {
-                        if (typeof fieldValue[key] === 'undefined') fieldValue[key] = field.default[key];
+                        if (fieldValue[key] == null) fieldValue[key] = field.default[key];
                     }
                 }
                 if (client.scnxSetup) fieldValue = require('./scnx-integration').setFieldValue(client, field, fieldValue);
@@ -236,6 +280,8 @@ async function checkModuleConfig(moduleName, afterCheckEventFile = null) {
 }
 
 module.exports.loadAllConfigs = loadAllConfigs;
+module.exports.loadConfigLocalization = loadConfigLocalization;
+module.exports.isLocalizedObject = isLocalizedObject;
 
 /**
  * Check type of one field

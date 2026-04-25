@@ -229,7 +229,8 @@ module.exports.run = async function (interaction) {
 
     const collector = msg.createMessageComponentCollector({
         componentType: ComponentType.Button,
-        filter: i => i.user.id === interaction.user.id || i.user.id === member.id
+        filter: i => i.user.id === interaction.user.id || i.user.id === member.id,
+        time: 600000
     });
     collector.on('collect', i => {
         if ((color === 'blue' && i.user.id !== interaction.user.id) || (color === 'red' && i.user.id !== member.id)) return i.reply({
@@ -263,6 +264,10 @@ module.exports.run = async function (interaction) {
                 return i.update(gameMessage(grid, fieldSize, color, user, member.user.username, interaction.user.username));
             }
         }
+    });
+    collector.on('end', (_, reason) => {
+        if (reason === 'time') msg.edit({components: []}).catch(() => {
+        });
     });
 };
 

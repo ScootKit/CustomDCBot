@@ -1,242 +1,153 @@
 {
-  "description": {
-    "en": "Manage the basic settings of this module here",
-    "de": "Passe die grundlegenden Optionen des Modules hier an"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Manage the basic settings of this module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "give-roles-on-join",
-      "humanName": {
-        "en": "Give roles on join",
-        "de": "Nutzer Rollen beim Beitreten geben"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Roles to give to a new member",
-        "de": "Rollen, die neuen Mitgliedern gegeben werden sollen"
-      },
+      "humanName": "Give roles on join",
+      "default": [],
+      "description": "Roles to give to a new member",
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "roles"
     },
     {
       "name": "assign-roles-immediately",
-      "humanName": {
-        "en": "Immediately give roles, instead of waiting for rules acceptance?",
-        "de": "Rollen sofort geben statt Regelbestätigung abzuwarten?"
-      },
-      "default": {
-        "en": true
-      },
-      "description": {
-        "en": "If enabled, roles will be granted immediately when a user joins your server. Otherwise, no roles will be assigned to users before they complete the Discord onboarding.",
-        "de": "Wenn aktiviert, werden die Rollen sofort vergeben, wenn ein Nutzer deinem Server beitritt. Ansonsten werden Rollen erst zugewiesen, wenn das Discord onboarding abgeschlossen wurde."
-      },
-      "type": "boolean"
+      "humanName": "Immediately give roles, instead of waiting for rules acceptance?",
+      "default": true,
+      "description": "If enabled, roles will be granted immediately when a user joins your server. Otherwise, no roles will be assigned to users before they complete the Discord onboarding.",
+      "type": "boolean",
+      "category": "roles"
     },
     {
       "name": "not-send-messages-if-member-is-bot",
-      "humanName": {
-        "en": "Ignore bots?",
-        "de": "Bots ignorieren?"
-      },
-      "default": {
-        "en": true,
-        "de": true
-      },
-      "description": {
-        "en": "Should bots get ignored when they join (or leave) the server",
-        "de": "Sollen Bots ignoriert werden, wenn sie den Server beitreten (oder diesen verlassen)"
-      },
-      "type": "boolean"
+      "humanName": "Ignore bots?",
+      "default": true,
+      "description": "Should bots get ignored when they join (or leave) the server",
+      "type": "boolean",
+      "category": "welcome"
     },
     {
       "name": "give-roles-on-boost",
-      "humanName": {
-        "de": "Zusätzliche Rollen beim Boost geben",
-        "en": "Give additional roles to boosters"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Roles to give to members who boosts the server",
-        "de": "Rollen, die Booster haben sollen"
-      },
+      "humanName": "Give additional roles to boosters",
+      "default": [],
+      "description": "Roles to give to members who boosts the server",
       "type": "array",
-      "content": "roleID"
+      "content": "roleID",
+      "category": "boost"
     },
     {
       "name": "delete-welcome-message",
-      "humanName": {
-        "en": "Delete welcome message",
-        "de": "Willkommensnachricht löschen"
-      },
-      "default": {
-        "en": true
-      },
-      "description": {
-        "en": "Should their welcome message be deleted, if a user leaves the server within 7 days",
-        "de": "Soll die Willkommensnachricht eines Nutzers, der den Server innerhalb von 7 Tagen wieder verlässt gelöscht werden"
-      },
-      "type": "boolean"
+      "humanName": "Delete welcome message",
+      "default": true,
+      "description": "Should their welcome message be deleted, if a user leaves the server within 7 days",
+      "type": "boolean",
+      "category": "welcome"
     },
     {
       "name": "sendDirectMessageOnJoin",
-      "humanName": {
-        "en": "Send DM on join? (often experienced by users as spam)",
-        "de": "PN beim Beitreten schicken? (von Nutzern oft als Spam empfunden)"
-      },
+      "humanName": "Send DM on join? (often experienced by users as spam)",
       "type": "boolean",
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, a DM will be sent to new users. This is often experienced by them as spam and can decrease your new user retention metrics. Please note that not all users will receive this DM, as a huge chunk has DMs disabled.",
-        "de": "Wenn aktiviert, wird eine PN an neue Nutzer gesendet. Das wird often als Spam empfunden und kann die Anzahl an Nutzern erhöhen, die direkt nach dem Beitritt deinen Server verlassen. Bitte beachte, dass nicht alle Nutzer diese PN erhalten werden, da eine großer Anzahl diese deaktiviert hat."
-      }
+      "default": false,
+      "description": "If enabled, a DM will be sent to new users. This is often experienced by them as spam and can decrease your new user retention metrics. Please note that not all users will receive this DM, as a huge chunk has DMs disabled.",
+      "category": "welcome"
     },
     {
       "name": "joinDM",
       "dependsOn": "sendDirectMessageOnJoin",
-      "humanName": {
-        "en": "Join DM Message",
-        "de": "Beitritt PN Nachricht"
-      },
+      "humanName": "Join DM Message",
       "allowGeneratedImage": true,
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Message that should get send to new users via DMs",
-        "de": "Nachricht, die an neue Nutzer per PN geschickt werden soll"
-      },
+      "default": "",
+      "description": "Message that should get send to new users via DMs",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "mention",
-          "description": {
-            "en": "Mentions the user",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mentions the user"
         },
         {
           "name": "memberProfilePictureUrl",
-          "description": {
-            "en": "URL of the user's avatar",
-            "de": "URL zum Avatar des Nutzers"
-          },
+          "description": "URL of the user's avatar",
           "isImage": true
         },
         {
           "name": "servername",
-          "description": {
-            "en": "Name of the guild",
-            "de": "Servername"
-          }
+          "description": "Name of the guild"
         },
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the user"
         },
         {
           "name": "createdAt",
-          "description": {
-            "en": "Date when account was created",
-            "de": "Datum an dem der Account erstellt wurde"
-          }
+          "description": "Date when account was created"
         },
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the user"
         },
         {
           "name": "memberProfilePictureUrl",
-          "description": {
-            "en": "URL of the user's avatar",
-            "de": "URL zum Avatar des Nutzers"
-          },
+          "description": "URL of the user's avatar",
           "isImage": true
         },
         {
           "name": "joinedAt",
-          "description": {
-            "en": "Date when user joined guild",
-            "de": "Datum, an dem der Nutzer den Server betreten hat"
-          }
+          "description": "Date when user joined guild"
         },
         {
           "name": "guildUserCount",
-          "description": {
-            "en": "Count of users on the guild",
-            "de": "Anzahl von Nutzern auf dem Server"
-          }
+          "description": "Count of users on the guild"
         },
         {
           "name": "guildMemberCount",
-          "description": {
-            "en": "Count of members (without bots) on the guild",
-            "de": "Anzahl von Nutzern auf dem Server"
-          }
+          "description": "Count of members (without bots) on the guild"
         },
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user who boosted",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mention of the user who boosted"
         },
         {
           "name": "boostCount",
-          "description": {
-            "en": "Total count of boosts",
-            "de": "Gesamte Anzahl an Boosts"
-          }
+          "description": "Total count of boosts"
         },
         {
           "name": "guildLevel",
-          "description": {
-            "en": "Boost-Level of the guild after the boost",
-            "de": "Boost-Level nach dem Boost"
-          }
+          "description": "Boost-Level of the guild after the boost"
         },
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user who unboosted",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mention of the user who unboosted"
         },
         {
           "name": "boostCount",
-          "description": {
-            "en": "Total count of boosts",
-            "de": "Gesamte Anzahl an Boosts"
-          }
+          "description": "Total count of boosts"
         },
         {
           "name": "guildLevel",
-          "description": {
-            "en": "Boost-Level of the guild after the unboost",
-            "de": "Boost-Level nach dem Boost"
-          }
+          "description": "Boost-Level of the guild after the unboost"
         }
-      ]
+      ],
+      "category": "welcome"
+    }
+  ],
+  "categories": [
+    {
+      "id": "welcome",
+      "icon": "fas fa-door-open",
+      "displayName": "Welcome"
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": "Auto-Roles"
+    },
+    {
+      "id": "boost",
+      "icon": "fas fa-star",
+      "displayName": "Boosts"
     }
   ]
 }

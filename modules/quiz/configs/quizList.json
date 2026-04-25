@@ -1,74 +1,36 @@
 {
-  "description": {
-    "en": "Create and edit the quizzes of the server",
-    "de": "Erstelle und bearbeite hier die Quiz des Servers"
-  },
-  "humanName": {
-    "en": "Edit quiz",
-    "de": "Quiz bearbeiten"
-  },
+  "description": "Create and edit the quizzes of the server",
+  "humanName": "Edit quiz",
   "configElements": true,
   "filename": "quizList.json",
   "content": [
     {
       "name": "description",
-      "humanName": {
-        "en": "Question or statement",
-        "de": "Frage oder Behauptung"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Title/Question of the quiz",
-        "de": "Titel/Frage des Quiz"
-      },
+      "humanName": "Question or statement",
+      "default": "",
+      "description": "Title/Question of the quiz",
       "type": "string"
     },
     {
       "name": "duration",
-      "humanName": {
-        "en": "Time limit",
-        "de": "Zeitlimit"
-      },
-      "default": {
-        "en": "1m"
-      },
-      "description": {
-        "en": "How much time the user has to answer",
-        "de": "Wie viel Zeit der Nutzer zum Beantworten hat"
-      },
+      "humanName": "Time limit",
+      "default": "1m",
+      "description": "How much time the user has to answer",
       "type": "string"
     },
     {
       "name": "correctOptions",
-      "humanName": {
-        "en": "Correct answers",
-        "de": "Richtige Antworten"
-      },
-      "default": {
-        "en": []
-      },
-      "description": {
-        "en": "Correct answers",
-        "de": "Richtige Antworten"
-      },
+      "humanName": "Correct answers",
+      "default": [],
+      "description": "Correct answers",
       "type": "array",
       "content": "string"
     },
     {
       "name": "wrongOptions",
-      "humanName": {
-        "en": "Wrong answers",
-        "de": "Falsche Antworten"
-      },
-      "default": {
-        "en": []
-      },
-      "description": {
-        "en": "Wrong answers",
-        "de": "Falsche Antworten"
-      },
+      "humanName": "Wrong answers",
+      "default": [],
+      "description": "Wrong answers",
       "type": "array",
       "content": "string"
     }

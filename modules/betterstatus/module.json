@@ -5,7 +5,9 @@
     "link": "https://github.com/SCDerox",
     "scnxOrgID": "1"
   },
+  "fa-icon": "far fa-user-circle",
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/betterstatus",
+  "commands-dir": "/commands",
   "events-dir": "/events",
   "config-example-files": [
     "config.json"
@@ -13,11 +15,6 @@
   "tags": [
     "bot"
   ],
-  "humanReadableName": {
-    "en": "Betterstatus"
-  },
-  "description": {
-    "en": "Give you more features to make your status even better - change it when someone joins, change it every x seconds and more!",
-    "de": "Mache den Status deines Bots noch besser - Nutze Variablen, Intervalle und vieles mehr!"
-  }
+  "humanReadableName": "Betterstatus",
+  "description": "Give you more features to make your status even better - change it when someone joins, change it every x seconds and more!"
 }

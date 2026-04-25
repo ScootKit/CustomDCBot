@@ -1,4 +1,9 @@
-const {embedTypeV2, disableModule, formatDiscordUserName} = require('../../src/functions/helpers');
+const {
+    embedTypeV2,
+    disableModule,
+    formatDiscordUserName,
+    archiveDiscordAttachment
+} = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 const {Op} = require('sequelize');
 
@@ -70,7 +75,15 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false) => 
         return;
     }
 
-    let image = msg.attachments.size > 0 ? msg.attachments.first().url : null;
+    let image = null;
+    if (msg.attachments.size > 0) {
+        const firstAttachment = msg.attachments.first();
+        image = await archiveDiscordAttachment(client, firstAttachment.url, {
+            displayName: `Starboard post by ${formatDiscordUserName(msg.author)} in #${msg.channel.name}`.slice(0, 100),
+            tags: ['starboard'],
+            uploaderDiscordID: msg.author.id
+        });
+    }
     if (!image) {
         const matches = msg.content.match(/https?:\/\/.*\.(?:png|jpg|gif|jpeg|webp)/i);
         if (matches) image = matches[0];

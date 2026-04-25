@@ -1,0 +1,107 @@
+{
+  "filename": "reviews.json",
+  "humanName": "Staff Reviews",
+  "description": "Configure the staff rating system and feedback channels.",
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fas fa-gears",
+      "displayName": "Settings"
+    },
+    {
+      "id": "messages",
+      "icon": "fa fa-messages",
+      "displayName": "Notifications"
+    }
+  ],
+  "content": [
+    {
+      "name": "enableReviews",
+      "category": "settings",
+      "humanName": "Enable Reviews System",
+      "description": "Enabling this unlocks the staff review system, allowing users to submit ratings and feedback for staff members.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "reviewLogChannel",
+      "category": "settings",
+      "humanName": "Reviews Log Channel",
+      "description": "Channel where new reviews are posted.",
+      "type": "channelID",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": ""
+    },
+    {
+      "name": "allowSelfRating",
+      "category": "settings",
+      "humanName": "Allow Self-Rating?",
+      "description": "If enabled, staff can review themselves. This is not recommended to keep a fair ratings system.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "onlyAllowStaffReview",
+      "category": "settings",
+      "humanName": "Only let users review staff",
+      "description": "If enabled, only staff members can review other staff members.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "ratingMessage",
+      "category": "messages",
+      "humanName": "Review Message",
+      "description": "The message sent when a review is submitted.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "staff-mention",
+          "description": "Mention of the staff member"
+        },
+        {
+          "name": "reviewer-mention",
+          "description": "Mention of the reviewer"
+        },
+        {
+          "name": "stars",
+          "description": "Amount of stars rated in emoji's (⭐⭐⭐⭐⭐)"
+        },
+        {
+          "name": "rating",
+          "description": "Amount of stars rated in text (1-5)"
+        },
+        {
+          "name": "comment",
+          "description": "The review's text"
+        },
+        {
+          "name": "staff-avatar",
+          "description": "The staff member's profile picture (URL)",
+          "isImage": true
+        },
+        {
+          "name": "reviewer-avatar",
+          "description": "The reviewer's profile picture (URL)",
+          "isImage": true
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%staff%",
+        "embeds": [
+          {
+            "title": "🌟 New Staff Rating",
+            "description": "**Staff:** %staff-mention%\n**Rated by:** %reviewer-mention%\n\n**Rating:** %stars% (%rating%/5)\n**Comment:**\n%comment%",
+            "color": "#f1c40f",
+            "thumbnailURL": "%staff-avatar%"
+          }
+        ]
+      }
+    }
+  ]
+}

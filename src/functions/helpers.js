@@ -117,6 +117,15 @@ function getGlobalArgs() {
         globalArgs['%guildID%'] = guild.id;
         globalArgs['%guildIcon%'] = guild.iconURL() || '';
     }
+    const now = new Date();
+    globalArgs['%timestamp%'] = dateToDiscordTimestamp(now);
+    globalArgs['%shortTime%'] = dateToDiscordTimestamp(now, 't');
+    globalArgs['%longTime%'] = dateToDiscordTimestamp(now, 'T');
+    globalArgs['%shortDate%'] = dateToDiscordTimestamp(now, 'd');
+    globalArgs['%longDate%'] = dateToDiscordTimestamp(now, 'D');
+    globalArgs['%shortDateTime%'] = dateToDiscordTimestamp(now, 'f');
+    globalArgs['%longDateTime%'] = dateToDiscordTimestamp(now, 'F');
+    globalArgs['%relativeTime%'] = dateToDiscordTimestamp(now, 'R');
     return globalArgs;
 }
 
@@ -195,7 +204,7 @@ function embedType(input, args = {}, optionsToKeep = {}, mergeComponentsRows = [
         let footer = null;
         if (!embedData.footer?.disabled) {
             const footerText = inputReplacer(args, embedData.footer?.text, true) || (client.strings && client.strings.footer);
-            const footerIconURL = embedData.footer?.iconURL || (client.strings && client.strings.footerImgUrl);
+            const footerIconURL = (embedData.footer?.iconURL || (client.strings && client.strings.footerImgUrl) || '').trim() || undefined;
             // Only create footer object if we have valid text
             if (footerText && footerText.trim().length > 0) {
                 footer = {
@@ -207,22 +216,22 @@ function embedType(input, args = {}, optionsToKeep = {}, mergeComponentsRows = [
         const fields = [];
 
         for (const fieldData of embedData.fields || []) fields.push({
-            name: inputReplacer(args, fieldData.name, true) || '\u200B',
-            value: inputReplacer(args, fieldData.value, true) || '\u200B',
+            name: truncate(inputReplacer(args, fieldData.name, true) || '\u200B', 256),
+            value: truncate(inputReplacer(args, fieldData.value, true) || '\u200B', 1024),
             inline: fieldData.inline
         });
 
         const embed = new MessageEmbed({
-            title: inputReplacer(args, embedData.title, true),
-            description: inputReplacer(args, embedData.description, true),
+            title: truncate(inputReplacer(args, embedData.title, true) || '', 256) || undefined,
+            description: truncate(inputReplacer(args, embedData.description, true) || '', 4096) || undefined,
             color: parseColor(embedData.color),
-            thumbnail: embedData.thumbnailURL ? {url: inputReplacer(args, embedData.thumbnailURL)} : null,
-            image: embedData.imageURL ? {url: inputReplacer(args, embedData.imageURL)} : null,
+            thumbnail: inputReplacer(args, embedData.thumbnailURL)?.trim() ? {url: inputReplacer(args, embedData.thumbnailURL).trim()} : null,
+            image: inputReplacer(args, embedData.imageURL)?.trim() ? {url: inputReplacer(args, embedData.imageURL).trim()} : null,
             timestamp: (embedData.footer?.hideTime || embedData.footer?.disabled || client.strings.disableFooterTimestamp) ? null : new Date(),
             author: embedData.author?.name ? {
-                name: inputReplacer(args, embedData.author.name),
-                iconURL: inputReplacer(args, embedData.author.imageURL, null),
-                url: inputReplacer(args, embedData.author.url, null)
+                name: truncate(inputReplacer(args, embedData.author.name), 256),
+                iconURL: inputReplacer(args, embedData.author.imageURL, null)?.trim() || null,
+                url: inputReplacer(args, embedData.author.url, null)?.trim() || null
             } : null,
             footer,
             fields
@@ -232,7 +241,7 @@ function embedType(input, args = {}, optionsToKeep = {}, mergeComponentsRows = [
 
     optionsToKeep.files = [...(optionsToKeep.files || [])];
     for (const url of input.attachmentURLs || []) {
-        optionsToKeep.files.push({attachment: url});
+        if (url && url.trim()) optionsToKeep.files.push({attachment: url.trim()});
     }
 
     if (optionsToKeep.components) optionsToKeep.components = optionsToKeep.components.map(c => (typeof c.toJSON === 'function' ? c.toJSON() : c)); // polyfill for djs migration
@@ -250,19 +259,22 @@ function embedTypeSchemaV2(input, args = {}, optionsToKeep = {}, mergeComponents
     if (client.scnxSetup) input = require('./scnx-integration').verifyEmbedType(client, input);
     if (input.title || input.description || (input.author || {}).name || input.image) {
         const emb = new MessageEmbed();
-        if (input['title']) emb.setTitle(inputReplacer(args, input['title']));
-        if (input['description']) emb.setDescription(inputReplacer(args, input['description']));
+        if (input['title']) emb.setTitle(truncate(inputReplacer(args, input['title']), 256));
+        if (input['description']) emb.setDescription(truncate(inputReplacer(args, input['description']), 4096));
         if (input['color']) emb.setColor(parseColor(input['color']));
-        if (input['url']) emb.setURL(input['url']);
-        if ((input['image'] || '').replaceAll(' ', '')) emb.setImage(inputReplacer(args, input['image']));
-        if ((input['thumbnail'] || '').replaceAll(' ', '')) emb.setThumbnail(inputReplacer(args, input['thumbnail']));
+        const resolvedURL = inputReplacer(args, input['url'])?.trim();
+        if (resolvedURL) emb.setURL(resolvedURL);
+        const resolvedImage = inputReplacer(args, input['image'])?.trim();
+        if (resolvedImage) emb.setImage(resolvedImage);
+        const resolvedThumbnail = inputReplacer(args, input['thumbnail'])?.trim();
+        if (resolvedThumbnail) emb.setThumbnail(resolvedThumbnail);
         if (input['author'] && typeof input['author'] === 'object' && (input['author'] || {}).name) emb.setAuthor({
-            name: inputReplacer(args, input['author']['name']),
-            iconURL: (input['author']['img'] || '').replaceAll(' ', '') ? inputReplacer(args, input['author']['img']) : null
+            name: truncate(inputReplacer(args, input['author']['name']), 256),
+            iconURL: (input['author']['img'] || '').trim() ? inputReplacer(args, input['author']['img']).trim() : null
         });
         if (typeof input['fields'] === 'object') {
             input.fields.forEach(f => {
-                emb.addField(inputReplacer(args, f['name']), inputReplacer(args, f['value']), f['inline']);
+                emb.addField(truncate(inputReplacer(args, f['name']), 256), truncate(inputReplacer(args, f['value']), 1024), f['inline']);
             });
         }
         if (!client.strings.disableFooterTimestamp && !input.embedTimestamp) emb.setTimestamp();
@@ -270,7 +282,7 @@ function embedTypeSchemaV2(input, args = {}, optionsToKeep = {}, mergeComponents
 
         // Safely set footer with null checks
         const footerText = input.footer ? inputReplacer(args, input.footer) : (client.strings && client.strings.footer);
-        const footerIconURL = input.footerImgUrl || (client.strings && client.strings.footerImgUrl);
+        const footerIconURL = (input.footerImgUrl || (client.strings && client.strings.footerImgUrl) || '').trim() || undefined;
         if (footerText && footerText.trim().length > 0) {
             emb.setFooter({
                 text: footerText,
@@ -360,10 +372,10 @@ function buildV4Button(comp, args) {
             btn.setCustomId(`disabled-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`);
         } else if (action.type === 'linkButton') {
             btn.setStyle(ButtonStyle.Link);
-            if (comp.url) btn.setURL(inputReplacer(args, comp.url));
+            if (comp.url) btn.setURL(inputReplacer(args, comp.url).trim());
         }
     } else if (style === 5 && comp.url) {
-        btn.setURL(inputReplacer(args, comp.url));
+        btn.setURL(inputReplacer(args, comp.url).trim());
     } else if (comp.custom_id) {
         btn.setCustomId(comp.custom_id);
     }
@@ -379,16 +391,16 @@ function buildV4Button(comp, args) {
  * @returns {StringSelectMenuBuilder|null} Built select menu or null if invalid
  * @private
  */
-function buildV4StringSelect(comp, args) {
+function buildV4StringSelect(comp, args, counters) {
     if (!Array.isArray(comp.options) || comp.options.length === 0) return null;
 
     const select = new StringSelectMenuBuilder();
 
     if (comp.scnx_action) {
         if (comp.scnx_action.type === 'roleElement') {
-            select.setCustomId('select-roles');
+            select.setCustomId(`select-roles-${counters ? counters.roleSelect++ : 0}`);
         } else if (comp.scnx_action.type === 'customCommandElement') {
-            select.setCustomId('cc-select');
+            select.setCustomId(`cc-select-${counters ? counters.ccSelect++ : 0}`);
         }
     } else if (comp.custom_id) {
         select.setCustomId(comp.custom_id);
@@ -425,7 +437,7 @@ function buildV4StringSelect(comp, args) {
  * @returns {Object|null} A discord.js builder instance or null if invalid/skipped
  * @private
  */
-function buildV4Component(comp, args) {
+function buildV4Component(comp, args, counters) {
     if (!comp || typeof comp !== 'object' || !comp.type) return null;
 
     try {
@@ -450,7 +462,7 @@ function buildV4Component(comp, args) {
                     if (!item.media || !item.media.url) continue;
                     try {
                         const galleryItem = new MediaGalleryItemBuilder()
-                            .setURL(inputReplacer(args, item.media.url));
+                            .setURL(inputReplacer(args, item.media.url).trim());
                         if (item.description) galleryItem.setDescription(truncate(inputReplacer(args, item.description), 1024));
                         if (item.spoiler) galleryItem.setSpoiler(true);
                         gallery.addItems(galleryItem);
@@ -464,7 +476,7 @@ function buildV4Component(comp, args) {
             }
             case 13: { // File
                 if (!comp.file || !comp.file.url) return null;
-                const file = new FileBuilder().setURL(inputReplacer(args, comp.file.url));
+                const file = new FileBuilder().setURL(inputReplacer(args, comp.file.url).trim());
                 if (comp.spoiler) file.setSpoiler(true);
                 return file;
             }
@@ -474,7 +486,7 @@ function buildV4Component(comp, args) {
                 const firstChild = comp.components[0];
                 if (firstChild && firstChild.type === 3) {
                     // String select menu (max 1 per row)
-                    const select = buildV4StringSelect(firstChild, args);
+                    const select = buildV4StringSelect(firstChild, args, counters);
                     if (!select) return null;
                     row.addComponents(select);
                 } else {
@@ -509,7 +521,7 @@ function buildV4Component(comp, args) {
 
                 if (comp.accessory.type === 11) { // Thumbnail
                     if (comp.accessory.media && comp.accessory.media.url) {
-                        const thumb = new ThumbnailBuilder().setURL(inputReplacer(args, comp.accessory.media.url));
+                        const thumb = new ThumbnailBuilder().setURL(inputReplacer(args, comp.accessory.media.url).trim());
                         if (comp.accessory.description) thumb.setDescription(truncate(inputReplacer(args, comp.accessory.description), 1024));
                         if (comp.accessory.spoiler) thumb.setSpoiler(true);
                         section.setThumbnailAccessory(thumb);
@@ -541,7 +553,7 @@ function buildV4Component(comp, args) {
                 let addedChildren = 0;
                 for (const child of comp.components) {
                     try {
-                        const built = buildV4Component(child, args);
+                        const built = buildV4Component(child, args, counters);
                         if (!built) continue;
                         switch (child.type) {
                             case 10:
@@ -568,6 +580,10 @@ function buildV4Component(comp, args) {
                                 container.addSectionComponents(built);
                                 addedChildren++;
                                 break;
+                            case 'dynamicImage':
+                                container.addMediaGalleryComponents(built);
+                                addedChildren++;
+                                break;
                         }
                     } catch (e) {
                         client.logger.error(`[embedType/v4] Failed to build container child (type ${child.type}): ${formatV4BuilderError(e)}`);
@@ -575,6 +591,11 @@ function buildV4Component(comp, args) {
                 }
                 if (addedChildren === 0) return null;
                 return container;
+            }
+            case 'dynamicImage': { // Placeholder for dynamic image - emits a MediaGallery component at this position
+                return new MediaGalleryBuilder().addItems(
+                    new MediaGalleryItemBuilder().setURL('attachment://image.png')
+                );
             }
             default:
                 return null;
@@ -600,17 +621,32 @@ function embedTypeSchemaV4(input, args = {}, optionsToKeep = {}, mergeComponents
     optionsToKeep.flags = existingFlags | MessageFlags.IsComponentsV2;
 
     const components = [];
+
+    // Save any pre-existing components passed via optionsToKeep (e.g. giveaway buttons) to append last
+    const keepComponents = (optionsToKeep.components || []).map(c => typeof c.toJSON === 'function' ? c.toJSON() : c);
+
+    const counters = {roleSelect: 0, ccSelect: 0};
     for (const comp of input.components || []) {
         try {
-            const built = buildV4Component(comp, args);
+            const built = buildV4Component(comp, args, counters);
             if (built) components.push(built);
         } catch (e) {
             client.logger.error(`[embedType/v4] Failed to build top-level component (type ${(comp || {}).type}): ${formatV4BuilderError(e)}`);
         }
     }
 
+    // Check if a dynamicImage sentinel exists anywhere (including inside containers)
+    if ((input.components || []).some(function findSentinel(c) {
+        return c.type === 'dynamicImage' || (Array.isArray(c.components) && c.components.some(findSentinel));
+    })) optionsToKeep._hasDynamicImagePlaceholder = true;
+
     for (const row of mergeComponentsRows) {
         components.push(row);
+    }
+
+    // Append pre-existing components from optionsToKeep at the bottom (e.g. giveaway buttons)
+    for (const kept of keepComponents) {
+        components.push(kept);
     }
 
     // Add SCNX branding for non-paid plans
@@ -630,10 +666,16 @@ module.exports.embedTypeV2 = async function (input, args, otP, mergeComponentsRo
     let optionsToKeep = embedType(input, args, otP, mergeComponentsRows);
     if (!optionsToKeep.attachments && client.scnxSetup && (input.dynamicImage || {}).enabled) {
         optionsToKeep = await require('./scnx-integration').returnDynamicImages(input, optionsToKeep, args);
-        // For v4, dynamic image was added to files but embeds don't exist; add a File component to display it
+        // For v4, dynamic image was added to files but embeds don't exist; add a MediaGallery component to display it
         if ((input._schema || 'v2') === 'v4' && optionsToKeep.files && optionsToKeep.files.length > 0) {
-            if (!optionsToKeep.components) optionsToKeep.components = [];
-            optionsToKeep.components.push(new FileBuilder().setURL('attachment://image.png'));
+            // If a dynamicImage placeholder was placed in the components, the MediaGallery is already in position
+            if (!optionsToKeep._hasDynamicImagePlaceholder) {
+                if (!optionsToKeep.components) optionsToKeep.components = [];
+                optionsToKeep.components.push(new MediaGalleryBuilder().addItems(
+                    new MediaGalleryItemBuilder().setURL('attachment://image.png')
+                ));
+            }
+            delete optionsToKeep._hasDynamicImagePlaceholder;
         }
     }
     return optionsToKeep;
@@ -660,6 +702,33 @@ function formatDate(date, skipDiscordFormat = false) {
 }
 
 module.exports.formatDate = formatDate;
+
+/**
+ * Formats a duration (in milliseconds) as a short human-readable string,
+ * picking the largest meaningful unit. Localized via the `helpers` namespace.
+ * @param {number} ms Duration in milliseconds
+ * @return {string} e.g. "2 months", "5 days", "3 hours", "just now"
+ * @author Simon Csaba <mail@scderox.de>
+ */
+function formatDurationShort(ms) {
+    if (!Number.isFinite(ms) || ms < 60_000) return localize('helpers', 'duration-just-now');
+    const units = [
+        ['year', 365 * 24 * 60 * 60 * 1000],
+        ['month', 30 * 24 * 60 * 60 * 1000],
+        ['day', 24 * 60 * 60 * 1000],
+        ['hour', 60 * 60 * 1000],
+        ['minute', 60 * 1000]
+    ];
+    for (const [unit, size] of units) {
+        const value = Math.floor(ms / size);
+        if (value >= 1) {
+            return localize('helpers', `duration-${unit}${value === 1 ? '' : 's'}`, {i: value});
+        }
+    }
+    return localize('helpers', 'duration-just-now');
+}
+
+module.exports.formatDurationShort = formatDurationShort;
 
 /**
  * Posts (encrypted) content to SC Network Paste
@@ -731,6 +800,7 @@ module.exports.messageLogToStringToPaste = messageLogToStringToPaste;
  * @return {string} Truncated string
  */
 function truncate(string, length) {
+    if (!string) return string;
     return (string.length > length) ? string.substr(0, length - 3).trim() + '...' : string;
 }
 
@@ -837,9 +907,10 @@ function compareArrays(array1, array2) {
     if (array1.length !== array2.length) return false;
 
     for (let i = 0, l = array1.length; i < l; i++) {
-        if (array1[i] instanceof Object) {
-            for (const key in array1[i]) {
-                if (array2[key] !== array1[key]) return false;
+        if (array1[i] instanceof Object || array2[i] instanceof Object) {
+            const keys = new Set([...Object.keys(array1[i] || {}), ...Object.keys(array2[i] || {})]);
+            for (const key of keys) {
+                if ((array1[i][key] ?? null) !== (array2[i][key] ?? null)) return false;
             }
             continue;
         }
@@ -934,17 +1005,37 @@ async function lockChannel(channel, allowedRoles = [], reason = localize('main',
             permissions: Array.from(channel.permissionOverwrites.cache.values())
         });
 
-        for (const overwrite of channel.permissionOverwrites.cache.filter(e => e.allow.has(PermissionFlagsBits.SendMessages)).values()) {
-            if (overwrite.type === 'role' && channel.client.guild.members.me.roles.botRole?.id === overwrite.id) continue;
+        const allowedRoleSet = new Set(allowedRoles.map(r => typeof r === 'string' ? r : r.id || r));
+        const botRoleId = channel.client.guild.members.me.roles.botRole?.id;
+
+        for (const overwrite of channel.permissionOverwrites.cache.values()) {
+            if (overwrite.id === botRoleId) continue;
             if (overwrite.type === 'member' && channel.client.user.id === overwrite.id) continue;
+            if (allowedRoleSet.has(overwrite.id)) continue;
+            if (overwrite.deny.has(PermissionFlagsBits.SendMessages)) continue;
             await overwrite.edit({
                 SendMessages: false,
                 SendMessagesInThreads: false
             }, reason);
         }
 
-        const everyoneRole = await channel.guild.roles.cache.find(r => r.name === '@everyone');
-        if (channel.permissionsFor(everyoneRole).has(PermissionFlagsBits.ViewChannel)) await channel.permissionOverwrites.create(everyoneRole, {
+        // Also deny roles inheriting SendMessages from the parent category
+        if (channel.parent) {
+            for (const [id, catOverwrite] of channel.parent.permissionOverwrites.cache) {
+                if (catOverwrite.type !== 0) continue; // Only roles
+                if (id === botRoleId) continue;
+                if (allowedRoleSet.has(id)) continue;
+                if (channel.permissionOverwrites.cache.has(id)) continue; // Already handled above
+                if (!catOverwrite.allow.has(PermissionFlagsBits.SendMessages)) continue;
+                await channel.permissionOverwrites.create(id, {
+                    SendMessages: false,
+                    SendMessagesInThreads: false
+                }, {reason});
+            }
+        }
+
+        const everyoneRole = channel.guild.roles.everyone;
+        await channel.permissionOverwrites.create(everyoneRole, {
             SendMessages: false,
             SendMessagesInThreads: false
         }, {reason});
@@ -1025,13 +1116,29 @@ function disableModule(module, reason = null) {
 module.exports.disableModule = disableModule;
 
 /**
+ * Checks whether a module is currently enabled. Prefer this over `client.models[X]` or
+ * `client.configurations[X]` as enabled-checks — models load for every module directory
+ * on disk regardless of enabled state, and configurations are only populated when the
+ * module is enabled.
+ * @param {Client} client
+ * @param {String} moduleName
+ * @returns {Boolean}
+ */
+function moduleEnabled(client, moduleName) {
+    return !!(client.modules[moduleName] && client.modules[moduleName].enabled);
+}
+
+module.exports.moduleEnabled = moduleEnabled;
+
+/**
  * Formates a number to make it human-readable
  * @param {Number|string} number
+ * @param {Intl.NumberFormatOptions} [options]
  * @returns {string}
  */
-module.exports.formatNumber = function (number) {
-    if (typeof number === 'string') number = parseInt(number);
-    return new Intl.NumberFormat(client.locale.split('_')[0], {}).format(number);
+module.exports.formatNumber = function (number, options = {}) {
+    if (typeof number === 'string') number = parseFloat(number);
+    return new Intl.NumberFormat(client.locale.split('_')[0], options).format(number);
 };
 
 /**
@@ -1051,3 +1158,36 @@ module.exports.shuffleArray = function (input) {
     }
     return array;
 }
+
+/**
+ * Tries to archive a Discord CDN attachment into the guild's scnx file
+ * library and returns the full archival result. Returns null when the bot
+ * is running outside an scnx setup (OSS build — scnx-integration is not
+ * shipped), when archival is disabled, or on any failure. Use this when you
+ * need to know whether the returned URL will outlive Discord's signed TTL
+ * — e.g. persisting an attachment URL for later restoration.
+ * @param {Client} client
+ * @param {string} url Discord CDN URL
+ * @param {{displayName?: string, tags?: string[], uploaderDiscordID?: string}} meta
+ * @returns {Promise<{id: string, url: string, mediaCategory: string, duplicate?: boolean} | null>}
+ */
+module.exports.tryArchiveDiscordAttachment = async function (client, url, meta = {}) {
+    if (!client.scnxSetup) return null;
+    return require('./scnx-integration').archiveDiscordAttachment(client, url, meta);
+};
+
+/**
+ * Convenience wrapper around tryArchiveDiscordAttachment — always returns a
+ * URL. On success, the permanent scnx CDN URL; on any failure (disabled,
+ * OSS build, rate-limited, quota-exhausted, upstream error), the original
+ * Discord URL. Use this at display sites where the URL is only needed
+ * within Discord's signed-TTL window.
+ * @param {Client} client
+ * @param {string} url Discord CDN URL
+ * @param {{displayName?: string, tags?: string[], uploaderDiscordID?: string}} meta
+ * @returns {Promise<string>}
+ */
+module.exports.archiveDiscordAttachment = async function (client, url, meta = {}) {
+    const result = await module.exports.tryArchiveDiscordAttachment(client, url, meta);
+    return result ? result.url : url;
+};

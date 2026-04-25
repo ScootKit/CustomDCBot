@@ -1,17 +1,13 @@
 {
   "name": "uno",
-  "humanReadableName": {
-    "en": "Uno"
-  },
+  "humanReadableName": "Uno",
+  "fa-icon": "fa-solid fa-cards-blank",
   "author": {
     "scnxOrgID": "60",
     "name": "TomatoCake",
     "link": "https://github.com/DEVTomatoCake"
   },
-  "description": {
-    "en": "Let your users play Uno against each other!",
-    "de": "Lasse Nutzer auf deinem Server Uno gegeneinander spielen"
-  },
+  "description": "Let your users play Uno against each other!",
   "commands-dir": "/commands",
   "noConfig": true,
   "releaseDate": "0",

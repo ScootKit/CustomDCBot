@@ -1,77 +1,33 @@
 {
-  "description": {
-    "en": "You can send messages on an hourly basic here - this can be once or 24 times a day",
-    "de": "Hier kannst du Nachrichten auf stündlicher Basis schicken lassen - das kann alles von 1-24x pro Tag sein"
-  },
-  "humanName": {
-    "en": "Hourly basic",
-    "de": "Stündliche Basis"
-  },
-  "elementLimits": {
-    "STARTER": 1,
-    "ACTIVE_GUILD": 4,
-    "PRO": 14,
-    "UNLIMITED": 4,
-    "PROFESSIONAL": 14
-  },
+  "description": "You can send messages on an hourly basic here - this can be once or 24 times a day",
+  "humanName": "Hourly basic",
   "configElementName": {
-    "de": {
-      "one": "Automatische Nachricht",
-      "more": "Automatische Nachrichten"
-    },
-    "en": {
-      "one": "Automatic message",
-      "more": "Automatic messages"
-    }
+    "one": "Automatic message",
+    "more": "Automatic messages"
   },
   "filename": "hourly.json",
   "configElements": true,
   "content": [
     {
       "name": "channelID",
-      "humanName": {
-        "de": "Kanal",
-        "en": "Channel"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "ID of the channel in which the message should be send",
-        "de": "ID des Kanals, in welchen die Nachricht gesendet werden soll"
-      },
+      "humanName": "Channel",
+      "default": "",
+      "description": "ID of the channel in which the message should be send",
       "type": "channelID"
     },
     {
       "name": "message",
-      "humanName": {
-        "de": "Nachricht",
-        "en": "Message"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Message that should be send",
-        "de": "Nachricht, die gesendet werden soll"
-      },
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should be send",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "limitHoursTo",
-      "humanName": {
-        "de": "Stunden begrenzen auf",
-        "en": "Limit hours to"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "If one or more values are set, the message will only get send when the current hour is included in this field",
-        "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn die aktuelle Stunde hier enthalten ist"
-      },
+      "humanName": "Limit hours to",
+      "default": [],
+      "description": "If one or more values are set, the message will only get send when the current hour is included in this field",
       "type": "array",
       "content": "integer"
     }

@@ -5,10 +5,13 @@ const {
     dateToDiscordTimestamp,
     formatDiscordUserName,
     formatNumber,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter,
+    moduleEnabled
 } = require('../../../src/functions/helpers');
 const {ChannelType, MessageEmbed} = require('discord.js');
 const {AgeFromDate} = require('age-calculator');
+const {stringNames} = require('../../invite-tracking/events/guildMemberJoin');
 const {calculateLevelXP, isMaxLevel, displayLevel} = require('../../levels/events/messageCreate');
 
 const legacyChannelType = (type) => {
@@ -40,8 +43,8 @@ module.exports.subcommands = {
             .setTitle(localize('info-commands', 'information-about-server', {s: interaction.guild.name}))
             .setColor(parseEmbedColor('GOLD'))
             .setThumbnail(interaction.guild.iconURL())
-            .setImage(interaction.guild.bannerURL())
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl});
+            .setImage(interaction.guild.bannerURL());
+        safeSetFooter(embed, interaction.client);
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (interaction.guild.afkChannel) embed.addField(moduleStrings.serverinfo.afkChannel, `<#${interaction.guild.afkChannelID}> (${interaction.guild.afkTimeout}s)`, true);
         if (interaction.guild.description) embed.setDescription(interaction.guild.description);
@@ -79,8 +82,8 @@ module.exports.subcommands = {
             .addField(moduleStrings.channelInfo.id, channel.id, true)
             .addField(moduleStrings.channelInfo.createdAt, `<t:${(channel.createdAt.getTime() / 1000).toFixed(0)}:d>`, true)
             .addField(moduleStrings.channelInfo.name, channel.name, true)
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .setColor(parseEmbedColor('GREEN'));
+        safeSetFooter(embed, interaction.client);
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (channel.parent) embed.addField(moduleStrings.channelInfo.parent, channel.parent.name, true);
         if (channel.position) embed.addField(moduleStrings.channelInfo.position, (channel.position + 1).toString(), true);
@@ -111,12 +114,12 @@ module.exports.subcommands = {
         const role = interaction.options.getRole('role', true);
         const embed = new MessageEmbed()
             .setTitle(localize('info-commands', 'information-about-role', {r: role.name}))
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .addField(moduleStrings.roleInfo.createdAt, `<t:${(role.createdAt.getTime() / 1000).toFixed(0)}:d>`, true)
             .addField(moduleStrings.roleInfo.position, role.position.toString(), true)
             .addField(moduleStrings.roleInfo.id, role.id, true)
             .addField(moduleStrings.roleInfo.name, role.name, true)
             .setColor(role.color || parseEmbedColor('GREEN'));
+        safeSetFooter(embed, interaction.client);
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (role.color) embed.addField(moduleStrings.roleInfo.color, role.hexColor, true);
         if (role.members) {
@@ -152,14 +155,14 @@ module.exports.subcommands = {
         if (!member) return interaction.reply(embedType(moduleStrings['user_not_found'], {}, {ephemeral: true}));
         let birthday = null;
         let levelUserData = null;
-        if (interaction.client.models['birthday']) {
+        if (moduleEnabled(interaction.client, 'birthday')) {
             birthday = await interaction.client.models['birthday']['User'].findOne({
                 where: {
                     id: member.user.id
                 }
             });
         }
-        if (interaction.client.models['levels']) {
+        if (moduleEnabled(interaction.client, 'levels')) {
             levelUserData = await interaction.client.models['levels']['User'].findOne({
                 where: {
                     userID: member.user.id
@@ -171,11 +174,11 @@ module.exports.subcommands = {
             .setTitle(localize('info-commands', 'information-about-user', {u: formatDiscordUserName(member.user)}))
             .setColor(member.displayColor || parseEmbedColor('GREEN'))
             .setThumbnail(member.user.avatarURL({forceStatic: false}))
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .addField(moduleStrings.userinfo.tag, formatDiscordUserName(member.user), true)
             .addField(moduleStrings.userinfo.id, member.user.id, true)
             .addField(moduleStrings.userinfo.createdAt, `<t:${(member.user.createdAt.getTime() / 1000).toFixed(0)}:d> (<t:${(member.user.createdAt.getTime() / 1000).toFixed(0)}:R>)`, true)
             .addField(moduleStrings.userinfo.joinedAt, `<t:${(member.joinedAt.getTime() / 1000).toFixed(0)}:d> (<t:${(member.joinedAt.getTime() / 1000).toFixed(0)}:R>)`, true);
+        safeSetFooter(embed, interaction.client);
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (member.user.presence) embed.addField(moduleStrings.userinfo.currentStatus, member.user.presence.status, true);
         if (member.nickname) embed.addField(moduleStrings.userinfo.nickname, member.nickname, true);
@@ -196,6 +199,22 @@ module.exports.subcommands = {
             embed.addField(moduleStrings.userinfo.xp, `${formatNumber(isMaxLevel(levelUserData.level, interaction.client) ? calculateLevelXP(interaction.client, interaction.client.configurations['levels']['config'].maximumLevel) : levelUserData.xp)}/${isMaxLevel(levelUserData.level, interaction.client) ? '∞' : formatNumber(calculateLevelXP(interaction.client, levelUserData.level))}`, true);
             embed.addField(moduleStrings.userinfo.level, displayLevel(levelUserData.level, interaction.client), true);
             embed.addField(moduleStrings.userinfo.messages, levelUserData.messages.toString(), true);
+        }
+        if (moduleEnabled(interaction.client, 'invite-tracking')) {
+            const invitedUsers = await interaction.client.models['invite-tracking']['UserInvite'].findAll({
+                where: {
+                    inviter: member.user.id
+                }
+            });
+            const userInvites = await interaction.client.models['invite-tracking']['UserInvite'].findAll({
+                where: {
+                    userID: member.user.id,
+                    left: false
+                },
+                order: [['createdAt', 'DESC']]
+            });
+            if (userInvites[0]) embed.addField(moduleStrings.userinfo['invited-by'], `${localize('invite-tracking', stringNames[userInvites[0].inviteType])}${userInvites[0].inviter ? ` by <@${userInvites[0].inviter}>` : ''}`, true);
+            embed.addField(moduleStrings.userinfo.invites, `\`\`\`| ${localize('info-commands', 'total-invites')} | ${localize('info-commands', 'active-invites')} | ${localize('info-commands', 'left-invites')} |\n| ${pufferStringToSize(invitedUsers.length.toString(), localize('info-commands', 'total-invites').length)} | ${pufferStringToSize(invitedUsers.filter(i => !i.left).length.toString(), localize('info-commands', 'active-invites').length)} | ${pufferStringToSize(invitedUsers.filter(i => i.left).length.toString(), localize('info-commands', 'left-invites').length)} |\`\`\``);
         }
         let permstring = '';
         member.permissions.toArray().forEach(p => {

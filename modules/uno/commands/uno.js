@@ -401,13 +401,16 @@ module.exports.run = async function (interaction) {
                 fetchReply: true,
                 ephemeral: true
             });
-            m.createMessageComponentCollector({componentType: ComponentType.Button}).on('collect', i => perPlayerHandler(i, p, game));
+            m.createMessageComponentCollector({
+                componentType: ComponentType.Button,
+                time: 1800000
+            }).on('collect', i => perPlayerHandler(i, p, game));
         });
     }
 
     const timeout = setTimeout(startGame, 179000);
 
-    const collector = msg.createMessageComponentCollector({componentType: ComponentType.Button});
+    const collector = msg.createMessageComponentCollector({componentType: ComponentType.Button, time: 1800000});
     collector.on('collect', async i => {
         if (i.customId === 'uno-join') {
             if (game.players.some(p => p.id === i.user.id)) return i.reply({
@@ -451,7 +454,10 @@ module.exports.run = async function (interaction) {
                 fetchReply: true,
                 ephemeral: true
             });
-            m.createMessageComponentCollector({componentType: ComponentType.Button}).on('collect', int => perPlayerHandler(int, player, game));
+            m.createMessageComponentCollector({
+                componentType: ComponentType.Button,
+                time: 1800000
+            }).on('collect', int => perPlayerHandler(int, player, game));
         } else if (i.customId === 'uno-uno') {
             const player = game.players.find(p => p.id === i.user.id);
             if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});

@@ -1,47 +1,30 @@
 {
-  "description": {},
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Twitch API credentials and polling interval. Create an app at https://dev.twitch.tv/console/apps to get your Client ID and Secret.",
+  "humanName": "Configuration",
   "filename": "config.json",
   "hidden": true,
   "content": [
     {
       "name": "twitchClientID",
-      "humanName": {},
-      "default": {
-        "en": "me3ub5wbx2jxlhkvxrc6fbgp8wgixq"
-      },
-      "description": {
-        "en": "ID of the Client, which is used to check if the Streamer is live"
-      },
-      "hidden": true,
+      "humanName": "Twitch Client ID",
+      "default": "",
+      "description": "Client ID of your Twitch application (https://dev.twitch.tv/console/apps).",
       "type": "string"
     },
     {
       "name": "clientSecret",
-      "humanName": {},
-      "default": {
-        "en": "58v6r0v2oips1tldmfunrxp5m8xv6r"
-      },
-      "description": {
-        "en": "Secret of the Twitch-Client, which is used to check if the Streamer is live"
-      },
-      "hidden": true,
+      "humanName": "Twitch Client Secret",
+      "default": "",
+      "description": "Client Secret of your Twitch application.",
       "type": "string"
     },
     {
       "name": "interval",
-      "humanName": {},
-      "default": {
-        "en": 180
-      },
-      "description": {
-        "en": "Interval (in seconds) in which it is tested whether the streamer is live. This value must be higher than 60"
-      },
-      "hidden": true,
-      "type": "integer"
+      "humanName": "Check interval (seconds)",
+      "default": 180,
+      "description": "How often (in seconds) the bot polls Twitch for stream updates. Must be at least 60 to stay within Twitch rate limits.",
+      "type": "integer",
+      "minValue": 60
     }
   ]
 }

@@ -1,12 +1,6 @@
 {
-  "description": {
-    "en": "Configure the function of the module here",
-    "de": "Stelle hier die Funktionen des Modules ein"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "commandsWarnings": {
     "normal": [
@@ -16,144 +10,82 @@
   "content": [
     {
       "name": "min-xp",
-      "humanName": {
-        "en": "XP given at least for messages",
-        "de": "Für Nachrichten mindestens gegebenes XP"
-      },
-      "default": {
-        "en": 25,
-        "de": 25
-      },
-      "description": {
-        "en": "How much XP the user gets at least for each message",
-        "de": "So viel XP bekommt ein Benutzer mindestens pro Nachricht"
-      },
-      "type": "integer"
+      "humanName": "XP given at least for messages",
+      "default": 25,
+      "description": "How much XP the user gets at least for each message",
+      "type": "integer",
+      "category": "xp"
     },
     {
       "name": "max-xp",
-      "humanName": {
-        "en": "XP given at most for messages",
-        "de": "Für Nachrichten maximal gegebenes XP"
-      },
-      "default": {
-        "en": 65,
-        "de": 65
-      },
-      "description": {
-        "en": "How much XP the user gets at most for each messages",
-        "de": "So viel XP bekommt ein Benutzer maximal pro Nachricht"
-      },
-      "type": "integer"
+      "humanName": "XP given at most for messages",
+      "default": 65,
+      "description": "How much XP the user gets at most for each messages",
+      "type": "integer",
+      "category": "xp"
     },
     {
       "name": "voiceXPPerMinute",
       "type": "float",
-      "default": {
-        "en": 0.5
-      },
-      "humanName": {
-        "en": "XP given per Voice Minute",
-        "de": "Pro Sprachminute vergebenes XP"
-      },
-      "description": {
-        "en": "How many XP will be given to users per minute when they are in a voice channel with other members. No XP will be given if they are alone in their channel or are muted or deafened. Numbers will be rounded and XP will be given every 15 minutes or when the user leaves the channel.",
-        "de": "Wie viel XP Nutzer pro Minute erhalten, wenn sie sich in einem Sprachkanal mit anderen Nutzern befinden. Es wird kein XP vergeben, wenn sie alleine in einem Kanal sind oder stummgeschaltet sind oder den Ton deaktiviert haben. Zahlen werden gerundet und XP wird alle 15 Minuten vergeben, oder wenn der Nutzer den Kanal verlässt."
-      }
+      "default": 0.5,
+      "humanName": "XP given per Voice Minute",
+      "description": "How many XP will be given to users per minute when they are in a voice channel with other members. No XP will be given if they are alone in their channel or are muted or deafened. Numbers will be rounded and XP will be given every 15 minutes or when the user leaves the channel.",
+      "category": "xp"
     },
     {
       "name": "cooldown",
-      "humanName": {
-        "en": "Cooldown"
-      },
-      "default": {
-        "en": 1500,
-        "de": 1500
-      },
-      "description": {
-        "en": "In ms. How much cooldown there is between each XP getting",
-        "de": "In Millisekunden! So viel Zeit muss ein Nutzer zwischen jeder Nachricht mit XP warten"
-      },
-      "type": "integer"
+      "humanName": "Cooldown",
+      "default": 1500,
+      "description": "In ms. How much cooldown there is between each XP getting",
+      "type": "integer",
+      "category": "xp"
     },
     {
       "name": "curveType",
       "type": "select",
       "content": [
         {
-          "displayName": {
-            "en": "Easy Linear",
-            "de": "Einfacherer Linearfunktion"
-          },
+          "displayName": "Easy Linear",
           "value": "EXPONENTIAL"
         },
         {
-          "displayName": {
-            "en": "Default Linear",
-            "de": "Standardmässige Linearfunktion"
-          },
+          "displayName": "Default Linear",
           "value": "LINEAR"
         },
         {
-          "displayName": {
-            "en": "Exponentiation (softer start, harder leveling after level 14)",
-            "de": "Potenzfunktion (leichter start, ab Level 14 härter)"
-          },
+          "displayName": "Exponentiation (softer start, harder leveling after level 14)",
           "value": "EXPONENTIATION"
         },
         {
           "value": "CUSTOM",
-          "displayName": {
-            "en": "Custom formula (dangerous!)",
-            "de": "Eigene Formel (gefährlich!)"
-          }
+          "displayName": "Custom formula (dangerous!)"
         }
       ],
-      "humanName": {
-        "en": "Type of the leveling curve",
-        "de": "Art der Levelingkurve"
-      },
-      "default": {
-        "en": "LINEAR"
-      },
-      "description": {
-        "en": "Type of the leveling curve. The exponential curve is recommended, as archiving new levels gets harder the higher your level is. Leveling is always the same if you use the linear curve.",
-        "de": "Art der Levelingkurve. Die exponentielle Kurve wird empfohlen, da mit dieser das Aufsteigen von Leveln schwerer wird je höher das eigene Level ist. Mit der linearen Kurve ist das Aufsteigen zum nächsten Level für alle gleich schwer."
-      },
+      "humanName": "Type of the leveling curve",
+      "default": "LINEAR",
+      "description": "Type of the leveling curve. The exponential curve is recommended, as archiving new levels gets harder the higher your level is. Leveling is always the same if you use the linear curve.",
       "links": [
         {
-          "label": {
-            "en": "Calculate how much XP is needed to level up",
-            "de": "Berechne, wie viel XP zum Aufsteigen notwendig ist"
-          },
+          "label": "Calculate how much XP is needed to level up",
           "url": "https://scootk.it/level-calculator"
         }
-      ]
+      ],
+      "category": "xp"
     },
     {
       "name": "customLevelCurve",
-      "default": {
-        "en": ""
-      },
+      "default": "",
       "allowNull": true,
-      "humanName": {
-        "en": "Custom Level Formula (if enabled)",
-        "de": "Eigene Levelformel (wenn aktiviert)"
-      },
+      "humanName": "Custom Level Formula (if enabled)",
       "type": "string",
       "links": [
         {
-          "label": {
-            "en": "Calculate how much XP is needed to level up",
-            "de": "Berechne, wie viel XP zum Aufsteigen notwendig ist"
-          },
+          "label": "Calculate how much XP is needed to level up",
           "url": "https://scootk.it/level-calculator"
         }
       ],
-      "description": {
-        "en": "Your custom leveling formula. Use the x variable (and no other variables). The result of the formula should be the required XP to reach level x (your variable). Example: \"x*750+((x-1)*500)\" (our default level curve)",
-        "de": "Deine eigene Levelformel. Nutze nur die x Variabel (und keine andere Variablen). Das Ergebnis deiner Formel sollte die XP-Anzahl sein, die notwendig ist, um Level x zu erreichen (deine Variabel). Beispiel: \"x*750+((x-1)*500)\" (unsere Standartkurve)"
-      }
+      "description": "Your custom leveling formula. Use the x variable (and no other variables). The result of the formula should be the required XP to reach level x (your variable). Example: \"x*750+((x-1)*500)\" (our default level curve)",
+      "category": "xp"
     },
     {
       "name": "levelUpMessagesConditions",
@@ -163,306 +95,204 @@
         "only-role-rewards",
         "none"
       ],
-      "humanName": {
-        "de": "Welche Level-Up-Nachrichten sollen gesendet werden?",
-        "en": "Which Level-Up-Messages should get sent?"
-      },
-      "default": {
-        "en": "all"
-      },
-      "description": {
-        "en": "This settings changes in which cases a level up message should be sent. With the setting \"all\", level up messages will be sent at every level up. With the setting \"only-role-rewards\", level up messages will only be sent if the new level has a role reward. With the \"none\" setting, no level up messages will be sent.",
-        "de": "Diese Einstellung verändert, welche Art von Level-Up-Nachrichten gesendet werden. Mit der Einstellung \"all\", werden Level-Up-Nachrichten bei jedem Level-Up versendet. Mit der Einstellung \"only-role-rewards\" werden Level-Up-Nachrichten nur gesandt, wenn das neue Level eine Rollenbelohnung hat. Wenn die Einstellung \"none\" gewählt ist, werden keine Level-Up-Nachrichten verschickt."
-      }
+      "humanName": "Which Level-Up-Messages should get sent?",
+      "default": "all",
+      "description": "This settings changes in which cases a level up message should be sent. With the setting \"all\", level up messages will be sent at every level up. With the setting \"only-role-rewards\", level up messages will only be sent if the new level has a role reward. With the \"none\" setting, no level up messages will be sent.",
+      "category": "messages"
     },
     {
       "name": "level_up_channel_id",
-      "humanName": {
-        "en": "Level-Up-Channel"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)",
-        "de": "Channel, in den die Level-Up-Nachrichten gesendet werden. (Leerlassen, um sie einfach in den aktuellen Channel zu schicken))"
-      },
+      "humanName": "Level-Up-Channel",
+      "default": "",
+      "description": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)",
       "type": "channelID",
-      "allowNull": true
+      "allowNull": true,
+      "category": "messages"
     },
     {
       "name": "sortLeaderboardBy",
-      "humanName": {
-        "en": "Leaderboard-Sort-Category",
-        "de": "Ranglisten-Sortierung"
-      },
-      "default": {
-        "en": "levels",
-        "de": "levels"
-      },
-      "description": {
-        "en": "How the leaderboard should be sorted",
-        "de": "Wähle aus, wie der /leaderboard-command aussehen werden soll"
-      },
+      "humanName": "Leaderboard-Sort-Category",
+      "default": "levels",
+      "description": "How the leaderboard should be sorted",
       "type": "select",
       "content": [
         "levels",
         "xp"
-      ]
+      ],
+      "category": "leaderboard"
     },
     {
       "name": "blacklisted_channels",
-      "humanName": {
-        "en": "Blacklisted Channels",
-        "de": "Channel ohne XP"
-      },
+      "humanName": "Blacklisted Channels",
       "channelTypes": [
         "GUILD_TEXT",
         "GUILD_NEWS",
         "GUILD_VOICE",
         "GUILD_FORUM"
       ],
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Blacklisted-Channels in which users can not earn XP",
-        "de": "Channel, in denen kein XP gesammelt werden kann"
-      },
+      "default": [],
+      "description": "Blacklisted-Channels in which users can not earn XP",
       "type": "array",
-      "content": "channelID"
+      "content": "channelID",
+      "category": "xp"
     },
     {
       "name": "blacklistedRoles",
-      "humanName": {
-        "en": "Blacklisted roles",
-        "de": "Rollen, die kein XP sammeln"
-      },
+      "humanName": "Blacklisted roles",
       "type": "array",
       "content": "roleID",
-      "default": {
-        "en": []
-      },
-      "description": {
-        "de": "Diese Rollen werden kein XP für ihre Nachrichten erhalten",
-        "en": "These roles won't receive XP when writing messages"
-      }
+      "default": [],
+      "description": "These roles won't receive XP when writing messages",
+      "category": "xp"
     },
     {
       "name": "reward_roles",
-      "humanName": {
-        "en": "Level Reward roles",
-        "de": "Level-Belohnung-Rollen"
-      },
-      "default": {
-        "en": {},
-        "de": {}
-      },
-      "description": {
-        "de": "Level, bei denen der Nutzer eine Rolle bekommt. Parameter 1: Level, Parameter 2: Rollen-ID",
-        "en": "Level at which users should get roles. Parameter 1: Level, Parameter 2: Role-ID"
-      },
+      "humanName": "Level Reward roles",
+      "default": {},
+      "description": "Level at which users should get roles. Parameter 1: Level, Parameter 2: Role-ID",
       "type": "keyed",
       "content": {
         "key": "integer",
         "value": "roleID"
-      }
+      },
+      "category": "roles"
     },
     {
       "name": "multiplication_roles",
-      "humanName": {
-        "en": "XP Multiplication Roles",
-        "de": "XP-Multiplikator Rollen"
-      },
-      "default": {
-        "en": {},
-        "de": {}
-      },
-      "description": {
-        "en": "Allows you to configure roles that have a higher multiplication factor than normal (default value is 1). If a user has more than one of the configured roles, the multiplication factors get multiplied together before multiplying the result with the amount of XP the user receives for their message.",
-        "de": "Erlaubt es dir, den Multiplikationsfaktor von bestimmten Rollen anzupassen. Standardmäßig haben Rollen einen Wert von 1. Bevor der XP Wert für eine Nachricht an den Nutzer gegeben wird, werden alle Faktoren von Rollen miteinander multipliziert und das Ergebnis dann mal den XP-Wert genommen."
-      },
+      "humanName": "XP Multiplication Roles",
+      "default": {},
+      "description": "Allows you to configure roles that have a higher multiplication factor than normal (default value is 1). If a user has more than one of the configured roles, the multiplication factors get multiplied together before multiplying the result with the amount of XP the user receives for their message.",
       "type": "keyed",
       "content": {
         "key": "roleID",
         "value": "float"
-      }
+      },
+      "category": "xp"
     },
     {
       "name": "multiplication_channels",
-      "humanName": {
-        "en": "XP Multiplication Channels",
-        "de": "XP-Multiplikator Kanäle"
-      },
-      "default": {
-        "en": {},
-        "de": {}
-      },
-      "description": {
-        "en": "Allows you to configure channels that have a higher multiplication factor than normal (default value is 1). Messages sent in these channels will have their XP value multiplied by the multiplier configured here.",
-        "de": "Erlaubt es dir, den Multiplikationsfaktor von bestimmten Kanälen anzupassen. Standardmäßig haben Rollen einen Wert von 1. Die XP-Werte von Nachrichten, die in hier konfigurierten Kanälen gesendet werden, werden mit den hier eingestellten Multiplikator multipliziert."
-      },
+      "humanName": "XP Multiplication Channels",
+      "default": {},
+      "description": "Allows you to configure channels that have a higher multiplication factor than normal (default value is 1). Messages sent in these channels will have their XP value multiplied by the multiplier configured here.",
       "type": "keyed",
       "content": {
         "key": "channelID",
         "value": "float"
-      }
+      },
+      "category": "xp"
     },
     {
       "name": "onlyTopLevelRole",
-      "humanName": {
-        "en": "Only keep highest Level-Role",
-        "de": "Nur die höchste Level-Rolle behalten"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, all previous level roles a user had will get removed, when they advance to a new level.",
-        "de": "Wenn aktiviert, werden alle vorherigen Level-Rollen, die ein Nutzer hatte, entfernt, wenn dieser ein neues Level erreicht."
-      },
-      "type": "boolean"
+      "humanName": "Only keep highest Level-Role",
+      "default": false,
+      "description": "If enabled, all previous level roles a user had will get removed, when they advance to a new level.",
+      "type": "boolean",
+      "category": "roles"
     },
     {
       "name": "reset-on-leave",
-      "humanName": {
-        "en": "Rest Level on leave",
-        "de": "Level beim Verlassen zurücksetzen"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, all levels and the XP of a user will be deleted, when they leave your server.",
-        "de": "Wenn aktiviert, werden alle Level und das XP eines Nutzers gelöscht, wenn er den Server verlässt."
-      },
-      "type": "boolean"
+      "humanName": "Rest Level on leave",
+      "default": false,
+      "description": "If enabled, all levels and the XP of a user will be deleted, when they leave your server.",
+      "type": "boolean",
+      "category": "general"
     },
     {
       "name": "randomMessages",
-      "humanName": {
-        "en": "Random messages",
-        "de": "Zufällige Nachrichten"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "de": "Wenn aktiviert wird das Modul die Level-Up-Nachricht zufällig auswählen und nicht die in Nachrichten angegebene verwenden",
-        "en": "If enabled the module will randomly select a messages from random-levelup-messages and ignore the one set in strings"
-      },
-      "type": "boolean"
+      "humanName": "Random messages",
+      "default": false,
+      "description": "If enabled the module will randomly select a messages from random-levelup-messages and ignore the one set in strings",
+      "type": "boolean",
+      "category": "messages"
     },
     {
       "name": "leaderboard-channel",
-      "humanName": {
-        "en": "Live Leaderboard-Channel",
-        "de": "Live Ranglisten-Channel"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "de": "Wenn gesetzt wird der Bot in diesen Channel eine Nachricht senden, welche die aktuellen Level der Nutzern enthält",
-        "en": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes"
-      },
+      "humanName": "Live Leaderboard-Channel",
+      "default": "",
+      "description": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes",
       "type": "channelID",
       "content": [
         "GUILD_TEXT"
       ],
-      "allowNull": true
+      "allowNull": true,
+      "category": "leaderboard"
     },
     {
       "name": "leaderboard-channel-max-amount",
-      "humanName": {
-        "en": "Maximum amount of users displayed in live leaderboard Channel",
-        "de": "Maximale Anzahl von Nutzern im Live Ranglistenkanal"
-      },
-      "default": {
-        "en": 15
-      },
+      "humanName": "Maximum amount of users displayed in live leaderboard Channel",
+      "default": 15,
       "maxValue": 25,
-      "description": {
-        "de": "Dies ist die Anzahl von Nutzern, die in der Live Rangliste angezeigt werden sollen. /leaderboard zeigt weiterhin die vollständige Rangliste.",
-        "en": "This is the maximum amount of users displayed in the Live Leaderboard channel. /leaderboard will still show the full leaderboard."
-      },
-      "type": "integer"
+      "description": "This is the maximum amount of users displayed in the Live Leaderboard channel. /leaderboard will still show the full leaderboard.",
+      "type": "integer",
+      "category": "leaderboard"
     },
     {
       "name": "maximumLevelEnabled",
-      "humanName": {
-        "en": "Enable maximum level?",
-        "de": "Maximales Level aktivieren?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, users can only level until they reach the configured maximum level. After that, they can't level up and can't earn XP. Can be enabled retroactively.",
-        "de": "Wenn aktiviert können Nutzer nur ein bestimmtes Level erreichen. Sobald sie dieses Level erreicht haben, können sie nicht weiter aufsteigen oder weiter XP verdienen. Kann rückwirkend aktiviert werden."
-      },
-      "type": "boolean"
+      "humanName": "Enable maximum level?",
+      "default": false,
+      "description": "If enabled, users can only level until they reach the configured maximum level. After that, they can't level up and can't earn XP. Can be enabled retroactively.",
+      "type": "boolean",
+      "category": "general"
     },
     {
       "dependsOn": "maximumLevelEnabled",
       "name": "maximumLevel",
-      "humanName": {
-        "en": "Maximum level",
-        "de": "Maximales Level"
-      },
-      "default": {
-        "en": 200
-      },
-      "description": {
-        "en": "Once a user reaches this level, they neither earn more XP nor level up anymore.",
-        "de": "Sobald ein Nutzer dieses Level erreicht hat, kann dieser weder mehr XP verdienen noch weiter Level aufsteigen."
-      },
-      "type": "integer"
+      "humanName": "Maximum level",
+      "default": 200,
+      "description": "Once a user reaches this level, they neither earn more XP nor level up anymore.",
+      "type": "integer",
+      "category": "general"
     },
     {
       "name": "startFromZero",
-      "humanName": {
-        "en": "Start with Level 0?",
-        "de": "Von Level 0 starten?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, the initial level of users will be displayed as zero. This doesn't affect leveling, this is a cosmetic setting and can be applied retroactively.",
-        "de": "Wenn aktiviert werden die Anfangslevel von Nutzern als null angezeigt. Das hat keinen Einfluss auf das Leveling, das ist eine kosmetische Einstellung und kann rückwirkend angewandt werden."
-      },
-      "type": "boolean"
+      "humanName": "Start with Level 0?",
+      "default": false,
+      "description": "If enabled, the initial level of users will be displayed as zero. This doesn't affect leveling, this is a cosmetic setting and can be applied retroactively.",
+      "type": "boolean",
+      "category": "general"
     },
     {
       "name": "useTags",
-      "humanName": {
-        "en": "Use User's Tags instead of their Mention in the Leaderboard-Channel-Embed",
-        "de": "Nutze den Tag der Nutzer, anstatt eine Erwähnung im Ranglisten-Channel-Embed"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, the bot will use the tag of users in the Leaderboard-Channel-Embed instead of their mention.",
-        "de": "Wenn aktiviert, wird im Ranglisten-Channel-Embed der Tag des Nutzers angezeigt und nicht eine Erwähnung (bei großen Servern empfohlen)"
-      },
-      "type": "boolean"
+      "humanName": "Use User's Tags instead of their Mention in the Leaderboard-Channel-Embed",
+      "default": false,
+      "description": "If enabled, the bot will use the tag of users in the Leaderboard-Channel-Embed instead of their mention.",
+      "type": "boolean",
+      "category": "general"
     },
     {
       "name": "allowCheats",
-      "humanName": {
-        "en": "Cheats"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled admins can change the XP of other users (not recommended (please leave it off if you want to have a fair levelling system!!!))",
-        "de": "Wenn aktiviert können Administratoren die XP von anderen Nutzern editieren (nicht empfohlen, wenn du einen coolen, fairen Server haben willst (wirklich nicht!!!)))"
-      },
-      "type": "boolean"
+      "humanName": "Cheats",
+      "default": false,
+      "description": "If enabled admins can change the XP of other users (not recommended (please leave it off if you want to have a fair levelling system!!!))",
+      "type": "boolean",
+      "category": "general"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "xp",
+      "icon": "fas fa-arrow-up-1-9",
+      "displayName": "XP Settings"
+    },
+    {
+      "id": "leaderboard",
+      "icon": "fas fa-ranking-stars",
+      "displayName": "Leaderboard"
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": "Level Roles"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Level-up Messages"
     }
   ]
 }

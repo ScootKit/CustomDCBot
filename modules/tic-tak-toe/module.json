@@ -1,18 +1,13 @@
 {
   "name": "tic-tak-toe",
-  "humanReadableName": {
-    "en": "Tic Tac Toe",
-    "de": "Tic-Tac-Toe"
-  },
+  "humanReadableName": "Tic Tac Toe",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": {
-    "en": "Let your users play Tick-Tac-Toe against each other!",
-    "de": "Lasse Nutzer auf deinem Server Tick-Tac-Toe gegeneinander spielen"
-  },
+  "fa-icon": "fa-solid fa-border-all",
+  "description": "Let your users play Tick-Tac-Toe against each other!",
   "commands-dir": "/commands",
   "noConfig": true,
   "releaseDate": "1641230658000",

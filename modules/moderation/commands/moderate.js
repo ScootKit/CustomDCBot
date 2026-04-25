@@ -416,11 +416,11 @@ module.exports.subcommands = {
             fieldCount++;
             fieldCache.push({
                 name: `#${action.actionID}: ${action.type}`,
-                value: localize('moderation', 'action-description-format', {
+                value: truncate(localize('moderation', 'action-description-format', {
                     reason: action.reason,
                     u: action.memberID,
                     t: dateToDiscordTimestamp(new Date(action.createdAt))
-                })
+                }), 1024)
             });
             if (fieldCount % 3 === 0) {
                 addSite(fieldCache);

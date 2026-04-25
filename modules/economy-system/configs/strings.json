@@ -1,248 +1,155 @@
 {
-  "description": {
-    "en": "Configure messages of this module here",
-    "de": "Passe hier die Nachrichten des Modules an"
-  },
-  "humanName": {
-    "en": "Messages",
-    "de": "Nachrichten"
-  },
+  "description": "Configure messages of this module here",
+  "humanName": "Messages",
   "filename": "strings.json",
   "content": [
     {
       "name": "notFound",
-      "humanName": {
-        "en": "not found message",
-        "de": "Nicht gefunden Nachricht"
-      },
-      "default": {
-        "en": "This item could not be found",
-        "de": "Dieses Item konnte nicht gefunden werden"
-      },
-      "description": {
-        "en": "The message that is send if the item wasn't found",
-        "de": "Die Nachricht, die gesendet wird, wenn das Item nicht gefunden wird"
-      },
+      "humanName": "not found message",
+      "default": "This item could not be found",
+      "description": "The message that is send if the item wasn't found",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "notEnoughMoney",
-      "humanName": {
-        "en": "not enough money",
-        "de": "Nicht genug Geld"
-      },
-      "default": {
-        "en": "You haven't enough money to buy this Item",
-        "de": "Du hast nicht genug Geld, um dieses Item zu kaufen"
-      },
-      "description": {
-        "en": "The message that is send if the user haven't enough money to buy an item",
-        "de": "Die Nachricht, die gesendet wird, wenn ein Benutzer nicht genug geld hat, um ein Item zu kaufen"
-      },
+      "humanName": "not enough money",
+      "default": "You haven't enough money to buy this Item",
+      "description": "The message that is send if the user haven't enough money to buy an item",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "shopMsg",
-      "humanName": {
-        "en": "shop message",
-        "de": "Shop-Nachricht"
-      },
+      "humanName": "shop message",
       "default": {
-        "en": {
-          "title": "Shop",
-          "description": "%shopItems%"
-        }
+        "title": "Shop",
+        "description": "%shopItems%"
       },
-      "description": {
-        "en": "Message for the shop. The Items gets added at the end",
-        "de": "Die Nachricht, die den aktuellen Shop anzeigt"
-      },
+      "description": "Message for the shop. The Items gets added at the end",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "shopItems",
-          "description": {
-            "en": "All items of the shop (format specified below)",
-            "de": "Alle Items des Shops (Format wird unten angegeben)"
-          }
+          "description": "All items of the shop (format specified below)"
         }
       ]
     },
     {
       "name": "itemString",
-      "humanName": {
-        "en": "item string",
-        "de": "Item Text"
-      },
-      "default": {
-        "en": "**%id%** %itemName%, **price**: %price%, **sellcount**: %sellcount%",
-        "de": "**%id%** %itemName%: **Preis**: %price%, **Verkäufe**: %sellcount%"
-      },
-      "description": {
-        "en": "String for the items for the shop message",
-        "de": "Text für die Items für die Shop-Nachricht"
-      },
+      "humanName": "item string",
+      "default": "**%id%** %itemName%, **price**: %price%, **sellcount**: %sellcount%",
+      "description": "String for the items for the shop message",
       "type": "string",
       "allowEmbed": false,
       "params": [
         {
           "name": "id",
-          "description": {
-            "en": "Id of the item",
-            "de": "ID des Items"
-          }
+          "description": "Id of the item"
         },
         {
           "name": "itemName",
-          "description": {
-            "en": "Name of the item",
-            "de": "Name des Items"
-          }
+          "description": "Name of the item"
         },
         {
           "name": "price",
-          "description": {
-            "en": "Price of the item",
-            "de": "Preis des Items"
-          }
+          "description": "Price of the item"
         },
         {
           "name": "sellcount",
-          "description": {
-            "en": "Count of the sales of the item",
-            "de": "Anzahl, wie häufig das Item verkauft wurde"
-          }
+          "description": "Count of the sales of the item"
         }
       ]
     },
     {
       "name": "cooldown",
-      "humanName": {
-        "en": "cooldown",
-        "de": "Cooldown"
-      },
-      "default": {
-        "en": "Please wait before using this command again"
-      },
-      "description": {
-        "en": "This message gets send when a user is currently in cooldown"
-      },
+      "humanName": "cooldown",
+      "default": "Please wait before using this command again",
+      "description": "This message gets send when a user is currently in cooldown",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "workSuccess",
-      "humanName": {},
-      "default": {
-        "en": [
-          "You worked and earned **%earned%**"
-        ]
-      },
-      "description": {
-        "en": "Array of messages from which one random gets send when a user works successfully"
-      },
+      "humanName": "Work Success Messages",
+      "default": [
+        "You worked and earned **%earned%**"
+      ],
+      "description": "Array of messages from which one random gets send when a user works successfully",
       "type": "array",
       "content": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "earned",
-          "description": {
-            "en": "Money that the user had earned"
-          }
+          "description": "Money that the user had earned"
         }
       ]
     },
     {
       "name": "crimeSuccess",
-      "humanName": {},
-      "default": {
-        "en": [
-          "You stole a wallet and earned **%earned%**"
-        ]
-      },
-      "description": {
-        "en": "Array of messages from which one random gets send when a user commits a crime successfully"
-      },
+      "humanName": "Crime Success Messages",
+      "default": [
+        "You stole a wallet and earned **%earned%**"
+      ],
+      "description": "Array of messages from which one random gets send when a user commits a crime successfully",
       "type": "array",
       "content": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "earned",
-          "description": {
-            "en": "Money that the user had earned"
-          }
+          "description": "Money that the user had earned"
         }
       ]
     },
     {
       "name": "crimeFail",
-      "humanName": {},
-      "default": {
-        "en": [
-          "You've stolen a wallet and get caught.You loose **%loose%**"
-        ]
-      },
-      "description": {
-        "en": "Array of messages from which one random gets send when a user fails to do some crime"
-      },
+      "humanName": "Crime Fail Messages",
+      "default": [
+        "You've stolen a wallet and get caught.You loose **%loose%**"
+      ],
+      "description": "Array of messages from which one random gets send when a user fails to do some crime",
       "type": "array",
       "content": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "loose",
-          "description": {
-            "en": "Money that the user looses"
-          }
+          "description": "Money that the user looses"
         }
       ]
     },
     {
       "name": "robSuccess",
-      "humanName": {},
-      "default": {
-        "en": "You robed %user% earned **%earned%**"
-      },
-      "description": {
-        "en": "This message gets send when a user robs another user successfully"
-      },
+      "humanName": "Rob Success Message",
+      "default": "You robed %user% earned **%earned%**",
+      "description": "This message gets send when a user robs another user successfully",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "earned",
-          "description": {
-            "en": "Money that the user had earned"
-          }
+          "description": "Money that the user had earned"
         },
         {
           "name": "user",
-          "description": {
-            "en": "The user that gets robed by you"
-          }
+          "description": "The user that gets robed by you"
         }
       ]
     },
     {
       "name": "leaderboardEmbed",
-      "humanName": {},
+      "humanName": "Leaderboard Embed",
       "default": {
-        "en": {
-          "title": "Leaderboard",
-          "color": "GREEN",
-          "thumbnail": " ",
-          "image": " ",
-          "description": "Here you can see who has the most money"
-        }
+        "title": "Leaderboard",
+        "color": "GREEN",
+        "thumbnail": " ",
+        "image": " ",
+        "description": "Here you can see who has the most money"
       },
-      "description": {
-        "en": "Configure the leaderboard embed here"
-      },
+      "description": "Configure the leaderboard embed here",
       "type": "keyed",
       "content": {
         "key": "string",
@@ -253,460 +160,296 @@
     },
     {
       "name": "dailyReward",
-      "humanName": {},
-      "default": {
-        "en": "You earned **%earned%** by collecting your daily reward"
-      },
-      "description": {
-        "en": "Message that gets send after the user has claimed the daily reward"
-      },
+      "humanName": "Daily Reward Message",
+      "default": "You earned **%earned%** by collecting your daily reward",
+      "description": "Message that gets send after the user has claimed the daily reward",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "earned",
-          "description": {
-            "en": "Money that the user had earned"
-          }
+          "description": "Money that the user had earned"
         }
       ]
     },
     {
       "name": "weeklyReward",
-      "humanName": {},
-      "default": {
-        "en": "You earned **%earned%** by collecting your weekly reward"
-      },
-      "description": {
-        "en": "Message that gets send after the user has claimed the weekly reward"
-      },
+      "humanName": "Weekly Reward Message",
+      "default": "You earned **%earned%** by collecting your weekly reward",
+      "description": "Message that gets send after the user has claimed the weekly reward",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "earned",
-          "description": {
-            "en": "Money that the user had earned"
-          }
+          "description": "Money that the user had earned"
         }
       ]
     },
     {
       "name": "balanceReply",
-      "humanName": {},
+      "humanName": "Balance Reply",
       "default": {
-        "en": {
-          "title": "Balance of %user%",
-          "fields": [
-            {
-              "name": "Balance:",
-              "value": "%balance%"
-            },
-            {
-              "name": "Bank:",
-              "value": "%bank%"
-            },
-            {
-              "name": "Total:",
-              "value": "%total%"
-            }
-          ]
-        }
+        "title": "Balance of %user%",
+        "fields": [
+          {
+            "name": "Balance:",
+            "value": "%balance%"
+          },
+          {
+            "name": "Bank:",
+            "value": "%bank%"
+          },
+          {
+            "name": "Total:",
+            "value": "%total%"
+          }
+        ]
       },
-      "description": {
-        "en": "Reply for the balance command"
-      },
+      "description": "Reply for the balance command",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "balance",
-          "description": {
-            "en": "Current balance of the user"
-          }
+          "description": "Current balance of the user"
         },
         {
           "name": "bank",
-          "description": {
-            "en": "Current value that the user has on the bank"
-          }
+          "description": "Current value that the user has on the bank"
         },
         {
           "name": "total",
-          "description": {
-            "en": "Total balance of the user"
-          }
+          "description": "Total balance of the user"
         },
         {
           "name": "user",
-          "description": {
-            "en": "Username and discriminator of the User"
-          }
+          "description": "Username and discriminator of the User"
         }
       ]
     },
     {
       "name": "userNotFound",
-      "humanName": {},
-      "default": {
-        "en": "I can't find the user **%user%**"
-      },
-      "description": {
-        "en": "The message that gets sent when the bot can't find a user"
-      },
+      "humanName": "User Not Found",
+      "default": "I can't find the user **%user%**",
+      "description": "The message that gets sent when the bot can't find a user",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "user",
-          "description": {
-            "en": "User that can't been found"
-          }
+          "description": "User that can't been found"
         }
       ]
     },
     {
       "name": "buyMsg",
-      "humanName": {},
-      "default": {
-        "en": "You got the item **%item%**"
-      },
-      "description": {
-        "en": "Message that gets send when a user buys something in the shop"
-      },
+      "humanName": "Purchase Message",
+      "default": "You got the item **%item%**",
+      "description": "Message that gets send when a user buys something in the shop",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "item",
-          "description": {
-            "en": "Name of the item"
-          }
+          "description": "Name of the item"
         }
       ]
     },
     {
       "name": "itemCreate",
-      "humanName": {},
-      "default": {
-        "en": "Successfully created the item %name% with the id %id%. It costs %price% and you get the role %role%"
-      },
-      "description": {
-        "en": "Message that gets send when a new shop item gets created"
-      },
+      "humanName": "Item Created Message",
+      "default": "Successfully created the item %name% with the id %id%. It costs %price% and you get the role %role%",
+      "description": "Message that gets send when a new shop item gets created",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "name",
-          "description": {
-            "en": "Name of the created item"
-          }
+          "description": "Name of the created item"
         },
         {
           "name": "id",
-          "description": {
-            "en": "Id of the created item"
-          }
+          "description": "Id of the created item"
         },
         {
           "name": "price",
-          "description": {
-            "en": "Price of the created item"
-          }
+          "description": "Price of the created item"
         },
         {
           "name": "role",
-          "description": {
-            "en": "Role that everyone gets who buys the item"
-          }
+          "description": "Role that everyone gets who buys the item"
         }
       ]
     },
     {
       "name": "itemDelete",
-      "humanName": {},
-      "default": {
-        "en": "Successfully deleted the item %name%."
-      },
-      "description": {
-        "en": "Message that gets send when a new shop item gets deleted"
-      },
+      "humanName": "Item Deleted Message",
+      "default": "Successfully deleted the item %name%.",
+      "description": "Message that gets send when a new shop item gets deleted",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "name",
-          "description": {
-            "en": "Name of the deleted item",
-            "de": "Name des gelöschten Items"
-          }
+          "description": "Name of the deleted item"
         },
         {
           "name": "id",
-          "description": {
-            "en": "Id of the deleted item",
-            "de": "ID des gelöschten Items"
-          }
+          "description": "Id of the deleted item"
         }
       ]
     },
     {
       "name": "itemEdit",
-      "humanName": {},
-      "default": {
-        "en": "Successfully edited the item %name%. Check it out using `/shop list`"
-      },
-      "description": {
-        "en": "Message that gets sent when a shop item gets edited"
-      },
+      "humanName": "Item Edited Message",
+      "default": "Successfully edited the item %name%. Check it out using `/shop list`",
+      "description": "Message that gets sent when a shop item gets edited",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "name",
-          "description": {
-            "en": "Name of the edited item",
-            "de": "Name des bearbeiteten Items"
-          }
+          "description": "Name of the edited item"
         },
         {
           "name": "id",
-          "description": {
-            "en": "Id of the edited item",
-            "de": "ID des bearbeiteten Items"
-          }
+          "description": "Id of the edited item"
         }
       ]
     },
     {
       "name": "depositMsg",
-      "humanName": {
-        "en": "deposit message"
-      },
-      "default": {
-        "en": "Successfully deposited **%amount%** to your bank"
-      },
-      "description": {
-        "en": "The reply when a user deposits money to the bank"
-      },
+      "humanName": "deposit message",
+      "default": "Successfully deposited **%amount%** to your bank",
+      "description": "The reply when a user deposits money to the bank",
       "type": "string",
       "params": [
         {
           "name": "amount",
-          "description": {}
+          "description": "Amount deposited"
         }
       ]
     },
     {
       "name": "withdrawMsg",
-      "humanName": {
-        "en": "withdraw message"
-      },
-      "default": {
-        "en": "Successfully withdrew **%amount%** from your bank"
-      },
-      "description": {
-        "en": "The reply when a user withdraws money from the bank"
-      },
+      "humanName": "withdraw message",
+      "default": "Successfully withdrew **%amount%** from your bank",
+      "description": "The reply when a user withdraws money from the bank",
       "type": "string",
       "params": [
         {
           "name": "amount",
-          "description": {}
+          "description": "Amount withdrawn"
         }
       ]
     },
     {
       "name": "msgDropMsg",
-      "humanName": {
-        "en": "message drop message"
-      },
-      "default": {
-        "en": [
-          "Message-Drop: You earned %earned% simply by chatting!"
-        ]
-      },
-      "description": {
-        "en": "The message that gets sent on a message-drop"
-      },
+      "humanName": "message drop message",
+      "default": [
+        "Message-Drop: You earned %earned% simply by chatting!"
+      ],
+      "description": "The message that gets sent on a message-drop",
       "type": "array",
       "content": "string",
       "params": [
         {
           "name": "earned",
-          "description": {}
+          "description": "Money earned from the drop"
         }
       ]
     },
     {
       "name": "NaN",
-      "humanName": {
-        "en": "not a number"
-      },
-      "default": {
-        "en": "**%input%** isn't a number"
-      },
-      "description": {
-        "en": "Message that gets send if the bot needs a number but gets something different"
-      },
+      "humanName": "not a number",
+      "default": "**%input%** isn't a number",
+      "description": "Message that gets send if the bot needs a number but gets something different",
       "type": "string",
       "params": [
         {
           "name": "input",
-          "description": {}
+          "description": "The invalid input"
         }
       ]
     },
     {
       "name": "msgDropAlreadyEnabled",
-      "humanName": {
-        "en": "message-drop already enabled"
-      },
-      "default": {
-        "en": "The Mesage-Drop message is already enabled!"
-      },
-      "description": {
-        "en": "Message that gets send if a User trys to enable the Message-Drop message, but it's already enabled"
-      },
+      "humanName": "message-drop already enabled",
+      "default": "The Mesage-Drop message is already enabled!",
+      "description": "Message that gets send if a User trys to enable the Message-Drop message, but it's already enabled",
       "type": "string"
     },
     {
       "name": "msgDropEnabled",
-      "humanName": {
-        "en": "message-drop enabled"
-      },
-      "default": {
-        "en": "Successfully enabled the Message-Drop message"
-      },
-      "description": {
-        "en": "Message that gets send when a User enables the Message-Drop message"
-      },
+      "humanName": "message-drop enabled",
+      "default": "Successfully enabled the Message-Drop message",
+      "description": "Message that gets send when a User enables the Message-Drop message",
       "type": "string"
     },
     {
       "name": "msgDropAlreadyDisabled",
-      "humanName": {
-        "en": "message-drop already disabled"
-      },
-      "default": {
-        "en": "The Mesage-Drop message is already disabled!"
-      },
-      "description": {
-        "en": "Message that gets send if a User trys to disable the Message-Drop message, but it's already disabled"
-      },
+      "humanName": "message-drop already disabled",
+      "default": "The Mesage-Drop message is already disabled!",
+      "description": "Message that gets send if a User trys to disable the Message-Drop message, but it's already disabled",
       "type": "string"
     },
     {
       "name": "msgDropDisabled",
-      "humanName": {
-        "en": "message-drop disabled"
-      },
-      "default": {
-        "en": "Successfully disabled the Message-Drop message"
-      },
-      "description": {
-        "en": "Message that gets send when a User disables the Message-Drop message"
-      },
+      "humanName": "message-drop disabled",
+      "default": "Successfully disabled the Message-Drop message",
+      "description": "Message that gets send when a User disables the Message-Drop message",
       "type": "string"
     },
     {
       "name": "rebuyItem",
-      "humanName": {
-        "en": "rebuy message",
-        "de": "Erneutkaufen Nachricht"
-      },
-      "default": {
-        "en": "You already own this Item",
-        "de": "Du hast dieses Item bereits gekauft"
-      },
-      "description": {
-        "en": "The message that is send when the user trys to buy an Item that he already own",
-        "de": "Die Nachricht, die gesendet wird, wenn der Nutzer das Item bereits besitzt"
-      },
+      "humanName": "rebuy message",
+      "default": "You already own this Item",
+      "description": "The message that is send when the user trys to buy an Item that he already own",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "multipleMatches",
-      "humanName": {
-        "en": "multiple matches",
-        "de": "mehrere Treffer"
-      },
-      "default": {
-        "en": "Multiple items match the query",
-        "de": "Mehrere Items entsprechen der Suche"
-      },
-      "description": {
-        "en": "The message that gets send when multiple items match the query",
-        "de": "Die Nachricht, die gesendet wird, wenn mehrere Items der Suche entsprechen"
-      },
+      "humanName": "multiple matches",
+      "default": "Multiple items match the query",
+      "description": "The message that gets send when multiple items match the query",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "noMatches",
-      "humanName": {
-        "en": "no matches",
-        "de": "keine Treffer"
-      },
-      "default": {
-        "en": "The item with the id %id%/ the name %name% doesn't exists",
-        "de": "Das Item mit der ID %id%/ dem Namen %name% wurde nicht gefunden"
-      },
-      "description": {
-        "en": "The message that gets send when the item can't be found",
-        "de": "Die Nachricht, die gesendet wird, wenn das Item nicht gefunden wird"
-      },
+      "humanName": "no matches",
+      "default": "The item with the id %id%/ the name %name% doesn't exists",
+      "description": "The message that gets send when the item can't be found",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "id",
-          "description": {
-            "en": "The specified ID",
-            "de": "Die angegebene ID"
-          }
+          "description": "The specified ID"
         },
         {
           "name": "name",
-          "description": {
-            "en": "The specified name",
-            "de": "Der angegebene Name"
-          }
+          "description": "The specified name"
         }
       ]
     },
     {
       "name": "itemDuplicate",
-      "humanName": {
-        "en": "item duplicate",
-        "de": "Item Duplikat"
-      },
-      "default": {
-        "en": "There's already an item with the id %id% or the name %name%",
-        "de": "Es gibt schon ein Item mit der ID %id% oder dem Namen %name%"
-      },
-      "description": {
-        "en": "The message that gets send when an item with the specified id or name already exists",
-        "de": "Die Nachricht, die gesendet wird, wenn ein Item mit dem angegebenen Namen oder der angegebenen ID schon existiert"
-      },
+      "humanName": "item duplicate",
+      "default": "There's already an item with the id %id% or the name %name%",
+      "description": "The message that gets send when an item with the specified id or name already exists",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "id",
-          "description": {
-            "en": "The specified ID",
-            "de": "Die angegebene ID"
-          }
+          "description": "The specified ID"
         },
         {
           "name": "name",
-          "description": {
-            "en": "The specified name",
-            "de": "Der angegebene Name"
-          }
+          "description": "The specified name"
         }
       ]
     }

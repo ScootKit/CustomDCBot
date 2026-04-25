@@ -1,22 +1,18 @@
 {
   "name": "starboard",
-  "humanReadableName": {
-    "en": "Starboard"
-  },
+  "humanReadableName": "Starboard",
   "author": {
     "scnxOrgID": "60",
     "name": "TomatoCake",
     "link": "https://github.com/DEVTomatoCake"
   },
-  "description": {
-    "en": "Let users highlight messages into a starboard channel by reacting.",
-    "de": "Lass Nutzer Nachrichten durch eine Reaktion in einem Starboard-Kanal hervorheben."
-  },
+  "description": "Let users highlight messages into a starboard channel by reacting.",
   "events-dir": "/events",
   "models-dir": "/models",
   "config-example-files": [
     "configs/config.json"
   ],
+  "fa-icon": "fas fa-star",
   "tags": [
     "community"
   ],

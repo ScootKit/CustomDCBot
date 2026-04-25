@@ -11,6 +11,7 @@ module.exports.run = async function (client, msg) {
     if (messageWithMentions[msg.id].guild.id !== client.config.guildID) return;
     if (!moduleStrings.awaitBotMessages) return executeGhostPingMessage();
     setTimeout(async () => {
+        if (!messageWithMentions[msg.id]) return;
         const messages = await msg.channel.messages.fetch({after: msg.id});
         if (messages.filter(m => m.author.bot).size !== 0) return;
         await executeGhostPingMessage();
@@ -22,6 +23,7 @@ module.exports.run = async function (client, msg) {
      * @return {Promise<void>}
      */
     async function executeGhostPingMessage() {
+        if (!messageWithMentions[msg.id]) return;
         let mentionString = '';
         messageWithMentions[msg.id].mentions.members.filter(f => f.id !== messageWithMentions[msg.id].author.id && !f.user.bot).forEach(m => {
             mentionString = mentionString + `<@${m.id}>, `;

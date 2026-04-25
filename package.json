@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node main.js",
     "test": "npx eslint ./",
+    "verify-configs": "node scripts/verify-config-defaults.js",
     "generate-config": "node generate-config.js",
     "generate-template": "node generate-template.js"
   },
@@ -30,7 +31,7 @@
     "centra": "2.6.0",
     "discord-api-types": "0.38.37",
     "discord-logs": "2.2.1",
-    "discord.js": "14.25.1",
+    "discord.js": "14.26.2",
     "dotenv": "16.3.1",
     "erlpack": "github:discord/erlpack",
     "fparser": "3.1.0",

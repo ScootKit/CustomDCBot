@@ -1,62 +1,30 @@
 {
-  "description": {
-    "en": "This system can prevent suspicious accounts from getting access to your server",
-    "de": "Dieses System kann verhindern, dass verdächtige Accounts Zugriff erhalten"
-  },
-  "humanName": {
-    "de": "Join-Gate-Konfiguration",
-    "en": "Join-Gate-Configuration"
-  },
+  "description": "This system can prevent suspicious accounts from getting access to your server",
+  "humanName": "Join-Gate-Configuration",
   "filename": "joinGate.json",
   "content": [
     {
       "name": "enabled",
-      "humanName": {
-        "de": "Aktiviert?",
-        "en": "Enabled?"
-      },
-      "default": {
-        "en": true,
-        "de": true
-      },
-      "description": {
-        "en": "Enable or disable the join gate",
-        "de": "Aktiviere oder deaktiviere das Join-Gate"
-      },
+      "humanName": "Enabled?",
+      "default": true,
+      "description": "Enable or disable the join gate",
       "type": "boolean",
       "elementToggle": true,
       "category": "general"
     },
     {
       "name": "allUsers",
-      "humanName": {
-        "de": "Alle Nutzer filtern",
-        "en": "Filter all users"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled all users action against all new users will be taken",
-        "de": "Wenn aktiviert, werden Aktionen gegen alle neuen Nutzer ausgefüht"
-      },
+      "humanName": "Filter all users",
+      "default": false,
+      "description": "If enabled all users action against all new users will be taken",
       "type": "boolean",
       "category": "general"
     },
     {
       "name": "action",
-      "humanName": {
-        "de": "Aktion",
-        "en": "Action"
-      },
-      "default": {
-        "en": "quarantine",
-        "de": "quarantine"
-      },
-      "description": {
-        "en": "Select the action here that should get performed if the join gate gets triggered",
-        "de": "Wähle hier die Aktion, die ausgeführt werden soll, wenn das Join-Gate ausgelöst wird"
-      },
+      "humanName": "Action",
+      "default": "quarantine",
+      "description": "Select the action here that should get performed if the join gate gets triggered",
       "type": "select",
       "content": [
         "mute",
@@ -69,85 +37,41 @@
     },
     {
       "name": "roleID",
-      "humanName": {
-        "de": "Rolle",
-        "en": "Role"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Only if action = give-role. Role that gets given to users who fail the join gate",
-        "de": "Nur verfügbar, wenn Aktion = give-role. Rolle, die Nutzern gegeben wird, die das Join-Gate nicht bestehen"
-      },
+      "humanName": "Role",
+      "default": "",
+      "description": "Only if action = give-role. Role that gets given to users who fail the join gate",
       "type": "roleID",
       "category": "roles"
     },
     {
       "name": "removeOtherRoles",
-      "humanName": {
-        "de": "Andere Rollen entfernen",
-        "en": "Remove other roles"
-      },
-      "default": {
-        "en": true,
-        "de": true
-      },
-      "description": {
-        "en": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
-        "de": "Nur verfügbar, wenn Aktion = give-role. Wenn aktiviert, werden andere Rollen die der Nutzer hat nach einem kurzen Zeitraum entfernt (und das Vergeben der Rolle von \"Rolle\" wird verzögert)"
-      },
+      "humanName": "Remove other roles",
+      "default": true,
+      "description": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
       "type": "boolean",
       "category": "roles"
     },
     {
       "name": "minAccountAge",
-      "humanName": {
-        "de": "Minimales Accountalter",
-        "en": "Minimum account age"
-      },
-      "default": {
-        "en": "3",
-        "de": 3
-      },
-      "description": {
-        "en": "Age of the account of a new user that is required to be set to pass the join gate (in days)",
-        "de": "Alter des Accounts eines neuen Nutzers, der beitritt, welches benötigt wird um das Join-Gate zu bestehen (in Tagen)"
-      },
+      "humanName": "Minimum account age",
+      "default": 3,
+      "description": "Age of the account of a new user that is required to be set to pass the join gate (in days)",
       "type": "integer",
       "category": "general"
     },
     {
       "name": "requireProfilePicture",
-      "humanName": {
-        "de": "Benötige Profilbild",
-        "en": "Require profile picture"
-      },
-      "default": {
-        "en": true,
-        "de": true
-      },
-      "description": {
-        "en": "If enabled users are required to have a profile picture set to pass the join gate",
-        "de": "Wenn aktiviert, brauchen Nutzer ein Profilbild um das Join-Gate zu bestehen"
-      },
+      "humanName": "Require profile picture",
+      "default": true,
+      "description": "If enabled users are required to have a profile picture set to pass the join gate",
       "type": "boolean",
       "category": "general"
     },
     {
       "name": "ignoreBots",
-      "humanName": {
-        "de": "Ignoriere Bots",
-        "en": "Ignore bots"
-      },
-      "default": {
-        "en": true,
-        "de": true
-      },
-      "description": {
-        "en": "If enabled bots are allowed to pass the join gate without any restrictions",
-        "de": "Wenn aktiviert, bestehen Bots das Join-Gate ohne Beschränkungen"
-      },
+      "humanName": "Ignore bots",
+      "default": true,
+      "description": "If enabled bots are allowed to pass the join gate without any restrictions",
       "type": "boolean",
       "category": "general"
     }
@@ -156,18 +80,12 @@
     {
       "id": "general",
       "icon": "fas fa-door-open",
-      "displayName": {
-        "en": "General Settings",
-        "de": "Allgemeine Einstellungen"
-      }
+      "displayName": "General Settings"
     },
     {
       "id": "roles",
       "icon": "fa-solid fa-users",
-      "displayName": {
-        "en": "Roles",
-        "de": "Rollen"
-      }
+      "displayName": "Roles"
     }
   ]
 }

@@ -1,5 +1,6 @@
 {
   "name": "twitch-notifications",
+  "fa-icon": "fa-brands fa-twitch",
   "author": {
     "name": "jateute",
     "link": "https://github.com/jateute",
@@ -15,12 +16,6 @@
   "tags": [
     "integrations"
   ],
-  "humanReadableName": {
-    "en": "Twitch-Notifications",
-    "de": "Twitch-Benachrichtigungen"
-  },
-  "description": {
-    "en": "Module that sends a message to a channel, when a streamer goes live on Twitch",
-    "de": "Sendet eine Nachricht in einen ausgewählten Channel, wenn ein Streamer Live auf Twitch streamt"
-  }
+  "humanReadableName": "Twitch-Notifications",
+  "description": "Module that sends a message to a channel, when a streamer goes live on Twitch"
 }

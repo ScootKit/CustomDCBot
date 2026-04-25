@@ -1,150 +1,74 @@
 {
-  "description": {
-    "en": "Configure here, where for what streamer which message should get send",
-    "de": "Stelle hier ein, bei welchem Streamer in welchen Channel eine Nachricht gesendet werden soll"
-  },
-  "humanName": {
-    "en": "Streamers",
-    "de": "Streamers"
-  },
-  "elementLimits": {
-    "STARTER": 2,
-    "ACTIVE_GUILD": 5,
-    "PRO": 15,
-    "UNLIMITED": 5,
-    "PROFESSIONAL": 15
-  },
+  "description": "Configure here, where for what streamer which message should get send",
+  "humanName": "Streamers",
   "filename": "streamers.json",
   "configElements": true,
   "content": [
     {
       "name": "liveMessage",
-      "humanName": {
-        "en": "Live-Messages",
-        "de": "Live-Nachricht"
-      },
-      "default": {
-        "en": "Hey, %streamer% is live on Twitch streaming %game%! Check it out: %url%",
-        "de": "Hi, %streamer% ist Live auf Twitch und streamt %game%! Jetzt anschauen: %url%"
-      },
-      "description": {
-        "en": "Message that gets send if the streamer goes live",
-        "de": "Nachricht, die gesendet wird, wenn ein Streamer anfängt zu streamen"
-      },
+      "humanName": "Live-Messages",
+      "default": "Hey, %streamer% is live on Twitch streaming %game%! Check it out: %url%",
+      "description": "Message that gets send if the streamer goes live",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "streamer",
-          "description": {
-            "en": "Name of the Streamer",
-            "de": "Name des Streamers"
-          }
+          "description": "Name of the Streamer"
         },
         {
           "name": "game",
-          "description": {
-            "en": "Game which is streamed",
-            "de": "Spiel, welches gestreamt wird"
-          }
+          "description": "Game which is streamed"
         },
         {
           "name": "url",
-          "description": {
-            "en": "Link to the stream",
-            "de": "Link zum Twitch-Stream"
-          }
+          "description": "Link to the stream"
         },
         {
           "name": "title",
-          "description": {
-            "en": "Title of the Stream",
-            "de": "Titel des Streams"
-          }
+          "description": "Title of the Stream"
         },
         {
           "name": "thumbnailUrl",
-          "description": {
-            "en": "The Link to the thumbnail of the Stream",
-            "de": "Link zum Thumbnail des Streams"
-          },
+          "description": "The Link to the thumbnail of the Stream",
           "isImage": true
         }
       ]
     },
     {
       "name": "liveMessageChannel",
-      "humanName": {
-        "en": "Channel"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Channel in which live-message should get sent",
-        "de": "Kanal, in welchen Benachrichtigung gesendet werden soll"
-      },
+      "humanName": "Channel",
+      "default": "",
+      "description": "Channel in which live-message should get sent",
       "type": "channelID"
     },
     {
       "name": "streamer",
-      "humanName": {
-        "en": "Streamer",
-        "de": "Streamer"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Streamer where a notification should send when they start streaming",
-        "de": "Steamer, bei denen eine Benachrichtigung gesendet werden soll, wenn sie anfangen, zu streamen"
-      },
+      "humanName": "Streamer",
+      "default": "",
+      "description": "Streamer where a notification should send when they start streaming",
       "type": "string"
     },
     {
       "name": "liveRole",
-      "humanName": {
-        "en": "Use Live-Role",
-        "de": "Live-Rolle Aktivieren"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Should the Live-Role be activated?",
-        "de": "Soll die Live-Rolle aktiviert sein?"
-      },
+      "humanName": "Use Live-Role",
+      "default": false,
+      "description": "Should the Live-Role be activated?",
       "type": "boolean"
     },
     {
       "name": "id",
-      "humanName": {
-        "en": "Discord-User ID",
-        "de": "Discord-Benutzer ID"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "ID of the Discord-Account of the Streamer",
-        "de": "ID des Discord-Accounts des Streamers"
-      },
+      "humanName": "Discord-User ID",
+      "default": "",
+      "description": "ID of the Discord-Account of the Streamer",
       "type": "userID",
       "dependsOn": "liveRole"
     },
     {
       "name": "role",
-      "humanName": {
-        "en": "Live Role",
-        "de": "Live Rolle"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "ID of the Role that the Streamer should get, when live",
-        "de": "ID der Rolle, die der streamer bekommen soll, wenn er live ist"
-      },
+      "humanName": "Live Role",
+      "default": "",
+      "description": "ID of the Role that the Streamer should get, when live",
       "type": "roleID",
       "allowNull": true,
       "dependsOn": "liveRole"

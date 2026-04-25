@@ -1,94 +1,41 @@
 {
-  "description": {
-    "en": "You can send on a daily basic here - this can be once a week or month",
-    "de": "Hier kannst du Nachrichten auf täglicher Basis versenden lassen - das kann auch nur einmal pro Woche oder Monat sein"
-  },
-  "elementLimits": {
-    "STARTER": 2,
-    "ACTIVE_GUILD": 5,
-    "PRO": 15,
-    "UNLIMITED": 5,
-    "PROFESSIONAL": 15
-  },
+  "description": "You can send on a daily basic here - this can be once a week or month",
   "configElementName": {
-    "de": {
-      "one": "Automatische Nachricht",
-      "more": "Automatische Nachrichten"
-    },
-    "en": {
-      "one": "Automatic message",
-      "more": "Automatic messages"
-    }
+    "one": "Automatic message",
+    "more": "Automatic messages"
   },
-  "humanName": {
-    "en": "Daily Basic",
-    "de": "Tägliche Basis"
-  },
+  "humanName": "Daily Basic",
   "filename": "daily.json",
   "configElements": true,
   "content": [
     {
       "name": "channelID",
-      "humanName": {
-        "de": "Kanal",
-        "en": "Channel"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "ID of the channel in which the message should be send",
-        "de": "ID des Kanals, in welchen die Nachricht gesendet werden soll"
-      },
+      "humanName": "Channel",
+      "default": "",
+      "description": "ID of the channel in which the message should be send",
       "type": "channelID"
     },
     {
       "name": "message",
-      "humanName": {
-        "de": "Nachricht",
-        "en": "Message"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Message that should be send",
-        "de": "Nachricht, die gesendet werden soll"
-      },
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should be send",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "limitWeekDaysTo",
-      "humanName": {
-        "de": "Wochentage begrenzen auf",
-        "en": "Limit Week-Days to"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "If one or more values are set, the message will only get send when the current week-day is included in this field",
-        "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Wochentag hier enthalten ist"
-      },
+      "humanName": "Limit Week-Days to",
+      "default": [],
+      "description": "If one or more values are set, the message will only get send when the current week-day is included in this field",
       "type": "array",
       "content": "integer"
     },
     {
       "name": "limitDaysTo",
-      "humanName": {
-        "de": "Tage begrenzen auf",
-        "en": "Limit days to"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "If one or more values are set, the message will only get send when the current day (of the month) is included in this field",
-        "de": "Wenn ein oder mehrere Werte gesetzt sind, wird die Nachricht nur gesendet, wenn der aktuelle Tag (des Monats) hier enthalten ist"
-      },
+      "humanName": "Limit days to",
+      "default": [],
+      "description": "If one or more values are set, the message will only get send when the current day (of the month) is included in this field",
       "type": "array",
       "content": "integer"
     }

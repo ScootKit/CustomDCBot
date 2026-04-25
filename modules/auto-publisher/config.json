@@ -1,27 +1,13 @@
 {
-  "description": {
-    "en": "Configure the behaviour of the module here",
-    "de": "Stelle hier die Funktionen des Modules ein"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "mode",
-      "humanName": {
-        "en": "Message-Publishing-Mode",
-        "de": "Nachrichten-Veröffentlichung-Modus"
-      },
-      "default": {
-        "en": "all"
-      },
-      "description": {
-        "en": "Modus in which this module should operate",
-        "de": "Modus in welchem dieses Modul arbeiten sollte"
-      },
+      "humanName": "Message-Publishing-Mode",
+      "default": "all",
+      "description": "Modus in which this module should operate",
       "type": "select",
       "content": [
         "all",
@@ -31,47 +17,25 @@
     },
     {
       "name": "blacklist",
-      "humanName": {
-        "en": "Blacklist"
-      },
-      "default": {
-        "en": []
-      },
-      "description": {
-        "en": "Channel to be ignored (only if Message-Publishing-Mode = \"blacklist\")",
-        "de": "Kanäle, die ignoriert werden sollen (nur wenn Nachrichten-Veröffentlichung-Modus = \"blacklist\")"
-      },
+      "humanName": "Blacklist",
+      "default": [],
+      "description": "Channel to be ignored (only if Message-Publishing-Mode = \"blacklist\")",
       "type": "array",
       "content": "channelID"
     },
     {
       "name": "whitelist",
-      "humanName": {
-        "en": "Whitelist"
-      },
-      "default": {
-        "en": []
-      },
-      "description": {
-        "en": "Channel in which messages should get published (only if Message-Publishing-Mode = \"whitelist\")",
-        "de": "Kanäle, in denen Nachrichten veröffentlicht werden sollen (nur wenn Message-Publishing-Mode = \"whitelist\")"
-      },
+      "humanName": "Whitelist",
+      "default": [],
+      "description": "Channel in which messages should get published (only if Message-Publishing-Mode = \"whitelist\")",
       "type": "array",
       "content": "channelID"
     },
     {
       "name": "ignoreBots",
-      "humanName": {
-        "en": "Ignore bots?",
-        "de": "Bots ignorieren?"
-      },
-      "default": {
-        "en": true
-      },
-      "description": {
-        "en": "Should bots get ignored when they post a message",
-        "de": "Sollen Bots ignoriert werden, wenn sie eine Nachricht senden"
-      },
+      "humanName": "Ignore bots?",
+      "default": true,
+      "description": "Should bots get ignored when they post a message",
       "type": "boolean"
     }
   ]

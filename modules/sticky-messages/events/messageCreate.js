@@ -14,8 +14,10 @@ async function deleteMessage(clientId, channel) {
     message = await channel.messages.fetch(channelData[channel.id].msg).catch(async () => {
         const msgs = await channel.messages.fetch({limit: 20});
         message = msgs.find(m => m.author.id === clientId);
+        if (message) message.delete().catch(() => {
+        });
     });
-    if (message) message.delete().catch(() => {
+    if (message && message.deletable) message.delete().catch(() => {
     });
 }
 

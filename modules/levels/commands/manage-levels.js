@@ -25,17 +25,17 @@ async function runXPAction(interaction, newXP) {
     if (user.xp < 0) return interaction.editReply({
         content: '⚠️ ' + localize('levels', 'negative-xp')
     });
+    if (!Number.isFinite(user.xp) || user.xp > 1e12) return interaction.editReply({
+        content: '⚠️ ' + localize('levels', 'xp-out-of-range')
+    });
 
-    function runXPCheck() {
+    let guard = 0;
+    while (guard++ < 1_000_000) {
         const nextLevelXp = calculateLevelXP(interaction.client, user.level + 1);
-        if (nextLevelXp <= user.xp) {
-            user.level = user.level + 1;
-            fixLevelRoles(interaction, member, user.level);
-            runXPCheck();
-        }
+        if (!Number.isFinite(nextLevelXp) || nextLevelXp > user.xp) break;
+        user.level = user.level + 1;
+        await fixLevelRoles(interaction, member, user.level);
     }
-
-    runXPCheck();
 
 
     await user.save();
@@ -84,12 +84,19 @@ async function runLevelAction(interaction, newLevel) {
     if (!user) return interaction.editReply({
         content: '⚠️ ' + localize('levels', 'cheat-no-profile')
     });
+    const isZero = newLevel(user.level) === user.level;
     user.level = newLevel(user.level);
-    if (interaction.client.configurations['levels']['config'].startFromZero) user.level = user.level + 1;
+    if (interaction.client.configurations['levels']['config'].startFromZero && !isZero) user.level = user.level + 1;
     if (user.level < 1) return interaction.editReply({
         content: '⚠️ ' + localize('levels', 'negative-level')
     });
+    if (!Number.isFinite(user.level) || user.level > 1e6) return interaction.editReply({
+        content: '⚠️ ' + localize('levels', 'level-out-of-range')
+    });
     user.xp = calculateLevelXP(interaction.client, user.level);
+    if (!Number.isFinite(user.xp) || user.xp > 1e12) return interaction.editReply({
+        content: '⚠️ ' + localize('levels', 'xp-out-of-range')
+    });
 
     await fixLevelRoles(interaction, member, user.level);
 

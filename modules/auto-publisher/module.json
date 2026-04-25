@@ -1,5 +1,6 @@
 {
   "name": "auto-publisher",
+  "fa-icon": "fas fa-bullhorn",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -13,12 +14,6 @@
   "tags": [
     "tools"
   ],
-  "humanReadableName": {
-    "en": "Automatic Publishing",
-    "de": "Automatische Veröffentlichung"
-  },
-  "description": {
-    "en": "Publishes messages in announcement channels",
-    "de": "Veröffentlicht Nachrichten in Ankündigungskanälen"
-  }
+  "humanReadableName": "Automatic Publishing",
+  "description": "Publishes messages in announcement channels"
 }

@@ -1,4 +1,7 @@
-const { enforceRetention, syncNativeAutoMod } = require('../ping-protection');
+const {
+    enforceRetention,
+    syncNativeAutoMod
+} = require('../ping-protection');
 const schedule = require('node-schedule');
 
 module.exports.run = async function (client) {

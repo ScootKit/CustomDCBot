@@ -14,12 +14,12 @@ if (args[0]) {
 try {
     require(`${confDir}/config.json`);
     console.error('Seems like you already have an config file! You can start the bot now with "npm start"!');
-    process.exit(1);
+    process.exit(0);
 } catch (e) {
     console.log('[INFO] Starting generation...');
     exampleFile.content.forEach(async field => {
         if (!field.name) return;
-        config[field.name] = field.default.en;
+        config[field.name] = (typeof field.default === 'object' && field.default !== null && 'en' in field.default) ? field.default.en : field.default;
     });
 
     if (!fs.existsSync(`${confDir}`)) {

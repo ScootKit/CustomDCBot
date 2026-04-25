@@ -18,7 +18,7 @@ module.exports.run = async (client, interaction) => {
         });
     }
     if ((interaction.customId || '').startsWith('cc-') && client.scnxSetup) return require('../functions/scnx-integration').customCommandInteractionClick(interaction);
-    if (interaction.isSelectMenu() && interaction.customId === 'select-roles' && client.scnxSetup) return require('../functions/scnx-integration').handleSelectRoles(client, interaction);
+    if (interaction.isSelectMenu() && interaction.customId.startsWith('select-roles') && client.scnxSetup) return require('../functions/scnx-integration').handleSelectRoles(client, interaction);
     if (interaction.isButton() && interaction.customId.startsWith('srb-') && client.scnxSetup) return require('../functions/scnx-integration').handleRoleButton(client, interaction);
     if (!interaction.commandName) return;
     const command = client.commands.find(c => c.name.toLowerCase() === interaction.commandName.toLowerCase());
@@ -54,26 +54,26 @@ module.exports.run = async (client, interaction) => {
             if (group) return await command.autoComplete[group][subCommand][focusedOption](interaction);
             else return await command.autoComplete[subCommand][focusedOption](interaction);
         } catch (e) {
-            if (client.captureException) client.captureException(e, {
+            const sentryId = client.captureException ? client.captureException(e, {
                 command: command.name,
                 module: command.module,
                 group,
                 subCommand,
                 focusedOption,
                 userID: interaction.user.id
-            });
+            }) : null;
             interaction.client.logger.error(localize('command', 'autcomplete-execution-failed', {
                 e,
                 f: focusedOption,
                 c: command.name,
                 g: group || '',
                 s: subCommand || ''
-            }));
+            }) + (sentryId ? ` [Sentry: ${sentryId}]` : ''));
             interaction.respond([]);
         }
     }
     if (!interaction.isCommand()) return;
-    if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions));
+    if (command.restricted === true && !client.config.botOperators.includes(interaction.user.id)) return interaction.reply(embedType(client.strings.not_enough_permissions || '⚠️ Not enough permissions', {}, {ephemeral: true}));
 
     client.logger.debug(localize('command', 'used', {
         tag: command.forceAnonymous ? '????????????' : formatDiscordUserName(interaction.user),
@@ -82,7 +82,7 @@ module.exports.run = async (client, interaction) => {
     }));
 
     try {
-        if (command.options.filter(c => c.type === 'SUB_COMMAND').length === 0) return await command.run(interaction);
+        if (command.options.filter(c => c.type === 'SUB_COMMAND' || c.type === 'SUB_COMMAND_GROUP').length === 0) return await command.run(interaction);
         if (!command.subcommands) {
             interaction.client.logger.error(`Command ${interaction.commandName} has subcommands but does not use the subcommands handler (required).`);
             return interaction.reply({
@@ -103,6 +103,7 @@ module.exports.run = async (client, interaction) => {
             subCommand,
             userID: interaction.user.id
         });
+        console.error(e, traceID);
         interaction.client.logger.error(localize('command', 'execution-failed', {
             e,
             c: command.name,

@@ -1,8 +1,6 @@
 {
   "name": "levels",
-  "humanReadableName": {
-    "en": "Level-System"
-  },
+  "humanReadableName": "Level-System",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -18,11 +16,9 @@
     "configs/random-levelup-messages.json",
     "configs/special-levelup-messages.json"
   ],
+  "fa-icon": "fas fa-comments",
   "tags": [
     "community"
   ],
-  "description": {
-    "en": "Easy to use levelsystem with a lot of customization!",
-    "de": "Einfaches Level-System mit vielen Anpassungsmöglichkeiten!"
-  }
+  "description": "Easy to use levelsystem with a lot of customization!"
 }

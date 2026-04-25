@@ -1,0 +1,58 @@
+[
+  {
+    "name": "botName",
+    "description": {
+      "en": "Display name of the bot",
+      "de": "Anzeigename des Bots"
+    }
+  },
+  {
+    "name": "botID",
+    "description": {
+      "en": "User ID of the bot",
+      "de": "Nutzer-ID des Bots"
+    }
+  },
+  {
+    "name": "botAvatar",
+    "description": {
+      "en": "URL of the bot's avatar",
+      "de": "URL des Bot-Avatars"
+    }
+  },
+  {
+    "name": "botTag",
+    "description": {
+      "en": "Username and tag of the bot (e.g. Bot#1234)",
+      "de": "Nutzername und Tag des Bots (z.B. Bot#1234)"
+    }
+  },
+  {
+    "name": "botMention",
+    "description": {
+      "en": "Mention of the bot (renders as a clickable @mention)",
+      "de": "Erwähnung des Bots (wird als klickbare @Erwähnung angezeigt)"
+    }
+  },
+  {
+    "name": "guildName",
+    "description": {
+      "en": "Name of the server",
+      "de": "Name des Servers"
+    }
+  },
+  {
+    "name": "guildID",
+    "description": {
+      "en": "ID of the server",
+      "de": "ID des Servers"
+    }
+  },
+  {
+    "name": "guildIcon",
+    "description": {
+      "en": "URL of the server icon",
+      "de": "URL des Server-Icons"
+    }
+  }
+]

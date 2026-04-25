@@ -1,8 +1,8 @@
 const isEqual = require('is-equal');
 const {
-    disableModule,
     truncate,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter
 } = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const {MessageEmbed} = require('discord.js');
@@ -32,26 +32,31 @@ let lastSavedEmbed = {};
  */
 async function updateEmbedsIfNeeded(client) {
     const channels = client.configurations['team-list']['config'];
-    for (const channelConfig of channels) {
+    for (let configIndex = 0; configIndex < channels.length; configIndex++) {
+        const channelConfig = channels[configIndex];
         const embed = new MessageEmbed()
-            .setColor(parseEmbedColor(channelConfig.embed.color))
-            .setTitle(channelConfig.embed.title)
-            .setDescription(channelConfig.embed.description)
-            .setTimestamp()
-            .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl});
+            .setColor(parseEmbedColor(channelConfig.embed.color));
 
+        safeSetFooter(embed, client);
+
+        if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
+        if (channelConfig.embed.description) embed.setDescription(channelConfig.embed.description);
+        if (channelConfig.embed.title) embed.setTitle(channelConfig.embed.title);
         if (channelConfig.embed['thumbnail-url']) embed.setThumbnail(channelConfig.embed['thumbnail-url']);
         if (channelConfig.embed['img-url']) embed.setImage(channelConfig.embed['img-url']);
 
         const channel = await client.channels.fetch(channelConfig['channelID']).catch(() => {
         });
-        if (!channel) return disableModule('team-list', localize('team-list', 'channel-not-found', {c: channelConfig['channelID']}));
-        const messages = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id);
+        if (!channel) {
+            client.logger.error(`[team-list] Could not find channel with id ${channelConfig['channelID']}`);
+            continue;
+        }
+
         const guildMembers = client.guild.members.cache;
 
         const roles = (await channel.guild.roles.fetch()).filter(f => channelConfig.roles.includes(f.id)).sort((a, b) => a.position < b.position ? 1 : -1);
         const listedUserIDs = [];
-        let i = 0;
+        let fieldCount = 0;
         for (const role of roles.values()) {
             let userString = '';
             for (const member of guildMembers.filter(m => m.roles.cache.has(role.id)).values()) {
@@ -61,16 +66,40 @@ async function updateEmbedsIfNeeded(client) {
             }
             if (userString === '') userString = localize('team-list', 'no-users-with-role', {r: role.toString()});
             else if (!channelConfig.includeStatus) userString = userString.substring(0, userString.length - 2);
-            i++;
+            fieldCount++;
             embed.addField(channelConfig['nameOverwrites'][role.id] || role.name, truncate((channelConfig['descriptions'][role.id] ? `${channelConfig['descriptions'][role.id]}\n` : '') + userString, 1024));
         }
 
-        if (i === 0) embed.addField('⚠️', localize('team-list', 'no-roles-selected'));
+        if (fieldCount === 0) embed.addField('⚠️', localize('team-list', 'no-roles-selected'));
 
-        if (isEqual(lastSavedEmbed[channelConfig['channelID']], embed.toJSON())) continue;
-        lastSavedEmbed[channelConfig['channelID']] = embed.toJSON();
+        const cacheKey = `${channelConfig['channelID']}-${configIndex}`;
+        if (isEqual(lastSavedEmbed[cacheKey], embed.toJSON())) continue;
+        lastSavedEmbed[cacheKey] = embed.toJSON();
 
-        if (messages.last()) await messages.last().edit({embeds: [embed]});
-        else channel.send({embeds: [embed]});
+        const [messageData] = await client.models['team-list']['TeamListMessage'].findOrCreate({
+            where: {
+                channelID: channel.id,
+                configIndex
+            },
+            defaults: {
+                channelID: channel.id,
+                configIndex
+            }
+        });
+
+        let message = messageData.messageID ? await channel.messages.fetch(messageData.messageID).catch(() => {
+        }) : null;
+
+        try {
+            if (message) {
+                await message.edit({embeds: [embed]});
+            } else {
+                message = await channel.send({embeds: [embed]});
+                messageData.messageID = message.id;
+                await messageData.save();
+            }
+        } catch (e) {
+            client.logger.error(`[team-list] Failed to send/edit message in channel ${channelConfig['channelID']}: ${e.message}`);
+        }
     }
 }

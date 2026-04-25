@@ -15,12 +15,6 @@
   "tags": [
     "support"
   ],
-  "humanReadableName": {
-    "en": "Voice-Channel Actions",
-    "de": "Sprachkanal-Aktionen"
-  },
-  "description": {
-    "en": "Sends messages when someone joins a voicechat and assign roles to users in Voice-Channels",
-    "de": "Sende Nachrichten, wenn jemand einem Sprachkanal beitritt und vergebe Rollen an Nutzer in Sprachkanälen"
-  }
+  "humanReadableName": "Voice-Channel Actions",
+  "description": "Sends messages when someone joins a voicechat and assign roles to users in Voice-Channels"
 }

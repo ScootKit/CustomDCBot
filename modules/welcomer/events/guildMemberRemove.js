@@ -50,7 +50,7 @@ module.exports.run = async function (client, guildMember) {
     if (!moduleConfig['delete-welcome-message']) return;
     const memberModels = await moduleModel.findAll({
         where: {
-            userId: guildMember.id
+            userID: guildMember.id
         }
     });
     for (const memberModel of memberModels) {
@@ -77,7 +77,7 @@ async function timer(client, userId) {
     const model = client.models['welcomer']['User'];
     const timeModel = await model.findOne({
         where: {
-            userId: userId
+            userID: userId
         }
     });
     if (timeModel) {

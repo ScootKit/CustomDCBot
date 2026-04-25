@@ -1,5 +1,6 @@
 {
   "name": "auto-messager",
+  "fa-icon": "fas fa-comment-dots",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
@@ -15,12 +16,6 @@
   "tags": [
     "tools"
   ],
-  "humanReadableName": {
-    "en": "Automatic Messages",
-    "de": "Automatische Nachrichten"
-  },
-  "description": {
-    "en": "You can - with this module - send automatic messages",
-    "de": "Dieses Modul erlaubt dir es dir, automatisch versenden zu lassen"
-  }
+  "humanReadableName": "Automatic Messages",
+  "description": "You can - with this module - send automatic messages"
 }

@@ -105,6 +105,7 @@ module.exports.config = {
                     channel_types: [ChannelType.GuildCategory],
                     required: true,
                     name: 'category',
+                    channelTypes: [ChannelType.GuildCategory],
                     description: localize('admin-tools', 'category-description')
                 }
             ]

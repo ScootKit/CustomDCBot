@@ -7,7 +7,8 @@ const {ChannelType, MessageEmbed} = require('discord.js');
 const {
     renderProgressbar,
     formatDate,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter
 } = require('../../src/functions/helpers');
 const {localize} = require('../../src/functions/localize');
 
@@ -226,9 +227,10 @@ async function updateLeaderboard(client, force = false) {
     const embed = new MessageEmbed()
         .setTitle(moduleStrings.embed.leaderboardTitle)
         .setColor(parseEmbedColor(moduleStrings.embed.leaderboardColor))
-        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setThumbnail(channel.guild.iconURL())
         .addField(moduleStrings.embed.leaderboardSubtitle, leaderboardString);
+
+    safeSetFooter(embed, client);
 
     if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 

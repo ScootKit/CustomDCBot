@@ -1,18 +1,13 @@
 {
   "name": "quiz",
-  "humanReadableName": {
-    "en": "Quiz Module",
-    "de": "Quiz-Modul"
-  },
+  "humanReadableName": "Quiz Module",
   "author": {
     "scnxOrgID": "60",
     "name": "TomatoCake",
     "link": "https://github.com/DEVTomatoCake"
   },
-  "description": {
-    "en": "Create quiz for your users and let them compete against each other.",
-    "de": "Erstelle Quiz für deine Nutzer und lasse sie gegeneinander antreten."
-  },
+  "description": "Create quiz for your users and let them compete against each other.",
+  "fa-icon": "fas fa-clipboard-question",
   "events-dir": "/events",
   "commands-dir": "/commands",
   "models-dir": "/models",

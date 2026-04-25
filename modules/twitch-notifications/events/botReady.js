@@ -116,13 +116,16 @@ function twitchNotifications(client, apiClient) {
 module.exports.run = async (client) => {
     const config = client.configurations['twitch-notifications']['config'];
 
-    const ClientID = config['twitchClientID'];
-    const ClientSecret = config['clientSecret'];
-    const authProvider = new ClientCredentialsAuthProvider(ClientID, ClientSecret);
+    if (!config['twitchClientID'] || !config['clientSecret']) {
+        client.logger.error('[twitch-notifications] Missing twitchClientID or clientSecret in configs/config.json — module disabled. Create a Twitch app at https://dev.twitch.tv/console/apps to obtain credentials.');
+        return;
+    }
+
+    const authProvider = new ClientCredentialsAuthProvider(config['twitchClientID'], config['clientSecret']);
     const apiClient = new ApiClient({authProvider});
 
     await twitchNotifications(client, apiClient);
-    const interval = config['interval'] * 1000;
+    const interval = (config['interval'] || 180) * 1000;
     const twitchCheckInterval = setInterval(() => {
         twitchNotifications(client, apiClient);
     }, interval);

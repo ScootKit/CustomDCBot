@@ -1,358 +1,300 @@
 # Custom-Bot v3
 
-Create your own discord bot - Fully customizable and with a lot of features. This bot is for advanced JS-Users, you
-should only use it if you have some experience with Javascript, discord.js and JSON files.
+Create your own Discord bot - fully customizable and modular. This bot is for advanced JS users with experience in
+JavaScript, discord.js, and JSON configuration.
 
----
+## Don't want to self-host? Use SCNX (free)
 
-## Get your own Custom-Bot completely free and with a modern webinterface and a lot more features!
+This repository is the **DIY path**: clone, configure JSON files by hand, run a Node process, manage uptime yourself.
+If that doesn't sound fun, the same bot is available as a fully managed service at **[scnx.xyz](https://scnx.xyz)**.
 
-Go check it out on our [website](https://scnx.xyz) or get started in the [dashboard](https://scnx.app).
-In addition to the here
-available features we offer:
+* **Free plan** - no credit card required. Hosting is ad-supported: watch one short ad in the dashboard every 7 days
+  to keep the bot running. Skip a week and the bot pauses until you log in.
+* **Paid plans** start at **€4.99 / month** - no ads, higher limits, and access to premium modules and tiers.
 
-* Free hosting
-* Custom-Commands
-* Easy-to-use Embed-Editor
-* Self-Roles
-* Send and edit messages in specific channels
-* Easy-to-use Configuration-Editor
-* Human-Readable Issue Reporting - never look at logs again
-* and a modern dashboard
-* and *a lot* more - for free
+What you get with the hosted version that you do **not** get here:
 
-[Get started now](https://scnx.xyz) - it's free - forever!
+* **Zero setup.** Invite the bot, log in to the [dashboard](https://scnx.app), pick your modules, done. No Node, no
+  JSON, no server.
+* **Hosted for you.** We run the bot so you don't have to keep a Node process alive. Restarts and updates are handled
+  on our side; Discord-side outages are still Discord's problem, but you're not on the hook for the rest. The free
+  plan keeps running as long as you watch the weekly ad; paid plans drop the ad requirement.
+* **Visual editors.** Drag-and-drop embed editor, point-and-click configuration, live previews. No more hand-writing
+  JSON for every welcome message.
+* **Custom slash commands.** Build commands in the dashboard with no code.
+* **Send and edit messages anywhere.** Rich message editor for any channel, any time.
+* **AI features.** AI chat channels, AI-generated images, and other LLM-backed modules - configured from the dashboard,
+  no API keys to manage.
+* **Human-readable error reports.** When something breaks, you see what and why - in your language - in your dashboard.
+* **More modules.** Several modules (anti-nuke, applications, giveaways, advanced logging, RSS / Twitter / YouTube /
+  TikTok integrations, and more) are exclusive to the hosted version.
+* **Translated UI.** Dashboard and bot fully translated into 20+ languages.
 
-## Applicable [license](LICENSE) terms if you use this bot
+**[Get started at scnx.xyz](https://scnx.xyz)** - the free plan covers most communities; upgrade only if you outgrow
+it.
 
-We really love open-source. It does not make sense financially to publish this Source-Code publicly (as our business
-model is to host these bots on [SCNX](https://scnx.xyz), but we still do it.
-While this project does not fit the [definition of Open Source](https://opensource.org/osd-annotated)
-set forward by the Open Source Initiative,
-we are committed to allowing you as much freedom as possible.
-Please read the [license](LICENSE) and follow it.
+### Running professional customer support on Discord?
 
-Here's a summary:
+The OSS `tickets` module here is fine for small communities, but if you're running **paid customer support** through
+Discord - ticket assignments, estimated wait times, voice support, escalation, analytics - SCNX ships a **separate,
+dedicated support bot** with a feature set built for that use case. It's a different (paid) product, not a module of
+this
+bot. See [scnx.xyz](https://scnx.xyz/support-bot) for details.
 
-* You may use the bot on your server and change the source code (as long as you follow the license).
-* You have to retain a link to the [LICENSE](LICENSE) and this repository in your bot, most likely in your `/help`
-  command.
-* All changes you make to this codebase are subject to these license terms, you cannot remove the link to the license,
-  even if you change large parts of the bot.
-* You may not create a competitor to [SCNX](https://scnx.xyz) or other ScootKit products using this source code.
-* You may not use the "ScootKit" brand name or any other trademarks outside of the LICENSE notice.
+> **Heads up on support.** Our customer support team only handles the SCNX hosted version. Tickets, live help, and
+> account assistance all go through scnx.app. The OSS version in this repo is community-supported - GitHub issues
+> only, best-effort, no SLA.
 
-Please read the full [license](LICENSE), as the terms laid out there apply. This is not legal advice.
+## Why two versions?
 
-Failure to abide by these terms might result in deactivation of your bot from Discord or legal action being taken
-(but we'll act in good faith and usually try to solve the issue before doing anything drastic).
+You might wonder why the same bot exists in two flavors. Short version:
+
+* **OSS (this repo).** The base bot, modular core, and a curated set of modules that work standalone. Good for
+  self-hosters, learners, and people who want to fork. Released under [BUSL-1.1](#license---read-before-using).
+* **SCNX (hosted).** Everything in OSS, plus the dashboard, several integration modules (AI features, anti-nuke,
+  giveaways, the social-platform notifiers, etc.), the visual editors, the customer support, and the managed
+  infrastructure.
+
+We split it this way because the dashboard, infra, and several modules cost money to build and run. Giving them away
+for free would mean we couldn't pay the people who build them. Keeping a strong OSS core (with a non-compete clause via
+BUSL) lets us be transparent about how the bot works, accept community contributions, and let advanced users self-host
+
+- without subsidizing competitors who would just rebrand and resell our work.
+
+If you want the rebrand-and-resell freedom that an MIT/Apache license would give you, the [LICENSE](LICENSE) explains
+how to negotiate commercial terms. For everyone else, the [Additional Use Grant](LICENSE) is broad enough to cover
+the use cases people actually have: run the bot in your own community, modify it, contribute back, learn from it.
+
+## License - read before using
+
+> **This is NOT MIT, Apache, or any other permissive license.** It is the
+> [Business Source License 1.1](LICENSE) (BUSL-1.1, the same license used by MariaDB, CockroachDB, and Sentry). Read
+> the full [LICENSE](LICENSE) before deploying anything based on this code.
+
+### What you can do
+
+* **Self-host for your own community.** Run this bot on your own server, in your own Discord guild, for your own
+  members. No fees, no permission needed.
+* **Modify and contribute.** Fork the repo, change the code, build your own modules. Pull requests welcome.
+* **Learn from it.** Read the source, copy patterns into unrelated projects, write tutorials.
+
+### What you CANNOT do
+
+* **You may NOT offer this bot - or any modified version, fork, or derivative - as a hosted, managed, or embedded
+  service to third parties in a way that competes with [scnx.app](https://scnx.app).** That includes selling,
+  reselling, "free with ads," white-labeling, or running it for paying customers. This is the explicit "Additional Use
+  Grant" carve-out in the license, and we enforce it.
+* **You may NOT relicense or sublicense this code** under MIT, Apache, GPL, or anything else. The license travels with
+  the code.
+
+### What you MUST do if you publish modifications
+
+* **Publish your source.** Any modified or derivative work distributed to third parties must be made available under
+  this same license.
+* **Document your changes.** State what you changed and when.
+* **Carry the license.** Display BUSL-1.1 prominently on every copy or fork.
+
+### When does it become MIT?
+
+The license auto-converts to **MIT License** eight years after a given version is published (or four years after
+its first public distribution, whichever comes first). After that date, that specific version is fully permissive.
+Newer versions stay BUSL until their own clock runs out.
+
+### Need a commercial license?
+
+If your intended use isn't covered by the Additional Use Grant - for example, you want to host this bot for paying
+customers - email **oss@scootkit.net** to negotiate commercial terms. Operating outside the license without an
+agreement is a violation and we will pursue it.
+
+This summary is not legal advice. The [LICENSE](LICENSE) file is the authoritative document.
 
 ## Support development
 
-As mentioned above, our business model is to host these bots for servers - it does not really make sense to publish our
-product here - but we do it anyway - but we need your support! Feel free to [contribute](.github/CONTRIBUTING.md) or
-becoming a [GitHub Sponsor](https://github.com/sponsors/ScootKit/). Thank you so much <3
+Development of this bot is funded by [SCNX](https://scnx.xyz) - our hosted version. Every paid SCNX customer keeps the
+OSS core moving forward. If you want to help in other ways, [contribute code](.github/CONTRIBUTING.md): bug fixes, new
+modules, and documentation improvements are all welcome via pull request.
 
-## Need help?
-
-Are you stuck? Please do not ask on our Discord (unless you are using our hosted version), instead ask in
-the [discussions-tab](https://github.com/ScootKit/CustomDCBot/discussions).
-
-## Need something even more custom?
-
-We are happy to give you a quote for individual requirements. Please email `sales@sc-network.net` with your
-requirements.
-
-### Table of contents
-
-[Installation](#installation)\
-[Features](#features)\
-[Configuration](#configuration)\
-[Modules](#modules)\
-[Add your own module (or API)](#add-your-own-modules)
-
-### Installation
+## Installation
 
 1. Clone this repo
 2. Run `npm ci`
 3. Run `npm run generate-config`
-4. Replace your token in the `config/config.json` file.
+4. Replace your token in `config/config.json`
 5. Start the bot with `npm start`
-6. The bot is now generating a `modules.json` and a `strings.json` file inside your `config` directory. You
-   can [change](#configuration) them.
+6. The bot generates `modules.json` and `strings.json` in your `config` directory - see [Configuration](#configuration)
+   for details
 
-When reading thought the code, you may encounter code "tracking" / "issue reporting" parts of the bot.
-This part is only enabled in the SCNX-Version and only used to allow users to see (configuration) issues of their bot
-and to allow our team to detect bugs more easily (users can opt-out of that if they want to; we use the sentry-sdk for
-that, but don't actually send any data to them, instead to our glitchtip instance - the open-source-version does neither
-of that).
-This open-source-version won't contact SCNX, SC Network and won't share any information with us, don't worry. You
-can verify this by looking at the source code, which you should do before executing any code from the internet.
+When reading the code, you may encounter tracking/issue-reporting sections. These are only active in the SCNX version
+and are used for bug detection and user-facing diagnostics (users can opt out; we use Sentry SDK with our own Glitchtip
+instance). The open-source version does not contact SCNX or share any data.
 
-### Features
+## Features
 
-* Everything is split in different [modules](#modules) - you can enable, configure and disable it how you want
-* Highly configurable - The goal with this bot is that you can change *everything*
-* Add your own modules
-* Easy configuration - Every config field has a description in an example file
+* **Modular architecture** - enable, configure, and disable each module independently
+* **Highly configurable** - every message, role, channel, and behavior can be customized
+* **Custom modules** - add your own modules with commands, events, and database models
+* **Auto-generated configs** - every config field has a description and default value
 
-### Configuration
+## Configuration
 
-You can find all the configuration-files inside your `config` folder. Every **enabled module** will have their own
-folder with config-files inside them. **These files are generated automatically**. Every module has slightly different
-configuration options. Every module has example files. Inside these files are more information about every configuration
-option.
-Some config values also support [embeds](https://discordjs.guide/popular-topics/embeds.html). This is the case
-if `allowEmbed` is true.\
-You either input a string (normal Discord message), or an embed object with the following values:
+All configuration files live in your `config` folder. Each enabled module gets its own subfolder with config files.
+These files are auto-generated with defaults and descriptions.
 
-* `title`: Title of the embed
-* `message`: Message outside the embed (optional)
-* `description`: Description of the embed (optional)
-* `color`: Color of the embed, must be
-  a [ColorResolvable](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ColorResolvable) (optional)
-* `url`: URL of the embed (optional)
-* `image`: Image of the embed, should be an url (optional)
-* `thumbnail`: Thumbnail-Image of the embed, should be an url (optional)
-* `author` (optional):
-    * `name`: Name of the author
-    * `img`: Image of the author, should be an url
-* `fields`: Fields of the embed, must be an array
-  of [EmbedFieldData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/EmbedFieldData) (optional)
-* `footer`:  Footer value (optional, default: global footer value)
-* `footerImgUrl`:  URL to image of the footer (optional, default: global footer value)
+For embed-capable fields (`allowEmbed: true`), the value can be a plain string or an embed object with: `title`,
+`message`, `description`, `color`, `url`, `image`, `thumbnail`, `author`, `fields`, `footer`, `footerImgUrl`. The footer
+and timestamp are controlled globally via `strings.json`.
 
-The footer of the embed is global and is defined in your global `strings.json` file. The timestamp is set automatically
-to the current time.
+For full details on writing config files, see [developer-docs/configuration.md](developer-docs/configuration.md).
 
-### Modules
+## Developer Documentation
 
-The bot is split in modules. Each module can register their own commands, events and even database models, so they can
-do basically anything. Every module can register "example-config-files" witch are files with information about the
-config file, so the bot can automatically check configs and do all the boring stuff for you.
+Full guides live in [developer-docs/](developer-docs/) (start with the [index](developer-docs/README.md)). The
+short version:
 
-### Add your own modules
+**Module authors - start here:**
 
-As per the [License](LICENSE) you *have* to make *every* of your modules publicly available under the same license.
-Please read the license for more information.
+| Document                                               | Covers                                                                                                                |
+|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| [Writing a module](developer-docs/writing-a-module.md) | File layout, `module.json`, lifecycle, end-to-end example                                                             |
+| [Events](developer-docs/events.md)                     | Handler shape, `botReadyAt` / `allowPartial` / `ignoreBotReadyCheck` gates, custom `botReady` / `configReload` events |
+| [Slash commands](developer-docs/commands.md)           | `config` / `run` / `subcommands` / `autocomplete`, options, permissions, deferring                                    |
+| [Database models](developer-docs/database-models.md)   | Sequelize `Model.init` pattern, conventions, `sequelize.sync()` behavior, associations                                |
+| [Localization](developer-docs/localization.md)         | Adding strings to `locales/en.json`, using `localize()`, runtime fallback                                             |
 
-**Before you make a module**:
-Please create an issue with your suggestion and claim that you are working on it so nobody is working on the same
-thing (;\
-Also please read the [Rules for modules](#rules-for-modules).\
-**Submit a module**: Simply create a pull request, and we will check your module and merge it then (;
+**Configuration schema:**
 
-#### Rules for modules
+| Document                                                      | Covers                                                                            |
+|---------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| [Configuration files](developer-docs/configuration.md)        | Schema reference: field types, defaults, `dependsOn`, `elementToggle`, validation |
+| [Country localization](developer-docs/config-localization.md) | How user-facing config strings are extracted and translated                       |
 
-Every module should
+**Operations:**
 
-* Use Slash-Commands wherever possible
-* Should provide a file with exported functions which other modules can use to manipulate data or perform actions in
-  your module (eg: an economy module should provide a file with exported functions like `User.addToBalance()`)
-* Answer with ephemeral messages wherever it makes sense
-* Create as few commands as possible (we have a limit to 100 commands in total), so please try to
-  use [Sub-Commands](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups)
-  wherever possible (eg: instead of having /ban, /kick, /mute etc, have a /moderate command with sub-commands)
-* Use the newest features of the discord api and discord.js (buttons, selects, etc) if possible
-* Process and Store only needed user information and data
-* Support localization (you don't need to translate everything, you only need to support translations, read
-  more [here](#Localization)
-* protect sensitive slash-commands with the proper [`defaultMemberPermissions`](#interaction-command) settings
-* must comply with our [end-user documentation requirements](https://docs.scnx.xyz/oss/create-module-docs)
-* follow our [terms of service](https://sc-net.work/tos), [Discord's Terms of Service](https://discord.com/tos) and
-  the [Discord Developer Terms of Service](https://discord.com/developers/docs/legal). A module should not allow users
-  to bypass or break the mentioned documents. This includes but is not limited to Nitro-Only-Features.
+| Document                                 | Covers                               |
+|------------------------------------------|--------------------------------------|
+| [Migration](developer-docs/migration.md) | Upgrading between major bot versions |
 
-#### Localization
+**Message schemas** (canonical reference at docs.scnx.xyz):
 
-We'd like to offer SCNX and this bot in as many languages as possible. Because of this, we highly encourage you to use
-translationable systems in your module.
+* [V2 schema](https://docs.scnx.xyz/docs/scnx-api/reference/message-schema-v2/) - legacy, parsed when `_schema` is
+  absent
+* [V3 schema](https://docs.scnx.xyz/docs/scnx-api/reference/message-schema-v3/) - tag with `"_schema": "v3"`
+* [V4 schema](https://docs.scnx.xyz/docs/scnx-api/reference/message-schema-v4/) - tag with `"_schema": "v4"`
 
-* Localizations of not-user-editable strings: Use `localize(key, string, replace = {})` from `src/functions/localize.js`
-  to localize strings. Translations of these strings happen
-  on [Weblate](https://localize.sc-network.net/projects/custombot/locales/)
-    * `key`: Key of the string (usually your module name, check out any files in `locales` to get an idea how this
-      works)
-    * `string`: Name of the string
-    * `replace` (optional, object): Will replace `%<key>` in the source string by `<value>`
-* Localizations of configuration-files and user-editable strings: All localizable configuration fields are an object
-  with values keyed based on language codes.
-  Example: `{"description": {"de": "Beschreibung des Feldes", "en": "Description of the field"}`. Each field needs to
-  have at least an English value, as every other language will default back to English.
+## Creating modules
 
-#### module.json
+As per the [license](LICENSE), you **must** make every module publicly available under the same license.
 
-Every module has to contain a `module.json` file with the following content:
+Before building a module, create an issue with your suggestion so nobody duplicates work. Submit modules via pull
+request.
 
-* `name` of the module. Should be the same as the name of your dictionary.
-* `humanReadableName`: [Localized](#localization) name of the module, shown to users
-* `author`
-    * `name`: Name of the author
-    * `link`: Link to the author
-    * `scnxOrgID`:   [SCNX](https://scnx.xyz)-Organisation-ID of the developer (allows you to accept donations in the
-      dashboard and will show up to users in the dashboard)
-* `openSourceURL`: URL to the Source-Code of the module licensed under an Open-Source-License (will show
-  donation-banners in the SCNX Dashboard (if orgID is set) and qualifies (qualified) developers for financial support
-  from the Open-Source-Pool of SCNX)
-* `description`: [Localized](#localization)  short description of the module
-* `cli` (optional): [CLI-File](#cli-files) of your module
-* `commands-dir` (optional): Directory inside your module folder where all
-  the [interaction-command-files](#interaction-command) are in
-* `on-load-event` (optional): File with exported `onLoad` function in it. Gets executed when your commands got loaded
-  successfully; at this point the Client is not logged in yet, so you can't communicate with Discord (yet).
-* `events-dir` (optional): Directory inside your module folder where all the [event-files](#events) are in
-* `models-dir` (optional): Directory inside your module folder where all the models-files are in
-* `config-example-files` (optional, seriously leave this out when you don't have config files): Array
-  of [config-files](#example-config-file) inside your module directory.
-* `tags` (optional): Array of tags.
-* `fa-icon`: Used for matching of icons in our dashboard. We will fill this out for you, please do not set this field.
+### Module structure
 
-#### Interaction-Command
+```
+modules/your-module/
+  module.json          # Module metadata (required)
+  configs/
+    config.json        # Configuration schema
+  commands/
+    your-command.js    # Slash commands
+  events/
+    botReady.js        # Event handlers
+    messageCreate.js
+  models/
+    YourModel.js       # Sequelize models
+```
 
-Note: Interaction-Commands get loaded after the configuration got checked.\
-An interaction-command ("slash command") file has to export the following things:
+### module.json
 
-* `run` (function; provided arguments: `interaction`):
-    * Without subcommands: Function that gets triggered if the interactions is being used
-    * With subcommands: Optional function that gets triggered after the subcommand functions (if specified) got executed
-* `beforeSubcommand` (optional, only if subcommands exit): Function which gets executed before the function in
-  subcommands gets executed
-* `autoComplete` (only required if any of your options use `autocomplete`): Object of functions, sorted by
-  subcommandgroup, subcommand and option name
-* `subcommands` (only required if subcommands exist): Object of functions, sorted by subcommandgroup and subcommand
-* `help`
-* `config` (both for !help and slash-commands)
-    * `name`: Name of the command (should be the same name as the file name)
-    * `description`: Description of the command
-    * `restricted`: Can this command only be run one of the bot operators (e.g. config reloading, change status or ...,
-      boolean)
-    * `defaultMemberPermissions`: This will determine which users can use your commands by default - leave `null` (or `undefined`) to allow usage by @everyone, otherwise, use [PermissionsResolvable](https://old.discordjs.dev/#/docs/discord.js/main/typedef/PermissionResolvable).
-    * `options`:
-        * [ApplicationCommandOptionData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ApplicationCommandData)
-          OR
-        * Async function
-          returning [ApplicationCommandOptionData](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ApplicationCommandData) (
-          gets called with `client` as argument)
+```json
+{
+  "name": "your-module",
+  "humanReadableName": {
+    "en": "Your Module",
+    "de": "Dein Modul"
+  },
+  "description": {
+    "en": "Short description",
+    "de": "Kurze Beschreibung"
+  },
+  "author": {
+    "name": "Your Name",
+    "link": "https://your-site.com"
+  },
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json"
+  ]
+}
+```
 
-#### Message-Command
+Optional fields: `cli`, `on-load-event`, `tags`, `openSourceURL`, `fa-icon` (set by us - browse and request icons
+at https://scnx.app/developers/icons).
 
-Starting V3, message-commands are no longer supported. Please use [Interaction-Commands](#interaction-command)
-instead. Read more in [CHANGELOG.md](CHANGELOG.md).
+### Commands
 
-#### Events
+Export `run`, `config`, and optionally `subcommands`, `beforeSubcommand`, `autoComplete`:
 
-An event file should export the following things:
+```js
+module.exports.run = async function (interaction) { /* ... */
+};
 
-* `run`: Function that gets triggered if the event gets executed (provided arguments: `client` (discord.js Client) and
-  all the arguments that gets past by discord.js for this event)
-* `allowPartial` (optional, default: `false`): Boolean determining whether the `run` function should be called if the event
-  has [partial structures](https://discordjs.guide/popular-topics/partials.html#enabling-partials). When enabling,
-  please make sure you handle partial data correctly.
+module.exports.config = {
+    name: 'your-command',
+    description: localize('your-module', 'command-description'),
+    defaultMemberPermissions: null, // null = everyone, ['Administrator'] = admin only
+    options: [] // or async function(client) { return [...]; }
+};
+```
 
-#### CLI-Files
+Use subcommands over separate commands - there's a 100-command limit. Use
+`disabled: function(client) { return !condition; }` to conditionally hide commands.
 
-A CLI-File should export the following things:
+### Events
 
-* `commands`: Array of the following objects:
-    * `command`: Command which should be entered in the CLI
-    * `description`: Description of the command
-    * `run`: Function which should be executed when the command gets executed. The function gets executed with an object
-      of following structure as argument:
-        * `input`: The whole input
-        * `args`: Array of arguments (split by spaces)
-        * `client`: [Client](https://old.discordjs.dev/#/docs/discord.js/13.16.0/class/Client)
-        * `cliCommands`: Array of all CLICommands
+Export a `run` function:
 
-Note: We might allow users to execute CLI-Commands via the Dashboard in the future. This is not supported right now.
+```js
+module.exports.run = async function (client, ...args) { /* ... */
+};
+```
 
-#### Config-Elements
+Use `botReady` instead of discord.js `ready` when you need configs loaded. Remember that `botReady` re-fires on config
+reload - clean up intervals by pushing to `client.intervals` or `client.jobs`.
 
-Certain configuration may contain an array of multiple objects with different values - these are called "
-Config-Elements".
+### Models
 
-To add a new Config-Element to your configuration
-use `node add-config-element-object.js <Path to example config file> <Path to your config-file>`.
+Use Sequelize models with the standard pattern. See [developer-docs/migration.md](developer-docs/migration.md) for
+adding fields to existing models.
 
-#### Example config-file
+### Rules for modules
 
-An example config file should include the following things:
+* Use slash commands with subcommands wherever possible
+* Reply with ephemeral messages where it makes sense
+* Export functions for cross-module interaction
+* Use the newest Discord API features (buttons, selects, modals)
+* Process and store only needed user data
+* Support localization (see below)
+* Follow the [SCNX ToS](https://scootk.it/scnx-tos), [Discord ToS](https://discord.com/tos),
+  and [Discord Developer ToS](https://discord.com/developers/docs/legal)
 
-* `filename`: Name of the generated config file
-* `humanname`: [Localized](#localization) name of the file, shown to users
-* `description`: [Localized](#localization) description of the file, shown to users
-* `configElements` (boolean, default: `false`): If enabled the configuration-file will be an array of an object of the
-  content-fields
-* `elementLimits` (optional, if configElements = `true`): Configuration to limit the amount of configuration elements
-  that guilds with a specific plan
-* `commandsWarnings`: This field is used to indicate, that users need to manually set up the permissions for commands in
-  their discord-server-settings
-    * `normal`: Array of commands which that can be configured without any limitation in the discord-server-settings
-    * `special`: Array of commands that need special configuration in addition to editing the permissions in the
-      server-settings
-        * `name`: Name of the command
-        * `info`: Key by language; Information about the command; used to explain users what exactly they should do
-* `content`: Array of content fields:
-    * `field_name`: Name of the config field
-    * `default`: [Localized](#localization) default value of this field
-    * `type`: Can be `channelID`, `userID`, `imgURL`, `select`, `timezone` (treated as string, please check validity
-      before using), `roleID`
-      , `boolean`, `integer`, `array`, `emoji`, `keyed` (codename for an JS-Object)
-      or `string`
-    * `description`: [Localized](#localization) description of this field
-    * `humanname`: [Localized](#localization) name of this field show to users
-    * `allowEmbed` (if type === `array, keyed or string`): Allow the usage of an [embed](#configuration) (Note: Please
-      use the build-in function in `src/functions/helpers.js`)
-    * `content` (if type === `array`): Type (see `type` above) of every value
-    * `content` (if type === `channelID`): Array of
-      supported [ChannelType](https://old.discordjs.dev/#/docs/discord.js/13.16.0/typedef/ChannelType)s (
-      default: `['GUILD_TEXT', 'GUILD_VOICE', 'GUILD_CATEGORY', 'GUILD_NEWS', 'GUILD_STAGE_VOICE']`). To improve user
-      experience, we recommend adding information about supported types into `description`. The bot will verify that the
-      channel is inside the bot's guild.
-    * `content` (if type === `select`): Array of the possible options
-    * `content` (if type === `keyed`):
-        * `key`: Type (see `type` above) of the index of every value
-        * `value`: Type as string (see `type` above) of the value of every value
-    * `params`: (if type === `string`, array, optional) Possible parameters
-        * `name`: Name of the parameter (e.g. `%mention%`)
-        * `description`: [Localized](#localization) Description of the parameter (e.g. `Mention of the user`)
-        * `isImage`: If true, users will be able to set this parameter as Image, Author-Icon, Footer-Icon or Thumbnail
-          of an embed (only if `allowEmbed` is enabled)
-    * `allowNull` (default: `false`, optional): If the value of this field can be empty
-    * `disableKeyEdits` (if type === `keyed`): If enabled the user can not edit the keys of the object
-    * `elementToggle` (if type === `boolean`): If this option gets turned off, other fields of the config-element / file
-      will not be rendered in the dashboard
-    * `dependsOn` (a name of any (other) boolean-field): If the referenced boolean field (the value of this option
-      should be equal to the `field.field_name` of a boolean field) is turned off, the field will be not be rendered in
-      the dashboard
-    * `links` (optional): Array of links displayed below the field description in the SCNX Dashboard
-        * `label`: [Localized](#localization) label of the link displayed to the user
-        * `url`: URL the user will be redirected to on click
+### Localization
 
-#### `botReady`-Event and Config-Reload
+Use `localize(module, key, replacements)` from `src/functions/localize.js` for non-user-editable strings. Translations
+happen on [Weblate](https://localize.sc-network.net/projects/custombot/locales/).
 
-If you plan to use the [ready](https://old.discordjs.dev/#/docs/discord.js/13.16.0/class/Client?scrollTo=e-ready) event of
-discord.js to run some action when the client is ready, and you need to load some configuration-files you should use
-the `botReady`-event instead. Please remember that this event gets re-emitted on configuration reloading. If you set
-callbacks that get executed later or similar please remember to remove them on `configReload`. If you set intervals,
-please push the return value to `client.intervals` to get them removed on `configReload` or do it manually.
+For user-editable strings in config files (`humanName`, `description`, defaults), use **plain English strings**.
+Translations live separately in `config-localizations/<lang>.json` and are extracted by a script - see
+[developer-docs/config-localization.md](developer-docs/config-localization.md). The deprecated `{ "en": "...", "de":
+"..." }` inline format is rejected by `npm run verify-configs`.
 
-#### Helper-Functions
+### Helper functions
 
-The bot includes a lot of functions to make your live easier. Check out the file `src/functions/helpers.js`.
+Check `src/functions/helpers.js` for utilities: `embedType()`, `formatDiscordUserName()`, `parseEmbedColor()`,
+`formatDate()`, `truncate()`, and more.
 
-### Support for developers
+---
 
-As we earn some money with hosting your modules for users, we have decided to give you some (remember, we need to pay
-for hosting) of this money. Here are the main ways to earn some pocket-cash with developing for SCNX:
-
-* [Open-Source-Developer-Pool](https://faq.scnx.app/open-source-developer-pool/): We give you a monthly amount for each
-  paying server using your module
-* [Bounties](https://faq.scnx.app/open-source-developer-pool/#bounties): We give you a small amount of money for merged
-  pull-requests and contributions
-  We support a lot of payout-methods, learn more [here](https://faq.scnx.app/scnx-referrals-faq/#payout-methods).
-
-© Simon Csaba, 2020-2023
-
-ScootKit is a trademark, registered in Germany.
-
-We ♥ you - yes you.
+Copyright © 2026 ScootKit UG (haftungsbeschränkt). [BUSL-1.1](LICENSE) applies.

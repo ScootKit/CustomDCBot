@@ -1,5 +1,6 @@
 const {localize} = require('../../../src/functions/localize');
 const {ComponentType, MessageEmbed} = require('discord.js');
+const {safeSetFooter} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (interaction) {
     const member = interaction.options.getMember('user', true);
@@ -46,7 +47,7 @@ module.exports.run = async function (interaction) {
     bullets[member.user.id] = 0;
     guardAfterEachOther[interaction.user.id] = 0;
     guardAfterEachOther[member.user.id] = 0;
-    const a = rep.createMessageComponentCollector({componentType: ComponentType.Button});
+    const a = rep.createMessageComponentCollector({componentType: ComponentType.Button, time: 600000});
     setTimeout(() => {
         if (started || a.ended) return;
         endReason = localize('duel', 'invite-expired', {u: interaction.user.toString(), i: member.toString()});
@@ -128,8 +129,8 @@ module.exports.run = async function (interaction) {
         const embed = new MessageEmbed()
             .setTitle(localize('duel', ended ? 'game-ended' : 'game-running-header'))
             .setColor(ended ? 0x2ECC71 : (!mentions ? 0xD35400 : 0xE67E22))
-            .setDescription(lastRoundString + (!ended ? stateString : '\n\n' + localize('duel', 'ended-state')) + '\n*' + localize('duel', 'how-does-this-game-work') + '*')
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl});
+            .setDescription(lastRoundString + (!ended ? stateString : '\n\n' + localize('duel', 'ended-state')) + '\n*' + localize('duel', 'how-does-this-game-work') + '*');
+        safeSetFooter(embed, interaction.client);
 
         i.update({
             content: ended ? 'GGs!' : `<@${member.user.id}> vs <@${interaction.user.id}>`,
@@ -170,10 +171,11 @@ module.exports.run = async function (interaction) {
         });
     });
     a.on('end', () => {
-            rep.edit({
+        if (!ended) rep.edit({
                 content: endReason,
                 components: []
-            });
+        }).catch(() => {
+        });
         }
     );
 };

@@ -292,7 +292,7 @@ module.exports.run = async function (client, interaction) {
 
             const replyOptions = await generateHistoryResponse(client, userId, targetPage);
             await interaction.update(replyOptions);
-            return; 
+            return;
         }
 
         if (interaction.customId.startsWith('ping-protection_mod-page_')) {

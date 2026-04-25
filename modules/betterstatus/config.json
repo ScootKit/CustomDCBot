@@ -1,100 +1,62 @@
 {
-  "description": {},
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the bot status, activity type and interval settings here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
+      "name": "enableStatusCommand",
+      "humanName": "Enable /status command?",
+      "default": false,
+      "description": "If enabled, administrators can change the bot status using the /status slash command",
+      "type": "boolean"
+    },
+    {
       "name": "enableInterval",
-      "humanName": {
-        "en": "Enable interval?",
-        "de": "Interval aktivieren?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled the bot will change its status every x seconds",
-        "de": "Wenn aktiviert wird sich der Status des Bots alle x Sekunden ändern"
-      },
+      "humanName": "Enable interval?",
+      "default": false,
+      "description": "If enabled the bot will change its status every x seconds",
       "type": "boolean"
     },
     {
       "name": "intervalStatuses",
       "dependsOn": "enableInterval",
-      "humanName": {
-        "en": "Interval-Statuses",
-        "de": "Interval-Status"
-      },
-      "default": {
-        "en": []
-      },
-      "description": {
-        "en": "Statuses from which the bot should randomly choose one",
-        "de": "Die Status von denen der Bot einen zufällig wählen soll"
-      },
+      "humanName": "Interval-Statuses",
+      "default": [],
+      "description": "Statuses from which the bot should randomly choose one",
       "type": "array",
       "content": "string",
       "params": [
         {
           "name": "onlineMemberCount",
-          "description": {
-            "en": "Count of online members on your guild (will not work if presence intent not enabled)",
-            "de": "Anzahl der Online-Mitglieder auf deinem Server"
-          }
+          "description": "Count of online members on your guild (will not work if presence intent not enabled)"
         },
         {
           "name": "memberCount",
-          "description": {
-            "en": "Count of members on your guild",
-            "de": "Anzahl der Mitglieder auf deinem Server"
-          }
+          "description": "Count of members on your guild"
         },
         {
           "name": "randomMemberTag",
-          "description": {
-            "en": "Tag of one random member on your guild",
-            "de": "Erwähnung eines zufälligen Nutzern auf deinem Server"
-          }
+          "description": "Tag of one random member on your guild"
         },
         {
           "name": "randomOnlineMemberTag",
-          "description": {
-            "en": "Tag of one random member who is online on your guild",
-            "de": "Erwähnung eines zufälligen online Nutzern auf deinem Server"
-          }
+          "description": "Tag of one random member who is online on your guild"
         },
         {
           "name": "channelCount",
-          "description": {
-            "en": "Count of channels on your guild",
-            "de": "Anzahl Channel auf deinem Server"
-          }
+          "description": "Count of channels on your guild"
         },
         {
           "name": "roleCount",
-          "description": {
-            "en": "Count of roles on your guild",
-            "de": "Anzahl Rollen auf deinem Server"
-          }
+          "description": "Count of roles on your guild"
         }
       ]
     },
     {
       "name": "activityType",
-      "humanName": {
-        "en": "Activity-Type",
-        "de": "Aktivität-Typ"
-      },
-      "default": {
-        "en": "PLAYING"
-      },
-      "description": {
-        "en": "Type of the user activity",
-        "de": "Type der Aktivität deines Bots"
-      },
+      "humanName": "Activity-Type",
+      "default": "PLAYING",
+      "description": "Type of the user activity",
       "type": "select",
       "content": [
         "CUSTOM",
@@ -107,17 +69,9 @@
     },
     {
       "name": "botStatus",
-      "humanName": {
-        "en": "Bot-Status",
-        "de": "Bot-Status"
-      },
-      "default": {
-        "en": "online"
-      },
-      "description": {
-        "en": "Status of your bot",
-        "de": "Status deines Bots"
-      },
+      "humanName": "Bot-Status",
+      "default": "online",
+      "description": "Status of your bot",
       "type": "select",
       "content": [
         "idle",
@@ -127,88 +81,47 @@
     },
     {
       "name": "interval",
-      "humanName": {
-        "en": "Status-Interval",
-        "de": "Statusänderung-Interval"
-      },
-      "default": {
-        "en": 15
-      },
-      "description": {
-        "en": "The interval in seconds (at least 10 seconds)",
-        "de": "Das Intervall der Statusänderungen in Sekunden (mindestens 10 Sekunden)"
-      },
+      "humanName": "Status-Interval",
+      "default": 15,
+      "description": "The interval in seconds (at least 10 seconds)",
       "minValue": 10,
       "type": "integer"
     },
     {
       "name": "changeOnUserJoin",
-      "humanName": {
-        "en": "Change status on user join?",
-        "de": "Beim Beitreten Status ändern?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If the status should be changed if someone joins your guild",
-        "de": "Wenn aktiviert wird sich der Status des Bots ändern, wenn jemand deinem Server beitritt"
-      },
+      "humanName": "Change status on user join?",
+      "default": false,
+      "description": "If the status should be changed if someone joins your guild",
       "type": "boolean"
     },
     {
       "name": "userJoinStatus",
       "dependsOn": "changeOnUserJoin",
-      "humanName": {
-        "en": "User-Join-Status",
-        "de": "Nutzer-Join-Status"
-      },
-      "default": {
-        "en": "Welcome %tag%!"
-      },
-      "description": {
-        "en": "Status that will be set if a user joins",
-        "de": "Dieser Status wird gesetzt, wenn jemand deinem Server beitritt"
-      },
+      "humanName": "User-Join-Status",
+      "default": "Welcome %tag%!",
+      "description": "Status that will be set if a user joins",
       "type": "string",
       "params": [
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the new user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the new user"
         },
         {
           "name": "username",
-          "description": {
-            "en": "Username of the new user",
-            "de": "Nutzername des Nutzers"
-          }
+          "description": "Username of the new user"
         },
         {
           "name": "memberCount",
-          "description": {
-            "en": "New member count of your guild",
-            "de": "Anzahl der Mitglieder auf deinem Server"
-          }
+          "description": "New member count of your guild"
         }
       ]
     },
     {
       "name": "streamingLink",
       "type": "string",
-      "humanName": {
-        "en": "Streaming Link",
-        "de": "Stream-Link"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "de": "Wird angezeigt, wenn der Aktivität-Typ auf streaming ist und der Link von Discord unterstützt wird",
-        "en": "Will be shown, if the activity-typ is streaming and your link is supported by Discord"
-      }
+      "humanName": "Streaming Link",
+      "default": "",
+      "description": "Will be shown, if the activity-typ is streaming and your link is supported by Discord"
     }
   ]
 }

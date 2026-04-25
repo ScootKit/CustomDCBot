@@ -1,28 +1,14 @@
 {
-  "description": {
-    "en": "If enabled, the bot will randomly select a message from here",
-    "de": "Wenn aktiviert, wird der Bot zufällige eine Nachricht von hier auswählen"
-  },
-  "humanName": {
-    "en": "Random-Level-Up-Messages",
-    "de": "Zufällige Level-Up-Nachrichten"
-  },
+  "description": "If enabled, the bot will randomly select a message from here",
+  "humanName": "Random-Level-Up-Messages",
   "filename": "random-levelup-messages.json",
   "configElements": true,
   "content": [
     {
       "name": "type",
-      "humanName": {
-        "de": "Nachrichtentyp"
-      },
-      "default": {
-        "en": "normal",
-        "de": "normal"
-      },
-      "description": {
-        "en": "Type of this message",
-        "de": "Typ dieser Nachricht"
-      },
+      "humanName": "Message Type",
+      "default": "normal",
+      "description": "Type of this message",
       "type": "select",
       "content": [
         "normal",
@@ -31,62 +17,37 @@
     },
     {
       "name": "message",
-      "humanName": {
-        "de": "Nachrichten"
-      },
+      "humanName": "Messages",
       "allowGeneratedImage": true,
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Messages which should be send",
-        "de": "Nachrichten, die gesendet werden sollen"
-      },
+      "default": "",
+      "description": "Messages which should be send",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mention of the user"
         },
         {
           "name": "avatarURL",
           "isImage": true,
-          "description": {
-            "en": "Avatar of the user",
-            "de": "Profilbild des Nutzers"
-          }
+          "description": "Avatar of the user"
         },
         {
           "name": "username",
-          "description": {
-            "en": "Username of the user",
-            "de": "Nutzername des Nutzers"
-          }
+          "description": "Username of the user"
         },
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the user"
         },
         {
           "name": "newLevel",
-          "description": {
-            "en": "New level of the user",
-            "de": "Neues Level des Nutzers"
-          }
+          "description": "New level of the user"
         },
         {
           "name": "role",
-          "description": {
-            "en": "Mention of the role (No ping, only if type = with-reward)",
-            "de": "Erwähnung der Rolle (Kein \"Ping\", nur, wenn Nachrichtentyp = with-reward)"
-          }
+          "description": "Mention of the role (No ping, only if type = with-reward)"
         }
       ]
     }

@@ -1,0 +1,325 @@
+{
+  "filename": "infractions.json",
+  "humanName": "Infractions & Suspensions",
+  "description": "Configure how staff infractions, strikes, and suspensions are handled.",
+  "categories": [
+    {
+      "id": "logic",
+      "icon": "fas fa-hammer",
+      "displayName": "General Logic"
+    },
+    {
+      "id": "suspensions",
+      "icon": "fa fa-bell-exclamation",
+      "displayName": "Suspensions Logic"
+    },
+    {
+      "id": "messages",
+      "icon": "fa fa-messages",
+      "displayName": "Messages & Embeds"
+    }
+  ],
+  "content": [
+    {
+      "name": "enableInfractions",
+      "category": "logic",
+      "humanName": "Enable Infractions System",
+      "description": "Enabling this will unlock features such as issuing infractions to staff members, suspensions and more.",
+      "type": "boolean",
+      "elementToggle": true,
+      "default": true
+    },
+    {
+      "name": "infractionTypes",
+      "category": "logic",
+      "humanName": "Infraction Types",
+      "description": "These are the types of infractions that can be issued to staff members. You can customize these to fit your infractions system.",
+      "type": "array",
+      "content": "string",
+      "default": [
+        "Warning",
+        "Strike",
+        "Demotion",
+        "Termination",
+        "Under Investigation"
+      ]
+    },
+    {
+      "name": "enableSuspensions",
+      "category": "suspensions",
+      "humanName": "Enable Suspensions System",
+      "description": "Suspensions temporarily strip a staff member of their roles.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "suspensionHierarchyRole",
+      "category": "suspensions",
+      "humanName": "Hierarchy Base Role",
+      "description": "When suspending, the bot will remove all roles above and including this one. This would usually be your lowest 'Staff' role.",
+      "type": "roleID",
+      "allowNull": true,
+      "dependsOn": "enableSuspensions",
+      "default": ""
+    },
+    {
+      "name": "suspensionRole",
+      "category": "suspensions",
+      "humanName": "Suspended Role (Optional)",
+      "description": "A role to assign the user while they are suspended (e.g., 'Suspended Staff').",
+      "type": "roleID",
+      "allowNull": true,
+      "dependsOn": "enableSuspensions",
+      "default": ""
+    },
+    {
+      "name": "suspensionMessage",
+      "category": "suspensions",
+      "humanName": "Suspension Announcement Message",
+      "description": "The message sent to the log channel when a staff member is suspended.",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "enableSuspensions",
+      "params": [
+        {
+          "name": "user",
+          "description": "Mention of the staff member"
+        },
+        {
+          "name": "user-avatar",
+          "description": "Avatar of the staff member",
+          "isImage": true
+        },
+        {
+          "name": "issuer-mention",
+          "description": "Mention of the manager issuing it"
+        },
+        {
+          "name": "issuer-name",
+          "description": "Name of the issuer"
+        },
+        {
+          "name": "issuer-avatar",
+          "description": "Avatar of the issuer",
+          "isImage": true
+        },
+        {
+          "name": "duration",
+          "description": "Duration of the suspension"
+        },
+        {
+          "name": "end-date",
+          "description": "Timestamp of when the suspension ends"
+        },
+        {
+          "name": "reason",
+          "description": "Reason provided"
+        },
+        {
+          "name": "case-id",
+          "description": "Database Case ID"
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%user%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %issuer-name% • Case #%case-id%",
+              "iconURL": "%issuer-avatar%"
+            },
+            "title": "⛔ Staff Suspension",
+            "description": "**Staff Member:** %user%\n**Duration:** %duration%\n**Ends:** %end-date%\n**Reason:** %reason%",
+            "color": "#ed4245",
+            "thumbnailURL": "%user-avatar%"
+          }
+        ]
+      }
+    },
+    {
+      "name": "infractionLogChannel",
+      "category": "messages",
+      "humanName": "Infraction Log Channel",
+      "description": "Where should infractions and suspensions be announced?",
+      "type": "channelID",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": ""
+    },
+    {
+      "name": "infractionMessage",
+      "category": "messages",
+      "humanName": "Infraction Announcement Message",
+      "description": "The message sent to the log channel for regular infractions.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": "Mention of the staff member"
+        },
+        {
+          "name": "user-avatar",
+          "description": "Avatar of the staff member",
+          "isImage": true
+        },
+        {
+          "name": "issuer-mention",
+          "description": "Mention of the manager issuing it"
+        },
+        {
+          "name": "issuer-name",
+          "description": "Name of the issuer"
+        },
+        {
+          "name": "issuer-avatar",
+          "description": "Avatar of the issuer",
+          "isImage": true
+        },
+        {
+          "name": "type",
+          "description": "Type of infraction (e.g., Warning, Strike)"
+        },
+        {
+          "name": "end-date",
+          "description": "Timestamp of when this infraction expires"
+        },
+        {
+          "name": "reason",
+          "description": "Reason provided"
+        },
+        {
+          "name": "case-id",
+          "description": "Database Case ID"
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%user%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %issuer-name% • Case #%case-id%",
+              "iconURL": "%issuer-avatar%"
+            },
+            "title": "⚠️ New infraction",
+            "description": "**Staff Member:** %user%\n**Action Taken:** %type%\n**Expires:** %end-date%\n**Reason:** %reason%",
+            "color": "#e67e22",
+            "thumbnailURL": "%user-avatar%"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dmInfractedUser",
+      "category": "messages",
+      "humanName": "DM User on infraction?",
+      "description": "If enabled, the bot will DM the staff member when they receive an infraction or suspension.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "infractionDmMessage",
+      "category": "messages",
+      "humanName": "Infraction DM Message",
+      "description": "The message sent directly to the staff member.",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "dmInfractedUser",
+      "params": [
+        {
+          "name": "user",
+          "description": "Mention of the staff member"
+        },
+        {
+          "name": "issuer-name",
+          "description": "Name of the issuer"
+        },
+        {
+          "name": "type",
+          "description": "Type of infraction (e.g., Warning, Strike)"
+        },
+        {
+          "name": "end-date",
+          "description": "Timestamp of when this infraction expires"
+        },
+        {
+          "name": "reason",
+          "description": "Reason provided"
+        },
+        {
+          "name": "case-id",
+          "description": "Database Case ID"
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %issuer-name% • Case #%case-id%"
+            },
+            "title": "⚠️ You have been infracted",
+            "description": "**Type:** %type%\n**Reason:** %reason%\n**Expires:** %end-date%",
+            "color": "#e67e22"
+          }
+        ]
+      }
+    },
+    {
+      "name": "suspensionDmMessage",
+      "category": "messages",
+      "humanName": "Suspension DM Message1",
+      "description": "The message sent directly to the staff member when suspended.",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "dmInfractedUser",
+      "params": [
+        {
+          "name": "user",
+          "description": "Mention of the staff member"
+        },
+        {
+          "name": "issuer-name",
+          "description": "Name of the issuer"
+        },
+        {
+          "name": "type",
+          "description": "Type of infraction (e.g., Warning, Strike)"
+        },
+        {
+          "name": "duration",
+          "description": "Duration of the suspension"
+        },
+        {
+          "name": "end-date",
+          "description": "Timestamp of when this infraction expires"
+        },
+        {
+          "name": "reason",
+          "description": "Reason provided"
+        },
+        {
+          "name": "case-id",
+          "description": "Database Case ID"
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %issuer-name% • Case #%case-id%"
+            },
+            "title": "⛔ Staff Suspension",
+            "description": "You have been temporarily suspended.\n\n**Duration:** %duration%\n**Returns:** %end-date%\n**Reason:** %reason%",
+            "color": "#ed4245"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,28 +1,14 @@
 {
-  "description": {
-    "en": "Manage the randomly send messages here",
-    "de": "Passe hier die Nachrichten an, die zufällig gesendet werden sollen"
-  },
-  "humanName": {
-    "en": "Random messages",
-    "de": "Zufällige Nachrichten"
-  },
+  "description": "Manage the randomly send messages here",
+  "humanName": "Random messages",
   "filename": "random-messages.json",
   "configElements": true,
   "content": [
     {
       "name": "type",
-      "humanName": {
-        "en": "Message-Type",
-        "de": "Nachricht-Type"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "This sets in which content the message should get send",
-        "de": "Dies gibt an, in welchem Kontext diese Nachricht versendet werden soll"
-      },
+      "humanName": "Message-Type",
+      "default": "",
+      "description": "This sets in which content the message should get send",
       "type": "select",
       "content": [
         "join",
@@ -33,134 +19,78 @@
     },
     {
       "name": "message",
-      "humanName": {
-        "en": "Message",
-        "de": "Nachricht"
-      },
+      "humanName": "Message",
       "allowGeneratedImage": true,
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Message that should get send",
-        "de": "Nachricht, die gesendet werden soll"
-      },
+      "default": "",
+      "description": "Message that should get send",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "mention",
-          "description": {
-            "en": "Mentions the user",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mentions the user"
         },
         {
           "name": "memberProfilePictureUrl",
-          "description": {
-            "en": "URL of the user's avatar",
-            "de": "URL zum Avatar des Nutzers"
-          },
+          "description": "URL of the user's avatar",
           "isImage": true
         },
         {
           "name": "servername",
-          "description": {
-            "en": "Name of the guild",
-            "de": "Servername"
-          }
+          "description": "Name of the guild"
         },
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the user"
         },
         {
           "name": "createdAt",
-          "description": {
-            "en": "Date when account was created",
-            "de": "Datum an dem der Account erstellt wurde"
-          }
+          "description": "Date when account was created"
         },
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the user"
         },
         {
           "name": "memberProfilePictureUrl",
-          "description": {
-            "en": "URL of the user's avatar",
-            "de": "URL zum Avatar des Nutzers"
-          },
+          "description": "URL of the user's avatar",
           "isImage": true
         },
         {
           "name": "joinedAt",
-          "description": {
-            "en": "Date when user joined guild",
-            "de": "Datum, an dem der Nutzer den Server betreten hat"
-          }
+          "description": "Date when user joined guild"
         },
         {
           "name": "guildUserCount",
-          "description": {
-            "en": "Count of users on the guild",
-            "de": "Anzahl von Nutzern auf dem Server"
-          }
+          "description": "Count of users on the guild"
         },
         {
           "name": "guildMemberCount",
-          "description": {
-            "en": "Count of members (without bots) on the guild",
-            "de": "Anzahl von Nutzern auf dem Server"
-          }
+          "description": "Count of members (without bots) on the guild"
         },
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user who boosted",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mention of the user who boosted"
         },
         {
           "name": "boostCount",
-          "description": {
-            "en": "Total count of boosts",
-            "de": "Gesamte Anzahl an Boosts"
-          }
+          "description": "Total count of boosts"
         },
         {
           "name": "guildLevel",
-          "description": {
-            "en": "Boost-Level of the guild after the boost",
-            "de": "Boost-Level nach dem Boost"
-          }
+          "description": "Boost-Level of the guild after the boost"
         },
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user who unboosted",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mention of the user who unboosted"
         },
         {
           "name": "boostCount",
-          "description": {
-            "en": "Total count of boosts",
-            "de": "Gesamte Anzahl an Boosts"
-          }
+          "description": "Total count of boosts"
         },
         {
           "name": "guildLevel",
-          "description": {
-            "en": "Boost-Level of the guild after the unboost",
-            "de": "Boost-Level nach dem Boost"
-          }
+          "description": "Boost-Level of the guild after the unboost"
         }
       ]
     }

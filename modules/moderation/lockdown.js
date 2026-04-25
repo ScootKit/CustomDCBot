@@ -128,10 +128,11 @@ async function activateLockdown(client, reason, triggeredBy, isAutomatic = false
                         if (role.position >= botHighestRole.position) continue;
                         if (moderatorRoles.has(role.id)) continue;
 
+                        // Safety check before accessing cache
                         if (!channel.permissionOverwrites || !channel.permissionOverwrites.cache) continue;
 
                         const overwrite = channel.permissionOverwrites.cache.get(role.id);
-                        if (overwrite && overwrite.allow.has(PermissionFlagsBits.SendMessages)) {
+                        if (overwrite && !overwrite.deny.has(PermissionFlagsBits.SendMessages)) {
                             await channel.permissionOverwrites.edit(role, {
                                 SendMessages: false,
                                 SendMessagesInThreads: false,
@@ -171,10 +172,11 @@ async function activateLockdown(client, reason, triggeredBy, isAutomatic = false
                         if (role.position >= botHighestRole.position) continue;
                         if (moderatorRoles.has(role.id)) continue;
 
+                        // Safety check before accessing cache
                         if (!channel.permissionOverwrites || !channel.permissionOverwrites.cache) continue;
 
                         const overwrite = channel.permissionOverwrites.cache.get(role.id);
-                        if (overwrite && (overwrite.allow.has(PermissionFlagsBits.Connect) || overwrite.allow.has(PermissionFlagsBits.Speak) || overwrite.allow.has(PermissionFlagsBits.SendMessages))) {
+                        if (overwrite && !(overwrite.deny.has(PermissionFlagsBits.Connect) && overwrite.deny.has(PermissionFlagsBits.Speak) && overwrite.deny.has(PermissionFlagsBits.SendMessages))) {
                             await channel.permissionOverwrites.edit(role, {
                                 Connect: false,
                                 Speak: false,
@@ -222,7 +224,7 @@ async function activateLockdown(client, reason, triggeredBy, isAutomatic = false
                         if (!channel.permissionOverwrites || !channel.permissionOverwrites.cache) continue;
 
                         const overwrite = channel.permissionOverwrites.cache.get(role.id);
-                        if (overwrite && (overwrite.allow.has(PermissionFlagsBits.Connect) || overwrite.allow.has(PermissionFlagsBits.RequestToSpeak) || overwrite.allow.has(PermissionFlagsBits.SendMessages))) {
+                        if (overwrite && !(overwrite.deny.has(PermissionFlagsBits.Connect) && overwrite.deny.has(PermissionFlagsBits.RequestToSpeak) && overwrite.deny.has(PermissionFlagsBits.SendMessages))) {
                             await channel.permissionOverwrites.edit(role, {
                                 Connect: false,
                                 RequestToSpeak: false,
@@ -249,21 +251,33 @@ async function activateLockdown(client, reason, triggeredBy, isAutomatic = false
 
                 affectedChannels.push(channel.id);
                 successfullyLockedCount++;
-
-                if (lockdownConfig.sendMessageInAffectedChannels && typeof channel.send === 'function') {
-                    const msgPayload = embedType(lockdownConfig.lockdownMessage, {
-                        '%reason%': reason,
-                        '%user%': triggeredBy
-                    });
-                    await channel.send(msgPayload).catch(() => {});
-                }
             } catch (error) {
                 client.logger.error(`[moderation] [lockdown] Failed to lock channel ${channel.id}: ${error.message}`);
+                // Continue with next channel - backup is already saved
             }
         }
 
         client.logger.info(`[moderation] [lockdown] Successfully locked ${successfullyLockedCount}/${channelsToLockdown.length} channels`);
 
+        // PHASE 3b: Send notification messages
+        if (lockdownConfig.sendMessageInAffectedChannels) {
+            const msgPayload = embedType(lockdownConfig.lockdownMessage, {
+                '%reason%': reason,
+                '%user%': triggeredBy
+            });
+            const targetChannels = (lockdownConfig.lockdownMessageChannels || []).length > 0
+                ? lockdownConfig.lockdownMessageChannels
+                : affectedChannels;
+            for (const channelId of targetChannels) {
+                const ch = guild.channels.cache.get(channelId);
+                if (ch && typeof ch.send === 'function') {
+                    await ch.send(msgPayload).catch(() => {
+                    });
+                }
+            }
+        }
+
+        // PHASE 4: Kick non-moderator users from voice and stage channels
         let kickedUsersCount = 0;
         let totalVoiceUsers = 0;
         for (const [, channel] of guild.channels.cache) {
@@ -272,9 +286,11 @@ async function activateLockdown(client, reason, triggeredBy, isAutomatic = false
 
             for (const [, member] of channel.members) {
                 totalVoiceUsers++;
+                // Skip moderators
                 const isModerator = member.roles.cache.some(role => moderatorRoles.has(role.id));
                 if (isModerator) continue;
 
+                // Kick non-moderator
                 try {
                     await member.voice.disconnect(`[moderation] [lockdown] ${reason}`);
                     kickedUsersCount++;
@@ -362,14 +378,27 @@ async function liftLockdown(client, reason, liftedBy) {
                     deny: BigInt(o.deny)
                 })), `[moderation] [lockdown-lift] ${reason}`);
                 restoredCount++;
+            } catch (e) {
+                client.logger.warn(localize('moderation', 'lockdown-restore-failed', {
+                    c: backup.channelID,
+                    e: e.toString()
+                }));
+            }
+        }
 
-                if (lockdownConfig.sendMessageInAffectedChannels && typeof channel.send === 'function') {
-                    await channel.send(embedType(lockdownConfig.liftMessage, {
+        // Send lift notification messages
+        if (lockdownConfig.sendMessageInAffectedChannels) {
+            const restoredChannelIds = (state.permissionBackup || []).map(b => b.channelID);
+            const targetChannels = (lockdownConfig.lockdownMessageChannels || []).length > 0
+                ? lockdownConfig.lockdownMessageChannels
+                : restoredChannelIds;
+            for (const channelId of targetChannels) {
+                const ch = guild.channels.cache.get(channelId);
+                if (ch && typeof ch.send === 'function') {
+                    await ch.send(embedType(lockdownConfig.liftMessage, {
                         '%user%': liftedBy
                     })).catch(() => {});
                 }
-            } catch (e) {
-                client.logger.warn(localize('moderation', 'lockdown-restore-failed', {c: backup.channelID, e: e.toString()}));
             }
         }
 

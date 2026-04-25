@@ -1,5 +1,13 @@
 const {scheduleJob} = require('node-schedule');
-const {embedType, formatDate, dateToDiscordTimestamp, formatDiscordUserName, safeSetFooter} = require('../../src/functions/helpers');
+const {
+    embedType,
+    formatDate,
+    dateToDiscordTimestamp,
+    formatDiscordUserName,
+    safeSetFooter,
+    truncate,
+    tryArchiveDiscordAttachment
+} = require('../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../src/functions/localize');
 const durationParser = require('parse-duration');
@@ -173,7 +181,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     })).catch(() => {
                     });
                     if (victim.bannable) await victim.ban({
-                        days: additionalData.days || 0,
+                        deleteMessageDays: additionalData.days || 0,
                         reason: '[moderation] ' + localize('moderation', 'banned-audit-log-reason', {
                             u: formatDiscordUserName(user.user),
                             r: reason
@@ -184,7 +192,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                     victim.user.tag = victim.id;
                     victim.user.id = victim.id;
                     await guild.members.ban(victim.id, {
-                        days: additionalData.days || 0,
+                        deleteMessageDays: additionalData.days || 0,
                         reason: '[moderation] ' + localize('moderation', 'banned-audit-log-reason', {
                             u: formatDiscordUserName(user.user),
                             r: reason
@@ -279,6 +287,16 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
         if (!channel) {
             client.error('[moderation] ' + localize('moderation', 'missing-logchannel'));
         } else {
+            let proofURL = null;
+            if (proof) {
+                const victimName = victim?.user ? formatDiscordUserName(victim.user) : 'unknown';
+                const archived = await tryArchiveDiscordAttachment(client, proof.url, {
+                    displayName: `Moderation case #${modAction.actionID} (${type}) — evidence against ${victimName}`.slice(0, 100),
+                    tags: ['moderation', 'report-evidence', type],
+                    uploaderDiscordID: user?.user?.id || user?.id
+                });
+                proofURL = archived ? archived.url : (proof.proxyURL || proof.url);
+            }
             const fields = [];
             if (expiringAt) fields.push({
                 name: localize('moderation', 'expires-at'),
@@ -287,7 +305,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
             });
             if (proof) fields.push({
                 name: localize('moderation', 'proof'),
-                value: `[${localize('moderation', 'file')}](${proof.proxyURL || proof.url})`,
+                value: `[${localize('moderation', 'file')}](${proofURL})`,
                 inline: true
             });
             if (additionalData.channel) fields.push({
@@ -298,7 +316,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
             const modEmbed = new MessageEmbed()
                 .setColor(expiringAt ? 0xf1c40f : (type.includes('un') ? 0x2ecc71 : 0xe74c3c))
                 .setTimestamp()
-                .setImage(proof ? (proof.proxyURL || proof.url) : null)
+                .setImage(proofURL)
                 .setAuthor({
                     name: formatDiscordUserName(client.user),
                     iconURL: client.user.avatarURL()
@@ -309,7 +327,7 @@ async function moderationAction(client, type, user, victim, reason, additionalDa
                 .addField('User', `${formatDiscordUserName(user.user)}\n\`${user.user.id}\``, true)
                 .addField(localize('moderation', 'action'), expiringAt ? `tmp-${type}` : type, true)
                 .addFields(fields)
-                .addField(localize('moderation', 'reason'), reason);
+                .addField(localize('moderation', 'reason'), truncate(reason, 1024));
             safeSetFooter(modEmbed, client);
             await channel.send({
                 embeds: [modEmbed]

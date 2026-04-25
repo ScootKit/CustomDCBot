@@ -1,27 +1,13 @@
 {
-  "description": {
-    "en": "Configure the server-wide lockdown system. This is separate from per-channel lock/unlock commands.",
-    "de": "Konfiguriere das serverweite Lockdown-System. Dies ist getrennt von den kanalweisen Sperr-/Entsperr-Befehlen."
-  },
-  "humanName": {
-    "en": "Lockdown Configuration",
-    "de": "Lockdown-Konfiguration"
-  },
+  "description": "Configure the server-wide lockdown system. This is separate from per-channel lock/unlock commands.",
+  "humanName": "Lockdown Configuration",
   "filename": "lockdown.json",
   "content": [
     {
       "name": "enabled",
-      "humanName": {
-        "en": "Enable lockdown system?",
-        "de": "Lockdown-System aktivieren?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Enables the /moderate lockdown command and automatic lockdown triggers",
-        "de": "Aktiviert den /moderate lockdown Befehl und automatische Lockdown-Auslöser"
-      },
+      "humanName": "Enable lockdown system?",
+      "default": false,
+      "description": "Enables the /moderate lockdown command and automatic lockdown triggers",
       "type": "boolean",
       "elementToggle": true,
       "category": "general"
@@ -30,34 +16,28 @@
       "name": "logChannel",
       "type": "channelID",
       "dependsOn": "enabled",
-      "humanName": {
-        "en": "Lockdown log channel",
-        "de": "Lockdown-Log-Kanal"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Channel where detailed lockdown log entries are posted. Falls back to the moderation log channel if not set.",
-        "de": "Kanal, in dem detaillierte Lockdown-Logeinträge gepostet werden. Fällt auf den Moderations-Logkanal zurück, wenn nicht gesetzt."
-      },
+      "humanName": "Lockdown log channel",
+      "default": "",
+      "description": "Channel where detailed lockdown log entries are posted. Falls back to the moderation log channel if not set.",
       "category": "general"
     },
     {
       "name": "sendMessageInAffectedChannels",
       "type": "boolean",
       "dependsOn": "enabled",
-      "humanName": {
-        "en": "Send message in affected channels?",
-        "de": "Nachricht in betroffenen Kanälen senden?"
-      },
-      "default": {
-        "en": true
-      },
-      "description": {
-        "en": "If enabled, the lockdown/lift message will be sent in every affected channel",
-        "de": "Wenn aktiviert, wird die Lockdown-/Aufhebungsnachricht in jedem betroffenen Kanal gesendet"
-      },
+      "humanName": "Send message in affected channels?",
+      "default": true,
+      "description": "If enabled, the lockdown/lift message will be sent in every affected channel",
+      "category": "messages"
+    },
+    {
+      "name": "lockdownMessageChannels",
+      "type": "array",
+      "content": "channelID",
+      "dependsOn": "sendMessageInAffectedChannels",
+      "humanName": "Channels for lockdown messages",
+      "default": [],
+      "description": "If set, lockdown/lift messages will only be sent in these channels instead of all affected channels. Leave empty to send in all affected channels.",
       "category": "messages"
     },
     {
@@ -65,32 +45,17 @@
       "type": "string",
       "allowEmbed": true,
       "dependsOn": "sendMessageInAffectedChannels",
-      "humanName": {
-        "en": "Lockdown activation message",
-        "de": "Lockdown-Aktivierungsnachricht"
-      },
-      "description": {
-        "en": "Message sent in affected channels when lockdown is activated",
-        "de": "Nachricht, die in betroffenen Kanälen gesendet wird, wenn der Lockdown aktiviert wird"
-      },
-      "default": {
-        "en": "🔒 **Server Lockdown** - This server is currently in lockdown mode. Reason: %reason%",
-        "de": "🔒 **Server-Lockdown** - Dieser Server befindet sich im Lockdown-Modus. Grund: %reason%"
-      },
+      "humanName": "Lockdown activation message",
+      "description": "Message sent in affected channels when lockdown is activated",
+      "default": "🔒 **Server Lockdown** - This server is currently in lockdown mode. Reason: %reason%",
       "params": [
         {
           "name": "reason",
-          "description": {
-            "en": "Reason for the lockdown",
-            "de": "Grund für den Lockdown"
-          }
+          "description": "Reason for the lockdown"
         },
         {
           "name": "user",
-          "description": {
-            "en": "User who activated the lockdown (or 'System' for automatic)",
-            "de": "Nutzer, der den Lockdown aktiviert hat (oder 'System' bei automatisch)"
-          }
+          "description": "User who activated the lockdown (or 'System' for automatic)"
         }
       ],
       "category": "messages"
@@ -100,25 +65,13 @@
       "type": "string",
       "allowEmbed": true,
       "dependsOn": "sendMessageInAffectedChannels",
-      "humanName": {
-        "en": "Lockdown lifted message",
-        "de": "Lockdown-Aufhebungsnachricht"
-      },
-      "description": {
-        "en": "Message sent in affected channels when lockdown is lifted",
-        "de": "Nachricht, die in betroffenen Kanälen gesendet wird, wenn der Lockdown aufgehoben wird"
-      },
-      "default": {
-        "en": "🔓 **Lockdown Lifted** - The server lockdown has been lifted. You can chat again.",
-        "de": "🔓 **Lockdown aufgehoben** - Der Server-Lockdown wurde aufgehoben. Ihr könnt wieder schreiben."
-      },
+      "humanName": "Lockdown lifted message",
+      "description": "Message sent in affected channels when lockdown is lifted",
+      "default": "🔓 **Lockdown Lifted** - The server lockdown has been lifted. You can chat again.",
       "params": [
         {
           "name": "user",
-          "description": {
-            "en": "User who lifted the lockdown",
-            "de": "Nutzer, der den Lockdown aufgehoben hat"
-          }
+          "description": "User who lifted the lockdown"
         }
       ],
       "category": "messages"
@@ -127,68 +80,36 @@
       "name": "autoLiftAfter",
       "type": "integer",
       "dependsOn": "enabled",
-      "humanName": {
-        "en": "Auto-lift lockdown after (minutes, 0 = manual only)",
-        "de": "Lockdown automatisch aufheben nach (Minuten, 0 = nur manuell)"
-      },
-      "default": {
-        "en": 0
-      },
-      "description": {
-        "en": "Automatically lift the lockdown after this many minutes. Set to 0 to require manual lifting.",
-        "de": "Den Lockdown nach dieser Anzahl Minuten automatisch aufheben. Auf 0 setzen für nur manuelle Aufhebung."
-      },
+      "humanName": "Auto-lift lockdown after (minutes, 0 = manual only)",
+      "default": 0,
+      "description": "Automatically lift the lockdown after this many minutes. Set to 0 to require manual lifting.",
       "category": "automation"
     },
     {
       "name": "autoTriggerOnJoinRaid",
       "type": "boolean",
       "dependsOn": "enabled",
-      "humanName": {
-        "en": "Auto-lockdown on join raid?",
-        "de": "Automatischer Lockdown bei Join-Raid?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Automatically activate lockdown when the anti-join-raid system is triggered",
-        "de": "Lockdown automatisch aktivieren, wenn das Anti-Join-Raid-System ausgelöst wird"
-      },
+      "humanName": "Auto-lockdown on join raid?",
+      "default": false,
+      "description": "Automatically activate lockdown when the anti-join-raid system is triggered",
       "category": "automation"
     },
     {
       "name": "autoTriggerOnJoinGate",
       "type": "boolean",
       "dependsOn": "enabled",
-      "humanName": {
-        "en": "Auto-lockdown on join-gate violations?",
-        "de": "Automatischer Lockdown bei Join-Gate-Verletzungen?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Automatically activate lockdown when the join-gate system is triggered. Thresholds are configured in the Join-Gate configuration.",
-        "de": "Lockdown automatisch aktivieren, wenn das Join-Gate-System ausgelöst wird. Schwellwerte werden in der Join-Gate-Konfiguration konfiguriert."
-      },
+      "humanName": "Auto-lockdown on join-gate violations?",
+      "default": false,
+      "description": "Automatically activate lockdown when the join-gate system is triggered. Thresholds are configured in the Join-Gate configuration.",
       "category": "automation"
     },
     {
       "name": "autoTriggerOnSpam",
       "type": "boolean",
       "dependsOn": "enabled",
-      "humanName": {
-        "en": "Auto-lockdown on spam detection?",
-        "de": "Automatischer Lockdown bei Spam-Erkennung?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Automatically activate lockdown when the anti-spam system is triggered. Thresholds are configured in the Anti-Spam configuration.",
-        "de": "Lockdown automatisch aktivieren, wenn das Anti-Spam-System ausgelöst wird. Schwellwerte werden in der Anti-Spam-Konfiguration konfiguriert."
-      },
+      "humanName": "Auto-lockdown on spam detection?",
+      "default": false,
+      "description": "Automatically activate lockdown when the anti-spam system is triggered. Thresholds are configured in the Anti-Spam configuration.",
       "category": "automation"
     }
   ],
@@ -196,26 +117,17 @@
     {
       "id": "general",
       "icon": "fas fa-gears",
-      "displayName": {
-        "en": "General Settings",
-        "de": "Allgemeine Einstellungen"
-      }
+      "displayName": "General Settings"
     },
     {
       "id": "messages",
       "icon": "fas fa-comment-dots",
-      "displayName": {
-        "en": "Messages",
-        "de": "Nachrichten"
-      }
+      "displayName": "Messages"
     },
     {
       "id": "automation",
       "icon": "far fa-robot",
-      "displayName": {
-        "en": "Automation",
-        "de": "Automatisierung"
-      }
+      "displayName": "Automation"
     }
   ]
 }

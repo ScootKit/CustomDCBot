@@ -4,7 +4,23 @@ const {embedType} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 const stopPhishing = require('stop-discord-phishing');
 
+// Cache resolved invite codes to guild IDs to avoid repeated API calls
+const inviteGuildCache = new Map();
+
+const INVITE_PATTERN = /(?:discord\.gg|discordapp\.com\/invite|discord\.com\/invite)\/([a-zA-Z0-9-]+)/g;
+
+function extractInviteCodes(content) {
+    const codes = [];
+    let match;
+    while ((match = INVITE_PATTERN.exec(content)) !== null) {
+        codes.push(match[1]);
+    }
+    INVITE_PATTERN.lastIndex = 0;
+    return codes;
+}
+
 const messageCache = {};
+const actionInProgress = new Set();
 
 module.exports.run = async (client, msg) => {
     if (!client.botReadyAt) return;
@@ -34,6 +50,7 @@ module.exports.run = async (client, msg) => {
      * @return {Promise<void>}
      */
     async function antiSpam() {
+        if (actionInProgress.has(msg.author.id)) return;
         if (!messageCache[msg.author.id]) messageCache[msg.author.id] = [];
         messageCache[msg.author.id].push({
             id: msg.id,
@@ -42,7 +59,9 @@ module.exports.run = async (client, msg) => {
             massMentions: msg.mentions.everyone || Array.from(msg.mentions.roles.keys()).length !== 0
         });
         setTimeout(() => {
+            if (!messageCache[msg.author.id]) return;
             messageCache[msg.author.id] = messageCache[msg.author.id].filter(m => m.id !== msg.id);
+            if (messageCache[msg.author.id].length === 0) delete messageCache[msg.author.id];
         }, antiSpamConfig.timeframe * 1000);
         if (messageCache[msg.author.id].length >= antiSpamConfig.maxMessagesInTimeframe) return await performAntiSpamAction(localize('moderation', 'reached-messages-in-timeframe', {
             m: antiSpamConfig.maxMessagesInTimeframe,
@@ -68,6 +87,8 @@ module.exports.run = async (client, msg) => {
          * @return {Promise<void>}
          */
         async function performAntiSpamAction(reason) {
+            actionInProgress.add(msg.author.id);
+            delete messageCache[msg.author.id];
             await moderationAction(client, antiSpamConfig.action, {user: client.user}, msg.member, `[${localize('moderation', 'anti-spam')}]: ${reason}`, {roles: roles});
             if (antiSpamConfig.sendChatMessage) await msg.channel.send(embedType(antiSpamConfig.message, {
                 '%reason%': reason,
@@ -77,6 +98,7 @@ module.exports.run = async (client, msg) => {
             if (lockdownConfig && lockdownConfig.enabled && lockdownConfig.autoTriggerOnSpam && !await isLockdownActive(client)) {
                 await activateLockdown(client, localize('moderation', 'lockdown-spam-trigger'), localize('moderation', 'lockdown-system'), true);
             }
+            setTimeout(() => actionInProgress.delete(msg.author.id), 10000);
         }
     }
 
@@ -113,9 +135,29 @@ async function performBadWordAndInviteProtection(msg) {
     if (moduleConfig['whitelisted_channels_for_invite_blocking'].includes(msg.channel.id) || moduleConfig['whitelisted_channels_for_invite_blocking'].includes(msg.channel.parentId)) return;
     if (msg.member.roles.cache.find(r => moduleConfig['whitelisted_roles_for_invite_blocking'].includes(r.id))) return;
     if (moduleConfig['action_on_invite'] !== 'none') {
-        if (msg.content.includes('discord.gg/') || msg.content.includes('discordapp.com/invite/')) {
+        const inviteCodes = extractInviteCodes(msg.content);
+        for (const code of inviteCodes) {
+            let guildId = inviteGuildCache.get(code);
+            if (!guildId) {
+                try {
+                    const invite = await msg.client.fetchInvite(code);
+                    guildId = invite.guild ? invite.guild.id : null;
+                    if (guildId) {
+                        if (inviteGuildCache.size > 500) {
+                            const firstKey = inviteGuildCache.keys().next().value;
+                            inviteGuildCache.delete(firstKey);
+                        }
+                        inviteGuildCache.set(code, guildId);
+                    }
+                } catch (e) {
+                    guildId = null;
+                }
+            }
+            if (guildId === msg.guild.id) continue;
+            if (guildId && (moduleConfig['allowed_invite_guild_ids'] || []).includes(guildId)) continue;
             await msg.delete();
             await moderationAction(msg.client, moduleConfig['action_on_invite'], msg.client, msg.member, localize('moderation', 'invite-sent', {c: msg.channel.toString()}), {roles});
+            return;
         }
     }
 }

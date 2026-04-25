@@ -1,203 +1,104 @@
 {
-  "description": {
-    "en": "Configure strings & messages of your bot here",
-    "de": "Passe die Nachrichten deines Botes an"
-  },
-  "humanName": {
-    "en": "Messages",
-    "de": "Nachrichten"
-  },
+  "description": "Configure strings & messages of your bot here",
+  "humanName": "Messages",
   "filename": "strings.json",
   "content": [
     {
       "name": "addAtToUsernames",
-      "humanName": {
-        "en": "Add @ to usernames",
-        "de": "@ zu Nutzernamen hinzufügen"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, every username will be prefixed by an \"@\". Example: \"scderox\" -> \"@scderox\"",
-        "de": "Wenn aktiviert, wird vor jedem Nutzername ein \"@\" eingefügt. Beispiel: \"scderox\" -> \"@scderox\""
-      },
+      "humanName": "Add @ to usernames",
+      "default": false,
+      "description": "If enabled, every username will be prefixed by an \"@\". Example: \"scderox\" -> \"@scderox\"",
       "type": "boolean"
     },
     {
       "name": "footer",
-      "humanName": {
-        "en": "Embed-Footer"
-      },
-      "default": {
-        "en": "Powered by scnx.xyz ⚡"
-      },
-      "description": {
-        "en": "Footer of every embed",
-        "de": "Footer jedes Embeds"
-      },
+      "humanName": "Embed-Footer",
+      "default": "Powered by scnx.xyz ⚡",
+      "description": "Footer of every embed",
       "type": "string",
       "pro": true
     },
     {
       "name": "footerImgUrl",
-      "humanName": {
-        "en": "Embed-Footer-Image-URL",
-        "de": "Embed-Footer-Bild-URL"
-      },
-      "default": {
-        "en": "https://scnx.xyz/favicon.png"
-      },
+      "humanName": "Embed-Footer-Image-URL",
+      "default": "https://scnx.xyz/favicon.png",
       "allowNull": true,
-      "description": {
-        "en": "Footer-Image of every embed",
-        "de": "Footer-Bild von jedem Embed"
-      },
+      "description": "Footer-Image of every embed",
       "type": "imgURL",
       "pro": true
     },
     {
       "name": "need_args",
-      "humanName": {
-        "en": "More arguments are needed",
-        "de": "Mehr Argumente werden benötigt"
-      },
-      "default": {
-        "en": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
-        "de": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%."
-      },
-      "description": {
-        "en": "This message gets sent if there are not enough arguments specified",
-        "de": "Diese Nachricht wird versendet, wenn eine oder mehrere Argumente für einen Befehl fehlen"
-      },
+      "humanName": "More arguments are needed",
+      "default": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
+      "description": "This message gets sent if there are not enough arguments specified",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "count",
-          "description": {
-            "en": "Count of arguments provided",
-            "de": "Anzahl von angegebenen Parameter"
-          }
+          "description": "Count of arguments provided"
         },
         {
           "name": "neededCount",
-          "description": {
-            "en": "Count of arguments needed",
-            "de": "Anzahl von benötigten Argumenten"
-          }
+          "description": "Count of arguments needed"
         }
       ]
     },
     {
       "name": "updated_roles",
-      "humanName": {
-        "en": "Roles updated",
-        "de": "Rollen erfolgreich geupdated"
-      },
-      "default": {
-        "en": "✅ Updated roles according to your settings",
-        "de": "✅ Rollen-Änderungen übernommen"
-      },
-      "description": {
-        "en": "This message gets sent after a user selects self-roles on a self-role-element.",
-        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer eine Self-Rolle auswählt."
-      },
+      "humanName": "Roles updated",
+      "default": "✅ Updated roles according to your settings",
+      "description": "This message gets sent after a user selects self-roles on a self-role-element.",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "added_role",
-      "humanName": {
-        "en": "Role added",
-        "de": "Rolle erfolgreich hinzugefügt"
-      },
-      "default": {
-        "en": "✅ Role %role% successfully added",
-        "de": "✅ Rolle %role% erfolgreich hinzugefügt"
-      },
-      "description": {
-        "en": "This message gets sent when a user adds a role to themselves.",
-        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer sich selbst eine Self-Rolle hinzufügt."
-      },
+      "humanName": "Role added",
+      "default": "✅ Role %role% successfully added",
+      "description": "This message gets sent when a user adds a role to themselves.",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "role",
-          "description": {
-            "en": "Name of the role",
-            "de": "Name der Rolle"
-          }
+          "description": "Name of the role"
         }
       ]
     },
     {
       "name": "removed_role",
-      "humanName": {
-        "en": "Role removed",
-        "de": "Rolle erfolgreich entfernt"
-      },
-      "default": {
-        "en": "✅ Role %role% successfully removed",
-        "de": "✅ Rolle %role% erfolgreich entfernt"
-      },
-      "description": {
-        "en": "This message gets sent when a user removes a role from themselves.",
-        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer sich selbst eine Self-Rolle entfernt."
-      },
+      "humanName": "Role removed",
+      "default": "✅ Role %role% successfully removed",
+      "description": "This message gets sent when a user removes a role from themselves.",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "role",
-          "description": {
-            "en": "Name of the role",
-            "de": "Name der Rolle"
-          }
+          "description": "Name of the role"
         }
       ]
     },
     {
       "name": "not_enough_permissions",
-      "humanName": {
-        "en": "Not enough permissions",
-        "de": "Nicht genügend Rechte"
-      },
-      "default": {
-        "en": "Seems like you don't have enough permissions.",
-        "de": "Scheint als hättest du nicht genügend Rechte."
-      },
-      "description": {
-        "en": "This message gets sent if an user don't hase enough permissions",
-        "de": "Diese Nachricht wird versendet, wenn der Nutzer nicht genügen Rechte hat"
-      },
+      "humanName": "Not enough permissions",
+      "default": "Seems like you don't have enough permissions.",
+      "description": "This message gets sent if an user don't hase enough permissions",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "helpembed",
-      "humanName": {
-        "en": "Help-Message",
-        "de": "Hilfe-Nachricht"
-      },
+      "humanName": "Help-Message",
       "default": {
-        "en": {
-          "title": "Help",
-          "description": "You can find every command here",
-          "module_translation": "%name% by %author%: %description%",
-          "build_in": "Build-In-Commands"
-        },
-        "de": {
-          "title": "Help",
-          "description": "Alle Commands findest du hier",
-          "module_translation": "%name% by %author%: %description%",
-          "build_in": "Build-In-Commands"
-        }
+        "title": "Help",
+        "description": "You can find every command here",
+        "module_translation": "%name% by %author%: %description%",
+        "build_in": "Build-In-Commands"
       },
-      "description": {
-        "en": "Strings for help command"
-      },
+      "description": "Strings for help command",
       "type": "keyed",
       "content": {
         "key": "string",
@@ -207,48 +108,24 @@
     },
     {
       "name": "disableHelpEmbedStats",
-      "humanName": {
-        "en": "Disable Stats in Help-Embed",
-        "de": "Deaktiviere Stats im Hilfe-Embed"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, the stats-field in the Help-Embed will get hidden",
-        "de": "Wenn aktiviert, wird der Stats-Bereich im Help-Embed verborgen"
-      },
+      "humanName": "Disable Stats in Help-Embed",
+      "default": false,
+      "description": "If enabled, the stats-field in the Help-Embed will get hidden",
       "type": "boolean",
       "pro": true
     },
     {
       "name": "disableFooterTimestamp",
-      "humanName": {
-        "en": "Disable default Timestamp in footer",
-        "de": "Standard-Timestamp im Footer deaktivieren"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, the current time will not be displayed in the embed footer",
-        "de": "Wenn aktiviert, wird die Aktuelle Uhrzeit nicht im Footer angezeigt"
-      },
+      "humanName": "Disable default Timestamp in footer",
+      "default": false,
+      "description": "If enabled, the current time will not be displayed in the embed footer",
       "type": "boolean"
     },
     {
       "name": "putBotInfoOnLastSite",
-      "humanName": {
-        "en": "Hides the Bot-Info in the Help-Embed",
-        "de": "Verbergt die Bot-Info Sektion im Hilfe-Embed"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, the Bot-Info-Section of the Help-Embed will be hidden.",
-        "de": "Wenn aktiviert, wird der Bot-Info-Bereich im Help-Embed verborgen."
-      },
+      "humanName": "Hides the Bot-Info in the Help-Embed",
+      "default": false,
+      "description": "If enabled, the Bot-Info-Section of the Help-Embed will be hidden.",
       "type": "boolean",
       "pro": true
     }

@@ -13,7 +13,8 @@ module.exports.run = async (client, msg) => {
         if (!config.mode) config.mode = 'all';
         if (config.mode === 'blacklist' && config.blacklist.includes(msg.channel.id)) return;
         if (config.mode === 'whitelist' && !config.whitelist.includes(msg.channel.id)) return;
-        if (msg.crosspostable) await msg.crosspost();
+        if (msg.crosspostable) await msg.crosspost().catch(() => {
+        });
         await msg.react('✅').then((r) => {
             setTimeout(() => {
                 r.remove();

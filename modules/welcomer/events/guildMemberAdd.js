@@ -70,7 +70,7 @@ module.exports.run = async function (client, guildMember) {
         ));
         const memberModel = await moduleModel.findOne({
             where: {
-                userId: guildMember.id,
+                userID: guildMember.id,
                 channelID: sentMessage.channelId
             }
         });

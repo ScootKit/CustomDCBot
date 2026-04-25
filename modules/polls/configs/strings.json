@@ -1,47 +1,23 @@
 {
-  "description": {
-    "en": "Edit the messages and strings of the module here",
-    "de": "Stelle hier die Nachrichten des Modules ein"
-  },
-  "humanName": {
-    "en": "Messages",
-    "de": "Nachrichten"
-  },
+  "description": "Edit the messages and strings of the module here",
+  "humanName": "Messages",
   "filename": "strings.json",
   "content": [
     {
       "name": "embed",
-      "humanName": {
-        "de": "Embed"
-      },
+      "humanName": "Embed",
       "default": {
-        "en": {
-          "title": "New Poll",
-          "color": "BLUE",
-          "options": "Today's options",
-          "liveView": "Live-Views of the results",
-          "expiresOn": "End of this poll",
-          "thisPollExpiresOn": "This poll expires on %date%.",
-          "endedPollTitle": "Poll ended",
-          "visibility": "Visibility of votes",
-          "endedPollColor": "RED"
-        },
-        "de": {
-          "title": "Neue Umfrage",
-          "color": "BLUE",
-          "options": "Heutige Auswahlmöglichkeiten",
-          "liveView": "Live-Anzeige der Ergebnisse",
-          "expiresOn": "Ende dieser Umfrage",
-          "visibility": "Sichtbarkeit der Stimmen",
-          "thisPollExpiresOn": "Diese Umfrage endet am %date%.",
-          "endedPollTitle": "Umfrage beendet",
-          "endedPollColor": "RED"
-        }
+        "title": "New Poll",
+        "color": "BLUE",
+        "options": "Today's options",
+        "liveView": "Live-Views of the results",
+        "expiresOn": "End of this poll",
+        "thisPollExpiresOn": "This poll expires on %date%.",
+        "endedPollTitle": "Poll ended",
+        "visibility": "Visibility of votes",
+        "endedPollColor": "RED"
       },
-      "description": {
-        "en": "You can edit the settings of your embed here",
-        "de": "Du kannst die Einstellungen des Embeds hier bearbeiten"
-      },
+      "description": "You can edit the settings of your embed here",
       "type": "keyed",
       "content": {
         "key": "string",

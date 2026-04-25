@@ -1,23 +1,19 @@
 {
   "name": "duel",
-  "humanReadableName": {
-    "en": "Duel"
-  },
+  "humanReadableName": "Duel",
   "author": {
     "scnxOrgID": "1",
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": {
-    "en": "Let users play the game \"Duel\" on your discord",
-    "de": "Erlaubt es deinen Nutzern, das Spiel \"Duel\" auf deinem Discord zu spielen"
-  },
+  "description": "Let users play the game \"Duel\" on your discord",
   "commands-dir": "/commands",
   "noConfig": true,
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/duel",
   "tags": [
     "fun"
   ],
+  "fa-icon": "fas fa-gun",
   "earlyAccess": false,
   "holidayGift": true
 }

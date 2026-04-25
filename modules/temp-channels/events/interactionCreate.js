@@ -1,6 +1,14 @@
-const {ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle} = require('discord.js');
+const {
+    ActionRowBuilder,
+    ModalBuilder,
+    TextInputBuilder,
+    TextInputStyle,
+    LabelBuilder,
+    UserSelectMenuBuilder
+} = require('discord.js');
 const {usersList, channelMode, userAdd, userRemove, channelEdit} = require('../channel-settings');
 const {localize} = require('../../../src/functions/localize');
+const {embedType} = require('../../../src/functions/helpers');
 const {Op} = require('sequelize');
 
 module.exports.run = async function (client, interaction) {
@@ -19,50 +27,41 @@ module.exports.run = async function (client, interaction) {
 
         if (interaction.customId === 'tempc-add') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
-            const modal = new ModalBuilder()
-                .setCustomId('tempc-add-modal')
-                .setTitle(localize('temp-channels', 'add-modal-title'));
-            const userInput = new TextInputBuilder()
-                .setCustomId('add-modal-input')
-                .setLabel(localize('temp-channels', 'add-modal-prompt'))
-                .setStyle(TextInputStyle.Short)
-                .setPlaceholder(localize('temp-channels', 'edit-modal-username-placeholder'));
-            const actionRow = new ActionRowBuilder().addComponents(userInput);
-            modal.addComponents(actionRow);
-            await interaction.showModal(modal);
+            const selectMenu = new UserSelectMenuBuilder()
+                .setCustomId('tempc-add-select')
+                .setPlaceholder(localize('temp-channels', 'add-modal-prompt'))
+                .setMinValues(1)
+                .setMaxValues(1);
+            await interaction.reply({
+                ephemeral: true,
+                content: localize('temp-channels', 'add-modal-prompt'),
+                components: [new ActionRowBuilder().addComponents(selectMenu)]
+            });
+            return;
         }
         if (interaction.customId === 'tempc-remove') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
-            const modal = new ModalBuilder()
-                .setCustomId('tempc-remove-modal')
-                .setTitle(localize('temp-channels', 'remove-modal-title'));
-            const userInput = new TextInputBuilder()
-                .setCustomId('remove-modal-input')
-                .setLabel(localize('temp-channels', 'remove-modal-prompt'))
-                .setStyle(TextInputStyle.Short)
-                .setPlaceholder(localize('temp-channels', 'edit-modal-username-placeholder'));
-            const actionRow = new ActionRowBuilder().addComponents(userInput);
-            modal.addComponents(actionRow);
-            await interaction.showModal(modal);
+            const selectMenu = new UserSelectMenuBuilder()
+                .setCustomId('tempc-remove-select')
+                .setPlaceholder(localize('temp-channels', 'remove-modal-prompt'))
+                .setMinValues(1)
+                .setMaxValues(1);
+            await interaction.reply({
+                ephemeral: true,
+                content: localize('temp-channels', 'remove-modal-prompt'),
+                components: [new ActionRowBuilder().addComponents(selectMenu)]
+            });
+            return;
         }
         if (interaction.customId === 'tempc-list') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -70,10 +69,7 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-private') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -81,10 +77,7 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-public') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -92,32 +85,44 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-edit') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
             const vchann = interaction.guild.channels.cache.get(vc.id);
             const modal = new ModalBuilder()
                 .setCustomId('tempc-edit-modal')
                 .setTitle(localize('temp-channels', 'edit-modal-title'));
-            const nsfwInput = new TextInputBuilder()
-                .setCustomId('edit-modal-nsfw-input')
+            const nsfwLabel = new LabelBuilder()
                 .setLabel(localize('temp-channels', 'edit-modal-nsfw-prompt'))
-                .setRequired(true)
-                .setStyle(TextInputStyle.Short)
-                .setPlaceholder(localize('temp-channels', 'edit-modal-nsfw-placeholder'))
-                .setValue(vchann.nsfw.toString());
+                .setStringSelectMenuComponent(c => c
+                    .setCustomId('edit-modal-nsfw-input')
+                    .addOptions(
+                        {
+                            label: localize('temp-channels', 'edit-modal-nsfw-off'),
+                            value: 'false',
+                            default: vchann.nsfw === false
+                        },
+                        {
+                            label: localize('temp-channels', 'edit-modal-nsfw-on'),
+                            value: 'true',
+                            default: vchann.nsfw === true
+                        }
+                    ));
 
 
-            const bitrateInput = new TextInputBuilder()
-                .setCustomId('edit-modal-bitrate-input')
+            const bitrateLabel = new LabelBuilder()
                 .setLabel(localize('temp-channels', 'edit-modal-bitrate-prompt'))
-                .setRequired(true)
-                .setStyle(TextInputStyle.Short)
-                .setPlaceholder(localize('temp-channels', 'edit-modal-bitrate-placeholder'))
-                .setValue(vchann.bitrate.toString());
+                .setStringSelectMenuComponent(c => {
+                    c.setCustomId('edit-modal-bitrate-input');
+                    for (const b of [8000, 16000, 32000, 64000, 96000, 128000, 256000, 384000].filter(b => b <= interaction.guild.maximumBitrate)) {
+                        c.addOptions({
+                            label: `${b / 1000} kbps`,
+                            value: b.toString(),
+                            default: vchann.bitrate === b
+                        });
+                    }
+                    return c;
+                });
 
             const limitInput = new TextInputBuilder()
                 .setCustomId('edit-modal-limit-input')
@@ -135,8 +140,8 @@ module.exports.run = async function (client, interaction) {
                 .setPlaceholder(localize('temp-channels', 'edit-modal-name-placeholder'))
                 .setValue(vchann.name);
 
-            const nsfwRow = new ActionRowBuilder().addComponents(nsfwInput);
-            const bitrateRow = new ActionRowBuilder().addComponents(bitrateInput);
+            const nsfwRow = nsfwLabel;
+            const bitrateRow = bitrateLabel;
             const limitRow = new ActionRowBuilder().addComponents(limitInput);
             const nameRow = new ActionRowBuilder().addComponents(nameInput);
             modal.addComponents(bitrateRow);
@@ -156,10 +161,7 @@ module.exports.run = async function (client, interaction) {
         });
         if (interaction.customId === 'tempc-add-modal') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -167,10 +169,7 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-remove-modal') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
             await interaction.deferReply({ephemeral: true});
@@ -178,14 +177,34 @@ module.exports.run = async function (client, interaction) {
         }
         if (interaction.customId === 'tempc-edit-modal') {
             if (!vc) {
-                interaction.reply({
-                    ephemeral: true,
-                    content: interaction.client.configurations['temp-channels']['config']['notInChannel']
-                });
+                interaction.reply(embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true}));
                 return;
             }
             await interaction.deferReply({ephemeral: true});
             await channelEdit(interaction, 'modal');
+        }
+    } else if (interaction.isUserSelectMenu()) {
+        const vc = await client.models['temp-channels']['TempChannel'].findOne({
+            where: {
+                [Op.and]: [
+                    {id: interaction.member.voice ? interaction.member.voice.channelId : null},
+                    {creatorID: interaction.member.id}
+                ]
+            }
+        });
+        if (!vc) {
+            return interaction.reply({
+                ephemeral: true,
+                ...embedType(interaction.client.configurations['temp-channels']['config']['notInChannel'], {}, {ephemeral: true})
+            });
+        }
+        if (interaction.customId === 'tempc-add-select') {
+            await interaction.deferReply({ephemeral: true});
+            await userAdd(interaction, 'select');
+        }
+        if (interaction.customId === 'tempc-remove-select') {
+            await interaction.deferReply({ephemeral: true});
+            await userRemove(interaction, 'select');
         }
     }
 };

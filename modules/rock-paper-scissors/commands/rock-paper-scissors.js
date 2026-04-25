@@ -238,7 +238,11 @@ module.exports.run = async function (interaction) {
 
     const collector = msg.createMessageComponentCollector({
         componentType: ComponentType.Button,
-        filter: i => i.user.id === interaction.user.id || i.user.id === user2.id
+        filter: i => i.user.id === interaction.user.id || i.user.id === user2.id,
+        time: 300000
+    });
+    collector.on('end', () => {
+        delete rpsgames[msg.id];
     });
     collector.on('collect', i => {
         const game = rpsgames[i.message.id];

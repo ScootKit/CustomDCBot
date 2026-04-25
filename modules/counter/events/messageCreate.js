@@ -2,7 +2,7 @@ const {localize} = require('../../../src/functions/localize');
 const {embedType} = require('../../../src/functions/helpers');
 let Formula;
 
-const invalidMessages = {};
+const invalidMessages = new Map();
 
 module.exports.run = async function (client, msg) {
     if (!client.botReadyAt) return;
@@ -29,7 +29,7 @@ module.exports.run = async function (client, msg) {
             object.lastCountedUser = null;
             object.userCounts = {};
             await object.save();
-            invalidMessages[msg.author.id]++;
+            invalidMessages.set(msg.author.id, (invalidMessages.get(msg.author.id) || 0) + 1);
             return msg.reply(embedType(moduleConfig.restartOnWrongCountMessage, {
                 '%i%': 1,
                 '%mention%': msg.author.toString()
@@ -61,13 +61,18 @@ module.exports.run = async function (client, msg) {
     }
 
     let reactions;
-    if (msg.content === '42') reactions = [await msg.react('❓')];
-    else if (msg.content === '420') reactions = [await msg.react('🚬')];
-    else if (msg.content === '100') reactions = [await msg.react('💯')];
-    else if (msg.content === '110') reactions = [await msg.react('🚓')];
-    else if (msg.content === '112' || msg.content === '911') reactions = [await msg.react('🚑'), await msg.react('🚒')];
-    else if (msg.content === '69') reactions = [await msg.react('🇳'), await msg.react('🇮'), await msg.react('🇨'), await msg.react('🇪')];
-    else reactions = [await msg.react(moduleConfig['success-reaction'])];
+    if (moduleConfig.enableEasterEggs) {
+        if (parsedNumber === 67) reactions = [await msg.react('🤲')];
+        else if (parsedNumber === 42) reactions = [await msg.react('❓')];
+        else if (parsedNumber === 420) reactions = [await msg.react('🚬')];
+        else if (parsedNumber === 100) reactions = [await msg.react('💯')];
+        else if (parsedNumber === 110) reactions = [await msg.react('🚓')];
+        else if (parsedNumber === 112 || parsedNumber === 911) reactions = [await msg.react('🚑'), await msg.react('🚒')];
+        else if (parsedNumber === 69) reactions = [await msg.react('🇳'), await msg.react('🇮'), await msg.react('🇨'), await msg.react('🇪')];
+        else reactions = [await msg.react(moduleConfig['success-reaction'])];
+    } else {
+        reactions = [await msg.react(moduleConfig['success-reaction'])];
+    }
 
     if (moduleConfig.removeReactions) setTimeout(async () => {
         for (const reaction of reactions) await reaction.remove();
@@ -88,10 +93,8 @@ module.exports.run = async function (client, msg) {
             await msg.delete();
         }, 8000);
         if (!skipStrike || parseInt(moduleConfig.strikeAmount) === 0) return;
-        console.log(invalidMessages);
-        if (!invalidMessages[msg.author.id]) invalidMessages[msg.author.id] = 0;
-        invalidMessages[msg.author.id]++;
-        if (invalidMessages[msg.author.id] >= parseInt(moduleConfig.strikeAmount)) {
+        invalidMessages.set(msg.author.id, (invalidMessages.get(msg.author.id) || 0) + 1);
+        if (invalidMessages.get(msg.author.id) >= parseInt(moduleConfig.strikeAmount)) {
             if (moduleConfig.giveRoleInsteadOfPermissionRemoval) await msg.member.roles.add(moduleConfig.strikeRole, '[counter] ' + localize('counter', 'restriction-audit-log'));
             else await msg.channel.permissionOverwrites.create(msg.author, {
                 SEND_MESSAGES: false

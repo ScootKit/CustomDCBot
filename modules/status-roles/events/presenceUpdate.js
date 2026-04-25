@@ -3,6 +3,7 @@ const {ActivityType} = require('discord.js');
 
 module.exports.run = async function (client, oldPresence, newPresence) {
     if (!client.botReadyAt) return;
+    if (!newPresence.member) return;
     if (newPresence.member.guild.id !== client.guildID) return;
     const moduleConfig = client.configurations['status-roles']['config'];
     const roles = moduleConfig.roles;

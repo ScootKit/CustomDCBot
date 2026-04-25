@@ -10,15 +10,10 @@
   "config-example-files": [
     "configs/config.json"
   ],
+  "fa-icon": "fa-solid fa-user-tag",
   "tags": [
     "administration"
   ],
-  "humanReadableName": {
-    "en": "Status-roles",
-    "de": "Status-Rollen"
-  },
-  "description": {
-    "en": "Simple module to reward users who have an invite to your server in their status!",
-    "de": "Einfaches Modul, um Nutzer zu belohnen, die einen Link zu deinem Server in ihrem Status haben!"
-  }
+  "humanReadableName": "Status-roles",
+  "description": "Simple module to reward users who have an invite to your server in their status!"
 }

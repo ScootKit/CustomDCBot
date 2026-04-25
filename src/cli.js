@@ -37,6 +37,7 @@ module.exports.commands = [
                 if (inputElement.client.logChannel) await inputElement.client.logChannel.send('⚠️️ Configuration reloaded failed. Bot shutting down');
                 console.log('Reload failed. Exiting');
                 process.exit(0);
+                ;
             });
         }
     },

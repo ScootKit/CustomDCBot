@@ -1,51 +1,29 @@
 {
-  "description": {
-    "en": "Configure the basic features of the bot here",
-    "de": "Generelle Konfiguration deines Bots"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the basic features of the bot here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "token",
       "humanName": {},
-      "default": {
-        "en": "yourtokengoeshere"
-      },
-      "description": {
-        "en": "Replace this with your token"
-      },
+      "default": "yourtokengoeshere",
+      "description": "Replace this with your token",
       "hidden": true,
       "type": "string"
     },
     {
       "name": "prefix",
-      "humanName": {
-        "en": "Prefix of your bot",
-        "de": "Prefix deines Botes"
-      },
-      "default": {
-        "en": "!"
-      },
-      "description": {
-        "en": "Set the prefix of your bot here",
-        "de": "Dein eigener Prefix - Wir empfehlen ihn einfach bei ! zu belassen."
-      },
+      "humanName": "Prefix of your bot",
+      "default": "!",
+      "description": "Set the prefix of your bot here",
       "hidden": true,
       "type": "string"
     },
     {
       "name": "botOperators",
       "humanName": {},
-      "default": {
-        "en": []
-      },
-      "description": {
-        "en": "Bot operators can reload the configuration and perform system relevant actions with this bot. Please only add users you really trust (and yourself of course)"
-      },
+      "default": [],
+      "description": "Bot operators can reload the configuration and perform system relevant actions with this bot. Please only add users you really trust (and yourself of course)",
       "hidden": true,
       "type": "array",
       "content": "string"
@@ -53,57 +31,30 @@
     {
       "name": "guildID",
       "humanName": {},
-      "default": {
-        "en": "489786377261678592"
-      },
-      "description": {
-        "en": "Replace this the id of the guild the bot should work in."
-      },
+      "default": "489786377261678592",
+      "description": "Replace this the id of the guild the bot should work in.",
       "hidden": true,
       "type": "guildID"
     },
     {
       "name": "disableStatus",
-      "humanName": {
-        "en": "Disable Bot-Status",
-        "de": "Bot-Status deaktivieren"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, the bot won't have a status in discord",
-        "de": "Wenn aktiviert wird der Bot keinen Status in Discord haben"
-      },
+      "humanName": "Disable Bot-Status",
+      "default": false,
+      "description": "If enabled, the bot won't have a status in discord",
       "type": "boolean"
     },
     {
       "name": "user_presence",
-      "humanName": {
-        "en": "Bot-Status"
-      },
-      "default": {
-        "en": "Change this in your Bot-Configuration on scnx.app: https://scootk.it/change-status",
-        "de": "Ändere das in deiner Bot-Konfiguration auf scnx.app: https://scootk.it/change-status"
-      },
-      "description": {
-        "en": "This will show up in Discord as \"Playing <YourValue>\"",
-        "de": "Das wird in Discord als \"Spielt <Hier der Wert>\" angezeigt"
-      },
+      "humanName": "Bot-Status",
+      "default": "your bot status",
+      "description": "This will show up in Discord as \"Playing <YourValue>\"",
       "type": "string"
     },
     {
       "name": "logLevel",
-      "humanName": {
-        "en": "Logging-Level"
-      },
-      "default": {
-        "en": "debug"
-      },
-      "description": {
-        "en": "Log-Level of the bot. Leave it as it is, if you don't know what this means",
-        "de": "Log-Level des Bots. Belasse es wie es ist, wenn du nicht weißt, was das bedeutet."
-      },
+      "humanName": "Logging-Level",
+      "default": "debug",
+      "description": "Log-Level of the bot. Leave it as it is, if you don't know what this means",
       "hidden": true,
       "type": "select",
       "content": [
@@ -117,63 +68,31 @@
     },
     {
       "name": "logChannelID",
-      "humanName": {
-        "en": "Log-Channel",
-        "de": "Log-Kanal"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Default log-channel for most modules and used to log relevant information",
-        "de": "Standard Log-Kanal für viele Module. Wird außerdem genutzt, um wesentliche Bot-Informationen zu senden"
-      },
+      "humanName": "Log-Channel",
+      "default": "",
+      "description": "Default log-channel for most modules and used to log relevant information",
       "type": "channelID",
       "allowNull": true
     },
     {
       "name": "timezone",
-      "humanName": {
-        "en": "Timezone",
-        "de": "Zeitzone"
-      },
-      "default": {
-        "en": "Europe/Berlin"
-      },
-      "description": {
-        "en": "Timezone the bot runs in",
-        "de": "Zeitzone in der der Bot laufen soll"
-      },
+      "humanName": "Timezone",
+      "default": "Europe/Berlin",
+      "description": "Timezone the bot runs in",
       "type": "timezone"
     },
     {
       "name": "disableEveryoneProtection",
-      "humanName": {
-        "en": "Allow @everyone / @here pings",
-        "de": "@everyone und @here Pings erlauben"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Allows @everyone and @here pings for messages configurable in the dashboard",
-        "de": "Erlaubt @everyone und @here pings in im Dashboard anpassbaren Nachrichten"
-      },
+      "humanName": "Allow @everyone / @here pings",
+      "default": false,
+      "description": "Allows @everyone and @here pings for messages configurable in the dashboard",
       "type": "boolean"
     },
     {
       "name": "syncCommandGlobally",
-      "humanName": {
-        "en": "Sync module commands as global commands",
-        "de": "Speichere Modul-Befehle als Globale-Befehle"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, module-commands will be synced to discord as global commands. They will show up on other servers, but won't work. Syncing can take up to 2 hours, so changes may not be reflected immediately.",
-        "de": "Wenn aktiviert, werden Befehle von Modulen als Globale-Befehle zu Discord gesendet. Sie werden auf anderen Servern angezeigt, werden aber nicht funktionieren. Synchronisierung kann bis zu 2 Stunden dauern."
-      },
+      "humanName": "Sync module commands as global commands",
+      "default": false,
+      "description": "If enabled, module-commands will be synced to discord as global commands. They will show up on other servers, but won't work. Syncing can take up to 2 hours, so changes may not be reflected immediately.",
       "type": "boolean"
     }
   ]

@@ -1,53 +1,25 @@
 {
-  "description": {
-    "en": "Manage the basic settings of this module here",
-    "de": "Passe die grundlegenden Optionen des Modules hier an"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Manage the basic settings of this module here",
+  "humanName": "Configuration",
   "configElementName": {
-    "de": {
-      "one": "Ticket-Kategorie",
-      "more": "Ticket-Kategorien"
-    },
-    "en": {
-      "one": "Ticket-Category",
-      "more": "Ticket-Categories"
-    }
+    "one": "Ticket-Category",
+    "more": "Ticket-Categories"
   },
   "configElements": true,
   "filename": "config.json",
   "content": [
     {
       "name": "name",
-      "humanName": {
-        "en": "Name",
-        "de": "Name"
-      },
-      "default": {
-        "en": "Support"
-      },
-      "description": {
-        "en": "Name of the Ticket type. This will be shown to users",
-        "de": "Name des Tickettypen. Dieser wird Nutzern angezeigt"
-      },
+      "humanName": "Name",
+      "default": "Support",
+      "description": "Name of the Ticket type. This will be shown to users",
       "type": "string"
     },
     {
       "name": "ticket-create-category",
-      "humanName": {
-        "en": "Ticket create category",
-        "de": "Ticketerstellungs-Kategorie"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Category in which tickets should get created.",
-        "de": "Kategorie, in der Tickets erstellt werden sollen."
-      },
+      "humanName": "Ticket create category",
+      "default": "",
+      "description": "Category in which tickets should get created.",
       "type": "channelID",
       "content": [
         "GUILD_CATEGORY"
@@ -55,17 +27,9 @@
     },
     {
       "name": "ticket-create-channel",
-      "humanName": {
-        "en": "Ticket create category",
-        "de": "Ticketerstellungs-Kanal"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Channel in which a message with a \"Create Ticket\" button should get send",
-        "de": "Kanal in den eine Nachticht mit \"Ticket erstellen\" button gesendet werden soll"
-      },
+      "humanName": "Ticket creation channel",
+      "default": "",
+      "description": "Channel in which a message with a \"Create Ticket\" button should get send",
       "type": "channelID",
       "content": [
         "GUILD_TEXT"
@@ -73,229 +37,116 @@
     },
     {
       "name": "ticketRoles",
-      "humanName": {
-        "en": "Ticket Roles",
-        "de": "Ticketrollen"
-      },
-      "default": {
-        "en": []
-      },
-      "description": {
-        "de": "Nutzer, die in Tickets gepingt werden und diese sehen können",
-        "en": "Users who get pinged in the tickets and who can see tickets"
-      },
+      "humanName": "Ticket Roles",
+      "default": [],
+      "description": "Users who get pinged in the tickets and who can see tickets",
       "type": "array",
       "content": "roleID"
     },
     {
       "name": "logChannel",
-      "humanName": {
-        "en": "Log channel",
-        "de": "Log-Kanal"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Channel in which ticket logs should get send",
-        "de": "Kanal in den Ticket-Logs gesendet werden sollen"
-      },
+      "humanName": "Log channel",
+      "default": "",
+      "description": "Channel in which ticket logs should get send",
       "type": "channelID"
     },
     {
       "name": "ticket-create-message",
-      "humanName": {
-        "en": "Ticket created message",
-        "de": "Ticketerstellungs-Nachricht"
-      },
-      "default": {
-        "en": "Click the big button below to contact our staff and create a ticket",
-        "de": "Klick auf den großen Button unter dieser Nachricht um unser Team zu kontaktieren und ein Ticket zu erstellen"
-      },
-      "description": {
-        "en": "Message that gets send/edited in the ticket-create-channel",
-        "de": "Nachricht, die im Ticketerstellungs-Kanal gesendet/bearbeitet wird"
-      },
+      "humanName": "Ticket created message",
+      "default": "Click the big button below to contact our staff and create a ticket",
+      "description": "Message that gets send/edited in the ticket-create-channel",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "sendUserDMAfterTicketClose",
-      "humanName": {
-        "en": "Send user DM after ticket is closed",
-        "de": "Nach schließen PN an Nutzer senden"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled users get a DM from the bot after someone closes the ticket",
-        "de": "Wenn diese Option aktiviert ist, bekommen Nutzer eine PN, wenn ihr Ticket geschlossen wird"
-      },
+      "humanName": "Send user DM after ticket is closed",
+      "default": false,
+      "description": "If enabled users get a DM from the bot after someone closes the ticket",
       "type": "boolean"
     },
     {
       "name": "userDM",
-      "humanName": {
-        "en": "User DM",
-        "de": "Nutzer PN"
-      },
-      "default": {
-        "en": "Thanks for contacting our support for the ticket-category \"%type%\", here is your transcript: %transcriptURL%",
-        "de": "Danke, dass du unseren Support für die Kategorie \"%type%\" kontaktiert hast. Hier ist dein Transcript: %transcriptURL%"
-      },
-      "description": {
-        "en": "This message gets send to the user if sendUserDMAfterTicketClose is enabled",
-        "de": "Diese Nachricht wird an den Nutzer gesendet, wenn die entsprechende Option aktiviert ist"
-      },
+      "humanName": "User DM",
+      "default": "Thanks for contacting our support for the ticket-category \"%type%\", here is your transcript: %transcriptURL%",
+      "description": "This message gets send to the user if sendUserDMAfterTicketClose is enabled",
       "type": "string",
       "dependsOn": "sendUserDMAfterTicketClose",
       "allowEmbed": true,
       "params": [
         {
           "name": "transcriptURL",
-          "description": {
-            "de": "URL zum Transcript",
-            "en": "URL to transcript"
-          }
+          "description": "URL to transcript"
         },
         {
           "name": "type",
-          "description": {
-            "de": "Name des dieses Ticket Typen",
-            "en": "Name of this ticket type"
-          }
+          "description": "Name of this ticket type"
         }
       ]
     },
     {
       "name": "creation-message",
-      "humanName": {
-        "en": "Ticket-Created Message",
-        "de": "Ticket-Erstellt Nachricht"
-      },
-      "pro": true,
+      "humanName": "Ticket-Created Message",
       "type": "string",
       "allowEmbed": true,
-      "description": {
-        "en": "This message will get sent in new tickets. The close buttons will be added.",
-        "de": "Diese Nachricht wird in neue Tickets gesendet. Der Schließ-Knopf wird hinzugefügt."
-      },
+      "description": "This message will get sent in new tickets. The close buttons will be added.",
       "default": {
-        "en": {
-          "title": "\uD83D\uDCE5 New ticket #%id%",
-          "color": "#2ECC71",
-          "message": "%rolePings%",
-          "fields": [
-            {
-              "name": "\uD83D\uDC64 User",
-              "value": "%userMention%",
-              "inline": true
-            },
-            {
-              "name": "☕ Ticket-Topic",
-              "value": "%ticketTopic%",
-              "inline": true
-            },
-            {
-              "name": "ℹ\uFE0F Information",
-              "value": "Your issue got solved? Click the button below. You can always find this message pinned."
-            }
-          ]
-        },
-        "de": {
-          "title": "\uD83D\uDCE5 Neues Ticket #%id%",
-          "color": "#2ECC71",
-          "message": "%rolePings%",
-          "fields": [
-            {
-              "name": "\uD83D\uDC64 Nutzer",
-              "value": "%userMention%",
-              "inline": true
-            },
-            {
-              "name": "☕ Ticket-Thema",
-              "value": "%ticketTopic%",
-              "inline": true
-            },
-            {
-              "name": "ℹ\uFE0F Information",
-              "value": "Dein Problem wurde behoben? Klicke den Knopf unten. Du kannst diese Nachricht immer in den angepinnten Nachrichten finden."
-            }
-          ]
-        }
+        "title": "📥 New ticket #%id%",
+        "color": "#2ECC71",
+        "message": "%rolePings%",
+        "fields": [
+          {
+            "name": "👤 User",
+            "value": "%userMention%",
+            "inline": true
+          },
+          {
+            "name": "☕ Ticket-Topic",
+            "value": "%ticketTopic%",
+            "inline": true
+          },
+          {
+            "name": "ℹ️ Information",
+            "value": "Your issue got solved? Click the button below. You can always find this message pinned."
+          }
+        ]
       },
       "params": [
         {
           "name": "id",
-          "description": {
-            "de": "Eindeutige Identifikationsnummer des Tickets",
-            "en": "Unique identification number of the ticket"
-          }
+          "description": "Unique identification number of the ticket"
         },
         {
           "name": "userMention",
-          "description": {
-            "de": "Erwähnung des Nutzers, der das Ticket erstellt hat",
-            "en": "Mention of the user who created this ticket"
-          }
+          "description": "Mention of the user who created this ticket"
         },
         {
           "name": "rolePings",
-          "description": {
-            "de": "Erwähnung der Rollen, die du im \"Ticket-Rollen\"-Feld eingestellt hast",
-            "en": "Mention of the roles you have selected in the \"Ticket roles\" field"
-          }
+          "description": "Mention of the roles you have selected in the \"Ticket roles\" field"
         },
         {
           "name": "ticketTopic",
-          "description": {
-            "de": "Name des Ticket-Themas",
-            "en": "Name of the Ticket-Topic"
-          }
+          "description": "Name of the Ticket-Topic"
         },
         {
           "name": "userTag",
-          "description": {
-            "de": "Tag des Nutzers, der das Ticket erstellt hat",
-            "en": "Tag of the user who created this ticket"
-          }
+          "description": "Tag of the user who created this ticket"
         }
       ]
     },
     {
       "name": "ticket-create-button",
-      "humanName": {
-        "en": "Ticket create button",
-        "de": "Ticketerstellungs-Button"
-      },
-      "default": {
-        "en": "Create ticket 🎫",
-        "de": "Ticket erstellen 🎫"
-      },
-      "description": {
-        "en": "Button for creating a ticket",
-        "de": "Button zum Erstellen eines Tickets"
-      },
-      "type": "string",
-      "pro": true
+      "humanName": "Ticket create button",
+      "default": "Create ticket 🎫",
+      "description": "Button for creating a ticket",
+      "type": "string"
     },
     {
       "name": "ticket-close-button",
-      "humanName": {
-        "en": "Ticket close button",
-        "de": "Ticketschließungs-Button"
-      },
-      "default": {
-        "en": "❎ Close ticket",
-        "de": "❎ Ticket schließen"
-      },
-      "description": {
-        "en": "Button for closing a ticket",
-        "de": "Button um ein Ticket zu schließen"
-      },
-      "type": "string",
-      "pro": true
+      "humanName": "Ticket close button",
+      "default": "❎ Close ticket",
+      "description": "Button for closing a ticket",
+      "type": "string"
     }
   ]
 }

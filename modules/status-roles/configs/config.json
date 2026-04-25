@@ -1,77 +1,37 @@
 {
-  "description": {
-    "en": "Configure the function of the module here",
-    "de": "Stelle hier die Funktionen des Modules ein"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "words",
-      "humanName": {
-        "en": "Words",
-        "de": "Statusinhalt"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Words users should have in their status.",
-        "de": "Wörter, die Nutzer in ihrem Status haben sollen."
-      },
+      "humanName": "Words",
+      "default": [],
+      "description": "Words users should have in their status.",
       "type": "array",
       "content": "string"
     },
     {
       "name": "roles",
-      "humanName": {
-        "en": "Roles",
-        "de": "Rollen"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Roles to give to users with one of the words in their status",
-        "de": "Rollen, die an Nutzer mit einem der Wörter im Status vergeben werden sollen"
-      },
+      "humanName": "Roles",
+      "default": [],
+      "description": "Roles to give to users with one of the words in their status",
       "type": "array",
       "content": "roleID"
     },
     {
       "name": "remove",
-      "humanName": {
-        "en": "Remove all other roles",
-        "de": "Entferne alle anderen Rollen"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Remove all other roles from users with one of the words in their status",
-        "de": "Entferne alle anderen Rollen von Nutzern mit einem der Wörter im Status"
-      },
+      "humanName": "Remove all other roles",
+      "default": false,
+      "description": "Remove all other roles from users with one of the words in their status",
       "type": "boolean"
     },
     {
       "name": "ignoreOfflineUsers",
-      "humanName": {
-        "en": "Do not remove roles from offline users",
-        "de": "Rollen von offline Nutzern nicht entfernen"
-      },
+      "humanName": "Do not remove roles from offline users",
       "type": "boolean",
-      "default": {
-        "en": true
-      },
-      "description": {
-        "en": "When users are offline, they don't have a status, leading to the role being removed. If enabled, the status role won't be removed from offline users, only users that have a different status. Recommended on servers with more than 500 members.",
-        "de": "Wenn Nutzer offline sind, haben sie keinen Status, was dazu führt, dass die Rolle entfernt wird. Wenn aktiviert, wird die Status-Rolle nicht von offline Nutzern entfernt, nur von Nutzern mit anderem Status. Empfohlen auf Servern mit 500+ Nutzern."
-      }
+      "default": true,
+      "description": "When users are offline, they don't have a status, leading to the role being removed. If enabled, the status role won't be removed from offline users, only users that have a different status. Recommended on servers with more than 500 members."
     }
   ]
 }

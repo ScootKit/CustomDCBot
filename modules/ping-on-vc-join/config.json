@@ -1,130 +1,109 @@
 {
-  "description": {
-    "en": "Configure messages that should get send when a user joins a Voice-Channel",
-    "de": "Stelle hier Nachrichten ein, die versendet werden, wenn ein Nutzer einem Sprachkanal beitritt"
-  },
-  "humanName": {
-    "en": "Message on Voice Join",
-    "de": "Nachricht beim Kanalbeitritt"
-  },
+  "description": "Configure messages that should get send when a user joins a Voice-Channel",
+  "humanName": "Message on Voice Join",
   "filename": "config.json",
   "configElements": true,
   "content": [
     {
       "name": "channels",
-      "humanName": {
-        "en": "Channels",
-        "de": "Auslöserkanäle"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Channel-ID in which this messages should get triggered",
-        "de": "Kanäle, bei denen der Bot reagieren soll, wenn ein Nutzer joint"
-      },
+      "humanName": "Channels",
+      "default": [],
+      "description": "Channel-ID in which this messages should get triggered",
       "type": "array",
-      "content": "channelID"
+      "content": "channelID",
+      "category": "general"
     },
     {
       "name": "message",
-      "humanName": {
-        "de": "Nachricht",
-        "en": "Message"
-      },
-      "default": {
-        "en": "The user %tag% joined the voicechat %vc%",
-        "de": "Der Nutzer %tag% ist dem Voicechat %vc% beigetreten."
-      },
-      "description": {
-        "en": "Here you can set the message that should be send if someone joins a selected voicechat",
-        "de": "Hier kannst du die Nachricht einstellen, die gesendet werden soll, wenn jemand dem Sprachkanal beitritt"
-      },
+      "humanName": "Message",
+      "default": "The user %tag% joined the voicechat %vc%",
+      "description": "Here you can set the message that should be send if someone joins a selected voicechat",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the user"
         },
         {
           "name": "vc",
-          "description": {
-            "en": "Name of the voicechat",
-            "de": "Name des Sprackkanals"
-          }
+          "description": "Name of the voicechat"
         },
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mention of the user"
         }
-      ]
+      ],
+      "category": "messages"
     },
     {
       "name": "notify_channel_id",
-      "humanName": {
-        "de": "Benachrichtigungskanal",
-        "en": "Notification-Channel"
-      },
-      "default": {
-        "en": ""
-      },
+      "humanName": "Notification-Channel",
+      "default": "",
       "content": [
         "GUILD_TEXT"
       ],
-      "description": {
-        "en": "Channel where the message should be send",
-        "de": "Kanal, in welchen die Nachricht gesendet werden soll"
-      },
-      "type": "channelID"
+      "description": "Channel where the message should be send",
+      "type": "channelID",
+      "category": "general"
+    },
+    {
+      "name": "cooldownEnabled",
+      "humanName": "Enable Cooldown?",
+      "default": false,
+      "description": "When enabled, messages will only be sent once per channel within the cooldown period",
+      "type": "boolean",
+      "category": "cooldown"
+    },
+    {
+      "name": "cooldownMinutes",
+      "humanName": "Cooldown Duration (Minutes)",
+      "default": 5,
+      "description": "Duration in minutes to wait before sending another message for the same channel",
+      "type": "integer",
+      "dependsOn": "cooldownEnabled",
+      "category": "cooldown"
     },
     {
       "name": "send_pn_to_member",
-      "humanName": {
-        "en": "Join-DM",
-        "de": "Join-PN"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Should the bot send a PN to the member?",
-        "de": "Soll der Bot eine PN an den Nutzer schicken?"
-      },
-      "type": "boolean"
+      "humanName": "Join-DM",
+      "default": false,
+      "description": "Should the bot send a PN to the member?",
+      "type": "boolean",
+      "category": "messages"
     },
     {
       "name": "pn_message",
-      "humanName": {
-        "en": "Join-DM-Message",
-        "de": "Join-PN-Nachricht"
-      },
-      "default": {
-        "en": "Hi, I saw you joined the voice chat %vc%. Nice (;",
-        "de": "Hi, ich habe gesehen, dass du %vc% beigetreten bist. Nice (;"
-      },
-      "description": {
-        "de": "Diese Nachricht wird an den Nutzer versandt, wenn er einem Voicechat beitritt (wenn \"Join-PN\" aktiviert ist)."
-      },
+      "humanName": "Join-DM-Message",
+      "default": "Hi, I saw you joined the voice chat %vc%. Nice (;",
+      "description": "This message is sent to the user when they join a voice chat (if \"Join DM\" is enabled).",
       "type": "string",
       "dependsOn": "send_pn_to_member",
       "allowEmbed": true,
       "params": [
         {
           "name": "vc",
-          "description": {
-            "en": "Name of the voicechat",
-            "de": "Name des Sprachkanals"
-          }
+          "description": "Name of the voicechat"
         }
-      ]
+      ],
+      "category": "messages"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "cooldown",
+      "icon": "fa-regular fa-clock-rotate-left",
+      "displayName": "Cooldown"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Messages"
     }
   ]
 }

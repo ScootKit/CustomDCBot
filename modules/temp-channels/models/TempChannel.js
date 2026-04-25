@@ -10,7 +10,12 @@ module.exports = class TempChannel extends Model {
             creatorID: DataTypes.STRING,
             noMicChannel: DataTypes.STRING,
             allowedUsers: DataTypes.STRING,
-            isPublic: DataTypes.BOOLEAN
+            isPublic: DataTypes.BOOLEAN,
+            archivedAt: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                defaultValue: null
+            }
         }, {
             tableName: 'temp-channel_TempChannelsv2',
             timestamps: true,

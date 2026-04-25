@@ -7,7 +7,7 @@ module.exports.run = async function (client, msg) {
     if (moduleConfig.ignoredChannels.includes(msg.channel.id)) return;
     if (msg.mentions.members.filter(f => f.id !== msg.author.id && !f.user.bot).size !== 0) msgsWithMention[msg.id] = msg;
     setTimeout(() => {
-        msgsWithMention[msg.id] = null;
+        delete msgsWithMention[msg.id];
     }, 60000);
 };
 module.exports.messageWithMentions = msgsWithMention;

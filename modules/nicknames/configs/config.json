@@ -1,27 +1,13 @@
 {
-  "description": {
-    "en": "Configure the function of the module here",
-    "de": "Stelle hier die Funktionen des Modules ein"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "forceDisplayname",
-      "humanName": {
-        "en": "Force display name",
-        "de": "Anzeigenamen erzwingen"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Use display names of users instead of custom nicknames.",
-        "de": "Anzeigenamen von Benutzern anstelle von benutzerdefinierten Nicknamen verwenden."
-      },
+      "humanName": "Force display name",
+      "default": false,
+      "description": "Use display names of users instead of custom nicknames.",
       "type": "boolean"
     }
   ]

@@ -1,43 +1,21 @@
 {
-  "description": {
-    "en": "Configure here in which channel which message should get send",
-    "de": "Passe hier an, in welchen Kanälen welche Nachricht gesendet werden soll"
-  },
-  "humanName": {
-    "en": "Channel",
-    "de": "Kanäle"
-  },
+  "description": "Configure here in which channel which message should get send",
+  "humanName": "Channel",
   "filename": "channels.json",
   "configElements": true,
   "content": [
     {
       "name": "channelID",
-      "humanName": {
-        "en": "Channel",
-        "de": "Channel"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Channel in which the message should get send",
-        "de": "Kanal in welchen die Nachricht gesendet werden soll"
-      },
+      "humanName": "Channel",
+      "default": "",
+      "description": "Channel in which the message should get send",
       "type": "channelID"
     },
     {
       "name": "type",
-      "humanName": {
-        "en": "Channel-Type",
-        "de": "Kanal-Typ"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "This sets in which content the channel should get used",
-        "de": "Dies gibt an, in welchem Kontext dieser Kanal verwendet werden soll"
-      },
+      "humanName": "Channel-Type",
+      "default": "",
+      "description": "This sets in which content the channel should get used",
       "type": "select",
       "content": [
         "join",
@@ -48,234 +26,129 @@
     },
     {
       "name": "randomMessages",
-      "humanName": {
-        "en": "Random messages?",
-        "de": "Zufällige Nachrichten?"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled the bot will randomly pick a messages instead of using the message option below",
-        "de": "Wenn aktiviert wird der Bot eine zufällige Nachricht aus deiner Konfiguration wählen, anstatt die unten"
-      },
+      "humanName": "Random messages?",
+      "default": false,
+      "description": "If enabled the bot will randomly pick a messages instead of using the message option below",
       "type": "boolean"
     },
     {
       "name": "message",
-      "humanName": {
-        "de": "Nachricht",
-        "en": "Message"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Message that should get send",
-        "de": "Nachricht, die gesendet wird"
-      },
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should get send",
       "type": "string",
       "allowEmbed": true,
       "allowGeneratedImage": true,
       "params": [
         {
           "name": "mention",
-          "description": {
-            "en": "Mentions the user",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mentions the user"
         },
         {
           "name": "memberProfilePictureUrl",
-          "description": {
-            "en": "URL of the user's avatar",
-            "de": "URL zum Avatar des Nutzers"
-          },
+          "description": "URL of the user's avatar",
           "isImage": true
         },
         {
           "name": "servername",
-          "description": {
-            "en": "Name of the guild",
-            "de": "Servername"
-          }
+          "description": "Name of the guild"
         },
         {
           "name": "tag",
-          "description": {
-            "en": "Tag of the user",
-            "de": "Tag des Nutzers"
-          }
+          "description": "Tag of the user"
         },
         {
           "name": "createdAt",
-          "description": {
-            "en": "Date when account was created",
-            "de": "Datum an dem der Account erstellt wurde"
-          }
+          "description": "Date when account was created"
         },
         {
           "name": "memberProfileBannerUrl",
-          "description": {
-            "en": "URL of the banner's avatar",
-            "de": "URL zum Banner des Nutzers"
-          },
+          "description": "URL of the banner's avatar",
           "isImage": true
         },
         {
           "name": "joinedAt",
-          "description": {
-            "en": "Date when user joined guild",
-            "de": "Datum, an dem der Nutzer den Server betreten hat"
-          }
+          "description": "Date when user joined guild"
         },
         {
           "name": "guildUserCount",
-          "description": {
-            "en": "Count of users on the guild",
-            "de": "Anzahl von Nutzern auf dem Server"
-          }
+          "description": "Count of users on the guild"
         },
         {
           "name": "guildMemberCount",
-          "description": {
-            "en": "Count of members (without bots) on the guild",
-            "de": "Anzahl von Nutzern auf dem Server"
-          }
+          "description": "Count of members (without bots) on the guild"
         },
         {
           "name": "boostCount",
-          "description": {
-            "en": "Total count of boosts",
-            "de": "Gesamte Anzahl an Boosts"
-          }
+          "description": "Total count of boosts"
         },
         {
           "name": "guildLevel",
-          "description": {
-            "en": "Boost-Level of the guild after the boost",
-            "de": "Boost-Level nach dem Boost"
-          }
+          "description": "Boost-Level of the guild after the boost"
         },
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user who unboosted",
-            "de": "Erwähnung des Nutzers"
-          }
+          "description": "Mention of the user who unboosted"
         }
       ]
     },
     {
       "name": "welcome-button",
-      "humanName": {
-        "en": "Welcome-Button (only if \"Channel-Type\" = \"join\")",
-        "de": "Willkommens-Knopf (nur wenn \"Channel-Type\" = \"join\")"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "If enabled, a welcome-button will be attached to the welcome message. When a user clicks on it, the bot will send a welcome-ping in a configured channel. The button can be pressed once.",
-        "de": "If enabled, a welcome-button will be attached to the welcome message. When a user clicks on it, the bot will send a welcome-ping in a configured channel. The button can be pressed once."
-      },
+      "humanName": "Welcome-Button (only if \"Channel-Type\" = \"join\")",
+      "default": false,
+      "description": "If enabled, a welcome-button will be attached to the welcome message. When a user clicks on it, the bot will send a welcome-ping in a configured channel. The button can be pressed once.",
       "type": "boolean"
     },
     {
       "name": "welcome-button-content",
       "dependsOn": "welcome-button",
-      "humanName": {
-        "en": "Welcome-Button-Content",
-        "de": "Willkommens-Knopf-Inhalt"
-      },
-      "default": {
-        "en": "Say hi \uD83D\uDC4B",
-        "de": "Hallo sagen \uD83D\uDC4B"
-      },
-      "description": {
-        "en": "Content of the welcome button",
-        "de": "Inhalt des Willkommens-Knopfes"
-      },
+      "humanName": "Welcome-Button-Content",
+      "default": "Say hi 👋",
+      "description": "Content of the welcome button",
       "type": "string"
     },
     {
       "name": "welcome-button-channel",
       "dependsOn": "welcome-button",
-      "humanName": {
-        "en": "Channel in which the welcome-button should send a message",
-        "de": "Kanal, in welchen der Willkommens-Knopf die Nachricht senden soll"
-      },
-      "default": {
-        "en": "",
-        "de": ""
-      },
-      "description": {
-        "en": "The bot will send the configured message in this channel when a user presses the button",
-        "de": "Der Bot wird die konfigurierte Nachricht in diesen Kanal senden, wenn jemand den Knopf drückt"
-      },
+      "humanName": "Channel in which the welcome-button should send a message",
+      "default": "",
+      "description": "The bot will send the configured message in this channel when a user presses the button",
       "type": "channelID"
     },
     {
       "name": "welcome-button-message",
       "dependsOn": "welcome-button",
-      "humanName": {
-        "en": "Welcome-Button-Message",
-        "de": "Willkommens-Knopf-Nachricht"
-      },
-      "default": {
-        "en": "%clickUserMention% welcomes %userMention% :wave:",
-        "de": "%clickUserMention% begrüßt %userMention% :wave:"
-      },
+      "humanName": "Welcome-Button-Message",
+      "default": "%clickUserMention% welcomes %userMention% :wave:",
       "allowEmbed": true,
-      "description": {
-        "en": "This is the message the bot will send in the configured channel when a user presses the button",
-        "de": "Der Bot wird in diesen Kanal die Nachricht senden, wenn ein Nutzer den Knopf drückt"
-      },
+      "description": "This is the message the bot will send in the configured channel when a user presses the button",
       "type": "string",
       "params": [
         {
           "name": "userMention",
-          "description": {
-            "en": "Mention of the user who joined the server",
-            "de": "Erwähnung des Nutzer, der den Server beigetreten hat"
-          }
+          "description": "Mention of the user who joined the server"
         },
         {
           "name": "userTag",
-          "description": {
-            "en": "Tag of the user who joined the server",
-            "de": "Tag des Nutzer, der den Server beigetreten hat"
-          }
+          "description": "Tag of the user who joined the server"
         },
         {
           "name": "userAvatarURL",
           "isImage": true,
-          "description": {
-            "en": "Avatar of the user who joined the server",
-            "de": "Avatar des Nutzer, der den Server beigetreten hat"
-          }
+          "description": "Avatar of the user who joined the server"
         },
         {
           "name": "clickUserMention",
-          "description": {
-            "en": "Mention of the user who clicked the button",
-            "de": "Erwähnung des Nutzer, der den Knopf gedrückt hat"
-          }
+          "description": "Mention of the user who clicked the button"
         },
         {
           "name": "clickUserTag",
-          "description": {
-            "en": "Tag of the user who clicked the button",
-            "de": "Tag des Nutzer, der den Knopf gedrückt hat"
-          }
+          "description": "Tag of the user who clicked the button"
         },
         {
           "name": "clickUserAvatarURL",
           "isImage": true,
-          "description": {
-            "en": "Avatar of the user who clicked the button",
-            "de": "Avatar des Nutzer, der den Knopf gedrückt hat"
-          }
+          "description": "Avatar of the user who clicked the button"
         }
       ]
     }

@@ -1,9 +1,12 @@
-const { DataTypes, Model } = require('sequelize');
+const {
+    DataTypes,
+    Model
+} = require('sequelize');
 
 module.exports = class PingProtectionModerationLog extends Model {
     static init(sequelize) {
         return super.init({
-            id: { 
+            id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
@@ -17,7 +20,7 @@ module.exports = class PingProtectionModerationLog extends Model {
                 type: DataTypes.STRING,
                 allowNull: false
             },
-            reason: { 
+            reason: {
                 type: DataTypes.STRING,
                 allowNull: true
             },

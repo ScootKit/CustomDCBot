@@ -34,7 +34,8 @@ function localize(file, string, replace = {}) {
     let rs = locals[client.locale][file][string];
     if (!rs) rs = locals['en'][file][string];
     if (!rs) throw new Error(`String ${file}/${string} not found`);
-    for (const key in replace) {
+    // Replace longest keys first to avoid e.g. %user replacing part of %username
+    for (const key of Object.keys(replace).sort((a, b) => b.length - a.length)) {
         rs = rs.replaceAll(`%${key}`, replace[key]);
     }
     return rs;

@@ -61,6 +61,7 @@ module.exports.getMemberRoleFactor = getMemberRoleFactor;
 
 async function grantXPAndLevelUP(client, member, xp, xpType, channel, msg = null) {
     const moduleConfig = client.configurations['levels']['config'];
+    if (member.roles.cache.some(r => moduleConfig.blacklistedRoles.some(br => String(br) === r.id))) return;
     const moduleStrings = client.configurations['levels']['strings'];
 
     let user = await client.models['levels']['User'].findOne({
@@ -88,8 +89,35 @@ async function grantXPAndLevelUP(client, member, xp, xpType, channel, msg = null
     await user.save();
 
     if (nextLevelXp <= user.xp && !currentlyLevelingUp.has(member.user.id)) {
+        const cachedXp = user.xp;
+        const cachedLevel = user.level;
+        // Sanity-check the stored values before entering the loop. Out-of-range values
+        // (NaN, Infinity, absurdly large XP, negative level) indicate a corrupted row
+        // and can make the level-up loop run effectively forever.
+        if (
+            !Number.isFinite(cachedXp) || !Number.isFinite(cachedLevel) ||
+            cachedXp < 0 || cachedLevel < 0 ||
+            cachedXp > 1e12 || cachedLevel > 1e6
+        ) {
+            client.logger.error(`[levels] skipping level-up for user ${member.user.id}: corrupted values (xp=${cachedXp}, level=${cachedLevel})`);
+            return;
+        }
         let i = 1;
-        while (user.xp >= calculateLevelXP(client, user.level + i)) i++;
+        let lastRequired = -Infinity;
+        while (i <= 1000) {
+            const required = calculateLevelXP(client, cachedLevel + i);
+            if (!Number.isFinite(required) || required <= lastRequired) {
+                client.logger.error(`[levels] level curve returned non-monotonic or non-finite value at level ${cachedLevel + i} (got ${required}); aborting level-up for user ${member.user.id}`);
+                return;
+            }
+            if (cachedXp < required) break;
+            lastRequired = required;
+            i++;
+        }
+        if (i > 1000) {
+            client.logger.error(`[levels] level-up loop exceeded 1000 iterations for user ${member.user.id} (xp=${cachedXp}, level=${cachedLevel}); skipping`);
+            return;
+        }
         currentlyLevelingUp.add(member.user.id);
         user.level = user.level + (i - 1);
         const levelUpChannel = client.channels.cache.find(c => c.id === moduleConfig.level_up_channel_id && c.type === ChannelType.GuildText);
@@ -151,13 +179,14 @@ module.exports.run = async (client, msg) => {
     if (msg.author.bot || msg.system) return;
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
+    if (!msg.member) return;
     if (cooldown.has(msg.author.id)) return;
 
     const moduleConfig = client.configurations['levels']['config'];
 
     if (msg.content.includes(client.config.prefix)) return;
     if (moduleConfig.blacklisted_channels.includes(msg.channel.id) || moduleConfig.blacklisted_channels.includes(msg.channel.parentId) || moduleConfig.blacklisted_channels.includes(msg.channel.parent?.parentId)) return;
-    if (msg.member.roles.cache.filter(r => moduleConfig.blacklistedRoles.includes(r.id)).size !== 0) return;
+    if (msg.member.roles.cache.some(r => moduleConfig.blacklistedRoles.some(br => String(br) === r.id))) return;
     let xp = randomIntFromInterval(moduleConfig['min-xp'], moduleConfig['max-xp']);
 
     await grantXPAndLevelUP(client, msg.member, xp, 'message', msg.channel, msg);

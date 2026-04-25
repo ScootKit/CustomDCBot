@@ -1,56 +1,28 @@
 {
-  "description": {},
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "channels",
-      "humanName": {
-        "en": "Channels",
-        "de": "Kanäle"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Here you can add channels in which the bot should create a thread under every message",
-        "de": "Hier kannst du Kanäle hinzufügen, in welchen der Bot automatisch unter jeder Nachricht einen Thread erstellen soll"
-      },
+      "humanName": "Channels",
+      "default": [],
+      "description": "Here you can add channels in which the bot should create a thread under every message",
       "type": "array",
       "content": "channelID"
     },
     {
       "name": "threadName",
-      "humanName": {
-        "de": "Threadname"
-      },
-      "default": {
-        "en": "Comments",
-        "de": "Kommentare"
-      },
-      "description": {
-        "en": "Name of every thread",
-        "de": "Name jedes Threads"
-      },
+      "humanName": "Thread Name",
+      "default": "Comments",
+      "description": "Name of every thread",
       "type": "string"
     },
     {
       "name": "threadArchiveDuration",
-      "humanName": {
-        "de": "Archivierungsdauer"
-      },
-      "default": {
-        "en": "MAX",
-        "de": "MAX"
-      },
-      "description": {
-        "en": "Inactivity after which a thread is automatically archived (in minutes, some values are limited by guild boost level; select \"max\" for the longest possible duration)",
-        "de": "Inaktivität nach welcher ein Thread automatisch archiviert wird (in Minutes, manche Werte sind durch das Boostlevel des Servers eingeschränkt; verwende \"max\" für die längstmögliche Dauer)"
-      },
+      "humanName": "Archive Duration",
+      "default": "MAX",
+      "description": "Inactivity after which a thread is automatically archived (in minutes, some values are limited by guild boost level; select \"max\" for the longest possible duration)",
       "type": "select",
       "content": [
         "MAX",

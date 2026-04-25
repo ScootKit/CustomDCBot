@@ -30,30 +30,47 @@ module.exports.channelMode = async function (interaction, callerInfo) {
         publicTemp = false;
     }
     if (publicTemp) {
-
         await vchann.lockPermissions();
-        await vchann.permissionOverwrites.delete(vchann.guild.roles.everyone);
+        await vchann.permissionOverwrites.create(interaction.guild.members.me, {
+            'CONNECT': true,
+            'VIEW_CHANNEL': true,
+            'MANAGE_CHANNELS': true
+        });
         await interaction.editReply(embedType(moduleConfig['modeSwitched'], {'%mode%': 'public'}, {ephemeral: true}));
-
-    } else if (!publicTemp) {
-
-        await vchann.lockPermissions();
-        const guildRoles = await interaction.guild.roles.fetch();
-        for (const [, role] of guildRoles) {
-            await vchann.permissionOverwrites.create(role, {'CONNECT': false});
-        }
-        await vchann.permissionOverwrites.create(interaction.guild.members.me, {'CONNECT': true});
-        await vchann.permissionOverwrites.create(interaction.member, {'CONNECT': true});
+    } else {
+        await vchann.permissionOverwrites.create(vchann.guild.roles.everyone, {
+            'CONNECT': false,
+            'VIEW_CHANNEL': false
+        });
+        await vchann.permissionOverwrites.create(interaction.guild.members.me, {
+            'CONNECT': true,
+            'VIEW_CHANNEL': true
+        });
+        await vchann.permissionOverwrites.create(interaction.member, {
+            'CONNECT': true,
+            'VIEW_CHANNEL': true
+        });
         if (allowedUsers.at(0) !== '') {
             for (const user of allowedUsers) {
-                await vchann.permissionOverwrites.create(interaction.guild.members.cache.get(user), {'CONNECT': true});
+                const member = interaction.guild.members.cache.get(user);
+                if (member) await vchann.permissionOverwrites.create(member, {
+                    'CONNECT': true,
+                    'VIEW_CHANNEL': true
+                });
             }
         }
-        interaction.editReply(embedType(moduleConfig['modeSwitched'], {'%mode%': 'private'}, {ephemeral: true}));
+        for (const roleId of (moduleConfig['privateBypassRoles'] || [])) {
+            await vchann.permissionOverwrites.create(roleId, {
+                'CONNECT': true,
+                'VIEW_CHANNEL': true
+            }).catch(() => {
+            });
+        }
+        await interaction.editReply(embedType(moduleConfig['modeSwitched'], {'%mode%': 'private'}, {ephemeral: true}));
     }
 
     vc.isPublic = publicTemp;
-    await vc.save;
+    await vc.save();
 };
 
 /**
@@ -75,8 +92,10 @@ module.exports.userAdd = async function (interaction, callerInfo) {
     let addedUser = null;
     if (callerInfo === 'command') {
         addedUser = interaction.options.getUser('user');
-    }
-    if (callerInfo === 'modal') {
+    } else if (callerInfo === 'select') {
+        addedUser = await client.users.fetch(interaction.values[0]).catch(() => null);
+        if (!addedUser) return interaction.editReply(localize('temp-channels', 'user-not-found'));
+    } else if (callerInfo === 'modal') {
         const addedUserString = interaction.fields.getTextInputValue('add-modal-input');
         try {
             addedUser = interaction.guild.members.cache.find(member => formatDiscordUserName(member.user).replaceAll('@', '') === addedUserString).user;
@@ -90,11 +109,13 @@ module.exports.userAdd = async function (interaction, callerInfo) {
         }
     }
 
-    if (allowedUsers === '') {
-        allowedUsers = addedUser.id;
-    } else {
-        allowedUsers = allowedUsers + ',' + addedUser.id;
+    const existingUsers = (allowedUsers || '').split(',').filter(u => u.trim() !== '');
+    if (existingUsers.includes(addedUser.id)) {
+        await interaction.editReply(embedType(moduleConfig['userAdded'], {'%user%': formatDiscordUserName(addedUser)}, {ephemeral: true}));
+        return;
     }
+    existingUsers.push(addedUser.id);
+    allowedUsers = existingUsers.join(',');
     vc.allowedUsers = allowedUsers;
     await vc.save();
     const vchann = interaction.guild.channels.cache.get(vc.id);
@@ -120,12 +141,14 @@ module.exports.userRemove = async function (interaction, callerInfo) {
             ]
         }
     });
-    let allowedUsers = vc.allowedUsers.split(',');
+    let allowedUsers = (vc.allowedUsers || '').split(',').filter(u => u.trim() !== '');
     let removedUser = null;
     if (callerInfo === 'command') {
         removedUser = interaction.options.getUser('user');
-    }
-    if (callerInfo === 'modal') {
+    } else if (callerInfo === 'select') {
+        removedUser = await client.users.fetch(interaction.values[0]).catch(() => null);
+        if (!removedUser) return interaction.editReply(localize('temp-channels', 'user-not-found'));
+    } else if (callerInfo === 'modal') {
         const removedUserString = interaction.fields.getTextInputValue('remove-modal-input');
         try {
             removedUser = interaction.guild.members.cache.find(member => formatDiscordUserName(member.user).replaceAll('@', '') === removedUserString).user;
@@ -145,7 +168,14 @@ module.exports.userRemove = async function (interaction, callerInfo) {
     await vc.save();
     const vchann = interaction.guild.channels.cache.get(vc.id);
     try {
-        await vchann.permissionOverwrites.delete(removedUser);
+        if (vc.isPublic) {
+            await vchann.permissionOverwrites.delete(removedUser);
+        } else {
+            await vchann.permissionOverwrites.create(removedUser, {
+                'CONNECT': false,
+                'VIEW_CHANNEL': false
+            });
+        }
     } catch (e) {
         console.log(e);
     }
@@ -171,16 +201,33 @@ module.exports.usersList = async function (interaction) {
             ]
         }
     });
-    const allowedUsersArray = vc.allowedUsers.split(',');
+    if (!vc) {
+        interaction.editReply(embedType(moduleConfig['notInChannel'], {}, {ephemeral: true}));
+        return;
+    }
+    if (!vc.allowedUsers || vc.allowedUsers.trim() === '') {
+        interaction.editReply(embedType(localize('temp-channels', 'no-added-user'), {}, {ephemeral: true}));
+        return;
+    }
+    const allowedUsersArray = vc.allowedUsers.split(',').filter(u => u.trim() !== '');
     let allowedUsers = '';
     for (const user of allowedUsersArray) {
         allowedUsers = allowedUsers + '\n • <@' + user + '>';
     }
-    if (allowedUsersArray.at(0) === '') {
-        interaction.editReply(localize('temp-channels', 'no-added-user'));
+    if (allowedUsersArray.length === 0) {
+        interaction.editReply(embedType(localize('temp-channels', 'no-added-user'), {}, {ephemeral: true}));
         return;
     }
-    interaction.editReply(moduleConfig['listUsers'] + ' ' + allowedUsers);
+    const listMsg = moduleConfig['listUsers'];
+    const hasParam = typeof listMsg === 'string' ? listMsg.includes('%users%') : JSON.stringify(listMsg).includes('%users%');
+    if (hasParam) {
+        interaction.editReply(embedType(listMsg, {'%users%': allowedUsers}, {ephemeral: true}));
+    } else {
+        const result = embedType(listMsg, {}, {ephemeral: true});
+        if (result.content) result.content += ' ' + allowedUsers;
+        else if (result.embeds && result.embeds[0]) result.embeds[0].description = (result.embeds[0].description || '') + '\n' + allowedUsers;
+        interaction.editReply(result);
+    }
 };
 
 module.exports.channelEdit = async function (interaction, callerInfo) {
@@ -202,7 +249,7 @@ module.exports.channelEdit = async function (interaction, callerInfo) {
     if (callerInfo === 'command') {
         if (interaction.options.getInteger('user-limit') >= 0) {
             if (interaction.options.getInteger('user-limit') < 0 || interaction.options.getInteger('user-limit') > 99) {
-                interaction.editReply(localize('temp-channels', 'edit-error'));
+                interaction.editReply(embedType(moduleConfig['edit-error'], {}, {ephemeral: true}));
                 return;
             }
             vcLimit = interaction.options.getInteger('user-limit');
@@ -210,7 +257,7 @@ module.exports.channelEdit = async function (interaction, callerInfo) {
         } else vcLimit = vchann.userLimit;
         if (interaction.options.getInteger('bitrate')) {
             if (interaction.options.getInteger('bitrate') <= 8000 || interaction.options.getInteger('bitrate') >= interaction.guild.maximumBitrate) {
-                interaction.editReply(localize('temp-channels', 'edit-error'));
+                interaction.editReply(embedType(moduleConfig['edit-error'], {}, {ephemeral: true}));
                 return;
             }
             vcBitrate = interaction.options.getInteger('bitrate');
@@ -227,30 +274,23 @@ module.exports.channelEdit = async function (interaction, callerInfo) {
     }
     if (callerInfo === 'modal') {
         if (isNaN(interaction.fields.getTextInputValue('edit-modal-limit-input'))) {
-            interaction.editReply(localize('temp-channels', 'edit-error'));
+            interaction.editReply(embedType(moduleConfig['edit-error'], {}, {ephemeral: true}));
             return;
         }
         if (interaction.fields.getTextInputValue('edit-modal-limit-input') < 0 || interaction.fields.getTextInputValue('edit-modal-limit-input') > 99) {
-            interaction.editReply(localize('temp-channels', 'edit-error'));
-            return;
-        }
-        if (isNaN(interaction.fields.getTextInputValue('edit-modal-bitrate-input'))) {
-            interaction.editReply(localize('temp-channels', 'edit-error'));
-            return;
-        }
-        if (interaction.fields.getTextInputValue('edit-modal-bitrate-input') <= 8000 || interaction.fields.getTextInputValue('edit-modal-bitrate-input') >= interaction.guild.maximumBitrate) {
-            interaction.editReply(localize('temp-channels', 'edit-error'));
+            interaction.editReply(embedType(moduleConfig['edit-error'], {}, {ephemeral: true}));
             return;
         }
 
         vcLimit = interaction.fields.getTextInputValue('edit-modal-limit-input');
 
-        vcBitrate = interaction.fields.getTextInputValue('edit-modal-bitrate-input');
+        const bitrateValues = interaction.fields.getStringSelectValues('edit-modal-bitrate-input');
+        vcBitrate = parseInt(bitrateValues[0]);
 
         vcName = interaction.fields.getTextInputValue('edit-modal-name-input');
 
-        const nsfwInput = interaction.fields.getTextInputValue('edit-modal-nsfw-input');
-        vcNsfw = (nsfwInput === 'true');
+        const nsfwValues = interaction.fields.getStringSelectValues('edit-modal-nsfw-input');
+        vcNsfw = (nsfwValues[0] === 'true');
         edited++;
     }
 
@@ -259,7 +299,7 @@ module.exports.channelEdit = async function (interaction, callerInfo) {
         try {
             vchann.edit({userLimit: vcLimit, nsfw: vcNsfw, name: vcName, bitrate: vcBitrate});
         } catch (e) {
-            interaction.editReply(localize('temp-channels', 'edit-error'));
+            interaction.editReply(embedType(moduleConfig['edit-error'], {}, {ephemeral: true}));
         }
     } else {
         interaction.editReply(localize('temp-channels', 'nothing-changed'));

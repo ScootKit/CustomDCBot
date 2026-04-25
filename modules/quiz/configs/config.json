@@ -1,12 +1,6 @@
 {
-  "description": {
-    "en": "Configure the function of the module here",
-    "de": "Stelle hier die Funktionen des Modules ein"
-  },
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "commandsWarnings": {
     "normal": [
@@ -16,41 +10,21 @@
   "content": [
     {
       "name": "emojis",
-      "humanName": {
-        "de": "Emojis"
-      },
+      "humanName": "Emojis",
       "default": {
-        "en": {
-          "1": "1️⃣",
-          "2": "2️⃣",
-          "3": "3️⃣",
-          "4": "4️⃣",
-          "5": "5️⃣",
-          "6": "6️⃣",
-          "7": "7️⃣",
-          "8": "8️⃣",
-          "9": "9️⃣",
-          "true": "✅",
-          "false": "❌"
-        },
-        "de": {
-          "1": "1️⃣",
-          "2": "2️⃣",
-          "3": "3️⃣",
-          "4": "4️⃣",
-          "5": "5️⃣",
-          "6": "6️⃣",
-          "7": "7️⃣",
-          "8": "8️⃣",
-          "9": "9️⃣",
-          "true": "✅",
-          "false": "❌"
-        }
+        "1": "1️⃣",
+        "2": "2️⃣",
+        "3": "3️⃣",
+        "4": "4️⃣",
+        "5": "5️⃣",
+        "6": "6️⃣",
+        "7": "7️⃣",
+        "8": "8️⃣",
+        "9": "9️⃣",
+        "true": "✅",
+        "false": "❌"
       },
-      "description": {
-        "en": "You can set the emojis to use",
-        "de": "Du kannst die verschiedenen Emojis, die benutzt werden sollen, einstellen"
-      },
+      "description": "You can set the emojis to use",
       "type": "keyed",
       "content": {
         "key": "string",
@@ -60,32 +34,16 @@
     },
     {
       "name": "dailyQuizLimit",
-      "humanName": {
-        "en": "Daily quiz limit",
-        "de": "Tägliches Quizlimit"
-      },
-      "default": {
-        "en": 5
-      },
-      "description": {
-        "en": "How many quizzes can be played per day using /quiz play",
-        "de": "Wie viele Quiz pro Tag mit /quiz play gespielt werden können"
-      },
+      "humanName": "Daily quiz limit",
+      "default": 5,
+      "description": "How many quizzes can be played per day using /quiz play",
       "type": "integer"
     },
     {
       "name": "leaderboardChannel",
-      "humanName": {
-        "en": "Quiz leaderboard channel",
-        "de": "Quiz-Leaderboard-Kanal"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "In which channel the quiz leaderboard is displayed",
-        "de": "In welchem Kanal das Quiz-Leaderboard angezeigt wird"
-      },
+      "humanName": "Quiz leaderboard channel",
+      "default": "",
+      "description": "In which channel the quiz leaderboard is displayed",
       "type": "channelID",
       "content": [
         "GUILD_TEXT",
@@ -95,32 +53,16 @@
     },
     {
       "name": "createAllowedRole",
-      "humanName": {
-        "en": "Role needed to create quizzes",
-        "de": "Rolle zum Erstellen von Quiz"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Which role a user needs to have to be able to create quizzes with /quiz create/create-bool",
-        "de": "Welche Rolle ein Nutzer haben muss, um Quiz mit /quiz create/create-bool erstellen zu können"
-      },
+      "humanName": "Role needed to create quizzes",
+      "default": "",
+      "description": "Which role a user needs to have to be able to create quizzes with /quiz create/create-bool",
       "type": "roleID"
     },
     {
       "name": "mode",
-      "humanName": {
-        "en": "Mode for quiz selection",
-        "de": "Modus zur Quizauswahl"
-      },
-      "default": {
-        "en": "Random"
-      },
-      "description": {
-        "en": "How a /quiz play quiz is selected for users",
-        "de": "Wie ein /quiz-play-Quiz für Nutzer ausgewählt wird"
-      },
+      "humanName": "Mode for quiz selection",
+      "default": "Random",
+      "description": "How a /quiz play quiz is selected for users",
       "type": "select",
       "content": [
         "Random",
@@ -129,17 +71,9 @@
     },
     {
       "name": "livePreview",
-      "humanName": {
-        "en": "Live preview of results",
-        "de": "Live-Vorschau der Ergebnisse"
-      },
-      "default": {
-        "en": false
-      },
-      "description": {
-        "en": "Whether the live preview of results is enabled",
-        "de": "Ob die Live-Vorschau der Ergebnisse aktiviert ist"
-      },
+      "humanName": "Live preview of results",
+      "default": false,
+      "description": "Whether the live preview of results is enabled",
       "type": "boolean"
     }
   ]

@@ -14,12 +14,6 @@
     "moderation"
   ],
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/info-commands",
-  "humanReadableName": {
-    "en": "Info-Commands",
-    "de": "Info-Befehle"
-  },
-  "description": {
-    "en": "Adds info-commands with information about specific parts of your server",
-    "de": "Fügt viele Info-Commands zu deinen Server hinzu"
-  }
+  "humanReadableName": "Info-Commands",
+  "description": "Adds info-commands with information about specific parts of your server"
 }

@@ -6,5 +6,6 @@ module.exports.run = async function (client, interaction) {
     if (!interaction.isSelectMenu()) return;
     if (interaction.customId !== 'economy-system_shop-select') return;
     await interaction.deferReply({ephemeral: true});
+    console.log(interaction.values);
     buyShopItem(interaction, interaction.values[0], null);
 };

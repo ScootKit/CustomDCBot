@@ -17,8 +17,33 @@ const {
     MessageFlags
 } = require('discord.js');
 const {localize} = require('../functions/localize');
+const {
+    loadConfigLocalization,
+    isLocalizedObject
+} = require('../functions/configuration');
 
 const SELECT_MENU_MAX = 25;
+
+/**
+ * Resolve a module.json string (humanReadableName or description) for the current locale.
+ * Supports both old {en: ..., de: ...} format and new plain English string format.
+ */
+function resolveModuleString(client, moduleName, key, fallback) {
+    const value = client.modules[moduleName]['config'][key];
+    if (typeof value === 'object' && value !== null && 'en' in value) {
+        return value[client.locale] || value['en'] || fallback;
+    }
+    if (typeof value === 'string') {
+        if (client.locale && client.locale !== 'en') {
+            const locData = loadConfigLocalization(client.locale);
+            if (locData[moduleName] && locData[moduleName]['_module'] && locData[moduleName]['_module'][key]) {
+                return locData[moduleName]['_module'][key];
+            }
+        }
+        return value || fallback;
+    }
+    return fallback;
+}
 
 module.exports.run = async function (interaction) {
     const modules = {};
@@ -29,21 +54,44 @@ module.exports.run = async function (interaction) {
         modules[command.module || 'none'].push(command);
     }
 
+    // Add custom slash commands as their own module group
+    const customCommands = (interaction.client.config || {}).customCommands || [];
+    const enabledCustomCommands = customCommands.filter(c => c.type === 'COMMAND' && c.enabled && c.slashCommandName && c.slashCommandDescription);
+    if (enabledCustomCommands.length > 0) {
+        modules['custom-commands'] = enabledCustomCommands.map(c => ({
+            name: c.slashCommandName,
+            description: c.slashCommandDescription,
+            options: (c.slashCommandsOptions || []).map(o => ({
+                type: o.type,
+                name: o.name,
+                description: o.description,
+                required: o.required
+            }))
+        }));
+    }
+
     const moduleKeys = Object.keys(modules);
     const allSelectOptions = [];
     for (const mod of moduleKeys) {
-        const label = mod === 'none'
-            ? interaction.client.strings.helpembed.build_in
-            : (interaction.client.modules[mod]['config']['humanReadableName'][interaction.client.locale] ||
-                interaction.client.modules[mod]['config']['humanReadableName']['en'] || mod);
+        let label, desc, emoji;
+        if (mod === 'none') {
+            label = interaction.client.strings.helpembed.build_in;
+            desc = localize('help', 'built-in-description');
+            emoji = '⚙️';
+        } else if (mod === 'custom-commands') {
+            label = localize('help', 'custom-commands-label');
+            desc = localize('help', 'custom-commands-description');
+            emoji = '🔧';
+        } else {
+            label = resolveModuleString(interaction.client, mod, 'humanReadableName', mod);
+            desc = resolveModuleString(interaction.client, mod, 'description', '');
+            emoji = '📦';
+        }
         allSelectOptions.push({
             label: truncate(label, 100),
             value: mod,
-            description: mod !== 'none'
-                ? truncate(interaction.client.modules[mod]['config']['description'][interaction.client.locale] ||
-                    interaction.client.modules[mod]['config']['description']['en'] || '', 100)
-                : localize('help', 'built-in-description'),
-            emoji: mod === 'none' ? '⚙️' : '📦'
+            description: truncate(desc, 100),
+            emoji
         });
     }
 
@@ -76,12 +124,19 @@ module.exports.run = async function (interaction) {
 
         let moduleList = '';
         for (const mod of moduleKeys) {
-            const label = mod === 'none'
-                ? interaction.client.strings.helpembed.build_in
-                : (interaction.client.modules[mod]['config']['humanReadableName'][interaction.client.locale] ||
-                    interaction.client.modules[mod]['config']['humanReadableName']['en'] || mod);
+            let label, emoji;
+            if (mod === 'none') {
+                label = interaction.client.strings.helpembed.build_in;
+                emoji = '⚙️';
+            } else if (mod === 'custom-commands') {
+                label = localize('help', 'custom-commands-label');
+                emoji = '🔧';
+            } else {
+                label = resolveModuleString(interaction.client, mod, 'humanReadableName', mod);
+                emoji = '📦';
+            }
             const cmdNames = modules[mod].map(c => `\`/${c.name}\``).join(', ');
-            moduleList = moduleList + `${mod === 'none' ? '⚙️' : '📦'} **${label}**: ${truncate(cmdNames, 200)}\n`;
+            moduleList = moduleList + `${emoji} **${label}**: ${truncate(cmdNames, 200)}\n`;
         }
         headerContainer.addTextDisplayComponents(new TextDisplayBuilder().setContent(truncate(moduleList, 4000)));
         headerContainer.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
@@ -155,21 +210,26 @@ module.exports.run = async function (interaction) {
      * @returns {Promise<Array>} Array of V2 component objects
      */
     async function buildModuleComponents(mod) {
-        const label = mod === 'none'
-            ? interaction.client.strings.helpembed.build_in
-            : (interaction.client.modules[mod]['config']['humanReadableName'][interaction.client.locale] ||
-                interaction.client.modules[mod]['config']['humanReadableName']['en'] || mod);
-        const description = mod !== 'none'
-            ? (interaction.client.modules[mod]['config']['description'][interaction.client.locale] ||
-                interaction.client.modules[mod]['config']['description']['en'] || '')
-            : '';
+        let label, description;
+        if (mod === 'none') {
+            label = interaction.client.strings.helpembed.build_in;
+            description = '';
+        } else if (mod === 'custom-commands') {
+            label = localize('help', 'custom-commands-label');
+            description = localize('help', 'custom-commands-description');
+        } else {
+            label = resolveModuleString(interaction.client, mod, 'humanReadableName', mod);
+            description = resolveModuleString(interaction.client, mod, 'description', '');
+        }
+
+        const emoji = mod === 'none' ? '⚙️' : mod === 'custom-commands' ? '🔧' : '📦';
 
         const container = new ContainerBuilder()
             .setAccentColor(parseEmbedColor('GREEN'));
 
         const headerSection = new SectionBuilder()
             .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`# ${mod === 'none' ? '⚙️' : '📦'} ${label}${description ? '\n*' + description + '*' : ''}`)
+                new TextDisplayBuilder().setContent(`# ${emoji} ${label}${description ? '\n*' + description + '*' : ''}`)
             )
             .setThumbnailAccessory(
                 new ThumbnailBuilder().setURL(interaction.client.user.displayAvatarURL())

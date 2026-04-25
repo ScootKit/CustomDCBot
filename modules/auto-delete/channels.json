@@ -1,28 +1,14 @@
 {
-  "description": {
-    "en": "Set up channels to delete text-messages from",
-    "de": "Stelle hier Text-Kanäle ein, aus welchen gelöscht werden soll"
-  },
-  "humanName": {
-    "en": "Text-Channels",
-    "de": "Text-Kanäle"
-  },
+  "description": "Set up channels to delete text-messages from",
+  "humanName": "Text-Channels",
   "filename": "channels.json",
   "configElements": true,
   "content": [
     {
       "name": "channelID",
-      "humanName": {
-        "en": "Channel",
-        "de": "Kanal"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "The Channel you want messages to be deleted from.",
-        "de": "Wähle den Kanal aus, aus welchen Nachrichten automatisch gelöscht werden sollen."
-      },
+      "humanName": "Channel",
+      "default": "",
+      "description": "The Channel you want messages to be deleted from.",
       "type": "channelID",
       "content": [
         "GUILD_TEXT",
@@ -31,33 +17,17 @@
     },
     {
       "name": "timeout",
-      "humanName": {
-        "en": "Timeout",
-        "de": "Timeout"
-      },
-      "default": {
-        "en": "5"
-      },
-      "description": {
-        "en": "Timeout (in minutes) after which the messages in a channel will be deleted.",
-        "de": "Timeout (in Minuten), nachdem die Nachrichten in einem Kanal automatisch gelöscht werden sollen."
-      },
+      "humanName": "Timeout",
+      "default": 5,
+      "description": "Timeout (in minutes) after which the messages in a channel will be deleted.",
       "type": "integer"
     },
     {
       "name": "keepMessageCount",
-      "default": {
-        "en": 0
-      },
-      "humanName": {
-        "en": "Amount of messages to keep",
-        "de": "Anzahl von zu behaltenden Nachrichten"
-      },
+      "default": 0,
+      "humanName": "Amount of messages to keep",
       "type": "integer",
-      "description": {
-        "en": "Set up a number here to always have x messages in your channel left (newest messages are kept). The number has to below 50.",
-        "de": "Stelle hier eine Anzahl an Nachrichten ein, die auch nach einer Löschung in dem Kanal behalten werden sollen (neuere Nachrichten werden behalten). Die Zahl muss unter 50 liegen."
-      }
+      "description": "Set up a number here to always have x messages in your channel left (newest messages are kept). The number has to below 50."
     }
   ]
 }

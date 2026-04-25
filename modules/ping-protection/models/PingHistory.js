@@ -1,4 +1,7 @@
-const { DataTypes, Model } = require('sequelize');
+const {
+    DataTypes,
+    Model
+} = require('sequelize');
 
 module.exports = class PingProtectionPingHistory extends Model {
     static init(sequelize) {

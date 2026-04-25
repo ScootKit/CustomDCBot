@@ -5,13 +5,11 @@
     "name": "SCDerox (SC Network Team)",
     "link": "https://github.com/SCDerox"
   },
-  "description": {
-    "en": "Simple module to create fresh polls on your server! Supports anonymous polls and more.",
-    "de": "Einfaches Modul, um coole Umfragen auf deinem Server zu erstellen! Unterstützt anonyme Umfragen und mehr."
-  },
+  "description": "Simple module to create fresh polls on your server! Supports anonymous polls and more.",
   "events-dir": "/events",
   "commands-dir": "/commands",
   "models-dir": "/models",
+  "fa-icon": "fas fa-poll",
   "config-example-files": [
     "configs/config.json",
     "configs/strings.json"
@@ -20,8 +18,5 @@
     "community"
   ],
   "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/polls",
-  "humanReadableName": {
-    "en": "Polls",
-    "de": "Umfragen"
-  }
+  "humanReadableName": "Polls"
 }

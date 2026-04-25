@@ -1,324 +1,173 @@
 {
-  "description": {},
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure counting channels, rules and moderation settings here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "channels",
-      "humanName": {
-        "de": "Kanäle",
-        "en": "Channels"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "Channels in which users can participate in the counting game",
-        "de": "Kanäle, in welchem Nutzer am Zählspiel teilnehmen können."
-      },
+      "humanName": "Channels",
+      "default": [],
+      "description": "Channels in which users can participate in the counting game",
       "type": "array",
       "content": "channelID"
     },
     {
       "name": "channelDescription",
-      "humanName": {
-        "de": "Kanalbeschreibung",
-        "en": "Channel-Description"
-      },
-      "default": {
-        "en": "Next number %x%",
-        "de": "Nächste Zahl: %x%"
-      },
-      "description": {
-        "en": "Text which should be set after someone counted (leave blank to disable)",
-        "de": "Text, welcher gesetzt werden soll, nachdem jemand gezählt hat (leer lassen zum deaktivieren)"
-      },
+      "humanName": "Channel-Description",
+      "default": "Next number %x%",
+      "description": "Text which should be set after someone counted (leave blank to disable)",
       "type": "string",
       "allowNull": true,
       "params": [
         {
           "name": "x",
-          "description": {
-            "en": "Next number users should count",
-            "de": "Nächste Zahl, welche die Nutzer zählen sollen"
-          }
+          "description": "Next number users should count"
         }
       ]
     },
     {
       "name": "success-reaction",
-      "humanName": {
-        "de": "Erfolgsreaktion",
-        "en": "Success-Reaction"
-      },
-      "default": {
-        "en": "✅",
-        "de": "✅"
-      },
-      "description": {
-        "en": "Reaction which the bot should give when someone counts successfully",
-        "de": "Reaktion welche der Bot geben soll, wenn jemand erfolgreich gezählt hat"
-      },
+      "humanName": "Success-Reaction",
+      "default": "✅",
+      "description": "Reaction which the bot should give when someone counts successfully",
       "type": "emoji"
     },
     {
       "name": "restartOnWrongCount",
-      "default": {
-        "en": false
-      },
-      "humanName": {
-        "de": "Spiel neustarten, wenn sich jemand verzählt",
-        "en": "Restart game, if user miscounts"
-      },
-      "description": {
-        "en": "If enabled, the game will restarts if a user sends a number that is not in order",
-        "de": "Wenn aktiviert, wird das Spiel neustarten, wenn ein Nutzer eine Zahl sendet, die nicht in die Reihenfolge passt"
-      },
+      "default": false,
+      "humanName": "Restart game, if user miscounts",
+      "description": "If enabled, the game will restarts if a user sends a number that is not in order",
       "type": "boolean"
     },
     {
       "name": "restartOnWrongCountMessage",
       "dependsOn": "restartOnWrongCount",
-      "default": {
-        "de": "Aufgrund der Inkompetenz von %mention% muss das Spiel neugestartet werden - die nächste Zahl ist **%i%**.",
-        "en": "Due to the incompetence of %mention%, the game had to restart - the next number is **%i%**."
-      },
-      "humanName": {
-        "en": "Message when game gets restarted",
-        "de": "Nachricht, wenn das Spiel neugestartet werden"
-      },
+      "default": "Due to the incompetence of %mention%, the game had to restart - the next number is **%i%**.",
+      "humanName": "Message when game gets restarted",
       "type": "string",
       "allowEmbed": true,
-      "description": {
-        "en": "This message will be sent when the game gets restarted due to a miscount.",
-        "de": "Diese Nachricht wird gesendet, wenn das Spiel aufgrund einer Verzählung neugestartet wird."
-      },
+      "description": "This message will be sent when the game gets restarted due to a miscount.",
       "params": [
         {
           "name": "mention",
-          "description": {
-            "de": "Erwähnung des Nutzers",
-            "en": "Mention of the users"
-          }
+          "description": "Mention of the users"
         },
         {
           "name": "i",
-          "description": {
-            "de": "Nächste Nummer",
-            "en": "Next number"
-          }
+          "description": "Next number"
         }
       ]
     },
     {
       "name": "onlyOneMessagePerUser",
-      "default": {
-        "en": true
-      },
-      "humanName": {
-        "de": "Nutzer müssen abwechselnd zählen",
-        "en": "Only one continuous message per user"
-      },
-      "description": {
-        "en": "If enabled, users can not count more than one number continuously",
-        "de": "Wenn aktiviert, können Nutzer nicht mehr als eine Nummer nacheinander zählen"
-      },
+      "default": true,
+      "humanName": "Only one continuous message per user",
+      "description": "If enabled, users can not count more than one number continuously",
       "type": "boolean"
     },
     {
       "name": "protectAgainstDeletion",
-      "default": {
-        "en": true
-      },
-      "humanName": {
-        "de": "Verhindern, dass Nutzer die letzte Zählungsnachricht löschen?",
-        "en": "Protect against users deleting the last counting message?"
-      },
-      "description": {
-        "en": "If enabled, the bot will send a message when the last correct counting message gets deleted so that other counters can't be fooled into counting an already counted number again.",
-        "de": "Wenn aktiviert, wird der Bot eine Nachricht in den Kanal schicken, wenn die letzte korrekte Zählnachricht gelöscht wird - das verhindert, dass andere Nutzer nicht dazu gebracht werden können, eine korrekte Nummer erneut zu zählen."
-      },
+      "default": true,
+      "humanName": "Protect against users deleting the last counting message?",
+      "description": "If enabled, the bot will send a message when the last correct counting message gets deleted so that other counters can't be fooled into counting an already counted number again.",
       "type": "boolean"
     },
     {
       "name": "protectionMessage",
       "dependsOn": "protectAgainstDeletion",
-      "humanName": {
-        "de": "Löschschutznachricht",
-        "en": "Deletion protection message"
-      },
-      "default": {
-        "de": "Scheint als hätte %mention% seine letzte Nachricht gelöscht - die zuletzt gezählte Zahl ist **%number%**.",
-        "en": "It seems like %mention% deleted their last message - the last counted number is **%number%**."
-      },
-      "description": {
-        "en": "Message that gets send if a user deletes the last correct counting message.",
-        "de": "Nachricht, welche verschickt wird, wenn die letzte korrekte Zahlnachricht gelöscht wird."
-      },
+      "humanName": "Deletion protection message",
+      "default": "It seems like %mention% deleted their last message - the last counted number is **%number%**.",
+      "description": "Message that gets send if a user deletes the last correct counting message.",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "mention",
-          "description": {
-            "en": "Mention of the user who's message got removed",
-            "de": "Erwähnung des Nutzers, dessen Nachricht gelöscht wurde"
-          }
+          "description": "Mention of the user who's message got removed"
         },
         {
           "name": "number",
-          "description": {
-            "en": "Last counted number in this the channel",
-            "de": "Zuletzt gezählte Nummer in diesem Kanal"
-          }
+          "description": "Last counted number in this the channel"
         }
       ]
     },
     {
       "name": "removeReactions",
-      "default": {
-        "en": true
-      },
-      "humanName": {
-        "de": "Reaktionen nach 5 Sekunden entfernen?",
-        "en": "Remove reactions after 5 seconds?"
-      },
-      "description": {
-        "en": "If enabled, the reactions the bot gives will be removed after 5 seconds. This will free up space in the counting channel",
-        "de": "Wenn aktiviert, werden die Reaktionen des Bots nach 5 Sekunden entfernt. Das lässt mehr Platz im Kanal."
-      },
+      "default": true,
+      "humanName": "Remove reactions after 5 seconds?",
+      "description": "If enabled, the reactions the bot gives will be removed after 5 seconds. This will free up space in the counting channel",
       "type": "boolean"
     },
     {
       "name": "wrong-input-message",
-      "humanName": {
-        "de": "Nachricht bei falscher Eingabe",
-        "en": "Message on wrong input"
-      },
-      "default": {
-        "en": "⚠️ %err%"
-      },
-      "description": {
-        "en": "Message that gets send if a user provides an invalid input",
-        "de": "Nachricht, welche gesendet wird, wenn ein Nutzer eine ungültige Nachricht sendet"
-      },
+      "humanName": "Message on wrong input",
+      "default": "⚠️ %err%",
+      "description": "Message that gets send if a user provides an invalid input",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "err",
-          "description": {
-            "en": "Description of what they did wrong",
-            "de": "Beschreibung, was der Nutzer falsch gemacht hat"
-          }
+          "description": "Description of what they did wrong"
         }
       ]
     },
     {
       "name": "strikeAmount",
-      "default": {
-        "en": 5
-      },
-      "humanName": {
-        "en": "Amount of wrong messages to trigger action",
-        "de": "Anzahl von falschen Nachrichten, um eine Aktion auszulösen"
-      },
-      "description": {
-        "en": "This is the amount of wrong messages a user has to send to trigger action. Once this amount is reached, the bot will either, depending on your configuration, give a role or disable the SEND_MESSAGES permission for a user (set to 0 to disable)",
-        "de": "Dies ist die Anzahl von falschen Nachrichten, die ein Nutzer senden muss, um eine Aktion auszulösen. Sobald diese Anzahl erreicht ist, wird der Bot, je nach Konfiguration, entweder dem Nutzer eine Rolle geben oder ihm die \"Nachrichten verfassen\"-Berechtigung entfernen (auf 0 setzen zum Deaktivieren)"
-      },
+      "default": 5,
+      "humanName": "Amount of wrong messages to trigger action",
+      "description": "This is the amount of wrong messages a user has to send to trigger action. Once this amount is reached, the bot will either, depending on your configuration, give a role or disable the SEND_MESSAGES permission for a user (set to 0 to disable)",
       "type": "integer"
     },
     {
       "name": "giveRoleInsteadOfPermissionRemoval",
-      "default": {
-        "en": false
-      },
-      "humanName": {
-        "de": "Rolle bei Sperrung vergeben, anstatt Rechte zu entfernen",
-        "en": "Give role on action, instead of removing permission"
-      },
-      "description": {
-        "en": "If enabled, a role will be given to the user (once their reach the configured action amount of wrong messages) instead of the removal of the \"Send Messages\"-permission in the counter channel",
-        "de": "Wenn aktiviert, wird dem Nutzer (sobald er die benötigte Anzahl von falschen Nachrichten erreicht hat) eine Rolle gegeben, anstatt die \"Nachrichten verfassen\"-Berechtigung im Kanal zu entfernen"
-      },
+      "default": false,
+      "humanName": "Give role on action, instead of removing permission",
+      "description": "If enabled, a role will be given to the user (once their reach the configured action amount of wrong messages) instead of the removal of the \"Send Messages\"-permission in the counter channel",
       "type": "boolean"
     },
     {
       "name": "strikeRole",
       "dependsOn": "giveRoleInsteadOfPermissionRemoval",
-      "default": {
-        "en": false
-      },
-      "humanName": {
-        "de": "Rolle, die bei Sperrung vergeben wird",
-        "en": "Role given when amount is being reached"
-      },
-      "description": {
-        "en": "This role will be given to users when they reach the configured amount of wrong messages",
-        "de": "Diese Rolle wird dem Nutzer gegeben, sobald die konfigurierte Anzahl von falschen Nachrichten erreicht wird"
-      },
+      "default": "",
+      "humanName": "Role given when amount is being reached",
+      "description": "This role will be given to users when they reach the configured amount of wrong messages",
       "type": "roleID"
     },
     {
       "name": "strikeMessage",
-      "default": {
-        "de": "%mention%, ich musste dir den Zugriff auf diesen Kanal verbieten, da du ihn mehrmals falsch verwendet hast.",
-        "en": "%mention%, I had to restrict your access to this channel because you repeatedly used it improperly."
-      },
-      "humanName": {
-        "en": "Message when user gets actioned",
-        "de": "Nachricht, wenn ein Nutzer gesperrt wird"
-      },
+      "default": "%mention%, I had to restrict your access to this channel because you repeatedly used it improperly.",
+      "humanName": "Message when user gets actioned",
       "type": "string",
       "allowEmbed": true,
-      "description": {
-        "en": "This message will be sent when a user reach the configured amount of wrong messages and gets actioned",
-        "de": "Diese Nachricht wird versendet, sobald die konfigurierte Anzahl von falschen Nachrichten erreicht wird und ein Nutzer bestraft wird"
-      },
+      "description": "This message will be sent when a user reach the configured amount of wrong messages and gets actioned",
       "params": [
         {
           "name": "mention",
-          "description": {
-            "de": "Erwähnung des Nutzers",
-            "en": "Mention of the users"
-          }
+          "description": "Mention of the users"
         }
       ]
     },
     {
       "name": "allowCharactersInMessage",
-      "default": {
-        "en": false
-      },
+      "default": false,
       "type": "boolean",
-      "humanName": {
-        "en": "Allow text characters in messages?",
-        "de": "Textcharaktere in der Nachricht erlauben?"
-      },
-      "description": {
-        "en": "If enabled, users may write additional content into their messages instead of forcing them to just write a number. Messages without a number will still lead to an error.",
-        "de": "Wenn aktiviert, können Nutzer weitere Inhalte in ihre Nachrichten schreiben, statt sie zu zwingen, nur eine Nachricht zu posten. Nachrichten ohne Zahlen werden weiterhin zu einem Fehler führen."
-      }
+      "humanName": "Allow text characters in messages?",
+      "description": "If enabled, users may write additional content into their messages instead of forcing them to just write a number. Messages without a number will still lead to an error."
     },
     {
       "name": "allowMaths",
-      "default": {
-        "en": true
-      },
+      "default": true,
       "type": "boolean",
-      "humanName": {
-        "en": "Allow users to use maths in their messages?",
-        "de": "Nutzern erlauben, Mathematik in ihren Nachrichten zu verwenden?"
-      },
-      "description": {
-        "en": "If enabled, users can use maths in messages, as long as the result of their formula is the correct next number.",
-        "de": "If enabled, können Nutzer Mathematik in ihren Nachrichten verwenden, solange das Ergebnis des Termes der korrekten nächsten Zahl entspricht."
-      }
+      "humanName": "Allow users to use maths in their messages?",
+      "description": "If enabled, users can use maths in messages, as long as the result of their formula is the correct next number."
+    },
+    {
+      "name": "enableEasterEggs",
+      "default": false,
+      "type": "boolean",
+      "humanName": "Enable number easter eggs?",
+      "description": "If enabled, the bot will react with special emojis on certain numbers (e.g. 42, 67, 69, 100, 420)"
     }
   ]
 }

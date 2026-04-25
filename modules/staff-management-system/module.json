@@ -1,0 +1,28 @@
+{
+  "name": "staff-management-system",
+  "author": {
+    "scnxOrgID": "148",
+    "name": "Kevin",
+    "link": "https://github.com/Kevinking500"
+  },
+  "fa-icon": "far fa-gear looks",
+  "openSourceURL": "https://github.com/Kevinking500/CustomDCBot/tree/main/modules/staff-management-system",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/configuration.json",
+    "configs/infractions.json",
+    "configs/promotions.json",
+    "configs/reviews.json",
+    "configs/shifts.json",
+    "configs/status.json",
+    "configs/profiles.json",
+    "configs/activity-checks.json"
+  ],
+  "tags": [
+    "moderation"
+  ],
+  "humanReadableName": "Staff Management System",
+  "description": "A powerful, highly customizable staff management system designed to track activity, moderate personnel, and maintain detailed staff records seamlessly."
+}

@@ -2,7 +2,10 @@
  * Checks when a member leaves the server and handles data retention and/or deletion
  */
 
-const { markUserAsLeft, deleteAllUserData } = require('../ping-protection');
+const {
+    markUserAsLeft,
+    deleteAllUserData
+} = require('../ping-protection');
 
 module.exports.run = async function (client, member) {
     if (!client.botReadyAt) return;

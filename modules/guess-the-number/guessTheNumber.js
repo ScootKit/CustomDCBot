@@ -18,18 +18,30 @@ module.exports.startGame = async function (channel, number, min, max, ownerID = 
         if (pin.author.id !== channel.client.user.id) continue;
         await pin.unpin();
     }
+    const buttonComponents = [
+        {
+            type: 'BUTTON',
+            label: localize('guess-the-number', 'emoji-guide-button'),
+            style: 'SECONDARY',
+            customId: 'gtn-reaction-meaning'
+        }
+    ];
+    if (channel.client.configurations['guess-the-number']['config'].enableLeaderboard) {
+        buttonComponents.push({
+            type: 'BUTTON',
+            label: localize('guess-the-number', 'leaderboard-button'),
+            style: 'PRIMARY',
+            customId: 'gtn-leaderboard',
+            emoji: '🏆'
+        });
+    }
     const m = await channel.send(embedType(channel.client.configurations['guess-the-number']['config'].startMessage, {
         '%min%': min,
         '%max%': max
     }, {
         components: [{
             type: 'ACTION_ROW',
-            components: [{
-                type: 'BUTTON',
-                label: localize('guess-the-number', 'emoji-guide-button'),
-                style: 'SECONDARY',
-                customId: 'gtn-reaction-meaning'
-            }]
+            components: buttonComponents
         }]
     }));
     await m.pin();

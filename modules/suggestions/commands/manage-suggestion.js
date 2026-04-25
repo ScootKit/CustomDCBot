@@ -53,6 +53,7 @@ module.exports.autoComplete = {
  */
 async function autoCompleteSuggestionID(interaction) {
     const suggestions = await interaction.client.models['suggestions']['Suggestion'].findAll({
+        where: {adminAnswer: null},
         order: [['createdAt', 'DESC']]
     });
     const returnValue = [];

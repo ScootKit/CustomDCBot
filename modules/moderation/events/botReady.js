@@ -38,8 +38,13 @@ exports.run = async (client) => {
     await restoreLockdownState(client);
 
     const verificationConfig = client.configurations['moderation']['verification'];
-    if (!verificationConfig.enabled || !verificationConfig['restart-verification-channel']) return;
-    const channel = await client.channels.fetch(verificationConfig['restart-verification-channel']).catch(() => {
+    if (!verificationConfig.enabled) return;
+
+    // Support both new and legacy config field name
+    const channelId = verificationConfig['verification-channel'] || verificationConfig['restart-verification-channel'];
+    if (!channelId) return;
+
+    const channel = await client.channels.fetch(channelId).catch(() => {
     });
     if (!channel || (channel || {}).type !== ChannelType.GuildText) return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
     let message = (await channel.messages.fetch()).filter(msg => msg.author.id === client.user.id).last();
@@ -47,6 +52,8 @@ exports.run = async (client) => {
         message = await channel.send(localize('moderation', 'generating-message'));
         await message.pin();
     }
+
+    const isLegacyDM = verificationConfig.type === 'captcha-dm';
     await message.edit(embedType(verificationConfig['verify-channel-first-message'], {}, {
         components: [
             {
@@ -54,8 +61,8 @@ exports.run = async (client) => {
                 components: [
                     {
                         type: 'BUTTON',
-                        label: '📨 ' + localize('moderation', 'restart-verification-button'),
-                        customId: `mod-rvp`,
+                        label: isLegacyDM ? ('📨 ' + localize('moderation', 'restart-verification-button')) : ('✅ ' + localize('moderation', 'verify-me-button')),
+                        customId: isLegacyDM ? 'mod-rvp' : 'mod-verify',
                         style: 'PRIMARY'
                     }
                 ]

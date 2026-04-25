@@ -1,81 +1,42 @@
 {
-  "description": {},
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "awaitBotMessages",
-      "humanName": {
-        "de": "Botnachrichten abwarten",
-        "en": "Wait for Bot-Messages"
-      },
-      "default": {
-        "en": true,
-        "de": true
-      },
-      "description": {
-        "en": "If enabled, the bot will wait ~2 Seconds to make sure no bot like NQN deleted the messages and answered afterwards",
-        "de": "Wenn diese Option aktiviert ist, wird der Bot ~2 Sekunden warten, um sicherzustellen, dass kein Bot wie NQN die Nachricht gelöscht und danach geantwortet hat"
-      },
+      "humanName": "Wait for Bot-Messages",
+      "default": true,
+      "description": "If enabled, the bot will wait ~2 Seconds to make sure no bot like NQN deleted the messages and answered afterwards",
       "type": "boolean"
     },
     {
       "name": "ignoredChannels",
-      "humanName": {
-        "en": "Ignored Channels",
-        "de": "Ignorierte Channel"
-      },
-      "default": {
-        "en": [],
-        "de": []
-      },
-      "description": {
-        "en": "If a ghost ping gets send in one of these configured channels, the bot will not run anti-ghost-ping",
-        "de": "Wenn ein Ghost-Ping in einem dieser konfigurierten Channel gesendet wird, wird der Bot nicht anti-ghost-ping ausführen"
-      },
+      "humanName": "Ignored Channels",
+      "default": [],
+      "description": "If a ghost ping gets send in one of these configured channels, the bot will not run anti-ghost-ping",
       "type": "array",
       "content": "channelID"
     },
     {
       "name": "youJustGotGhostPinged",
-      "humanName": {
-        "en": "Ghostping-Message",
-        "de": "Ghostping-Nachricht"
-      },
-      "default": {
-        "en": "%mentions%,\nYou just got ghost-pinged by %authorMention% with the following message: \"%msgContent%\"",
-        "de": "%mentions%,\nDu wurdest gerade von %authorMention% mit folgender Nachricht geghost-pinged: \"%msgContent%\""
-      },
-      "description": {
-        "en": "This message gets send if a member pings another user and deletes the message afterwards",
-        "de": "Diese Nachricht wird gesendet, wenn ein Nutzer einen anderen Nutzer pingt und die Nachricht danach löscht"
-      },
+      "humanName": "Ghostping-Message",
+      "default": "%mentions%,\nYou just got ghost-pinged by %authorMention% with the following message: \"%msgContent%\"",
+      "description": "This message gets send if a member pings another user and deletes the message afterwards",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "mentions",
-          "description": {
-            "en": "Mentions of every user that got pinged in the original message",
-            "de": "Erwähnung von jedem, in der Originalnachricht gepingten, Nutzer"
-          }
+          "description": "Mentions of every user that got pinged in the original message"
         },
         {
           "name": "authorMention",
-          "description": {
-            "en": "Mention of the original message-author.",
-            "de": "Erwähnung des Autors der Originalnachricht."
-          }
+          "description": "Mention of the original message-author."
         },
         {
           "name": "msgContent",
-          "description": {
-            "en": "Content of the original message",
-            "de": "Inhalt der Originalnachricht"
-          }
+          "description": "Content of the original message"
         }
       ]
     }

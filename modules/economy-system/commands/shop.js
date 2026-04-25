@@ -1,4 +1,11 @@
-const {createShopItem, createShopMsg, deleteShopItem, shopMsg, buyShopItem, updateShopItem} = require('../economy-system');
+const {
+    createShopItem,
+    createShopMsg,
+    deleteShopItem,
+    shopMsg,
+    buyShopItem,
+    updateShopItem
+} = require('../economy-system');
 const {localize} = require('../../../src/functions/localize');
 
 /**
@@ -8,9 +15,9 @@ const {localize} = require('../../../src/functions/localize');
 async function checkPermsAndSendReplyOnFail(interaction) {
     const result = interaction.client.configurations['economy-system']['config']['shopManagers'].includes(interaction.user.id) || interaction.client.config['botOperators'].includes(interaction.user.id);
     if (!result) await interaction.reply({
-            content: interaction.client.strings['not_enough_permissions'],
-            ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
-        });
+        content: interaction.client.strings['not_enough_permissions'],
+        ephemeral: !interaction.client.configurations['economy-system']['config']['publicCommandReplies']
+    });
     return result;
 }
 
@@ -154,6 +161,6 @@ module.exports.config = {
                     description: localize('economy-system', 'shop-option-description-role')
                 }
             ]
-        },
+        }
     ]
 };

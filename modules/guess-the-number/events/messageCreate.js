@@ -11,6 +11,7 @@ module.exports.run = async (client, msg) => {
     if (msg.author.bot) return;
     if (!msg.guild) return;
     if (msg.guild.id !== client.guildID) return;
+    if (!msg.member) return;
     const game = await client.models['guess-the-number']['Channel'].findOne({
         where: {
             channelID: msg.channel.id,
@@ -24,6 +25,18 @@ module.exports.run = async (client, msg) => {
     if (parsedInt < game.min || parsedInt > game.max) return msg.react('🚫');
     game.guessCount++;
     await game.save();
+    if (client.configurations['guess-the-number']['config'].enableLeaderboard) {
+        const [userStats] = await client.models['guess-the-number']['User'].findOrCreate({
+            where: {userID: msg.author.id},
+            defaults: {
+                userID: msg.author.id,
+                wins: 0,
+                totalGuesses: 0
+            }
+        });
+        userStats.totalGuesses++;
+        await userStats.save();
+    }
     if (parsedInt !== game.number) {
         if (client.configurations['guess-the-number']['config']['higherLowerReactions']) {
             if (game.number < parsedInt) await msg.react('⬇'); else await msg.react('⬆');
@@ -33,7 +46,20 @@ module.exports.run = async (client, msg) => {
     }
     await msg.react('✅');
     game.ended = true;
+    game.winnerID = msg.author.id;
     await game.save();
+    if (client.configurations['guess-the-number']['config'].enableLeaderboard) {
+        const [userStats] = await client.models['guess-the-number']['User'].findOrCreate({
+            where: {userID: msg.author.id},
+            defaults: {
+                userID: msg.author.id,
+                wins: 0,
+                totalGuesses: 0
+            }
+        });
+        userStats.wins++;
+        await userStats.save();
+    }
     const isGamechannel = client.configurations['guess-the-number']['channel'].enabled && client.configurations['guess-the-number']['channel'].channel === msg.channel.id;
     if (!isGamechannel) await lockChannel(msg.channel, client.configurations['guess-the-number']['config'].adminRoles, '[guess-the-number] ' + localize('guess-the-number', 'game-ended'));
     await msg.reply(embedType(client.configurations['guess-the-number']['config']['endMessage'], {

@@ -3,10 +3,11 @@ const {moderationAction} = require('../moderationActions');
 const {activateLockdown, isLockdownActive} = require('../lockdown');
 const {localize} = require('../../../src/functions/localize');
 const {embedType} = require('../../../src/functions/helpers');
-const {ChannelType, MessageAttachment} = require('discord.js');
+const {ChannelType, AttachmentBuilder} = require('discord.js');
 const {client} = require('../../../main');
 
 let joinCache = [];
+let raidActionInProgress = false;
 
 module.exports.run = async (client, guildMember) => {
     if (guildMember.guild.id !== client.config.guildID) return;
@@ -30,7 +31,7 @@ module.exports.run = async (client, guildMember) => {
             joinCache = joinCache.filter(e => e.id !== guildMember.user.id && e.timestamp !== timestamp);
         }, antiJoinRaidConfig.timeframe * 60000);
 
-        if (joinCache.length >= antiJoinRaidConfig.maxJoinsInTimeframe) await performJoinRaidAction();
+        if (joinCache.length >= antiJoinRaidConfig.maxJoinsInTimeframe && !raidActionInProgress) await performJoinRaidAction();
 
         /**
          * Performs anti-join-raid actions
@@ -38,6 +39,7 @@ module.exports.run = async (client, guildMember) => {
          * @return {Promise<void>}
          */
         async function performJoinRaidAction() {
+            raidActionInProgress = true;
             for (const join of joinCache.filter(j => j.id !== guildMember.user.id)) {
                 const member = await guildMember.guild.members.fetch(join.id).catch(() => {
                 });
@@ -67,6 +69,10 @@ module.exports.run = async (client, guildMember) => {
             if (lockdownConfig && lockdownConfig.enabled && lockdownConfig.autoTriggerOnJoinRaid && !await isLockdownActive(client)) {
                 await activateLockdown(client, localize('moderation', 'lockdown-joinraid-trigger'), localize('moderation', 'lockdown-system'), true);
             }
+            joinCache = [];
+            setTimeout(() => {
+                raidActionInProgress = false;
+            }, 30000);
         }
     }
 
@@ -79,68 +85,38 @@ module.exports.run = async (client, guildMember) => {
     if (verificationConfig.enabled) {
         if (guildMember.user.bot) return;
         if (verificationConfig['verification-needed-role'].length !== 0) await guildMember.roles.add(verificationConfig['verification-needed-role'], '[moderation] ' + localize('moderation', 'verification-started'));
-        await sendDMPart(verificationConfig, guildMember).catch(() => dmFail());
 
-        /**
-         * Sends a backup message for users who have their dms disabled
-         * @private
-         * @returns {Promise<any>}
-         */
-        async function dmFail() {
-            const channel = await client.channels.fetch(verificationConfig['restart-verification-channel'] || '').catch(() => {
-            });
-            if (!channel || (channel || {}).type !== ChannelType.GuildText) return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
-            const m = await channel.send({
-                    content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
+        // Only send DMs for legacy captcha-dm type
+        if (verificationConfig.type === 'captcha-dm') {
+            await sendDMPart(verificationConfig, guildMember).catch(() => dmFail());
 
-                    components: [
-                        {
-                            type: 'ACTION_ROW',
-                            components: [
-                                {
-                                    type: 'BUTTON',
-                                    label: '📨 ' + localize('moderation', 'restart-verification-button'),
-                                    customId: `mod-rvp`,
-                                    style: 'PRIMARY'
-                                }
-                            ]
-                        }
-                    ]
-                }
-            );
-            setTimeout(() => {
-                m.delete().then(() => {
+            async function dmFail() {
+                const channel = await client.channels.fetch(verificationConfig['verification-channel'] || verificationConfig['restart-verification-channel'] || '').catch(() => {
                 });
-            }, 300000);
-        }
-
-        if (guildMember.guild.channels.cache.get(verificationConfig['verification-log']) && verificationConfig.type === 'manual') {
-            await guildMember.guild.channels.cache.get(verificationConfig['verification-log']).send({
-                embeds: [{
-                    title: localize('moderation', 'verification'),
-                    color: 'GREEN',
-                    description: `${localize('moderation', 'user')}: ${guildMember.toString()} (\`${guildMember.user.id}\`)\n${localize('moderation', 'manual-verification-needed')}`
-                }],
-                components: [
-                    {
-                        type: 'ACTION_ROW',
+                if (!channel || (channel || {}).type !== ChannelType.GuildText) return client.logger.error('[moderation] ' + localize('moderation', 'verify-channel-set-but-not-found-or-wrong-type'));
+                const m = await channel.send({
+                        content: localize('moderation', 'dms-not-enabled-ping', {p: guildMember.toString()}),
                         components: [
                             {
-                                type: 'BUTTON',
-                                label: '❌ ' + localize('moderation', 'verification-deny'),
-                                customId: `mod-ver-d-${guildMember.user.id}`,
-                                style: 'DANGER'
-                            },
-                            {
-                                type: 'BUTTON',
-                                label: '✅ ' + localize('moderation', 'verification-approve'),
-                                customId: `mod-ver-p-${guildMember.user.id}`,
-                                style: 'SUCCESS'
+                                type: 'ACTION_ROW',
+                                components: [
+                                    {
+                                        type: 'BUTTON',
+                                        label: '📨 ' + localize('moderation', 'restart-verification-button'),
+                                        customId: `mod-rvp`,
+                                        style: 'PRIMARY'
+                                    }
+                                ]
                             }
                         ]
                     }
-                ]
-            });
+                );
+                setTimeout(() => {
+                    m.delete().then(() => {
+                    });
+                }, 300000);
+            }
+
         }
     }
 
@@ -155,7 +131,7 @@ async function runJoinGate(guildMember) {
     const joinGateConfig = client.configurations['moderation']['joinGate'];
     if (guildMember.user.bot && joinGateConfig.ignoreBots) return;
     if (joinGateConfig.allUsers) return performJoinGateAction(localize('moderation', 'joingate-for-everyone'));
-    const daysSinceCreation = (new Date().getTime() / 86400000).toFixed(0) - (guildMember.user.createdTimestamp / 86400000).toFixed(0);
+    const daysSinceCreation = Math.floor((Date.now() - guildMember.user.createdTimestamp) / 86400000);
     if (daysSinceCreation <= joinGateConfig.minAccountAge) return performJoinGateAction(localize('moderation', 'account-age-to-low', {
         a: daysSinceCreation,
         c: joinGateConfig.minAccountAge
@@ -200,66 +176,74 @@ module.exports.runJoinGate = runJoinGate;
 async function sendDMPart(verificationConfig, guildMember) {
     return new Promise(async (resolve, reject) => {
         try {
-            if (verificationConfig.type === 'manual') await guildMember.user.send(embedType(verificationConfig['manual-verification-message'], {}));
-            else {
-                if (!guildMember.client.scnxSetup) return guildMember.client.logger.error('[moderation] Captcha Generation is only available if your bot has an SCNX Integration set up.');
-                const captcha = await require('../../../src/functions/scnx-integration').generateCaptcha(verificationConfig.captchaLevel);
-                await guildMember.user.send(embedType(verificationConfig['captcha-message'], {}, {
-                    files: [new MessageAttachment(captcha.buffer, {name: 'you-call-it-captcha-we-call-it-ai-training.png'})]
-                }));
-                const c = await guildMember.user.createDM();
-                const col = c.createMessageCollector({time: 120000});
-                let p = false;
-                let d = null;
-                if (guildMember.guild.channels.cache.get(verificationConfig['verification-log'])) {
-                    d = await guildMember.guild.channels.cache.get(verificationConfig['verification-log']).send({
-                        embeds: [{
-                            title: localize('moderation', 'verification'),
-                            color: 'GREEN',
-                            description: `${localize('moderation', 'user')}: ${guildMember.toString()} (\`${guildMember.user.id}\`)\n${localize('moderation', 'captcha-verification-pending')}`
-                        }],
-                        components: [
-                            {
-                                type: 'ACTION_ROW',
-                                components: [
-                                    {
-                                        type: 'BUTTON',
-                                        label: '⏭️ ' + localize('moderation', 'verification-skip'),
-                                        customId: `mod-ver-p-${guildMember.user.id}`,
-                                        style: 'SECONDARY'
-                                    }
-                                ]
-                            }
-                        ]
-                    });
-                    const coli = d.createMessageComponentCollector({time: 120000});
-                    coli.on('collect', () => {
-                        p = true;
-                    });
-                    coli.on('end', () => {
-                        d.delete();
-                    });
-                }
-                col.on('collect', (m) => {
-                    if (m.author.id === guildMember.user.id && !p) {
-                        p = true;
-                        if (m.content.toUpperCase() === captcha.solution.toUpperCase()) verificationPassed(guildMember);
-                        else {
-                            client.logger.log(`${guildMember.user.id} failed verification. Entered: "${m.content.toUpperCase()}", expected: "${captcha.solution.toUpperCase()}"`);
-                            verificationFail(guildMember);
+            if (!guildMember.client.scnxSetup) return guildMember.client.logger.error('[moderation] Captcha Generation is only available if your bot has an SCNX Integration set up.');
+            const captcha = await require('../../../src/functions/scnx-integration').generateCaptcha(verificationConfig.captchaLevel);
+            await guildMember.user.send(embedType(verificationConfig['captcha-message'], {}, {
+                files: [new AttachmentBuilder(captcha.buffer, {name: 'you-call-it-captcha-we-call-it-ai-training.png'})]
+            }));
+            const c = await guildMember.user.createDM();
+            const col = c.createMessageCollector({time: 120000});
+            let p = false;
+            let d = null;
+            let dDeleted = false;
+            if (guildMember.guild.channels.cache.get(verificationConfig['verification-log'])) {
+                d = await guildMember.guild.channels.cache.get(verificationConfig['verification-log']).send({
+                    embeds: [{
+                        title: localize('moderation', 'verification'),
+                        color: 'GREEN',
+                        description: `${localize('moderation', 'user')}: ${guildMember.toString()} (\`${guildMember.user.id}\`)\n${localize('moderation', 'captcha-verification-pending')}`
+                    }],
+                    components: [
+                        {
+                            type: 'ACTION_ROW',
+                            components: [
+                                {
+                                    type: 'BUTTON',
+                                    label: '⏭️ ' + localize('moderation', 'verification-skip'),
+                                    customId: `mod-ver-skip-${guildMember.user.id}`,
+                                    style: 'SECONDARY'
+                                }
+                            ]
                         }
-                        if (d && !d.deleted) d.delete().catch(() => {
-                        });
-                    }
+                    ]
                 });
-                col.on('end', () => {
-                    if (!p) {
-                        verificationFail(guildMember);
-                        if (d && !d.deleted) d.delete().catch(() => {
+                const coli = d.createMessageComponentCollector({time: 120000});
+                coli.on('collect', () => {
+                    p = true;
+                });
+                coli.on('end', () => {
+                    if (!dDeleted) {
+                        dDeleted = true;
+                        d.delete().catch(() => {
                         });
                     }
                 });
             }
+            col.on('collect', (m) => {
+                if (m.author.id === guildMember.user.id && !p) {
+                    p = true;
+                    if (m.content.toUpperCase() === captcha.solution.toUpperCase()) verificationPassed(guildMember);
+                    else {
+                        client.logger.log(`${guildMember.user.id} failed verification. Entered: "${m.content.toUpperCase()}", expected: "${captcha.solution.toUpperCase()}"`);
+                        verificationFail(guildMember);
+                    }
+                    if (d && !dDeleted) {
+                        dDeleted = true;
+                        d.delete().catch(() => {
+                        });
+                    }
+                }
+            });
+            col.on('end', () => {
+                if (!p) {
+                    verificationFail(guildMember);
+                    if (d && !dDeleted) {
+                        dDeleted = true;
+                        d.delete().catch(() => {
+                        });
+                    }
+                }
+            });
             resolve();
         } catch (e) {
             reject(e);
@@ -275,12 +259,20 @@ module.exports.sendDMPart = sendDMPart;
  * @param {GuildMember} guildMember Member who passed the verification
  * @returns {Promise<void>}
  */
-async function verificationPassed(guildMember) {
+async function verificationPassed(guildMember, interaction = null) {
     const verificationConfig = guildMember.client.configurations['moderation']['verification'];
     if (verificationConfig['verification-needed-role'].length !== 0) await guildMember.roles.remove(verificationConfig['verification-needed-role'], '[' + localize('moderation', 'verification') + '] ' + localize('moderation', 'verification-completed'));
     if (verificationConfig['verification-passed-role'].length !== 0) await guildMember.roles.add(verificationConfig['verification-passed-role'], '[' + localize('moderation', 'verification') + '] ' + localize('moderation', 'verification-completed'));
-    await guildMember.user.send(embedType(verificationConfig['captcha-succeeded-message'])).catch(() => {
-    });
+    if (interaction) {
+        await interaction.followUp({
+            ...embedType(verificationConfig['captcha-succeeded-message']),
+            ephemeral: true
+        }).catch(() => {
+        });
+    } else {
+        await guildMember.user.send(embedType(verificationConfig['captcha-succeeded-message'])).catch(() => {
+        });
+    }
     if (guildMember.guild.channels.cache.get(verificationConfig['verification-log'])) await guildMember.guild.channels.cache.get(verificationConfig['verification-log']).send({
         embeds: [{
             title: localize('moderation', 'verification'),
@@ -298,14 +290,28 @@ module.exports.verificationPassed = verificationPassed;
  * @param {GuildMember} guildMember Member who failed verification
  * @returns {Promise<void>}
  */
-async function verificationFail(guildMember) {
+async function verificationFail(guildMember, interaction = null) {
     const verificationConfig = guildMember.client.configurations['moderation']['verification'];
-    await guildMember.user.send(embedType(verificationConfig['captcha-failed-message']));
-    await moderationAction(guildMember.client, verificationConfig.actionOnFail, guildMember.guild.me, guildMember, '[' + localize('moderation', 'verification') + '] ' + localize('moderation', 'verification-failed'));
+    if (interaction) {
+        await interaction.followUp({
+            ...embedType(verificationConfig['captcha-failed-message']),
+            ephemeral: true
+        }).catch(() => {
+        });
+    } else {
+        await guildMember.user.send(embedType(verificationConfig['captcha-failed-message'])).catch(() => {
+        });
+    }
+    const durationParser = require('parse-duration');
+    let expiresAt = null;
+    if (['mute', 'quarantine'].includes(verificationConfig.actionOnFail) && verificationConfig.actionOnFailDuration) {
+        expiresAt = new Date(new Date().getTime() + durationParser(verificationConfig.actionOnFailDuration));
+    }
+    await moderationAction(guildMember.client, verificationConfig.actionOnFail, guildMember.guild.members.me, guildMember, '[' + localize('moderation', 'verification') + '] ' + localize('moderation', 'verification-failed'), {}, expiresAt);
     if (guildMember.guild.channels.cache.get(verificationConfig['verification-log'])) await guildMember.guild.channels.cache.get(verificationConfig['verification-log']).send({
         embeds: [{
             title: localize('moderation', 'verification'),
-            color: 'GREEN',
+            color: 'RED',
             description: `${localize('moderation', 'user')}: ${guildMember.toString()} (\`${guildMember.user.id}\`)\n${localize('moderation', 'verification-failed')}`
         }]
     });

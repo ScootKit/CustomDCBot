@@ -1,395 +1,219 @@
 {
-  "description": {},
-  "humanName": {
-    "en": "Configuration",
-    "de": "Konfiguration"
-  },
+  "description": "Customize the messages and images for fun commands here",
+  "humanName": "Configuration",
   "filename": "config.json",
   "content": [
     {
       "name": "ikeaMessage",
-      "humanName": {
-        "de": "IKEA-Nachricht",
-        "en": "IKEA Message"
-      },
-      "default": {
-        "en": "Here's a ikea-product-name: %name%",
-        "de": "Hier ist ein IKEA-Produkt-Name: %name%"
-      },
-      "description": {
-        "en": "Message that gets send when someone uses /random ikea-name",
-        "de": "Nachricht welche gesendet wird, wenn jemand /random ikea-name benutzt"
-      },
+      "humanName": "IKEA Message",
+      "default": "Here's a ikea-product-name: %name%",
+      "description": "Message that gets send when someone uses /random ikea-name",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "name",
-          "description": {
-            "en": "Randomly generated name of an ikea product (probably not real)",
-            "de": "Zufällig generierter Name eines IKEA-Produkts (wahrscheinlich nicht real)"
-          }
+          "description": "Randomly generated name of an ikea product (probably not real)"
         }
       ]
     },
     {
       "name": "randomNumberMessage",
-      "humanName": {
-        "de": "Zufallszahl-Nachricht",
-        "en": "Random numer message"
-      },
-      "default": {
-        "en": "Here your random number between %min% and %max%: %number%",
-        "de": "Hier ist deine Zufallszahl zwischen %min% und %max%: %number%"
-      },
-      "description": {
-        "en": "Message that gets send when someone uses /random number",
-        "de": "Nachricht, welche gesendet wird, wenn jemand /random number benutzt"
-      },
+      "humanName": "Random numer message",
+      "default": "Here your random number between %min% and %max%: %number%",
+      "description": "Message that gets send when someone uses /random number",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "min",
-          "description": {
-            "en": "Minimal value",
-            "de": "Niedrigster Wert"
-          }
+          "description": "Minimal value"
         },
         {
           "name": "max",
-          "description": {
-            "en": "Maximal value",
-            "de": "Höchster Wert"
-          }
+          "description": "Maximal value"
         },
         {
           "name": "number",
-          "description": {
-            "en": "Generated number",
-            "de": "Generierte Zahl"
-          }
+          "description": "Generated number"
         }
       ]
     },
     {
       "name": "diceRollMessage",
-      "humanName": {
-        "de": "Würfel-Nachricht",
-        "en": "Dice Roll message"
-      },
-      "default": {
-        "en": "🎲 %number%",
-        "de": "🎲 %number%"
-      },
-      "description": {
-        "en": "Message that gets send when someone uses /random dice",
-        "de": "Nachricht, welche gesendet wird, wenn jemand /random dice benutzt"
-      },
+      "humanName": "Dice Roll message",
+      "default": "🎲 %number%",
+      "description": "Message that gets send when someone uses /random dice",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "number",
-          "description": {
-            "en": "Generated number",
-            "de": "Generierte Zahl"
-          }
+          "description": "Generated number"
         }
       ]
     },
     {
       "name": "coinFlipMessage",
-      "humanName": {
-        "de": "Münzwurf-Nachricht",
-        "en": "Coin toss message"
-      },
-      "default": {
-        "en": "\uD83E\uDE99 %site%",
-        "de": "\uD83E\uDE99 %site%"
-      },
-      "description": {
-        "en": "Message that gets send when someone uses /random coinfilp",
-        "de": "Nachricht, welche gesendet wird, wenn jemand /random coinfilp benutzt"
-      },
+      "humanName": "Coin toss message",
+      "default": "🪙 %site%",
+      "description": "Message that gets send when someone uses /random coinfilp",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "site",
-          "description": {
-            "de": "Seite, auf den die Münze gefallen ist",
-            "en": "Site on which the coin landed"
-          }
+          "description": "Site on which the coin landed"
         }
       ]
     },
     {
       "name": "hugMessage",
-      "humanName": {
-        "de": "Umarmungsnachricht",
-        "en": "Hug message"
-      },
-      "default": {
-        "en": "<@%authorID%> hugs <@%userID%>",
-        "de": "<@%authorID%> umarmt <@%userID%>"
-      },
-      "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /hug benutzt",
-        "en": "Message that gets send when someone uses /hug"
-      },
+      "humanName": "Hug message",
+      "default": "<@%authorID%> hugs <@%userID%>",
+      "description": "Message that gets send when someone uses /hug",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "authorID",
-          "description": {
-            "en": "ID of the user who ran this command",
-            "de": "ID des Nutzers, welcher den Befehl aus"
-          }
+          "description": "ID of the user who ran this command"
         },
         {
           "name": "userID",
-          "description": {
-            "en": "ID of the user that gets hugged",
-            "de": "ID des umarmten Nutzers"
-          }
+          "description": "ID of the user that gets hugged"
         }
       ]
     },
     {
       "name": "hugImages",
-      "humanName": {
-        "de": "Umarmungsbilder",
-        "en": "Hug images"
-      },
-      "default": {
-        "en": [
-          "https://scnx-cdn.scootkit.net/1723477011519-tjCfeHPcYYzFe3jRnoUVI7dn.gif",
-          "https://scnx-cdn.scootkit.net/1723477171157-3wGistN45zd9kwrP67YKfRgU.gif",
-          "https://scnx-cdn.scootkit.net/1753891037940-pdaiqed4ffL4XHbLe2N0j6fbW6zRvPDzy0ZCwKIRwmOz85yX.gif"
-        ]
-      },
-      "description": {
-        "de": "Bilder aus welchen, wenn jemand /hug ausführt, zufällig ausgewählt wird",
-        "en": "Images that one will be randomly selected from when someone uses /hug."
-      },
+      "humanName": "Hug images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1723477011519-tjCfeHPcYYzFe3jRnoUVI7dn.gif",
+        "https://scnx-cdn.scootkit.net/1723477171157-3wGistN45zd9kwrP67YKfRgU.gif",
+        "https://scnx-cdn.scootkit.net/1753891037940-pdaiqed4ffL4XHbLe2N0j6fbW6zRvPDzy0ZCwKIRwmOz85yX.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /hug.",
       "type": "array",
       "content": "imgURL"
     },
     {
       "name": "kissMessage",
-      "humanName": {
-        "en": "Kiss message",
-        "de": "Kuss-Nachrichten"
-      },
-      "default": {
-        "en": "<@%authorID%> kissed <@%userID%>",
-        "de": "<@%authorID%> küsst <@%userID%>"
-      },
-      "description": {
-        "en": "Message that gets send when someone uses /kiss",
-        "de": "Nachricht, welche gesendet wird, wenn jemand /kiss  benutzt"
-      },
+      "humanName": "Kiss message",
+      "default": "<@%authorID%> kissed <@%userID%>",
+      "description": "Message that gets send when someone uses /kiss",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "authorID",
-          "description": {
-            "en": "ID of the user who ran this command",
-            "de": "ID des Nutzers, welcher den Befehl aus"
-          }
+          "description": "ID of the user who ran this command"
         },
         {
           "name": "userID",
-          "description": {
-            "en": "ID of the user that gets kissed",
-            "de": "ID des geküssten Nutzers"
-          }
+          "description": "ID of the user that gets kissed"
         }
       ]
     },
     {
       "name": "kissImages",
-      "humanName": {
-        "de": "Kussbilder",
-        "en": "Kiss images"
-      },
-      "default": {
-        "en": [
-          "https://scnx-cdn.scootkit.net/1743549285215-t9x4Fm9ZqE0f4vxyKfrTNo7JlGLO2hFHae8R8arRQHjQeylk.gif",
-          "https://scnx-cdn.scootkit.net/1695864480892-EVwr6ighEdpxY22G8jUweAPt.gif",
-          "https://scnx-cdn.scootkit.net/1743549267626-cSru5Kn1Dg2zv5KAefHMtRL5XuWqCW84hegW40aty4b8iFH7.gif"
-        ]
-      },
-      "description": {
-        "en": "Images that one will be randomly selected from when someone uses /kiss.",
-        "de": "Bilder aus welchen, wenn jemand /kiss ausführt, zufällig ausgewählt wird"
-      },
+      "humanName": "Kiss images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1743549285215-t9x4Fm9ZqE0f4vxyKfrTNo7JlGLO2hFHae8R8arRQHjQeylk.gif",
+        "https://scnx-cdn.scootkit.net/1695864480892-EVwr6ighEdpxY22G8jUweAPt.gif",
+        "https://scnx-cdn.scootkit.net/1743549267626-cSru5Kn1Dg2zv5KAefHMtRL5XuWqCW84hegW40aty4b8iFH7.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /kiss.",
       "type": "array",
       "content": "imgURL"
     },
     {
       "name": "slapMessage",
-      "humanName": {
-        "de": "Schlag-Nachricht",
-        "en": "Slap message"
-      },
-      "default": {
-        "en": "<@%authorID%> slapped <@%userID%>",
-        "de": "<@%authorID%> schlägt <@%userID%>"
-      },
-      "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /slap benutzt",
-        "en": "Message that gets send when someone uses /slap"
-      },
+      "humanName": "Slap message",
+      "default": "<@%authorID%> slapped <@%userID%>",
+      "description": "Message that gets send when someone uses /slap",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "authorID",
-          "description": {
-            "en": "ID of the user who ran this command",
-            "de": "ID des Nutzers, welcher den Befehl aus"
-          }
+          "description": "ID of the user who ran this command"
         },
         {
           "name": "userID",
-          "description": {
-            "en": "ID of the user that gets slapped",
-            "de": "ID des geschlagenen Nutzers"
-          }
+          "description": "ID of the user that gets slapped"
         }
       ]
     },
     {
       "name": "slapImages",
-      "humanName": {
-        "de": "Schlag-Bilder",
-        "en": "Slap images"
-      },
-      "default": {
-        "en": [
-          "https://scnx-cdn.scootkit.net/1744620013783-xEkcviAsrCZulbhoVoPPWtTUWlJbQda6kk43eQb58CMLFvDU.gif",
-          "https://scnx-cdn.scootkit.net/1744620140479-qz6nc8xzCSW2TB6Yy40vj6WzCBi31ezRZVElFrKuKCIfc6vZ.gif",
-          "https://scnx-cdn.scootkit.net/1744620083811-RYado8KTb7E8AzCVfncyNgUxD2GyQFdhjH4YxzVc5aLkGvN4.gif",
-          "https://scnx-cdn.scootkit.net/1744620244031-0JO1dEMxvKBAz12dj08BIVw8njCxgj8CJ89SnUihMZxnzyDE.gif"
-        ]
-      },
-      "description": {
-        "de": "Bilder aus welchen, wenn jemand /slap ausführt, zufällig ausgewählt wird",
-        "en": "Images that one will be randomly selected from when someone uses /slap."
-      },
+      "humanName": "Slap images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1744620013783-xEkcviAsrCZulbhoVoPPWtTUWlJbQda6kk43eQb58CMLFvDU.gif",
+        "https://scnx-cdn.scootkit.net/1744620140479-qz6nc8xzCSW2TB6Yy40vj6WzCBi31ezRZVElFrKuKCIfc6vZ.gif",
+        "https://scnx-cdn.scootkit.net/1744620083811-RYado8KTb7E8AzCVfncyNgUxD2GyQFdhjH4YxzVc5aLkGvN4.gif",
+        "https://scnx-cdn.scootkit.net/1744620244031-0JO1dEMxvKBAz12dj08BIVw8njCxgj8CJ89SnUihMZxnzyDE.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /slap.",
       "type": "array",
       "content": "imgURL"
     },
     {
       "name": "patMessage",
-      "humanName": {
-        "de": "Tätschel-Nachricht",
-        "en": "Pat message"
-      },
-      "default": {
-        "en": "<@%authorID%> patted <@%userID%>",
-        "de": "<@%authorID%> tätschelt <@%userID%>"
-      },
-      "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /pat benutzt",
-        "en": "Message that gets send when someone uses /pat"
-      },
+      "humanName": "Pat message",
+      "default": "<@%authorID%> patted <@%userID%>",
+      "description": "Message that gets send when someone uses /pat",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
           "name": "authorID",
-          "description": {
-            "en": "ID of the user who ran this command",
-            "de": "ID des Nutzers, welcher den Befehl aus"
-          }
+          "description": "ID of the user who ran this command"
         },
         {
           "name": "userID",
-          "description": {
-            "en": "ID of the user that gets patted",
-            "de": "ID des getätschelten Nutzers"
-          }
+          "description": "ID of the user that gets patted"
         }
       ]
     },
     {
       "name": "patImages",
-      "humanName": {
-        "de": "Tätschel-Bilder",
-        "en": "Pat images"
-      },
-      "default": {
-        "en": [
-          "https://scnx-cdn.scootkit.net/1744619869697-AYVUENwLWjusxCOKvJLOnpdSiiiQZJC2dmSwnHMSOLr7eLbH.gif",
-          "https://scnx-cdn.scootkit.net/1744619643063-Iw3QdOJ9LsQLKv3Moe3zvMfakKu0NVfqlrmmd2ssrBqLEJai.gif",
-          "https://scnx-cdn.scootkit.net/1671631825485-6eaH1p3ngebQigoVjBicgaRy.gif",
-          "https://scnx-cdn.scootkit.net/1744619413990-auYiCEqSxZnp2QldAOgav77oVb2EiXnPS83icTlX7AkV1JzV.gif"
-        ]
-      },
-      "description": {
-        "de": "Bilder aus welchen, wenn jemand /pat ausführt, zufällig ausgewählt wird",
-        "en": "Images that one will be randomly selected from when someone uses /pat."
-      },
+      "humanName": "Pat images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1744619869697-AYVUENwLWjusxCOKvJLOnpdSiiiQZJC2dmSwnHMSOLr7eLbH.gif",
+        "https://scnx-cdn.scootkit.net/1744619643063-Iw3QdOJ9LsQLKv3Moe3zvMfakKu0NVfqlrmmd2ssrBqLEJai.gif",
+        "https://scnx-cdn.scootkit.net/1671631825485-6eaH1p3ngebQigoVjBicgaRy.gif",
+        "https://scnx-cdn.scootkit.net/1744619413990-auYiCEqSxZnp2QldAOgav77oVb2EiXnPS83icTlX7AkV1JzV.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /pat.",
       "type": "array",
       "content": "imgURL"
     },
     {
       "name": "8ballMessage",
-      "humanName": {
-        "de": "8ball-Nachricht",
-        "en": "8ball Message"
-      },
-      "default": {
-        "en": "The oracle has spoken... %answer%",
-        "de": "Das Orakel hat gesprochen... %answer%"
-      },
-      "description": {
-        "de": "Nachricht, welche gesendet wird, wenn jemand /random 8ball benutzt",
-        "en": "Message that gets send when someone uses /random 8ball"
-      },
+      "humanName": "8ball Message",
+      "default": "The oracle has spoken... %answer%",
+      "description": "Message that gets send when someone uses /random 8ball",
       "type": "string",
       "allowEmbed": true,
       "params": [
         {
-          "name": "%answer",
-          "description": {
-            "en": "Answer to the question",
-            "de": "Antwort auf die Frage"
-          }
+          "name": "answer",
+          "description": "Answer to the question"
         }
       ]
     },
     {
       "name": "8BallMessages",
-      "humanName": {
-        "de": "8ball-Antworten",
-        "en": "8ball responses"
-      },
-      "default": {
-        "en": [
-          "<Yes>",
-          "No",
-          "Maybe",
-          "Try again",
-          "42 is the answer"
-        ],
-        "de": [
-          "Ja",
-          "Nein",
-          "Vielleicht",
-          "Bitte versuche es erneut",
-          "42 ist die Antwort"
-        ]
-      },
-      "description": {
-        "de": "Mögliche Antworten für /random 8ball",
-        "en": "Possible answers for /random 8ball"
-      },
+      "humanName": "8ball responses",
+      "default": [
+        "<Yes>",
+        "No",
+        "Maybe",
+        "Try again",
+        "42 is the answer"
+      ],
+      "description": "Possible answers for /random 8ball",
       "type": "array",
       "content": "string"
     }

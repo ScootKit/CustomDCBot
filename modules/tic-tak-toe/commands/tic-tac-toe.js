@@ -39,7 +39,7 @@ module.exports.run = async function (interaction) {
     let endReason = null;
     let gameEndReasonType = null;
     let currentUser = randomElementFromArray([interaction.member, member]);
-    const a = rep.createMessageComponentCollector({componentType: ComponentType.Button});
+    const a = rep.createMessageComponentCollector({componentType: ComponentType.Button, time: 300000});
     setTimeout(() => {
         if (started || a.ended) return;
         endReason = localize('tic-tac-toe', 'invite-expired', {u: interaction.user.toString(), i: member.toString()});
@@ -224,10 +224,11 @@ module.exports.run = async function (interaction) {
         });
     });
     a.on('end', () => {
-        rep.edit({
+            if (!ended) rep.edit({
             content: endReason,
             components: []
-        });
+            }).catch(() => {
+            });
     }
     );
 };

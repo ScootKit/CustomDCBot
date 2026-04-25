@@ -11,11 +11,31 @@ const {
 const client = new Discord.Client({
     partials: [Partials.Message, Partials.GuildMember, Partials.GuildScheduledEvent, Partials.Reaction, Partials.User, Partials.Channel], // Most of these are not needed, but enabling them does not increase CPU / RAM usage and does not introduce problems, as we handle them in the event emitter system
     allowedMentions: {parse: ['users', 'roles']}, // Disables @everyone mentions because everyone hates them
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildBans, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.AutoModerationExecution]
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.AutoModerationExecution, GatewayIntentBits.GuildModeration]
+});
+client.on('error', (err) => {
+    const {localize: loc} = require('./src/functions/localize');
+    const sentryId = client.captureException ? client.captureException(err, {source: 'discord-client-error'}) : null;
+    client.logger ? client.logger.error(client.sanitizePath(loc('main', 'discord-error', {e: err.stack || err})) + (sentryId ? ` [Sentry: ${sentryId}]` : '')) : console.error(err);
+});
+client.on('shardError', (err) => {
+    const {localize: loc} = require('./src/functions/localize');
+    const sentryId = client.captureException ? client.captureException(err, {source: 'shard-error'}) : null;
+    client.logger ? client.logger.error(client.sanitizePath(loc('main', 'shard-error', {e: err.stack || err})) + (sentryId ? ` [Sentry: ${sentryId}]` : '')) : console.error(err);
+});
+client.on('shardDisconnect', (event) => {
+    const {localize: loc} = require('./src/functions/localize');
+    client.logger ? client.logger.warn(loc('main', 'shard-disconnect', {c: event ? event.code : 'unknown'})) : console.warn('Disconnected from Discord');
+});
+client.on('shardReconnecting', () => {
+    const {localize: loc} = require('./src/functions/localize');
+    client.logger ? client.logger.info(loc('main', 'shard-reconnecting')) : console.info('Reconnecting to Discord');
 });
 client.intervals = [];
 client.jobs = [];
+client._migrationCount = 0;
+client._shutdownRequested = false;
 const fs = require('fs');
 const {Sequelize} = require('sequelize');
 const log4js = require('log4js');
@@ -31,6 +51,16 @@ const args = process.argv.slice(2);
 let scnxSetup = false; // If enabled some other (closed-sourced) files get imported and executed
 if (process.argv.includes('--scnx-enabled')) scnxSetup = true;
 client.scnxSetup = scnxSetup;
+if (scnxSetup) {
+    const instrument = require('./instrument');
+    client.sentry = instrument;
+    client.sanitizePath = instrument.sanitizePath;
+    client.captureException = function (err, data) {
+        return instrument.captureException(err, {contexts: {'extra-data': data}});
+    };
+} else {
+    client.sanitizePath = (s) => s;
+}
 if (args[0] === '--help' || args[0] === '-h') {
     process.exit();
 }
@@ -144,13 +174,13 @@ async function startUp() {
     if (scnxSetup) await require('./src/functions/scnx-integration').beforeInit(client);
     if (!client.isReady()) {
         await client.login(config.token).catch(async (e) => {
-            if (e.code === 'TOKEN_INVALID') {
+            if (e.code === 'TokenInvalid' || e.message === 'Authentication failed') {
                 if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
                     type: 'CORE_FAILURE',
                     errorDescription: 'invalid_token'
                 });
                 logger.fatal(localize('main', 'login-error-token'));
-            } else if (e.code === 'DISALLOWED_INTENTS') {
+            } else if (e.code === 'DisallowedIntents' || e.message === 'Used disallowed intents') {
                 if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
                     type: 'CORE_FAILURE',
                     errorDescription: 'disallowed_intents'
@@ -160,7 +190,12 @@ async function startUp() {
             process.exit();
         });
     }
-    const app = JSON.parse((await centra(`https://discord.com/api/applications/@me`, 'GET').header('Authorization', `Bot ${client.token}`).send()).body.toString());
+    let app = {};
+    try {
+        app = JSON.parse((await centra(`https://discord.com/api/applications/@me`, 'GET').header('Authorization', `Bot ${client.token}`).send()).body.toString());
+    } catch (e) {
+        logger.warn(localize('main', 'discord-api-error', {e: e.message || e}));
+    }
     if (app.bot_require_code_grant) {
         if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
             type: 'CORE_ISSUE',
@@ -235,20 +270,70 @@ async function startUp() {
     client.strings = jsonfile.readFileSync(`${confDir}/strings.json`);
     client.botReadyAt = new Date();
     client.emit('botReady');
+    await client.guild.members.fetch({withPresences: true}).catch(() => {
+    });
     if (scnxSetup) await require('./src/functions/scnx-integration').init(client);
     logger.info(localize('main', 'bot-ready'));
     if (client.logChannel) client.logChannel.send('🚀 ' + localize('main', 'bot-ready'));
     await checkForUpdates(client);
 }
 
+// Prevent shutdown during database migrations
+function handleShutdownSignal(signal) {
+    if (client._migrationCount > 0) {
+        client._shutdownRequested = true;
+        logger.warn(localize('main', 'shutdown-deferred'));
+        return;
+    }
+    process.exit(0);
+}
+
+process.on('SIGINT', handleShutdownSignal);
+process.on('SIGTERM', handleShutdownSignal);
+
+process.on('uncaughtException', (err) => {
+    const sentryId = client.captureException ? client.captureException(err, {source: 'uncaught-exception'}) : null;
+    logger.error(client.sanitizePath(localize('main', 'uncaught-exception', {e: err.stack || err})) + (sentryId ? ` [Sentry: ${sentryId}]` : ''));
+});
+
+process.on('unhandledRejection', (reason) => {
+    const sentryId = client.captureException ? client.captureException(reason instanceof Error ? reason : new Error(String(reason)), {source: 'unhandled-rejection'}) : null;
+    logger.error(client.sanitizePath(localize('main', 'unhandled-rejection', {e: reason instanceof Error ? reason.stack : reason})) + (sentryId ? ` [Sentry: ${sentryId}]` : ''));
+});
+
+/**
+ * Call before starting a migration to prevent shutdown
+ */
+module.exports.migrationStart = function () {
+    client._migrationCount++;
+};
+
+/**
+ * Call after a migration completes to allow shutdown again
+ */
+module.exports.migrationEnd = function () {
+    client._migrationCount--;
+    if (client._migrationCount <= 0 && client._shutdownRequested) {
+        logger.info(localize('main', 'shutdown-after-migration'));
+        process.exit(0);
+    }
+};
+
 // Starting bot
-db.authenticate().then(startUp);
+db.authenticate().then(startUp).catch((e) => {
+    logger.fatal(localize('main', 'db-connect-error', {e: e.message || e}));
+    process.exit(1);
+});
 
 // CLI-COMMANDS
 const cliCommands = [];
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
+});
+rl.on('error', (err) => {
+    const sentryId = client.captureException ? client.captureException(err, {source: 'readline-error'}) : null;
+    logger.error(client.sanitizePath(localize('main', 'cli-command-error', {e: err.message || err})) + (sentryId ? ` [Sentry: ${sentryId}]` : ''));
 });
 rl.on('line', (input) => {
     if (!client.botReadyAt) {
@@ -260,12 +345,17 @@ rl.on('line', (input) => {
     if (!command) return console.error('Command not found. Use "help" to see all available commands.');
 
     console.log('\n');
-    command.run({
-        input,
-        args: input.split(' '),
-        client,
-        cliCommands
-    });
+    try {
+        command.run({
+            input,
+            args: input.split(' '),
+            client,
+            cliCommands
+        });
+    } catch (e) {
+        const sentryId = client.captureException ? client.captureException(e, {source: 'cli-command'}) : null;
+        logger.error(client.sanitizePath(localize('main', 'cli-command-error', {e: e.stack || e})) + (sentryId ? ` [Sentry: ${sentryId}]` : ''));
+    }
 });
 
 /**
@@ -423,14 +513,17 @@ async function syncCommandsIfNeeded() {
                 break;
             }
 
-            if (oldCommand.description !== command.description || (oldCommand.options || []).length !== (command.options || []).length) {
+            if (oldCommand.description !== command.description || oldCommand.type !== command.type || (oldCommand.options || []).length !== (command.options || []).length) {
                 needSync = true;
                 break;
             }
 
             const newPerms = new PermissionsBitField(command.defaultMemberPermissions || []).bitfield;
             const oldPerms = new PermissionsBitField(oldCommand.defaultMemberPermissions || []).bitfield;
-            if (newPerms !== oldPerms) needSync = true;
+            if (newPerms !== oldPerms) {
+                needSync = true;
+                break;
+            }
 
             for (const option of (command.options || [])) {
                 const oldOptionOption = (oldCommand.options || []).find(o => o.name === option.name);
@@ -454,6 +547,9 @@ async function syncCommandsIfNeeded() {
             function checkOption(oldOption, newOption) {
                 if (oldOption.name !== newOption.name || oldOption.autocomplete !== newOption.autocomplete || oldOption.description !== newOption.description || oldOption.type !== newOption.type || (typeof oldOption.required === 'undefined' ? false : oldOption.required) !== (typeof newOption.required === 'undefined' ? false : newOption.required)) return true;
                 if (!compareArrays(oldOption.choices || [], newOption.choices || [])) return true;
+                if (!compareArrays(oldOption.channelTypes || [], newOption.channelTypes || [])) return true;
+                if (oldOption.minValue !== newOption.minValue || oldOption.maxValue !== newOption.maxValue) return true;
+                if (oldOption.minLength !== newOption.minLength || oldOption.maxLength !== newOption.maxLength) return true;
                 if ((oldOption.options || []).length !== (newOption.options || []).length) return true;
                 for (const option of (newOption.options || [])) {
                     const oldOptionOption = (oldOption.options || []).find(o => o.name === option.name);
@@ -547,11 +643,11 @@ async function loadEventsInDir(dir, moduleName = null) {
                                     if (!eData.moduleName) eData.eventFunction.run(client, ...cArgs);
                                     else if (client.modules[eData.moduleName].enabled) eData.eventFunction.run(client, ...cArgs);
                                 } catch (e) {
-                                    if (client.captureException) client.captureException(e, {
+                                    const sentryId = client.captureException ? client.captureException(e, {
                                         module: eData.moduleName,
                                         event: eventName
-                                    });
-                                    client.logger.error(`Error on event ${(eData.moduleName ? eData.moduleName + '/' : '') + eventName}: ${e}`);
+                                    }) : null;
+                                    client.logger.error(client.sanitizePath(`Error on event ${(eData.moduleName ? eData.moduleName + '/' : '') + eventName}: ${e}${sentryId ? ` [Sentry: ${sentryId}]` : ''}`));
                                 }
                             }
                         });

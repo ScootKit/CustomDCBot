@@ -8,7 +8,8 @@ const {localize} = require('../../src/functions/localize');
 const {
     formatDiscordUserName,
     formatNumber,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter
 } = require('../../src/functions/helpers');
 const {displayLevel, isMaxLevel, calculateLevelXP} = require('./events/messageCreate');
 const {client} = require('../../main');
@@ -66,9 +67,10 @@ module.exports.updateLeaderBoard = async function (client, force = false) {
         .setTitle(moduleStrings.liveLeaderBoardEmbed.title)
         .setDescription(moduleStrings.liveLeaderBoardEmbed.description)
         .setColor(parseEmbedColor(moduleStrings.liveLeaderBoardEmbed.color))
-        .setFooter({text: client.strings.footer, iconURL: client.strings.footerImgUrl})
         .setThumbnail(channel.guild.iconURL())
         .addField(localize('levels', 'leaderboard'), leaderboardString);
+
+    safeSetFooter(embed, client);
 
     if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 

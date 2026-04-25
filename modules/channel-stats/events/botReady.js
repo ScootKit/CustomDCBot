@@ -14,11 +14,20 @@ module.exports.run = async (client) => {
             t: dcChannel.type
         }));
         const res = await channelNameReplacer(client, dcChannel, channel.channelName);
-        if (res !== dcChannel.name) dcChannel.setName(res, '[channel-stats] ' + localize('channel-stats', 'audit-log-reason-startup'));
+        if (res !== dcChannel.name) await dcChannel.setName(res, '[channel-stats] ' + localize('channel-stats', 'audit-log-reason-startup')).catch(() => {
+        });
+        let updating = false;
         client.intervals.push(setInterval(async () => {
-            const repName = await channelNameReplacer(client, dcChannel, channel.channelName);
-            if (repName !== dcChannel.name) dcChannel.setName(repName, '[channel-stats] ' + localize('channel-stats', 'audit-log-reason-interval'));
-        }, (channel.updateInterval || 5) < 5 ? 5 * 60000 : (channel.updateInterval || 5) * 60000));
+            if (updating) return;
+            updating = true;
+            try {
+                const repName = await channelNameReplacer(client, dcChannel, channel.channelName);
+                if (repName !== dcChannel.name) await dcChannel.setName(repName, '[channel-stats] ' + localize('channel-stats', 'audit-log-reason-interval')).catch(() => {
+                });
+            } finally {
+                updating = false;
+            }
+        }, Math.min(((channel.updateInterval || 5) < 5 ? 5 : (channel.updateInterval || 5)) * 60000, 0x7FFFFFFF)));
     }
 };
 

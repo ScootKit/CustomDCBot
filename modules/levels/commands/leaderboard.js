@@ -3,7 +3,8 @@ const {
     truncate,
     formatNumber,
     formatDiscordUserName,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter
 } = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
@@ -34,13 +35,13 @@ module.exports.run = async function (interaction) {
      */
     function addSite(fields) {
         const embed = new MessageEmbed()
-            .setFooter({text: interaction.client.strings.footer, iconURL: interaction.client.strings.footerImgUrl})
             .setColor(parseEmbedColor(moduleStrings.leaderboardEmbed.color || 'GREEN'))
             .setThumbnail(interaction.guild.iconURL())
             .setTitle(moduleStrings.leaderboardEmbed.title)
             .setDescription(moduleStrings.leaderboardEmbed.description)
             .addField('\u200b', '\u200b')
             .addFields(fields);
+        safeSetFooter(embed, interaction.client);
         if (thisUser) embed.addField('\u200b', '\u200b').addField(moduleStrings.leaderboardEmbed.your_level, moduleStrings.leaderboardEmbed.you_are_level_x_with_x_xp.split('%level%').join(displayLevel(thisUser['level'], client)).split('%xp%').join(formatNumber(thisUser['xp'])));
         sites.push(embed);
     }

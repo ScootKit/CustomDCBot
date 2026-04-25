@@ -16,8 +16,8 @@ module.exports.createTemporaryRoleChangeAction = async function (client, type, c
         }
     });
     if (duplicate) {
-        duplicate.destroy();
         if (jobCache.has(duplicate.id)) jobCache.get(duplicate.id).cancel();
+        await duplicate.destroy();
     }
     const res = await client.models['admin-tools']['TemporaryRoleChange'].create({
         userID,

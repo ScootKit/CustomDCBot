@@ -17,12 +17,7 @@
   "tags": [
     "moderation"
   ],
-  "humanReadableName": {
-    "en": "Ping-Protection",
-    "de": "Ping-Schutz"
-  },
-  "description": {
-    "en": "Powerful and highly customizable ping-protection module to protect members/roles from unwanted mentions with moderation capabilities.",
-    "de": "Leistungsstarkes und hochgradig anpassbares Ping-Schutz-Modul zum Schutz von Mitgliedern/Rollen vor unerwünschten Erwähnungen mit Moderationsfunktionen."
-  }
+  "fa-icon": "fa-duotone fa-clock-alarm",
+  "humanReadableName": "Ping-Protection",
+  "description": "Powerful and highly customizable ping-protection module to protect members/roles from unwanted mentions with moderation capabilities."
 }

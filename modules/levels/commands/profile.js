@@ -2,7 +2,8 @@ const {
     embedType,
     formatDate,
     formatNumber,
-    parseEmbedColor
+    parseEmbedColor,
+    safeSetFooter
 } = require('../../../src/functions/helpers');
 const {MessageEmbed} = require('discord.js');
 const {localize} = require('../../../src/functions/localize');
@@ -31,10 +32,6 @@ module.exports.run = async function (interaction) {
     const nextLevelXp = calculateLevelXP(interaction.client, user.level + 1);
 
     const embed = new MessageEmbed()
-        .setFooter({
-            text: interaction.client.strings.footer,
-            iconURL: interaction.client.strings.footerImgUrl
-        })
         .setColor(parseEmbedColor(moduleStrings.embed.color || 'GREEN'))
         .setThumbnail(member.user.avatarURL({forceStatic: false}))
         .setTitle(moduleStrings.embed.title.replaceAll('%username%', member.user.username))
@@ -43,13 +40,15 @@ module.exports.run = async function (interaction) {
         .addField(moduleStrings.embed.xp, `${formatNumber(isMaxLevel(user.level, interaction.client) ? calculateLevelXP(interaction.client, interaction.client.configurations['levels']['config'].maximumLevel) : user.xp)}/${isMaxLevel(user.level, interaction.client) ? '∞' : formatNumber(nextLevelXp)}`, true)
         .addField(moduleStrings.embed.level, displayLevel(user.level, interaction.client), true);
 
+    safeSetFooter(embed, interaction.client);
+
     const roleFactor = getMemberRoleFactor(member);
     if (roleFactor !== 1) {
         let roleString = '';
         for (const role of member.roles.cache.filter(f => moduleConfig['multiplication_roles'][f.id]).values()) {
             roleString = roleString + `\n* <@&${role.id}>: ${moduleConfig['multiplication_roles'][role.id]}x`;
         }
-        embed.addField(moduleStrings.embed.roleFactor, `${roleString}\n${localize('levels', 'role-factors-total', {f: roleFactor})}`, true);
+        embed.addField(moduleStrings.embed.roleFactor, `${roleString}\n${localize('levels', 'role-factors-total', {f: formatNumber(roleFactor, {maximumFractionDigits: 2})})}`, true);
     }
     embed.addField(moduleStrings.embed.joinedAt, formatDate(member.joinedAt), true);
     interaction.reply({

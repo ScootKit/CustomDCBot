@@ -1,77 +1,33 @@
 {
-  "description": {
-    "en": "Advanced users can unleash the full potential of automatic message with cronejobs",
-    "de": "Nur für fortgeschrittene Nutzer - mit cronjob's kannst hast du die volle Kontrolle über die Nachrichten"
-  },
-  "elementLimits": {
-    "STARTER": 2,
-    "ACTIVE_GUILD": 5,
-    "PRO": 15,
-    "UNLIMITED": 5,
-    "PROFESSIONAL": 15
-  },
-  "humanName": {
-    "en": "Cronjob (advanced)",
-    "de": "Cronjobs (fortgeschritten)"
-  },
+  "description": "Advanced users can unleash the full potential of automatic message with cronejobs",
+  "humanName": "Cronjob (advanced)",
   "configElementName": {
-    "de": {
-      "one": "Automatische Nachricht",
-      "more": "Automatische Nachrichten"
-    },
-    "en": {
-      "one": "Automatic message",
-      "more": "Automatic messages"
-    }
+    "one": "Automatic message",
+    "more": "Automatic messages"
   },
   "filename": "cronjob.json",
   "configElements": true,
   "content": [
     {
       "name": "channelID",
-      "humanName": {
-        "de": "Kanal",
-        "en": "Channel"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "ID of the channel in which the message should be send",
-        "de": "ID des Kanals, in welchen die Nachricht gesendet werden soll"
-      },
+      "humanName": "Channel",
+      "default": "",
+      "description": "ID of the channel in which the message should be send",
       "type": "channelID"
     },
     {
       "name": "message",
-      "humanName": {
-        "de": "Nachricht",
-        "en": "Message"
-      },
-      "default": {
-        "en": ""
-      },
-      "description": {
-        "en": "Message that should be send",
-        "de": "Nachricht, die gesendet werden soll"
-      },
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should be send",
       "type": "string",
       "allowEmbed": true
     },
     {
       "name": "expression",
-      "humanName": {
-        "de": "Ausdruck",
-        "en": "Expression"
-      },
-      "default": {
-        "en": "1 6 1-31 * *",
-        "de": "1 6 1-31 * *"
-      },
-      "description": {
-        "en": "The message gets scheduled for this expression",
-        "de": "Die Nachricht wird für diesen Ausdruck geplant"
-      },
+      "humanName": "Expression",
+      "default": "1 6 1-31 * *",
+      "description": "The message gets scheduled for this expression",
       "type": "string"
     }
   ]
