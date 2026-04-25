@@ -80,9 +80,7 @@
       "description": "Pings in these channels are ignored.",
       "type": "array",
       "content": "channelID",
-      "default": { 
-        "en": [] 
-      },
+      "default": "[]",
       "channelTypes": [
         "GUILD_TEXT",
         "GUILD_NEWS",

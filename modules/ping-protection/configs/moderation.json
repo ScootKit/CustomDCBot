@@ -24,9 +24,7 @@
         "en": "If enabled, specific roles can have custom ping thresholds for this moderation action. This also allows specific roles to be exempted from this specific action."
       },
       "type": "boolean",
-      "default": {
-        "en": false
-      }
+      "default": false
     },
     {
       "name": "rolePingThresholds",
@@ -41,9 +39,7 @@
         "key": "roleID",
         "value": "integer"
       },
-      "default": {
-        "en": {}
-      },
+      "default": "{}",
       "dependsOn": "enableRolePingThresholds"
     },
     {
