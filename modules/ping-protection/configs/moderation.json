@@ -39,7 +39,7 @@
         "key": "roleID",
         "value": "integer"
       },
-      "default": "{}",
+      "default": {},
       "dependsOn": "enableRolePingThresholds"
     },
     {
