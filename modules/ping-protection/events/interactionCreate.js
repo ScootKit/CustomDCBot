@@ -132,7 +132,7 @@ module.exports.run = async function (client, interaction) {
         const confirmPhrase = localize('ping-protection', 'modal-phrase');
         if (interaction.fields.getTextInputValue('confirm').trim() !== confirmPhrase) {
             return interaction.reply({
-                content: localize('ping-protection', 'modal-fail'),
+                content: localize('ping-protection', 'modal-failed'),
                 flags: MessageFlags.Ephemeral
             });
         }
