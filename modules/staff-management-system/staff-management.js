@@ -1473,16 +1473,20 @@ async function endActivityCheckProcess(client, activeCheck) {
 
     try {
         const msg = await guild.channels.cache.get(activeCheck.channelId)?.messages.fetch(activeCheck.messageId);
-        if (msg && msg.embeds.length > 0) {
-            const originalEmbed = EmbedBuilder
-            .from(msg.embeds[0])
-            .setColor('#ed4245');
-            originalEmbed
-            .setTitle(localize('staff-management-system', 'ac-title-end'));
-            await msg.edit({
-                embeds: [originalEmbed.toJSON()],
+        if (msg) {
+            const editPayload = {
                 components: []
-            });
+            };
+
+            if (msg.embeds.length > 0) {
+                const originalEmbed = EmbedBuilder
+                    .from(msg.embeds[0])
+                    .setColor('#ed4245')
+                    .setTitle(localize('staff-management-system', 'ac-title-end'));
+
+                editPayload.embeds = [originalEmbed.toJSON()];
+            }
+            await msg.edit(editPayload);
         }
     } catch (e) {}
 
