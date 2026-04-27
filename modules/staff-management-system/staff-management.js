@@ -117,6 +117,11 @@ async function issueInfraction(client, interaction, targetMember, type, reason, 
         });
     }
 
+    const canInfract = checkStaffPermissions(interaction.member, config, 'staff');
+    if (!canInfract) return interaction.editReply({
+        content: localize('staff-management-system', 'err-gen-no-perm')
+    });
+
     if (type.toLowerCase() === 'suspension') {
         return interaction.editReply({
             content: localize('staff-management-system', 'err-use-susp')
@@ -249,6 +254,11 @@ async function issueSuspension(client, interaction, targetMember, durationInput,
             content: localize('staff-management-system', 'err-self-infract')
         });
     }
+
+    const canSuspend = checkStaffPermissions(interaction.member, config, 'staff');
+    if (!canSuspend) return interaction.editReply({
+        content: localize('staff-management-system', 'err-gen-no-perm')
+    });
 
     const durationDays = parseDurationToDays(durationInput);
     if (!durationDays)
@@ -1391,27 +1401,43 @@ async function startActivityCheck(client, interactionOrChannel, isAutomated = fa
 
     const durationHours = config.timeframe || 24;
     const endTime = new Date(Date.now() + durationHours * 60 * 60 * 1000);
+    const generalConfig = getConfig(client, 'configuration') || {};
 
-    let embedTemplate = typeof config.checkMessage === 'string'
-        ? JSON.parse(config.checkMessage)
-    : config.checkMessage;
-    let msgOpts = await embedTypeV2(embedTemplate, {
-        '%end-time%': `<t:${Math.floor(endTime.getTime() / 1000)}:F>`,
-        '%duration%': durationHours.toString()
-    });
+    const formatRoleMentions = (roles) => {
+        const roleIds = Array.isArray(roles)
+            ? roles
+            : (roles ? [roles] : []);
 
-    if (msgOpts?.content?.trim() === '') delete msgOpts.content;
-    msgOpts.components = [
-        new ActionRowBuilder()
-        .addComponents(
-            new ButtonBuilder()
+        return roleIds.map(roleId => `<@&${roleId}>`).join(' ');
+    };
+    const initiator = isAutomated
+    ? localize('staff-management-system', 'label-system')
+    : interactionOrChannel.user.toString();
+
+    const responseButtonRow = new ActionRowBuilder()
+    .addComponents(
+        new ButtonBuilder()
             .setCustomId('staff-mgmt_ac-respond')
             .setLabel(localize('staff-management-system', 'ac-confirm-btn'))
             .setStyle(ButtonStyle.Success)
             .setEmoji('✅')
-        )
-        .toJSON()
-    ];
+    )
+    .toJSON();
+
+    let msgOpts = await embedTypeV2(embedTemplate,  {
+            '%end-time%': `<t:${Math.floor(endTime.getTime() / 1000)}:F>`,
+            '%duration%': durationHours.toString(),
+            '%staff-mention%': formatRoleMentions(generalConfig.staffRoles),
+            '%supervisor-mention%': formatRoleMentions(generalConfig.supervisorRoles),
+            '%management-mention%': formatRoleMentions(generalConfig.managementRoles),
+            '%initiator%': initiator
+        },
+        {
+            components: [responseButtonRow]
+        }
+    );
+
+    if (msgOpts?.content?.trim() === '') delete msgOpts.content;
 
     try {
         const checkMessage = await targetChannel.send(msgOpts);

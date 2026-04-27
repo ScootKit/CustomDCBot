@@ -19,7 +19,7 @@
       "name": "enablePromotions",
       "category": "logic",
       "humanName": "Enable Promotions System",
-      "description": "If disabled, the /staff-management promote command will not work.",
+      "description": "Enabling this allows staff members to promote users to higher ranks.",
       "type": "boolean",
       "default": true,
       "elementToggle": true
@@ -30,7 +30,7 @@
       "humanName": "Auto-Add New Role?",
       "description": "If enabled, the bot will automatically give the user the new rank role. Note: This makes your server prone to raids by promoting someone to a role with more dangerous permissions which can be used to do malicious actions. It is recommended to keep this setting disabled.",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "promotionsChannel",

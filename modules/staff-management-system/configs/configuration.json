@@ -28,7 +28,7 @@
       "name": "supervisorRoles",
       "category": "roles",
       "humanName": "Supervisor Roles",
-      "description": "Roles that can manage other staff members (Approve/Deny/Manage LoA's and RA's, Manage Shifts, promote and infract users).",
+      "description": "Roles that can manage other staff members (Approve/Deny/Manage LoA's and RA's, Manage Shifts etc.).",
       "type": "array",
       "content": "roleID",
       "default": []

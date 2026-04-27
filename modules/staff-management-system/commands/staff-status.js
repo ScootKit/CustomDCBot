@@ -514,6 +514,7 @@ async function handleStatusEndSubmit(client, interaction, type) {
             flags: MessageFlags.Ephemeral
         });
     }
+    await interaction.deferUpdate();
 
     const meta = getStatusMeta(type);
     const request = await client.models['staff-management-system']['LoaRequest'].findByPk(interaction.customId.split('_')[2]);
@@ -574,10 +575,9 @@ async function handleStatusEndSubmit(client, interaction, type) {
         .setEmoji('📜')
         .setStyle(ButtonStyle.Secondary)
     );
-    return interaction.reply({
+    return interaction.editReply({
         embeds: [updatedEmbed.toJSON()],
-        components: [disabledRow.toJSON()],
-        flags: MessageFlags.Ephemeral
+        components: [disabledRow.toJSON()]
     });
 }
 
@@ -662,6 +662,7 @@ async function handleStatusExtendSubmit(client, interaction, type) {
             flags: MessageFlags.Ephemeral
         });
     }
+    await interaction.deferUpdate();
 
     const meta = getStatusMeta(type);
     const request = await client.models['staff-management-system']['LoaRequest'].findByPk(interaction.customId.split('_')[2]);
@@ -719,10 +720,9 @@ async function handleStatusExtendSubmit(client, interaction, type) {
                 r: request.reason || localize('staff-management-system', 'info-none')
             })
     });
-    return interaction.reply({
+    return interaction.editReply({
         embeds: [updatedEmbed.toJSON()],
-        components: interaction.message.components.map(c => c.toJSON()),
-        flags: MessageFlags.Ephemeral
+        components: interaction.message.components.map(c => c.toJSON())
     });
 }
 

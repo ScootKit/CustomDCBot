@@ -19,7 +19,7 @@
       "name": "enableReviews",
       "category": "settings",
       "humanName": "Enable Reviews System",
-      "description": "Enabling this unlocks the staff review system, allowing users to submit ratings and feedback for staff members.",
+      "description": "Enabling this unlocks the staff review system, allowing users to submit ratings with feedback for staff members.",
       "type": "boolean",
       "default": true
     },
@@ -39,7 +39,7 @@
       "name": "allowSelfRating",
       "category": "settings",
       "humanName": "Allow Self-Rating?",
-      "description": "If enabled, staff can review themselves. This is not recommended to keep a fair ratings system.",
+      "description": "If enabled, staff can review themselves. This is not recommended to keep a fair review system.",
       "type": "boolean",
       "default": false
     },
@@ -47,7 +47,7 @@
       "name": "onlyAllowStaffReview",
       "category": "settings",
       "humanName": "Only let users review staff",
-      "description": "If enabled, only staff members can review other staff members.",
+      "description": "If enabled, users can only review staff members.",
       "type": "boolean",
       "default": true
     },
@@ -92,7 +92,7 @@
       ],
       "default": {
         "_schema": "v3",
-        "content": "%staff%",
+        "content": "%staff-mention%",
         "embeds": [
           {
             "title": "🌟 New Staff Rating",

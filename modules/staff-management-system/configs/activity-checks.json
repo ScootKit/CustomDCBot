@@ -29,7 +29,7 @@
       "name": "enableActivityChecks",
       "category": "general",
       "humanName": "Enable Activity Checks",
-      "description": "Allows admins to start an activity check to see who is active.",
+      "description": "Allows admins to start an activity check to see who is active, and also set automatic activity checks.",
       "type": "boolean",
       "default": true,
       "elementToggle": true
@@ -69,12 +69,43 @@
         {
           "name": "duration",
           "description": "The configured duration in hours."
+        },
+        {
+          "name": "staff-mention",
+          "description": "Mention of the configured staff role(s)."
+        },
+        {
+          "name": "supervisor-mention",
+          "description": "Mention of the configured supervisor role(s)."
+        },
+        {
+          "name": "management-mention",
+          "description": "Mention of the configured management role(s)."
+        },
+        {
+          "name": "initiator",
+          "description": "The user who iniated the activity check. This will show 'system' if it was an automated check."
         }
       ],
       "default": {
-        "title": "📋 Staff Activity Check",
-        "description": "Please click the button below to confirm your activity before %endtime%.",
-        "color": "#3498db"
+        "_schema": "v3",
+        "content": "%staff-mention%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %initiator%"
+            },
+            "title": "📋 Staff Activity Check",
+            "description": "Please confirm your activity by clicking the button below before %end-time%. This activity check will stay open for %duration% hour(s), and members who do not respond before it ends may be marked as failed unless they qualify for an exception.",
+            "fields": [
+              {
+                "name": "Quick info overview",
+                "value": "Ends at: %end-time%\nDuration: %duration% hour(s)"
+              }
+            ],
+            "color": "#3498db"
+          }
+        ]
       }
     },
     {
