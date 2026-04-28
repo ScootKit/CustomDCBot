@@ -162,7 +162,7 @@ async function issueInfraction(client, interaction, targetMember, type, reason, 
         '%reason%': reason,
         '%case-id%': record.caseId.toString(),
         '%end-date%': expiresAt
-            ? `<t:${Math.floor(expiresAt.getTime() / 1000)}:F>`
+            ? dateToDiscordTimestamp(expiresAt, 'F')
             : localize('staff-management-system', 'label-never')
     };
 
@@ -313,7 +313,7 @@ async function issueSuspension(client, interaction, targetMember, durationInput,
         '%duration%': durationString,
         '%reason%': reason,
         '%case-id%': record.caseId.toString(),
-        '%end-date%': `<t:${Math.floor(expiresAt.getTime() / 1000)}:F>`
+        '%end-date%': dateToDiscordTimestamp(expiresAt, 'F')
     };
 
     const channelId = getSafeChannelId(config.infractionLogChannel);
@@ -494,10 +494,10 @@ async function generateInfractionHistoryResponse(client, targetUser, page = 1) {
             ? '🔴'
         : localize('staff-management-system', 'icon-voided');
         const expiry = r.expiresAt
-            ? `\n**${localize('staff-management-system', 'label-exp')}:** <t:${Math.floor(new Date(r.expiresAt).getTime() / 1000)}:R>`
+            ? `\n**${localize('staff-management-system', 'label-exp')}:** ${dateToDiscordTimestamp(r.expiresAt, 'R')}`
         : '';
 
-        return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:f>\n**${localize('staff-management-system', 'label-iss')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}${link}`;
+        return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** ${dateToDiscordTimestamp(r.createdAt, 'f')}\n**${localize('staff-management-system', 'label-iss')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}${link}`;
     }).join('\n\n');
 
     embed.setDescription(desc);
@@ -688,7 +688,7 @@ async function generatePromotionHistoryResponse(client, targetUser, page = 1) {
 
     const desc = rows.map((r, i) => {
         const link = r.messageUrl ? ` • [Jump](${r.messageUrl})` : '';
-        return `**${offset + i + 1}. <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:F>**\n**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${link}`;
+        return `**${offset + i + 1}. ${dateToDiscordTimestamp(r.createdAt, 'F')}**\n**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${link}`;
     }).join('\n\n');
 
     embed.setDescription(desc);
@@ -826,8 +826,8 @@ async function generatePanelInfractions(client, targetUser, page = 1) {
     } else {
         desc += rows.map(r => {
             const statusIcon = r.active ? '🔴' : localize('staff-management-system', 'icon-voided');
-            const expiry = r.expiresAt ? `\n**${localize('staff-management-system', 'label-exp')}:** <t:${Math.floor(new Date(r.expiresAt).getTime() / 1000)}:R>` : '';
-            return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:f>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}`;
+            const expiry = r.expiresAt ? `\n**${localize('staff-management-system', 'label-exp')}:** ${dateToDiscordTimestamp(r.expiresAt, 'R')}` : '';
+            return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** ${dateToDiscordTimestamp(r.createdAt, 'f')}\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}`;
         }).join('\n\n');
     }
 
@@ -886,7 +886,7 @@ async function generatePanelPromotions(client, targetUser, page = 1) {
     if (rows.length === 0) {
         desc += localize('staff-management-system', 'p-no-hist');
     } else {
-        desc += rows.map(r => `**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'label-date')}:** <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:R>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
+        desc += rows.map(r => `**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'label-date')}:** ${dateToDiscordTimestamp(r.createdAt, 'R')}\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
     }
 
     embed.setDescription(desc);
@@ -989,7 +989,7 @@ async function generatePanelStatus(client, targetUser, page = 1) {
     const activeStatus = allStatuses.find(s => ['APPROVED', 'PENDING'].includes(s.status) && new Date(s.endDate) > new Date());
     let activeText = localize('staff-management-system', 'info-none');
     if (activeStatus) {
-        activeText = `**${activeStatus.type}** (${activeStatus.status})\n${localize('staff-management-system', 'label-end')}: <t:${Math.floor(new Date(activeStatus.endDate).getTime()/1000)}:R>`;
+        activeText = `**${activeStatus.type}** (${activeStatus.status})\n${localize('staff-management-system', 'label-end')}: ${dateToDiscordTimestamp(activeStatus.endDate, 'R')}`;
     }
 
     const embed = applyFooter(client, new EmbedBuilder()
@@ -1018,7 +1018,7 @@ async function generatePanelStatus(client, targetUser, page = 1) {
             ENDED: '⏹️',
             PENDING: '🕐'
         };
-        desc += rows.map(r => `**${icons[r.status] || '❓'} ${r.type} - ${r.status}**\n**${localize('staff-management-system', 'general-start')}:** <t:${Math.floor(new Date(r.startDate).getTime()/1000)}:D>\n**${localize('staff-management-system', 'general-end')}:** <t:${Math.floor(new Date(r.endDate).getTime()/1000)}:D>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
+        desc += rows.map(r => `**${icons[r.status] || '❓'} ${r.type} - ${r.status}**\n**${localize('staff-management-system', 'general-start')}:** ${dateToDiscordTimestamp(r.startDate, 'D')}\n**${localize('staff-management-system', 'general-end')}:** ${dateToDiscordTimestamp(r.endDate, 'D')}\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
     }
 
     embed.setDescription(desc);
@@ -1117,8 +1117,8 @@ async function generatePanelActivity(client, targetUser, page = 1) {
         desc += localize('staff-management-system', 'p-no-hist');
     } else {
         desc += paginatedRows.map(r =>
-            `**${localize('staff-management-system', 'label-chk')} <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:D>**\n` +
-            `**${localize('staff-management-system', 'label-end')}:** <t:${Math.floor(new Date(r.endTime).getTime() / 1000)}:F>\n` +
+            `**${localize('staff-management-system', 'label-chk')} ${dateToDiscordTimestamp(r.createdAt, 'D')}**\n` +
+            `**${localize('staff-management-system', 'label-end')}:** ${dateToDiscordTimestamp(r.endTime, 'F')}\n` +
             `**${localize('staff-management-system', 'label-chan')}:** <#${r.channelId}>`
         ).join('\n\n');
     }
