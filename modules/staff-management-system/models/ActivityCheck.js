@@ -31,6 +31,14 @@ module.exports = class StaffManagementActivityCheck extends Model {
             status: {
                 type: DataTypes.STRING,
                 defaultValue: 'ACTIVE'
+            },
+            initiatorId: {
+                type: DataTypes.STRING,
+                allowNull: true
+            },
+            isAutomated: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
             }
         }, {
             tableName: 'staff_management_activity_checks',

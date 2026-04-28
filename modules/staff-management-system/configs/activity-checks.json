@@ -109,6 +109,64 @@
       }
     },
     {
+      "name": "endCheckMessage",
+      "category": "general",
+      "humanName": "Ended Activity Check Embed",
+      "description": "The message that will replace the activity check embed when it ends.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "end-time",
+          "description": "The Discord timestamp when the check ended."
+        },
+        {
+          "name": "duration",
+          "description": "The configured duration in hours."
+        },
+        {
+          "name": "staff-mention",
+          "description": "Mention of the configured staff role(s)."
+        },
+        {
+          "name": "supervisor-mention",
+          "description": "Mention of the configured supervisor role(s)."
+        },
+        {
+          "name": "management-mention",
+          "description": "Mention of the configured management role(s)."
+        },
+        {
+          "name": "initiator",
+          "description": "The user who iniated the activity check. This will show 'system' if it was an automated check."
+        },
+        {
+          "name": "responded-count",
+          "description": "The number or staff members who responed to the activity check."
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%staff-mention%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %initiator%"
+            },
+            "title": "📋 Staff Activity Check (ended)",
+            "description": "This activity check has concluded.",
+            "fields": [
+              {
+                "name": "Quick info overview",
+                "value": "Ended at: %end-time%\nDuration: %duration% hour(s)\nTotal responses: %responded-count%"
+              }
+            ],
+            "color": "#FF0000"
+          }
+        ]
+      }
+    },
+    {
       "name": "sendingChannel",
       "category": "general",
       "humanName": "Default Sending Channel",

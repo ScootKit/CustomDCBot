@@ -39,6 +39,14 @@ const applyFooter = (client, embed) => {
     return embed;
 };
 
+const formatRoleMentions = (roles) => {
+    const roleIds = Array.isArray(roles)
+        ? roles
+        : (roles ? [roles] : []);
+
+    return roleIds.map(roleId => `<@&${roleId}>`).join(' ');
+};
+
 function checkStaffPermissions(member, config, level = 'staff') {
     if (!member) return false;
     if (member.permissions?.has('Administrator')) return true;
@@ -1402,14 +1410,6 @@ async function startActivityCheck(client, interactionOrChannel, isAutomated = fa
     const durationHours = config.timeframe || 24;
     const endTime = new Date(Date.now() + durationHours * 60 * 60 * 1000);
     const generalConfig = getConfig(client, 'configuration') || {};
-
-    const formatRoleMentions = (roles) => {
-        const roleIds = Array.isArray(roles)
-            ? roles
-            : (roles ? [roles] : []);
-
-        return roleIds.map(roleId => `<@&${roleId}>`).join(' ');
-    };
     const initiator = isAutomated
     ? localize('staff-management-system', 'label-system')
     : interactionOrChannel.user.toString();
@@ -1453,7 +1453,9 @@ async function startActivityCheck(client, interactionOrChannel, isAutomated = fa
             channelId: targetChannel.id,
             endTime,
             targetRoles: JSON.stringify(rolesToCheck),
-            status: 'ACTIVE'
+            status: 'ACTIVE',
+            initiatorId: isAutomated ? null : interactionOrChannel.user.id,
+            isAutomated
         });
         schedule.scheduleJob(endTime, async () => {
             const currentCheck = await ActivityCheck.findByPk(record.id);
@@ -1470,25 +1472,6 @@ async function endActivityCheckProcess(client, activeCheck) {
     await activeCheck.update({ status: 'ENDED' });
     const guild = client.guilds.cache.get(client.guildID);
     if (!guild) return;
-
-    try {
-        const msg = await guild.channels.cache.get(activeCheck.channelId)?.messages.fetch(activeCheck.messageId);
-        if (msg) {
-            const editPayload = {
-                components: []
-            };
-
-            if (msg.embeds.length > 0) {
-                const originalEmbed = EmbedBuilder
-                    .from(msg.embeds[0])
-                    .setColor('#ed4245')
-                    .setTitle(localize('staff-management-system', 'ac-title-end'));
-
-                editPayload.embeds = [originalEmbed.toJSON()];
-            }
-            await msg.edit(editPayload);
-        }
-    } catch (e) {}
 
     const config = getConfig(client, 'activity-checks');
     const logChannel = guild.channels.cache.get(getSafeChannelId(config.logChannel) || getSafeChannelId(getConfig(client, 'configuration')?.generalLogChannel));
@@ -1511,6 +1494,9 @@ async function endActivityCheckProcess(client, activeCheck) {
             userId: {[Op.in]: expectedIds}
         }
     });
+    const initiator = activeCheck.isAutomated
+    ? localize('staff-management-system', 'label-system')
+    : `<@${activeCheck.initiatorId}>`;
 
     expectedMembers.forEach(member => {
         if (respondedUserIds.has(member.id)) return responded.push(member);
@@ -1529,6 +1515,34 @@ async function endActivityCheckProcess(client, activeCheck) {
             ? exceptions.push(member)
         : failed.push(member);
     });
+
+    try {
+        const msg = await guild.channels.cache.get(activeCheck.channelId)?.messages.fetch(activeCheck.messageId);
+        if (msg) {
+            const endTemplate = config.endCheckMessage;
+            const endedMessage = await embedTypeV2(
+                endTemplate,
+                {
+                    '%end-time%': dateToDiscordTimestamp(new Date(), 'F'),
+                    '%duration%': (config.timeframe || 24).toString(),
+                    '%staff-mention%': formatRoleMentions(config.staffRoles),
+                    '%supervisor-mention%': formatRoleMentions(config.supervisorRoles),
+                    '%management-mention%': formatRoleMentions(config.managementRoles),
+                    '%initiator%': initiator,
+                    '%responded-count%': responded.length.toString()
+                },
+                {
+                    components: []
+                }
+            );
+
+            if (endedMessage?.content?.trim() === '') {
+                delete endedMessage.content;
+            }
+
+            await msg.edit(endedMessage);
+        }
+    } catch (e) {}
 
     const embed = applyFooter(client, new EmbedBuilder()
         .setTitle(localize('staff-management-system', 'ac-res-title'))
