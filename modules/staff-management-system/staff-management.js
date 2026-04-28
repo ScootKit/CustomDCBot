@@ -6,7 +6,7 @@
 const { ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { Op } = require('sequelize');
 const schedule = require('node-schedule');
-const { embedTypeV2, safeSetFooter } = require('../../src/functions/helpers');
+const { embedTypeV2, safeSetFooter, dateToDiscordTimestamp } = require('../../src/functions/helpers');
 const { localize } = require('../../src/functions/localize');
 
 // --- Local helpers ---
@@ -1425,7 +1425,7 @@ async function startActivityCheck(client, interactionOrChannel, isAutomated = fa
     .toJSON();
 
     let msgOpts = await embedTypeV2(embedTemplate,  {
-            '%end-time%': `<t:${Math.floor(endTime.getTime() / 1000)}:F>`,
+            '%end-time%': dateToDiscordTimestamp(endTime, 'F'),
             '%duration%': durationHours.toString(),
             '%staff-mention%': formatRoleMentions(generalConfig.staffRoles),
             '%supervisor-mention%': formatRoleMentions(generalConfig.supervisorRoles),
