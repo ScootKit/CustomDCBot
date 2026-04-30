@@ -17,23 +17,15 @@
     },
     {
       "name": "enableRolePingThresholds",
-      "humanName": {
-        "en": "Enable role-based ping thresholds"
-      },
-      "description": {
-        "en": "If enabled, specific roles can have custom ping thresholds for this moderation action. This also allows specific roles to be exempted from this specific action."
-      },
+      "humanName": "Enable role-based ping thresholds",
+      "description": "If enabled, specific roles can have custom ping thresholds for this moderation action. This also allows specific roles to be exempted from this specific action.",
       "type": "boolean",
       "default": false
     },
     {
       "name": "rolePingThresholds",
-      "humanName": {
-        "en": "Role-based ping thresholds"
-      },
-      "description": {
-        "en": "Set custom ping thresholds per role for this moderation action. If a user has multiple configured roles, the value of their highest configured role is used. Setting a role to 0 exempts that role from this action - exempted roles also override any other role's threshold."
-      },
+      "humanName": "Role-based ping thresholds",
+      "description": "Set custom ping thresholds per role for this moderation action. If a user has multiple configured roles, the value of their highest configured role is used. Setting a role to 0 exempts that role from this action - exempted roles also override any other role's threshold.",
       "type": "keyed",
       "content": {
         "key": "roleID",
