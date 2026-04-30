@@ -45,10 +45,22 @@
       ]
     },
     {
+      "name": "infractionLogChannel",
+      "category": "messages",
+      "humanName": "Infraction Log Channel",
+      "description": "Where should infractions and suspensions be announced?",
+      "type": "channelID",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": ""
+    },
+    {
       "name": "enableSuspensions",
       "category": "suspensions",
       "humanName": "Enable Suspensions System",
-      "description": "Suspensions temporarily strip a staff member of their roles.",
+      "description": "Suspensions temporarily strip a staff member of their roles, and give them back after the specified duration.",
       "type": "boolean",
       "default": true
     },
@@ -136,18 +148,6 @@
           }
         ]
       }
-    },
-    {
-      "name": "infractionLogChannel",
-      "category": "messages",
-      "humanName": "Infraction Log Channel",
-      "description": "Where should infractions and suspensions be announced?",
-      "type": "channelID",
-      "channelTypes": [
-        "GUILD_TEXT",
-        "GUILD_NEWS"
-      ],
-      "default": ""
     },
     {
       "name": "infractionMessage",

@@ -1035,7 +1035,7 @@ async function handleDutyAdminVoidAll(client, interaction) {
         new ActionRowBuilder().addComponents(
             new TextInputBuilder()
                 .setCustomId('confirm')
-                .setLabel(localize('staff-management-system', 'mod-v-all-lbl'))
+                .setLabel(localize('staff-management-system', 'mod-del-lbl'))
                 .setStyle(TextInputStyle.Short)
                 .setPlaceholder(confirmPhrase)
                 .setRequired(true)

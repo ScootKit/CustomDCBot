@@ -6,7 +6,7 @@
 const { ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const { Op } = require('sequelize');
 const schedule = require('node-schedule');
-const { embedTypeV2, safeSetFooter } = require('../../src/functions/helpers');
+const { embedTypeV2, safeSetFooter, dateToDiscordTimestamp } = require('../../src/functions/helpers');
 const { localize } = require('../../src/functions/localize');
 
 // --- Local helpers ---
@@ -37,6 +37,14 @@ const applyFooter = (client, embed) => {
         embed.setTimestamp();
     }
     return embed;
+};
+
+const formatRoleMentions = (roles) => {
+    const roleIds = Array.isArray(roles)
+        ? roles
+        : (roles ? [roles] : []);
+
+    return roleIds.map(roleId => `<@&${roleId}>`).join(' ');
 };
 
 function checkStaffPermissions(member, config, level = 'staff') {
@@ -117,6 +125,11 @@ async function issueInfraction(client, interaction, targetMember, type, reason, 
         });
     }
 
+    const canInfract = checkStaffPermissions(interaction.member, config, 'staff');
+    if (!canInfract) return interaction.editReply({
+        content: localize('staff-management-system', 'err-gen-no-perm')
+    });
+
     if (type.toLowerCase() === 'suspension') {
         return interaction.editReply({
             content: localize('staff-management-system', 'err-use-susp')
@@ -157,7 +170,7 @@ async function issueInfraction(client, interaction, targetMember, type, reason, 
         '%reason%': reason,
         '%case-id%': record.caseId.toString(),
         '%end-date%': expiresAt
-            ? `<t:${Math.floor(expiresAt.getTime() / 1000)}:F>`
+            ? dateToDiscordTimestamp(expiresAt, 'F')
             : localize('staff-management-system', 'label-never')
     };
 
@@ -250,6 +263,11 @@ async function issueSuspension(client, interaction, targetMember, durationInput,
         });
     }
 
+    const canSuspend = checkStaffPermissions(interaction.member, config, 'staff');
+    if (!canSuspend) return interaction.editReply({
+        content: localize('staff-management-system', 'err-gen-no-perm')
+    });
+
     const durationDays = parseDurationToDays(durationInput);
     if (!durationDays)
         return interaction.editReply({
@@ -303,7 +321,7 @@ async function issueSuspension(client, interaction, targetMember, durationInput,
         '%duration%': durationString,
         '%reason%': reason,
         '%case-id%': record.caseId.toString(),
-        '%end-date%': `<t:${Math.floor(expiresAt.getTime() / 1000)}:F>`
+        '%end-date%': dateToDiscordTimestamp(expiresAt, 'F')
     };
 
     const channelId = getSafeChannelId(config.infractionLogChannel);
@@ -484,10 +502,10 @@ async function generateInfractionHistoryResponse(client, targetUser, page = 1) {
             ? '🔴'
         : localize('staff-management-system', 'icon-voided');
         const expiry = r.expiresAt
-            ? `\n**${localize('staff-management-system', 'label-exp')}:** <t:${Math.floor(new Date(r.expiresAt).getTime() / 1000)}:R>`
+            ? `\n**${localize('staff-management-system', 'label-exp')}:** ${dateToDiscordTimestamp(r.expiresAt, 'R')}`
         : '';
 
-        return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:f>\n**${localize('staff-management-system', 'label-iss')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}${link}`;
+        return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** ${dateToDiscordTimestamp(r.createdAt, 'f')}\n**${localize('staff-management-system', 'label-iss')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}${link}`;
     }).join('\n\n');
 
     embed.setDescription(desc);
@@ -678,7 +696,7 @@ async function generatePromotionHistoryResponse(client, targetUser, page = 1) {
 
     const desc = rows.map((r, i) => {
         const link = r.messageUrl ? ` • [Jump](${r.messageUrl})` : '';
-        return `**${offset + i + 1}. <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:F>**\n**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${link}`;
+        return `**${offset + i + 1}. ${dateToDiscordTimestamp(r.createdAt, 'F')}**\n**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${link}`;
     }).join('\n\n');
 
     embed.setDescription(desc);
@@ -816,8 +834,8 @@ async function generatePanelInfractions(client, targetUser, page = 1) {
     } else {
         desc += rows.map(r => {
             const statusIcon = r.active ? '🔴' : localize('staff-management-system', 'icon-voided');
-            const expiry = r.expiresAt ? `\n**${localize('staff-management-system', 'label-exp')}:** <t:${Math.floor(new Date(r.expiresAt).getTime() / 1000)}:R>` : '';
-            return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:f>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}`;
+            const expiry = r.expiresAt ? `\n**${localize('staff-management-system', 'label-exp')}:** ${dateToDiscordTimestamp(r.expiresAt, 'R')}` : '';
+            return `**${statusIcon} ${localize('staff-management-system', 'label-case')} #${r.caseId} - ${r.type}**\n**${localize('staff-management-system', 'label-date')}:** ${dateToDiscordTimestamp(r.createdAt, 'f')}\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}${expiry}`;
         }).join('\n\n');
     }
 
@@ -876,7 +894,7 @@ async function generatePanelPromotions(client, targetUser, page = 1) {
     if (rows.length === 0) {
         desc += localize('staff-management-system', 'p-no-hist');
     } else {
-        desc += rows.map(r => `**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'label-date')}:** <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:R>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
+        desc += rows.map(r => `**${localize('staff-management-system', 'label-role')}:** <@&${r.newRole}>\n**${localize('staff-management-system', 'label-prom-by')}:** <@${r.issuerId}>\n**${localize('staff-management-system', 'label-date')}:** ${dateToDiscordTimestamp(r.createdAt, 'R')}\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
     }
 
     embed.setDescription(desc);
@@ -979,7 +997,7 @@ async function generatePanelStatus(client, targetUser, page = 1) {
     const activeStatus = allStatuses.find(s => ['APPROVED', 'PENDING'].includes(s.status) && new Date(s.endDate) > new Date());
     let activeText = localize('staff-management-system', 'info-none');
     if (activeStatus) {
-        activeText = `**${activeStatus.type}** (${activeStatus.status})\n${localize('staff-management-system', 'label-end')}: <t:${Math.floor(new Date(activeStatus.endDate).getTime()/1000)}:R>`;
+        activeText = `**${activeStatus.type}** (${activeStatus.status})\n${localize('staff-management-system', 'label-end')}: ${dateToDiscordTimestamp(activeStatus.endDate, 'R')}`;
     }
 
     const embed = applyFooter(client, new EmbedBuilder()
@@ -1008,7 +1026,7 @@ async function generatePanelStatus(client, targetUser, page = 1) {
             ENDED: '⏹️',
             PENDING: '🕐'
         };
-        desc += rows.map(r => `**${icons[r.status] || '❓'} ${r.type} - ${r.status}**\n**${localize('staff-management-system', 'general-start')}:** <t:${Math.floor(new Date(r.startDate).getTime()/1000)}:D>\n**${localize('staff-management-system', 'general-end')}:** <t:${Math.floor(new Date(r.endDate).getTime()/1000)}:D>\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
+        desc += rows.map(r => `**${icons[r.status] || '❓'} ${r.type} - ${r.status}**\n**${localize('staff-management-system', 'general-start')}:** ${dateToDiscordTimestamp(r.startDate, 'D')}\n**${localize('staff-management-system', 'general-end')}:** ${dateToDiscordTimestamp(r.endDate, 'D')}\n**${localize('staff-management-system', 'general-rsn')}:** ${r.reason}`).join('\n\n');
     }
 
     embed.setDescription(desc);
@@ -1107,8 +1125,8 @@ async function generatePanelActivity(client, targetUser, page = 1) {
         desc += localize('staff-management-system', 'p-no-hist');
     } else {
         desc += paginatedRows.map(r =>
-            `**${localize('staff-management-system', 'label-chk')} <t:${Math.floor(new Date(r.createdAt).getTime() / 1000)}:D>**\n` +
-            `**${localize('staff-management-system', 'label-end')}:** <t:${Math.floor(new Date(r.endTime).getTime() / 1000)}:F>\n` +
+            `**${localize('staff-management-system', 'label-chk')} ${dateToDiscordTimestamp(r.createdAt, 'D')}**\n` +
+            `**${localize('staff-management-system', 'label-end')}:** ${dateToDiscordTimestamp(r.endTime, 'F')}\n` +
             `**${localize('staff-management-system', 'label-chan')}:** <#${r.channelId}>`
         ).join('\n\n');
     }
@@ -1391,27 +1409,35 @@ async function startActivityCheck(client, interactionOrChannel, isAutomated = fa
 
     const durationHours = config.timeframe || 24;
     const endTime = new Date(Date.now() + durationHours * 60 * 60 * 1000);
+    const generalConfig = getConfig(client, 'configuration') || {};
+    const initiator = isAutomated
+    ? localize('staff-management-system', 'label-system')
+    : interactionOrChannel.user.toString();
 
-    let embedTemplate = typeof config.checkMessage === 'string'
-        ? JSON.parse(config.checkMessage)
-    : config.checkMessage;
-    let msgOpts = await embedTypeV2(embedTemplate, {
-        '%end-time%': `<t:${Math.floor(endTime.getTime() / 1000)}:F>`,
-        '%duration%': durationHours.toString()
-    });
-
-    if (msgOpts?.content?.trim() === '') delete msgOpts.content;
-    msgOpts.components = [
-        new ActionRowBuilder()
-        .addComponents(
-            new ButtonBuilder()
+    const responseButtonRow = new ActionRowBuilder()
+    .addComponents(
+        new ButtonBuilder()
             .setCustomId('staff-mgmt_ac-respond')
             .setLabel(localize('staff-management-system', 'ac-confirm-btn'))
             .setStyle(ButtonStyle.Success)
             .setEmoji('✅')
-        )
-        .toJSON()
-    ];
+    )
+    .toJSON();
+
+    let msgOpts = await embedTypeV2(config.checkMessage,  {
+            '%end-time%': dateToDiscordTimestamp(endTime, 'F'),
+            '%duration%': durationHours.toString(),
+            '%staff-mention%': formatRoleMentions(generalConfig.staffRoles),
+            '%supervisor-mention%': formatRoleMentions(generalConfig.supervisorRoles),
+            '%management-mention%': formatRoleMentions(generalConfig.managementRoles),
+            '%initiator%': initiator
+        },
+        {
+            components: [responseButtonRow]
+        }
+    );
+
+    if (msgOpts?.content?.trim() === '') delete msgOpts.content;
 
     try {
         const checkMessage = await targetChannel.send(msgOpts);
@@ -1427,7 +1453,9 @@ async function startActivityCheck(client, interactionOrChannel, isAutomated = fa
             channelId: targetChannel.id,
             endTime,
             targetRoles: JSON.stringify(rolesToCheck),
-            status: 'ACTIVE'
+            status: 'ACTIVE',
+            initiatorId: isAutomated ? null : interactionOrChannel.user.id,
+            isAutomated
         });
         schedule.scheduleJob(endTime, async () => {
             const currentCheck = await ActivityCheck.findByPk(record.id);
@@ -1444,21 +1472,6 @@ async function endActivityCheckProcess(client, activeCheck) {
     await activeCheck.update({ status: 'ENDED' });
     const guild = client.guilds.cache.get(client.guildID);
     if (!guild) return;
-
-    try {
-        const msg = await guild.channels.cache.get(activeCheck.channelId)?.messages.fetch(activeCheck.messageId);
-        if (msg && msg.embeds.length > 0) {
-            const originalEmbed = EmbedBuilder
-            .from(msg.embeds[0])
-            .setColor('#ed4245');
-            originalEmbed
-            .setTitle(localize('staff-management-system', 'ac-title-end'));
-            await msg.edit({
-                embeds: [originalEmbed.toJSON()],
-                components: []
-            });
-        }
-    } catch (e) {}
 
     const config = getConfig(client, 'activity-checks');
     const logChannel = guild.channels.cache.get(getSafeChannelId(config.logChannel) || getSafeChannelId(getConfig(client, 'configuration')?.generalLogChannel));
@@ -1481,6 +1494,9 @@ async function endActivityCheckProcess(client, activeCheck) {
             userId: {[Op.in]: expectedIds}
         }
     });
+    const initiator = (activeCheck.isAutomated || !activeCheck.initiatorId)
+    ? localize('staff-management-system', 'label-system')
+    : `<@${activeCheck.initiatorId}>`;
 
     expectedMembers.forEach(member => {
         if (respondedUserIds.has(member.id)) return responded.push(member);
@@ -1499,6 +1515,34 @@ async function endActivityCheckProcess(client, activeCheck) {
             ? exceptions.push(member)
         : failed.push(member);
     });
+
+    try {
+        const msg = await guild.channels.cache.get(activeCheck.channelId)?.messages.fetch(activeCheck.messageId);
+        if (msg) {
+            const endTemplate = config.endCheckMessage;
+            const endedMessage = await embedTypeV2(
+                endTemplate,
+                {
+                    '%end-time%': dateToDiscordTimestamp(new Date(), 'F'),
+                    '%duration%': (config.timeframe || 24).toString(),
+                    '%staff-mention%': formatRoleMentions(config.staffRoles),
+                    '%supervisor-mention%': formatRoleMentions(config.supervisorRoles),
+                    '%management-mention%': formatRoleMentions(config.managementRoles),
+                    '%initiator%': initiator,
+                    '%responded-count%': responded.length.toString()
+                },
+                {
+                    components: []
+                }
+            );
+
+            if (endedMessage?.content?.trim() === '') {
+                delete endedMessage.content;
+            }
+
+            await msg.edit(endedMessage);
+        }
+    } catch (e) {}
 
     const embed = applyFooter(client, new EmbedBuilder()
         .setTitle(localize('staff-management-system', 'ac-res-title'))

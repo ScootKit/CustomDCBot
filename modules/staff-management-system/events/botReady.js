@@ -1,11 +1,69 @@
 const schedule = require('node-schedule');
 const { localize } = require('../../../src/functions/localize');
 const { Op } = require('sequelize');
+const {
+    migrationStart,
+    migrationEnd
+} = require('../../../main');
 const {scheduleStatusExpiry} = require('../commands/staff-status.js');
 const { initActivityCheckAutomation } = require('../staff-management');
 const suspension_check_job = 'staff-management-checks';
 
 module.exports.run = async (client) => {
+    const dbVersion = await client.models['DatabaseSchemeVersion'].findOne({
+        where: {
+            model: 'staff-management-system_ActivityCheck',
+            version: 'V1'
+        }
+    });
+
+    if (!dbVersion) {
+        migrationStart();
+        try {
+            client.logger.info('[staff-management-system] Running V1 migration (adding initiatorId and isAutomated)...');
+
+            const data = await client.models['staff-management-system']['ActivityCheck'].findAll({
+                attributes: [
+                    'id',
+                    'messageId',
+                    'channelId',
+                    'endTime',
+                    'targetRoles',
+                    'respondedUsers',
+                    'status',
+                    'createdAt',
+                    'updatedAt'
+                ]
+            });
+
+            await client.models['staff-management-system']['ActivityCheck'].sync({ force: true });
+
+            for (const row of data) {
+                await client.models['staff-management-system']['ActivityCheck'].create({
+                    id: row.id,
+                    messageId: row.messageId,
+                    channelId: row.channelId,
+                    endTime: row.endTime,
+                    targetRoles: row.targetRoles,
+                    respondedUsers: row.respondedUsers,
+                    status: row.status,
+                    createdAt: row.createdAt,
+                    updatedAt: row.updatedAt,
+                    initiatorId: null,
+                    isAutomated: false
+                });
+            }
+
+            client.logger.info('[staff-management-system] V1 migration complete.');
+            await client.models['DatabaseSchemeVersion'].create({
+                model: 'staff-management-system_ActivityCheck',
+                version: 'V1'
+            });
+        } finally {
+            migrationEnd();
+        }
+    }
+
     const guild = client.guilds.cache.get(client.guildID);
     try {
         const LoaRequest = client.models['staff-management-system']['LoaRequest'];
