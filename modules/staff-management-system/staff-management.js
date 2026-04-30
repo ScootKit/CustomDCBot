@@ -1424,7 +1424,7 @@ async function startActivityCheck(client, interactionOrChannel, isAutomated = fa
     )
     .toJSON();
 
-    let msgOpts = await embedTypeV2(embedTemplate,  {
+    let msgOpts = await embedTypeV2(config.checkMessage,  {
             '%end-time%': dateToDiscordTimestamp(endTime, 'F'),
             '%duration%': durationHours.toString(),
             '%staff-mention%': formatRoleMentions(generalConfig.staffRoles),
@@ -1494,7 +1494,7 @@ async function endActivityCheckProcess(client, activeCheck) {
             userId: {[Op.in]: expectedIds}
         }
     });
-    const initiator = activeCheck.isAutomated
+    const initiator = (activeCheck.isAutomated || !activeCheck.initiatorId)
     ? localize('staff-management-system', 'label-system')
     : `<@${activeCheck.initiatorId}>`;
 
