@@ -11,6 +11,7 @@ const {
     getDeletionTypeLocaleKey
 } = require('../ping-protection');
 const { localize } = require('../../../src/functions/localize');
+const { safeSetFooter, dateToDiscordTimestamp } = require('../../../src/functions/helpers.js');
 const {
     MessageFlags,
     ModalBuilder,
@@ -86,7 +87,7 @@ module.exports.run = async function (client, interaction) {
             return interaction.reply({
                 content: localize('ping-protection', 'err-del-cooldown', {
                     time: localize('ping-protection', getDeletionTypeLocaleKey(cooldown.lastDeletionType)),
-                    until: `<t:${Math.floor(new Date(cooldown.blockedUntil).getTime() / 1000)}:F>`
+                    until: dateToDiscordTimestamp(new Date(cooldown.blockedUntil), 'F')
                 }),
                 flags: MessageFlags.Ephemeral
             });
@@ -142,7 +143,7 @@ module.exports.run = async function (client, interaction) {
             return interaction.reply({
                 content: localize('ping-protection', 'err-del-cooldown', {
                     time: localize('ping-protection', getDeletionTypeLocaleKey(cooldown.lastDeletionType)),
-                    until: `<t:${Math.floor(new Date(cooldown.blockedUntil).getTime() / 1000)}:F>`
+                    until: dateToDiscordTimestamp(new Date(cooldown.blockedUntil), 'F')
                 }),
                 flags: MessageFlags.Ephemeral
             });
@@ -160,11 +161,8 @@ module.exports.run = async function (client, interaction) {
                 .setTitle(localize('ping-protection', 'del-all-title'))
                 .setDescription(localize('ping-protection', 'del-all-desc'))
                 .setColor('DarkRed')
-                .setFooter({
-                    text: client.strings.footer,
-                    iconURL: client.strings.footerImgUrl
-                });
 
+            safeSetFooter(embed, client);
             if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
             const row = new ActionRowBuilder().addComponents(
@@ -205,7 +203,7 @@ module.exports.run = async function (client, interaction) {
                     return btnInt.reply({
                         content: localize('ping-protection', 'err-del-cooldown', {
                             time: localize('ping-protection', getDeletionTypeLocaleKey(liveCooldown.lastDeletionType)),
-                            until: `<t:${Math.floor(new Date(liveCooldown.blockedUntil).getTime() / 1000)}:F>`
+                            until: dateToDiscordTimestamp(new Date(liveCooldown.blockedUntil), 'F')
                         }),
                         flags: MessageFlags.Ephemeral
                     });
@@ -237,7 +235,7 @@ module.exports.run = async function (client, interaction) {
 
                     await btnInt.update({
                         content: localize('ping-protection', 'succ-del-all', {
-                            until: `<t:${Math.floor(new Date(blockedUntil).getTime() / 1000)}:F>`
+                            until: dateToDiscordTimestamp(new Date(blockedUntil), 'F')
                         }),
                         embeds: [],
                         components: []
@@ -276,7 +274,7 @@ module.exports.run = async function (client, interaction) {
         return interaction.reply({
             content: localize('ping-protection', 'succ-del-tgt', {
                 type: localize('ping-protection', getDeletionTypeLocaleKey(selection)),
-                until: `<t:${Math.floor(new Date(blockedUntil).getTime() / 1000)}:F>`
+                until: dateToDiscordTimestamp(new Date(blockedUntil), 'F')
             }),
             flags: MessageFlags.Ephemeral
         });

@@ -5,7 +5,7 @@
  */
 const { Op } = require('sequelize');
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
-const { embedType, embedTypeV2, formatDate } = require('../../src/functions/helpers');
+const { embedType, embedTypeV2, formatDate, safeSetFooter } = require('../../src/functions/helpers');
 const { localize } = require('../../src/functions/localize');
 const recentPings = new Set();
 
@@ -332,11 +332,8 @@ async function generateUserPanel(client, targetUser) {
             }),
             inline: false
         }])
-        .setFooter({
-            text: client.strings.footer,
-            iconURL: client.strings.footerImgUrl
-        });
 
+    safeSetFooter(embed, client);
     if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
     return {
@@ -424,11 +421,8 @@ async function generatePanelHistory(client, targetUser, page = 1) {
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
         .setDescription(description)
         .setColor('Orange')
-        .setFooter({
-            text: client.strings.footer,
-            iconURL: client.strings.footerImgUrl
-        });
 
+    safeSetFooter(embed, client);
     if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
     return {
@@ -490,11 +484,8 @@ async function generatePanelActions(client, targetUser, page = 1) {
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
         .setDescription(description)
         .setColor(isEnabled ? 'Red' : 'Grey')
-        .setFooter({
-            text: client.strings.footer,
-            iconURL: client.strings.footerImgUrl
-        });
 
+    safeSetFooter(embed, client);
     if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
     return {
@@ -528,11 +519,8 @@ async function generatePanelDeletion(client, targetUser) {
         .setDescription(description)
         .setColor('DarkRed')
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
-        .setFooter({
-            text: client.strings.footer,
-            iconURL: client.strings.footerImgUrl
-        });
 
+    safeSetFooter(embed, client);
     if (!client.strings.disableFooterTimestamp) embed.setTimestamp();
 
     return {
@@ -989,11 +977,8 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
             inline: false
         })
         .setColor('#ed4245')
-        .setFooter({ 
-            text: client.strings.footer, 
-            iconURL: client.strings.footerImgUrl 
-        });
-
+    
+        safeSetFooter(errorEmbed, client);
         if (!client.strings.disableFooterTimestamp) errorEmbed.setTimestamp();
         await originChannel.send({ embeds: [errorEmbed.toJSON()] }).catch((sendError) => {
             client.logger.warn(localize('ping-protection', 'log-punish-log-send-failed', {
