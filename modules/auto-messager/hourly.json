@@ -26,7 +26,7 @@
     {
       "name": "limitHoursTo",
       "humanName": "Limit hours to",
-      "default": [],
+      "default": [15],
       "description": "If one or more values are set, the message will only get send when the current hour is included in this field",
       "type": "array",
       "content": "integer"
