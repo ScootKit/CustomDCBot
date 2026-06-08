@@ -44,7 +44,7 @@
     "node-schedule": "2.1.1",
     "parse-duration": "1.1.2",
     "sequelize": "6.37.7",
-    "sqlite3": "5.1.7",
+    "sqlite3": "6.0.1",
     "stop-discord-phishing": "0.3.3",
     "utf-8-validate": "6.0.3",
     "zlib-sync": "0.1.8"
