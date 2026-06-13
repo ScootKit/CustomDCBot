@@ -36,7 +36,16 @@
         "en": "Name of every thread",
         "de": "Name jedes Threads"
       },
-      "type": "string"
+      "type": "string",
+      "params": [
+        {
+          "name": "username",
+          "description": {
+            "en": "Name of the user",
+            "de": "Name des Nutzers"
+          }
+        }
+      ]
     },
     {
       "name": "threadArchiveDuration",

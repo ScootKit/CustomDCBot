@@ -6,7 +6,7 @@ const {createPoll, updateMessage} = require('../polls');
 
 module.exports.subcommands = {
     'create': async function (interaction) {
-        if (interaction.options.getChannel('channel', true).type !== ChannelType.GuildText) return interaction.reply({
+        if (interaction.options.getChannel('channel', true).type !== ChannelType.GuildText || interaction.options.getChannel('channel', true).type !== ChannelType.GuildAnnouncement) return interaction.reply({
             content: '⚠️ ' + localize('polls', 'not-text-channel'),
             ephemeral: true
         });
