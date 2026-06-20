@@ -74,43 +74,45 @@
             "allowGeneratedImage": true,
             "params": [
                 {
-                    "name": "%userID%",
+                    "name": "userID",
                     "description": "Id of the user"
                 },
                 {
-                    "name": "%userName%",
+                    "name": "userName",
                     "description": "Username of the user"
                 },
                 {
-                    "name": "%displayName%",
+                    "name": "displayName",
                     "description": "Displays the user's nickname"
                 },
                 {
-                    "name": "%userAvatar%",
-                    "description": "Avatar of the user"
+                    "name": "userAvatar",
+                    "description": "Avatar of the user",
+                    "isImage": true
                 },
                 {
-                    "name": "%channelID%",
+                    "name": "channelID",
                     "description": "Id of the channel from which the quote originates"
                 },
                 {
-                    "name": "%channelName%",
+                    "name": "channelName",
                     "description": "Name of the channel from which the quote originates"
                 },
                 {
-                    "name": "%timestamp%",
+                    "name": "timestamp",
                     "description": "Shows when the original message was sent (Used discord timestamp)"
                 },
                 {
-                    "name": "%link%",
+                    "name": "link",
                     "description": "Message-link of the original message"
                 },
                 {
-                    "name": "%image%",
-                    "description": "First image of the message, if available"
+                    "name": "image",
+                    "description": "First image of the message, if available",
+                    "isImage": true
                 },
                 {
-                    "name": "%content%",
+                    "name": "content",
                     "description": "Message content of the quote"
                 }
             ]

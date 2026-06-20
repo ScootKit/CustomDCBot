@@ -4,6 +4,7 @@
   "description": "Quotes a Discord message when a user pastes a message link.",
   "fa-icon": "fas fa-quote-left",
   "author": {
+    "scnxOrgID": "98",
     "name": "Jean S.",
     "link": "https://github.com/JeanCoding16"
   },
