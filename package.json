@@ -10,46 +10,48 @@
   "scripts": {
     "start": "node main.js",
     "test": "npx eslint ./",
+    "test:unit": "jest tests/",
+    "lint": "npx eslint ./",
     "verify-configs": "node scripts/verify-config-defaults.js",
     "generate-config": "node generate-config.js",
     "generate-template": "node generate-template.js"
   },
-  "author": "SC Network Team",
+  "author": "ScootKit Team",
   "contributors": [
-    "SCDerox <scderox@sc-network.net>"
+    "SCDerox <simon@scootkit.com>"
   ],
   "license": "LicenseRef-LICENSE",
   "dependencies": {
-    "@androz2091/discord-invites-tracker": "1.1.1",
-    "@pixelfactory/privatebin": "2.6.1",
     "@scderox/ikea-name-generator": "1.0.0",
-    "@twurple/api": "5.3.4",
-    "@twurple/auth": "5.3.4",
+    "@twurple/api": "8.1.4",
+    "@twurple/auth": "8.1.4",
     "age-calculator": "1.0.0",
-    "bs58": "5.0.0",
-    "bufferutil": "4.0.7",
-    "centra": "2.6.0",
-    "discord-api-types": "0.38.37",
-    "discord-logs": "2.2.1",
-    "discord.js": "14.26.2",
-    "dotenv": "16.3.1",
-    "erlpack": "github:discord/erlpack",
-    "fparser": "3.1.0",
-    "fs-extra": "11.1.1",
-    "html-entities": "2.4.0",
-    "is-equal": "1.6.4",
-    "isomorphic-webcrypto": "2.3.8",
-    "jsonfile": "6.1.0",
+    "centra": "2.7.0",
+    "discord-api-types": "^0.38.47",
+    "discord.js": "14.26.4",
+    "fparser": "^4.2.0",
+    "is-equal": "^1.6.4",
+    "jsonfile": "6.2.1",
     "log4js": "6.9.1",
     "node-schedule": "2.1.1",
-    "parse-duration": "1.1.2",
-    "sequelize": "6.37.7",
-    "sqlite3": "5.1.7",
-    "stop-discord-phishing": "0.3.3",
-    "utf-8-validate": "6.0.3",
-    "zlib-sync": "0.1.8"
+    "parse-duration": "2.1.6",
+    "sequelize": "6.37.8",
+    "sqlite3": "6.0.1",
+    "umzug": "^3.8.3"
+  },
+  "optionalDependencies": {
+    "bufferutil": "4.1.0",
+    "erlpack": "github:discord/erlpack",
+    "utf-8-validate": "6.0.6",
+    "zlib-sync": "0.1.10"
   },
   "devDependencies": {
-    "eslint": "8.49.0"
+    "@stylistic/eslint-plugin": "^5.6.1",
+    "eslint": "10.4.0",
+    "globals": "^17.6.0",
+    "jest": "^30.4.2"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
   }
 }
