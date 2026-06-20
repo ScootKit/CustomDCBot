@@ -1,0 +1,160 @@
+{
+  "description": "Edit the messages and strings of the module here",
+  "humanName": "Messages",
+  "filename": "strings.json",
+  "content": [
+    {
+      "name": "serverinfo",
+      "humanName": "Server Info",
+      "default": {
+        "id": "ID",
+        "owner": "Owner",
+        "boosts": "Boosts",
+        "emojiCount": "Emoji-Count",
+        "region": "Region",
+        "roleCount": "Role-Count",
+        "rulesChannel": "Rules-Channel",
+        "dcSystemChannel": "Discord-System-Channel",
+        "verificationLevel": "Verification-Level",
+        "banCount": "Bans",
+        "createdAt": "Created at",
+        "members": "Members",
+        "channels": "Channels",
+        "features": "Features",
+        "noFeaturesEnabled": "No features enabled",
+        "afkChannel": "AFK-Channel",
+        "stickerCount": "Sticker-Count"
+      },
+      "description": "You can change the parts of the serverinfo-command here",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "name": "userinfo",
+      "humanName": "User Info",
+      "default": {
+        "id": "ID",
+        "tag": "Tag",
+        "currentStatus": "Current status",
+        "createdAt": "Account created at",
+        "joinedAt": "Joined Server at",
+        "nickname": "Nickname",
+        "boosterSince": "Server-Booster since",
+        "displayColor": "Display-Color",
+        "currentVoiceChannel": "Current Voice-Channel",
+        "highestRole": "Highest role",
+        "hoistRole": "Hoisted role",
+        "birthday": "Birthday",
+        "permissions": "Permissions",
+        "xp": "XP",
+        "invited-by": "Invited by",
+        "invites": "Invites",
+        "level": "Level",
+        "messages": "Messages",
+        "noPermissions": "This user does not have any permissions ):"
+      },
+      "description": "You can change the parts of the userinfo-command here",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "name": "channelInfo",
+      "humanName": "Channel Info",
+      "default": {
+        "id": "ID",
+        "createdAt": "Created at",
+        "type": "Type",
+        "name": "Name",
+        "parent": "Category",
+        "topic": "Topic",
+        "position": "Current position in category",
+        "stageInstanceName": "Stage topic",
+        "stageInstancePrivacy": "Stage Privacy",
+        "threadArchivedAt": "Thread archived at",
+        "threadAutoArchiveDuration": "Thread auto Archive Duration",
+        "threadOwner": "Thread-Owner",
+        "threadMessages": "Messages in thread",
+        "threadMemberCount": "Members in this thread",
+        "membersInChannel": "Members currently in this channel"
+      },
+      "description": "You can change the parts of the channelinfo-command here",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "name": "roleInfo",
+      "humanName": "Role Info",
+      "default": {
+        "id": "ID",
+        "createdAt": "Created at",
+        "color": "Color",
+        "name": "Name",
+        "position": "Current position",
+        "memberWithThisRoleCount": "Count of members with this role",
+        "memberWithThisRole": "Members with this role",
+        "permissions": "Permissions"
+      },
+      "description": "You can change the parts of the roleinfo-command here",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "name": "user_not_found",
+      "humanName": "User Not Found",
+      "default": "I could not find this user - try using an ID or a mention",
+      "description": "Message that gets send if the user provided an invalid userid",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "channel_not_found",
+      "humanName": "Channel Not Found",
+      "default": "I could not find this channel - try using an ID or a mention",
+      "description": "Message that gets send if the user provided an invalid userid",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "role_not_found",
+      "humanName": "Role Not Found",
+      "default": "I could not find this role - try using an ID or a mention",
+      "description": "Message that gets send if the user provided an invalid roleid",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "avatarMsg",
+      "humanName": "Avatar Message",
+      "default": "Here is the avatar: (Please reminder that the image may be protected under copyright-law)",
+      "description": "Message that gets send if the user requested an avatar",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "avatarUrl",
+          "description": "URL to the avatar"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the requested user"
+        }
+      ]
+    }
+  ]
+}

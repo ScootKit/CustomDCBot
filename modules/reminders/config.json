@@ -1,0 +1,39 @@
+{
+  "filename": "config.json",
+  "description": "Configure the behavior of this module here",
+  "humanName": "Configuration",
+  "content": [
+    {
+      "name": "notificationMessage",
+      "type": "string",
+      "allowEmbed": true,
+      "humanName": "Reminder-Message",
+      "description": "This message gets send when someone gets remaindered",
+      "default": {
+        "title": "🔔 Reminder",
+        "color": "#F1C40F",
+        "description": "%message%",
+        "message": "%mention%"
+      },
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mention of the user"
+        },
+        {
+          "name": "message",
+          "description": "Reminder message set by the user"
+        },
+        {
+          "name": "userTag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "userAvatarURL",
+          "isImage": true,
+          "description": "Avatar-URL of the user"
+        }
+      ]
+    }
+  ]
+}

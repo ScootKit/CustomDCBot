@@ -1,0 +1,134 @@
+{
+  "description": "You can configure here, how your bot should react to spam",
+  "humanName": "Anti-Spam-Configuration",
+  "filename": "antiSpam.json",
+  "content": [
+    {
+      "name": "enabled",
+      "humanName": "Enabled?",
+      "default": true,
+      "description": "Enable or disable the anti spam system",
+      "type": "boolean",
+      "elementToggle": true,
+      "category": "settings"
+    },
+    {
+      "name": "timeframe",
+      "humanName": "Timeframe (in seconds)",
+      "default": 5,
+      "description": "Timeframe in seconds after which message objects get deleted (and can not longer be used to detect spam)",
+      "type": "integer",
+      "category": "settings"
+    },
+    {
+      "name": "maxMessagesInTimeframe",
+      "humanName": "Maximal count of messages in timeframe",
+      "default": 10,
+      "description": "Count of messages that are allowed to be sent in the selected timeframe",
+      "type": "integer",
+      "category": "settings"
+    },
+    {
+      "name": "maxDuplicatedMessagesInTimeframe",
+      "humanName": "Maximal count of duplicated messages in timeframe",
+      "default": 5,
+      "description": "Count of identical messages that are allowed to be sent in the selected timeframe",
+      "type": "integer",
+      "category": "settings"
+    },
+    {
+      "name": "maxPingsInTimeframe",
+      "humanName": "Maximal count of pings in timeframe",
+      "default": 4,
+      "description": "Count of pings (also counts replies) that are allowed to be sent in the selected timeframe",
+      "type": "integer",
+      "category": "settings"
+    },
+    {
+      "name": "maxMassPings",
+      "humanName": "Maximal count of mass-pings in timeframe",
+      "default": 3,
+      "description": "Count of mass pings (= @everyone, @here and roles) that are allowed to be sent in the selected timeframe",
+      "type": "integer",
+      "category": "settings"
+    },
+    {
+      "name": "action",
+      "humanName": "Action",
+      "default": "mute",
+      "description": "Select what should happen if someone spams",
+      "type": "select",
+      "content": [
+        "mute",
+        "warn",
+        "kick",
+        "quarantine",
+        "ban"
+      ],
+      "category": "actions"
+    },
+    {
+      "name": "sendChatMessage",
+      "humanName": "Send Chat-Message",
+      "default": true,
+      "description": "If enabled the bot will send a chat message if it has to take action agains a bot",
+      "type": "boolean",
+      "category": "actions"
+    },
+    {
+      "name": "message",
+      "dependsOn": "sendChatMessage",
+      "humanName": "Message",
+      "default": "Anti-Spam: I took action against <@%userid%> because of **%reason%**",
+      "description": "This will get send in the channel the spam is occurring in when anti-spam gets triggered",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "userid",
+          "description": "ID of the user"
+        },
+        {
+          "name": "reason",
+          "description": "Reason of the action"
+        }
+      ],
+      "category": "actions"
+    },
+    {
+      "name": "ignoredChannels",
+      "humanName": "Whitelisted Channels",
+      "default": [],
+      "description": "You can set channels that get ignored here",
+      "type": "array",
+      "content": "channelID",
+      "category": "exemptions"
+    },
+    {
+      "name": "ignoredRoles",
+      "humanName": "Whitelisted roles",
+      "default": [],
+      "description": "You can set roles that get ignored here",
+      "type": "array",
+      "content": "roleID",
+      "category": "exemptions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fas fa-gears",
+      "displayName": "Detection Settings"
+    },
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": "Actions"
+    },
+    {
+      "id": "exemptions",
+      "icon": "fa-solid fa-shield",
+      "displayName": "Exemptions"
+    }
+  ]
+}

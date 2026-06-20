@@ -1,0 +1,21 @@
+{
+  "name": "reaction-roles",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "events-dir": "/events",
+  "fa-icon": "fas fa-smile",
+  "config-example-files": [
+    "messages.json"
+  ],
+  "tags": [
+    "bot"
+  ],
+  "humanReadableName": "Reaction Roles",
+  "description": "Let users assign roles to themselves the good old way - by adding and removing a reaction.",
+  "intents": [
+    "GuildMessageReactions"
+  ]
+}

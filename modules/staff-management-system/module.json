@@ -1,0 +1,36 @@
+{
+  "name": "staff-management-system",
+  "author": {
+    "scnxOrgID": "148",
+    "name": "Kevin",
+    "link": "https://github.com/Kevinking500"
+  },
+  "fa-icon": "fa-duotone fa-gear",
+  "openSourceURL": "https://github.com/Kevinking500/CustomDCBot/tree/main/modules/staff-management-system",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/configuration.json",
+    "configs/infractions.json",
+    "configs/promotions.json",
+    "configs/reviews.json",
+    "configs/shifts.json",
+    "configs/status.json",
+    "configs/profiles.json",
+    "configs/activity-checks.json"
+  ],
+  "tags": [
+    "administration"
+  ],
+  "humanReadableName": "Staff Management System",
+  "description": "A powerful, highly customizable staff management system designed to track activity, moderate personnel, and maintain detailed staff records seamlessly.",
+  "intents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Restores suspended-staff roles on startup and tracks staff membership.",
+    "GuildPresences": "Displays each staff member's current online status in their profile."
+  }
+}

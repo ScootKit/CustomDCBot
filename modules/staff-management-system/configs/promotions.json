@@ -1,0 +1,177 @@
+{
+  "filename": "promotions.json",
+  "humanName": "Promotions",
+  "description": "Configure how staff promotions are handled and announced.",
+  "categories": [
+    {
+      "id": "logic",
+      "icon": "fas fa-gears",
+      "displayName": "General logic"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Announcements"
+    }
+  ],
+  "content": [
+    {
+      "name": "enablePromotions",
+      "category": "logic",
+      "humanName": "Enable Promotions System",
+      "description": "Enabling this allows staff members to promote users to higher ranks.",
+      "type": "boolean",
+      "default": true,
+      "elementToggle": true
+    },
+    {
+      "name": "autoAddRole",
+      "category": "logic",
+      "humanName": "Auto-Add New Role?",
+      "description": "If enabled, the bot will automatically give the user the new rank role. Note: This makes your server prone to raids by promoting someone to a role with more dangerous permissions which can be used to do malicious actions. It is recommended to keep this setting disabled.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "promotionsChannel",
+      "category": "messages",
+      "humanName": "Promotions Channel",
+      "description": "The channel where promotion announcements will be sent.",
+      "type": "channelID",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": ""
+    },
+    {
+      "name": "promotionMessage",
+      "category": "messages",
+      "humanName": "Promotion Announcement Embed",
+      "description": "This will be the message sent when someone is promoted.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user-mention",
+          "description": "Pings the promoted user."
+        },
+        {
+          "name": "new-role-name",
+          "description": "The plain text name of the new role."
+        },
+        {
+          "name": "new-role-mention",
+          "description": "The pingable mention of the new role."
+        },
+        {
+          "name": "promoter-mention",
+          "description": "Pings the staff member who issued the promotion."
+        },
+        {
+          "name": "promoter-name",
+          "description": "The username of the staff member who issued the promotion."
+        },
+        {
+          "name": "reason",
+          "description": "The reason for the promotion."
+        },
+        {
+          "name": "user-avatar",
+          "description": "The avatar URL of the promoted user.",
+          "isImage": true
+        },
+        {
+          "name": "promoter-avatar",
+          "description": "The avatar URL of the promoter.",
+          "isImage": true
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%user-mention%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %promoter-name%",
+              "imageURL": "%promoter-avatar%"
+            },
+            "title": "🎉 New promotion!",
+            "description": "Congratulations, you have been promoted to **%new-role-name%**!\n\n**Promoted to:** %new-role-mention%\n**On behalf of:** %promoter-mention%\n**Reason:** %reason%",
+            "color": "#f1c40f",
+            "thumbnailURL": "%user-avatar%"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dmPromotedUser",
+      "category": "messages",
+      "humanName": "DM Promoted User?",
+      "description": "If enabled, the user will receive a direct message when promoted.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "promotionDmMessage",
+      "category": "messages",
+      "humanName": "Promotion DM Embed",
+      "description": "The message sent directly to the user.",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "dmPromotedUser",
+      "params": [
+        {
+          "name": "user-mention",
+          "description": "Pings the promoted user."
+        },
+        {
+          "name": "new-role-name",
+          "description": "The plain text name of the new role."
+        },
+        {
+          "name": "new-role-mention",
+          "description": "The pingable mention of the new role."
+        },
+        {
+          "name": "promoter-mention",
+          "description": "Pings the staff member who issued the promotion."
+        },
+        {
+          "name": "promoter-name",
+          "description": "The username of the staff member who issued the promotion."
+        },
+        {
+          "name": "reason",
+          "description": "The reason for the promotion."
+        },
+        {
+          "name": "user-avatar",
+          "description": "The avatar URL of the promoted user.",
+          "isImage": true
+        },
+        {
+          "name": "promoter-avatar",
+          "description": "The avatar URL of the promoter.",
+          "isImage": true
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%user-mention%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %promoter-name%",
+              "imageURL": "%promoter-avatar%"
+            },
+            "title": "🎉 New promotion!",
+            "description": "Congratulations, you have been promoted to **%new-role-name%**!\n\n**Promoted to:** %new-role-mention%\n**On behalf of:** %promoter-mention%\n**Reason:** %reason%",
+            "color": "#f1c40f",
+            "thumbnailURL": "%user-avatar%"
+          }
+        ]
+      }
+    }
+  ]
+}

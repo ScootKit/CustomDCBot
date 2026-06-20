@@ -1,0 +1,25 @@
+{
+  "name": "status-roles",
+  "author": {
+    "name": "hfgd",
+    "link": "https://github.com/hfgd123",
+    "scnxOrgID": "2"
+  },
+  "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/status-roles",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/config.json"
+  ],
+  "fa-icon": "fa-solid fa-user-tag",
+  "tags": [
+    "administration"
+  ],
+  "humanReadableName": "Status-roles",
+  "description": "Simple module to reward users who have an invite to your server in their status!",
+  "intents": [
+    "GuildPresences"
+  ],
+  "intentReasons": {
+    "GuildPresences": "Grants or removes roles based on keywords in a member's custom status text."
+  }
+}

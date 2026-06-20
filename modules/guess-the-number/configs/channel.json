@@ -1,0 +1,41 @@
+{
+  "description": "Enable the Gamechannel mode to automatically re-start games",
+  "humanName": "Gamechannel Mode",
+  "filename": "channel.json",
+  "content": [
+    {
+      "default": false,
+      "name": "enabled",
+      "description": "If enabled, you can configure a game channel, in which a new guess the number game will be started if a number got guessed correctly. You still will be able to manually start games in other channels. Everyone, including admins, can guess in game channels.",
+      "humanName": "Enable Gamechannel mode?",
+      "type": "boolean"
+    },
+    {
+      "default": "",
+      "dependsOn": "enabled",
+      "description": "In this channel, games will be automatically started if a game ends or no game is currently running",
+      "humanName": "Gamechannel",
+      "content": [
+        "GUILD_TEXT"
+      ],
+      "type": "channelID",
+      "name": "channel"
+    },
+    {
+      "type": "integer",
+      "dependsOn": "enabled",
+      "default": 1,
+      "name": "minInt",
+      "humanName": "Minimum number",
+      "description": "A number between this and the highest number will be selected at random when a game starts."
+    },
+    {
+      "type": "integer",
+      "dependsOn": "enabled",
+      "default": 1000,
+      "name": "maxInt",
+      "humanName": "Highest number",
+      "description": "A number between this and the minimum number will be selected at random when a game starts."
+    }
+  ]
+}

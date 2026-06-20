@@ -1,0 +1,33 @@
+{
+  "description": "Set up channels to delete text-messages from",
+  "humanName": "Text-Channels",
+  "filename": "channels.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channelID",
+      "humanName": "Channel",
+      "default": "",
+      "description": "The Channel you want messages to be deleted from.",
+      "type": "channelID",
+      "content": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ]
+    },
+    {
+      "name": "timeout",
+      "humanName": "Timeout",
+      "default": 5,
+      "description": "Timeout (in minutes) after which the messages in a channel will be deleted.",
+      "type": "integer"
+    },
+    {
+      "name": "keepMessageCount",
+      "default": 0,
+      "humanName": "Amount of messages to keep",
+      "type": "integer",
+      "description": "Set up a number here to always have x messages in your channel left (newest messages are kept). The number has to below 50."
+    }
+  ]
+}

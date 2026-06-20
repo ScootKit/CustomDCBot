@@ -1,0 +1,46 @@
+{
+  "description": "Reward your users, when they reach certain goals",
+  "humanName": "Milestones",
+  "configElementName": {
+    "one": "Milestone",
+    "more": "Milestones"
+  },
+  "filename": "milestones.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "userMessageCount",
+      "humanName": "Message count",
+      "default": "",
+      "description": "Count of valid counter-messages the users has to achieve this goal",
+      "type": "integer"
+    },
+    {
+      "name": "giveRoles",
+      "humanName": "Roles",
+      "default": [],
+      "description": "These roles are given to the user if they achieve this goal (optional)",
+      "type": "array",
+      "content": "roleID"
+    },
+    {
+      "name": "sendMessage",
+      "humanName": "Message",
+      "default": "Congrats %mention% for counting %milestone% times!",
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mention the user who achieved the milestone"
+        },
+        {
+          "name": "milestone",
+          "description": "The milestone (the number of message) that was reached"
+        }
+      ],
+      "description": "This message gets send when they achieve this goal",
+      "type": "string",
+      "allowNull": true,
+      "allowEmbed": true
+    }
+  ]
+}

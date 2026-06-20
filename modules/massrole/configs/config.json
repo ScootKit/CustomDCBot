@@ -1,0 +1,23 @@
+{
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "commandsWarnings": {
+    "special": [
+      {
+        "name": "/massrole",
+        "info": "You need to first set the permissions in your server settings for this command and after that add them under \"adminRoles\" here."
+      }
+    ]
+  },
+  "content": [
+    {
+      "name": "adminRoles",
+      "humanName": "Admin Roles",
+      "default": [],
+      "description": "Every role that can use the massrole command",
+      "type": "array",
+      "content": "roleID"
+    }
+  ]
+}

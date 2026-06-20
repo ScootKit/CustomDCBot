@@ -1,0 +1,28 @@
+{
+  "name": "team-list",
+  "fa-icon": "fa-user-tie",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "administration"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/team-list",
+  "humanReadableName": "Staff-List",
+  "description": "List all your staff members and explain team roles in always up-to-date embed",
+  "intents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Lists every member holding each staff role in the always up-to-date embed.",
+    "GuildPresences": "Shows each listed staff member's current online status."
+  }
+}

@@ -1,0 +1,301 @@
+{
+  "filename": "activity-checks.json",
+  "humanName": "Activity Checks",
+  "description": "Configure automated staff activity checks and response logging.",
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-clipboard-user",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "exceptions",
+      "icon": "fa-solid fa-badge-check",
+      "displayName": "Exceptions"
+    },
+    {
+      "id": "automation",
+      "icon": "far fa-robot",
+      "displayName": "Automation"
+    },
+    {
+      "id": "results",
+      "icon": "fa-solid fa-check-to-slot",
+      "displayName": "Results & Logging"
+    }
+  ],
+  "content": [
+    {
+      "name": "enableActivityChecks",
+      "category": "general",
+      "humanName": "Enable Activity Checks",
+      "description": "Allows admins to start an activity check to see who is active, and also set automatic activity checks.",
+      "type": "boolean",
+      "default": true,
+      "elementToggle": true
+    },
+    {
+      "name": "targetRoles",
+      "category": "general",
+      "humanName": "Roles to Check",
+      "description": "The roles required to respond to the activity check. Anyone with these roles will be expected to click the button. Leave empty to default to the General Staff Roles.",
+      "type": "array",
+      "content": "roleID",
+      "default": [],
+      "allowNull": true
+    },
+    {
+      "name": "timeframe",
+      "category": "general",
+      "humanName": "Check Duration (Hours)",
+      "description": "How long staff have to respond to the activity check (Max 168 hours / 1 week).",
+      "type": "integer",
+      "minValue": 1,
+      "maxValue": 168,
+      "default": 24
+    },
+    {
+      "name": "checkMessage",
+      "category": "general",
+      "humanName": "Activity Check Embed",
+      "description": "The message sent when an activity check starts.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "end-time",
+          "description": "The Discord timestamp when the check ends."
+        },
+        {
+          "name": "duration",
+          "description": "The configured duration in hours."
+        },
+        {
+          "name": "staff-mention",
+          "description": "Mention of the configured staff role(s)."
+        },
+        {
+          "name": "supervisor-mention",
+          "description": "Mention of the configured supervisor role(s)."
+        },
+        {
+          "name": "management-mention",
+          "description": "Mention of the configured management role(s)."
+        },
+        {
+          "name": "initiator",
+          "description": "The user who iniated the activity check. This will show 'system' if it was an automated check."
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%staff-mention%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %initiator%"
+            },
+            "title": "📋 Staff Activity Check",
+            "description": "Please confirm your activity by clicking the button below before %end-time%. This activity check will stay open for %duration% hour(s), and members who do not respond before it ends may be marked as failed unless they qualify for an exception.",
+            "fields": [
+              {
+                "name": "Quick info overview",
+                "value": "Ends at: %end-time%\nDuration: %duration% hour(s)"
+              }
+            ],
+            "color": "#3498db"
+          }
+        ]
+      }
+    },
+    {
+      "name": "endCheckMessage",
+      "category": "general",
+      "humanName": "Ended Activity Check Embed",
+      "description": "The message that will replace the activity check embed when it ends.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "end-time",
+          "description": "The Discord timestamp when the check ended."
+        },
+        {
+          "name": "duration",
+          "description": "The configured duration in hours."
+        },
+        {
+          "name": "staff-mention",
+          "description": "Mention of the configured staff role(s)."
+        },
+        {
+          "name": "supervisor-mention",
+          "description": "Mention of the configured supervisor role(s)."
+        },
+        {
+          "name": "management-mention",
+          "description": "Mention of the configured management role(s)."
+        },
+        {
+          "name": "initiator",
+          "description": "The user who iniated the activity check. This will show 'system' if it was an automated check."
+        },
+        {
+          "name": "responded-count",
+          "description": "The number or staff members who responed to the activity check."
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "content": "%staff-mention%",
+        "embeds": [
+          {
+            "author": {
+              "name": "Signed, %initiator%"
+            },
+            "title": "📋 Staff Activity Check (ended)",
+            "description": "This activity check has concluded.",
+            "fields": [
+              {
+                "name": "Quick info overview",
+                "value": "Ended at: %end-time%\nDuration: %duration% hour(s)\nTotal responses: %responded-count%"
+              }
+            ],
+            "color": "#FF0000"
+          }
+        ]
+      }
+    },
+    {
+      "name": "sendingChannel",
+      "category": "general",
+      "humanName": "Default Sending Channel",
+      "description": "The default channel where the activity check message will be posted. This can manually be overridden with the command.",
+      "type": "channelID",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": "",
+      "allowNull": true
+    },
+    {
+      "name": "exceptionsType",
+      "category": "exceptions",
+      "humanName": "Exceptions Rule",
+      "description": "Who are excused from the activity checks?",
+      "type": "select",
+      "content": [
+        "No exceptions",
+        "Only LoA",
+        "Only RA",
+        "LoA and RA",
+        "Custom role(s)"
+      ],
+      "default": "LoA and RA"
+    },
+    {
+      "name": "customExceptionRoles",
+      "category": "exceptions",
+      "humanName": "Custom Exception Roles",
+      "description": "Only applies if 'Custom role(s)' is selected above.",
+      "type": "array",
+      "content": "roleID",
+      "default": [],
+      "allowNull": true
+    },
+    {
+      "name": "automatedChecks",
+      "category": "automation",
+      "humanName": "Automated Checks",
+      "description": "If enabled, the bot will automatically start activity checks at configured intervals.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "automatedCheckInterval",
+      "category": "automation",
+      "humanName": "Automated Check Interval",
+      "description": "On which interval to start automatic checks. Choose cronjob for full customzation.",
+      "type": "select",
+      "content": [
+        "Weekly",
+        "Biweekly",
+        "Monthly",
+        "Cronjob"
+      ],
+      "default": "Biweekly",
+      "dependsOn": "automatedChecks"
+    },
+    {
+      "name": "automatedCheckCronjob",
+      "category": "automation",
+      "humanName": "Automated Check Cronjob",
+      "description": "The cronjob schedule for automatic checks. Only applies if 'Cronjob' is selected above.",
+      "type": "string",
+      "default": "",
+      "dependsOn": "automatedChecks",
+      "allowNull": true
+    },
+    {
+      "name": "automatedCheckWeekDay",
+      "category": "automation",
+      "humanName": "Automated Check Week Day",
+      "description": "The week day to start automatic checks.",
+      "type": "select",
+      "content": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "default": "Monday",
+      "dependsOn": "automatedChecks"
+    },
+    {
+      "name": "automatedCheckMonthWeek",
+      "category": "automation",
+      "humanName": "Automated Check Month Week",
+      "description": "The week of the month to start automatic checks. Only applies if 'Monthly' is selected above.",
+      "type": "integer",
+      "minValue": 1,
+      "maxValue": 4,
+      "default": 1,
+      "dependsOn": "automatedChecks"
+    },
+    {
+      "name": "logChannel",
+      "category": "results",
+      "humanName": "Results Channel",
+      "description": "Where the final results are posted. Leave empty if you want to use the general log channel.",
+      "type": "channelID",
+      "default": "",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "allowNull": true
+    },
+    {
+      "name": "pingResults",
+      "category": "results",
+      "humanName": "Ping on Results",
+      "description": "Ping specific roles when the results are posted.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "pingRoles",
+      "category": "results",
+      "humanName": "Roles to Ping",
+      "description": "The roles to ping with the results message.",
+      "type": "array",
+      "content": "roleID",
+      "default": [],
+      "dependsOn": "pingResults"
+    }
+  ]
+}

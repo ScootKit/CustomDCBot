@@ -1,0 +1,29 @@
+{
+  "description": "Edit the messages and strings of the module here",
+  "humanName": "Messages",
+  "filename": "strings.json",
+  "content": [
+    {
+      "name": "embed",
+      "humanName": "Embed",
+      "default": {
+        "title": "New Poll",
+        "color": "BLUE",
+        "options": "Today's options",
+        "liveView": "Live-Views of the results",
+        "expiresOn": "End of this poll",
+        "thisPollExpiresOn": "This poll expires on %date%.",
+        "endedPollTitle": "Poll ended",
+        "visibility": "Visibility of votes",
+        "endedPollColor": "RED"
+      },
+      "description": "You can edit the settings of your embed here",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    }
+  ]
+}

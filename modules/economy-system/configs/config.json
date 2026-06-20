@@ -1,0 +1,187 @@
+{
+  "description": "Configure here, how the module should behave",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "admins",
+      "humanName": "Administrators",
+      "default": [],
+      "description": "Users who can perform admin only actions e.g. manage the balance of users (Bot Operators always have this permission)",
+      "type": "array",
+      "content": "integer"
+    },
+    {
+      "name": "allowCheats",
+      "humanName": "Allow Cheats",
+      "default": false,
+      "description": "Allow admins to edit the balance of users (for a fair system not recommended!)",
+      "type": "boolean"
+    },
+    {
+      "name": "selfBalance",
+      "humanName": "Allow Self-Balance Editing",
+      "default": false,
+      "description": "Allow admins to edit their own balance (for a fair system not recommended! DON'T DO THIS!!!!!)",
+      "type": "boolean"
+    },
+    {
+      "name": "shopManagers",
+      "humanName": "shop-managers",
+      "default": [],
+      "description": "The Ids of the shop managers (Bot Operators have this permission always)",
+      "type": "array",
+      "content": "integer"
+    },
+    {
+      "name": "startMoney",
+      "humanName": "Start Money",
+      "default": 100,
+      "description": "The amount of money that is given to a new user",
+      "type": "integer"
+    },
+    {
+      "name": "currencyName",
+      "humanName": "currency name",
+      "default": "",
+      "description": "The name of the currency",
+      "type": "string"
+    },
+    {
+      "name": "currencySymbol",
+      "humanName": "Symbol of the currency",
+      "default": "💰",
+      "description": "The symbol of the currency",
+      "type": "string"
+    },
+    {
+      "name": "maxWorkMoney",
+      "humanName": "max work money",
+      "default": 100,
+      "description": "The highest amount of money you can get for working",
+      "type": "integer"
+    },
+    {
+      "name": "minWorkMoney",
+      "humanName": "min work money",
+      "default": 20,
+      "description": "The lowest amount of money you can get for working",
+      "type": "integer"
+    },
+    {
+      "name": "workCooldown",
+      "humanName": "work cooldown",
+      "default": 20,
+      "description": "The amount of time a user needs to wait util they can use the work command again (in minutes)",
+      "type": "integer"
+    },
+    {
+      "name": "maxCrimeMoney",
+      "humanName": "max crime money",
+      "default": 1000,
+      "description": "The highest amount of money you can get for crime",
+      "type": "integer"
+    },
+    {
+      "name": "minCrimeMoney",
+      "humanName": "min crime money",
+      "default": 100,
+      "description": "The lowest amount of money you can get for crime",
+      "type": "integer"
+    },
+    {
+      "name": "crimeCooldown",
+      "humanName": "crime cooldown",
+      "default": 30,
+      "description": "The amount of time a user needs to wait util they can use the crime command again (in minutes)",
+      "type": "integer"
+    },
+    {
+      "name": "maxRobAmount",
+      "humanName": "max rob amount",
+      "default": 400,
+      "description": "The highest amount of money that a user can rob",
+      "type": "integer"
+    },
+    {
+      "name": "robPercent",
+      "humanName": "rob percent",
+      "default": 10,
+      "description": "The amount that can get robed in percent",
+      "type": "integer"
+    },
+    {
+      "name": "robCooldown",
+      "humanName": "rob cooldown",
+      "default": 60,
+      "description": "The amount of time a user needs to wait util they can use the rob command again (in minutes)",
+      "type": "integer"
+    },
+    {
+      "name": "leaderboardChannel",
+      "humanName": "leaderboard-channel",
+      "default": "",
+      "allowNull": true,
+      "description": "The channel for the leaderboard. On this leaderboard everyone can see who has the most money.",
+      "type": "channelID"
+    },
+    {
+      "name": "shopChannel",
+      "humanName": "shop channel",
+      "default": "",
+      "description": "The id of the channel for the shop-Message. This message shows the items of the shop",
+      "type": "channelID",
+      "allowNull": true
+    },
+    {
+      "name": "msgDropsIgnoredChannels",
+      "humanName": "message-drops ignored channels",
+      "default": [],
+      "description": "List of Channels where Users can't get message-drops",
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "messageDrops",
+      "humanName": "Message Drop Chance",
+      "default": 25,
+      "description": "Chance to get money for a message (Chance: 1/ This value). Set to 0 to disable message drops",
+      "type": "integer"
+    },
+    {
+      "name": "messageDropsMax",
+      "humanName": "Max Message Drop Amount",
+      "default": 50,
+      "description": "The max amount of money in a message Drop",
+      "type": "integer"
+    },
+    {
+      "name": "messageDropsMin",
+      "humanName": "Min Message Drop Amount",
+      "default": 5,
+      "description": "The min amount of money in a message Drop",
+      "type": "integer"
+    },
+    {
+      "name": "dailyReward",
+      "humanName": "Daily Reward Amount",
+      "default": 25,
+      "description": "The daily reward",
+      "type": "integer"
+    },
+    {
+      "name": "weeklyReward",
+      "humanName": "Weekly Reward Amount",
+      "default": 100,
+      "description": "The weekly reward",
+      "type": "integer"
+    },
+    {
+      "name": "publicCommandReplies",
+      "humanName": "Public Command-Replies",
+      "default": false,
+      "description": "Should the Command-replies be displayed for everyone?",
+      "type": "boolean"
+    }
+  ]
+}

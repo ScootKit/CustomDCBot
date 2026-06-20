@@ -1,0 +1,286 @@
+{
+  "description": "You can set up permissions and features of this module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "commandsWarnings": {
+    "special": [
+      {
+        "name": "/moderate",
+        "info": "Each moderator needs to be able to execute the /moderate command, so set your permissions in your server-settings accordingly. Additionally, moderator need to be entered into their level below."
+      }
+    ]
+  },
+  "content": [
+    {
+      "name": "logchannel-id",
+      "humanName": "Log-Channel",
+      "default": "",
+      "description": "Moderative actions will get logged in this channel",
+      "type": "channelID",
+      "category": "general"
+    },
+    {
+      "name": "quarantine-role-id",
+      "humanName": "Quarantine-Role",
+      "default": "",
+      "description": "When a user gets quarantined, all of their roles will get removed and this quarantine-role wil get assigned",
+      "type": "roleID",
+      "category": "roles"
+    },
+    {
+      "name": "report-channel-id",
+      "default": "",
+      "humanName": "Report-Channel",
+      "description": "Channel in which user-reports should get send. (optional, default: Log-Channel)",
+      "type": "channelID",
+      "allowNull": true,
+      "category": "reports"
+    },
+    {
+      "name": "remove-all-roles-on-quarantine",
+      "humanName": "Remove all roles on quarantine",
+      "default": true,
+      "description": "If enabled all roles from a user get removed if they get quarantined (they get saved an can be restored with /unquarantine)",
+      "type": "boolean",
+      "category": "roles"
+    },
+    {
+      "name": "moderator-roles_level1",
+      "humanName": "Moderator-Level 1",
+      "default": [],
+      "description": "Moderator roles that can perform the following actions: Warn",
+      "type": "array",
+      "content": "roleID",
+      "category": "roles"
+    },
+    {
+      "name": "moderator-roles_level2",
+      "humanName": "Moderator-Level 2",
+      "default": [],
+      "description": "Moderator roles that can perform the following actions: Warn, Mute, Unmute, Lock, Unlock, Channelmute, Remove-Channel-Mute",
+      "type": "array",
+      "content": "roleID",
+      "category": "roles"
+    },
+    {
+      "name": "moderator-roles_level3",
+      "humanName": "Moderator-Level 3",
+      "default": [],
+      "description": "Moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear",
+      "type": "array",
+      "content": "roleID",
+      "category": "roles"
+    },
+    {
+      "name": "moderator-roles_level4",
+      "humanName": "Moderator-Level 4",
+      "default": [],
+      "description": "Moderator roles that can perform the following actions: Warn, Mute, Unmute, Kick, Clear, Ban, Unban",
+      "type": "array",
+      "content": "roleID",
+      "category": "roles"
+    },
+    {
+      "name": "roles-to-ping-on-report",
+      "humanName": "Roles to ping on reports",
+      "default": [],
+      "description": "Roles that should get pinged in the log-channel when a user reports someone",
+      "type": "array",
+      "content": "roleID",
+      "category": "reports"
+    },
+    {
+      "name": "require_reason",
+      "humanName": "Force moderators to set a reason",
+      "default": true,
+      "description": "Should moderators be required to set a reason?",
+      "type": "boolean",
+      "category": "reports"
+    },
+    {
+      "name": "require_proof",
+      "humanName": "Force moderators to upload proof",
+      "dependsOn": "require_reason",
+      "default": false,
+      "description": "Should moderators be required to upload proof for their actions?",
+      "type": "boolean",
+      "category": "reports"
+    },
+    {
+      "name": "action_on_invite",
+      "humanName": "Action on invite",
+      "default": "mute",
+      "description": "What should the bot do if someone posts an invite link?",
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "quarantine",
+        "ban"
+      ],
+      "category": "automod"
+    },
+    {
+      "name": "allowed_invite_guild_ids",
+      "humanName": "Allowed invite guild IDs",
+      "default": [],
+      "description": "Guild IDs whose invites should be allowed (in addition to this server's invites which are always allowed).",
+      "type": "array",
+      "content": "string",
+      "dependsOn": "action_on_invite",
+      "category": "automod"
+    },
+    {
+      "name": "whitelisted_channels_for_invite_blocking",
+      "humanName": "Whitelisted channels for invite-ban",
+      "default": [],
+      "description": "Channels or categories where invite blocking is disabled",
+      "type": "array",
+      "content": "channelID",
+      "category": "automod"
+    },
+    {
+      "name": "whitelisted_roles_for_invite_blocking",
+      "humanName": "Whitelisted roles for invite-ban",
+      "default": [],
+      "description": "ID of Roles which are allowed to bypass invite blocking",
+      "type": "array",
+      "content": "roleID",
+      "category": "automod"
+    },
+    {
+      "name": "blacklisted_words",
+      "humanName": "Blacklisted words",
+      "default": [],
+      "description": "Words that are blacklisted",
+      "type": "array",
+      "content": "string",
+      "category": "automod"
+    },
+    {
+      "name": "action_on_posting_blacklisted_word",
+      "humanName": "Action on blacklisted Word",
+      "default": "mute",
+      "description": "What should the bot do if someone posts a blacklisted word?",
+      "type": "select",
+      "content": [
+        "none",
+        "warn",
+        "mute",
+        "kick",
+        "ban",
+        "quarantine"
+      ],
+      "category": "automod"
+    },
+    {
+      "name": "defaultMuteDuration",
+      "humanName": "Default Mute-Duration",
+      "type": "string",
+      "default": "14d",
+      "description": "Default mute duration when none was configured. Will also be used for automod features (e.g. when someone posts a blacklisted word). Maximum value of 28 days.",
+      "category": "actions"
+    },
+    {
+      "name": "changeNicknames",
+      "humanName": "Change nicknames on Mute- / Quarantine",
+      "default": false,
+      "description": "If enabled, the user will get renamed when they get muted or quarantined",
+      "type": "boolean",
+      "category": "nicknames"
+    },
+    {
+      "name": "changeNicknameOnMute",
+      "dependsOn": "changeNicknames",
+      "humanName": "New nickname on mute",
+      "default": "%nickname%",
+      "description": "The nickname in which the user should be renamed when they get muted",
+      "type": "string",
+      "params": [
+        {
+          "name": "nickname",
+          "description": "Original nickname of the user"
+        }
+      ],
+      "category": "nicknames"
+    },
+    {
+      "name": "changeNicknameOnQuarantine",
+      "humanName": "Nickname during quarantine",
+      "dependsOn": "changeNicknames",
+      "default": "%nickname%",
+      "description": "The nickname in which the user should be renamed when they get quarantined",
+      "type": "string",
+      "params": [
+        {
+          "name": "nickname",
+          "description": "Original nickname of the user"
+        }
+      ],
+      "category": "nicknames"
+    },
+    {
+      "name": "automod",
+      "humanName": "Automod",
+      "default": {},
+      "description": "You can define here what should happen (options: mute, kick, ban, quarantine) when someone gets x warns. Specify duration by writing :<Duration> after the action.",
+      "type": "keyed",
+      "content": {
+        "key": "integer",
+        "value": "string"
+      },
+      "category": "automod"
+    },
+    {
+      "name": "warnsExpire",
+      "humanName": "Should warns be deleted automatically?",
+      "default": false,
+      "description": "If enabled, warns will be deleted automatically after a certain period of time. Warns expired this way will completely disappear and can not be viewed again after they expired.",
+      "type": "boolean",
+      "category": "actions"
+    },
+    {
+      "name": "warnExpiration",
+      "humanName": "Time after which warns will be automatically removed",
+      "default": "3 months",
+      "dependsOn": "warnsExpire",
+      "description": "Warns will be automatically deleted after this value after it's creation. Please note that this action will delete existing warns if they expired. Enter an english value, such as  \"1y\" (= 1 year), \"3 Months\" (= 3 Months) oder \"2w\" (= 2 Weeks).",
+      "type": "string",
+      "category": "actions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": "Roles & Permissions"
+    },
+    {
+      "id": "reports",
+      "icon": "fa-solid fa-flag",
+      "displayName": "Reports"
+    },
+    {
+      "id": "automod",
+      "icon": "far fa-robot",
+      "displayName": "Auto-Moderation"
+    },
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": "Actions & Punishments"
+    },
+    {
+      "id": "nicknames",
+      "icon": "fa-solid fa-user-pen",
+      "displayName": "Nickname Management"
+    }
+  ]
+}

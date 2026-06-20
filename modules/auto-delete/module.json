@@ -1,0 +1,24 @@
+{
+  "name": "auto-delete",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "fa-icon": "fa-regular fa-trash-can",
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-delete",
+  "events-dir": "/events",
+  "config-example-files": [
+    "channels.json",
+    "voice-channels.json"
+  ],
+  "tags": [
+    "administration"
+  ],
+  "humanReadableName": "Auto-Message-Delete",
+  "description": "This module allows you to delete messages from a channel after a specified timeout to keep your channel clean",
+  "intents": [
+    "GuildVoiceStates",
+    "GuildMessages"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "levels",
+  "humanReadableName": "Level-System",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/levels",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json",
+    "configs/random-levelup-messages.json",
+    "configs/special-levelup-messages.json"
+  ],
+  "fa-icon": "fas fa-comments",
+  "tags": [
+    "community"
+  ],
+  "description": "Easy to use levelsystem with a lot of customization!",
+  "intents": [
+    "GuildMessages",
+    "GuildVoiceStates",
+    "MessageContent",
+    "GuildMembers"
+  ],
+  "intentReasons": {
+    "MessageContent": "Reads message text to award activity XP while excluding prefix commands.",
+    "GuildMembers": "Resets levels when a member leaves and resolves names for the leaderboard."
+  }
+}

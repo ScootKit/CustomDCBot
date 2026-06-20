@@ -1,0 +1,29 @@
+{
+  "description": "Set a prefixes and/or suffixes for roles.",
+  "humanName": "Roles",
+  "filename": "strings.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "roleID",
+      "humanName": "Role",
+      "default": "",
+      "description": "The role you want to set a prefix/suffix for.",
+      "type": "roleID"
+    },
+    {
+      "name": "prefix",
+      "humanName": "Prefix",
+      "default": "",
+      "description": "The Prefix to be set.",
+      "type": "string"
+    },
+    {
+      "name": "suffix",
+      "humanName": "Suffix",
+      "default": "",
+      "description": "The Suffix to be set.",
+      "type": "string"
+    }
+  ]
+}

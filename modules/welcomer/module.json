@@ -1,0 +1,28 @@
+{
+  "name": "welcomer",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "fa-icon": "fas fa-door-open",
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/welcomer",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/channels.json",
+    "configs/random-messages.json",
+    "configs/config.json"
+  ],
+  "tags": [
+    "administration"
+  ],
+  "humanReadableName": "Welcome and Boosts",
+  "description": "Simple module to say \"Hi\" to new members, give them roles automatically and say \"thanks\" to users who boosted",
+  "intents": [
+    "GuildMembers"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Sends welcome and leave messages, assigns autoroles and enforces base roles as members join."
+  }
+}

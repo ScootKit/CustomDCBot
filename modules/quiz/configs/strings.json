@@ -1,0 +1,32 @@
+{
+  "description": "Edit the messages and strings of the module here",
+  "humanName": "Messages",
+  "filename": "strings.json",
+  "content": [
+    {
+      "name": "embed",
+      "humanName": "Embed",
+      "default": {
+        "title": "New quiz - What's right?",
+        "color": "BLUE",
+        "options": "Today's options",
+        "liveView": "Live view of the results",
+        "expiresOn": "End of this quiz",
+        "thisQuizExpiresOn": "This quiz expires on %date%.",
+        "endedQuizTitle": "Quiz ended",
+        "endedQuizColor": "RED",
+        "leaderboardTitle": "The best quiz players",
+        "leaderboardSubtitle": "Quiz leaderboard",
+        "leaderboardColor": "GREEN",
+        "leaderboardButton": "View my ranking"
+      },
+      "description": "You can edit the settings of your embed here",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    }
+  ]
+}

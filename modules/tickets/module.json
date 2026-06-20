@@ -1,0 +1,23 @@
+{
+  "name": "tickets",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "fa-icon": "fas fa-ticket-simple",
+  "events-dir": "/events",
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/tickets",
+  "models-dir": "/models",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "support"
+  ],
+  "humanReadableName": "Ticket-System",
+  "description": "Let users create tickets to message your staff",
+  "intents": [
+    "GuildMessages"
+  ]
+}

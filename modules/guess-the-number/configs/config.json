@@ -1,0 +1,91 @@
+{
+  "description": "Adjust messages and permissions here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "commandsWarnings": {
+    "special": [
+      {
+        "name": "/guess-the-number",
+        "info": "You need to first set the permissions in your server settings for this command and after that add them under \"adminRoles\" here."
+      }
+    ]
+  },
+  "content": [
+    {
+      "name": "adminRoles",
+      "humanName": "Admin-Roles",
+      "default": [],
+      "description": "Every role that can manage game sessions.",
+      "type": "array",
+      "content": "roleID"
+    },
+    {
+      "name": "startMessage",
+      "humanName": "Start-Message",
+      "default": {
+        "title": "Guess the Number - Game started",
+        "description": "Guess a number between %min% and %max%. Good luck!"
+      },
+      "description": "Message that gets send when a new round gets started",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "min",
+          "description": "Minimal value to guess"
+        },
+        {
+          "name": "max",
+          "description": "Maximal value to guess"
+        }
+      ]
+    },
+    {
+      "name": "endMessage",
+      "humanName": "End-Message",
+      "default": {
+        "title": "Guess the Number - Game ended",
+        "description": "Good game everyone!\nThe winner is %winner%.\nThe number was **%number%**.\nThere were around **%guessCount% guesses** in total."
+      },
+      "description": "Message that gets send when a round ends",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "min",
+          "description": "Minimal value to guess"
+        },
+        {
+          "name": "max",
+          "description": "Maximal value to guess"
+        },
+        {
+          "name": "winner",
+          "description": "@-mention of the winner"
+        },
+        {
+          "name": "guessCount",
+          "description": "Count of guesses in this game session"
+        },
+        {
+          "name": "number",
+          "description": "Winning number"
+        }
+      ]
+    },
+    {
+      "name": "higherLowerReactions",
+      "type": "boolean",
+      "humanName": "React with Lower / Higher reactions",
+      "default": false,
+      "description": "If enabled, the bot will react with ⬇ (if the guess is higher than the correct number) or with ⬆ (if the guess is lower than the correct number) on wrong guesses. If disabled, the bot will just react with ❌ on wrong guesses."
+    },
+    {
+      "name": "enableLeaderboard",
+      "type": "boolean",
+      "humanName": "Enable leaderboard?",
+      "default": false,
+      "description": "If enabled, a leaderboard button is shown on new game messages and user statistics (wins, guesses) are tracked."
+    }
+  ]
+}

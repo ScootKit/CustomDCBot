@@ -1,0 +1,126 @@
+{
+  "description": "Configure the starboard channel and reaction settings here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "channelId",
+      "humanName": "Starboard channel",
+      "default": "",
+      "description": "In which channel starred messages are sent",
+      "type": "channelID"
+    },
+    {
+      "name": "emoji",
+      "humanName": "Emoji",
+      "default": "⭐",
+      "description": "Which emoji should be used to star messages",
+      "type": "emoji"
+    },
+    {
+      "name": "message",
+      "humanName": "Message",
+      "default": {
+        "message": "**%stars%** %emoji% in %channelMention%",
+        "color": "#f5c91b",
+        "description": "%content%",
+        "image": "%image%",
+        "author": {
+          "name": "%displayName%",
+          "img": "%userAvatar%",
+          "url": "%link%"
+        }
+      },
+      "description": "This message gets send into the selected channel",
+      "allowEmbed": true,
+      "type": "string",
+      "params": [
+        {
+          "name": "stars",
+          "description": "Amount of reactions on the message"
+        },
+        {
+          "name": "content",
+          "description": "The content of the starred message"
+        },
+        {
+          "name": "link",
+          "description": "A link to the starred message"
+        },
+        {
+          "name": "userID",
+          "description": "The user ID of the author of the starred message"
+        },
+        {
+          "name": "userName",
+          "description": "The username of the author of the starred message"
+        },
+        {
+          "name": "displayName",
+          "description": "The nickname of the author"
+        },
+        {
+          "name": "userTag",
+          "description": "The tag of the author of the starred message"
+        },
+        {
+          "name": "userAvatar",
+          "description": "The avatar URL of the message author"
+        },
+        {
+          "name": "channelName",
+          "description": "The name of the channel the starred message was sent in"
+        },
+        {
+          "name": "channelMention",
+          "description": "The channel mention of the channel the starred message was sent in"
+        },
+        {
+          "name": "emoji",
+          "description": "The set starboard emoji for lazy users"
+        },
+        {
+          "name": "image",
+          "description": "The first attachment or the first image url in the message"
+        }
+      ]
+    },
+    {
+      "name": "excludedChannels",
+      "humanName": "Excluded channels",
+      "default": [],
+      "description": "In which channels messages cannot be starred",
+      "type": "array",
+      "content": "channelID"
+    },
+    {
+      "name": "excludedRoles",
+      "humanName": "Excluded roles",
+      "default": [],
+      "description": "Users with these roles cannot star messages",
+      "type": "array",
+      "content": "roleID"
+    },
+    {
+      "name": "minStars",
+      "humanName": "Minimum stars",
+      "default": 3,
+      "description": "How many star reactions are needed for a message to land on the starboard",
+      "type": "integer"
+    },
+    {
+      "name": "starsPerHour",
+      "humanName": "Stars per user per hour",
+      "default": 5,
+      "description": "How many messages a user can star per hour",
+      "type": "integer"
+    },
+    {
+      "name": "selfStar",
+      "humanName": "Self-Star",
+      "default": true,
+      "description": "Whether users can star their own messages",
+      "type": "boolean"
+    }
+  ]
+}

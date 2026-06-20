@@ -1,0 +1,156 @@
+{
+  "description": "Configure here in which channel which message should get send",
+  "humanName": "Channel",
+  "filename": "channels.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channelID",
+      "humanName": "Channel",
+      "default": "",
+      "description": "Channel in which the message should get send",
+      "type": "channelID"
+    },
+    {
+      "name": "type",
+      "humanName": "Channel-Type",
+      "default": "",
+      "description": "This sets in which content the channel should get used",
+      "type": "select",
+      "content": [
+        "join",
+        "leave",
+        "boost",
+        "unboost"
+      ]
+    },
+    {
+      "name": "randomMessages",
+      "humanName": "Random messages?",
+      "default": false,
+      "description": "If enabled the bot will randomly pick a messages instead of using the message option below",
+      "type": "boolean"
+    },
+    {
+      "name": "message",
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should get send",
+      "type": "string",
+      "allowEmbed": true,
+      "allowGeneratedImage": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mentions the user"
+        },
+        {
+          "name": "memberProfilePictureUrl",
+          "description": "URL of the user's avatar",
+          "isImage": true
+        },
+        {
+          "name": "servername",
+          "description": "Name of the guild"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "createdAt",
+          "description": "Date when account was created"
+        },
+        {
+          "name": "memberProfileBannerUrl",
+          "description": "URL of the banner's avatar",
+          "isImage": true
+        },
+        {
+          "name": "joinedAt",
+          "description": "Date when user joined guild"
+        },
+        {
+          "name": "guildUserCount",
+          "description": "Count of users on the guild"
+        },
+        {
+          "name": "guildMemberCount",
+          "description": "Count of members (without bots) on the guild"
+        },
+        {
+          "name": "boostCount",
+          "description": "Total count of boosts"
+        },
+        {
+          "name": "guildLevel",
+          "description": "Boost-Level of the guild after the boost"
+        },
+        {
+          "name": "mention",
+          "description": "Mention of the user who unboosted"
+        }
+      ]
+    },
+    {
+      "name": "welcome-button",
+      "humanName": "Welcome-Button (only if \"Channel-Type\" = \"join\")",
+      "default": false,
+      "description": "If enabled, a welcome-button will be attached to the welcome message. When a user clicks on it, the bot will send a welcome-ping in a configured channel. The button can be pressed once.",
+      "type": "boolean"
+    },
+    {
+      "name": "welcome-button-content",
+      "dependsOn": "welcome-button",
+      "humanName": "Welcome-Button-Content",
+      "default": "Say hi 👋",
+      "description": "Content of the welcome button",
+      "type": "string"
+    },
+    {
+      "name": "welcome-button-channel",
+      "dependsOn": "welcome-button",
+      "humanName": "Channel in which the welcome-button should send a message",
+      "default": "",
+      "description": "The bot will send the configured message in this channel when a user presses the button",
+      "type": "channelID"
+    },
+    {
+      "name": "welcome-button-message",
+      "dependsOn": "welcome-button",
+      "humanName": "Welcome-Button-Message",
+      "default": "%clickUserMention% welcomes %userMention% :wave:",
+      "allowEmbed": true,
+      "description": "This is the message the bot will send in the configured channel when a user presses the button",
+      "type": "string",
+      "params": [
+        {
+          "name": "userMention",
+          "description": "Mention of the user who joined the server"
+        },
+        {
+          "name": "userTag",
+          "description": "Tag of the user who joined the server"
+        },
+        {
+          "name": "userAvatarURL",
+          "isImage": true,
+          "description": "Avatar of the user who joined the server"
+        },
+        {
+          "name": "clickUserMention",
+          "description": "Mention of the user who clicked the button"
+        },
+        {
+          "name": "clickUserTag",
+          "description": "Tag of the user who clicked the button"
+        },
+        {
+          "name": "clickUserAvatarURL",
+          "isImage": true,
+          "description": "Avatar of the user who clicked the button"
+        }
+      ]
+    }
+  ]
+}

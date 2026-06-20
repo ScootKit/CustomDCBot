@@ -1,0 +1,27 @@
+{
+  "name": "economy-system",
+  "beta": true,
+  "author": {
+    "scnxOrgID": "4",
+    "name": "jateute",
+    "link": "https://github.com/jateute"
+  },
+  "openSourceURL": "https://github.com/jateute/CustomDCBot/tree/main/modules/economy-system",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "cli": "cli.js",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json"
+  ],
+  "fa-icon": "fa-solid fa-bank",
+  "tags": [
+    "community"
+  ],
+  "humanReadableName": "Economy",
+  "description": "A simple economy-system, containing a shop system, message-drops and commands to earn money",
+  "intents": [
+    "GuildMessages"
+  ]
+}

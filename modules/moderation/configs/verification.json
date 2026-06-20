@@ -1,0 +1,223 @@
+{
+  "description": "Require accounts to verify that they are not a robot before accessing your server",
+  "humanName": "Verification-Configuration",
+  "filename": "verification.json",
+  "content": [
+    {
+      "name": "enabled",
+      "humanName": "Enabled?",
+      "default": false,
+      "description": "If checked, verification on your server will be enabled",
+      "type": "boolean",
+      "elementToggle": true,
+      "category": "general"
+    },
+    {
+      "name": "verification-needed-role",
+      "humanName": "Role for users with pending verification",
+      "default": "",
+      "description": "Role, which members should be given before they verify themselves",
+      "type": "roleID",
+      "allowNull": true,
+      "category": "roles"
+    },
+    {
+      "name": "verification-passed-role",
+      "humanName": "Role for users that passed verification",
+      "default": "",
+      "description": "Role, which members should be given after they got verified successfully",
+      "type": "roleID",
+      "allowNull": true,
+      "category": "roles"
+    },
+    {
+      "name": "verification-log",
+      "humanName": "Verification Log Channel",
+      "default": "Verification-Log",
+      "description": "Channel where all verification-actions should get logged",
+      "type": "channelID",
+      "allowNull": true,
+      "category": "general"
+    },
+    {
+      "name": "type",
+      "humanName": "Type of verification",
+      "default": "captcha",
+      "description": "How should new members verify themselves on your server?",
+      "type": "select",
+      "content": [
+        {
+          "displayName": "Image Captcha: distorted image, solved in-channel",
+          "value": "captcha"
+        },
+        {
+          "displayName": "Image Captcha (DM): legacy, sent via direct message",
+          "value": "captcha-dm"
+        },
+        {
+          "displayName": "Word challenge: retype a displayed word",
+          "value": "word"
+        },
+        {
+          "displayName": "Math challenge: solve an arithmetic problem",
+          "value": "math"
+        },
+        {
+          "displayName": "Manual: a moderator approves each new member",
+          "value": "manual"
+        },
+        {
+          "displayName": "Button click: one click, no challenge",
+          "value": "button"
+        }
+      ],
+      "category": "general"
+    },
+    {
+      "name": "captchaLevel",
+      "humanName": "Challenge difficulty",
+      "default": "medium",
+      "description": "Difficulty of the verification challenge. Applies to Image Captcha, Image Captcha (DM), Word and Math. Not used for Manual or Button.",
+      "type": "select",
+      "content": [
+        {
+          "displayName": "Easy: short words / small numbers",
+          "value": "easy"
+        },
+        {
+          "displayName": "Medium (default)",
+          "value": "medium"
+        },
+        {
+          "displayName": "Hard: longer words / larger numbers & multiplication",
+          "value": "hard"
+        }
+      ],
+      "category": "general"
+    },
+    {
+      "name": "actionOnFail",
+      "humanName": "Action on failure of verification",
+      "default": "kick",
+      "description": "What should happen if someone fails the verification?",
+      "type": "select",
+      "content": [
+        "kick",
+        "quarantine",
+        "ban",
+        "mute"
+      ],
+      "category": "general"
+    },
+    {
+      "name": "verification-channel",
+      "humanName": "Verification Channel",
+      "default": "",
+      "description": "Channel where users can verify themselves by clicking the Verify Me button. For the legacy DM type, this serves as a fallback channel for users with DMs disabled.",
+      "type": "channelID",
+      "allowNull": true,
+      "category": "general"
+    },
+    {
+      "name": "maxRetries",
+      "humanName": "Maximum verification attempts",
+      "default": 3,
+      "description": "How many attempts a user gets before the failure action is applied. Applies to Image Captcha, Image Captcha (DM), Word and Math types.",
+      "type": "integer",
+      "category": "general"
+    },
+    {
+      "name": "retryCooldown",
+      "humanName": "Cooldown between retries",
+      "default": "5m",
+      "description": "How long a user must wait between verification attempts (e.g. 5m, 10m, 1h).",
+      "type": "string",
+      "category": "general"
+    },
+    {
+      "name": "actionOnFailDuration",
+      "humanName": "Punishment duration",
+      "default": "1h",
+      "description": "Duration for mute or quarantine punishment when a user exhausts all verification attempts (e.g. 1h, 1d). Only applies when action on fail is mute or quarantine.",
+      "type": "string",
+      "category": "general"
+    },
+    {
+      "name": "cooldown-message",
+      "humanName": "Cooldown message",
+      "default": "⏳ Please wait %t% before trying again.",
+      "description": "Shown when a user needs to wait before verifying again.",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages",
+      "params": [
+        {
+          "name": "t",
+          "description": "Discord timestamp showing when the user can try again"
+        }
+      ]
+    },
+    {
+      "name": "captcha-message",
+      "humanName": "Captcha-Message",
+      "default": "Welcome! Please verify that you are a human. You have two minutes to complete this.",
+      "description": "This message gets sent to users who need to complete a captcha",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    },
+    {
+      "name": "manual-verification-message",
+      "humanName": "Manual-Verification-Message",
+      "default": "Welcome! A human will be verifying your account shortly. I will update you if I have any news.",
+      "description": "This message gets sent to users who need to get verified manually.",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    },
+    {
+      "name": "captcha-failed-message",
+      "humanName": "Captcha failed-Message",
+      "default": "It seems like you failed the verification. This is bad, I will have to take moderative actions against you - sorry fellow bot.",
+      "description": "This message gets sent when a user fails the verification",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    },
+    {
+      "name": "captcha-succeeded-message",
+      "humanName": "Captcha completed-Message",
+      "default": "Thanks! We have verified that you are indeed not a bot, so I granted you access to the whole server! Have fun <3",
+      "description": "This message gets sent to users when they complete the verification",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    },
+    {
+      "name": "verify-channel-first-message",
+      "humanName": "Verification-Channel-Info-Message",
+      "default": "Welcome! Please verify yourself by clicking the button below. This step is required to access this server.",
+      "description": "This message is the introduction message in the verify-channel.",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fa-solid fa-badge-check",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Messages"
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": "Roles"
+    }
+  ]
+}

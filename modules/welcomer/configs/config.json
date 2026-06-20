@@ -1,0 +1,161 @@
+{
+  "description": "Manage the basic settings of this module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "give-roles-on-join",
+      "humanName": "Give roles on join",
+      "default": [],
+      "description": "Roles to give to a new member",
+      "type": "array",
+      "content": "roleID",
+      "category": "roles"
+    },
+    {
+      "name": "assign-roles-immediately",
+      "humanName": "Immediately give roles, instead of waiting for rules acceptance?",
+      "default": true,
+      "description": "If enabled, roles will be granted immediately when a user joins your server. Otherwise, no roles will be assigned to users before they complete the Discord onboarding.",
+      "type": "boolean",
+      "category": "roles"
+    },
+    {
+      "name": "treat-welcome-roles-as-base-roles",
+      "humanName": "Treat join roles as base roles (auto-restore)",
+      "default": false,
+      "description": "Guarantees every regular member has all roles configured under 'Give roles on join'. When enabled, the bot re-adds a join role if it gets removed, grants missing join roles after a member is released from quarantine or Join Gate hold, and runs a daily sweep to catch anything missed. Quarantined, held, and pending members are excluded — see the docs for the full list of exclusions and edge cases.",
+      "type": "boolean",
+      "category": "roles"
+    },
+    {
+      "name": "not-send-messages-if-member-is-bot",
+      "humanName": "Ignore bots?",
+      "default": true,
+      "description": "Should bots get ignored when they join (or leave) the server",
+      "type": "boolean",
+      "category": "welcome"
+    },
+    {
+      "name": "give-roles-on-boost",
+      "humanName": "Give additional roles to boosters",
+      "default": [],
+      "description": "Roles to give to members who boosts the server",
+      "type": "array",
+      "content": "roleID",
+      "category": "boost"
+    },
+    {
+      "name": "delete-welcome-message",
+      "humanName": "Delete welcome message",
+      "default": true,
+      "description": "Should their welcome message be deleted, if a user leaves the server within 7 days",
+      "type": "boolean",
+      "category": "welcome"
+    },
+    {
+      "name": "sendDirectMessageOnJoin",
+      "humanName": "Send DM on join? (often experienced by users as spam)",
+      "type": "boolean",
+      "default": false,
+      "description": "If enabled, a DM will be sent to new users. This is often experienced by them as spam and can decrease your new user retention metrics. Please note that not all users will receive this DM, as a huge chunk has DMs disabled.",
+      "category": "welcome"
+    },
+    {
+      "name": "joinDM",
+      "dependsOn": "sendDirectMessageOnJoin",
+      "humanName": "Join DM Message",
+      "allowGeneratedImage": true,
+      "default": "",
+      "description": "Message that should get send to new users via DMs",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mentions the user"
+        },
+        {
+          "name": "memberProfilePictureUrl",
+          "description": "URL of the user's avatar",
+          "isImage": true
+        },
+        {
+          "name": "servername",
+          "description": "Name of the guild"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "createdAt",
+          "description": "Date when account was created"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "memberProfilePictureUrl",
+          "description": "URL of the user's avatar",
+          "isImage": true
+        },
+        {
+          "name": "joinedAt",
+          "description": "Date when user joined guild"
+        },
+        {
+          "name": "guildUserCount",
+          "description": "Count of users on the guild"
+        },
+        {
+          "name": "guildMemberCount",
+          "description": "Count of members (without bots) on the guild"
+        },
+        {
+          "name": "mention",
+          "description": "Mention of the user who boosted"
+        },
+        {
+          "name": "boostCount",
+          "description": "Total count of boosts"
+        },
+        {
+          "name": "guildLevel",
+          "description": "Boost-Level of the guild after the boost"
+        },
+        {
+          "name": "mention",
+          "description": "Mention of the user who unboosted"
+        },
+        {
+          "name": "boostCount",
+          "description": "Total count of boosts"
+        },
+        {
+          "name": "guildLevel",
+          "description": "Boost-Level of the guild after the unboost"
+        }
+      ],
+      "category": "welcome"
+    }
+  ],
+  "categories": [
+    {
+      "id": "welcome",
+      "icon": "fas fa-door-open",
+      "displayName": "Welcome"
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": "Auto-Roles"
+    },
+    {
+      "id": "boost",
+      "icon": "fas fa-star",
+      "displayName": "Boosts"
+    }
+  ]
+}

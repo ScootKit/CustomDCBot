@@ -1,0 +1,117 @@
+{
+  "filename": "moderation.json",
+  "humanName": "Moderation Actions",
+  "configElementName": {
+    "one": "punishment",
+    "more": "punishment"
+  },
+  "description": "Define triggers for punishments.",
+  "configElements": true,
+  "content": [
+    {
+      "name": "pingsCount",
+      "humanName": "Pings to trigger moderation",
+      "description": "The amount of pings required to trigger a moderation action.",
+      "type": "integer",
+      "default": 10
+    },
+    {
+      "name": "enableRolePingThresholds",
+      "humanName": "Enable role-based ping thresholds",
+      "description": "If enabled, specific roles can have custom ping thresholds for this moderation action. This also allows specific roles to be exempted from this specific action.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "rolePingThresholds",
+      "humanName": "Role-based ping thresholds",
+      "description": "Set custom ping thresholds per role for this moderation action. If a user has multiple configured roles, the value of their highest configured role is used. Setting a role to 0 exempts that role from this action - exempted roles also override any other role's threshold.",
+      "type": "keyed",
+      "content": {
+        "key": "roleID",
+        "value": "integer"
+      },
+      "default": {},
+      "dependsOn": "enableRolePingThresholds"
+    },
+    {
+      "name": "useCustomTimeframe",
+      "humanName": "Use a custom timeframe",
+      "description": "If enabled, you can choose your own custom timeframe of days in which the pings must occur to trigger the moderation action.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "timeframeDays",
+      "humanName": "Timeframe (Days)",
+      "description": "In how many days must these pings occur?",
+      "type": "integer",
+      "default": 7,
+      "dependsOn": "useCustomTimeframe"
+    },
+    {
+      "name": "actionType",
+      "humanName": "Action",
+      "description": "What punishment should be applied?",
+      "type": "select",
+      "content": [
+        "MUTE",
+        "KICK"
+      ],
+      "default": "MUTE"
+    },
+    {
+      "name": "muteDuration",
+      "humanName": "Mute Duration (only if action type is MUTE)",
+      "description": "How long to mute the user? (in minutes)",
+      "type": "integer",
+      "default": 60
+    },
+    {
+      "name": "enableActionLogging",
+      "humanName": "Enable action logging",
+      "description": "If enabled, moderation actions will be logged in the channel where a protected user/role got pinged.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "actionLogMessage",
+      "humanName": "Action log message",
+      "description": "The message that will be sent when a user is punished for pinging protected users/roles.",
+      "type": "string",
+      "dependsOn": "enableActionLogging",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "pinger-mention",
+          "description": "Mention of the user who pinged"
+        },
+        {
+          "name": "pinger-name",
+          "description": "Name of the user who pinged"
+        },
+        {
+          "name": "action",
+          "description": "The action that was taken (muted/kicked)"
+        },
+        {
+          "name": "pings",
+          "description": "Number of pings that triggered the action"
+        },
+        {
+          "name": "timeframe",
+          "description": "The timeframe in days in which the pings occurred"
+        },
+        {
+          "name": "duration",
+          "description": "Duration of the mute in minutes (only for the mute action)"
+        }
+      ],
+      "default": {
+        "title": "Moderation action taken against %pinger-name%",
+        "description": "I have taken action against %pinger-mention% for pinging protected users/roles %pings% times within %timeframe% days.\n **Action:** %action%\n**Duration:** %duration% minutes",
+        "color": "#ed4245"
+      }
+    }
+  ]
+}

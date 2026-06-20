@@ -1,0 +1,32 @@
+{
+  "filename": "always-temporary-roles.json",
+  "humanName": "Always-Temporary Roles",
+  "configElementName": {
+    "one": "Always-Temporary Role",
+    "more": "Always-Temporary Roles"
+  },
+  "description": "Configure roles that are always temporary. When a user receives one of these roles (by any means), the role will automatically be removed after the configured duration.",
+  "configElements": true,
+  "content": [
+    {
+      "type": "roleID",
+      "name": "roleID",
+      "default": "",
+      "humanName": "Role",
+      "description": "The role that should always be temporary. When a user receives this role, it will be automatically removed after the configured duration."
+    },
+    {
+      "type": "string",
+      "name": "duration",
+      "default": "24h",
+      "humanName": "Duration",
+      "description": "How long the role should last before being automatically removed. Examples: 1h, 12h, 1d, 7d, 30m",
+      "links": [
+        {
+          "label": "Duration format",
+          "url": "https://scootk.it/custombot-durations"
+        }
+      ]
+    }
+  ]
+}

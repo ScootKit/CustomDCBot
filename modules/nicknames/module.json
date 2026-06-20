@@ -1,0 +1,28 @@
+{
+  "name": "nicknames",
+  "humanReadableName": "Role-Nicknames",
+  "author": {
+    "name": "hfgd",
+    "link": "https://github.com/hfgd123",
+    "scnxOrgID": "2"
+  },
+  "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/nicknames",
+  "fa-icon": "fa-solid fa-user-pen",
+  "events-dir": "/events",
+  "on-load-event": "onLoad.js",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json"
+  ],
+  "tags": [
+    "community"
+  ],
+  "description": "Simple module to edit user nicknames based on roles!",
+  "intents": [
+    "GuildMembers"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Watches member updates to keep role-based nickname decorations in sync."
+  }
+}

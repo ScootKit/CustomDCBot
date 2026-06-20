@@ -1,0 +1,77 @@
+{
+  "description": "Configure here, where for what streamer which message should get send",
+  "humanName": "Streamers",
+  "filename": "streamers.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "liveMessage",
+      "humanName": "Live-Messages",
+      "default": "Hey, %streamer% is live on Twitch streaming %game%! Check it out: %url%",
+      "description": "Message that gets send if the streamer goes live",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "streamer",
+          "description": "Name of the Streamer"
+        },
+        {
+          "name": "game",
+          "description": "Game which is streamed"
+        },
+        {
+          "name": "url",
+          "description": "Link to the stream"
+        },
+        {
+          "name": "title",
+          "description": "Title of the Stream"
+        },
+        {
+          "name": "thumbnailUrl",
+          "description": "The Link to the thumbnail of the Stream",
+          "isImage": true
+        }
+      ]
+    },
+    {
+      "name": "liveMessageChannel",
+      "humanName": "Channel",
+      "default": "",
+      "description": "Channel in which live-message should get sent",
+      "type": "channelID"
+    },
+    {
+      "name": "streamer",
+      "humanName": "Streamer",
+      "default": "",
+      "description": "Streamer where a notification should send when they start streaming",
+      "type": "string"
+    },
+    {
+      "name": "liveRole",
+      "humanName": "Use Live-Role",
+      "default": false,
+      "description": "Should the Live-Role be activated?",
+      "type": "boolean"
+    },
+    {
+      "name": "id",
+      "humanName": "Discord-User ID",
+      "default": "",
+      "description": "ID of the Discord-Account of the Streamer",
+      "type": "userID",
+      "dependsOn": "liveRole"
+    },
+    {
+      "name": "role",
+      "humanName": "Live Role",
+      "default": "",
+      "description": "ID of the Role that the Streamer should get, when live",
+      "type": "roleID",
+      "allowNull": true,
+      "dependsOn": "liveRole"
+    }
+  ]
+}

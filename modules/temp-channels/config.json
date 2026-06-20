@@ -1,0 +1,344 @@
+{
+  "description": "Configure temporary voice channel creation settings here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "channelID",
+      "humanName": "Channel",
+      "default": "",
+      "description": "Set the channel here where users have to join to create their temp-channel",
+      "type": "channelID",
+      "content": [
+        "GUILD_VOICE"
+      ],
+      "category": "general"
+    },
+    {
+      "name": "category",
+      "humanName": "Category",
+      "default": "",
+      "description": "You can set a category here in which the new channel should be created",
+      "type": "channelID",
+      "content": [
+        "GUILD_CATEGORY"
+      ],
+      "category": "general"
+    },
+    {
+      "name": "channelname_format",
+      "humanName": "Channel name",
+      "default": "⏳ %username%",
+      "description": "Change the format of the channel name here",
+      "type": "string",
+      "params": [
+        {
+          "name": "username",
+          "description": "Username of the user"
+        },
+        {
+          "name": "nickname",
+          "description": "Nickname of the member"
+        },
+        {
+          "name": "number",
+          "description": "The current number of the channel"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        }
+      ],
+      "category": "general"
+    },
+    {
+      "name": "timeout",
+      "humanName": "Deletion timeout",
+      "default": 3,
+      "description": "Set a timeout here in which the bot should wait before deleting the voice channel (in seconds)",
+      "type": "integer",
+      "allowNull": true,
+      "category": "general"
+    },
+    {
+      "name": "publicChannels",
+      "humanName": "Default to public channels",
+      "default": true,
+      "description": "If enabled, new temp channels start public (synced with category). If disabled, channels start private (only the creator can join).",
+      "type": "boolean",
+      "category": "permissions"
+    },
+    {
+      "name": "allowUserToChangeMode",
+      "humanName": "Allow change of channel mode",
+      "default": true,
+      "description": "If enabled the user has the permission to change the access-mode of the voice channel",
+      "type": "boolean",
+      "category": "permissions"
+    },
+    {
+      "name": "privateBypassRoles",
+      "humanName": "Private Mode Bypass Roles",
+      "default": [],
+      "description": "Roles that can always join and see private temporary channels, regardless of who created them.",
+      "type": "array",
+      "content": "roleID",
+      "category": "permissions"
+    },
+    {
+      "name": "allowUserToChangeName",
+      "humanName": "Allow editing the channel",
+      "default": true,
+      "description": "If enabled the user has the permission to change the name and settings of the voice channel via both, the Discord-integrated menus and the corresponding /-commands",
+      "type": "boolean",
+      "category": "permissions"
+    },
+    {
+      "name": "create_no_mic_channel",
+      "humanName": "Create no-mic-channel",
+      "default": false,
+      "description": "If enabled the bot will create a separate text channel for each voice channel, visible only to users in the voice channel. Note: Discord now has built-in text-in-voice channels, so this is usually not needed.",
+      "type": "boolean",
+      "category": "features"
+    },
+    {
+      "name": "noMicChannelMessage",
+      "humanName": "No-Mic Channel Message",
+      "default": "Welcome to your no-mic-channel - you can only see this channel if you are in the connected voicechat",
+      "description": "You can set a message here that should be send in the no-mic-channel when created",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "create_no_mic_channel",
+      "category": "features"
+    },
+    {
+      "name": "useNoMic",
+      "humanName": "No-Mic Channel for Settings",
+      "default": true,
+      "description": "If enabled the settings menu will be sent into the no-mic-channel. If no-mic-channels aren't enabled, the menu will instead be sent to Discord's integrated text-in-voice channels",
+      "type": "boolean",
+      "category": "features"
+    },
+    {
+      "name": "settingsChannel",
+      "humanName": "Settings channel",
+      "default": "",
+      "description": "You can set a channel here in which the settings menu should be created. Leave this field empty, if you don't want to use this feature.",
+      "type": "channelID",
+      "content": [
+        "GUILD_TEXT"
+      ],
+      "allowNull": true,
+      "category": "features"
+    },
+    {
+      "name": "send_dm",
+      "humanName": "Send DM",
+      "default": true,
+      "description": "Should the bot send a direct message to a user when a new channel is created for them?",
+      "type": "boolean",
+      "category": "messages"
+    },
+    {
+      "name": "dm",
+      "humanName": "DM Message Content",
+      "default": "I have created and moved you to your new voice-channel - have fun ^^",
+      "description": "The direct message content sent to the user when their temporary channel is created.",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "send_dm",
+      "params": [
+        {
+          "name": "channelname",
+          "description": "Name of the channel"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "notInChannel",
+      "humanName": "Not in Channel Message",
+      "default": "You have to be in your temp-channel to do this",
+      "description": "This message gets sent to a user who tries to edit their channel while not being in it.",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    },
+    {
+      "name": "modeSwitched",
+      "humanName": "Mode Switched Message",
+      "default": "The access-mode of your channel has been switched to %mode%",
+      "description": "This message gets sent to a user, after they changed the mode of their channel",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mode",
+          "description": "Mode of the channel"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "userAdded",
+      "humanName": "User Added Message",
+      "default": "the user %user% has been added to your channel. They can now access it whenever they like to",
+      "description": "This message gets sent to a user, after they added an user to their channel",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": "The user, that was added"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "userRemoved",
+      "humanName": "User Removed Message",
+      "default": "the user %user% has been removed from your channel. They can no longer access it, while your channel is private",
+      "description": "This message gets sent to a user, after they removed an user from their channel",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": "The user, that was removed"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "listUsers",
+      "humanName": "List Users Message",
+      "default": "Here is a list of all the users that have access to your channel: %users%",
+      "description": "The message to be sent when a user requests a list of users with access to their channel.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "users",
+          "description": "List of users with access"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "channelEdited",
+      "humanName": "Channel Edited Message",
+      "default": "Your channel was edited",
+      "description": "The message to be sent when a user edits their channel.",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    },
+    {
+      "name": "edit-error",
+      "humanName": "Edit Error Message",
+      "default": "An error occurred while editing your channel. One or more of your settings could not be applied. This could be due to missing permissions or an invalid value",
+      "description": "The message sent when a channel edit fails.",
+      "type": "string",
+      "allowEmbed": true,
+      "category": "messages"
+    },
+    {
+      "name": "settingsMessage",
+      "humanName": "Settings Panel Message",
+      "default": "Change the Settings of your temporary channel here",
+      "description": "Set the message that should get send in the channel specified above to let the users change the settings of their temp-channels",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [],
+      "category": "messages"
+    },
+    {
+      "name": "enableMaxActiveChannels",
+      "humanName": "Enable channel limit",
+      "default": false,
+      "description": "If enabled, the bot will limit the number of temporary channels that can exist at the same time.",
+      "type": "boolean",
+      "category": "limits"
+    },
+    {
+      "name": "maxActiveChannels",
+      "humanName": "Maximum active channels",
+      "default": 10,
+      "description": "Maximum number of temp channels that can exist at the same time.",
+      "type": "integer",
+      "dependsOn": "enableMaxActiveChannels",
+      "category": "limits"
+    },
+    {
+      "name": "maxActiveChannelsMessage",
+      "humanName": "Channel Limit Reached Message",
+      "default": "⚠️ The maximum number of temporary channels has been reached. Please try again later.",
+      "description": "This message is sent via DM when a user tries to create a temp channel but the limit has been reached.",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "enableMaxActiveChannels",
+      "category": "limits"
+    },
+    {
+      "name": "enableArchiving",
+      "humanName": "Enable channel archiving",
+      "default": false,
+      "description": "If enabled, empty temp channels will be moved to an archive category instead of being deleted. Channels are restored when the creator rejoins the trigger channel.",
+      "type": "boolean",
+      "category": "archiving"
+    },
+    {
+      "name": "archiveCategory",
+      "humanName": "Archive category",
+      "dependsOn": "enableArchiving",
+      "default": "",
+      "description": "Category where archived temp channels are moved to. Make this category hidden from regular users.",
+      "type": "channelID",
+      "content": [
+        "GUILD_CATEGORY"
+      ],
+      "category": "archiving"
+    },
+    {
+      "name": "archiveDeleteAfterHours",
+      "humanName": "Delete archived channels after (hours)",
+      "dependsOn": "enableArchiving",
+      "default": 168,
+      "description": "Hours after which archived channels are permanently deleted. Set to 0 to never auto-delete. Default: 168 (7 days).",
+      "type": "integer",
+      "category": "archiving"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": "General"
+    },
+    {
+      "id": "permissions",
+      "icon": "fas fa-lock",
+      "displayName": "Permissions & Mode"
+    },
+    {
+      "id": "features",
+      "icon": "fas fa-star",
+      "displayName": "Features"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Messages"
+    },
+    {
+      "id": "limits",
+      "icon": "fa-solid fa-shield",
+      "displayName": "Limits"
+    },
+    {
+      "id": "archiving",
+      "icon": "fa-regular fa-clock-rotate-left",
+      "displayName": "Archiving"
+    }
+  ]
+}

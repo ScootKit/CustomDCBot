@@ -1,0 +1,145 @@
+{
+  "filename": "shifts.json",
+  "humanName": "Shift Management",
+  "description": "Configure shift requirements, duty roles, leaderboards, and quotas.",
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fas fa-gears",
+      "displayName": "Shift Settings"
+    },
+    {
+      "id": "leaderboard",
+      "icon": "fas fa-ranking-stars",
+      "displayName": "Leaderboard"
+    },
+    {
+      "id": "quotas",
+      "icon": "fa-solid fa-check-to-slot",
+      "displayName": "Quotas"
+    },
+    {
+      "id": "logging",
+      "icon": "fas fa-message-lines",
+      "displayName": "Logging"
+    }
+  ],
+  "content": [
+    {
+      "name": "enableShifts",
+      "category": "settings",
+      "humanName": "Enable Shifts",
+      "description": "This unlocks the ability for staff to use a shifts system, where they can get on-duty, off-duty, take a break and see their total duty time.",
+      "type": "boolean",
+      "default": true,
+      "elementToggle": true
+    },
+    {
+      "name": "onDutyRole",
+      "category": "settings",
+      "humanName": "On-Duty Role",
+      "description": "Role given to users when they are on-duty. This is optional, but recommended to easily identify who is on-duty.",
+      "type": "roleID",
+      "allowNull": true,
+      "default": ""
+    },
+    {
+      "name": "dutyTypes",
+      "category": "settings",
+      "humanName": "Duty Types",
+      "description": "The types of duty a staff member can select when going on-duty.",
+      "type": "array",
+      "content": "string",
+      "default": [
+        "Staff"
+      ]
+    },
+    {
+      "name": "minShiftDuration",
+      "category": "settings",
+      "humanName": "Minimum Shift Duration (minutes)",
+      "description": "A minimum shift duration for a shift to count towards their duty time. Default is 0, which means all shift time counts.",
+      "type": "integer",
+      "default": 0,
+      "minValue": 0
+    },
+    {
+      "name": "enableLeaderboard",
+      "category": "leaderboard",
+      "humanName": "Enable duty leaderboard",
+      "description": "If enabled, staff can see a leaderboard of who has the most duty time in the configured timeframe.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "leaderboardLookback",
+      "category": "leaderboard",
+      "humanName": "Leaderboard Timeframe",
+      "description": "The timeframe of the duty time shown on the leaderboard.",
+      "type": "select",
+      "content": [
+        "Weekly",
+        "Monthly",
+        "All-time"
+      ],
+      "default": "Weekly",
+      "dependsOn": "enableLeaderboard"
+    },
+    {
+      "name": "enableQuotas",
+      "category": "quotas",
+      "humanName": "Enable Quota System",
+      "description": "If enabled, you can set a custom quota of hours for staff to meet in the configured timeframe.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "quotaTimeframe",
+      "category": "quotas",
+      "humanName": "Quota Timeframe",
+      "description": "The timeframe in which the quota must be met.",
+      "type": "select",
+      "content": [
+        "Weekly",
+        "Monthly"
+      ],
+      "default": "Weekly",
+      "dependsOn": "enableQuotas"
+    },
+    {
+      "name": "quotas",
+      "category": "quotas",
+      "humanName": "Role Quotas",
+      "description": "Set required hours per role - the left side will be the role, and the right side is a number which is the hours for the quota. The user's highest role counts as their quota.",
+      "type": "keyed",
+      "content": {
+        "key": "roleID",
+        "value": "integer"
+      },
+      "default": {},
+      "dependsOn": "enableQuotas"
+    },
+    {
+      "name": "logShiftChanges",
+      "category": "logging",
+      "humanName": "Log Shift Changes",
+      "description": "When enabled, shift changes (such as going on-duty, on break, or off-duty) will be logged in a custom channel.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "logShiftChangesChannel",
+      "category": "logging",
+      "humanName": "Channel for shift change logs",
+      "description": "The channel where shift changes will be logged. You can set this empty to use the general log channel.",
+      "type": "channelID",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": "",
+      "allowNull": true,
+      "dependsOn": "logShiftChanges"
+    }
+  ]
+}

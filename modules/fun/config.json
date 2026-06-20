@@ -1,0 +1,221 @@
+{
+  "description": "Customize the messages and images for fun commands here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "ikeaMessage",
+      "humanName": "IKEA Message",
+      "default": "Here's a ikea-product-name: %name%",
+      "description": "Message that gets send when someone uses /random ikea-name",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "name",
+          "description": "Randomly generated name of an ikea product (probably not real)"
+        }
+      ]
+    },
+    {
+      "name": "randomNumberMessage",
+      "humanName": "Random numer message",
+      "default": "Here your random number between %min% and %max%: %number%",
+      "description": "Message that gets send when someone uses /random number",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "min",
+          "description": "Minimal value"
+        },
+        {
+          "name": "max",
+          "description": "Maximal value"
+        },
+        {
+          "name": "number",
+          "description": "Generated number"
+        }
+      ]
+    },
+    {
+      "name": "diceRollMessage",
+      "humanName": "Dice Roll message",
+      "default": "🎲 %number%",
+      "description": "Message that gets send when someone uses /random dice",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "number",
+          "description": "Generated number"
+        }
+      ]
+    },
+    {
+      "name": "coinFlipMessage",
+      "humanName": "Coin toss message",
+      "default": "🪙 %site%",
+      "description": "Message that gets send when someone uses /random coinfilp",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "site",
+          "description": "Site on which the coin landed"
+        }
+      ]
+    },
+    {
+      "name": "hugMessage",
+      "humanName": "Hug message",
+      "default": "<@%authorID%> hugs <@%userID%>",
+      "description": "Message that gets send when someone uses /hug",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "authorID",
+          "description": "ID of the user who ran this command"
+        },
+        {
+          "name": "userID",
+          "description": "ID of the user that gets hugged"
+        }
+      ]
+    },
+    {
+      "name": "hugImages",
+      "humanName": "Hug images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1723477011519-tjCfeHPcYYzFe3jRnoUVI7dn.gif",
+        "https://scnx-cdn.scootkit.net/1723477171157-3wGistN45zd9kwrP67YKfRgU.gif",
+        "https://scnx-cdn.scootkit.net/1753891037940-pdaiqed4ffL4XHbLe2N0j6fbW6zRvPDzy0ZCwKIRwmOz85yX.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /hug.",
+      "type": "array",
+      "content": "imgURL"
+    },
+    {
+      "name": "kissMessage",
+      "humanName": "Kiss message",
+      "default": "<@%authorID%> kissed <@%userID%>",
+      "description": "Message that gets send when someone uses /kiss",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "authorID",
+          "description": "ID of the user who ran this command"
+        },
+        {
+          "name": "userID",
+          "description": "ID of the user that gets kissed"
+        }
+      ]
+    },
+    {
+      "name": "kissImages",
+      "humanName": "Kiss images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1743549285215-t9x4Fm9ZqE0f4vxyKfrTNo7JlGLO2hFHae8R8arRQHjQeylk.gif",
+        "https://scnx-cdn.scootkit.net/1695864480892-EVwr6ighEdpxY22G8jUweAPt.gif",
+        "https://scnx-cdn.scootkit.net/1743549267626-cSru5Kn1Dg2zv5KAefHMtRL5XuWqCW84hegW40aty4b8iFH7.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /kiss.",
+      "type": "array",
+      "content": "imgURL"
+    },
+    {
+      "name": "slapMessage",
+      "humanName": "Slap message",
+      "default": "<@%authorID%> slapped <@%userID%>",
+      "description": "Message that gets send when someone uses /slap",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "authorID",
+          "description": "ID of the user who ran this command"
+        },
+        {
+          "name": "userID",
+          "description": "ID of the user that gets slapped"
+        }
+      ]
+    },
+    {
+      "name": "slapImages",
+      "humanName": "Slap images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1744620013783-xEkcviAsrCZulbhoVoPPWtTUWlJbQda6kk43eQb58CMLFvDU.gif",
+        "https://scnx-cdn.scootkit.net/1744620140479-qz6nc8xzCSW2TB6Yy40vj6WzCBi31ezRZVElFrKuKCIfc6vZ.gif",
+        "https://scnx-cdn.scootkit.net/1744620083811-RYado8KTb7E8AzCVfncyNgUxD2GyQFdhjH4YxzVc5aLkGvN4.gif",
+        "https://scnx-cdn.scootkit.net/1744620244031-0JO1dEMxvKBAz12dj08BIVw8njCxgj8CJ89SnUihMZxnzyDE.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /slap.",
+      "type": "array",
+      "content": "imgURL"
+    },
+    {
+      "name": "patMessage",
+      "humanName": "Pat message",
+      "default": "<@%authorID%> patted <@%userID%>",
+      "description": "Message that gets send when someone uses /pat",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "authorID",
+          "description": "ID of the user who ran this command"
+        },
+        {
+          "name": "userID",
+          "description": "ID of the user that gets patted"
+        }
+      ]
+    },
+    {
+      "name": "patImages",
+      "humanName": "Pat images",
+      "default": [
+        "https://scnx-cdn.scootkit.net/1744619869697-AYVUENwLWjusxCOKvJLOnpdSiiiQZJC2dmSwnHMSOLr7eLbH.gif",
+        "https://scnx-cdn.scootkit.net/1744619643063-Iw3QdOJ9LsQLKv3Moe3zvMfakKu0NVfqlrmmd2ssrBqLEJai.gif",
+        "https://scnx-cdn.scootkit.net/1671631825485-6eaH1p3ngebQigoVjBicgaRy.gif",
+        "https://scnx-cdn.scootkit.net/1744619413990-auYiCEqSxZnp2QldAOgav77oVb2EiXnPS83icTlX7AkV1JzV.gif"
+      ],
+      "description": "Images that one will be randomly selected from when someone uses /pat.",
+      "type": "array",
+      "content": "imgURL"
+    },
+    {
+      "name": "8ballMessage",
+      "humanName": "8ball Message",
+      "default": "The oracle has spoken... %answer%",
+      "description": "Message that gets send when someone uses /random 8ball",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "answer",
+          "description": "Answer to the question"
+        }
+      ]
+    },
+    {
+      "name": "8BallMessages",
+      "humanName": "8ball responses",
+      "default": [
+        "<Yes>",
+        "No",
+        "Maybe",
+        "Try again",
+        "42 is the answer"
+      ],
+      "description": "Possible answers for /random 8ball",
+      "type": "array",
+      "content": "string"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "description": "Configure the bot status, activity type and interval settings here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "enableStatusCommand",
+      "humanName": "Enable /status command?",
+      "default": false,
+      "description": "If enabled, administrators can change the bot status using the /status slash command",
+      "type": "boolean"
+    },
+    {
+      "name": "enableInterval",
+      "humanName": "Enable interval?",
+      "default": false,
+      "description": "If enabled the bot will change its status every x seconds",
+      "type": "boolean"
+    },
+    {
+      "name": "intervalStatuses",
+      "dependsOn": "enableInterval",
+      "humanName": "Interval-Statuses",
+      "default": [],
+      "description": "Statuses from which the bot should randomly choose one",
+      "type": "array",
+      "content": "string",
+      "params": [
+        {
+          "name": "onlineMemberCount",
+          "description": "Count of online members on your guild (will not work if presence intent not enabled)"
+        },
+        {
+          "name": "memberCount",
+          "description": "Count of members on your guild"
+        },
+        {
+          "name": "randomMemberTag",
+          "description": "Tag of one random member on your guild"
+        },
+        {
+          "name": "randomOnlineMemberTag",
+          "description": "Tag of one random member who is online on your guild"
+        },
+        {
+          "name": "channelCount",
+          "description": "Count of channels on your guild"
+        },
+        {
+          "name": "roleCount",
+          "description": "Count of roles on your guild"
+        }
+      ]
+    },
+    {
+      "name": "activityType",
+      "humanName": "Activity-Type",
+      "default": "PLAYING",
+      "description": "Type of the user activity",
+      "type": "select",
+      "content": [
+        "CUSTOM",
+        "PLAYING",
+        "WATCHING",
+        "STREAMING",
+        "COMPETING",
+        "LISTENING"
+      ]
+    },
+    {
+      "name": "botStatus",
+      "humanName": "Bot-Status",
+      "default": "online",
+      "description": "Status of your bot",
+      "type": "select",
+      "content": [
+        "idle",
+        "online",
+        "dnd"
+      ]
+    },
+    {
+      "name": "interval",
+      "humanName": "Status-Interval",
+      "default": 15,
+      "description": "The interval in seconds (at least 10 seconds)",
+      "minValue": 10,
+      "type": "integer"
+    },
+    {
+      "name": "changeOnUserJoin",
+      "humanName": "Change status on user join?",
+      "default": false,
+      "description": "If the status should be changed if someone joins your guild",
+      "type": "boolean"
+    },
+    {
+      "name": "userJoinStatus",
+      "dependsOn": "changeOnUserJoin",
+      "humanName": "User-Join-Status",
+      "default": "Welcome %tag%!",
+      "description": "Status that will be set if a user joins",
+      "type": "string",
+      "params": [
+        {
+          "name": "tag",
+          "description": "Tag of the new user"
+        },
+        {
+          "name": "username",
+          "description": "Username of the new user"
+        },
+        {
+          "name": "memberCount",
+          "description": "New member count of your guild"
+        }
+      ]
+    },
+    {
+      "name": "streamingLink",
+      "type": "string",
+      "humanName": "Streaming Link",
+      "default": "",
+      "description": "Will be shown, if the activity-typ is streaming and your link is supported by Discord"
+    }
+  ]
+}

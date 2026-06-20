@@ -1,0 +1,14 @@
+{
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "forceDisplayname",
+      "humanName": "Force display name",
+      "default": false,
+      "description": "Use display names of users instead of custom nicknames.",
+      "type": "boolean"
+    }
+  ]
+}

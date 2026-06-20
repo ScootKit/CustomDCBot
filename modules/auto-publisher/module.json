@@ -1,0 +1,22 @@
+{
+  "name": "auto-publisher",
+  "fa-icon": "fas fa-bullhorn",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-publisher",
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "tools"
+  ],
+  "humanReadableName": "Automatic Publishing",
+  "description": "Publishes messages in announcement channels",
+  "intents": [
+    "GuildMessages"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "admin-tools",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/admin-tools",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json",
+    "always-temporary-roles.json",
+    "role-bans.json"
+  ],
+  "tags": [
+    "administration"
+  ],
+  "fa-icon": "fas fa-screwdriver-wrench",
+  "humanReadableName": "Admin-Tools",
+  "description": "Simple tools for admins - move channels and roles via commands, assign temporary roles, configure role bans or copy an emoji from another server to your server.",
+  "intents": [
+    "GuildMembers"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Looks up members across the server to apply and remove scheduled temporary roles at the right time."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "color-me",
+  "humanReadableName": "Color me",
+  "author": {
+    "name": "hfgd",
+    "link": "https://github.com/hfgd123",
+    "scnxOrgID": "2"
+  },
+  "openSourceURL": "https://github.com/hfgd123/CustomDCBot/tree/main/modules/color-me",
+  "commands-dir": "/commands",
+  "events-dir": "/events",
+  "fa-icon": "fas fa-palette",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json"
+  ],
+  "tags": [
+    "community"
+  ],
+  "description": "Simple module to reward users who have boosted your server with a custom role!",
+  "intents": [
+    "GuildMembers"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Reacts to member updates to grant or remove the custom color role when boost status changes."
+  }
+}

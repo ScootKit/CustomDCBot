@@ -1,0 +1,77 @@
+{
+  "description": "Edit the messages and strings of the module here",
+  "humanName": "Messages",
+  "filename": "strings.json",
+  "content": [
+    {
+      "name": "created",
+      "humanName": "Role created",
+      "default": "Your role was created successfully.",
+      "description": "This messages gets send when a booster sucessfully created their custom role",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "createdNoIcon",
+      "humanName": "Role created without icon",
+      "default": "Your role was created successfully, but your role icon was not used, as this requires the guild to be boost level 2 or higher.",
+      "description": "This message gets send when a booster successfully created their custom role, but the guild has not enough boosts to use role icons",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "updated",
+      "humanName": "Role updated",
+      "default": "Your role was updated successfully.",
+      "description": "This messages gets send when a booster sucessfully updates their custom role",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "updatedNoIcon",
+      "humanName": "Role updated without icon",
+      "default": "Your role was updated successfully, but your role icon was not used, as this requires the guild to be boost level 2 or higher.",
+      "description": "This messages gets send when a booster sucessfully updates their custom role, but the guild has not enough boosts to use role icons",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "removed",
+      "humanName": "Role removed",
+      "default": "Your role was removed successfully.",
+      "description": "This messages gets send when a booster deleted their custom role",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "roleLimit",
+      "humanName": "Role-limit reached",
+      "default": "Your role couldn't be created. This could be, because this server has reached the maximum of roles set by Discord. Ask the staff to delete an unnecessary role to make space for your role or try again later.",
+      "description": "This messages gets send when a booster-role couldn't be created",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "cooldown",
+      "humanName": "Cooldown",
+      "default": "Your role couldn't be edited, since you have to wait until %cooldown% for the cooldown to expire.",
+      "description": "This messages gets send when a booster-role couldn't be edited, since the user is on cooldown",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "cooldown",
+          "description": "Timestamp the cooldown expires at"
+        }
+      ]
+    },
+    {
+      "name": "invalidColor",
+      "humanName": "Invalid Color",
+      "default": "The color you provided is not a valid HEX-Code.",
+      "description": "This messages gets send when the user provides a wrong color code",
+      "type": "string",
+      "allowEmbed": true
+    }
+  ]
+}

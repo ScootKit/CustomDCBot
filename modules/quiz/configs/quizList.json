@@ -1,0 +1,54 @@
+{
+  "description": "Create and edit the quizzes of the server",
+  "humanName": "Edit quiz",
+  "configElements": true,
+  "filename": "quizList.json",
+  "content": [
+    {
+      "name": "description",
+      "humanName": "Question or statement",
+      "default": "",
+      "description": "Title/Question of the quiz",
+      "type": "string"
+    },
+    {
+      "name": "duration",
+      "humanName": "Time limit",
+      "default": "1m",
+      "description": "How much time the user has to answer",
+      "type": "string"
+    },
+    {
+      "name": "correctOptions",
+      "humanName": "Correct answers",
+      "default": [],
+      "description": "Correct answers",
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "wrongOptions",
+      "humanName": "Wrong answers",
+      "default": [],
+      "description": "Wrong answers",
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "headline",
+      "humanName": "Headline (optional)",
+      "default": "",
+      "description": "Optional embed title shown above the question. Leave empty to use the default quiz title.",
+      "type": "string",
+      "allowNull": true
+    },
+    {
+      "name": "imageURL",
+      "humanName": "Image (optional)",
+      "default": "",
+      "description": "Optional image displayed above the answer choices (e.g. movie scene, visual hint). Upload via the dashboard or paste an http(s) URL.",
+      "type": "imgURL",
+      "allowNull": true
+    }
+  ]
+}

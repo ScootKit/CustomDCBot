@@ -1,0 +1,22 @@
+{
+  "name": "auto-messager",
+  "fa-icon": "fas fa-comment-dots",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-messager",
+  "events-dir": "/events",
+  "config-example-files": [
+    "hourly.json",
+    "daily.json",
+    "cronjob.json"
+  ],
+  "tags": [
+    "tools"
+  ],
+  "humanReadableName": "Automatic Messages",
+  "description": "You can - with this module - send automatic messages",
+  "intents": []
+}

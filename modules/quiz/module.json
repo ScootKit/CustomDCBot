@@ -1,0 +1,29 @@
+{
+  "name": "quiz",
+  "humanReadableName": "Quiz Module",
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": "Create quiz for your users and let them compete against each other.",
+  "fa-icon": "fas fa-clipboard-question",
+  "events-dir": "/events",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json",
+    "configs/quizList.json"
+  ],
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/quiz",
+  "intents": [
+    "GuildMembers"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Resolves member names for quiz participants and the scoreboard."
+  }
+}

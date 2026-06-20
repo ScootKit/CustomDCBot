@@ -1,0 +1,173 @@
+{
+  "description": "Configure counting channels, rules and moderation settings here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "channels",
+      "humanName": "Channels",
+      "default": [],
+      "description": "Channels in which users can participate in the counting game",
+      "type": "array",
+      "content": "channelID"
+    },
+    {
+      "name": "channelDescription",
+      "humanName": "Channel-Description",
+      "default": "Next number %x%",
+      "description": "Text which should be set after someone counted (leave blank to disable)",
+      "type": "string",
+      "allowNull": true,
+      "params": [
+        {
+          "name": "x",
+          "description": "Next number users should count"
+        }
+      ]
+    },
+    {
+      "name": "success-reaction",
+      "humanName": "Success-Reaction",
+      "default": "✅",
+      "description": "Reaction which the bot should give when someone counts successfully",
+      "type": "emoji"
+    },
+    {
+      "name": "restartOnWrongCount",
+      "default": false,
+      "humanName": "Restart game, if user miscounts",
+      "description": "If enabled, the game will restarts if a user sends a number that is not in order",
+      "type": "boolean"
+    },
+    {
+      "name": "restartOnWrongCountMessage",
+      "dependsOn": "restartOnWrongCount",
+      "default": "Due to the incompetence of %mention%, the game had to restart - the next number is **%i%**.",
+      "humanName": "Message when game gets restarted",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message will be sent when the game gets restarted due to a miscount.",
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mention of the users"
+        },
+        {
+          "name": "i",
+          "description": "Next number"
+        }
+      ]
+    },
+    {
+      "name": "onlyOneMessagePerUser",
+      "default": true,
+      "humanName": "Only one continuous message per user",
+      "description": "If enabled, users can not count more than one number continuously",
+      "type": "boolean"
+    },
+    {
+      "name": "protectAgainstDeletion",
+      "default": true,
+      "humanName": "Protect against users deleting the last counting message?",
+      "description": "If enabled, the bot will send a message when the last correct counting message gets deleted so that other counters can't be fooled into counting an already counted number again.",
+      "type": "boolean"
+    },
+    {
+      "name": "protectionMessage",
+      "dependsOn": "protectAgainstDeletion",
+      "humanName": "Deletion protection message",
+      "default": "It seems like %mention% deleted their last message - the last counted number is **%number%**.",
+      "description": "Message that gets send if a user deletes the last correct counting message.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mention of the user who's message got removed"
+        },
+        {
+          "name": "number",
+          "description": "Last counted number in this the channel"
+        }
+      ]
+    },
+    {
+      "name": "removeReactions",
+      "default": true,
+      "humanName": "Remove reactions after 5 seconds?",
+      "description": "If enabled, the reactions the bot gives will be removed after 5 seconds. This will free up space in the counting channel",
+      "type": "boolean"
+    },
+    {
+      "name": "wrong-input-message",
+      "humanName": "Message on wrong input",
+      "default": "⚠️ %err%",
+      "description": "Message that gets send if a user provides an invalid input",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "err",
+          "description": "Description of what they did wrong"
+        }
+      ]
+    },
+    {
+      "name": "strikeAmount",
+      "default": 5,
+      "humanName": "Amount of wrong messages to trigger action",
+      "description": "This is the amount of wrong messages a user has to send to trigger action. Once this amount is reached, the bot will either, depending on your configuration, give a role or disable the SEND_MESSAGES permission for a user (set to 0 to disable)",
+      "type": "integer"
+    },
+    {
+      "name": "giveRoleInsteadOfPermissionRemoval",
+      "default": false,
+      "humanName": "Give role on action, instead of removing permission",
+      "description": "If enabled, a role will be given to the user (once their reach the configured action amount of wrong messages) instead of the removal of the \"Send Messages\"-permission in the counter channel",
+      "type": "boolean"
+    },
+    {
+      "name": "strikeRole",
+      "dependsOn": "giveRoleInsteadOfPermissionRemoval",
+      "default": "",
+      "humanName": "Role given when amount is being reached",
+      "description": "This role will be given to users when they reach the configured amount of wrong messages",
+      "type": "roleID"
+    },
+    {
+      "name": "strikeMessage",
+      "default": "%mention%, I had to restrict your access to this channel because you repeatedly used it improperly.",
+      "humanName": "Message when user gets actioned",
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message will be sent when a user reach the configured amount of wrong messages and gets actioned",
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mention of the users"
+        }
+      ]
+    },
+    {
+      "name": "allowCharactersInMessage",
+      "default": false,
+      "type": "boolean",
+      "humanName": "Allow text characters in messages?",
+      "description": "If enabled, users may write additional content into their messages instead of forcing them to just write a number. Messages without a number will still lead to an error."
+    },
+    {
+      "name": "allowMaths",
+      "default": true,
+      "type": "boolean",
+      "humanName": "Allow users to use maths in their messages?",
+      "description": "If enabled, users can use maths in messages, as long as the result of their formula is the correct next number."
+    },
+    {
+      "name": "enableEasterEggs",
+      "default": false,
+      "type": "boolean",
+      "humanName": "Enable number easter eggs?",
+      "description": "If enabled, the bot will react with special emojis on certain numbers (e.g. 42, 67, 69, 100, 420)"
+    }
+  ]
+}

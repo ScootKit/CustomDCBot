@@ -1,0 +1,32 @@
+{
+  "description": "Configure messages that should get send when a user joins a Voice-Channel",
+  "humanName": "Configuration",
+  "filename": "actual-config.json",
+  "content": [
+    {
+      "name": "assignRoleToUsersInVoiceChannels",
+      "humanName": "Assign roles to members connected to voice channels?",
+      "default": false,
+      "description": "If enabled, users will receive a role when they join a voice channel. This role will be removed when they leave the voice channel (switching voice channels does not trigger a role removal).",
+      "type": "boolean",
+      "category": "roles"
+    },
+    {
+      "name": "voiceRoles",
+      "dependsOn": "assignRoleToUsersInVoiceChannels",
+      "humanName": "Roles for users that are connected to voice channels",
+      "default": [],
+      "description": "Users that are currently connected to a voice channel will be assigned these roles.",
+      "type": "array",
+      "content": "roleID",
+      "category": "roles"
+    }
+  ],
+  "categories": [
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": "Voice Roles"
+    }
+  ]
+}

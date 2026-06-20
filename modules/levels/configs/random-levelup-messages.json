@@ -1,0 +1,55 @@
+{
+  "description": "If enabled, the bot will randomly select a message from here",
+  "humanName": "Random-Level-Up-Messages",
+  "filename": "random-levelup-messages.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "type",
+      "humanName": "Message Type",
+      "default": "normal",
+      "description": "Type of this message",
+      "type": "select",
+      "content": [
+        "normal",
+        "with-reward"
+      ]
+    },
+    {
+      "name": "message",
+      "humanName": "Messages",
+      "allowGeneratedImage": true,
+      "default": "",
+      "description": "Messages which should be send",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mention of the user"
+        },
+        {
+          "name": "avatarURL",
+          "isImage": true,
+          "description": "Avatar of the user"
+        },
+        {
+          "name": "username",
+          "description": "Username of the user"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "newLevel",
+          "description": "New level of the user"
+        },
+        {
+          "name": "role",
+          "description": "Mention of the role (No ping, only if type = with-reward)"
+        }
+      ]
+    }
+  ]
+}

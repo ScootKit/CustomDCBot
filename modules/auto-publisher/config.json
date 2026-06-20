@@ -1,0 +1,42 @@
+{
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "mode",
+      "humanName": "Message-Publishing-Mode",
+      "default": "all",
+      "description": "Modus in which this module should operate",
+      "type": "select",
+      "content": [
+        "all",
+        "whitelist",
+        "blacklist"
+      ]
+    },
+    {
+      "name": "blacklist",
+      "humanName": "Blacklist",
+      "default": [],
+      "description": "Channel to be ignored (only if Message-Publishing-Mode = \"blacklist\")",
+      "type": "array",
+      "content": "channelID"
+    },
+    {
+      "name": "whitelist",
+      "humanName": "Whitelist",
+      "default": [],
+      "description": "Channel in which messages should get published (only if Message-Publishing-Mode = \"whitelist\")",
+      "type": "array",
+      "content": "channelID"
+    },
+    {
+      "name": "ignoreBots",
+      "humanName": "Ignore bots?",
+      "default": true,
+      "description": "Should bots get ignored when they post a message",
+      "type": "boolean"
+    }
+  ]
+}

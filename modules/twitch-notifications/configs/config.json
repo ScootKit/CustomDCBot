@@ -1,0 +1,30 @@
+{
+  "description": "Twitch API credentials and polling interval. Create an app at https://dev.twitch.tv/console/apps to get your Client ID and Secret.",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "hidden": true,
+  "content": [
+    {
+      "name": "twitchClientID",
+      "humanName": "Twitch Client ID",
+      "default": "",
+      "description": "Client ID of your Twitch application (https://dev.twitch.tv/console/apps).",
+      "type": "string"
+    },
+    {
+      "name": "clientSecret",
+      "humanName": "Twitch Client Secret",
+      "default": "",
+      "description": "Client Secret of your Twitch application.",
+      "type": "string"
+    },
+    {
+      "name": "interval",
+      "humanName": "Check interval (seconds)",
+      "default": 180,
+      "description": "How often (in seconds) the bot polls Twitch for stream updates. Must be at least 60 to stay within Twitch rate limits.",
+      "type": "integer",
+      "minValue": 60
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "filename": "configuration.json",
+  "humanName": "General Configuration",
+  "description": "Configure the main staff roles and the default log channel.",
+  "categories": [
+    {
+      "id": "roles",
+      "icon": "fas fa-clipboard-user",
+      "displayName": "Staff Roles"
+    },
+    {
+      "id": "logging",
+      "icon": "fa-solid fa-clipboard-list",
+      "displayName": "Logging"
+    }
+  ],
+  "content": [
+    {
+      "name": "staffRoles",
+      "category": "roles",
+      "humanName": "Staff Roles",
+      "description": "Roles that can use basic staff commands (Shifts, LoA Request and RA Request, reviews etc.).",
+      "type": "array",
+      "content": "roleID",
+      "default": []
+    },
+    {
+      "name": "supervisorRoles",
+      "category": "roles",
+      "humanName": "Supervisor Roles",
+      "description": "Roles that can manage other staff members (Approve/Deny/Manage LoA's and RA's, Manage Shifts etc.).",
+      "type": "array",
+      "content": "roleID",
+      "default": []
+    },
+    {
+      "name": "managementRoles",
+      "category": "roles",
+      "humanName": "Management Roles",
+      "description": "Roles with full access, including data deletion abilities.",
+      "type": "array",
+      "content": "roleID",
+      "default": []
+    },
+    {
+      "name": "generalLogChannel",
+      "category": "logging",
+      "humanName": "General Log Channel",
+      "description": "The default channel where logs happen such as status changes/request and more. This can be overridden in some features.",
+      "type": "channelID",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": ""
+    }
+  ]
+}

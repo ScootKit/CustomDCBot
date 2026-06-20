@@ -1,0 +1,306 @@
+{
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "commandsWarnings": {
+    "normal": [
+      "/manage-levels"
+    ]
+  },
+  "content": [
+    {
+      "name": "min-xp",
+      "humanName": "XP given at least for messages",
+      "default": 25,
+      "description": "How much XP the user gets at least for each message",
+      "type": "integer",
+      "category": "xp"
+    },
+    {
+      "name": "max-xp",
+      "humanName": "XP given at most for messages",
+      "default": 65,
+      "description": "How much XP the user gets at most for each messages",
+      "type": "integer",
+      "category": "xp"
+    },
+    {
+      "name": "voiceXPPerMinute",
+      "type": "float",
+      "default": 0.5,
+      "humanName": "XP given per Voice Minute",
+      "description": "How many XP will be given to users per minute when they are in a voice channel with other members. No XP will be given if they are alone in their channel or are muted or deafened. Numbers will be rounded and XP will be given every 15 minutes or when the user leaves the channel.",
+      "category": "xp"
+    },
+    {
+      "name": "cooldown",
+      "humanName": "Cooldown",
+      "default": 1500,
+      "description": "In ms. How much cooldown there is between each XP getting",
+      "type": "integer",
+      "category": "xp"
+    },
+    {
+      "name": "curveType",
+      "type": "select",
+      "content": [
+        {
+          "displayName": "Easy Linear",
+          "value": "EXPONENTIAL"
+        },
+        {
+          "displayName": "Default Linear",
+          "value": "LINEAR"
+        },
+        {
+          "displayName": "Exponentiation (softer start, harder leveling after level 14)",
+          "value": "EXPONENTIATION"
+        },
+        {
+          "value": "CUSTOM",
+          "displayName": "Custom formula (dangerous!)"
+        }
+      ],
+      "humanName": "Type of the leveling curve",
+      "default": "LINEAR",
+      "description": "Type of the leveling curve. The exponential curve is recommended, as archiving new levels gets harder the higher your level is. Leveling is always the same if you use the linear curve.",
+      "links": [
+        {
+          "label": "Calculate how much XP is needed to level up",
+          "url": "https://scootk.it/level-calculator"
+        }
+      ],
+      "category": "xp"
+    },
+    {
+      "name": "customLevelCurve",
+      "default": "",
+      "allowNull": true,
+      "humanName": "Custom Level Formula (if enabled)",
+      "type": "string",
+      "links": [
+        {
+          "label": "Calculate how much XP is needed to level up",
+          "url": "https://scootk.it/level-calculator"
+        }
+      ],
+      "description": "Your custom leveling formula. Use the x variable (and no other variables). The result of the formula should be the required XP to reach level x (your variable). Example: \"x*750+((x-1)*500)\" (our default level curve)",
+      "category": "xp"
+    },
+    {
+      "name": "levelUpMessagesConditions",
+      "type": "select",
+      "content": [
+        "all",
+        "only-role-rewards",
+        "none"
+      ],
+      "humanName": "Which Level-Up-Messages should get sent?",
+      "default": "all",
+      "description": "This settings changes in which cases a level up message should be sent. With the setting \"all\", level up messages will be sent at every level up. With the setting \"only-role-rewards\", level up messages will only be sent if the new level has a role reward. With the \"none\" setting, no level up messages will be sent.",
+      "category": "messages"
+    },
+    {
+      "name": "level_up_channel_id",
+      "humanName": "Level-Up-Channel",
+      "default": "",
+      "description": "Channel in which Level-Up-Messages should get send. (Leave empty to disable)",
+      "type": "channelID",
+      "allowNull": true,
+      "category": "messages"
+    },
+    {
+      "name": "sortLeaderboardBy",
+      "humanName": "Leaderboard-Sort-Category",
+      "default": "levels",
+      "description": "How the leaderboard should be sorted",
+      "type": "select",
+      "content": [
+        "levels",
+        "xp"
+      ],
+      "category": "leaderboard"
+    },
+    {
+      "name": "blacklisted_channels",
+      "humanName": "Blacklisted Channels",
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS",
+        "GUILD_VOICE",
+        "GUILD_FORUM"
+      ],
+      "default": [],
+      "description": "Blacklisted-Channels in which users can not earn XP",
+      "type": "array",
+      "content": "channelID",
+      "category": "xp"
+    },
+    {
+      "name": "blacklistedRoles",
+      "humanName": "Blacklisted roles",
+      "type": "array",
+      "content": "roleID",
+      "default": [],
+      "description": "These roles won't receive XP when writing messages",
+      "category": "xp"
+    },
+    {
+      "name": "reward_roles",
+      "humanName": "Level Reward roles",
+      "default": {},
+      "description": "Level at which users should get roles. Parameter 1: Level, Parameter 2: Role-ID",
+      "type": "keyed",
+      "content": {
+        "key": "integer",
+        "value": "roleID"
+      },
+      "category": "roles"
+    },
+    {
+      "name": "multiplication_roles",
+      "humanName": "XP Multiplication Roles",
+      "default": {},
+      "description": "Allows you to configure roles that have a higher multiplication factor than normal (default value is 1). If a user has more than one of the configured roles, the multiplication factors get multiplied together before multiplying the result with the amount of XP the user receives for their message.",
+      "type": "keyed",
+      "content": {
+        "key": "roleID",
+        "value": "float"
+      },
+      "category": "xp"
+    },
+    {
+      "name": "multiplication_channels",
+      "humanName": "XP Multiplication Channels",
+      "default": {},
+      "description": "Allows you to configure channels that have a higher multiplication factor than normal (default value is 1). Messages sent in these channels will have their XP value multiplied by the multiplier configured here.",
+      "type": "keyed",
+      "content": {
+        "key": "channelID",
+        "value": "float"
+      },
+      "category": "xp"
+    },
+    {
+      "name": "onlyTopLevelRole",
+      "humanName": "Only keep highest Level-Role",
+      "default": false,
+      "description": "If enabled, all previous level roles a user had will get removed, when they advance to a new level.",
+      "type": "boolean",
+      "category": "roles"
+    },
+    {
+      "name": "reset-on-leave",
+      "humanName": "Rest Level on leave",
+      "default": false,
+      "description": "If enabled, all levels and the XP of a user will be deleted, when they leave your server.",
+      "type": "boolean",
+      "category": "general"
+    },
+    {
+      "name": "randomMessages",
+      "humanName": "Random messages",
+      "default": false,
+      "description": "If enabled the module will randomly select a messages from random-levelup-messages and ignore the one set in strings",
+      "type": "boolean",
+      "category": "messages"
+    },
+    {
+      "name": "leaderboard-channel",
+      "humanName": "Live Leaderboard-Channel",
+      "default": "",
+      "description": "If set, the bot will send a messages in this channel with the current leaderboard and edit it every five minutes",
+      "type": "channelID",
+      "content": [
+        "GUILD_TEXT"
+      ],
+      "allowNull": true,
+      "category": "leaderboard"
+    },
+    {
+      "name": "leaderboard-channel-max-amount",
+      "humanName": "Maximum amount of users displayed in live leaderboard Channel",
+      "default": 15,
+      "maxValue": 25,
+      "description": "This is the maximum amount of users displayed in the Live Leaderboard channel. /leaderboard will still show the full leaderboard.",
+      "type": "integer",
+      "category": "leaderboard"
+    },
+    {
+      "name": "maximumLevelEnabled",
+      "humanName": "Enable maximum level?",
+      "default": false,
+      "description": "If enabled, users can only level until they reach the configured maximum level. After that, they can't level up and can't earn XP. Can be enabled retroactively.",
+      "type": "boolean",
+      "category": "general"
+    },
+    {
+      "dependsOn": "maximumLevelEnabled",
+      "name": "maximumLevel",
+      "humanName": "Maximum level",
+      "default": 200,
+      "description": "Once a user reaches this level, they neither earn more XP nor level up anymore.",
+      "type": "integer",
+      "category": "general"
+    },
+    {
+      "name": "startFromZero",
+      "humanName": "Start with Level 0?",
+      "default": false,
+      "description": "If enabled, the initial level of users will be displayed as zero. This doesn't affect leveling, this is a cosmetic setting and can be applied retroactively.",
+      "type": "boolean",
+      "category": "general"
+    },
+    {
+      "name": "useTags",
+      "humanName": "Use User's Tags instead of their Mention in the Leaderboard-Channel-Embed",
+      "default": false,
+      "description": "If enabled, the bot will use the tag of users in the Leaderboard-Channel-Embed instead of their mention.",
+      "type": "boolean",
+      "category": "general"
+    },
+    {
+      "name": "enableLevelCalculator",
+      "humanName": "Enable /calculate-level command",
+      "default": false,
+      "description": "If enabled, server members can use the /calculate-level command to calculate the XP and amount of messages required to reach a specific level based on the configured level curve and XP-per-message range.",
+      "type": "boolean",
+      "category": "general"
+    },
+    {
+      "name": "allowCheats",
+      "humanName": "Cheats",
+      "default": false,
+      "description": "If enabled admins can change the XP of other users (not recommended (please leave it off if you want to have a fair levelling system!!!))",
+      "type": "boolean",
+      "category": "general"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "xp",
+      "icon": "fas fa-arrow-up-1-9",
+      "displayName": "XP Settings"
+    },
+    {
+      "id": "leaderboard",
+      "icon": "fas fa-ranking-stars",
+      "displayName": "Leaderboard"
+    },
+    {
+      "id": "roles",
+      "icon": "fa-solid fa-users",
+      "displayName": "Level Roles"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Level-up Messages"
+    }
+  ]
+}

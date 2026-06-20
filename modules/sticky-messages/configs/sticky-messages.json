@@ -1,0 +1,30 @@
+{
+  "description": "Manage the sticky messages here",
+  "humanName": "Sticky messages",
+  "filename": "sticky-messages.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channelId",
+      "humanName": "Channel",
+      "default": "",
+      "description": "Channel-ID in which the message should get send",
+      "type": "channelID"
+    },
+    {
+      "name": "message",
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should get send",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "respondBots",
+      "humanName": "Respond to bots",
+      "default": false,
+      "description": "Whether your bot reacts to messages from other bots in the channel",
+      "type": "boolean"
+    }
+  ]
+}

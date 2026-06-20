@@ -1,0 +1,133 @@
+{
+  "description": "Configure strings & messages of your bot here",
+  "humanName": "Messages",
+  "filename": "strings.json",
+  "content": [
+    {
+      "name": "addAtToUsernames",
+      "humanName": "Add @ to usernames",
+      "default": false,
+      "description": "If enabled, every username will be prefixed by an \"@\". Example: \"scderox\" -> \"@scderox\"",
+      "type": "boolean"
+    },
+    {
+      "name": "footer",
+      "humanName": "Embed-Footer",
+      "default": "Powered by scnx.xyz ⚡",
+      "description": "Footer of every embed",
+      "type": "string",
+      "pro": true
+    },
+    {
+      "name": "footerImgUrl",
+      "humanName": "Embed-Footer-Image-URL",
+      "default": "https://scnx.xyz/favicon.png",
+      "allowNull": true,
+      "description": "Footer-Image of every embed",
+      "type": "imgURL",
+      "pro": true
+    },
+    {
+      "name": "need_args",
+      "humanName": "More arguments are needed",
+      "default": "This command needs more arguments - you passed %count%, but you need to provide at least %neededCount%.",
+      "description": "This message gets sent if there are not enough arguments specified",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "count",
+          "description": "Count of arguments provided"
+        },
+        {
+          "name": "neededCount",
+          "description": "Count of arguments needed"
+        }
+      ]
+    },
+    {
+      "name": "updated_roles",
+      "humanName": "Roles updated",
+      "default": "✅ Updated roles according to your settings",
+      "description": "This message gets sent after a user selects self-roles on a self-role-element.",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "added_role",
+      "humanName": "Role added",
+      "default": "✅ Role %role% successfully added",
+      "description": "This message gets sent when a user adds a role to themselves.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "role",
+          "description": "Name of the role"
+        }
+      ]
+    },
+    {
+      "name": "removed_role",
+      "humanName": "Role removed",
+      "default": "✅ Role %role% successfully removed",
+      "description": "This message gets sent when a user removes a role from themselves.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "role",
+          "description": "Name of the role"
+        }
+      ]
+    },
+    {
+      "name": "not_enough_permissions",
+      "humanName": "Not enough permissions",
+      "default": "Seems like you don't have enough permissions.",
+      "description": "This message gets sent if an user don't hase enough permissions",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "helpembed",
+      "humanName": "Help-Message",
+      "default": {
+        "title": "Help",
+        "description": "You can find every command here",
+        "module_translation": "%name% by %author%: %description%",
+        "build_in": "Build-In-Commands"
+      },
+      "description": "Strings for help command",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "name": "disableHelpEmbedStats",
+      "humanName": "Disable Stats in Help-Embed",
+      "default": false,
+      "description": "If enabled, the stats-field in the Help-Embed will get hidden",
+      "type": "boolean",
+      "pro": true
+    },
+    {
+      "name": "disableFooterTimestamp",
+      "humanName": "Disable default Timestamp in footer",
+      "default": false,
+      "description": "If enabled, the current time will not be displayed in the embed footer",
+      "type": "boolean"
+    },
+    {
+      "name": "putBotInfoOnLastSite",
+      "humanName": "Hides the Bot-Info in the Help-Embed",
+      "default": false,
+      "description": "If enabled, the Bot-Info-Section of the Help-Embed will be hidden.",
+      "type": "boolean",
+      "pro": true
+    }
+  ]
+}

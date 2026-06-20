@@ -1,0 +1,27 @@
+{
+  "name": "duel",
+  "humanReadableName": "Duel",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "description": "Let users play the game \"Duel\" on your discord",
+  "commands-dir": "/commands",
+  "noConfig": true,
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/duel",
+  "tags": [
+    "fun"
+  ],
+  "fa-icon": "fas fa-gun",
+  "earlyAccess": false,
+  "holidayGift": true,
+  "intents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Looks up members to pick random opponents and resolve player names in duels.",
+    "GuildPresences": "Reads members' online status so offline members are skipped when choosing a random opponent."
+  }
+}

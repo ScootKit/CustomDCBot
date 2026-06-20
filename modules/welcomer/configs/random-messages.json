@@ -1,0 +1,98 @@
+{
+  "description": "Manage the randomly send messages here",
+  "humanName": "Random messages",
+  "filename": "random-messages.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "type",
+      "humanName": "Message-Type",
+      "default": "",
+      "description": "This sets in which content the message should get send",
+      "type": "select",
+      "content": [
+        "join",
+        "leave",
+        "boost",
+        "unboost"
+      ]
+    },
+    {
+      "name": "message",
+      "humanName": "Message",
+      "allowGeneratedImage": true,
+      "default": "",
+      "description": "Message that should get send",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mention",
+          "description": "Mentions the user"
+        },
+        {
+          "name": "memberProfilePictureUrl",
+          "description": "URL of the user's avatar",
+          "isImage": true
+        },
+        {
+          "name": "servername",
+          "description": "Name of the guild"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "createdAt",
+          "description": "Date when account was created"
+        },
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "memberProfilePictureUrl",
+          "description": "URL of the user's avatar",
+          "isImage": true
+        },
+        {
+          "name": "joinedAt",
+          "description": "Date when user joined guild"
+        },
+        {
+          "name": "guildUserCount",
+          "description": "Count of users on the guild"
+        },
+        {
+          "name": "guildMemberCount",
+          "description": "Count of members (without bots) on the guild"
+        },
+        {
+          "name": "mention",
+          "description": "Mention of the user who boosted"
+        },
+        {
+          "name": "boostCount",
+          "description": "Total count of boosts"
+        },
+        {
+          "name": "guildLevel",
+          "description": "Boost-Level of the guild after the boost"
+        },
+        {
+          "name": "mention",
+          "description": "Mention of the user who unboosted"
+        },
+        {
+          "name": "boostCount",
+          "description": "Total count of boosts"
+        },
+        {
+          "name": "guildLevel",
+          "description": "Boost-Level of the guild after the unboost"
+        }
+      ]
+    }
+  ]
+}

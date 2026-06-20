@@ -1,0 +1,22 @@
+{
+  "name": "auto-thread",
+  "fa-icon": "fa-regular fa-comment",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "events-dir": "/events",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "tools"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/auto-thread",
+  "humanReadableName": "Automatic Thread-Creation",
+  "description": "Automatically creates a thread under each message that gets posted in a selected channel",
+  "intents": [
+    "GuildMessages"
+  ]
+}

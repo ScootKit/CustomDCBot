@@ -1,0 +1,29 @@
+{
+  "en": {
+    "temp-channels": {
+      "removed-audit-log-reason": "Removed temp channel, because no one was in it",
+      "permission-update-audit-log-reason": "Updated permissions, to make sure only people in the VC can see the no-mic-channel",
+      "created-audit-log-reason": "Created Temp-Channel for %u",
+      "move-audit-log-reason": "Moved user to their voice channel",
+      "no-mic-channel-topic": "Welcome to %u's no-mic-channel. You will see this channel as long as you are connected to this temp-channel.",
+      "disconnect-audit-log-reason": "The old channel of the user could not be found - disconnecting them - hopefully they join again",
+      "command-description": "Manage your temp-channel",
+      "mode-subcommand-description": "Change the mode of your channel",
+      "public-option-description": "local public-option-description",
+      "add-subcommand-description": "Add users, that will be able to join your channel, while it is private",
+      "remove-subcommand-description": "Remove users from you channel",
+      "add-user-option-description": "The user to be added",
+      "remove-user-option-description": "The user to be removed",
+      "list-subcommand-description": "List the users with access to your channel",
+      "edit-subcommand-description": "Edit various settings of yout channel",
+      "user-limit-option-description": "Change the user-limit of your channel",
+      "bitrate-option-description": "Change the bitrate of your channel (min. 8000)",
+      "name-option-description": "Change the name of your channel",
+      "nsfw-option-description": "Change, whether your channel is age-restricted or not",
+      "no-added-user": "There are no users to be displayed here",
+      "nothing-changed": "Your channel already had these settings.",
+      "no-disconnect": "Couldn't disconnect the user from your channel. This could be due to missing permissions, or the user not being in your voice-channel",
+      "edit-error": "An error occurred while editing your channel. one or more of your settings couldn't be applied. This could be due to missing permissions or an invalid value."
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "description": "Configure the function of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "commandsWarnings": {
+    "normal": [
+      "/quiz"
+    ]
+  },
+  "content": [
+    {
+      "name": "emojis",
+      "humanName": "Emojis",
+      "default": {
+        "1": "1️⃣",
+        "2": "2️⃣",
+        "3": "3️⃣",
+        "4": "4️⃣",
+        "5": "5️⃣",
+        "6": "6️⃣",
+        "7": "7️⃣",
+        "8": "8️⃣",
+        "9": "9️⃣",
+        "true": "✅",
+        "false": "❌"
+      },
+      "description": "You can set the emojis to use",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "name": "dailyQuizLimit",
+      "humanName": "Daily quiz limit",
+      "default": 5,
+      "description": "How many quizzes can be played per day using /quiz play",
+      "type": "integer"
+    },
+    {
+      "name": "leaderboardChannel",
+      "humanName": "Quiz leaderboard channel",
+      "default": "",
+      "description": "In which channel the quiz leaderboard is displayed",
+      "type": "channelID",
+      "content": [
+        "GUILD_TEXT",
+        "GUILD_ANNOUNCEMENT"
+      ],
+      "allowNull": true
+    },
+    {
+      "name": "createAllowedRole",
+      "humanName": "Role needed to create quizzes",
+      "default": "",
+      "description": "Which role a user needs to have to be able to create quizzes with /quiz create/create-bool",
+      "type": "roleID"
+    },
+    {
+      "name": "mode",
+      "humanName": "Mode for quiz selection",
+      "default": "Random",
+      "description": "How a /quiz play quiz is selected for users",
+      "type": "select",
+      "content": [
+        "Random",
+        "Continuous"
+      ]
+    },
+    {
+      "name": "livePreview",
+      "humanName": "Live preview of results",
+      "default": false,
+      "description": "Whether the live preview of results is enabled",
+      "type": "boolean"
+    }
+  ]
+}

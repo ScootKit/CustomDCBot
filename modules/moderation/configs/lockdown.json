@@ -1,0 +1,133 @@
+{
+  "description": "Configure the server-wide lockdown system. This is separate from per-channel lock/unlock commands.",
+  "humanName": "Lockdown Configuration",
+  "filename": "lockdown.json",
+  "content": [
+    {
+      "name": "enabled",
+      "humanName": "Enable lockdown system?",
+      "default": false,
+      "description": "Enables the /moderate lockdown command and automatic lockdown triggers",
+      "type": "boolean",
+      "elementToggle": true,
+      "category": "general"
+    },
+    {
+      "name": "logChannel",
+      "type": "channelID",
+      "dependsOn": "enabled",
+      "humanName": "Lockdown log channel",
+      "default": "",
+      "description": "Channel where detailed lockdown log entries are posted. Falls back to the moderation log channel if not set.",
+      "category": "general"
+    },
+    {
+      "name": "sendMessageInAffectedChannels",
+      "type": "boolean",
+      "dependsOn": "enabled",
+      "humanName": "Send message in affected channels?",
+      "default": true,
+      "description": "If enabled, the lockdown/lift message will be sent in every affected channel",
+      "category": "messages"
+    },
+    {
+      "name": "lockdownMessageChannels",
+      "type": "array",
+      "content": "channelID",
+      "dependsOn": "sendMessageInAffectedChannels",
+      "humanName": "Channels for lockdown messages",
+      "default": [],
+      "description": "If set, lockdown/lift messages will only be sent in these channels instead of all affected channels. Leave empty to send in all affected channels.",
+      "category": "messages"
+    },
+    {
+      "name": "lockdownMessage",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "sendMessageInAffectedChannels",
+      "humanName": "Lockdown activation message",
+      "description": "Message sent in affected channels when lockdown is activated",
+      "default": "🔒 **Server Lockdown** - This server is currently in lockdown mode. Reason: %reason%",
+      "params": [
+        {
+          "name": "reason",
+          "description": "Reason for the lockdown"
+        },
+        {
+          "name": "user",
+          "description": "User who activated the lockdown (or 'System' for automatic)"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "liftMessage",
+      "type": "string",
+      "allowEmbed": true,
+      "dependsOn": "sendMessageInAffectedChannels",
+      "humanName": "Lockdown lifted message",
+      "description": "Message sent in affected channels when lockdown is lifted",
+      "default": "🔓 **Lockdown Lifted** - The server lockdown has been lifted. You can chat again.",
+      "params": [
+        {
+          "name": "user",
+          "description": "User who lifted the lockdown"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "autoLiftAfter",
+      "type": "integer",
+      "dependsOn": "enabled",
+      "humanName": "Auto-lift lockdown after (minutes, 0 = manual only)",
+      "default": 0,
+      "description": "Automatically lift the lockdown after this many minutes. Set to 0 to require manual lifting.",
+      "category": "automation"
+    },
+    {
+      "name": "autoTriggerOnJoinRaid",
+      "type": "boolean",
+      "dependsOn": "enabled",
+      "humanName": "Auto-lockdown on join raid?",
+      "default": false,
+      "description": "Automatically activate lockdown when the anti-join-raid system is triggered",
+      "category": "automation"
+    },
+    {
+      "name": "autoTriggerOnJoinGate",
+      "type": "boolean",
+      "dependsOn": "enabled",
+      "humanName": "Auto-lockdown on join-gate violations?",
+      "default": false,
+      "description": "Automatically activate lockdown when the join-gate system is triggered. Thresholds are configured in the Join-Gate configuration.",
+      "category": "automation"
+    },
+    {
+      "name": "autoTriggerOnSpam",
+      "type": "boolean",
+      "dependsOn": "enabled",
+      "humanName": "Auto-lockdown on spam detection?",
+      "default": false,
+      "description": "Automatically activate lockdown when the anti-spam system is triggered. Thresholds are configured in the Anti-Spam configuration.",
+      "category": "automation"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Messages"
+    },
+    {
+      "id": "automation",
+      "icon": "far fa-robot",
+      "displayName": "Automation"
+    }
+  ]
+}

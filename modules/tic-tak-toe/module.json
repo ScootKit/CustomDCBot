@@ -1,0 +1,32 @@
+{
+  "name": "tic-tak-toe",
+  "humanReadableName": "Tic Tac Toe",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "fa-icon": "fa-solid fa-border-all",
+  "description": "Let your users play Tick-Tac-Toe against each other!",
+  "commands-dir": "/commands",
+  "noConfig": true,
+  "releaseDate": "1641230658000",
+  "earlyAccessFeatures": [
+    "Lasse Nutzer auf deinem Server Tick-Tac-Toe spielen",
+    "Angenehmes Spiel-Erlebnis durch Nutzung von Buttons, Ping-Nachrichten-Farben und Einladungen",
+    "(definitiv existierende und nicht erfundene) Studien zeigen, dass Server aktiver werden, wenn sie Minispiele anbieten",
+    "Teste als einer der ersten das neue Modul und gib uns Feedback!"
+  ],
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/tic-tak-toe",
+  "intents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Resolves member names for opponents and the scoreboard.",
+    "GuildPresences": "Filters out offline members when picking a random opponent."
+  }
+}

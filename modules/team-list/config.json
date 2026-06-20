@@ -1,0 +1,78 @@
+{
+  "description": "Configure your team list embeds and displayed roles here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channelID",
+      "humanName": "Channel",
+      "default": "",
+      "description": "Channel-ID to run all operations in it",
+      "type": "channelID"
+    },
+    {
+      "name": "roles",
+      "humanName": "Listed Roles",
+      "default": [],
+      "description": "Roles that should be listed in the embed",
+      "type": "array",
+      "maxLength": 25,
+      "content": "roleID"
+    },
+    {
+      "name": "descriptions",
+      "humanName": "Descriptions of roles",
+      "default": {},
+      "description": "Optional description of a listed role (Field 1: Role-ID, Field 2: Description)",
+      "type": "keyed",
+      "content": {
+        "key": "roleID",
+        "value": "string"
+      }
+    },
+    {
+      "name": "embed",
+      "humanName": "Embed",
+      "default": {
+        "title": "Our staff",
+        "description": "Meet our staff here",
+        "color": "GREEN",
+        "thumbnail-url": "",
+        "img-url": ""
+      },
+      "description": "Configuration of the member-embed",
+      "type": "keyed",
+      "content": {
+        "key": "string",
+        "value": "string"
+      },
+      "disableKeyEdits": true
+    },
+    {
+      "name": "nameOverwrites",
+      "humanName": "Name-Overwrites",
+      "default": {},
+      "description": "optional; Allows to overwrite the displayed name of roles (Field 1: Role-ID, Field 2: Displayed Name)",
+      "type": "keyed",
+      "content": {
+        "key": "roleID",
+        "value": "string"
+      }
+    },
+    {
+      "name": "includeStatus",
+      "humanName": "Include Online-Status of Staff-Members",
+      "description": "If enabled, the current online status will be displayed in the staffmember-list",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "onlineShowHighestRole",
+      "humanName": "Only list the highest role of a user?",
+      "description": "If enabled, a staff member will only be listed under their highest role in the list.",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

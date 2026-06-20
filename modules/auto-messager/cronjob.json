@@ -1,0 +1,34 @@
+{
+  "description": "Advanced users can unleash the full potential of automatic message with cronejobs",
+  "humanName": "Cronjob (advanced)",
+  "configElementName": {
+    "one": "Automatic message",
+    "more": "Automatic messages"
+  },
+  "filename": "cronjob.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channelID",
+      "humanName": "Channel",
+      "default": "",
+      "description": "ID of the channel in which the message should be send",
+      "type": "channelID"
+    },
+    {
+      "name": "message",
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should be send",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "expression",
+      "humanName": "Expression",
+      "default": "1 6 1-31 * *",
+      "description": "The message gets scheduled for this expression",
+      "type": "string"
+    }
+  ]
+}

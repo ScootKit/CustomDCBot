@@ -1,0 +1,28 @@
+{
+  "name": "starboard",
+  "humanReadableName": "Starboard",
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": "Let users highlight messages into a starboard channel by reacting.",
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "configs/config.json"
+  ],
+  "fa-icon": "fas fa-star",
+  "tags": [
+    "community"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/starboard",
+  "intents": [
+    "GuildMessageReactions",
+    "GuildMessages",
+    "MessageContent"
+  ],
+  "intentReasons": {
+    "MessageContent": "Reads a starred message's text and attachments to render it on the starboard."
+  }
+}

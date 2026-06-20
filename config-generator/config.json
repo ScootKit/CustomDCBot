@@ -1,0 +1,99 @@
+{
+  "description": "Configure the basic features of the bot here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "token",
+      "humanName": {},
+      "default": "yourtokengoeshere",
+      "description": "Replace this with your token",
+      "hidden": true,
+      "type": "string"
+    },
+    {
+      "name": "prefix",
+      "humanName": "Prefix of your bot",
+      "default": "!",
+      "description": "Set the prefix of your bot here",
+      "hidden": true,
+      "type": "string"
+    },
+    {
+      "name": "botOperators",
+      "humanName": {},
+      "default": [],
+      "description": "Bot operators can reload the configuration and perform system relevant actions with this bot. Please only add users you really trust (and yourself of course)",
+      "hidden": true,
+      "type": "array",
+      "content": "string"
+    },
+    {
+      "name": "guildID",
+      "humanName": {},
+      "default": "489786377261678592",
+      "description": "Replace this the id of the guild the bot should work in.",
+      "hidden": true,
+      "type": "guildID"
+    },
+    {
+      "name": "disableStatus",
+      "humanName": "Disable Bot-Status",
+      "default": false,
+      "description": "If enabled, the bot won't have a status in discord",
+      "type": "boolean"
+    },
+    {
+      "name": "user_presence",
+      "humanName": "Bot-Status",
+      "default": "your bot status",
+      "description": "This will show up in Discord as \"Playing <YourValue>\"",
+      "type": "string"
+    },
+    {
+      "name": "logLevel",
+      "humanName": "Logging-Level",
+      "default": "debug",
+      "description": "Log-Level of the bot. Leave it as it is, if you don't know what this means",
+      "hidden": true,
+      "type": "select",
+      "content": [
+        "debug",
+        "info",
+        "warn",
+        "error",
+        "fatal",
+        "off"
+      ]
+    },
+    {
+      "name": "logChannelID",
+      "humanName": "Log-Channel",
+      "default": "",
+      "description": "Default log-channel for most modules and used to log relevant information",
+      "type": "channelID",
+      "allowNull": true
+    },
+    {
+      "name": "timezone",
+      "humanName": "Timezone",
+      "default": "Europe/Berlin",
+      "description": "Timezone the bot runs in",
+      "type": "timezone"
+    },
+    {
+      "name": "disableEveryoneProtection",
+      "humanName": "Allow @everyone / @here pings",
+      "default": false,
+      "description": "Allows @everyone and @here pings for messages configurable in the dashboard",
+      "type": "boolean"
+    },
+    {
+      "name": "syncCommandGlobally",
+      "humanName": "Sync module commands as global commands",
+      "default": false,
+      "description": "If enabled, module-commands will be synced to discord as global commands. They will show up on other servers, but won't work. Syncing can take up to 2 hours, so changes may not be reflected immediately.",
+      "type": "boolean"
+    }
+  ]
+}

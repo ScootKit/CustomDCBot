@@ -1,0 +1,19 @@
+{
+  "name": "uno",
+  "humanReadableName": "Uno",
+  "fa-icon": "fa-solid fa-cards-blank",
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": "Let your users play Uno against each other!",
+  "commands-dir": "/commands",
+  "noConfig": true,
+  "releaseDate": "0",
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/uno",
+  "intents": []
+}

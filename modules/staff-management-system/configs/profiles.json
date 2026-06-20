@@ -1,0 +1,105 @@
+{
+  "filename": "profiles.json",
+  "humanName": "Staff Profiles",
+  "description": "Configure the staff profile system (Intros, custom nicknames, and stats).",
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fa-user-tie",
+      "displayName": "Profile Settings"
+    }
+  ],
+  "content": [
+    {
+      "name": "enableProfiles",
+      "category": "settings",
+      "humanName": "Enable Staff Profiles",
+      "description": "Allows staff to have a profile tracking their shifts, reviews, and a custom introduction.",
+      "type": "boolean",
+      "default": true,
+      "elementToggle": true
+    },
+    {
+      "name": "onlyAllowStaffProfile",
+      "category": "settings",
+      "humanName": "Only allow staff and higher to have their own customizable profile",
+      "description": "If enabled, only staff members and higher will be able to set a custom profile nickname and introduction. If disabled, all members will be able to set a custom profile nickname and introduction.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "managePermission",
+      "category": "settings",
+      "humanName": "Profile Moderation Permission",
+      "description": "Which group is allowed to forcibly wipe another staff member's profile?",
+      "type": "select",
+      "content": [
+        "Supervisor",
+        "Management"
+      ],
+      "default": "Supervisor"
+    },
+    {
+      "name": "profileEmbedMessage",
+      "category": "settings",
+      "humanName": "Profile Embed",
+      "description": "Customize the embed shown when viewing a staff profile.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user-mention",
+          "description": "The user's mention."
+        },
+        {
+          "name": "username",
+          "description": "The user's standard Discord username."
+        },
+        {
+          "name": "nickname",
+          "description": "The user's custom profile nickname (uses default username if not set)."
+        },
+        {
+          "name": "intro",
+          "description": "The user's custom introduction."
+        },
+        {
+          "name": "status",
+          "description": "The user's current status (LoA, RA, etc.)."
+        },
+        {
+          "name": "rating",
+          "description": "The user's average review rating."
+        },
+        {
+          "name": "avatar",
+          "description": "The user's avatar URL.",
+          "isImage": true
+        }
+      ],
+      "default": {
+        "_schema": "v3",
+        "embeds": [
+          {
+            "title": "Staff Profile: %nickname%",
+            "description": "%intro%",
+            "color": "#2b2d31",
+            "thumbnailURL": "%avatar%",
+            "fields": [
+              {
+                "name": "Status",
+                "value": "%status%",
+                "inline": true
+              },
+              {
+                "name": "Average Rating",
+                "value": "%rating%",
+                "inline": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

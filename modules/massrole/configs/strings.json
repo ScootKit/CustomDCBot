@@ -1,0 +1,28 @@
+{
+  "description": "Edit the messages and strings of the module here",
+  "humanName": "Messages",
+  "commandsWarnings": {
+    "normal": [
+      "/massrole"
+    ]
+  },
+  "filename": "strings.json",
+  "content": [
+    {
+      "name": "done",
+      "humanName": "Action executed",
+      "default": "The action was executed successfully.",
+      "description": "This messages gets send when a action was executed successfully",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "notDone",
+      "humanName": "Action not executed",
+      "default": "The Action couldn't be executed because the bot has not enough permissions.",
+      "description": "This messages gets send when a action was not executed successfully",
+      "type": "string",
+      "allowEmbed": true
+    }
+  ]
+}

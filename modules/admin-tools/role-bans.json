@@ -1,0 +1,33 @@
+{
+  "filename": "role-bans.json",
+  "humanName": "Role Bans",
+  "configElementName": {
+    "one": "Role Ban",
+    "more": "Role Bans"
+  },
+  "description": "Configure roles that automatically ban users when assigned. When a user receives one of these roles, they will be immediately banned from the server. Users with the \"Manage Roles\" permission are exempt.",
+  "configElements": true,
+  "content": [
+    {
+      "type": "roleID",
+      "name": "roleID",
+      "default": "",
+      "humanName": "Role",
+      "description": "When a user receives this role, they will be immediately banned from the server. Users with the \"Manage Roles\" permission are exempt."
+    },
+    {
+      "type": "string",
+      "name": "reason",
+      "default": "Received a banned role",
+      "humanName": "Ban Reason",
+      "description": "The reason shown in the audit log when a user is banned for receiving this role."
+    },
+    {
+      "type": "integer",
+      "name": "deleteMessageDays",
+      "default": 0,
+      "humanName": "Delete Message Days",
+      "description": "Number of days of messages to delete when banning the user (0-7)."
+    }
+  ]
+}

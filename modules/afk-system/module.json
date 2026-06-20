@@ -1,0 +1,29 @@
+{
+  "name": "afk-system",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "events-dir": "/events",
+  "on-load-event": "onLoad.js",
+  "config-example-files": [
+    "config.json"
+  ],
+  "tags": [
+    "tools"
+  ],
+  "fa-icon": "fas fa-moon-stars",
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/afk-system",
+  "humanReadableName": "AFK-System",
+  "description": "Allow users to set their AFK-Status and notify other users if they try to reach them",
+  "intents": [
+    "GuildMessages",
+    "MessageContent"
+  ],
+  "intentReasons": {
+    "MessageContent": "Reads messages to detect when someone mentions an AFK member and notify the sender that they are away."
+  }
+}

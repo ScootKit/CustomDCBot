@@ -1,0 +1,25 @@
+{
+  "description": "Set up voice-channels to delete messages from",
+  "humanName": "Voice-Channels",
+  "filename": "voice-channels.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channelID",
+      "humanName": "Voice-Channel",
+      "default": "",
+      "description": "The Voice-Channel you want the auto-deleter to clear if there are no channel members left.",
+      "type": "channelID",
+      "content": [
+        "GUILD_VOICE"
+      ]
+    },
+    {
+      "name": "timeout",
+      "humanName": "Timeout",
+      "default": 5,
+      "description": "Timeout (in minutes) after which the messages in a Voice-Channel are deleted after the last member left the channel. Entering '0' will result in an instant deletion.",
+      "type": "integer"
+    }
+  ]
+}

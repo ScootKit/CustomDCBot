@@ -1,0 +1,13 @@
+{
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "commandsWarnings": {
+    "normal": [
+      "/admin",
+      "/stealemote",
+      "/roles"
+    ]
+  },
+  "content": []
+}

@@ -1,0 +1,29 @@
+{
+  "name": "guess-the-number",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "commands-dir": "/commands",
+  "fa-icon": "fas fa-dice-five",
+  "models-dir": "/models",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/channel.json"
+  ],
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/guess-the-number",
+  "humanReadableName": "Guess the number",
+  "description": "Select a number and let your users guess",
+  "intents": [
+    "GuildMessages",
+    "MessageContent"
+  ],
+  "intentReasons": {
+    "MessageContent": "Reads members' messages in the channel to check the number they guessed against the hidden target."
+  }
+}

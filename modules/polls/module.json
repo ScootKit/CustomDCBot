@@ -1,0 +1,23 @@
+{
+  "name": "polls",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "description": "Simple module to create fresh polls on your server! Supports anonymous polls and more.",
+  "events-dir": "/events",
+  "commands-dir": "/commands",
+  "models-dir": "/models",
+  "fa-icon": "fas fa-poll",
+  "config-example-files": [
+    "configs/config.json",
+    "configs/strings.json"
+  ],
+  "tags": [
+    "community"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/polls",
+  "humanReadableName": "Polls",
+  "intents": []
+}

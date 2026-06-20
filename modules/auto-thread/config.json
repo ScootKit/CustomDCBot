@@ -1,0 +1,36 @@
+{
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "channels",
+      "humanName": "Channels",
+      "default": [],
+      "description": "Here you can add channels in which the bot should create a thread under every message",
+      "type": "array",
+      "content": "channelID"
+    },
+    {
+      "name": "threadName",
+      "humanName": "Thread Name",
+      "default": "Comments",
+      "description": "Name of every thread",
+      "type": "string"
+    },
+    {
+      "name": "threadArchiveDuration",
+      "humanName": "Archive Duration",
+      "default": "MAX",
+      "description": "Inactivity after which a thread is automatically archived (in minutes, some values are limited by guild boost level; select \"max\" for the longest possible duration)",
+      "type": "select",
+      "content": [
+        "MAX",
+        "60",
+        "1440",
+        "4320",
+        "10080"
+      ]
+    }
+  ]
+}

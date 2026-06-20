@@ -1,0 +1,75 @@
+{
+  "description": "This system can prevent spammers from raiding your server",
+  "humanName": "Anti-Join-Raid-Configuration",
+  "filename": "antiJoinRaid.json",
+  "content": [
+    {
+      "name": "enabled",
+      "humanName": "Enabled?",
+      "default": true,
+      "description": "Enables or disables the anti-join-raid-system",
+      "type": "boolean",
+      "elementToggle": true,
+      "category": "settings"
+    },
+    {
+      "name": "timeframe",
+      "humanName": "Timeframe (in minutes)",
+      "default": 5,
+      "description": "Timeframe in which join actions should be recorded (in minutes)",
+      "type": "integer",
+      "category": "settings"
+    },
+    {
+      "name": "maxJoinsInTimeframe",
+      "humanName": "Maximal count of new users",
+      "default": 3,
+      "description": "Count of joins that are allowed to happen in the selected timeframe",
+      "type": "integer",
+      "category": "settings"
+    },
+    {
+      "name": "action",
+      "humanName": "Action",
+      "default": "quarantine",
+      "description": "Select the action here that should get performed if the anti-join-system gets triggered",
+      "type": "select",
+      "content": [
+        "mute",
+        "kick",
+        "quarantine",
+        "ban",
+        "give-role"
+      ],
+      "category": "actions"
+    },
+    {
+      "name": "roleID",
+      "humanName": "Role",
+      "default": "",
+      "description": "Only if action = give-role. Role that gets given to users who trigger the antiJoinRaid-System",
+      "type": "roleID",
+      "category": "actions"
+    },
+    {
+      "name": "removeOtherRoles",
+      "humanName": "Remove other roles",
+      "default": true,
+      "description": "Only if action = give-role. If enabled other roles that have been give to the user get removed after a short interval (and the giving of the role from \"roleID\" will be delayed)",
+      "type": "boolean",
+      "category": "actions"
+    }
+  ],
+  "categories": [
+    {
+      "id": "settings",
+      "icon": "fas fa-gears",
+      "displayName": "Detection Settings"
+    },
+    {
+      "id": "actions",
+      "icon": "fas fa-hammer",
+      "displayName": "Actions"
+    }
+  ]
+}

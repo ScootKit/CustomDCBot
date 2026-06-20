@@ -1,0 +1,155 @@
+{
+  "description": "Manage the basic settings of this module here",
+  "humanName": "Configuration",
+  "configElementName": {
+    "one": "Ticket-Category",
+    "more": "Ticket-Categories"
+  },
+  "configElements": true,
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "name",
+      "humanName": "Name",
+      "default": "Support",
+      "description": "Name of the Ticket type. This will be shown to users",
+      "type": "string"
+    },
+    {
+      "name": "ticket-create-category",
+      "humanName": "Ticket create category",
+      "default": "",
+      "description": "Category in which tickets should get created.",
+      "type": "channelID",
+      "content": [
+        "GUILD_CATEGORY"
+      ]
+    },
+    {
+      "name": "ticket-create-channel",
+      "humanName": "Ticket creation channel",
+      "default": "",
+      "description": "Channel in which a message with a \"Create Ticket\" button should get send",
+      "type": "channelID",
+      "content": [
+        "GUILD_TEXT"
+      ]
+    },
+    {
+      "name": "ticketRoles",
+      "humanName": "Ticket Roles",
+      "default": [],
+      "description": "Users who get pinged in the tickets and who can see tickets",
+      "type": "array",
+      "content": "roleID"
+    },
+    {
+      "name": "logChannel",
+      "humanName": "Log channel",
+      "default": "",
+      "description": "Channel in which ticket logs should get send",
+      "type": "channelID"
+    },
+    {
+      "name": "ticket-create-message",
+      "humanName": "Ticket created message",
+      "default": "Click the big button below to contact our staff and create a ticket",
+      "description": "Message that gets send/edited in the ticket-create-channel",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "sendUserDMAfterTicketClose",
+      "humanName": "Send user DM after ticket is closed",
+      "default": false,
+      "description": "If enabled users get a DM from the bot after someone closes the ticket",
+      "type": "boolean"
+    },
+    {
+      "name": "userDM",
+      "humanName": "User DM",
+      "default": "Thanks for contacting our support for the ticket-category \"%type%\", here is your transcript: %transcriptURL%",
+      "description": "This message gets send to the user if sendUserDMAfterTicketClose is enabled",
+      "type": "string",
+      "dependsOn": "sendUserDMAfterTicketClose",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "transcriptURL",
+          "description": "URL to transcript"
+        },
+        {
+          "name": "type",
+          "description": "Name of this ticket type"
+        }
+      ]
+    },
+    {
+      "name": "creation-message",
+      "humanName": "Ticket-Created Message",
+      "pro": true,
+      "type": "string",
+      "allowEmbed": true,
+      "description": "This message will get sent in new tickets. The close buttons will be added.",
+      "default": {
+        "title": "📥 New ticket #%id%",
+        "color": "#2ECC71",
+        "message": "%rolePings%",
+        "fields": [
+          {
+            "name": "👤 User",
+            "value": "%userMention%",
+            "inline": true
+          },
+          {
+            "name": "☕ Ticket-Topic",
+            "value": "%ticketTopic%",
+            "inline": true
+          },
+          {
+            "name": "ℹ️ Information",
+            "value": "Your issue got solved? Click the button below. You can always find this message pinned."
+          }
+        ]
+      },
+      "params": [
+        {
+          "name": "id",
+          "description": "Unique identification number of the ticket"
+        },
+        {
+          "name": "userMention",
+          "description": "Mention of the user who created this ticket"
+        },
+        {
+          "name": "rolePings",
+          "description": "Mention of the roles you have selected in the \"Ticket roles\" field"
+        },
+        {
+          "name": "ticketTopic",
+          "description": "Name of the Ticket-Topic"
+        },
+        {
+          "name": "userTag",
+          "description": "Tag of the user who created this ticket"
+        }
+      ]
+    },
+    {
+      "name": "ticket-create-button",
+      "humanName": "Ticket create button",
+      "default": "Create ticket 🎫",
+      "description": "Button for creating a ticket",
+      "type": "string",
+      "pro": true
+    },
+    {
+      "name": "ticket-close-button",
+      "humanName": "Ticket close button",
+      "default": "❎ Close ticket",
+      "description": "Button for closing a ticket",
+      "type": "string",
+      "pro": true
+    }
+  ]
+}

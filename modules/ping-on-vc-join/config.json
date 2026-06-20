@@ -1,0 +1,109 @@
+{
+  "description": "Configure messages that should get send when a user joins a Voice-Channel",
+  "humanName": "Message on Voice Join",
+  "filename": "config.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channels",
+      "humanName": "Channels",
+      "default": [],
+      "description": "Channel-ID in which this messages should get triggered",
+      "type": "array",
+      "content": "channelID",
+      "category": "general"
+    },
+    {
+      "name": "message",
+      "humanName": "Message",
+      "default": "The user %tag% joined the voicechat %vc%",
+      "description": "Here you can set the message that should be send if someone joins a selected voicechat",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "tag",
+          "description": "Tag of the user"
+        },
+        {
+          "name": "vc",
+          "description": "Name of the voicechat"
+        },
+        {
+          "name": "mention",
+          "description": "Mention of the user"
+        }
+      ],
+      "category": "messages"
+    },
+    {
+      "name": "notify_channel_id",
+      "humanName": "Notification-Channel",
+      "default": "",
+      "content": [
+        "GUILD_TEXT"
+      ],
+      "description": "Channel where the message should be send",
+      "type": "channelID",
+      "category": "general"
+    },
+    {
+      "name": "cooldownEnabled",
+      "humanName": "Enable Cooldown?",
+      "default": false,
+      "description": "When enabled, messages will only be sent once per channel within the cooldown period",
+      "type": "boolean",
+      "category": "cooldown"
+    },
+    {
+      "name": "cooldownMinutes",
+      "humanName": "Cooldown Duration (Minutes)",
+      "default": 5,
+      "description": "Duration in minutes to wait before sending another message for the same channel",
+      "type": "integer",
+      "dependsOn": "cooldownEnabled",
+      "category": "cooldown"
+    },
+    {
+      "name": "send_pn_to_member",
+      "humanName": "Join-DM",
+      "default": false,
+      "description": "Should the bot send a PN to the member?",
+      "type": "boolean",
+      "category": "messages"
+    },
+    {
+      "name": "pn_message",
+      "humanName": "Join-DM-Message",
+      "default": "Hi, I saw you joined the voice chat %vc%. Nice (;",
+      "description": "This message is sent to the user when they join a voice chat (if \"Join DM\" is enabled).",
+      "type": "string",
+      "dependsOn": "send_pn_to_member",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "vc",
+          "description": "Name of the voicechat"
+        }
+      ],
+      "category": "messages"
+    }
+  ],
+  "categories": [
+    {
+      "id": "general",
+      "icon": "fas fa-gears",
+      "displayName": "General Settings"
+    },
+    {
+      "id": "cooldown",
+      "icon": "fa-regular fa-clock-rotate-left",
+      "displayName": "Cooldown"
+    },
+    {
+      "id": "messages",
+      "icon": "fas fa-comment-dots",
+      "displayName": "Messages"
+    }
+  ]
+}

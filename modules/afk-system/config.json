@@ -1,0 +1,69 @@
+{
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "sessionEndedSuccessfully",
+      "humanName": "AFK-Session ended successfully",
+      "default": "✅ Your AFK status has been removed. Welcome back!",
+      "description": "This message gets send if a user ended their AFK-session successfully.",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "sessionStartedSuccessfully",
+      "humanName": "AFK-Session started successfully",
+      "default": "✅ Your status has been updated to AFK. If another member mentions you while your AFK, we're going to notify them about your status.",
+      "description": "This message gets send if a user started their session successfully.",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "afkUserWithReason",
+      "humanName": "User is AFK with reason",
+      "default": "ℹ %user% is currently AFK and specified the following reason: \"%reason%\".",
+      "description": "This message gets send if a pinged user is currently AFK with a previously specified reason.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "reason",
+          "description": "Reason for their absence"
+        },
+        {
+          "name": "user",
+          "description": "Mention of the user who is AFK"
+        }
+      ]
+    },
+    {
+      "name": "afkUserWithoutReason",
+      "humanName": "User is AFK without reason",
+      "default": "ℹ %user% is currently AFK.",
+      "description": "This message gets send if a pinged user is currently AFK without a previously specified reason.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": "Mention of the user who is AFK"
+        }
+      ]
+    },
+    {
+      "name": "autoEndMessage",
+      "humanName": "AFK Session ended automatically",
+      "default": "Welcome back 👋!\nYou are no longer AFK because you wrote a message. You can start a new session with `/afk start` and disable `auto-end` if you don't want your sessions to be ended automatically.",
+      "description": "This message gets send if a user who is AFK and hasn't disabled auto-ending their sessions posts a message on the server.",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "user",
+          "description": "Mention of the user who was AFK"
+        }
+      ]
+    }
+  ]
+}

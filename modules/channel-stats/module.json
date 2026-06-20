@@ -1,0 +1,27 @@
+{
+  "name": "channel-stats",
+  "fa-icon": "fas fa-stream",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "events-dir": "/events",
+  "config-example-files": [
+    "channels.json"
+  ],
+  "tags": [
+    "administration"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/channel-stats",
+  "humanReadableName": "Channel-Stats",
+  "description": "Create channels containing stats about your server - updated automatically.",
+  "intents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Counts the full membership to keep total member-count stat channels up to date.",
+    "GuildPresences": "Reads members' online status to power online, idle, do-not-disturb and offline count channels."
+  }
+}

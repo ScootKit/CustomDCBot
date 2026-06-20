@@ -1,0 +1,35 @@
+{
+  "description": "You can send messages on an hourly basic here - this can be once or 24 times a day",
+  "humanName": "Hourly basic",
+  "configElementName": {
+    "one": "Automatic message",
+    "more": "Automatic messages"
+  },
+  "filename": "hourly.json",
+  "configElements": true,
+  "content": [
+    {
+      "name": "channelID",
+      "humanName": "Channel",
+      "default": "",
+      "description": "ID of the channel in which the message should be send",
+      "type": "channelID"
+    },
+    {
+      "name": "message",
+      "humanName": "Message",
+      "default": "",
+      "description": "Message that should be send",
+      "type": "string",
+      "allowEmbed": true
+    },
+    {
+      "name": "limitHoursTo",
+      "humanName": "Limit hours to",
+      "default": [],
+      "description": "If one or more values are set, the message will only get send when the current hour is included in this field",
+      "type": "array",
+      "content": "integer"
+    }
+  ]
+}

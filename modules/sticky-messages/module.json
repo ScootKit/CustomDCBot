@@ -1,0 +1,22 @@
+{
+  "name": "sticky-messages",
+  "humanReadableName": "Sticky messages",
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": "Let a set message always appear at the end of a channel.",
+  "events-dir": "/events",
+  "config-example-files": [
+    "configs/sticky-messages.json"
+  ],
+  "fa-icon": "fas fa-thumbtack",
+  "tags": [
+    "community"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/sticky-messages",
+  "intents": [
+    "GuildMessages"
+  ]
+}

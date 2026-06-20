@@ -1,0 +1,44 @@
+{
+  "description": "Configure the behaviour of the module here",
+  "humanName": "Configuration",
+  "filename": "config.json",
+  "content": [
+    {
+      "name": "awaitBotMessages",
+      "humanName": "Wait for Bot-Messages",
+      "default": true,
+      "description": "If enabled, the bot will wait ~2 Seconds to make sure no bot like NQN deleted the messages and answered afterwards",
+      "type": "boolean"
+    },
+    {
+      "name": "ignoredChannels",
+      "humanName": "Ignored Channels",
+      "default": [],
+      "description": "If a ghost ping gets send in one of these configured channels, the bot will not run anti-ghost-ping",
+      "type": "array",
+      "content": "channelID"
+    },
+    {
+      "name": "youJustGotGhostPinged",
+      "humanName": "Ghostping-Message",
+      "default": "%mentions%,\nYou just got ghost-pinged by %authorMention% with the following message: \"%msgContent%\"",
+      "description": "This message gets send if a member pings another user and deletes the message afterwards",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "mentions",
+          "description": "Mentions of every user that got pinged in the original message"
+        },
+        {
+          "name": "authorMention",
+          "description": "Mention of the original message-author."
+        },
+        {
+          "name": "msgContent",
+          "description": "Content of the original message"
+        }
+      ]
+    }
+  ]
+}

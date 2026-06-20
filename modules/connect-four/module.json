@@ -1,0 +1,19 @@
+{
+  "name": "connect-four",
+  "humanReadableName": "Connect Four",
+  "fa-icon": "fa-solid fa-table-cells",
+  "author": {
+    "scnxOrgID": "60",
+    "name": "TomatoCake",
+    "link": "https://github.com/DEVTomatoCake"
+  },
+  "description": "Let your users play Connect Four against each other!",
+  "commands-dir": "/commands",
+  "noConfig": true,
+  "releaseDate": "0",
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/DEVTomatoCake/ScootKit-CustomBot/tree/main/modules/connect-four",
+  "intents": []
+}

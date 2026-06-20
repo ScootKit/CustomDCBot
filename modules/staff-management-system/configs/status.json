@@ -1,0 +1,147 @@
+{
+  "filename": "status.json",
+  "humanName": "LoA & RA Status",
+  "description": "Configure Leave of Absence (LoA) and Reduced Activity (RA) settings.",
+  "categories": [
+    {
+      "id": "base",
+      "icon": "fas fa-gears",
+      "displayName": "Base Settings"
+    },
+    {
+      "id": "loa",
+      "icon": "fas fa-door-open",
+      "displayName": "LoA Settings"
+    },
+    {
+      "id": "ra",
+      "icon": "fa-user-tie",
+      "displayName": "RA Settings"
+    },
+    {
+      "id": "logging",
+      "icon": "fa-solid fa-clipboard-list",
+      "displayName": "Requests Log"
+    }
+  ],
+  "content": [
+    {
+      "name": "enableStatusSystem",
+      "category": "base",
+      "humanName": "Enable Status System",
+      "description": "Enabling this unlocks the Leave of Absence (LoA) and Reduced Activity (RA) system, allowing staff to request these statuses and have them tracked.",
+      "type": "boolean",
+      "default": false,
+      "elementToggle": true
+    },
+    {
+      "name": "enableLoa",
+      "category": "loa",
+      "humanName": "Enable LoA System",
+      "description": "If enabled, staff can request a Leave of Absence (LoA).",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "loaRole",
+      "category": "loa",
+      "humanName": "LoA Role",
+      "description": "Role given to users when they are on a Leave of Absence. This is optional, but recommended to easily identify who is on LoA.",
+      "type": "roleID",
+      "allowNull": true,
+      "default": "",
+      "dependsOn": "enableLoa"
+    },
+    {
+      "name": "loaMaxDays",
+      "category": "loa",
+      "humanName": "Maximum LoA Duration (days)",
+      "description": "The maximum duration for a Leave of Absence in days. This limits how long staff can request to be on LoA for.",
+      "type": "integer",
+      "default": 60,
+      "minValue": 1,
+      "dependsOn": "enableLoa"
+    },
+    {
+      "name": "requireLoaApproval",
+      "category": "loa",
+      "humanName": "Require Approval for LoA?",
+      "description": "If enabled, LoA requests will require approval from staff who have supervisor permissions or higher.",
+      "type": "boolean",
+      "default": true,
+      "dependsOn": "enableLoa"
+    },
+    {
+      "name": "enableRa",
+      "category": "ra",
+      "humanName": "Enable RA System",
+      "description": "If enabled, staff can request Reduced Activity (RA) status for when they are still working but at a reduced load.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "raRole",
+      "category": "ra",
+      "humanName": "RA Role",
+      "description": "Role given to users when they are on Reduced Activity. This is optional, but recommended to easily identify who is on RA.",
+      "type": "roleID",
+      "allowNull": true,
+      "default": "",
+      "dependsOn": "enableRa"
+    },
+    {
+      "name": "raMaxDays",
+      "category": "ra",
+      "humanName": "Maximum RA Duration (days)",
+      "description": "The maximum duration for RA in days. This limits how long staff can request to be on RA for.",
+      "type": "integer",
+      "default": 30,
+      "minValue": 1,
+      "dependsOn": "enableRa"
+    },
+    {
+      "name": "requireRaApproval",
+      "category": "ra",
+      "humanName": "Require Approval for RA?",
+      "description": "If enabled, RA requests will require approval from staff who have supervisor permissions or higher.",
+      "type": "boolean",
+      "default": true,
+      "dependsOn": "enableRa"
+    },
+    {
+      "name": "statusLogChannel",
+      "category": "logging",
+      "humanName": "Status Request Channel",
+      "description": "Channel where requests are sent for approval.",
+      "type": "channelID",
+      "allowNull": true,
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": ""
+    },
+    {
+      "name": "logStatusChanges",
+      "category": "logging",
+      "humanName": "Log status changes",
+      "description": "If enabled, any changes in staff status (going on/off LoA or RA) will be logged in the configured channel.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "statusChangeLogChannel",
+      "category": "logging",
+      "humanName": "Status Change Log Channel",
+      "description": "Channel where status changes are logged. By default this uses your main log channel, but you can set a separate channel here.",
+      "type": "channelID",
+      "allowNull": true,
+      "channelTypes": [
+        "GUILD_TEXT",
+        "GUILD_NEWS"
+      ],
+      "default": "",
+      "dependsOn": "logStatusChanges"
+    }
+  ]
+}

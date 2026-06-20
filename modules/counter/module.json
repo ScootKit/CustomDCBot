@@ -1,0 +1,28 @@
+{
+  "name": "counter",
+  "fa-icon": "fas fa-arrow-up-1-9",
+  "author": {
+    "scnxOrgID": "1",
+    "name": "ScootKit Team (scootkit.com)",
+    "link": "https://github.com/ScootKit"
+  },
+  "events-dir": "/events",
+  "models-dir": "/models",
+  "config-example-files": [
+    "config.json",
+    "milestones.json"
+  ],
+  "tags": [
+    "fun"
+  ],
+  "openSourceURL": "https://github.com/SCNetwork/CustomDCBot/tree/main/modules/counter",
+  "humanReadableName": "Count-Game",
+  "description": "Allow your users to count together",
+  "intents": [
+    "GuildMessages",
+    "MessageContent"
+  ],
+  "intentReasons": {
+    "MessageContent": "Reads each message in the counting channel to check the number typed is the correct next count."
+  }
+}

@@ -1,0 +1,13 @@
+const msgsWithMention = {};
+module.exports.run = async function (client, msg) {
+    if (!client.botReadyAt) return;
+    if (!msg.guild) return;
+    if (msg.guild.id !== client.config.guildID) return;
+    const moduleConfig = client.configurations['anti-ghostping']['config'];
+    if (moduleConfig.ignoredChannels.includes(msg.channel.id)) return;
+    if (msg.mentions.members.filter(f => f.id !== msg.author.id && !f.user.bot).size !== 0) msgsWithMention[msg.id] = msg;
+    setTimeout(() => {
+        delete msgsWithMention[msg.id];
+    }, 60000);
+};
+module.exports.messageWithMentions = msgsWithMention;
