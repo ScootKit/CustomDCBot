@@ -2,13 +2,8 @@ const OLD_TABLE = 'ticket_Ticketv1';
 const NEW_TABLE = 'ticket_Ticketv2';
 
 /*
- * Replaces `migrate('tickets', 'TicketV1', 'Ticket')` (the legacy row-by-row helper
- * in src/functions/helpers.js) with a SQL-level INSERT INTO ... SELECT inside a
- * transaction. The new Ticket schema adds a `type` column; existing V1 rows have no
- * value for it, so it defaults to NULL.
- *
- * Idempotent: if either table is missing (already migrated under the legacy helper,
- * or a fresh install where the V1 schema was never present), the body is a no-op.
+ * Copies V1 rows into the V2 table in one transaction; the new `type` column defaults to NULL.
+ * No-ops when either table is absent.
  */
 module.exports = {
     tables: [OLD_TABLE, NEW_TABLE],
@@ -36,9 +31,6 @@ module.exports = {
     },
     down: async () => {
 
-        /*
-         * No-op: copying rows back to a now-empty V1 schema is not a meaningful
-         * rollback, and the old helper had no down path either.
-         */
+        // No-op: copying rows back to a now-empty V1 schema is not a meaningful rollback.
     }
 };

@@ -4,11 +4,10 @@
  *     listing.
  *   - role: permission rendering (ADMINISTRATOR shorthand vs explicit list),
  *     small-member listing, and the hoist/mentionable/managed feature flags.
- *   - user: the levels enrichment block and the administrator permission
- *     shorthand.
+ *   - user: the levels enrichment block and the administrator permission shorthand.
  *   - server: owner/ban/member-table assembly.
  * MessageEmbed + helpers are mocked so we can assert on the field set; the
- * cross-module helpers (messageCreate) load via the curve config.
+ * cross-module helpers (messageCreate/guildMemberJoin) load via the curve config.
  */
 const mainStub = require('../__stubs__/main');
 
@@ -137,7 +136,8 @@ function clientBase(modules = {}) {
         configurations: conf,
         modules,
         strings: {disableFooterTimestamp: true},
-        locale: 'en'
+        locale: 'en',
+        _activeIntents: ['Guilds', 'GuildMembers', 'GuildPresences']
     };
 }
 
@@ -259,6 +259,26 @@ describe('role subcommand', () => {
         const who = interaction.editReply.mock.calls[0][0].embeds[0].fields.find(f => f.name === 'Who');
         expect(who.value).toContain('<@a>');
         expect(who.value).toContain('<@b>');
+    });
+
+    test('renders N/A (not a false 0) for the role-member count when GuildMembers intent is inactive', async () => {
+        const members = {
+            size: 2,
+            forEach: (fn) => {
+                fn({id: 'a'});
+                fn({id: 'b'});
+            }
+        };
+        const client = clientBase();
+        client._activeIntents = ['Guilds', 'GuildPresences'];
+        const interaction = baseInteraction(client);
+        interaction.options = {getRole: () => role({members})};
+        await info.subcommands.role(interaction);
+        const count = interaction.editReply.mock.calls[0][0].embeds[0].fields.find(f => f.name === 'Count');
+        expect(count.value).toBe('N/A');
+        // The (near-empty, cache-derived) member list must also be omitted, not rendered wrong.
+        const who = interaction.editReply.mock.calls[0][0].embeds[0].fields.find(f => f.name === 'Who');
+        expect(who).toBeUndefined();
     });
 
     test('feature flags surface in the description', async () => {

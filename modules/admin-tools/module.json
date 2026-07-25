@@ -23,6 +23,9 @@
   "intents": [
     "GuildMembers"
   ],
+  "optionalIntents": [
+    "GuildMembers"
+  ],
   "intentReasons": {
     "GuildMembers": "Looks up members across the server to apply and remove scheduled temporary roles at the right time."
   }

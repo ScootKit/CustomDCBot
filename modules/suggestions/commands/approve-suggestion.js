@@ -14,10 +14,6 @@ module.exports.config = {
     description: localize('suggestions', 'approve-suggestion-description')
 };
 
-/*
- * Resolves the Suggestion by its stored messageID, then opens an optional-comment modal (customId encodes
- * action + suggestion id) whose submit handler reuses applySuggestionDecision. showModal first, so no defer.
- */
 module.exports.run = async function (interaction) {
     const suggestion = await interaction.client.models['suggestions']['Suggestion'].findOne({
         where: {messageID: interaction.targetMessage.id}

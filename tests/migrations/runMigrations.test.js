@@ -353,3 +353,36 @@ describe('Umzug + DatabaseSchemeVersionStorage end-to-end against the real level
         await sequelize.close();
     });
 });
+describe('buildUmzug explicit file list', () => {
+    const tempChannelsDir = path.join(__dirname, '..', '..', 'modules', 'temp-channels', 'migrations');
+
+    /*
+     * runAllMigrations always hands buildUmzug the exact absolute paths it wants run, rather than a
+     * glob: umzug's glob/ignore matching is version- and platform-dependent (backslash paths on
+     * Windows, brace patterns treated as literals) and can silently drop or re-include files.
+     */
+    test('drives from the given paths, sorted by basename, ignoring other files in the directory', async () => {
+        const {
+            DatabaseSchemeVersion,
+            sequelize
+        } = makeMarkerModel();
+        await sequelize.sync();
+
+        // Passed out of order on purpose: V1 must still resolve before V2.
+        const files = [
+            path.join(tempChannelsDir, 'temp-channels_TempChannel__V2.js'),
+            path.join(tempChannelsDir, 'temp-channels_TempChannel__V1.js')
+        ];
+        const umzug = buildUmzug(fakeClient(DatabaseSchemeVersion), tempChannelsDir, {files});
+        const names = (await umzug.migrations()).map(m => m.name);
+        expect(names).toEqual(['temp-channels_TempChannel__V1', 'temp-channels_TempChannel__V2']);
+
+        // A single-entry list must not pull in its sibling.
+        const one = buildUmzug(fakeClient(DatabaseSchemeVersion), tempChannelsDir, {
+            files: [path.join(tempChannelsDir, 'temp-channels_TempChannel__V2.js')]
+        });
+        expect((await one.migrations()).map(m => m.name)).toEqual(['temp-channels_TempChannel__V2']);
+
+        await sequelize.close();
+    });
+});

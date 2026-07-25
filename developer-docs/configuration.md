@@ -482,6 +482,24 @@ every PR via `.github/workflows/verify-configs.yml`. The script catches:
 - Defaults still using the deprecated localized format.
 - Embed defaults that look like v3 messages but are missing `"_schema": "v3"`.
 
+## What happens to an invalid stored value
+
+The checks above run against the schema you ship. At runtime the bot also validates what the **user** stored, and
+what it does when that fails depends on whether the field can be verified offline:
+
+- **Plain types** (`string`, `integer`, `boolean`, `select`, ...) - an invalid stored value is definitively wrong, so
+  it is healed to the field `default`, written back to disk, and logged. The module stays enabled.
+- **Fetch-backed types** (`channelID`, `roleID`, `userID`, `guildID`, and arrays of them) - validation needs a live
+  Discord lookup, and a failed lookup cannot be told apart from a rate limit or an outage. The stored value is
+  therefore **kept as-is** and only a warning is logged. Healing here would permanently destroy a valid ID during a
+  transient Discord problem.
+
+The one exception: a **required** fetch-backed field left unconfigured has an empty default that can never validate.
+That rejects the file and disables the module, rather than re-failing on every boot.
+
+Practical consequence for module authors: do not rely on a `channelID` in your config being currently resolvable.
+Handle a stale ID at the point of use.
+
 ## Full example
 
 ```json

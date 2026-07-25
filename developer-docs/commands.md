@@ -1,7 +1,11 @@
-# Slash Commands
+# Commands
 
-Commands live in a module's `commands-dir` (typically `commands/`). Each `.js` file is one slash command. The bot
-collects all command files and syncs them with Discord at startup.
+Commands live in a module's `commands-dir` (typically `commands/`). Each `.js` file is one command. The bot collects
+all command files and syncs them with Discord at startup.
+
+Two kinds exist: **slash commands**, invoked by typing `/name`, and **context-menu commands**, invoked by
+right-clicking a user or a message. Everything below describes slash commands unless stated otherwise; see
+[Context-menu commands](#context-menu-commands) for the differences.
 
 ## Minimum command
 
@@ -150,6 +154,76 @@ module.exports.run = async (interaction) => {
 };
 ```
 
+## Context-menu commands
+
+A context-menu command is one a user reaches by right-clicking a **user** or a **message** and picking it under
+*Apps*. It takes no options - the thing that was right-clicked is the entire input.
+
+```js
+// modules/levels/commands/view-profile.js
+const {localize} = require('../../../src/functions/localize');
+const {sendProfile} = require('./profile');
+
+module.exports.config = {
+    name: 'View Level Profile',
+    type: 'USER',
+    contextMenu: true,
+    description: localize('levels', 'profile-context-description')
+};
+
+module.exports.run = async function (interaction) {
+    const member = interaction.targetMember ?? await interaction.guild.members.fetch(interaction.targetUser.id);
+    return sendProfile(interaction, member);
+};
+```
+
+- **`type`** - `'USER'` or `'MESSAGE'`. Required, and the whole command sync fails without it.
+- **`contextMenu: true`** - marks the file as a context command.
+- **`name`** - unlike a slash command, it may use capitals and spaces. Maximum 32 characters.
+- **`description`** - used for `/help` only. Discord forbids a description on context commands, so it is stripped
+  before registration. Declare it anyway.
+- **`options`** - not allowed. They are stripped before registration.
+- **`defaultMemberPermissions`** - works exactly as for slash commands.
+
+Read the target off the interaction:
+
+| `type`      | Available on `interaction`                                      |
+|-------------|-----------------------------------------------------------------|
+| `'USER'`    | `targetUser`, and `targetMember` when the user is in the guild   |
+| `'MESSAGE'` | `targetMessage`                                                  |
+
+`targetMember` is null when the member is not cached, so fall back to `guild.members.fetch()` as above.
+
+### Sharing logic with a slash command
+
+Most context commands are a thin wrapper over an existing slash command. Export the shared core from the slash
+command file and call it from both, so the two render identically:
+
+```js
+// in the slash command file
+module.exports.sendProfile = sendProfile;
+```
+
+Where the slash command reads an option, hand its `run()` a proxy that supplies the context target instead:
+
+```js
+const proxy = Object.create(interaction);
+proxy.options = {getUser: () => interaction.targetUser};
+return runHug(proxy);
+```
+
+### Registration limits
+
+Discord allows **15 USER and 15 MESSAGE context commands per bot** (against 100 slash commands). Across all modules
+this bot ships more than that, so if too many are enabled at once the extras are skipped and logged:
+
+```
+Skipping 4 USER context command(s): Discord allows at most 15 per bot. Not registered: welcomer/Assign Join Roles, ...
+```
+
+Which ones survive depends on module load order. Two context commands of the same type may not share a name; the
+later one is skipped with a warning.
+
 ## Localization
 
 Use `localize()` for both descriptions and replies - see [localization.md](./localization.md). Descriptions are
@@ -179,6 +253,7 @@ module.exports.run = async (interaction) => {
 
 ## Where commands are registered
 
-Commands are registered as **guild commands** for the guild configured in `config/config.json`. Global registration is
-not supported - this bot is single-guild by design. Reloading happens automatically at startup; new commands appear
-within seconds. To force a re-sync without restart, run `/reload`.
+Commands are registered as **guild commands** for the guild configured in `config/config.json`, which is what you want
+during development: guild commands appear within seconds. Setting `syncCommandGlobally: true` registers them globally
+instead - they then also show up on other servers (where they will not work), and Discord can take up to two hours to
+propagate the change. Reloading happens automatically at startup; to force a re-sync without restarting, run `/reload`.

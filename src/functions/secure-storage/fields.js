@@ -1,13 +1,8 @@
 /*
- * The registry of columns protected by the secure-storage layer. These columns are declared TEXT and
- * the hooks (de)serialize their JSON/int values into that text. On the managed backend the same
- * columns are additionally encrypted at rest; locally the encryption is a no-op.
- *
- *   module : module folder name, or null for a core model under src/models/
- *   model  : the registration key (config.name) under client.models[module][key]
- *   file   : model filename without extension, when it differs from `model`
- *   name   : the live Sequelize model.name; pinned so an accidental class rename fails a test
- *   fields : { fieldName: 'string' | 'json' | 'int' } drives the (de)serialization
+ * Registry of columns protected by the secure-storage layer. Declared TEXT; the hooks (de)serialize
+ * their JSON/int values into that text. Entry keys: `module` (folder, null for a core model),
+ * `model` (registration key), `file` (filename when it differs), `name` (live model.name, pinned so
+ * a class rename fails a test), `fields` ({name: 'string'|'json'|'int'}).
  */
 const VALID_TYPES = ['string', 'json', 'int'];
 

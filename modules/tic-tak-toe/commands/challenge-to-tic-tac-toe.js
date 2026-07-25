@@ -9,12 +9,6 @@ module.exports.config = {
     description: localize('tic-tac-toe', 'challenge-to-tic-tac-toe-context-description')
 };
 
-/*
- * Thin adapter: /tic-tac-toe run() resolves its opponent via
- * interaction.options.getMember('user', true). We reuse run() unchanged by handing it the real
- * interaction with getMember overridden to return the right-clicked member, so the challenge and
- * game flow is identical against that user. The self-challenge guard inside run() applies unchanged.
- */
 module.exports.run = async function (interaction) {
     if (!memberCanSendInChannel(interaction.member, interaction.channel)) return interaction.reply({
         ephemeral: true,

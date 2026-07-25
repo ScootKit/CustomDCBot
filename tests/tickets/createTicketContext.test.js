@@ -14,9 +14,9 @@ const {createTicket} = require('../../modules/tickets/events/interactionCreate')
 const command = require('../../modules/tickets/commands/create-ticket-about-message');
 
 function makeInteraction({
-                             config = [{name: 'Support'}],
-                             content = 'hello world'
-                         } = {}) {
+    config = [{name: 'Support'}],
+    content = 'hello world'
+} = {}) {
     return {
         client: {configurations: {tickets: {config}}},
         targetMessage: {

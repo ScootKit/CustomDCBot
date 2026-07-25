@@ -10,14 +10,6 @@ module.exports.config = {
     description: localize('welcomer', 'restore-base-roles-context-description')
 };
 
-/*
- * Staff-only (MANAGE_ROLES) adapter for the base-role re-add path. Requires the base-roles
- * feature (treat-welcome-roles-as-base-roles) to be on - the automatic re-add in
- * handleRoleRemoval()/handleHoldingRelease() is gated the same way - otherwise it replies
- * ephemerally. It mirrors handleHoldingRelease exactly: skip if the member is still in a holding
- * state, then roles.add() the missing join roles with the shared base-role-audit-reason, so the
- * restored state is identical to the automatic flow.
- */
 module.exports.run = async function (interaction) {
     await interaction.deferReply({flags: MessageFlags.Ephemeral});
     const client = interaction.client;

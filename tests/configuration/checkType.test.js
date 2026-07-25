@@ -20,8 +20,20 @@ const {checkType} = require('../../src/functions/configuration');
 
 const baseClient = main.client;
 
+/*
+ * The new exit-code convention is a start-time opt-in (src/functions/exitCodes.js): enable it per
+ * test (the unknown-type test asserts the NEW code) and restore the environment afterwards.
+ */
+let prevScnxExitCodesEnv;
+beforeEach(() => {
+    prevScnxExitCodesEnv = process.env.SCNX_EXIT_CODES;
+    process.env.SCNX_EXIT_CODES = '1';
+});
+
 afterEach(() => {
     jest.restoreAllMocks();
+    if (typeof prevScnxExitCodesEnv === 'undefined') delete process.env.SCNX_EXIT_CODES;
+    else process.env.SCNX_EXIT_CODES = prevScnxExitCodesEnv;
 });
 
 describe('checkType - integer', () => {
@@ -359,8 +371,16 @@ describe('checkType - guildID', () => {
 });
 
 describe('checkType - unknown type', () => {
-    test('logs and calls process.exit(0)', async () => {
+    test('logs and calls process.exit(78) (FATAL_CONFIG)', async () => {
         const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => undefined);
+        await checkType({type: 'totally-unknown'}, 'x');
+        expect(exitSpy).toHaveBeenCalledWith(78);
+    });
+
+    test('WITHOUT the opt-in flag it exits 0 (legacy, byte-identical to pre-convention)', async () => {
+        delete process.env.SCNX_EXIT_CODES; // flag-off mode; afterEach restores it
+        const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
+        });
         await checkType({type: 'totally-unknown'}, 'x');
         expect(exitSpy).toHaveBeenCalledWith(0);
     });

@@ -8,10 +8,6 @@ module.exports.config = {
     description: localize('tickets', 'context-create-description')
 };
 
-/*
- * "create-ticket" button-flow adapter: reuses the shared createTicket() core for the first configured
- * ticket type, passing a reference to the targeted message so the new ticket links back to it.
- */
 module.exports.run = async function (interaction) {
     const client = interaction.client;
     const config = client.configurations['tickets']['config'];

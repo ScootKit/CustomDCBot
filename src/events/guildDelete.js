@@ -1,4 +1,5 @@
 const {localize} = require('../functions/localize');
+const {pick} = require('../functions/exitCodes');
 
 module.exports.run = async (client, guild) => {
     if (guild.id !== client.config.guildID) return;
@@ -16,7 +17,7 @@ module.exports.run = async (client, guild) => {
         client.logger.fatal(localize('main', 'not-invited', {
             inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${client.config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`
         }));
-        return process.exit(0);
+        return process.exit(pick(66)); // kicked from home guild: never restart
     }
 
     // Eager teardown so in-flight intervals/jobs stop immediately. reloadConfig() will
@@ -40,7 +41,7 @@ module.exports.run = async (client, guild) => {
             client.logger.fatal(localize('main', 'config-check-failed'));
             const sentryId = client.captureException ? client.captureException(e, {source: 'guild-rejoin-reload'}) : null;
             client.logger.error(client.sanitizePath(`${e.stack || e}${sentryId ? ` [Sentry: ${sentryId}]` : ''}`));
-            process.exit(0);
+            process.exit(pick(1)); // rejoin reload failure is retryable
         }
     };
     client.on('guildCreate', onGuildCreate);

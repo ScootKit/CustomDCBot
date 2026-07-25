@@ -9,10 +9,6 @@ module.exports.config = {
     description: localize('tickets', 'context-close-description')
 };
 
-/*
- * "close-ticket" button-flow adapter: resolves the open Ticket for interaction.channel and hands it to
- * the shared closeTicket() core. Replies ephemerally if the channel is not a ticket channel.
- */
 module.exports.run = async function (interaction) {
     const client = interaction.client;
     const ticket = await client.models['tickets']['Ticket'].findOne({

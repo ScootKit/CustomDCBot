@@ -42,7 +42,13 @@ Only `module.json` is mandatory. Everything else is opt-in via the matching `mod
   "models-dir": "/models",
   "config-example-files": [
     "configs/config.json"
-  ]
+  ],
+  "intents": [
+    "GuildMembers"
+  ],
+  "intentReasons": {
+    "GuildMembers": "Greets members as they join, which requires the member-join event."
+  }
 }
 ```
 
@@ -59,6 +65,9 @@ Only `module.json` is mandatory. Everything else is opt-in via the matching `mod
 | `commands-dir`         | No       | Folder scanned for slash commands. Convention: `/commands`.                                                  |
 | `models-dir`           | No       | Folder scanned for Sequelize models. Convention: `/models`.                                                  |
 | `config-example-files` | No       | Paths (relative to the module) of config schema files. See [configuration.md](./configuration.md).           |
+| `intents`              | No       | Gateway intents this module needs. See [intents.md](./intents.md).                                           |
+| `optionalIntents`      | No       | Privileged intents from `intents` the module can run without, losing one feature. See [intents.md](./intents.md). |
+| `intentReasons`        | No       | `{intent: "why"}`. Justifies each privileged intent to operators and to Discord.                             |
 
 If you omit a `*-dir` key, that subsystem is skipped - there's no default. A module with only events doesn't need
 `commands-dir`.
@@ -167,7 +176,8 @@ That's a working module. Run `npm run verify-configs` to confirm the config sche
 ## What to read next
 
 - [Events](./events.md) for handler patterns and the lifecycle gates that decide when your code runs.
-- [Slash commands](./commands.md) when your module needs user-invokable commands.
+- [Commands](./commands.md) when your module needs user-invokable slash or context-menu commands.
+- [Gateway intents](./intents.md) if your module needs events beyond the base set.
 - [Database models](./database-models.md) for persistent state.
 - [Localization](./localization.md) for adding user-facing strings.
 - [Configuration files](./configuration.md) for the full config schema reference.

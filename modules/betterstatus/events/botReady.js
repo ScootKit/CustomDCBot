@@ -1,4 +1,4 @@
-const {formatDiscordUserName} = require('../../../src/functions/helpers');
+const {formatDiscordUserName, memberCountOrFallback} = require('../../../src/functions/helpers');
 const {ActivityType} = require('discord.js');
 
 const activityTypes = {
@@ -41,19 +41,33 @@ module.exports.run = async function (client) {
 
     /**
      * @private
-     * Replace status variables
+     * Replace status variables. GuildMembers and GuildPresences are both optional for this module,
+     * so every placeholder derived from the member cache / presence data degrades to a placeholder
+     * instead of a false count built from an empty cache.
      * @param statusString String to run the replacer on
      * @returns {Promise<String>}
      */
     async function replaceStatusString(statusString) {
         if (!statusString) return 'Invalid status';
         const members = client.guild.members.cache;
-        const randomOnline = members.filter(m => ['online', 'dnd'].includes(m.presence?.status) && !m.user.bot).random();
-        const random = members.filter(m => !m.user.bot).random();
-        return statusString.replaceAll('%memberCount%', client.guild.memberCount)
-            .replaceAll('%onlineMemberCount%', members.filter(m => m.presence && !m.user.bot).size)
-            .replaceAll('%randomOnlineMemberTag%', randomOnline ? formatDiscordUserName(randomOnline.user) : formatDiscordUserName(client.user))
-            .replaceAll('%randomMemberTag%', `${random.user.username}#${random.user.discriminator}`)
+        const membersActive = (client._activeIntents || []).includes('GuildMembers');
+        const presencesActive = (client._activeIntents || []).includes('GuildPresences');
+        const placeholder = 'N/A';
+
+        const random = membersActive ? members.filter(m => !m.user.bot).random() : null;
+
+        // Needs presences too: without them every member looks offline, so this would near-always
+        // fall through to the bot's own tag and read as "a member is online" when we don't know.
+        const randomOnline = (membersActive && presencesActive)
+            ? members.filter(m => ['online', 'dnd'].includes(m.presence?.status) && !m.user.bot).random()
+            : null;
+
+        return statusString.replaceAll('%memberCount%', memberCountOrFallback(client.guild))
+            .replaceAll('%onlineMemberCount%', presencesActive ? members.filter(m => m.presence && !m.user.bot).size : placeholder)
+            .replaceAll('%randomOnlineMemberTag%', randomOnline
+                ? formatDiscordUserName(randomOnline.user)
+                : (presencesActive ? formatDiscordUserName(client.user) : placeholder))
+            .replaceAll('%randomMemberTag%', random ? `${random.user.username}#${random.user.discriminator}` : placeholder)
             .replaceAll('%channelCount%', client.guild.channels.cache.size)
             .replaceAll('%roleCount%', (await client.guild.roles.fetch()).size);
     }

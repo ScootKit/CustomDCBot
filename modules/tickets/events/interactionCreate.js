@@ -1,5 +1,10 @@
 const {localize} = require('../../../src/functions/localize');
-const {MessageEmbed} = require('discord.js');
+const {
+    MessageEmbed,
+    OverwriteType,
+    PermissionFlagsBits,
+    PermissionsBitField
+} = require('discord.js');
 const {
     lockChannel,
     messageLogToStringToPaste,
@@ -104,15 +109,85 @@ async function createTicket(client, interaction, element, typeIndex, reference =
         existingTicket.open = false;
         await existingTicket.save();
     }
-    const overwrites = [];
-    element.ticketRoles.forEach(rID => {
-        overwrites.push(
-            {
-                id: rID,
-                type: 'ROLE',
-                allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
-            }
+    const category = element.inheritCategoryPermissions === true
+        ? await interaction.guild.channels.fetch(element['ticket-create-category'])
+        : null;
+    const overwrites = category?.permissionOverwrites?.cache
+        ? Array.from(category.permissionOverwrites.cache.values(), overwrite => ({
+            id: overwrite.id,
+            type: overwrite.type,
+            allow: overwrite.allow.bitfield,
+            deny: overwrite.deny.bitfield
+        }))
+        : [];
+
+    /**
+     * Merges ticket access into an existing overwrite (or creates one) instead of replacing it, so
+     * inherited category permissions survive.
+     * @param {String} id Role or member id
+     * @param {Number} type OverwriteType
+     */
+    function grantTicketAccess(id, type) {
+        const index = overwrites.findIndex(overwrite => overwrite.id === id);
+        const overwrite = index === -1 ? {
+            id,
+            type,
+            allow: 0n,
+            deny: 0n
+        } : overwrites[index];
+        const allow = new PermissionsBitField(overwrite.allow).add(
+            PermissionFlagsBits.SendMessages,
+            PermissionFlagsBits.ViewChannel,
+            PermissionFlagsBits.AttachFiles,
+            PermissionFlagsBits.EmbedLinks,
+            PermissionFlagsBits.ReadMessageHistory
         );
+        const deny = new PermissionsBitField(overwrite.deny).remove(
+            PermissionFlagsBits.SendMessages,
+            PermissionFlagsBits.ViewChannel,
+            PermissionFlagsBits.AttachFiles,
+            PermissionFlagsBits.EmbedLinks,
+            PermissionFlagsBits.ReadMessageHistory
+        );
+        const merged = {
+            ...overwrite,
+            type,
+            allow: allow.bitfield,
+            deny: deny.bitfield
+        };
+        if (index === -1) overwrites.push(merged);
+        else overwrites[index] = merged;
+    }
+
+    /**
+     * Hides the ticket from a role. Only ViewChannel is denied; every other inherited category
+     * permission is kept intact, which is the point of the opt-in inherit mode.
+     * @param {String} id Role id
+     */
+    function denyEveryoneAccess(id) {
+        const index = overwrites.findIndex(overwrite => overwrite.id === id);
+        const overwrite = index === -1 ? {
+            id,
+            type: OverwriteType.Role,
+            allow: 0n,
+            deny: 0n
+        } : overwrites[index];
+        const allow = new PermissionsBitField(overwrite.allow).remove(PermissionFlagsBits.ViewChannel);
+        const deny = new PermissionsBitField(overwrite.deny).add(PermissionFlagsBits.ViewChannel);
+        const merged = {
+            ...overwrite,
+            type: OverwriteType.Role,
+            allow: allow.bitfield,
+            deny: deny.bitfield
+        };
+        if (index === -1) overwrites.push(merged);
+        else overwrites[index] = merged;
+    }
+
+    denyEveryoneAccess(interaction.guild.id); // Discord guarantees @everyone's role id is the guild id
+    grantTicketAccess(interaction.member.id, OverwriteType.Member);
+    element.ticketRoles.forEach(rID => {
+        grantTicketAccess(rID, OverwriteType.Role);
     });
     let topic = `Ticket created by ${interaction.user.toString()} by clicking on a message in ${interaction.channel.toString()}`;
     if (reference) topic = reference;
@@ -121,14 +196,7 @@ async function createTicket(client, interaction, element, typeIndex, reference =
         parent: element['ticket-create-category'],
         topic: topic,
         reason: localize('tickets', 'ticket-created-audit-log', {u: formatDiscordUserName(interaction.user)}),
-        permissionOverwrites: [{
-            id: interaction.guild.roles.cache.find(r => r.name === '@everyone'),
-            deny: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
-        },
-            {
-                id: interaction.member,
-                allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']
-            }, ...overwrites]
+        permissionOverwrites: overwrites
     });
     const ticket = await client.models['tickets']['Ticket'].create({
         open: true,

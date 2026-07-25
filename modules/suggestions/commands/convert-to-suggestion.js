@@ -10,10 +10,6 @@ module.exports.config = {
     description: localize('suggestions', 'convert-to-suggestion-description')
 };
 
-/*
- * Converts the right-clicked message into a suggestion via the shared createSuggestion(), attributed to
- * the original author (not the staff member converting it).
- */
 module.exports.run = async function (interaction) {
     const target = interaction.targetMessage;
     await interaction.deferReply({ephemeral: true});

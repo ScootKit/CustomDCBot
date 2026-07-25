@@ -94,6 +94,15 @@
       "default": false,
       "description": "If enabled, module-commands will be synced to discord as global commands. They will show up on other servers, but won't work. Syncing can take up to 2 hours, so changes may not be reflected immediately.",
       "type": "boolean"
+    },
+    {
+      "name": "allowedPrivilegedIntents",
+      "humanName": "Allowed privileged intents",
+      "default": [],
+      "description": "Advanced: the privileged gateway intents Discord has granted this application (GuildMembers, GuildPresences, MessageContent). Leave empty to allow all three (default). If set, any privileged intent not listed is never requested - modules that only use it for optional features keep running, and modules that require it are disabled. For operators of very large bots who cannot obtain every privileged intent.",
+      "hidden": true,
+      "type": "array",
+      "content": "string"
     }
   ]
 }

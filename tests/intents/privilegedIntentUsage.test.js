@@ -36,7 +36,13 @@ describe('privilegedIntentUsage', () => {
         });
         writeModule(modulesDir, 'b', {intents: ['GuildPresences']});
         const out = privilegedIntentUsage(confDir, modulesDir);
-        expect(out.GuildMembers).toEqual([{module: 'a', name: 'Module A', reason: 'needs members'}]);
+        expect(out.GuildMembers).toEqual([{
+            module: 'a',
+            name: 'Module A',
+            reason: 'needs members',
+            granted: true,
+            optional: false
+        }]);
         expect(out.GuildPresences).toBeUndefined();
     });
 
@@ -54,7 +60,13 @@ describe('privilegedIntentUsage', () => {
         fs.writeFileSync(path.join(confDir, 'modules.json'), JSON.stringify({a: true}));
         writeModule(modulesDir, 'a', {intents: ['MessageContent', 'GuildMessages']});
         const out = privilegedIntentUsage(confDir, modulesDir);
-        expect(out.MessageContent).toEqual([{module: 'a', name: 'a', reason: null}]);
+        expect(out.MessageContent).toEqual([{
+            module: 'a',
+            name: 'a',
+            reason: null,
+            granted: true,
+            optional: false
+        }]);
     });
 
     test('attributes a custom-command message trigger to a synthetic entry', () => {
@@ -68,7 +80,9 @@ describe('privilegedIntentUsage', () => {
         expect(out.MessageContent).toEqual([{
             module: 'custom-commands',
             name: 'Custom commands',
-            reason: 'Message-trigger auto-responders read message text to decide when to reply.'
+            reason: 'Message-trigger auto-responders read message text to decide when to reply.',
+            granted: true,
+            optional: false
         }]);
     });
 

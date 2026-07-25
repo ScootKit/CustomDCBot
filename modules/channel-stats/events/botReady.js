@@ -1,5 +1,5 @@
 const {ChannelType} = require('discord.js');
-const {formatDate} = require('../../../src/functions/helpers');
+const {formatDate, memberCountOrFallback, onlineCountOrNull} = require('../../../src/functions/helpers');
 const {localize} = require('../../../src/functions/localize');
 
 module.exports.run = async (client) => {
@@ -43,6 +43,13 @@ async function channelNameReplacer(client, channel, input) {
     const users = client.guild.members.cache;
     const members = users.filter(u => !u.user.bot);
 
+    // Presence data is only reliable with GuildPresences; role membership and the non-bot subset
+    // are enumerated from the member cache, which is near-empty without GuildMembers. Both degrade
+    // to a placeholder rather than silently under-reporting.
+    const presencesActive = (client._activeIntents || []).includes('GuildPresences');
+    const membersActive = (client._activeIntents || []).includes('GuildMembers');
+    const presencePlaceholder = 'N/A';
+
     /**
      * Replaces the first member-with-role-count parameters of the input
      * @private
@@ -51,30 +58,31 @@ async function channelNameReplacer(client, channel, input) {
         if (input.includes('%userWithRoleCount-')) {
             const id = input.split('%userWithRoleCount-')[1].split('%')[0];
             if (input.includes(`%userWithRoleCount-${id}%`)) {
-                input = input.replaceAll(`%userWithRoleCount-${id}%`, users.filter(f => f.roles.cache.has(id)).size.toString());
+                input = input.replaceAll(`%userWithRoleCount-${id}%`, membersActive ? users.filter(f => f.roles.cache.has(id)).size.toString() : presencePlaceholder);
                 replaceFirst();
             }
         }
         if (input.includes('%onlineUserWithRoleCount-')) {
             const id = input.split('%onlineUserWithRoleCount-')[1].split('%')[0];
             if (input.includes(`%onlineUserWithRoleCount-${id}%`)) {
-                input = input.replaceAll(`%onlineUserWithRoleCount-${id}%`, users.filter(f => f.roles.cache.has(id) && f.presence && (f.presence || {}).status !== 'offline').size.toString());
+                input = input.replaceAll(`%onlineUserWithRoleCount-${id}%`, (membersActive && presencesActive) ? users.filter(f => f.roles.cache.has(id) && f.presence && (f.presence || {}).status !== 'offline').size.toString() : presencePlaceholder);
                 replaceFirst();
             }
         }
     }
 
     replaceFirst();
-    return input.split('%userCount%').join(users.size)
-        .split('%memberCount%').join(members.size)
-        .split('%onlineUserCount%').join(users.filter(u => u.presence && (u.presence || {}).status !== 'offline').size)
-        .split('%onlineMemberCount%').join(members.filter(u => u.presence && (u.presence || {}).status !== 'offline').size)
+    const onlineUserCount = onlineCountOrNull(client, client.guild);
+    return input.split('%userCount%').join(memberCountOrFallback(client.guild))
+        .split('%memberCount%').join(membersActive ? members.size : presencePlaceholder)
+        .split('%onlineUserCount%').join(onlineUserCount === null ? presencePlaceholder : onlineUserCount)
+        .split('%onlineMemberCount%').join(presencesActive ? members.filter(u => u.presence && (u.presence || {}).status !== 'offline').size : presencePlaceholder)
         .split('%channelCount%').join(channel.guild.channels.cache.size)
         .split('%roleCount%').join(channel.guild.roles.cache.size)
-        .split('%botCount%').join(users.filter(m => m.user.bot).size)
-        .split('%dndCount%').join(members.filter(u => u.presence && (u.presence || {}).status === 'dnd').size)
-        .split('%awayCount%').join(members.filter(m => m.presence && (m.presence || {}).status === 'idle').size)
-        .split('%offlineCount%').join(members.filter(m => !m.presence || (m.presence || {}).status === 'offline').size)
+        .split('%botCount%').join(membersActive ? users.filter(m => m.user.bot).size : presencePlaceholder)
+        .split('%dndCount%').join(presencesActive ? members.filter(u => u.presence && (u.presence || {}).status === 'dnd').size : presencePlaceholder)
+        .split('%awayCount%').join(presencesActive ? members.filter(m => m.presence && (m.presence || {}).status === 'idle').size : presencePlaceholder)
+        .split('%offlineCount%').join(presencesActive ? members.filter(m => !m.presence || (m.presence || {}).status === 'offline').size : presencePlaceholder)
         .split('%guildBoosts%').join(channel.guild.premiumSubscriptionCount || '0')
         .split('%boostLevel%').join(localize('boostTier', channel.guild.premiumTier))
         .split('%boosterCount%').join(members.filter(m => !!m.premiumSinceTimestamp).size)
@@ -82,5 +90,4 @@ async function channelNameReplacer(client, channel, input) {
         .split('%currentTime%').join(formatDate(new Date(), true)).trim();
 }
 
-// Exported for unit testing of the placeholder-replacement logic.
 module.exports.channelNameReplacer = channelNameReplacer;

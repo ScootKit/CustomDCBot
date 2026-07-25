@@ -22,6 +22,9 @@
     "GuildMessages",
     "MessageContent"
   ],
+  "optionalIntents": [
+    "MessageContent"
+  ],
   "intentReasons": {
     "MessageContent": "Reads message text to turn it into a suggestion entry."
   }

@@ -23,6 +23,9 @@
     "GuildMessages",
     "MessageContent"
   ],
+  "optionalIntents": [
+    "MessageContent"
+  ],
   "intentReasons": {
     "MessageContent": "Reads a starred message's text and attachments to render it on the starboard."
   }

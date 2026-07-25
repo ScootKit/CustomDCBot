@@ -14,13 +14,6 @@ module.exports.config = {
     description: localize('reminders', 'context-create-description')
 };
 
-/*
- * Open a modal collecting WHEN (a duration like "10m"/"2h"). The modal's customId encodes the
- * targeted message as create-reminder:<channelId>:<messageId> so the modal-submit handler in
- * events/interactionCreate.js can reconstruct the message, build a reminder whose content is
- * the message jump link and run the existing planReminder() flow. showModal must be the first
- * response, so we must NOT deferReply before it.
- */
 module.exports.run = async function (interaction) {
     if (!memberCanSendInChannel(interaction.member, interaction.channel)) return interaction.reply({
         ephemeral: true,

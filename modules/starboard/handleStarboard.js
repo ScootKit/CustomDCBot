@@ -25,7 +25,7 @@ module.exports = async (client, msgReaction, user, isReactionRemove = false, opt
     if (isNaN(starConfig.minStars)) return disableModule('starboard', localize('starboard', 'invalid-minstars', {stars: starConfig.minStars}));
 
     const channel = client.channels.cache.get(starConfig.channelId);
-    if (!channel) return disableModule('starboard', localize('partner-list', 'channel-not-found', {c: starConfig.channelId}));
+    if (!channel) return disableModule('starboard', localize('starboard', 'channel-not-found', {c: starConfig.channelId}));
     if ((msg.channel.nsfw && !channel.nsfw) || starConfig.excludedChannels.includes(msg.channel.id) || starConfig.excludedRoles.some(r => msg.member?.roles.cache.has(r))) return;
     if (!force && !starConfig.selfStar && user.id === msg.author.id) return msgReaction.users.remove(user.id).catch(() => {
     });

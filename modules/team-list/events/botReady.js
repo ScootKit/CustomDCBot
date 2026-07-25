@@ -47,16 +47,22 @@ const statusIcons = {
  */
 function buildUserString(membersWithRole, role, channelConfig, listedUserIDs) {
     let userString = '';
-    for (const member of membersWithRole) {
+    const members = Array.from(membersWithRole);
+
+    // Without GuildPresences every member reads as offline, so drop the status column entirely
+    // rather than rendering everyone as offline.
+    const showStatus = Boolean(channelConfig.includeStatus) &&
+        Boolean(members[0]?.client?._activeIntents?.includes('GuildPresences'));
+    for (const member of members) {
         if (listedUserIDs.includes(member.user.id) && channelConfig.onlineShowHighestRole) continue;
         listedUserIDs.push(member.user.id);
         const status = (member.presence || {status: 'offline'}).status;
-        userString = userString + (channelConfig.includeStatus
+        userString = userString + (showStatus
             ? `* ${member.user.toString()}: ${statusIcons[status]} ${localize('team-list', status)}\n`
             : `${member.user.toString()}, `);
     }
     if (userString === '') userString = localize('team-list', 'no-users-with-role', {r: role.toString()});
-    else if (!channelConfig.includeStatus) userString = userString.substring(0, userString.length - 2);
+    else if (!showStatus) userString = userString.substring(0, userString.length - 2);
     return userString;
 }
 

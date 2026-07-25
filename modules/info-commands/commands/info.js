@@ -7,7 +7,9 @@ const {
     formatNumber,
     parseEmbedColor,
     safeSetFooter,
-    moduleEnabled
+    moduleEnabled,
+    memberCountOrFallback,
+    onlineCountOrNull
 } = require('../../../src/functions/helpers');
 const {ChannelType, MessageEmbed} = require('discord.js');
 const {AgeFromDate} = require('age-calculator');
@@ -63,7 +65,14 @@ module.exports.subcommands = {
         embed.addField(moduleStrings.serverinfo.banCount, bans.size.toString(), true);
         embed.addField(moduleStrings.serverinfo.createdAt, `<t:${(interaction.guild.createdAt.getTime() / 1000).toFixed(0)}:d>`, true);
         const members = interaction.guild.members.cache;
-        embed.addField(moduleStrings.serverinfo.members, `\`\`\`| ${localize('info-commands', 'userCount')} | ${localize('info-commands', 'memberCount')} | Online |\n| ${pufferStringToSize(members.size, localize('info-commands', 'userCount').length)} | ${pufferStringToSize(members.filter(m => !m.user.bot).size, localize('info-commands', 'memberCount').length)} | ${pufferStringToSize(members.filter(m => m.presence && (m.presence || {}).status !== 'offline').size, localize('info-commands', 'onlineCount').length)} |\`\`\``);
+        const onlineMemberCount = onlineCountOrNull(interaction.client, interaction.guild);
+        const onlineDisplay = onlineMemberCount === null ? 'N/A' : onlineMemberCount;
+
+        // members.cache is near-empty without GuildMembers, so the human-count column would silently
+        // under-report rather than showing the same placeholder as the columns beside it.
+        const membersIntentActive = (interaction.client._activeIntents || []).includes('GuildMembers');
+        const humanCountDisplay = membersIntentActive ? members.filter(m => !m.user.bot).size : 'N/A';
+        embed.addField(moduleStrings.serverinfo.members, `\`\`\`| ${localize('info-commands', 'userCount')} | ${localize('info-commands', 'memberCount')} | Online |\n| ${pufferStringToSize(memberCountOrFallback(interaction.guild), localize('info-commands', 'userCount').length)} | ${pufferStringToSize(humanCountDisplay, localize('info-commands', 'memberCount').length)} | ${pufferStringToSize(onlineDisplay, localize('info-commands', 'onlineCount').length)} |\`\`\``);
         embed.addField(moduleStrings.serverinfo.channels, `\`\`\`| ${localize('info-commands', 'textChannel')} | ${localize('info-commands', 'voiceChannel')} | ${localize('info-commands', 'categoryChannel')} | ${localize('info-commands', 'otherChannel')} |\n| ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildText).size.toString(), localize('info-commands', 'textChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildVoice).size.toString(), localize('info-commands', 'voiceChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildCategory).size.toString(), localize('info-commands', 'categoryChannel').length)} | ${pufferStringToSize(interaction.guild.channels.cache.filter(c => c.type !== ChannelType.GuildVoice && c.type !== ChannelType.GuildText && c.type !== ChannelType.GuildCategory).size.toString(), localize('info-commands', 'otherChannel').length)} |\`\`\``);
         let featuresstring = '';
         interaction.guild.features.forEach(f => {
@@ -123,9 +132,11 @@ module.exports.subcommands = {
         safeSetFooter(embed, interaction.client);
         if (!interaction.client.strings.disableFooterTimestamp) embed.setTimestamp();
         if (role.color) embed.addField(moduleStrings.roleInfo.color, role.hexColor, true);
+        // role.members is derived from the member cache, near-empty without GuildMembers.
+        const membersIntentActive = (interaction.client._activeIntents || []).includes('GuildMembers');
         if (role.members) {
-            embed.addField(moduleStrings.roleInfo.memberWithThisRoleCount, role.members.size.toString(), true);
-            if (role.members.size <= 10 && role.members.size !== 0) {
+            embed.addField(moduleStrings.roleInfo.memberWithThisRoleCount, membersIntentActive ? role.members.size.toString() : 'N/A', true);
+            if (membersIntentActive && role.members.size <= 10 && role.members.size !== 0) {
                 let memberstring = '';
                 role.members.forEach(m => {
                     memberstring = memberstring + `<@${m.id}>, `;
@@ -204,7 +215,7 @@ async function sendUserInfo(interaction, member) {
         let dateString = `${birthday.day}.${birthday.month}${birthday.year ? `.${birthday.year}` : ''}`;
         if (birthday.year) {
             const age = new AgeFromDate(new Date(birthday.year, birthday.month - 1, birthday.day)).age;
-            dateString = `[${dateString}](https://scnx.xyz/${interaction.client.locale === 'de' ? 'de/' : ''}custom-bot/age-calculator?age=${age} "${localize('birthdays', 'age-hover', {a: age})}")`;
+            dateString = `[${dateString}](https://scnx.xyz/${interaction.client.locale === 'de' ? 'de/' : ''}custom-bot/age-calculator?age=${age} "${localize('info-commands', 'age-hover', {a: age})}")`;
         }
         embed.addField(moduleStrings.userinfo.birthday, dateString, true);
     }

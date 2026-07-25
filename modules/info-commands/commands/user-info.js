@@ -8,11 +8,6 @@ module.exports.config = {
     description: localize('info-commands', 'user-info-context-description')
 };
 
-/*
- * Thin adapter: defer (sendUserInfo replies via editReply, normally deferred by beforeSubcommand)
- * and hand the target member off to the shared sendUserInfo core so the output is identical to
- * /info user.
- */
 module.exports.run = async function (interaction) {
     await interaction.deferReply({ephemeral: true});
     let member = interaction.targetMember;

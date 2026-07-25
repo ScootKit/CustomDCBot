@@ -12,6 +12,7 @@ jest.mock('../../src/functions/localize', () => ({localize: (file, key) => `${fi
 
 const mainStub = require('../__stubs__/main');
 const handler = require('../../modules/tickets/events/interactionCreate');
+const {OverwriteType, PermissionFlagsBits, PermissionsBitField} = require('discord.js');
 
 function makeElement() {
     return {
@@ -78,9 +79,11 @@ function makeInteraction(customId) {
             id: 'g1',
             channels: {
                 create: jest.fn().mockResolvedValue(channel),
-                fetch: jest.fn().mockResolvedValue(null)
+                fetch: jest.fn().mockResolvedValue({
+                    permissionOverwrites: {cache: new Map()}
+                })
             },
-            roles: {cache: {find: () => ({id: 'everyone'})}}
+            roles: {cache: {find: () => ({id: 'g1'})}}
         },
         deferReply: jest.fn().mockResolvedValue(),
         reply: jest.fn().mockResolvedValue(),
@@ -126,5 +129,65 @@ describe('tickets create-ticket interaction', () => {
         expect(interaction.editReply).toHaveBeenCalledTimes(1);
         // reply() on an already-acknowledged interaction throws "already acknowledged".
         expect(interaction.reply).not.toHaveBeenCalled();
+    });
+
+    test('copies category permissions and merges ticket-specific access when enabled', async () => {
+        const client = makeClient();
+        client.configurations.tickets.config[0].ticketRoles = ['staff'];
+        client.configurations.tickets.config[0].inheritCategoryPermissions = true;
+        const interaction = makeInteraction('create-ticket-0');
+        interaction.guild.channels.fetch.mockResolvedValue({
+            permissionOverwrites: {
+                cache: new Map([
+                    ['g1', {
+                        id: 'g1',
+                        type: OverwriteType.Role,
+                        allow: new PermissionsBitField([
+                            PermissionFlagsBits.AttachFiles,
+                            PermissionFlagsBits.ViewChannel
+                        ]),
+                        deny: new PermissionsBitField()
+                    }],
+                    ['staff', {
+                        id: 'staff',
+                        type: OverwriteType.Role,
+                        allow: new PermissionsBitField([
+                            PermissionFlagsBits.AttachFiles,
+                            PermissionFlagsBits.EmbedLinks
+                        ]),
+                        deny: new PermissionsBitField(PermissionFlagsBits.SendMessages)
+                    }]
+                ])
+            }
+        });
+
+        await handler.run(client, interaction);
+
+        const {permissionOverwrites} = interaction.guild.channels.create.mock.calls[0][0];
+        const everyone = permissionOverwrites.find(overwrite => overwrite.id === 'g1');
+        const staff = permissionOverwrites.find(overwrite => overwrite.id === 'staff');
+        const creator = permissionOverwrites.find(overwrite => overwrite.id === 'u1');
+        expect(new PermissionsBitField(everyone.allow).has(PermissionFlagsBits.AttachFiles)).toBe(true);
+        expect(new PermissionsBitField(everyone.allow).has(PermissionFlagsBits.ViewChannel)).toBe(false);
+        expect(new PermissionsBitField(everyone.deny).has(PermissionFlagsBits.ViewChannel)).toBe(true);
+        expect(new PermissionsBitField(staff.allow).has([
+            PermissionFlagsBits.AttachFiles,
+            PermissionFlagsBits.EmbedLinks,
+            PermissionFlagsBits.SendMessages,
+            PermissionFlagsBits.ViewChannel
+        ])).toBe(true);
+        expect(new PermissionsBitField(staff.deny).has(PermissionFlagsBits.SendMessages)).toBe(false);
+        expect(new PermissionsBitField(creator.allow).has(PermissionFlagsBits.ViewChannel)).toBe(true);
+    });
+
+    test('does not copy category permissions unless the option is explicitly enabled', async () => {
+        const client = makeClient();
+        const interaction = makeInteraction('create-ticket-0');
+
+        await handler.run(client, interaction);
+
+        expect(interaction.guild.channels.fetch).not.toHaveBeenCalled();
+        const {permissionOverwrites} = interaction.guild.channels.create.mock.calls[0][0];
+        expect(permissionOverwrites.map(overwrite => overwrite.id)).toEqual(['g1', 'u1']);
     });
 });

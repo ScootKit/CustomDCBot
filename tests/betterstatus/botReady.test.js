@@ -14,11 +14,11 @@ const {Collection} = require('discord.js');
 const botReady = require('../../modules/betterstatus/events/botReady');
 
 function makeMember({
-                        bot = false,
-                        status = 'online',
-                        username = 'user',
-                        discriminator = '0'
-                    } = {}) {
+    bot = false,
+    status = 'online',
+    username = 'user',
+    discriminator = '0'
+} = {}) {
     return {
         presence: status ? {status} : null,
         user: {
@@ -33,7 +33,8 @@ function makeClient(config, {
     members = [],
     roleCount = 3,
     channelCount = 4,
-    memberCount = 10
+    memberCount = 10,
+    activeIntents = ['GuildMembers', 'GuildPresences']
 } = {}) {
     const cache = new Collection();
     members.forEach((m, i) => cache.set(String(i), m));
@@ -41,6 +42,7 @@ function makeClient(config, {
         intervals: [],
         config: {user_presence: 'Hi %memberCount%'},
         configurations: {betterstatus: {config}},
+        _activeIntents: activeIntents,
         guild: {
             memberCount,
             members: {cache},
@@ -106,6 +108,63 @@ test('replaces %randomMemberTag% using the username#discriminator form', async (
     client.config.user_presence = 'T:%randomMemberTag%';
     await botReady.run(client);
     expect(client.user.setActivity.mock.calls[0][0]).toBe('T:alice#1234');
+});
+
+describe('degraded rendering (GuildMembers/GuildPresences withheld - both are optional for this module)', () => {
+    test('without GuildPresences, %onlineMemberCount% is the neutral N/A token, never a false 0', async () => {
+        const client = makeClient(baseConf(), {
+            members: [makeMember({status: 'online'}), makeMember({status: 'dnd'})],
+            memberCount: 42,
+            activeIntents: ['GuildMembers'] // GuildPresences withheld
+        });
+        client.config.user_presence = 'O:%onlineMemberCount%';
+        await botReady.run(client);
+        expect(client.user.setActivity.mock.calls[0][0]).toBe('O:N/A');
+    });
+
+    test('without GuildMembers, %randomMemberTag% is the neutral N/A token and does not throw', async () => {
+        const client = makeClient(baseConf(), {
+            members: [makeMember({username: 'alice', discriminator: '1234'})],
+            activeIntents: ['GuildPresences'] // GuildMembers withheld
+        });
+        client.config.user_presence = 'T:%randomMemberTag%';
+        await expect(botReady.run(client)).resolves.toBeUndefined();
+        expect(client.user.setActivity.mock.calls[0][0]).toBe('T:N/A');
+    });
+
+    test('without GuildMembers, %memberCount% still reports the correct total via guild.memberCount (not the empty cache)', async () => {
+        const client = makeClient(baseConf(), {
+            members: [],
+            memberCount: 250,
+            activeIntents: ['GuildPresences']
+        });
+        client.config.user_presence = 'M:%memberCount%';
+        await botReady.run(client);
+        expect(client.user.setActivity.mock.calls[0][0]).toBe('M:250');
+    });
+
+    test('without GuildPresences, %randomOnlineMemberTag% is the neutral N/A token (not the bot\'s own tag)', async () => {
+        const client = makeClient(baseConf(), {
+            members: [makeMember({username: 'alice', discriminator: '1234'})],
+            activeIntents: ['GuildMembers'] // GuildPresences withheld
+        });
+        client.config.user_presence = 'R:%randomOnlineMemberTag%';
+        await botReady.run(client);
+        expect(client.user.setActivity.mock.calls[0][0]).toBe('R:N/A');
+    });
+
+    test('happy path (both intents active) is unchanged', async () => {
+        const client = makeClient(baseConf(), {
+            members: [makeMember({status: 'online'}), makeMember({status: 'dnd'}), makeMember({status: null})],
+            roleCount: 7,
+            channelCount: 5,
+            memberCount: 42,
+            activeIntents: ['GuildMembers', 'GuildPresences']
+        });
+        client.config.user_presence = 'M:%memberCount% O:%onlineMemberCount% C:%channelCount% R:%roleCount%';
+        await botReady.run(client);
+        expect(client.user.setActivity.mock.calls[0][0]).toBe('M:42 O:2 C:5 R:7');
+    });
 });
 
 test('registers an interval when enableInterval is set and clamps below 5s', async () => {

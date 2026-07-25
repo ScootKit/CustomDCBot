@@ -22,6 +22,9 @@
   "intents": [
     "GuildMembers"
   ],
+  "optionalIntents": [
+    "GuildMembers"
+  ],
   "intentReasons": {
     "GuildMembers": "Reacts to member updates to grant or remove the custom color role when boost status changes."
   }

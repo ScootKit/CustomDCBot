@@ -1,7 +1,6 @@
 const Discord = require('./src/discordjs-fix');
 const {
     ApplicationCommandOptionType,
-    ApplicationCommandType,
     ChannelType,
     Partials,
     PermissionFlagsBits,
@@ -19,13 +18,15 @@ if (args[0] && args[1]) {
     dataDir = args[1];
 }
 
-// Compute the gateway intents required by the currently-enabled modules before constructing the client
 const {computeRequiredIntents} = require('./src/functions/intents');
 const {
     flags,
     names,
     unknown,
-    pairingInjected
+    pairingInjected,
+    droppedPrivileged,
+    degradedModules,
+    badAllowlistEntries
 } = computeRequiredIntents(confDir, `${__dirname}/modules`);
 if (unknown.length) throw new Error(`Unknown gateway intent(s) declared in a module.json: ${unknown.join(', ')}`);
 
@@ -45,9 +46,26 @@ client.on('shardError', (err) => {
     const sentryId = client.captureException ? client.captureException(err, {source: 'shard-error'}) : null;
     client.logger ? client.logger.error(client.sanitizePath(loc('main', 'shard-error', {e: err.stack || err})) + (sentryId ? ` [Sentry: ${sentryId}]` : '')) : console.error(err);
 });
-client.on('shardDisconnect', (event) => {
+client.on('shardDisconnect', async (event) => {
     const {localize: loc} = require('./src/functions/localize');
-    client.logger ? client.logger.warn(loc('main', 'shard-disconnect', {c: event ? event.code : 'unknown'})) : console.warn('Disconnected from Discord');
+    const code = event ? event.code : 'unknown';
+    client.logger ? client.logger.warn(loc('main', 'shard-disconnect', {c: code})) : console.warn('Disconnected from Discord');
+
+    /*
+     * discord.js emits this only for the six UNRECOVERABLE close codes — it has given up and will
+     * not reconnect, so escalate instead of lingering with a dead gateway. Transient falls back to
+     * legacy 1 (safe under any supervisor), the fatals to 0 to avoid a restart loop.
+     */
+    const {disconnectExitCode, EXIT, pick} = require('./src/functions/exitCodes');
+    const newCode = disconnectExitCode(code);
+    if (newCode === EXIT.FATAL_INVALID_TOKEN) {
+        if (client.scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'invalid_token'}).catch(() => {});
+        client.logger && client.logger.fatal(loc('main', 'login-error-token'));
+    } else if (newCode === EXIT.FATAL_INTENTS) {
+        if (client.scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {type: 'CORE_FAILURE', errorDescription: 'disallowed_intents'}).catch(() => {});
+        client.logger && client.logger.fatal(loc('main', 'login-error-intents', {url: 'https://discord.com/developers/applications/'}));
+    }
+    process.exit(pick(newCode, newCode === EXIT.CRASH_TRANSIENT ? EXIT.CRASH_TRANSIENT : 0));
 });
 client.on('shardReconnecting', () => {
     const {localize: loc} = require('./src/functions/localize');
@@ -63,6 +81,13 @@ const log4js = require('log4js');
 const jsonfile = require('jsonfile');
 const centra = require('centra');
 const readline = require('readline');
+const {pick} = require('./src/functions/exitCodes');
+const {
+    resolveCommandType,
+    partitionCommands,
+    USER_LIMIT,
+    MESSAGE_LIMIT
+} = require('./src/functions/commandTypes');
 
 let config;
 let scnxSetup = false; // If enabled some other (closed-sourced) files get imported and executed
@@ -122,12 +147,11 @@ log4js.configure({
 const logger = log4js.getLogger();
 logger.level = scnxSetup ? 'debug' : (process.env.LOGLEVEL || 'debug');
 
-// Loading config
 try {
     config = jsonfile.readFileSync(`${confDir}/config.json`);
 } catch (e) {
     logger.fatal('Missing config.json! Run "npm run generate-config <ConfDir>" (Parameter ConfDir is optional) to generate it');
-    process.exit(0);
+    process.exit(pick(78)); // config missing/unreadable: never restart
 }
 
 const models = {}; // Object with all models
@@ -156,6 +180,14 @@ logger.info(localize('main', 'intents-loaded', {
     intents: names.join(', ')
 }));
 if (pairingInjected) logger.warn(localize('main', 'intents-pairing-injected'));
+if (badAllowlistEntries.length) logger.warn(localize('main', 'allowlist-bad-entries', {entries: badAllowlistEntries.join(', ')}));
+if (droppedPrivileged.length) logger.warn(localize('main', 'intents-dropped', {intents: droppedPrivileged.join(', ')}));
+for (const d of degradedModules) {
+    logger.info(localize('main', 'intents-degraded', {
+        m: d.module,
+        intents: d.missingOptional.join(', ')
+    }));
+}
 
 let moduleConf = {};
 try {
@@ -164,7 +196,6 @@ try {
     logger.info(localize('main', 'missing-moduleconf'));
 }
 
-// Connecting to Database
 const db = new Sequelize({
     dialect: 'sqlite',
     storage: `${dataDir}/database.sqlite`,
@@ -203,27 +234,29 @@ async function startUp() {
         } catch (e) {
             logger.fatal(`[migrations] failed: ${e.stack || e}`);
             logger.fatal('[migrations] aborting boot to avoid running with a partially migrated schema.');
-            process.exit(1);
+            process.exit(pick(1, 1));
         }
     }
     logger.info(localize('main', 'sync-db'));
     if (scnxSetup) await require('./src/functions/scnx-integration').beforeInit(client);
     if (!client.isReady()) {
         await client.login(config.token).catch(async (e) => {
-            if (e.code === 'TokenInvalid' || e.message === 'Authentication failed') {
+            const {classifyLoginError, loginErrorExitCode} = require('./src/functions/exitCodes');
+            const kind = classifyLoginError(e, !config.token);
+            if (kind === 'InvalidToken' || kind === 'MissingToken') {
                 if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
                     type: 'CORE_FAILURE',
                     errorDescription: 'invalid_token'
                 });
                 logger.fatal(localize('main', 'login-error-token'));
-            } else if (e.code === 'DisallowedIntents' || e.message === 'Used disallowed intents') {
+            } else if (kind === 'DisallowedIntents') {
                 if (scnxSetup) await require('./src/functions/scnx-integration').reportIssue(client, {
                     type: 'CORE_FAILURE',
                     errorDescription: 'disallowed_intents'
                 });
                 logger.fatal(localize('main', 'login-error-intents', {url: `https://discord.com/developers/applications/`}));
             } else logger.fatal(localize('main', 'login-error', {e}));
-            process.exit();
+            process.exit(pick(loginErrorExitCode(kind)));
         });
     }
     let app = {};
@@ -247,7 +280,7 @@ async function startUp() {
             errorData: {settingsURL: `https://discord.com/developers/applications/${client.user.id}`}
         });
         logger.error(localize('main', 'interactions-endpoint-active', {d: `https://discord.com/developers/applications/${client.user.id}/bot`}));
-        process.exit();
+        process.exit(pick(78)); // an interactions endpoint URL is set: the gateway never receives interactions until the user clears it
     }
     client.guild = await client.guilds.fetch(config.guildID).catch(() => {
     });
@@ -262,7 +295,7 @@ async function startUp() {
             console.log('Waiting for being added to server…');
             client.once('guildCreate', () => startUp());
             return;
-        } else process.exit(0);
+        } else process.exit(pick(1)); // guilds.fetch swallows every error, so "not invited" is indistinguishable from a transient failure
     }
     logger.info(localize('main', 'logged-in', {tag: formatDiscordUserName(client.user)}));
     loadCLIFile('/src/cli.js');
@@ -290,7 +323,7 @@ async function startUp() {
         if (client.logChannel) await client.logChannel.send('⚠️ ' + localize('main', 'config-check-failed'));
         console.log(e);
         logger.fatal(localize('main', 'config-check-failed'));
-        process.exit(0);
+        process.exit(pick(78)); // config failed validation: the user must fix it
     });
     await loadCommandsInDir('./src/commands');
     if (client.scnxSetup) {
@@ -358,14 +391,12 @@ module.exports.migrationEnd = function () {
     }
 };
 
-// Starting bot
 db.authenticate().then(startUp).catch((e) => {
     logger.fatal(localize('main', 'db-connect-error', {e: e.message || e}));
     if (!scnxSetup) console.error(e);
-    process.exit(1);
+    process.exit(pick(1, 1));
 });
 
-// CLI-COMMANDS
 const cliCommands = [];
 const rl = readline.createInterface({
     input: process.stdin,
@@ -423,7 +454,10 @@ async function syncCommandsIfNeeded() {
             errorData: {inviteURL: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}
         });
         logger.fatal(localize('main', 'no-command-permissions', {inv: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&guild_id=${config.guildID}&disable_guild_select=true&permissions=8&scope=bot%20applications.commands`}));
-        process.exit(0);
+
+        // A transient Discord failure is retryable; only the guild's command cap (30032) is user-actionable.
+        const capHit = (e && (e.code === 30032 || e.code === '30032')) || (e && typeof e.message === 'string' && e.message.toLowerCase().includes('maximum number of application commands'));
+        process.exit(pick(capHit ? 78 : 1));
     }
 
 
@@ -483,12 +517,7 @@ async function syncCommandsIfNeeded() {
 
     function normalizeCommand(command) {
         const newCommand = {...command};
-        if (!newCommand.type) newCommand.type = ApplicationCommandType.ChatInput;
-        else if (typeof newCommand.type === 'string') {
-            const upper = newCommand.type.toUpperCase();
-            const pascal = newCommand.type.charAt(0).toUpperCase() + newCommand.type.slice(1);
-            newCommand.type = ApplicationCommandType[upper] || ApplicationCommandType[pascal] || newCommand.type;
-        }
+        newCommand.type = resolveCommandType(newCommand.type);
         if (newCommand.options) newCommand.options = newCommand.options.map(normalizeOption);
         if (newCommand.defaultMemberPermissions) newCommand.defaultMemberPermissions = new PermissionsBitField(newCommand.defaultMemberPermissions.map(normalizePermission)).bitfield.toString();
         return newCommand;
@@ -537,6 +566,28 @@ async function syncCommandsIfNeeded() {
         ranCommands.push(command);
     }
 
+    /*
+     * Context-menu commands must be shaped and bounded before the PUT: Discord forbids
+     * description/options on them and caps each type, and any violation rejects the ENTIRE sync.
+     * Over-cap and colliding commands are logged rather than dropped silently.
+     */
+    const partitioned = partitionCommands(ranCommands);
+    for (const c of partitioned.collisions) logger.warn(localize('main', 'context-command-collision', {
+        n: c.name,
+        m: c.module || 'core',
+        t: c.type
+    }));
+    for (const t of ['USER', 'MESSAGE']) {
+        const over = partitioned.dropped.filter(d => d.type === t);
+        if (over.length) logger.warn(localize('main', 'context-commands-dropped', {
+            c: over.length,
+            t,
+            limit: t === 'USER' ? USER_LIMIT : MESSAGE_LIMIT,
+            n: over.map(d => `${d.module || 'core'}/${d.name}`).join(', ')
+        }));
+    }
+    const registrableCommands = [...partitioned.slash, ...partitioned.context];
+
     /**
      * Checks if two application commands need to be synced
      * @param {ApplicationCommands} oldCommands Currently synced commands
@@ -553,7 +604,7 @@ async function syncCommandsIfNeeded() {
                 break;
             }
 
-            if (oldCommand.description !== command.description || oldCommand.type !== command.type || (oldCommand.options || []).length !== (command.options || []).length) {
+            if ((oldCommand.description || '') !== (command.description || '') || oldCommand.type !== command.type || (oldCommand.options || []).length !== (command.options || []).length) {
                 needSync = true;
                 break;
             }
@@ -602,8 +653,8 @@ async function syncCommandsIfNeeded() {
         return needSync;
     }
 
-    let guildCommands = config.syncCommandGlobally ? [] : ranCommands;
-    const globalCommands = config.syncCommandGlobally ? ranCommands : [];
+    let guildCommands = config.syncCommandGlobally ? [] : registrableCommands;
+    const globalCommands = config.syncCommandGlobally ? registrableCommands : [];
     if (scnxSetup) guildCommands = [...guildCommands, ...((await require('./src/functions/scnx-integration').generateCustomSlashCommands(client, guildCommands)).map(f => normalizeCommand(f)))];
     if (commandsNeedSync(oldGuildCommands, guildCommands)) {
         await client.application.commands.set(guildCommands, config.guildID).catch(handleSyncFailure);
@@ -629,10 +680,20 @@ async function loadModelsInDir(dir, moduleName = null) {
         await fs.readdir(`${__dirname}/${dir}`, (async (err, files) => {
             if (err) {
                 logger.fatal(err);
-                process.exit(0);
+                process.exit(pick(78)); // model directory unreadable: a broken install, retrying cannot help
             }
             for await (const file of files) {
                 const model = require(`${__dirname}/${dir}/${file}`);
+
+                /*
+                 * Sequelize registers models globally by class name (no model file passes an explicit
+                 * modelName), so a duplicate name would silently replace the earlier model and db.sync()
+                 * would never create its table.
+                 */
+                if (db.models[model.name]) {
+                    logger.fatal(`Duplicate model class name "${model.name}" in ${dir}/${file}: already registered by another model. Model class names must be unique across all modules; rename the class.`);
+                    process.exit(pick(78));
+                }
                 await model.init(db);
                 if (moduleName) {
                     if (!models[moduleName]) models[moduleName] = {};
@@ -749,6 +810,8 @@ async function loadCommandsInDir(dir, moduleName = null) {
             const props = require(`${__dirname}/${dir}/${f}`);
             commands.push({
                 name: props.config.name,
+                type: props.config.type || null,
+                contextMenu: props.config.contextMenu || false,
                 forceAnonymous: props.config.forceAnonymous,
                 description: props.config.description,
                 restricted: props.config.restricted,

@@ -14,10 +14,6 @@ module.exports.config = {
     description: localize('levels', 'set-xp-context-description')
 };
 
-/*
- * "Set User XP" admin context command: enforces the allowCheats gate (like /manage-levels edit-xp set),
- * then opens the XP modal (customId encodes the target) handled in events/interactionCreate.js. showModal first.
- */
 module.exports.run = async function (interaction) {
     if (!interaction.client.configurations['levels']['config']['allowCheats']) return interaction.reply({
         ephemeral: true,

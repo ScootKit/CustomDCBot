@@ -9,12 +9,6 @@ module.exports.config = {
     description: localize('fun', 'hug-context-description')
 };
 
-/*
- * Thin adapter: the /hug run() reads its recipient from interaction.options.getUser('user').
- * We delegate to that exact run() with a proxy whose options.getUser returns the context-menu
- * targetUser, so the rendered hug (message + gif) is identical to the slash command, including
- * the self-target guard the original enforces.
- */
 module.exports.run = async function (interaction) {
     if (!memberCanSendInChannel(interaction.member, interaction.channel)) return interaction.reply({
         ephemeral: true,

@@ -22,6 +22,9 @@
     "GuildVoiceStates",
     "GuildMembers"
   ],
+  "optionalIntents": [
+    "GuildMembers"
+  ],
   "intentReasons": {
     "GuildMembers": "Looks up members by username to add or remove them from a temporary channel."
   }

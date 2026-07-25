@@ -13,7 +13,12 @@ jest.mock('../../src/functions/helpers', () => ({
     formatNumber: (n) => String(n),
     parseEmbedColor: (c) => c,
     safeSetFooter: jest.fn(),
-    moduleEnabled: () => false
+    moduleEnabled: () => false,
+    memberCountOrFallback: (guild) => typeof guild.memberCount === 'number' ? guild.memberCount : guild.members.cache.size,
+    onlineCountOrNull: (client, guild) => {
+        if (!(client._activeIntents || []).includes('GuildPresences')) return null;
+        return guild.members.cache.filter(m => m.presence && ['online', 'idle', 'dnd'].includes(m.presence.status)).size;
+    }
 }));
 jest.mock('discord.js', () => {
     const actual = jest.requireActual('discord.js');
@@ -161,6 +166,73 @@ test('builds the overview with owner, bans and member/channel tables', async () 
     const names = embed.fields.map(f => f.name);
     expect(names).toEqual(expect.arrayContaining(['Id', 'Owner', 'Bans', 'Members', 'Channels', 'Features']));
     expect(embed.fields.find(f => f.name === 'Bans').value).toBe('3');
+});
+
+test('renders N/A (not a false 0) for the online count when GuildPresences intent is inactive', async () => {
+    const guild = makeGuild();
+    const interaction = makeInteraction(guild);
+    interaction.client._activeIntents = ['Guilds', 'GuildMembers'];
+    await info.subcommands.server(interaction);
+    const embed = interaction.editReply.mock.calls[0][0].embeds[0];
+    const members = embed.fields.find(f => f.name === 'Members');
+    expect(members.value).toContain('N/A');
+});
+
+test('renders the real online count when GuildPresences intent is active', async () => {
+    const guild = makeGuild();
+    const interaction = makeInteraction(guild);
+    interaction.client._activeIntents = ['Guilds', 'GuildMembers', 'GuildPresences'];
+    await info.subcommands.server(interaction);
+    const embed = interaction.editReply.mock.calls[0][0].embeds[0];
+    const members = embed.fields.find(f => f.name === 'Members');
+    expect(members.value).not.toContain('N/A');
+});
+
+test('renders N/A (not a wrong low count) for the non-bot member count when GuildMembers intent is inactive', async () => {
+    const guild = makeGuild({
+        members: {
+            cache: channels([{
+                user: {bot: false},
+                presence: {status: 'online'}
+            }, {
+                user: {bot: false},
+                presence: null
+            }, {
+                user: {bot: true},
+                presence: null
+            }])
+        }
+    });
+    const interaction = makeInteraction(guild);
+    interaction.client._activeIntents = ['Guilds'];
+    await info.subcommands.server(interaction);
+    const embed = interaction.editReply.mock.calls[0][0].embeds[0];
+    const members = embed.fields.find(f => f.name === 'Members');
+    expect(members.value).toContain('N/A');
+    expect(members.value).not.toContain('2');
+});
+
+test('renders the real non-bot member count when GuildMembers intent is active', async () => {
+    const guild = makeGuild({
+        members: {
+            cache: channels([{
+                user: {bot: false},
+                presence: {status: 'online'}
+            }, {
+                user: {bot: false},
+                presence: null
+            }, {
+                user: {bot: true},
+                presence: null
+            }])
+        }
+    });
+    const interaction = makeInteraction(guild);
+    interaction.client._activeIntents = ['Guilds', 'GuildMembers'];
+    await info.subcommands.server(interaction);
+    const embed = interaction.editReply.mock.calls[0][0].embeds[0];
+    const members = embed.fields.find(f => f.name === 'Members');
+    expect(members.value).toContain('2');
 });
 
 test('includes optional afk/description/rules/system fields when present', async () => {
