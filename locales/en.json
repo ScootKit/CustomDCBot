@@ -109,7 +109,9 @@
     "command-description": "Request a Custom role as a reward for boosting. This has a cooldown of 24 hours",
     "manage-subcommand-description": "Create or edit your custom role",
     "name-option-description": "The name of your custom role",
-    "color-option-description": "The color of your custom role",
+    "primary-color-option-description": "The (primary) color of your custom role",
+    "secondary-color-option-description": "The secondary color of your custom role. (If unlocked)",
+    "holographic-option-description": "If enabled, your role will use the holographic effect. (If unlocked)",
     "remove-subcommand-description": "Remove your custom role",
     "icon-option-description": "Your role-icon",
     "confirm-option-remove-description": "Do you really want to delete your custom role? This will not reset any running cooldowns"

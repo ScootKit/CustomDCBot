@@ -10,42 +10,47 @@
  * embedType is the real helper; localize/main auto-stubbed.
  */
 const mainStub = require('../__stubs__/main');
+const {Constants} = require('discord.js');
 const cmd = require('../../modules/color-me/commands/color-me');
 
 const strings = {
     cooldown: 'cooldown %cooldown%',
     updated: 'updated',
-    updatedNoIcon: 'updated-no-icon',
+    updatedLimited: 'updated-limited',
     created: 'created',
     createdNoIcon: 'created-no-icon',
     roleLimit: 'role-limit',
     invalidColor: 'invalid-color'
 };
 
-function setSharedModel(model) {
+function setSharedModel(model, features = []) {
     mainStub.client.models = {'color-me': {Role: model}};
     mainStub.client.logger = {error: jest.fn()};
-    mainStub.client.guild = {features: []};
+    mainStub.client.guild = {features};
 }
 
 function makeInteraction({
                              found = null,
-                             color = null,
+                             primaryColor = null,
+                             secondaryColor = null,
+                             holographic = false,
                              name = 'My Colour',
                              icon = null,
                              roleCacheSize = 5,
                              roleExists = true,
                              createImpl,
-                             config = {}
+                             config = {},
+                             features = []
                          } = {}) {
     const createdRole = {
         id: 'new-role',
         name,
-        hexColor: '#123456',
+        colors: {primaryColor: '#123456', secondaryColor: null, tertiaryColor: null},
         edit: jest.fn()
     };
     const liveRole = {
         id: found ? found.roleID : 'live',
+        colors: {primaryColor: '#123456', secondaryColor: null, tertiaryColor: null},
         edit: jest.fn()
     };
     const model = {
@@ -53,7 +58,7 @@ function makeInteraction({
         create: createImpl || jest.fn().mockResolvedValue(createdRole),
         update: jest.fn().mockResolvedValue()
     };
-    setSharedModel(model);
+    setSharedModel(model, features);
     const rolesCache = {
         size: roleCacheSize,
         find: () => (roleExists ? liveRole : undefined),
@@ -82,7 +87,8 @@ function makeInteraction({
         },
         options: {
             getAttachment: () => icon,
-            getString: (n) => (n === 'color' ? color : n === 'name' ? name : null)
+            getBoolean: (n) => (n === 'holographic' ? holographic : null),
+            getString: (n) => (n === 'primary-color' ? primaryColor : n === 'secondary-color' ? secondaryColor : n === 'name' ? name : null)
         },
         client: {
             configurations: {
@@ -127,6 +133,42 @@ test('creates a new colour role when the user has no record', async () => {
     expect(i.editReply).toHaveBeenCalled();
 });
 
+test('creates a holographic role when the guild supports enhanced colors', async () => {
+    const i = makeInteraction({
+        found: null,
+        holographic: true,
+        features: ['ENHANCED_ROLE_COLORS'],
+        config: {allowEnhancedRoleColors: true}
+    });
+    await cmd.subcommands.manage(i);
+    expect(i.guild.roles.create).toHaveBeenCalledWith(expect.objectContaining({
+        colors: {
+            primaryColor: Constants.HolographicStyle.Primary,
+            secondaryColor: Constants.HolographicStyle.Secondary,
+            tertiaryColor: Constants.HolographicStyle.Tertiary
+        }
+    }));
+});
+
+test('ignores secondary-color and holographic when the guild lacks enhanced colors', async () => {
+    const i = makeInteraction({
+        found: null,
+        secondaryColor: 'ABCDEF',
+        holographic: true,
+        features: [],
+        config: {allowEnhancedRoleColors: true}
+    });
+    await cmd.subcommands.manage(i);
+    expect(i.guild.roles.create).toHaveBeenCalledWith(expect.objectContaining({
+        colors: expect.objectContaining({secondaryColor: null})
+    }));
+    expect(i.editReply).toHaveBeenCalledWith(expect.objectContaining({}));
+    expect(i._model.create).toHaveBeenCalledWith(expect.objectContaining({
+        secondaryColor: null,
+        holo: false
+    }));
+});
+
 test('edits the live role in place when a record + role exist (past cooldown)', async () => {
     const old = {timestamp: new Date(Date.now() - 48 * 3600000)}; // 48h ago -> allowed
     const i = makeInteraction({
@@ -156,7 +198,7 @@ test('reports the role limit when the stored role is gone and the guild is at 25
 test('cancels on invalid colour without creating a role', async () => {
     const i = makeInteraction({
         found: null,
-        color: 'ZZZZZZ'
+        primaryColor: 'ZZZZZZ'
     });
     await cmd.subcommands.manage(i);
     expect(i.guild.roles.create).not.toHaveBeenCalled();

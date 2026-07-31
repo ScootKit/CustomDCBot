@@ -28,10 +28,10 @@
       "allowEmbed": true
     },
     {
-      "name": "updatedNoIcon",
-      "humanName": "Role updated without icon",
-      "default": "Your role was updated successfully, but your role icon was not used, as this requires the guild to be boost level 2 or higher.",
-      "description": "This messages gets send when a booster sucessfully updates their custom role, but the guild has not enough boosts to use role icons",
+      "name": "updatedLimited",
+      "humanName": "Role updated with limited features",
+      "default": "Your role was updated successfully, but either your role icon or enhanced role colors were not used, as these features either need to be unlocked by boosting the server or were disabled by the server admin.",
+      "description": "This message is sent when a booster successfully updates their custom role, but the guild does not have enough boosts to use role icons or enhanced role colors, or the feature was disabled in the module configuration",
       "type": "string",
       "allowEmbed": true
     },

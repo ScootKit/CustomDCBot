@@ -1,4 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
+const {Constants} = require('discord.js');
 let pos;
 
 module.exports.run = async function (client, oldGuildMember, newGuildMember) {
@@ -36,7 +37,7 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
     if (moduleConf.recreateRole) {
         if (!oldGuildMember.premiumSince && newGuildMember.premiumSince) {
             const data = await client.models['color-me']['Role'].findOne({
-                attributes: ['roleID', 'name', 'color'],
+                attributes: ['roleID', 'name', 'primaryColor', 'secondaryColor', 'holo'],
                 raw: true,
                 where: {
                     userID: newGuildMember.id
@@ -45,12 +46,21 @@ module.exports.run = async function (client, oldGuildMember, newGuildMember) {
             if (data) {
                 let role = data.roleID;
                 const name = data.name;
-                const color = data.color;
+                const primaryColor = data.primaryColor;
+                const secondaryColor = data.secondaryColor;
+                const isHolographic = data.holo && client.guild.features.includes('ENHANCED_ROLE_COLORS');
                 if (!newGuildMember.guild.roles.cache.find(r => r.id === role)) {
                     role = await client.guild.roles.create(
                         {
                             name: name,
-                            color: color,
+                            colors: isHolographic ? {
+                                primaryColor: Constants.HolographicStyle.Primary,
+                                secondaryColor: Constants.HolographicStyle.Secondary,
+                                tertiaryColor: Constants.HolographicStyle.Tertiary
+                            } : {
+                                primaryColor: primaryColor,
+                                secondaryColor: client.guild.features.includes('ENHANCED_ROLE_COLORS') ? secondaryColor : null
+                            },
                             hoist: moduleConf.listRoles,
                             position: pos,
                             permissions: '',

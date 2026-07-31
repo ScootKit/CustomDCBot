@@ -37,6 +37,13 @@
       "default": "",
       "description": "The role, beneath which the custom-roles should be created",
       "type": "roleID"
+    },
+    {
+      "name": "allowEnhancedRoleColors",
+      "humanName": "Allow \"Enhanced Role Colors\"",
+      "default": true,
+      "description": "Should the module allow users to use the \"Enhanced Role Colors\" feature? (If your server doesn't have this feature unlocked, this setting will have no effect)",
+      "type": "boolean"
     }
   ]
 }

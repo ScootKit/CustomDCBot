@@ -20,10 +20,12 @@ function makeRoleModel(found) {
 function makeGuild({
                        roleExists = false,
                        resolvedRole,
-                       positionRole
+                       positionRole,
+                       features = []
                    } = {}) {
     return {
         id: 'g1',
+        features,
         roles: {
             cache: {find: () => (roleExists ? resolvedRole : undefined)},
             resolve: (id) => (id === 'pos-role' ? positionRole : resolvedRole),
@@ -146,13 +148,15 @@ describe('removeOnUnboost', () => {
 
 describe('recreateRole', () => {
     test('recreates a missing colour role when a member starts boosting and persists the new id', async () => {
-        const guild = makeGuild({roleExists: false});
+        const guild = makeGuild({roleExists: false, features: ['ENHANCED_ROLE_COLORS']});
         const client = makeClient({
             config: conf({recreateRole: true}),
             found: {
                 roleID: 'old-r',
                 name: 'My Colour',
-                color: '#abcdef'
+                primaryColor: '#abcdef',
+                secondaryColor: '#123456',
+                holo: false
             },
             guild
         });
@@ -163,7 +167,10 @@ describe('recreateRole', () => {
         await handler.run(client, old, neu);
         expect(guild.roles.create).toHaveBeenCalledWith(expect.objectContaining({
             name: 'My Colour',
-            color: '#abcdef'
+            colors: {
+                primaryColor: '#abcdef',
+                secondaryColor: '#123456'
+            }
         }));
         expect(client.models['color-me'].Role.update).toHaveBeenCalledWith(
             {roleID: 'new-role-id'},
@@ -224,7 +231,9 @@ test('resolves the configured rolePosition for the new role position', async () 
         found: {
             roleID: 'old',
             name: 'n',
-            color: '#111111'
+            primaryColor: '#111111',
+            secondaryColor: null,
+            holo: false
         },
         guild
     });
