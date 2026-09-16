@@ -1,5 +1,6 @@
 const fs = require('fs');
 const {reloadConfig} = require('./functions/configuration');
+const {pick} = require('./functions/exitCodes');
 const {syncCommandsIfNeeded} = require('../main');
 
 module.exports.commands = [
@@ -36,7 +37,7 @@ module.exports.commands = [
             }).catch(async () => {
                 if (inputElement.client.logChannel) await inputElement.client.logChannel.send('⚠️️ Configuration reloaded failed. Bot shutting down');
                 console.log('Reload failed. Exiting');
-                process.exit(0);
+                process.exit(pick(1)); // reload failure is retryable
                 ;
             });
         }

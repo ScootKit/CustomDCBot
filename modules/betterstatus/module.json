@@ -21,6 +21,10 @@
     "GuildMembers",
     "GuildPresences"
   ],
+  "optionalIntents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
   "intentReasons": {
     "GuildMembers": "Tracks members joining and leaving to keep member-count placeholders in the bot's status accurate.",
     "GuildPresences": "Reads members' online status to show live online-member counts in the bot's status."

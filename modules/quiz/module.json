@@ -23,6 +23,9 @@
   "intents": [
     "GuildMembers"
   ],
+  "optionalIntents": [
+    "GuildMembers"
+  ],
   "intentReasons": {
     "GuildMembers": "Resolves member names for quiz participants and the scoreboard."
   }

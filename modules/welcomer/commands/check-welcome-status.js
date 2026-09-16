@@ -16,13 +16,6 @@ module.exports.config = {
     description: localize('welcomer', 'check-welcome-status-context-description')
 };
 
-/*
- * Staff-only (MANAGE_GUILD) read-only adapter: reports a member's welcomer state using the same
- * primitives the automatic base-role sync uses. isInHoldingState() decides whether the member is
- * currently withheld from welcome roles (pending onboarding, quarantine, join-gate hold, etc.),
- * and evaluateMember() reports which configured join roles the member is missing - identical
- * logic to runSync(), surfaced as an ephemeral embed instead of mutating roles.
- */
 module.exports.run = async function (interaction) {
     await interaction.deferReply({flags: MessageFlags.Ephemeral});
     const client = interaction.client;

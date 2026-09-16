@@ -8,16 +8,6 @@
           "description": "Replace this with your token",
           "default": "yourtokengoeshere"
         },
-        "dmAbuseButton": {
-          "description": "Used to allow mass dm reporting"
-        },
-        "scnxToken": {
-          "description": "Replace this with your token",
-          "default": "yourtokengoeshere"
-        },
-        "scnxHostOverwirde": {
-          "description": "Replace this with your token"
-        },
         "prefix": {
           "humanName": "Prefix of your bot",
           "description": "Set the prefix of your bot here",
@@ -36,7 +26,7 @@
         "user_presence": {
           "humanName": "Bot-Status",
           "description": "This will show up in Discord as \"Playing <YourValue>\"",
-          "default": "Change this in your Bot-Configuration on scnx.app: https://scootk.it/change-status"
+          "default": "your bot status"
         },
         "logLevel": {
           "humanName": "Logging-Level",
@@ -57,6 +47,10 @@
         "syncCommandGlobally": {
           "humanName": "Sync module commands as global commands",
           "description": "If enabled, module-commands will be synced to discord as global commands. They will show up on other servers, but won't work. Syncing can take up to 2 hours, so changes may not be reflected immediately."
+        },
+        "allowedPrivilegedIntents": {
+          "humanName": "Allowed privileged intents",
+          "description": "Advanced: the privileged gateway intents Discord has granted this application (GuildMembers, GuildPresences, MessageContent). Leave empty to allow all three (default). If set, any privileged intent not listed is never requested - modules that only use it for optional features keep running, and modules that require it are disabled. For operators of very large bots who cannot obtain every privileged intent."
         }
       }
     },
@@ -1722,6 +1716,10 @@
           "humanName": "Use User's Tags instead of their Mention in the Leaderboard-Channel-Embed",
           "description": "If enabled, the bot will use the tag of users in the Leaderboard-Channel-Embed instead of their mention."
         },
+        "enableLevelCalculator": {
+          "humanName": "Enable /calculate-level command",
+          "description": "If enabled, server members can use the /calculate-level command to calculate the XP and amount of messages required to reach a specific level based on the configured level curve and XP-per-message range."
+        },
         "allowCheats": {
           "humanName": "Cheats",
           "description": "If enabled admins can change the XP of other users (not recommended (please leave it off if you want to have a fair levelling system!!!))"
@@ -1772,6 +1770,27 @@
             },
             "newLevel": {
               "description": "New level of the user"
+            },
+            "xpGained": {
+              "description": "XP gained from this action"
+            },
+            "xpType": {
+              "description": "Type of XP gain (Message or Voice)"
+            },
+            "totalXP": {
+              "description": "Total XP after gaining XP"
+            },
+            "nextLevelXP": {
+              "description": "XP needed for the next level"
+            },
+            "totalMessages": {
+              "description": "Lifetime message count"
+            },
+            "messagesToday": {
+              "description": "Messages sent today (resets at midnight)"
+            },
+            "voiceTimeToday": {
+              "description": "Voice time today (resets at midnight)"
             }
           }
         },
@@ -1797,6 +1816,27 @@
             },
             "role": {
               "description": "Mention of the role (No ping)"
+            },
+            "xpGained": {
+              "description": "XP gained from this action"
+            },
+            "xpType": {
+              "description": "Type of XP gain (Message or Voice)"
+            },
+            "totalXP": {
+              "description": "Total XP after gaining XP"
+            },
+            "nextLevelXP": {
+              "description": "XP needed for the next level"
+            },
+            "totalMessages": {
+              "description": "Lifetime message count"
+            },
+            "messagesToday": {
+              "description": "Messages sent today (resets at midnight)"
+            },
+            "voiceTimeToday": {
+              "description": "Voice time today (resets at midnight)"
             }
           }
         },
@@ -1933,6 +1973,93 @@
       }
     }
   },
+  "message-quotes": {
+    "_module": {
+      "humanReadableName": "Message quotes",
+      "description": "Quotes a Discord message when a user pastes a message link."
+    },
+    "config": {
+      "description": "Configure the message quoting system",
+      "humanName": "Configuration",
+      "content": {
+        "roles": {
+          "humanName": "Blacklist roles",
+          "description": "Roles that are excluded from quoting"
+        },
+        "channels": {
+          "humanName": "Blacklist channels",
+          "description": "Channels that are excluded from quoting (Channels and categories are supported; a category excludes all its channels)"
+        },
+        "withAttachments": {
+          "humanName": "Attach files?",
+          "description": "Should all attachments be quoted? (Deactivation recommended if \"Message\" components v2 are used)"
+        },
+        "noBots": {
+          "humanName": "Ignore bot messages?",
+          "description": "Bot messages are not included in the quote when activated"
+        },
+        "selfQuote": {
+          "humanName": "Allow Self-quotes?",
+          "description": "Can users quote their own messages?"
+        },
+        "asReply": {
+          "humanName": "Reply to messages?",
+          "description": "Reply to the message that triggered the quote (Ignored when \"Delete trigger\" is enabled)"
+        },
+        "deleteOrigin": {
+          "humanName": "Delete trigger?",
+          "description": "When enabled, the trigger message will be deleted"
+        },
+        "message": {
+          "humanName": "Message",
+          "description": "Message in which the quote is returned",
+          "default": {
+            "title": "Quote from #%channelName%",
+            "url": "%link%",
+            "description": ">>> %content%",
+            "image": "%image%",
+            "color": "#2ECC71",
+            "author": {
+              "name": "%userName%",
+              "img": "%userAvatar%"
+            }
+          },
+          "params": {
+            "userID": {
+              "description": "Id of the user"
+            },
+            "userName": {
+              "description": "Username of the user"
+            },
+            "displayName": {
+              "description": "Displays the user's nickname"
+            },
+            "userAvatar": {
+              "description": "Avatar of the user"
+            },
+            "channelID": {
+              "description": "Id of the channel from which the quote originates"
+            },
+            "channelName": {
+              "description": "Name of the channel from which the quote originates"
+            },
+            "timestamp": {
+              "description": "Shows when the original message was sent (Used discord timestamp)"
+            },
+            "link": {
+              "description": "Message-link of the original message"
+            },
+            "image": {
+              "description": "First image of the message, if available"
+            },
+            "content": {
+              "description": "Message content of the quote"
+            }
+          }
+        }
+      }
+    }
+  },
   "moderation": {
     "_module": {
       "humanReadableName": "Moderation & Security",
@@ -2018,14 +2145,6 @@
         "allowed_invite_guild_ids": {
           "humanName": "Allowed invite guild IDs",
           "description": "Guild IDs whose invites should be allowed (in addition to this server's invites which are always allowed)."
-        },
-        "action_on_scam_link": {
-          "humanName": "Action on Scam-Link",
-          "description": "What should the bot do if someone posts an suspicious or confirmed scam link?"
-        },
-        "scam_link_level": {
-          "humanName": "Level of Scam-Link-Detection",
-          "description": "Select the Level of Scam-Link-Filter. \"confirmed\" only contains verified Scam-Domains, while \"suspicious\" may contain not-harmful domains."
         },
         "whitelisted_channels_for_invite_blocking": {
           "humanName": "Whitelisted channels for invite-ban",
@@ -2912,12 +3031,12 @@
           "description": "Configure what happens when a protected user pings themselves. Note: Automod overrides this setting meaning this setting will not apply if Automod is enabled."
         },
         "enableAutomod": {
-          "humanName": "Enable automod",
-          "description": "If enabled, the bot will utilise Discord's native AutoMod to block the message with a ping of a protected user/role."
+          "humanName": "Enable AutoMod",
+          "description": "If enabled, the bot will utilise Discord's native AutoMod to block the message with a ping of a protected user/role. Warning: AutoMod does not support whitelisted categories due to limitations in Discord's AutoMod system - instead, it will still block the message but not log it in the history."
         },
         "autoModLogChannel": {
           "humanName": "AutoMod Log Channel",
-          "description": "Channel where AutoMod alerts are sent."
+          "description": "Channel where AutoMod alerts are sent. It is recommended to keep these in a private channel."
         },
         "autoModBlockMessage": {
           "humanName": "AutoMod custom message for message block",
@@ -2961,6 +3080,14 @@
         "pingsCount": {
           "humanName": "Pings to trigger moderation",
           "description": "The amount of pings required to trigger a moderation action."
+        },
+        "enableRolePingThresholds": {
+          "humanName": "Enable role-based ping thresholds",
+          "description": "If enabled, specific roles can have custom ping thresholds for this moderation action. This also allows specific roles to be exempted from this specific action."
+        },
+        "rolePingThresholds": {
+          "humanName": "Role-based ping thresholds",
+          "description": "Set custom ping thresholds per role for this moderation action. If a user has multiple configured roles, the value of their highest configured role is used. Setting a role to 0 exempts that role from this action - exempted roles also override any other role's threshold."
         },
         "useCustomTimeframe": {
           "humanName": "Use a custom timeframe",
@@ -3147,6 +3274,45 @@
         "wrongOptions": {
           "humanName": "Wrong answers",
           "description": "Wrong answers"
+        },
+        "headline": {
+          "humanName": "Headline (optional)",
+          "description": "Optional embed title shown above the question. Leave empty to use the default quiz title.",
+          "default": ""
+        },
+        "imageURL": {
+          "humanName": "Image (optional)",
+          "description": "Optional image displayed above the answer choices (e.g. movie scene, visual hint). Upload via the dashboard or paste an http(s) URL.",
+          "default": ""
+        }
+      }
+    }
+  },
+  "reaction-roles": {
+    "_module": {
+      "humanReadableName": "Reaction Roles",
+      "description": "Let users assign roles to themselves the good old way - by adding and removing a reaction."
+    },
+    "messages": {
+      "description": "Add the messages you want to add reaction roles too.",
+      "humanName": "Messages",
+      "informationBanner": {
+        "button": {
+          "url": "https://scootk.it/login-as-bot",
+          "text": "Open Login-As-Bot"
+        },
+        "en": "You can have a way better user experience for your members using Button-Roles, Self-Role-Elements and other SCNX features in Login-As-Bot.",
+        "de": "Du kannst eine wesentlich Bessere Nutzererfahrung für deine Mitglieder erstellen, indem du Button-Rollen, Selbst-Rollen-Erfahrungen und mehr SCNX Funktionen von Als-Bot-Anmelden verwenden."
+      },
+      "content": {
+        "messageID": {
+          "humanName": "Message-ID",
+          "description": "This is the ID of the message that this configuration element should apply to",
+          "default": ""
+        },
+        "reactions": {
+          "humanName": "Reactions",
+          "description": "First-Value: Reaction value, Second value: Role-ID(s), seperated with \",\". The bot will only add a reaction to these messages AFTER at least one user reacted with them."
         }
       }
     }
@@ -3216,7 +3382,7 @@
         },
         "supervisorRoles": {
           "humanName": "Supervisor Roles",
-          "description": "Roles that can manage other staff members (Approve/Deny/Manage LoA's and RA's, Manage Shifts, promote and infract users)."
+          "description": "Roles that can manage other staff members (Approve/Deny/Manage LoA's and RA's, Manage Shifts etc.)."
         },
         "managementRoles": {
           "humanName": "Management Roles",
@@ -3251,9 +3417,13 @@
           "humanName": "Infraction Types",
           "description": "These are the types of infractions that can be issued to staff members. You can customize these to fit your infractions system."
         },
+        "infractionLogChannel": {
+          "humanName": "Infraction Log Channel",
+          "description": "Where should infractions and suspensions be announced?"
+        },
         "enableSuspensions": {
           "humanName": "Enable Suspensions System",
-          "description": "Suspensions temporarily strip a staff member of their roles."
+          "description": "Suspensions temporarily strip a staff member of their roles, and give them back after the specified duration."
         },
         "suspensionHierarchyRole": {
           "humanName": "Hierarchy Base Role",
@@ -3311,10 +3481,6 @@
               "description": "Database Case ID"
             }
           }
-        },
-        "infractionLogChannel": {
-          "humanName": "Infraction Log Channel",
-          "description": "Where should infractions and suspensions be announced?"
         },
         "infractionMessage": {
           "humanName": "Infraction Announcement Message",
@@ -3462,7 +3628,7 @@
       "content": {
         "enablePromotions": {
           "humanName": "Enable Promotions System",
-          "description": "If disabled, the /staff-management promote command will not work."
+          "description": "Enabling this allows staff members to promote users to higher ranks."
         },
         "autoAddRole": {
           "humanName": "Auto-Add New Role?",
@@ -3584,7 +3750,7 @@
       "content": {
         "enableReviews": {
           "humanName": "Enable Reviews System",
-          "description": "Enabling this unlocks the staff review system, allowing users to submit ratings and feedback for staff members."
+          "description": "Enabling this unlocks the staff review system, allowing users to submit ratings with feedback for staff members."
         },
         "reviewLogChannel": {
           "humanName": "Reviews Log Channel",
@@ -3592,18 +3758,18 @@
         },
         "allowSelfRating": {
           "humanName": "Allow Self-Rating?",
-          "description": "If enabled, staff can review themselves. This is not recommended to keep a fair ratings system."
+          "description": "If enabled, staff can review themselves. This is not recommended to keep a fair review system."
         },
         "onlyAllowStaffReview": {
           "humanName": "Only let users review staff",
-          "description": "If enabled, only staff members can review other staff members."
+          "description": "If enabled, users can only review staff members."
         },
         "ratingMessage": {
           "humanName": "Review Message",
           "description": "The message sent when a review is submitted.",
           "default": {
             "_schema": "v3",
-            "content": "%staff%",
+            "content": "%staff-mention%",
             "embeds": [
               {
                 "title": "🌟 New Staff Rating",
@@ -3864,7 +4030,7 @@
       "content": {
         "enableActivityChecks": {
           "humanName": "Enable Activity Checks",
-          "description": "Allows admins to start an activity check to see who is active."
+          "description": "Allows admins to start an activity check to see who is active, and also set automatic activity checks."
         },
         "targetRoles": {
           "humanName": "Roles to Check",
@@ -3878,9 +4044,24 @@
           "humanName": "Activity Check Embed",
           "description": "The message sent when an activity check starts.",
           "default": {
-            "title": "📋 Staff Activity Check",
-            "description": "Please click the button below to confirm your activity before %endtime%.",
-            "color": "#3498db"
+            "_schema": "v3",
+            "content": "%staff-mention%",
+            "embeds": [
+              {
+                "author": {
+                  "name": "Signed, %initiator%"
+                },
+                "title": "📋 Staff Activity Check",
+                "description": "Please confirm your activity by clicking the button below before %end-time%. This activity check will stay open for %duration% hour(s), and members who do not respond before it ends may be marked as failed unless they qualify for an exception.",
+                "fields": [
+                  {
+                    "name": "Quick info overview",
+                    "value": "Ends at: %end-time%\nDuration: %duration% hour(s)"
+                  }
+                ],
+                "color": "#3498db"
+              }
+            ]
           },
           "params": {
             "end-time": {
@@ -3888,6 +4069,65 @@
             },
             "duration": {
               "description": "The configured duration in hours."
+            },
+            "staff-mention": {
+              "description": "Mention of the configured staff role(s)."
+            },
+            "supervisor-mention": {
+              "description": "Mention of the configured supervisor role(s)."
+            },
+            "management-mention": {
+              "description": "Mention of the configured management role(s)."
+            },
+            "initiator": {
+              "description": "The user who iniated the activity check. This will show 'system' if it was an automated check."
+            }
+          }
+        },
+        "endCheckMessage": {
+          "humanName": "Ended Activity Check Embed",
+          "description": "The message that will replace the activity check embed when it ends.",
+          "default": {
+            "_schema": "v3",
+            "content": "%staff-mention%",
+            "embeds": [
+              {
+                "author": {
+                  "name": "Signed, %initiator%"
+                },
+                "title": "📋 Staff Activity Check (ended)",
+                "description": "This activity check has concluded.",
+                "fields": [
+                  {
+                    "name": "Quick info overview",
+                    "value": "Ended at: %end-time%\nDuration: %duration% hour(s)\nTotal responses: %responded-count%"
+                  }
+                ],
+                "color": "#FF0000"
+              }
+            ]
+          },
+          "params": {
+            "end-time": {
+              "description": "The Discord timestamp when the check ended."
+            },
+            "duration": {
+              "description": "The configured duration in hours."
+            },
+            "staff-mention": {
+              "description": "Mention of the configured staff role(s)."
+            },
+            "supervisor-mention": {
+              "description": "Mention of the configured supervisor role(s)."
+            },
+            "management-mention": {
+              "description": "Mention of the configured management role(s)."
+            },
+            "initiator": {
+              "description": "The user who iniated the activity check. This will show 'system' if it was an automated check."
+            },
+            "responded-count": {
+              "description": "The number or staff members who responed to the activity check."
             }
           }
         },
@@ -4535,6 +4775,10 @@
           "humanName": "Ticket Roles",
           "description": "Users who get pinged in the tickets and who can see tickets"
         },
+        "inheritCategoryPermissions": {
+          "humanName": "Copy category permissions",
+          "description": "Opt in to copying permission overwrites from the ticket category when a ticket is created. @everyone remains denied access. Later category changes are not applied automatically."
+        },
         "logChannel": {
           "humanName": "Log channel",
           "description": "Channel in which ticket logs should get send"
@@ -4620,6 +4864,26 @@
     "_module": {
       "humanReadableName": "Twitch-Notifications",
       "description": "Module that sends a message to a channel, when a streamer goes live on Twitch"
+    },
+    "config": {
+      "description": "Twitch API credentials and polling interval. Create an app at https://dev.twitch.tv/console/apps to get your Client ID and Secret.",
+      "humanName": "Configuration",
+      "content": {
+        "twitchClientID": {
+          "humanName": "Twitch Client ID",
+          "description": "Client ID of your Twitch application (https://dev.twitch.tv/console/apps).",
+          "default": ""
+        },
+        "clientSecret": {
+          "humanName": "Twitch Client Secret",
+          "description": "Client Secret of your Twitch application.",
+          "default": ""
+        },
+        "interval": {
+          "humanName": "Check interval (seconds)",
+          "description": "How often (in seconds) the bot polls Twitch for stream updates. Must be at least 60 to stay within Twitch rate limits."
+        }
+      }
     },
     "streamers": {
       "description": "Configure here, where for what streamer which message should get send",
@@ -4847,6 +5111,10 @@
         "assign-roles-immediately": {
           "humanName": "Immediately give roles, instead of waiting for rules acceptance?",
           "description": "If enabled, roles will be granted immediately when a user joins your server. Otherwise, no roles will be assigned to users before they complete the Discord onboarding."
+        },
+        "treat-welcome-roles-as-base-roles": {
+          "humanName": "Treat join roles as base roles (auto-restore)",
+          "description": "Guarantees every regular member has all roles configured under 'Give roles on join'. When enabled, the bot re-adds a join role if it gets removed, grants missing join roles after a member is released from quarantine or Join Gate hold, and runs a daily sweep to catch anything missed. Quarantined, held, and pending members are excluded — see the docs for the full list of exclusions and edge cases."
         },
         "not-send-messages-if-member-is-bot": {
           "humanName": "Ignore bots?",

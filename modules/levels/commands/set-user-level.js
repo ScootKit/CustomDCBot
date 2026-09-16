@@ -14,10 +14,6 @@ module.exports.config = {
     description: localize('levels', 'set-level-context-description')
 };
 
-/*
- * "Set User Level" admin context command: enforces the allowCheats gate (like /manage-levels edit-level set),
- * then opens the level modal (customId encodes the target) handled in events/interactionCreate.js. showModal first.
- */
 module.exports.run = async function (interaction) {
     if (!interaction.client.configurations['levels']['config']['allowCheats']) return interaction.reply({
         ephemeral: true,

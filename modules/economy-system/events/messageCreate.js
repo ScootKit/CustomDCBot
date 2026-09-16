@@ -1,6 +1,11 @@
 const {editBalance} = require('../economy-system');
 const {localize} = require('../../../src/functions/localize');
-const {formatDiscordUserName} = require('../../../src/functions/helpers');
+const {
+    formatDiscordUserName,
+    embedType,
+    randomElementFromArray,
+    randomIntFromInterval
+} = require('../../../src/functions/helpers');
 
 module.exports.run = async function (client, message) {
     if (!client.botReadyAt) return;
@@ -12,8 +17,8 @@ module.exports.run = async function (client, message) {
 
     if (config['messageDrops'] === 0) return;
     if (config['msgDropsIgnoredChannels'].includes(message.channel.id)) return;
-    if (Math.floor(Math.random() * config['messageDrops']) !== 1) return;
-    const toAdd = Math.floor(Math.random() * (config['messageDropsMax'] - config['messageDropsMin'])) + config['messageDropsMin'];
+    if (randomIntFromInterval(1, config['messageDrops']) !== 1) return;
+    const toAdd = randomIntFromInterval(parseInt(config['messageDropsMin']), parseInt(config['messageDropsMax']));
     await editBalance(client, message.author.id, 'add', toAdd);
     const sendMsg = await client.models['economy-system']['dropMsg'].findOne({
         where: {
@@ -21,7 +26,10 @@ module.exports.run = async function (client, message) {
         }
     });
     if (!sendMsg) {
-        const msg = await message.reply({content: localize('economy-system', 'message-drop', {m: toAdd, c: config['currencySymbol']})});
+        const dropMessage = randomElementFromArray(client.configurations['economy-system']['strings']['msgDropMsg'] || []);
+        const msg = await message.reply(dropMessage
+            ? embedType(dropMessage, {'%earned%': `${toAdd} ${config['currencySymbol']}`})
+            : {content: localize('economy-system', 'message-drop', {m: toAdd, c: config['currencySymbol']})});
         setTimeout(() => {
             msg.delete();
         }, 5000);

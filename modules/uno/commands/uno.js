@@ -447,7 +447,7 @@ module.exports.run = async function (interaction) {
             i.deferUpdate();
         } else if (i.customId === 'uno-deck') {
             const player = game.players.find(p => p.id === i.user.id);
-            if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});
+            if (!player) return i.reply({content: localize('uno', 'not-ingame'), ephemeral: true});
             console.log(player);
             const m = await i.reply({
                 components: buildDeck(player, game).map(c => c.toJSON()),
@@ -460,7 +460,7 @@ module.exports.run = async function (interaction) {
             }).on('collect', int => perPlayerHandler(int, player, game));
         } else if (i.customId === 'uno-uno') {
             const player = game.players.find(p => p.id === i.user.id);
-            if (!player) return i.reply({content: localize('uno', 'not-in-game'), ephemeral: true});
+            if (!player) return i.reply({content: localize('uno', 'not-ingame'), ephemeral: true});
 
             if (player.cards.length === 2) {
                 player.uno = true;

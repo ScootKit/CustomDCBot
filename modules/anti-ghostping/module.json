@@ -20,6 +20,9 @@
     "GuildMessages",
     "MessageContent"
   ],
+  "optionalIntents": [
+    "MessageContent"
+  ],
   "intentReasons": {
     "MessageContent": "Reads message content so a deleted ghost-ping can be surfaced with its original mention text."
   }

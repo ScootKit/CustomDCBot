@@ -20,6 +20,10 @@
     "GuildMembers",
     "GuildPresences"
   ],
+  "optionalIntents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
   "intentReasons": {
     "GuildMembers": "Counts the full membership to keep total member-count stat channels up to date.",
     "GuildPresences": "Reads members' online status to power online, idle, do-not-disturb and offline count channels."
