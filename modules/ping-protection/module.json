@@ -17,9 +17,9 @@
   "tags": [
     "moderation"
   ],
-  "fa-icon": "fa-duotone fa-clock-alarm",
+  "fa-icon": "fa-duotone fa-solid fa-message-dot",
   "humanReadableName": "Ping-Protection",
-  "description": "Powerful and highly customizable ping-protection module to protect members/roles from unwanted mentions with moderation capabilities.",
+  "description": "A powerful and highly customizable module to protect members and roles from unwanted mentions with moderation capabilities.",
   "intents": [
     "GuildMembers",
     "GuildMessages",

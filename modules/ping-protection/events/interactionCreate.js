@@ -103,21 +103,9 @@ module.exports.run = async function (client, interaction) {
             });
         }
 
-        // Checks to ensure modal content fits Discord limits
-        let modalTitle = localize('ping-protection', 'modal-title');
-        if (modalTitle.length > 45) {
-            modalTitle = localize('ping-protection', 'fallback-modal-title');
-        }
-
-        let modalLabel = localize('ping-protection', 'modal-label');
-        if (modalLabel.length > 45) {
-            modalLabel = localize('ping-protection', 'fallback-modal-label');
-        }
-
-        let confirmationPhrase = localize('ping-protection', 'modal-phrase');
-        if (confirmationPhrase.length > 100) {
-            confirmationPhrase = localize('ping-protection', 'fallback-modal-phrase');
-        }
+        let modalTitle = localize('ping-protection', 'del-modal-title');
+        let modalLabel = localize('ping-protection', 'del-modal-label');
+        let confirmationPhrase = localize('ping-protection', 'del-conf-phrase');
 
         const modal = new ModalBuilder()
             .setCustomId(`ping-protection_del-confirm_${targetId}_${selection}`)
@@ -149,10 +137,7 @@ module.exports.run = async function (client, interaction) {
         const targetId = parts[2];
         const selection = parts.slice(3).join('_');
 
-        let confirmPhrase = localize('ping-protection', 'modal-phrase');
-        if (confirmPhrase.length > 100) {
-            confirmPhrase = localize('ping-protection', 'fallback-modal-phrase');
-        }
+        let confirmPhrase = localize('ping-protection', 'del-conf-phrase');
 
         if (interaction.fields.getTextInputValue('confirm').trim() !== confirmPhrase) {
             return interaction.reply({

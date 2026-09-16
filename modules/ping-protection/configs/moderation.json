@@ -16,6 +16,18 @@
       "default": 10
     },
     {
+      "name": "pingsType",
+      "humanName": "Type of ping",
+      "description": "The type of pings tht will trigger this moderation action",
+      "type": "select",
+      "content": [
+        "Mentions",
+        "Reply pings",
+        "Both"
+      ],
+      "default": "Both"
+    },
+    {
       "name": "enableRolePingThresholds",
       "humanName": "Enable role-based ping thresholds",
       "description": "If enabled, specific roles can have custom ping thresholds for this moderation action. This also allows specific roles to be exempted from this specific action.",
@@ -42,11 +54,11 @@
       "default": false
     },
     {
-      "name": "timeframeDays",
-      "humanName": "Timeframe (Days)",
-      "description": "In how many days must these pings occur?",
-      "type": "integer",
-      "default": 7,
+      "name": "customTimeFrame",
+      "humanName": "Custom timeframe",
+      "description": "In how much time must these pings occur? (use formats like 10s for 10 seconds, 1h for 1 hour or 1d for 1 day)",
+      "type": "string",
+      "default": "7d",
       "dependsOn": "useCustomTimeframe"
     },
     {

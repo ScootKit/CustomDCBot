@@ -131,10 +131,10 @@
       "humanName": "AutoMod Log Channel",
       "description": "Channel where AutoMod alerts are sent. It is recommended to keep these in a private channel.",
       "type": "channelID",
-      "default": "",
-      "channelTypes": [
+      "content": [
         "GUILD_TEXT"
       ],
+      "default": "",
       "dependsOn": "enableAutomod"
     },
     {
@@ -178,6 +178,50 @@
         "image": "https://scnx-cdn.scootkit.net/1769198862209-rJfCVKzAuo6uQLhPUe9o2P6ArJkDBSVUCEyUQM6bqt5WFKWK.gif",
         "color": "#ed4245"
       }
+    },
+    {
+      "name": "kickPunishmentMessage",
+      "category": "messages",
+      "humanName": "Warning Message",
+      "description": "The message that gets sent to the user's DM's when they are kicked for meeting a moderation action's treshold.'",
+      "type": "string",
+      "allowEmbed": true,
+      "params": [
+        {
+          "name": "reason",
+          "description": "The reason why the user was kicked."
+        },
+        {
+          "name": "pings",
+          "description": "The amount of pings that triggered the moderation action."
+        },
+        {
+          "name": "timeframe",
+          "description": "The time frame in which the pings occurred."
+        },
+        {
+          "name": "guild-name",
+          "description": "The name of the server."
+        }
+      ],
+      "default": "You have been kicked from **%guild-name%** for pinging protected users/roles %pings% times within %timeframe% days."
+    },
+    {
+      "name": "autoDeleteWarningMessage",
+      "category": "messages",
+      "humanName": "Automatically delete warning message",
+      "description": "If enabled, you can set a custom time after which the warning message will automatically be deleted to keep the channel clean.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "deleteWarningMessageTime",
+      "category": "messages",
+      "humanName": "Automatic message deletion time",
+      "description": "The amount of time after which the warning message will automatically be deleted, in seconds.",
+      "type": "integer",
+      "default": 30,
+      "minValue": "1"
     }
   ]
 }
