@@ -12,11 +12,11 @@ const {Collection} = require('discord.js');
 const {channelNameReplacer} = require('../../modules/channel-stats/events/botReady');
 
 function member({
-                    bot = false,
-                    status = null,
-                    roles = [],
-                    premium = false
-                } = {}) {
+    bot = false,
+    status = null,
+    roles = [],
+    premium = false
+} = {}) {
     return {
         user: {bot},
         presence: status ? {status} : null,
@@ -25,7 +25,7 @@ function member({
     };
 }
 
-function buildClient(members) {
+function buildClient(members, activeIntents = ['Guilds', 'GuildMembers', 'GuildPresences']) {
     const cache = new Collection();
     members.forEach((m, i) => cache.set(String(i), m));
     const guild = {
@@ -36,7 +36,10 @@ function buildClient(members) {
         premiumTier: 2
     };
     return {
-        client: {guild: {members: {cache}}},
+        client: {
+            guild: {members: {cache}},
+            _activeIntents: activeIntents
+        },
         channel: {guild}
     };
 }
@@ -84,6 +87,30 @@ test('online member count excludes bots', async () => {
     expect(await channelNameReplacer(client, channel, '%onlineMemberCount%')).toBe('1');
 });
 
+test('renders N/A (not a false 0) for %onlineMemberCount% / %onlineUserCount% when GuildPresences intent is inactive', async () => {
+    const {
+        client,
+        channel
+    } = buildClient([
+        member({status: 'online'})
+    ], ['Guilds', 'GuildMembers']);
+    expect(await channelNameReplacer(client, channel, '%onlineMemberCount%')).toBe('N/A');
+    expect(await channelNameReplacer(client, channel, '%onlineUserCount%')).toBe('N/A');
+});
+
+test('renders N/A (not a false/under-reported count) for %memberCount% (non-bot) and %botCount% when GuildMembers intent is inactive', async () => {
+    const {
+        client,
+        channel
+    } = buildClient([
+        member(), member({bot: true})
+    ], ['Guilds', 'GuildPresences']);
+    // %userCount% (the guild total) stays correct via memberCountOrFallback regardless of GuildMembers.
+    expect(await channelNameReplacer(client, channel, 'U:%userCount%')).not.toBe('N/A');
+    expect(await channelNameReplacer(client, channel, 'M:%memberCount%')).toBe('M:N/A');
+    expect(await channelNameReplacer(client, channel, 'B:%botCount%')).toBe('B:N/A');
+});
+
 test('role-scoped counts resolve a specific role id', async () => {
     const {
         client,
@@ -98,6 +125,43 @@ test('role-scoped counts resolve a specific role id', async () => {
     ]);
     expect(await channelNameReplacer(client, channel, '%userWithRoleCount-role-a%')).toBe('2');
     expect(await channelNameReplacer(client, channel, '%onlineUserWithRoleCount-role-a%')).toBe('1');
+});
+
+test('renders N/A (not a false 0) for %userWithRoleCount-<id>% when GuildMembers intent is inactive', async () => {
+    const {
+        client,
+        channel
+    } = buildClient([
+        member({roles: ['role-a']}),
+        member({roles: ['role-a']})
+    ], ['Guilds', 'GuildPresences']);
+    expect(await channelNameReplacer(client, channel, '%userWithRoleCount-role-a%')).toBe('N/A');
+});
+
+test('renders N/A for %onlineUserWithRoleCount-<id>% when GuildPresences intent is inactive', async () => {
+    const {
+        client,
+        channel
+    } = buildClient([
+        member({
+            roles: ['role-a'],
+            status: 'online'
+        })
+    ], ['Guilds', 'GuildMembers']);
+    expect(await channelNameReplacer(client, channel, '%onlineUserWithRoleCount-role-a%')).toBe('N/A');
+});
+
+test('renders N/A for %onlineUserWithRoleCount-<id>% when GuildMembers intent is inactive', async () => {
+    const {
+        client,
+        channel
+    } = buildClient([
+        member({
+            roles: ['role-a'],
+            status: 'online'
+        })
+    ], ['Guilds', 'GuildPresences']);
+    expect(await channelNameReplacer(client, channel, '%onlineUserWithRoleCount-role-a%')).toBe('N/A');
 });
 
 test('replaces multiple distinct role placeholders recursively', async () => {

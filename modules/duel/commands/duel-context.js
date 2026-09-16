@@ -9,12 +9,6 @@ module.exports.config = {
     description: localize('duel', 'duel-context-description')
 };
 
-/*
- * Thin adapter: /duel run() resolves its opponent via interaction.options.getMember('user', true).
- * We reuse run() unchanged by handing it the real interaction with getMember overridden to return
- * the right-clicked member, so the challenge -> accept -> duel flow is identical against that user.
- * The self-challenge guard inside run() applies unchanged.
- */
 module.exports.run = async function (interaction) {
     if (!memberCanSendInChannel(interaction.member, interaction.channel)) return interaction.reply({
         ephemeral: true,

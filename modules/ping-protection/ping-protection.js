@@ -625,11 +625,19 @@ async function syncNativeAutoMod(client) {
 
         const protectedIdsSet = new Set(config.protectedUsers || []);
         if (config.protectAllUsersWithProtectedRole && config.protectedRoles && config.protectedRoles.length > 0) {
-            guild.members.cache.forEach(member => {
-                if (member.roles.cache.some(r => config.protectedRoles.includes(r.id))) {
-                    protectedIdsSet.add(member.id);
-                }
-            });
+
+            // Without GuildMembers the member cache is near-empty, so enumerating it would seed the
+            // native AutoMod rule with an incomplete protected-user list. Skip and warn instead; the
+            // real-time mention-based detection does not use the member cache and is unaffected.
+            if ((guild.client._activeIntents || []).includes('GuildMembers')) {
+                guild.members.cache.forEach(member => {
+                    if (member.roles.cache.some(r => config.protectedRoles.includes(r.id))) {
+                        protectedIdsSet.add(member.id);
+                    }
+                });
+            } else {
+                client.logger.warn(localize('ping-protection', 'log-automod-role-protection-skipped'));
+            }
         }
 
         protectedIdsSet.forEach(id => {

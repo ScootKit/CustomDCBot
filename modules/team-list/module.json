@@ -21,6 +21,9 @@
     "GuildMembers",
     "GuildPresences"
   ],
+  "optionalIntents": [
+    "GuildPresences"
+  ],
   "intentReasons": {
     "GuildMembers": "Lists every member holding each staff role in the always up-to-date embed.",
     "GuildPresences": "Shows each listed staff member's current online status."

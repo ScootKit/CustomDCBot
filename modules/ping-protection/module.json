@@ -26,6 +26,10 @@
     "MessageContent",
     "AutoModerationExecution"
   ],
+  "optionalIntents": [
+    "GuildMembers",
+    "MessageContent"
+  ],
   "intentReasons": {
     "GuildMembers": "Checks members to see if they are protected from pings and if they are allowed to ping such users.",
     "MessageContent": "Scans message content and mentions to catch pings of protected roles and users."

@@ -243,6 +243,7 @@ describe('computeRequiredIntents', () => {
         const {names} = computeRequiredIntents(confDir, modulesDir);
         expect(names).toEqual(['Guilds']);
     });
+
 });
 
 describe('resolveIntents — numeric-enum hardening', () => {
@@ -406,20 +407,72 @@ describe('privilegedIntentUsage', () => {
             {
                 module: 'moderation',
                 name: 'Moderation',
-                reason: 'Anti-raid and captcha'
+                reason: 'Anti-raid and captcha',
+                granted: true,
+                optional: false
             },
             {
                 module: 'welcomer',
                 name: 'Welcomer',
-                reason: null
+                reason: null,
+                granted: true,
+                optional: false
             }  // no intentReasons -> reason null, name fallback
         ]));
         expect(usage.MessageContent).toEqual([{
             module: 'moderation',
             name: 'Moderation',
-            reason: 'Spam/phishing filtering'
+            reason: 'Spam/phishing filtering',
+            granted: true,
+            optional: false
         }]);
         expect(usage.GuildPresences).toBeUndefined();           // statusRoles disabled
         expect(usage.GuildMessageReactions).toBeUndefined();    // non-privileged intents excluded
+    });
+
+    test('an enabled module with no module.json on disk is skipped', () => {
+        const {
+            confDir,
+            modulesDir
+        } = makeFixture({real: {intents: ['GuildMembers'], humanReadableName: 'Real'}}, {
+            real: true,
+            ghost: true // enabled but no folder/module.json
+        });
+        const usage = privilegedIntentUsage(confDir, modulesDir);
+        expect(usage.GuildMembers).toEqual([{module: 'real', name: 'Real', reason: null, granted: true, optional: false}]);
+    });
+
+    test('attributes MessageContent to custom commands when a MESSAGE autoresponder is enabled', () => {
+        const {
+            confDir,
+            modulesDir
+        } = makeFixture({}, {}, [{
+            type: 'MESSAGE',
+            enabled: true,
+            matchType: 'everyMessage'
+        }]);
+        const usage = privilegedIntentUsage(confDir, modulesDir);
+        expect(usage.MessageContent).toEqual([{
+            module: 'custom-commands',
+            name: 'Custom commands',
+            reason: 'Message-trigger auto-responders read message text to decide when to reply.',
+            granted: true,
+            optional: false
+        }]);
+    });
+
+    test('falls back to the dir name when a module has no humanReadableName, and tolerates non-array intents', () => {
+        const {
+            confDir,
+            modulesDir
+        } = makeFixture({
+            noName: {intents: ['GuildPresences']},        // privileged intent, no humanReadableName -> name fallback
+            badIntents: {intents: 'not-an-array'}          // intents not an array -> contributes nothing
+        }, {
+            noName: true,
+            badIntents: true
+        });
+        const usage = privilegedIntentUsage(confDir, modulesDir);
+        expect(usage.GuildPresences).toEqual([{module: 'noName', name: 'noName', reason: null, granted: true, optional: false}]);
     });
 });

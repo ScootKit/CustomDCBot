@@ -15,13 +15,14 @@ const role = {
     toString: () => '<@&r1>'
 };
 
-function member(id, status) {
+function member(id, status, activeIntents = ['GuildPresences']) {
     return {
         user: {
             id,
             toString: () => `<@${id}>`
         },
-        presence: status ? {status} : null
+        presence: status ? {status} : null,
+        client: {_activeIntents: activeIntents}
     };
 }
 
@@ -73,4 +74,19 @@ test('accumulates listed user ids across calls', () => {
     buildUserString([member('a')], role, {includeStatus: false}, listed);
     buildUserString([member('b')], role, {includeStatus: false}, listed);
     expect(listed).toEqual(['a', 'b']);
+});
+
+test('hides the status indicator when GuildPresences is not an active intent, even with includeStatus on', () => {
+    const members = [member('a', 'online', []), member('b', 'dnd', [])];
+    const out = buildUserString(members, role, {includeStatus: true}, []);
+    expect(out).toBe('<@a>, <@b>');
+    expect(out).not.toContain('🟢');
+    expect(out).not.toContain('⚫');
+});
+
+test('shows the status indicator when includeStatus is on and GuildPresences is active', () => {
+    const members = [member('a', 'online', ['GuildPresences']), member('b', 'dnd', ['GuildPresences'])];
+    const out = buildUserString(members, role, {includeStatus: true}, []);
+    expect(out).toContain('<@a>: 🟢 team-list.online');
+    expect(out).toContain('<@b>: 🔴 team-list.dnd');
 });
