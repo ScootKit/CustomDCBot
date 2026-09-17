@@ -227,8 +227,8 @@ module.exports.run = async function (client, interaction) {
                 }
 
                 if (btnInt.customId.includes('confirm')) {
-                    await executeDataDeletion(client, targetId, 'del_all');
-                    const blockedUntil = await setDeletionCooldown(client, targetId, 'del_all', btnInt.user.id);
+                    await executeDataDeletion(client, targetId, selection);
+                    const blockedUntil = await setDeletionCooldown(client, targetId, selection, btnInt.user.id);
 
                     client.logger.info(localize('ping-protection', 'log-del-all', {
                         target: targetId,
