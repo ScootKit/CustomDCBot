@@ -28,6 +28,7 @@ const mockG = {
 jest.mock('../../modules/ping-protection/ping-protection', () => mockG);
 
 const handler = require('../../modules/ping-protection/events/interactionCreate');
+const {localize} = require('../../src/functions/localize');
 
 function makeClient({
                         user = {
@@ -172,7 +173,7 @@ describe('del-confirm modal submit', () => {
 
     test('runs a partial deletion and sets the cooldown on the correct phrase', async () => {
         // the stub localize returns "ping-protection.modal-phrase"; confirm must equal it
-        const interaction = modalInteraction('ping-protection.modal-phrase');
+        const interaction = modalInteraction(localize('ping-protection', 'del-conf-phrase'));
         await handler.run(makeClient(), interaction);
         expect(mockG.executeDataDeletion).toHaveBeenCalledWith(expect.anything(), 'target', 'del_ping_history');
         expect(mockG.setDeletionCooldown).toHaveBeenCalledWith(expect.anything(), 'target', 'del_ping_history', 'admin1');

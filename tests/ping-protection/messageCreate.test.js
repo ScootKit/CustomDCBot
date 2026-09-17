@@ -9,11 +9,13 @@
  */
 const mockProcessPing = jest.fn().mockResolvedValue();
 const mockSendWarning = jest.fn().mockResolvedValue();
+const mockDeterminePingType = jest.fn(() => 'MENTION');
 const mockIsWhitelisted = jest.fn(() => false);
 jest.mock('../../modules/ping-protection/ping-protection', () => ({
     processPing: (...a) => mockProcessPing(...a),
     sendPingWarning: (...a) => mockSendWarning(...a),
-    isWhitelistedChannel: (...a) => mockIsWhitelisted(...a)
+    isWhitelistedChannel: (...a) => mockIsWhitelisted(...a),
+    determinePingType: (...a) => mockDeterminePingType(...a)
 }));
 
 const handler = require('../../modules/ping-protection/events/messageCreate');
@@ -91,6 +93,7 @@ beforeEach(() => {
     mockProcessPing.mockClear();
     mockSendWarning.mockClear();
     mockIsWhitelisted.mockClear();
+    mockDeterminePingType.mockClear();
     mockIsWhitelisted.mockReturnValue(false);
 });
 
@@ -165,7 +168,7 @@ describe('protected ping dispatch', () => {
         await handler.run(client, msg);
         expect(mockSendWarning).toHaveBeenCalledWith(client, msg, victimUser, expect.any(Object));
         expect(mockProcessPing).toHaveBeenCalledWith(
-            client, 'pinger', 'victim', false, 'http://msg', msg.channel, msg.member
+            client, 'pinger', 'victim', false, 'http://msg', msg.channel, msg.member, 'MENTION'
         );
     });
 
