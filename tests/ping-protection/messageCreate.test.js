@@ -178,7 +178,7 @@ describe('protected ping dispatch', () => {
         const msg = makeMessage({roles: [role]});
         await handler.run(client, msg);
         expect(mockProcessPing).toHaveBeenCalledWith(
-            client, 'pinger', 'roleP', true, 'http://msg', msg.channel, msg.member
+            client, 'pinger', 'roleP', true, 'http://msg', msg.channel, msg.member, 'MENTION'
         );
     });
 
