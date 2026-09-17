@@ -21,8 +21,71 @@ const {
 const {localize} = require('../../src/functions/localize');
 const recentPings = new Set();
 
+// Parses a timeframe to ms
+function parseTimeframeToMs(input, defaultDays = 7) {
+    const fallbackMs = defaultDays * 86400000;
+
+    if (typeof input === 'number') {
+        return Number.isFinite(input) && input > 0 
+        ? input * 86400000 
+        : fallbackMs;
+    }
+
+    const clean = String(input).trim().toLowerCase();
+
+    if (/^\d+$/.test(clean)) {
+        const parsedDays = parseInt(clean, 10);
+        return Number.isFinite(parsedDays) && parsedDays > 0 
+        ? parsedDays * 86400000 
+        : fallbackMs;
+    }
+
+    const match = clean.match(/^(\d+)\s*(s|m|h|d|w)$/);
+    if (!match) {
+        return fallbackMs;
+    }
+
+    const value = parseInt(match[1], 10);
+    const unit = match[2];
+
+    if (!Number.isFinite(value) || value <= 0) {
+        return fallbackMs;
+    }
+
+    switch (unit) {
+        case 's': return value * 1000;
+        case 'm': return value * 60000;
+        case 'h': return value * 3600000;
+        case 'd': return value * 86400000;
+        case 'w': return value * 7 * 86400000;
+        default:  return fallbackMs;
+    }
+}
+
+// Checks the type of ping (mention or reply)
+function determinePingType(message, targetId, isRole = false) {
+    if (isRole || !message || !targetId) {
+        return 'MENTION';
+    }
+
+    const isReply = Boolean(message.reference && message.mentions?.repliedUser?.id === targetId);
+    if (!isReply) {
+        return 'MENTION';
+    }
+    
+    const content = message.content || '';
+    if (!content) {
+        return 'REPLY'; // Backup if MessageContent intent is not enabled or content is empty
+    }
+    
+    const hasExplicitMention = content.includes(`<@${targetId}>`) || content.includes(`<@!${targetId}>`);
+    return hasExplicitMention 
+    ? 'MENTION' 
+    : 'REPLY';
+}
+
 // Data handling
-async function addPing(client, userId, messageUrl, targetId, isRole) {
+async function addPing(client, userId, messageUrl, targetId, isRole, pingType = 'MENTION') {
     const config = client.configurations['ping-protection']['configuration'];
     const duplicateWindow = config.enableAutomod ? 5000 : 2000;
     const debounceKey = `${userId}_${targetId}`;
@@ -46,20 +109,27 @@ async function addPing(client, userId, messageUrl, targetId, isRole) {
         userId: userId,
         messageUrl: messageUrl || 'Blocked by AutoMod',
         targetId: targetId,
-        isRole: isRole
+        isRole: isRole,
+        pingType: pingType || 'MENTION'
     });
 }
 
 // Gets ping count in timeframe
-async function getPingCountInWindow(client, userId, days) {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
+async function getPingCountInWindow(client, userId, timeframe, pingType = null) {
+    const timeframeMs = parseTimeframeToMs(timeframe);
+    const cutoffDate = new Date(Date.now() - timeframeMs);
+
+    const whereClause = {
+        userId: userId,
+        createdAt: {[Op.gt]: cutoffDate}
+    };
+
+    if (pingType === 'MENTION' || pingType === 'REPLY') {
+        whereClause.pingType = pingType;
+    }
 
     return await client.models['ping-protection']['PingHistory'].count({
-        where: {
-            userId: userId,
-            createdAt: {[Op.gt]: cutoffDate}
-        }
+        where: whereClause
     });
 }
 
@@ -404,14 +474,25 @@ async function generatePanelHistory(client, targetUser, page = 1) {
                 ? `[${localize('ping-protection', 'label-jump')}](${entry.messageUrl})`
                 : localize('ping-protection', 'no-message-link');
 
-            return localize('ping-protection', 'list-entry-text', {
+            let typeString;
+            if (entry.pingType === 'MENTION') {
+                typeString = localize('ping-protection', 'ping-mention');
+            } else if (entry.pingType === 'REPLY') {
+                typeString = localize('ping-protection', 'ping-reply');
+            } else {
+                typeString = localize('ping-protection', 'ping-unknown');
+            }
+
+            const typeLine = `• **${localize('ping-protection', 'label-type')}:** ${typeString} (${linkText})`;
+            const mainEntry = localize('ping-protection', 'list-entry-text', {
                 index: (page - 1) * limit + index + 1,
                 target: targetString,
                 time: timeString,
-                link: linkText
+                type: typeLine
             });
-        });
 
+            return `${mainEntry}`;
+        });
         description += lines.join('\n\n');
     }
 
@@ -475,7 +556,7 @@ async function generatePanelActions(client, targetUser, page = 1) {
             return `${(page - 1) * limit + index + 1}. **${entry.type}${duration}** - ${formatDate(entry.createdAt)}\n${localize('ping-protection', 'label-reason')}: ${reasonText}`;
         });
 
-        description += lines.join('\n\n') + `\n\n*${localize('ping-protection', 'actions-retention-note')}*`;
+        description += lines.join('\n\n') + `\n\n-# ${localize('ping-protection', 'actions-retention-note')}`;
     }
 
     const row = new ActionRowBuilder().addComponents(
@@ -563,16 +644,17 @@ async function sendPingWarning(client, message, target, moduleConfig) {
 
     try {
         const messageOptions = await embedTypeV2(warnMsg, placeholders);
+        let sentMessage = null;
 
         try {
-            return await message.reply(messageOptions);
+            sentMessage = await message.reply(messageOptions);
         } catch (replyError) {
             client.logger.warn(localize('ping-protection', 'log-warning-reply-failed', {
                 e: replyError.message
             }));
 
             try {
-                return await message.channel.send(messageOptions);
+                sentMessage = await message.channel.send(messageOptions);
             } catch (sendError) {
                 client.logger.warn(localize('ping-protection', 'log-warning-send-failed', {
                     c: message.channel.id,
@@ -581,8 +663,21 @@ async function sendPingWarning(client, message, target, moduleConfig) {
                 return null;
             }
         }
+
+        // Automatically deletes warning message, if enabled
+        if (sentMessage && moduleConfig.autoDeleteWarningMessage) {
+            setTimeout(() => {
+                sentMessage.delete().catch((deleteError) => {
+                    client.logger.warn(localize('ping-protection', 'log-warning-delete-failed', {
+                        e: deleteError.message
+                    }));
+                });
+            }, moduleConfig.deleteWarningMessageTime * 1000);
+        }
+
+        return sentMessage;
     } catch (error) {
-        client.logger.warn(localize('ping-protection', 'log-warning-build-failed', {
+        client.logger.error(localize('ping-protection', 'log-warning-build-failed', {
             e: error.message
         }));
         return null;
@@ -756,12 +851,24 @@ async function generateHistoryResponse(client, userId, page = 1) {
                 ? `[${localize('ping-protection', 'label-jump')}](${entry.messageUrl})`
                 : localize('ping-protection', 'no-message-link');
 
-            return localize('ping-protection', 'list-entry-text', {
+            let typeString;
+            if (entry.pingType === 'MENTION') {
+                typeString = localize('ping-protection', 'ping-mention');
+            } else if (entry.pingType === 'REPLY') {
+                typeString = localize('ping-protection', 'ping-reply');
+            } else {
+                typeString = localize('ping-protection', 'ping-unknown');
+            }
+
+            const typeLine = `• **${localize('ping-protection', 'label-type')}:** ${typeString} (${linkText})`;
+            const mainEntry = localize('ping-protection', 'list-entry-text', {
                 index: (page - 1) * limit + index + 1,
                 target: targetString,
                 time: timeString,
-                link: linkText
+                type: typeLine
             });
+
+            return `${mainEntry}`;
         });
         description += lines.join('\n\n');
     }
@@ -831,7 +938,7 @@ async function generateActionsResponse(client, userId, page = 1) {
             const reasonText = entry.reason || localize('ping-protection', 'no-reason') || 'No reason';
             return `${(page - 1) * limit + index + 1}. **${entry.type}${duration}** - ${formatDate(entry.createdAt)}\n${localize('ping-protection', 'label-reason')}: ${reasonText}`;
         });
-        description += lines.join('\n\n') + `\n\n*${localize('ping-protection', 'actions-retention-note')}*`;
+        description += lines.join('\n\n') + `\n\n-# ${localize('ping-protection', 'actions-retention-note')}`;
     }
 
     const row = new ActionRowBuilder().addComponents(
@@ -968,7 +1075,7 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
             '%action%': rule.actionType,
             '%duration%': rule.muteDuration || 'N/A',
             '%pings%': stats.pingCount || 'N/A',
-            '%timeframe%': stats.timeframeDays || 'N/A'
+            '%timeframe%': stats.customTimeFrame || 'N/A'
         };
 
         try {
@@ -1065,6 +1172,27 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
         }
 
     } else if (actionType === 'KICK') {
+        const moduleConfig = client.configurations['ping-protection']['configuration'];
+
+        if (moduleConfig?.kickPunishmentMessage) {
+            const placeholders = {
+                '%guild-name%': member.guild.name,
+                '%reason%': reason,
+                '%pings%': stats.pingCount || 'N/A',
+                '%timeframe%': stats.customTimeFrame || stats.timeframeDays || 'N/A'
+            };
+
+            try {
+                const dmPayload = await embedTypeV2(moduleConfig.kickPunishmentMessage, placeholders);
+                await member.send(dmPayload);
+            } catch (dmError) {
+                client.logger.warn(localize('ping-protection', 'log-kick-dm-failed', {
+                    u: member.user.tag,
+                    e: dmError.message
+                }));
+            }
+        }
+
         await logDb('KICK');
         try {
             await member.kick(reason);
@@ -1083,14 +1211,14 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
 }
 
 // Processes a ping event
-async function processPing(client, userId, targetId, isRole, messageUrl, originChannel, memberToPunish) {
+async function processPing(client, userId, targetId, isRole, messageUrl, originChannel, memberToPunish, pingType = 'MENTION') {
     const config = client.configurations['ping-protection']['configuration'];
     const storageConfig = client.configurations['ping-protection']['storage'];
     const moderationRules = client.configurations['ping-protection']['moderation'];
 
     if (storageConfig?.enablePingHistory) {
         try {
-            await addPing(client, userId, messageUrl, targetId, isRole);
+            await addPing(client, userId, messageUrl, targetId, isRole, pingType);
         } catch (e) {
             client.logger.error(localize('ping-protection', 'log-ping-history-create-failed', {
                 u: userId,
@@ -1103,13 +1231,26 @@ async function processPing(client, userId, targetId, isRole, messageUrl, originC
 
     for (let i = moderationRules.length - 1; i >= 0; i--) {
         const rule = moderationRules[i];
+        const rulePingType = rule.pingsType || 'Both';
+
+        if (rulePingType === 'Mentions' && pingType === 'REPLY') {
+            continue;
+        }
+        if (rulePingType === 'Reply pings' && pingType === 'MENTION') {
+            continue;
+        }
+
+        let countFilter = null;
+        if (rulePingType === 'Mentions') countFilter = 'MENTION';
+        else if (rulePingType === 'Reply pings') countFilter = 'REPLY';
 
         const retentionWeeks = storageConfig?.pingHistoryRetention || 12;
-        const timeframeDays = rule.useCustomTimeframe
-            ? (rule.timeframeDays || 7)
+        const timeframeRaw = rule.useCustomTimeframe
+            ? (rule.customTimeFrame || rule.timeframeDays || '7d')
             : (retentionWeeks * 7);
 
-        const pingCount = await getPingCountInWindow(client, userId, timeframeDays);
+        const timeframeDisplay = String(timeframeRaw);
+        const pingCount = await getPingCountInWindow(client, userId, timeframeRaw, countFilter);
         const requiredCount = getRequiredPingCountForMember(rule, memberToPunish);
 
         if (requiredCount === EXEMPT_THRESHOLD) {
@@ -1140,7 +1281,7 @@ async function processPing(client, userId, targetId, isRole, messageUrl, originC
             const generatedReason = rule.useCustomTimeframe
                 ? localize('ping-protection', 'reason-advanced', {
                     c: pingCount,
-                    d: timeframeDays
+                    d: timeframeDisplay
                 })
                 : localize('ping-protection', 'reason-basic', {
                     c: pingCount,
@@ -1157,7 +1298,8 @@ async function processPing(client, userId, targetId, isRole, messageUrl, originC
                     originChannel,
                     {
                         pingCount,
-                        timeframeDays
+                        timeframeDays: timeframeDisplay,
+                        customTimeFrame: timeframeDisplay
                     }
                 );
 
@@ -1168,6 +1310,8 @@ async function processPing(client, userId, targetId, isRole, messageUrl, originC
 }
 
 module.exports = {
+    parseTimeframeToMs,
+    determinePingType,
     addPing,
     getPingCountInWindow,
     getSafeChannelId,
@@ -1177,6 +1321,9 @@ module.exports = {
     sendPingWarning,
     syncNativeAutoMod,
     processPing,
+    sendPingWarning,
+    isWhitelistedChannel,
+    determinePingType,
     fetchPingHistory,
     fetchModHistory,
     executeAction,

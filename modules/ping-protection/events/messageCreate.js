@@ -1,7 +1,8 @@
 const {
     processPing,
     sendPingWarning,
-    isWhitelistedChannel
+    isWhitelistedChannel,
+    determinePingType
 } = require('../ping-protection');
 const {localize} = require('../../../src/functions/localize');
 const {randomElementFromArray} = require('../../../src/functions/helpers');
@@ -126,6 +127,8 @@ module.exports.run = async function (client, message) {
         }
     }
 
+    const pingType = determinePingType(message, target.id, isRole);
+
     await processPing(
         client,
         message.author.id,
@@ -133,6 +136,7 @@ module.exports.run = async function (client, message) {
         isRole,
         message.url,
         message.channel,
-        memberToPunish
+        message.member,
+        pingType
     );
 };
