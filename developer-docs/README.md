@@ -9,7 +9,10 @@ Start here if you want to add a new feature as a module:
 - [**Writing a module**](./writing-a-module.md) - file layout, `module.json`, lifecycle, end-to-end example.
 - [**Events**](./events.md) - event handler shape, lifecycle gates (`botReadyAt`, `allowPartial`,
   `ignoreBotReadyCheck`), Discord and custom events you can listen to.
-- [**Slash commands**](./commands.md) - `config` / `run` / `subcommands` / `autocomplete`, registration, options.
+- [**Commands**](./commands.md) - `config` / `run` / `subcommands` / `autocomplete`, options, context-menu commands,
+  registration.
+- [**Gateway intents**](./intents.md) - declaring `intents` / `optionalIntents` in `module.json`, degrading when a
+  privileged intent is not granted, the operator allowlist.
 - [**Database models**](./database-models.md) - Sequelize `Model.init` pattern, `models-dir`, accessing models from
   events.
 - [**Field-level encryption**](./field-encryption.md) - the secure-storage serialization layer: which columns are

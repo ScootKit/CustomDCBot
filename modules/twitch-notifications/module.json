@@ -21,6 +21,9 @@
   "intents": [
     "GuildMembers"
   ],
+  "optionalIntents": [
+    "GuildMembers"
+  ],
   "intentReasons": {
     "GuildMembers": "Resolves streamer members from the cache to grant the live role."
   }

@@ -8,7 +8,6 @@ exports.run = async (client, oldState, newState) => {
     if (!client.botReadyAt) return;
     const roleConfig = client.configurations['ping-on-vc-join']['actual-config'];
 
-    // Ignore bots for role assignment
     if (roleConfig.assignRoleToUsersInVoiceChannels && roleConfig.voiceRoles.length !== 0 && !newState.member.user.bot) {
         if (oldState.channel && !newState.channel) newState.member.roles.remove(roleConfig.voiceRoles);
         if (!oldState.channel && newState.channel) newState.member.roles.add(roleConfig.voiceRoles);
@@ -25,21 +24,17 @@ exports.run = async (client, oldState, newState) => {
     const member = await client.guild.members.fetch(newState.id);
     if (member.user.bot) return;
 
-    // Check cooldown based on configuration
     const cooldownEnabled = configElement['cooldownEnabled'] || false;
 
     if (cooldownEnabled) {
-        // Per-channel cooldown
         const cooldownKey = `${channel.id}`;
         const now = Date.now();
         const cooldownEnd = channelCooldown.get(cooldownKey);
 
         if (cooldownEnd && now < cooldownEnd) {
-            // Still in cooldown, don't send message
             return;
         }
     } else {
-        // Legacy per-user cooldown
         if (userCooldown.has(member.user.id)) return;
     }
 
@@ -56,16 +51,13 @@ exports.run = async (client, oldState, newState) => {
             '%mention%': `<@${member.user.id}>`
         }));
 
-        // Set cooldown after sending message
         if (cooldownEnabled) {
-            // Per-channel cooldown
             const cooldownMinutes = configElement['cooldownMinutes'] || 5;
             const cooldownMs = cooldownMinutes * 60 * 1000;
             const cooldownKey = `${channel.id}`;
 
             channelCooldown.set(cooldownKey, Date.now() + cooldownMs);
 
-            // Clean up expired cooldowns periodically
             setTimeout(() => {
                 const now = Date.now();
                 if (channelCooldown.get(cooldownKey) <= now) {
@@ -73,7 +65,6 @@ exports.run = async (client, oldState, newState) => {
                 }
             }, cooldownMs);
         } else {
-            // Legacy per-user cooldown
             userCooldown.add(member.user.id);
             setTimeout(() => {
                 userCooldown.delete(member.user.id);

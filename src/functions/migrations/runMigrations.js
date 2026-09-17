@@ -80,52 +80,66 @@ function buildUmzug(client, dir, options = {}) {
         getModel: () => client.models['DatabaseSchemeVersion']
     });
     const {writtenThisBoot} = options;
-    return new Umzug({
-        migrations: {
-            glob: path.join(dir, '*.js'),
-            resolve: ({
-                          name,
-                          path: filePath,
-                          context
-                      }) => {
-                const stripped = name.replace(/\.js$/u, '');
-                return {
-                    name: stripped,
-                    up: async () => {
-                        const mig = await loadMigrationFile(filePath);
-                        if (Array.isArray(mig.tables) && mig.tables.length > 0) {
-                            try {
-                                const written = await backupTables(client, context.sequelize, stripped, mig.tables);
-                                if (writtenThisBoot) for (const p of written) writtenThisBoot.add(path.basename(p));
-                            } catch (backupErr) {
-                                const e = new Error(
-                                    `[migrations] Cannot take pre-migration backup for ${stripped}: ${backupErr.message}. ` +
-                                    'Free disk space (or fix permissions on the migration-backups directory) and retry.'
-                                );
-                                e.cause = backupErr;
-                                throw e;
-                            }
-                        }
-                        return mig.up({
-                            name: stripped,
-                            context
-                        });
-                    },
-                    down: async () => {
-                        const mig = await loadMigrationFile(filePath);
-                        return mig.down({
-                            name: stripped,
-                            context
-                        });
+    const context = {
+        sequelize,
+        queryInterface: sequelize.getQueryInterface(),
+        client
+    };
+
+    const resolveMigration = (filePath, name) => {
+        const stripped = name.replace(/\.js$/u, '');
+        return {
+            name: stripped,
+            up: async () => {
+                const mig = await loadMigrationFile(filePath);
+                if (Array.isArray(mig.tables) && mig.tables.length > 0) {
+                    try {
+                        const written = await backupTables(client, context.sequelize, stripped, mig.tables);
+                        if (writtenThisBoot) for (const p of written) writtenThisBoot.add(path.basename(p));
+                    } catch (backupErr) {
+                        const e = new Error(
+                            `[migrations] Cannot take pre-migration backup for ${stripped}: ${backupErr.message}. ` +
+                            'Free disk space (or fix permissions on the migration-backups directory) and retry.'
+                        );
+                        e.cause = backupErr;
+                        throw e;
                     }
-                };
+                }
+                return mig.up({
+                    name: stripped,
+                    context
+                });
+            },
+            down: async () => {
+                const mig = await loadMigrationFile(filePath);
+                return mig.down({
+                    name: stripped,
+                    context
+                });
             }
-        },
-        context: {
-            sequelize,
-            queryInterface: sequelize.getQueryInterface(),
-            client
-        },
+        };
+    };
+
+    /*
+     * When the caller passes an explicit list of absolute paths (runAllMigrations always does),
+     * build the migrations array directly. Umzug's glob options are version- and platform-dependent
+     * (backslash paths on Windows; `{name}.js` is a literal without a comma), and both silently drop
+     * or re-include files — an explicit array removes that matching entirely. Sorted by basename so
+     * V1 runs before V2. Direct callers passing no list fall back to the directory glob.
+     */
+    const migrations = Array.isArray(options.files)
+        ? options.files
+            .slice()
+            .sort((a, b) => (path.basename(a) < path.basename(b) ? -1 : 1))
+            .map(filePath => resolveMigration(filePath, path.basename(filePath)))
+        : {
+            glob: path.join(dir, '*.js'),
+            resolve: ({name, path: filePath}) => resolveMigration(filePath, name)
+        };
+
+    return new Umzug({
+        migrations,
+        context,
         storage,
         logger: {
             info: (m) => client.logger.info(typeof m === 'string' ? m : JSON.stringify(m)),
@@ -158,7 +172,11 @@ async function runAllMigrations(client, hooks = {}) {
         const fileNames = migrationFileNames(dir);
         if (fileNames.length === 0) continue;
 
-        const umzug = buildUmzug(client, dir, {writtenThisBoot});
+        // Hand umzug the exact absolute file list rather than a glob (see buildUmzug).
+        const umzug = buildUmzug(client, dir, {
+            writtenThisBoot,
+            files: fileNames.map(name => path.join(dir, `${name}.js`))
+        });
         const pending = await umzug.pending();
         if (pending.length === 0) {
             client.logger.debug(`[migrations:${moduleName}] up to date`);

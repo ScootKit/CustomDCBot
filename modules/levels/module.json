@@ -27,6 +27,10 @@
     "MessageContent",
     "GuildMembers"
   ],
+  "optionalIntents": [
+    "GuildMembers",
+    "MessageContent"
+  ],
   "intentReasons": {
     "MessageContent": "Reads message text to award activity XP while excluding prefix commands.",
     "GuildMembers": "Resets levels when a member leaves and resolves names for the leaderboard."

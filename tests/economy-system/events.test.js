@@ -4,7 +4,9 @@
  * messageCreate (random money drops): the early-return guards (not ready, no
  *   guild, bot author, wrong guild), the messageDrops==0 / ignored-channel
  *   short-circuits, the random-roll gate, the credited amount range, and that a
- *   drop notice is sent only when the author has not opted out.
+ *   drop notice is sent only when the author has not opted out. The notice comes
+ *   from the configured msgDropMsg strings, falling back to the localized text
+ *   when that config is missing or empty.
  * interactionCreate: only the shop select-menu in the right guild buys an item.
  * botReady: redraws shop+leaderboard and schedules the daily refresh job.
  * shop command: permission gating on add/delete/edit, and that buy/list don't
@@ -31,9 +33,26 @@ jest.mock('../../modules/economy-system/economy-system', () => ({
     updateShopItem: (...a) => mockUpdateShopItem(...a)
 }));
 
-jest.mock('../../src/functions/helpers', () => ({
-    formatDiscordUserName: (u) => (u && u.tag) || 'user'
-}));
+// Real RNG (so the genuine drop-chance / payout maths runs); embedType is a
+// passthrough that renders the placeholders so assertions read as plain text.
+// mockRandomIntFromInterval lets a single test force a deterministic roll.
+let mockRandomIntFromInterval = null;
+jest.mock('../../src/functions/helpers', () => {
+    const actual = jest.requireActual('../../src/functions/helpers');
+    return {
+        ...actual,
+        randomIntFromInterval: (...a) => (mockRandomIntFromInterval || actual.randomIntFromInterval)(...a),
+        embedType: (input, args, opts) => {
+            let content = input;
+            for (const [k, v] of Object.entries(args || {})) content = content.split(k).join(v);
+            return {
+                content,
+                ...opts
+            };
+        },
+        formatDiscordUserName: (u) => (u && u.tag) || 'user'
+    };
+});
 
 const mockSchedule = jest.fn(() => ({}));
 jest.mock('node-schedule', () => ({scheduleJob: (...a) => mockSchedule(...a)}));
@@ -44,13 +63,16 @@ beforeEach(() => {
     mockShopMsg.mockClear();
     mockCreateLeaderboard.mockClear();
     mockSchedule.mockClear();
-    jest.spyOn(Math, 'random').mockRestore?.();
+    mockRandomIntFromInterval = null;
 });
 
 describe('messageCreate money drops', () => {
     const handler = require('../../modules/economy-system/events/messageCreate');
 
-    function makeClient(config = {}, {dropOptOut = null} = {}) {
+    function makeClient(config = {}, {
+        dropOptOut = null,
+        strings = {}
+    } = {}) {
         return {
             botReadyAt: Date.now(),
             config: {guildID: 'g1'},
@@ -65,6 +87,10 @@ describe('messageCreate money drops', () => {
                         messageDropsMax: 6,
                         currencySymbol: '$',
                         ...config
+                    },
+                    strings: {
+                        msgDropMsg: ['Message-Drop: You earned %earned% simply by chatting!'],
+                        ...strings
                     }
                 }
             },
@@ -115,17 +141,25 @@ describe('messageCreate money drops', () => {
     });
 
     test('does nothing when the random roll misses (drop chance not hit)', async () => {
-        jest.spyOn(Math, 'random').mockReturnValue(0.0); // floor(0*1)=0 !== 1 -> miss
+        mockRandomIntFromInterval = () => 2; // roll !== 1 -> miss
         await handler.run(makeClient({messageDrops: 5}), makeMessage());
         expect(mockEditBalance).not.toHaveBeenCalled();
-        Math.random.mockRestore();
+    });
+
+    test('a chance of 1 drops on every single message', async () => {
+        // REGRESSION: floor(random()*1) is always 0 and never 1, so a configured
+        // 1/1 (100%) chance used to drop NEVER. The roll is now a 1/N interval,
+        // so N=1 always hits. 25 consecutive messages must all drop.
+        for (let i = 0; i < 25; i++) {
+            mockEditBalance.mockClear();
+            await handler.run(makeClient({messageDrops: 1}), makeMessage());
+            expect(mockEditBalance).toHaveBeenCalled();
+        }
     });
 
     test('credits a drop and replies when the author has not opted out', async () => {
-        // messageDrops:1 -> floor(random*1)=0 ... need ===1; with messageDrops:2, random in [0.5,1) -> floor=1
-        jest.spyOn(Math, 'random').mockReturnValue(0.5);
         const client = makeClient({
-            messageDrops: 2,
+            messageDrops: 1,
             messageDropsMin: 10,
             messageDropsMax: 11
         }, {dropOptOut: null});
@@ -133,17 +167,83 @@ describe('messageCreate money drops', () => {
         await handler.run(client, msg);
         expect(mockEditBalance).toHaveBeenCalledWith(client, 'u1', 'add', expect.any(Number));
         expect(msg.reply).toHaveBeenCalled();
-        Math.random.mockRestore();
+    });
+
+    test('replies with the configured msgDropMsg, not a hardcoded string', async () => {
+        const client = makeClient({
+            messageDrops: 1,
+            messageDropsMin: 10,
+            messageDropsMax: 10
+        }, {strings: {msgDropMsg: ['CUSTOM %earned%']}});
+        const msg = makeMessage();
+        await handler.run(client, msg);
+        expect(msg.reply).toHaveBeenCalledWith(expect.objectContaining({content: 'CUSTOM 10 $'}));
+    });
+
+    test('picks a random element when msgDropMsg holds multiple entries', async () => {
+        // 3 entries, 60 drops: P(some entry never picked) < 3*(2/3)^60 ~ 1e-10.
+        const seen = new Set();
+        for (let i = 0; i < 60; i++) {
+            const client = makeClient({
+                messageDrops: 1,
+                messageDropsMin: 10,
+                messageDropsMax: 10
+            }, {
+                strings: {
+                    msgDropMsg: [
+                        'A %earned%',
+                        'B %earned%',
+                        'C %earned%'
+                    ]
+                }
+            });
+            const msg = makeMessage();
+            await handler.run(client, msg);
+            seen.add(msg.reply.mock.calls[0][0].content);
+        }
+        expect([...seen].sort()).toEqual([
+            'A 10 $',
+            'B 10 $',
+            'C 10 $'
+        ]);
+    });
+
+    test.each([
+        ['missing', undefined],
+        ['empty', []]
+    ])('falls back to the localized drop notice when msgDropMsg is %s', async (_label, msgDropMsg) => {
+        // randomElementFromArray([]) returns null and embedType(null) would throw,
+        // so configs predating msgDropMsg (or with a cleared array) must still send.
+        const client = makeClient({messageDrops: 1}, {strings: {msgDropMsg}});
+        const msg = makeMessage();
+        await handler.run(client, msg);
+        expect(msg.reply).toHaveBeenCalledWith({content: expect.any(String)});
+        expect(msg.reply.mock.calls[0][0].content).not.toBe('');
+    });
+
+    test('the credited amount spans the full inclusive [min,max]', async () => {
+        // REGRESSION: floor(random()*(max-min))+min excluded max entirely. The roll
+        // is now inclusive on both ends. min=5,max=6 => 2 outcomes; over 200 drops
+        // P(an endpoint never appears) = 2*(1/2)^200 ~ 1e-60, so this cannot flake.
+        const seen = new Set();
+        for (let i = 0; i < 200; i++) {
+            mockEditBalance.mockClear();
+            await handler.run(makeClient({messageDrops: 1}), makeMessage());
+            const amount = mockEditBalance.mock.calls[0][3];
+            expect(amount).toBeGreaterThanOrEqual(5);
+            expect(amount).toBeLessThanOrEqual(6);
+            expect(Number.isInteger(amount)).toBe(true);
+            seen.add(amount);
+        }
+        expect([...seen].sort()).toEqual([5, 6]);
     });
 
     test('does not send a reply when the author opted out of drop messages', async () => {
-        jest.spyOn(Math, 'random').mockReturnValue(0.5);
-        const client = makeClient({messageDrops: 2}, {dropOptOut: {id: 'u1'}});
+        const client = makeClient({messageDrops: 1}, {dropOptOut: {id: 'u1'}});
         const msg = makeMessage();
         await handler.run(client, msg);
         expect(mockEditBalance).toHaveBeenCalled();
         expect(msg.reply).not.toHaveBeenCalled();
-        Math.random.mockRestore();
     });
 });
 
@@ -211,10 +311,10 @@ describe('shop command permission gating', () => {
     const shop = require('../../modules/economy-system/commands/shop');
 
     function makeInteraction({
-                                 userId = 'u',
-                                 shopManagers = [],
-                                 botOperators = []
-                             } = {}) {
+        userId = 'u',
+        shopManagers = [],
+        botOperators = []
+    } = {}) {
         return {
             user: {id: userId},
             reply: jest.fn().mockResolvedValue(),

@@ -457,6 +457,6 @@ describe('run lobby', () => {
         await uno.run(interaction);
         const i = lobbyClick('uno-uno', 'stranger');
         await collector.handlers.collect(i);
-        expect(i.reply).toHaveBeenCalledWith(expect.objectContaining({content: 'uno.not-in-game'}));
+        expect(i.reply).toHaveBeenCalledWith(expect.objectContaining({content: 'uno.not-ingame'}));
     });
 });

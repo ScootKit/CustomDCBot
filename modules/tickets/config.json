@@ -44,6 +44,13 @@
       "content": "roleID"
     },
     {
+      "name": "inheritCategoryPermissions",
+      "humanName": "Copy category permissions",
+      "default": false,
+      "description": "Opt in to copying permission overwrites from the ticket category when a ticket is created. @everyone remains denied access. Later category changes are not applied automatically.",
+      "type": "boolean"
+    },
+    {
       "name": "logChannel",
       "humanName": "Log channel",
       "default": "",

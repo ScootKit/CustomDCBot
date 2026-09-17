@@ -11,14 +11,15 @@ const {
     client
 } = require('../../main');
 const {localize} = require('./localize');
+const {pick} = require('./exitCodes');
 const isEqual = require('is-equal');
 const path = require('path');
 const {
     computeRequiredIntents,
-    diffIntents
+    diffIntents,
+    PRIVILEGED_INTENTS
 } = require('./intents');
 
-// Config localization: load external translation files (cached)
 const configLocalizationCache = {};
 
 function loadConfigLocalization(locale) {
@@ -47,6 +48,56 @@ const channelTypeMap = {
     GUILD_STAGE_VOICE: ChannelType.GuildStageVoice
 };
 
+/*
+ * Types whose validity depends on a live Discord fetch. checkType returns false for these on BOTH a
+ * genuine not-found AND a transient blip (rate-limit / 5xx / network), which are indistinguishable
+ * at the call site, so an invalid stored value must NEVER be healed to the field default.
+ */
+const FETCH_BACKED_TYPES = new Set(['channelID', 'roleID', 'userID', 'guildID']);
+
+/**
+ * True when a field's validity is backed by a live Discord fetch, directly or as an array element.
+ * @param {ConfigField<Object>} field
+ * @returns {Boolean}
+ */
+function isFetchBackedType(field) {
+    if (FETCH_BACKED_TYPES.has(field.type)) return true;
+    return field.type === 'array' && FETCH_BACKED_TYPES.has(field.content);
+}
+
+/**
+ * Disables every enabled module requiring a privileged intent the operator's allowlist does not
+ * grant. Idempotent: reloadConfig resets `enabled` from modules.json first, so this must re-run on
+ * every boot AND reload. Returns the disabled module names so the caller can skip their config check.
+ * @param {Client} client
+ * @param {String} [modulesDir]
+ * @returns {Promise<Set<String>>}
+ */
+async function applyIntentDisables(client, modulesDir) {
+    const dir = modulesDir || path.join(__dirname, '..', '..', 'modules');
+    const {disabledModules} = computeRequiredIntents(client.configDir, dir);
+    const disabled = new Set();
+    for (const d of disabledModules) {
+        disabled.add(d.module);
+        const mod = client.modules[d.module];
+        if (!mod) continue;
+        mod.enabled = false;
+        client.logger.warn(localize('config', 'intent-module-disabled', {
+            m: d.module,
+            intents: d.missingRequired.join(', ')
+        }));
+        if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
+            type: 'MODULE_FAILURE',
+            errorDescription: 'module_disabled',
+            module: d.module,
+            errorData: {reason: 'Required privileged intent(s) not granted: ' + d.missingRequired.join(', ')}
+        });
+    }
+    return disabled;
+}
+
+module.exports.applyIntentDisables = applyIntentDisables;
+
 /**
  * Check every (including module) configuration and load them
  * @author Simon Csaba <mail@scderox.de>
@@ -66,8 +117,10 @@ async function loadAllConfigs(client) {
             }
         });
 
+        const intentDisabled = await applyIntentDisables(client);
         for (const moduleName in client.modules) {
             if (!client.modules[moduleName].userEnabled) continue;
+            if (intentDisabled.has(moduleName)) continue; // already disabled + reported above
             await checkModuleConfig(moduleName, client.modules[moduleName]['config']['on-checked-config-event'] ? require(`./modules/${moduleName}/${client.modules[moduleName]['config']['on-checked-config-event']}`) : null)
                 .catch(async (e) => {
                     client.modules[moduleName].enabled = false;
@@ -109,19 +162,51 @@ async function checkConfigFile(file, moduleName) {
         const locScope = builtIn ? '_core' : moduleName;
         const locFileName = exampleFile.filename.replace('.json', '');
 
+        /**
+         * Detaches a default value from the shared example/localization caches. Object and array
+         * defaults are returned by reference from module-cached JSON, so materialized configs alias
+         * them and any in-place mutation would corrupt the cache for every later load.
+         * @param {*} value Default value to detach
+         * @returns {*} A cache-independent copy; primitives pass through
+         */
+        function detachDefault(value) {
+            if (value !== null && typeof value === 'object') return structuredClone(value);
+            return value;
+        }
+
         function resolveDefault(field) {
             if (isLocalizedObject(field.default)) {
-                return field.default[client.locale] || field.default['en'];
+                return detachDefault(field.default[client.locale] || field.default['en']);
             }
             if (['string', 'emoji', 'imgURL'].includes(field.type) && client.locale && client.locale !== 'en') {
                 const locData = loadConfigLocalization(client.locale);
                 const fileLocData = locData[locScope] && locData[locScope][locFileName];
                 if (fileLocData && fileLocData.content && fileLocData.content[field.name] &&
                     fileLocData.content[field.name].default !== undefined) {
-                    return fileLocData.content[field.name].default;
+                    return detachDefault(fileLocData.content[field.name].default);
                 }
             }
-            return field.default;
+            return detachDefault(field.default);
+        }
+
+        /**
+         * Resolves a field's dependsOn chain transitively: a field is only enabled when its
+         * dependsOn target is truthy AND that target's own chain is satisfied, so a field stays
+         * hidden when a hidden ancestor disables it even if the intermediate still holds a stale
+         * truthy value.
+         * @param {Object} field Field whose chain is being resolved
+         * @param {Object} source Config object to read current values from
+         * @param {Set<String>} [seen] Cycle guard
+         * @returns {Boolean}
+         */
+        function dependsOnChainSatisfied(field, source, seen = new Set()) {
+            if (!field.dependsOn || seen.has(field.name)) return true;
+            seen.add(field.name);
+            const parent = exampleFile.content.find(f => f.name === field.dependsOn);
+            if (!parent) return true; // a missing dependsOn target is rejected separately
+            const parentValue = typeof source[parent.name] === 'undefined' ? resolveDefault(parent) : source[parent.name];
+            if (!parentValue) return false;
+            return dependsOnChainSatisfied(parent, source, seen);
         }
 
         let forceOverwrite = false;
@@ -152,7 +237,7 @@ async function checkConfigFile(file, moduleName) {
                     const dependsOnNotField = field.dependsOnNot ? exampleFile.content.find(f => f.name === field.dependsOnNot) : null;
                     if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
                     if (field.dependsOnNot && !dependsOnNotField) return reject(`Depends-On-Field ${field.dependsOnNotField} does not exist.`);
-                    if (dependsOnField && !(typeof object[dependsOnField.name] === 'undefined' ? resolveDefault(dependsOnField) : object[dependsOnField.name])) {
+                    if (dependsOnField && !dependsOnChainSatisfied(field, object)) {
                         objectData[field.name] = configData[field.name] || resolveDefault(field); // Otherwise disabled fields may be overwritten
                         continue;
                     }
@@ -179,7 +264,7 @@ async function checkConfigFile(file, moduleName) {
                 }
                 const dependsOnField = field.dependsOn ? exampleFile.content.find(f => f.name === field.dependsOn) : null;
                 if (field.dependsOn && !dependsOnField) return reject(`Depends-On-Field ${field.dependsOn} does not exist.`);
-                if (dependsOnField && !(typeof configData[dependsOnField.name] === 'undefined' ? resolveDefault(dependsOnField) : configData[dependsOnField.name])) {
+                if (dependsOnField && !dependsOnChainSatisfied(field, configData)) {
                     newConfig[field.name] = configData[field.name] || resolveDefault(field); // Otherwise disabled fields may be overwritten
                     continue;
                 }
@@ -207,7 +292,7 @@ async function checkConfigFile(file, moduleName) {
                 }
                 if (isLocalizedObject(field.default)) {
                     // Old format: {en: ..., de: ...} — backwards compatible
-                    field.default = field.default[client.locale] || field.default['en'];
+                    field.default = detachDefault(field.default[client.locale] || field.default['en']);
                 } else {
                     // New format: plain value — resolve locale from external file
                     field.default = resolveDefault(field);
@@ -218,6 +303,25 @@ async function checkConfigFile(file, moduleName) {
                 } else if (field.type === 'keyed' && field.disableKeyEdits) for (const key in field.default) if (fieldValue[key] == null) fieldValue[key] = field.default[key];
                 if (field.allowNull && field.type !== 'boolean' && !fieldValue) return res(fieldValue);
                 if (!await checkType(field, fieldValue)) {
+                    if (isFetchBackedType(field)) {
+
+                        /*
+                         * checkType-false on a fetch-backed type is ambiguous: the ID may be gone OR a
+                         * transient Discord failure rejected the fetch. Healing to the default here
+                         * would permanently destroy a valid ID (or empty a valid array) on a blip.
+                         */
+                        if (!fieldValue && field.default === '') {
+
+                            // A required fetch-backed field left unconfigured has an empty default that
+                            // never validates; healing would re-fail every boot, so disable the module.
+                            return rej(`Required field "${field.name}" in ${exampleFile.filename}${moduleName ? ` (module ${moduleName})` : ''} is not configured (empty default cannot be validated).`);
+                        }
+                        logger.warn(`[CONFIGURATION] Field "${field.name}" in ${exampleFile.filename}${moduleName ? ` (module ${moduleName})` : ''} could not be verified (stored value ${JSON.stringify(fieldValue)}); keeping the stored value without healing.`);
+                        return res(fieldValue);
+                    }
+
+                    // Non-fetch types: an invalid stored value is definitively wrong, so heal to the
+                    // default (persisted by the write-back below) instead of disabling the module.
                     if (client.scnxSetup) await require('./scnx-integration').reportIssue(client, {
                         type: 'CONFIGURATION_ISSUE',
                         module: moduleName,
@@ -225,16 +329,8 @@ async function checkConfigFile(file, moduleName) {
                         configFile: exampleFile.filename.replaceAll('.json', ''),
                         errorDescription: 'field_check_failed'
                     });
-                    logger.error(localize('config', 'checking-of-field-failed', {
-                        fieldName: field.name,
-                        m: moduleName,
-                        f: exampleFile.filename
-                    }));
-                    rej(localize('config', 'checking-of-field-failed', {
-                        fieldName: field.name,
-                        m: moduleName,
-                        f: exampleFile.filename
-                    }));
+                    logger.warn(`[CONFIGURATION] Field "${field.name}" in ${exampleFile.filename}${moduleName ? ` (module ${moduleName})` : ''} had an invalid stored value (${JSON.stringify(fieldValue)}); healed to default (${JSON.stringify(field.default)}).`);
+                    return res(field.default);
                 }
                 if (field.disableKeyEdits && field.type === 'keyed') {
                     for (const key in fieldValue) {
@@ -377,8 +473,8 @@ async function checkType(field, value) {
             return typeof value === 'boolean';
         default:
             logger.error(`Unknown type: ${field.type}`);
-            process.exit(0);
-
+            process.exit(pick(78)); // a config field declares an unknown type: invalid config, never restart
+            ;
     }
 }
 
@@ -404,17 +500,37 @@ function computeReloadIntentChange(client, modulesDir, logWarnings = true) {
     const dir = modulesDir || path.join(__dirname, '..', '..', 'modules');
     const {
         names: required,
-        unknown
+        unknown,
+        allowedPrivileged,
+        disabledModules,
+        badAllowlistEntries
     } = computeRequiredIntents(client.configDir, dir);
     if (logWarnings && unknown.length) client.logger.warn(localize('config', 'intents-unknown', {intents: unknown.join(', ')}));
+    if (logWarnings && badAllowlistEntries.length) client.logger.warn(localize('config', 'allowlist-bad-entries', {entries: badAllowlistEntries.join(', ')}));
     const missingIntents = diffIntents(client._activeIntents || [], required);
-    const requiresRestart = missingIntents.length > 0;
-    if (logWarnings && requiresRestart) {
+    const allowAll = allowedPrivileged.length === 0;
+
+    /*
+     * Still live on the connected gateway but no longer permitted by the on-disk allowlist. A live
+     * intent cannot be dropped without a reconnect, so this needs a restart too — on which
+     * applyIntentDisables will disable the modules that require it.
+     */
+    const removedIntents = (client._activeIntents || []).filter(i =>
+        PRIVILEGED_INTENTS.includes(i) && !allowAll && !allowedPrivileged.includes(i));
+    const requiresRestart = missingIntents.length > 0 || removedIntents.length > 0;
+    if (logWarnings && missingIntents.length) {
         client.logger.warn(localize('config', 'intents-restart-required', {intents: missingIntents.join(', ')}));
+    }
+    if (logWarnings && removedIntents.length) {
+        client.logger.warn(localize('config', 'intents-restart-required-removed', {
+            intents: removedIntents.join(', '),
+            modules: disabledModules.map(d => d.module).join(', ') || 'none'
+        }));
     }
     return {
         requiresRestart,
-        missingIntents
+        missingIntents,
+        removedIntents
     };
 }
 
@@ -440,7 +556,6 @@ module.exports.reloadConfig = async function (client) {
     }
     client.jobs = [];
 
-    // Reload module configuration
     const moduleConf = jsonfile.readFileSync(`${client.configDir}/modules.json`);
     for (const moduleName in client.modules) {
         client.modules[moduleName].enabled = !!moduleConf[moduleName];

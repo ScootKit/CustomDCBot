@@ -23,6 +23,9 @@
     "GuildMessages",
     "MessageContent"
   ],
+  "optionalIntents": [
+    "MessageContent"
+  ],
   "intentReasons": {
     "MessageContent": "Reads messages to detect when someone mentions an AFK member and notify the sender that they are away."
   }

@@ -25,6 +25,10 @@
     "GuildMembers",
     "GuildPresences"
   ],
+  "optionalIntents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
   "intentReasons": {
     "GuildMembers": "Resolves member names for opponents and the scoreboard.",
     "GuildPresences": "Filters out offline members when picking a random opponent."

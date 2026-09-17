@@ -127,7 +127,6 @@ function safeSetFooter(embed, client, customText = null, customIconURL = null) {
     const footerText = customText || (client.strings && client.strings.footer) || null;
     const footerIconURL = customIconURL || (client.strings && client.strings.footerImgUrl) || null;
 
-    // Only set footer if we have valid text (Discord.js requires text to be non-empty)
     if (footerText && footerText.trim().length > 0) {
         embed.setFooter({
             text: footerText,
@@ -263,7 +262,6 @@ function embedType(input, args = {}, optionsToKeep = {}, mergeComponentsRows = [
         if (!embedData.footer?.disabled) {
             const footerText = inputReplacer(args, embedData.footer?.text, true) || (client.strings && client.strings.footer);
             const footerIconURL = (embedData.footer?.iconURL || (client.strings && client.strings.footerImgUrl) || '').trim() || undefined;
-            // Only create footer object if we have valid text
             if (footerText && footerText.trim().length > 0) {
                 footer = {
                     text: footerText,
@@ -338,7 +336,6 @@ function embedTypeSchemaV2(input, args = {}, optionsToKeep = {}, mergeComponents
         if (!client.strings.disableFooterTimestamp && !input.embedTimestamp) emb.setTimestamp();
         if (input.embedTimestamp) emb.setTimestamp(input.embedTimestamp);
 
-        // Safely set footer with null checks
         const footerText = input.footer ? inputReplacer(args, input.footer) : (client.strings && client.strings.footer);
         const footerIconURL = (input.footerImgUrl || (client.strings && client.strings.footerImgUrl) || '').trim() || undefined;
         if (footerText && footerText.trim().length > 0) {
@@ -562,12 +559,10 @@ function buildV4Component(comp, args, counters) {
                 const row = new ActionRowBuilder();
                 const firstChild = comp.components[0];
                 if (firstChild && firstChild.type === 3) {
-                    // String select menu (max 1 per row)
                     const select = buildV4StringSelect(firstChild, args, counters);
                     if (!select) return null;
                     row.addComponents(select);
                 } else {
-                    // Buttons (max 5 per row)
                     const buttons = [];
                     for (const btnComp of comp.components.slice(0, 5)) {
                         if (btnComp.type !== 2) continue;
@@ -714,7 +709,6 @@ function embedTypeSchemaV4(input, args = {}, optionsToKeep = {}, mergeComponents
         }
     }
 
-    // Check if a dynamicImage sentinel exists anywhere (including inside containers)
     if ((input.components || []).some(function findSentinel(c) {
         return c.type === 'dynamicImage' || (Array.isArray(c.components) && c.components.some(findSentinel));
     })) optionsToKeep._hasDynamicImagePlaceholder = true;
@@ -1008,7 +1002,6 @@ async function postToSCNetworkPaste(content, opts = {
 module.exports.postToSCNetworkPaste = postToSCNetworkPaste;
 module.exports.PasteUploadError = PasteUploadError;
 
-// Internal building blocks exposed for unit tests; not part of the public bot API.
 module.exports.__test = {
     base58Encode,
     encryptPrivatebinPaste,
@@ -1219,9 +1212,7 @@ module.exports.checkForUpdates = checkForUpdates;
  * @returns {number} Random integer
  */
 function randomIntFromInterval(min, max) {
-    // Cryptographically secure, unbiased integer in [min, max] inclusive.
-    // crypto.randomInt does rejection sampling internally (no modulo bias) and is
-    // unpredictable, unlike Math.random. Tolerant of swapped args / non-integers.
+    // crypto.randomInt rejection-samples internally, so no modulo bias (unlike Math.random).
     const lo = Math.ceil(Math.min(min, max));
     const hi = Math.floor(Math.max(min, max));
     return hi > lo ? crypto.randomInt(lo, hi + 1) : lo;
@@ -1506,3 +1497,28 @@ module.exports.memberCanSendInChannel = function (member, channel) {
     const isThread = typeof channel.isThread === 'function' && channel.isThread();
     return perms.has(isThread ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages);
 };
+
+/**
+ * Total member count, correct with or without the GuildMembers intent (guild.memberCount is
+ * maintained by Discord independently of the member cache).
+ * @param {Guild} guild
+ * @returns {Number}
+ */
+function memberCountOrFallback(guild) {
+    return typeof guild.memberCount === 'number' ? guild.memberCount : guild.members.cache.size;
+}
+
+/**
+ * Online-member count, or null when GuildPresences is inactive, so callers can omit the figure
+ * instead of rendering a misleading 0 built from an empty presence cache.
+ * @param {Client} client
+ * @param {Guild} guild
+ * @returns {Number|null}
+ */
+function onlineCountOrNull(client, guild) {
+    if (!(client._activeIntents || []).includes('GuildPresences')) return null;
+    return guild.members.cache.filter(m => m.presence && ['online', 'idle', 'dnd'].includes(m.presence.status)).size;
+}
+
+module.exports.memberCountOrFallback = memberCountOrFallback;
+module.exports.onlineCountOrNull = onlineCountOrNull;

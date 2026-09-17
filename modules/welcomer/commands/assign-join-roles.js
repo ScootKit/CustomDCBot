@@ -10,13 +10,6 @@ module.exports.config = {
     description: localize('welcomer', 'assign-join-roles-context-description')
 };
 
-/*
- * Staff-only (MANAGE_ROLES) adapter that runs the automatic join-role assignment on demand for a
- * single member. evaluateMember() returns {skip, missingRoleIDs} exactly as the base-role sync
- * uses it: skip means the member is in a holding state (pending/quarantine/...) and must not be
- * given roles, otherwise we add the missing configured join roles - the same roles.add() the
- * automatic flow performs, with the same audit reason - so the result is identical.
- */
 module.exports.run = async function (interaction) {
     await interaction.deferReply({flags: MessageFlags.Ephemeral});
     const client = interaction.client;

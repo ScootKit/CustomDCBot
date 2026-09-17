@@ -26,6 +26,10 @@
     "MessageContent",
     "AutoModerationExecution"
   ],
+  "optionalIntents": [
+    "GuildMembers",
+    "MessageContent"
+  ],
   "intentReasons": {
     "GuildMembers": "Enumerates the holders of protected roles to detect unwanted mentions.",
     "MessageContent": "Scans message content and mentions to catch pings of protected roles and users."

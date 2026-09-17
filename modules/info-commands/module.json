@@ -21,6 +21,10 @@
     "GuildMembers",
     "GuildVoiceStates"
   ],
+  "optionalIntents": [
+    "GuildMembers",
+    "GuildPresences"
+  ],
   "intentReasons": {
     "GuildPresences": "Reads members' online status to show online counts and a member's status in info commands.",
     "GuildMembers": "Reads the member list to show accurate member and online counts in server and user info commands."

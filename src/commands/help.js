@@ -54,7 +54,6 @@ module.exports.run = async function (interaction) {
         modules[command.module || 'none'].push(command);
     }
 
-    // Add custom slash commands as their own module group
     const customCommands = (interaction.client.config || {}).customCommands || [];
     const enabledCustomCommands = customCommands.filter(c => c.type === 'COMMAND' && c.enabled && c.slashCommandName && c.slashCommandDescription);
     if (enabledCustomCommands.length > 0) {

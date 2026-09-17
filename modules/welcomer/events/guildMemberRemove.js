@@ -81,7 +81,6 @@ async function timer(client, userId) {
         }
     });
     if (timeModel) {
-        // check timer duration
         return timeModel.timestamp.getTime() + 604800000 >= Date.now();
     }
 }
