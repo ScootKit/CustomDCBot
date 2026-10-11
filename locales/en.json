@@ -845,8 +845,6 @@
     "toggle-succ-enabled": "Your ping protection has been reactivated. You are now protected from pings.",
     "log-check-preference-failed": "[Ping Protection] Failed to find ping preference for user %u: %e",
     "log-toggle-preference-failed": "[Ping Protection] Failed to toggle ping preference for user %u: %e",
-    "toggle-pref-failed": "An error occurred while toggling your ping protection preference. Please try again later or contact the bot's administrator.",
-    "toggle-not-protected": "You are not a protected member, so you cannot toggle your ping protection preference.",
     "toggle-err-cooldown": "You are changing your status too fast! You can toggle your protection again %time.",
     "toggle-easter-egg": ":brain: Make up your mind! Flipping the light switch back and forth isn't going to fix your notifications. \n-# Please step away from the toggle for a minute."
   },

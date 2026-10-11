@@ -9,11 +9,11 @@ module.exports = class PingProtectionUserPingPreference extends Model {
             userId: {
                 type: DataTypes.STRING,
                 primaryKey: true,
-                allowNull: false,
+                allowNull: false
             },
             disabledUntil: {
                 type: DataTypes.DATE,
-                allowNull: false,
+                allowNull: false
             }
         }, {
             tableName: 'ping_protection_user_preferences',

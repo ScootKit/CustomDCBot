@@ -12,7 +12,7 @@ module.exports = {
     }) => {
         await sequelize.transaction(async (transaction) => {
             const description = await queryInterface.describeTable(TABLE).catch(() => ({}));
-            
+
             if (!description.pingType) {
                 await queryInterface.addColumn(TABLE, 'pingType', {
                     type: DataTypes.STRING,

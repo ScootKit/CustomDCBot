@@ -46,7 +46,7 @@ module.exports.subcommands = {
                 return interaction.reply({
                     content: localize('ping-protection', 'no-permission'),
                     flags: MessageFlags.Ephemeral
-                })
+                });
             }
             const user = interaction.options.getUser('user');
             const payload = await generateUserPanel(interaction.client, user);
@@ -71,7 +71,7 @@ module.exports.subcommands = {
 
         const cdEntry = toggleCooldowns.get(userId);
         if (cdEntry && now < cdEntry.expiresAt) {
-            cdEntry.attempts += 1;
+            cdEntry.attempts = cdEntry.attempts + 1;
 
             // 3rd attempt or higher triggers the easter egg
             if (cdEntry.attempts >= 3) {
@@ -146,7 +146,6 @@ module.exports.subcommands = {
     }
 };
 
-// Handles list subcommands
 // Handles list subcommands
 async function listHandler(interaction, type) {
     const config = interaction.client.configurations['ping-protection']['configuration'];

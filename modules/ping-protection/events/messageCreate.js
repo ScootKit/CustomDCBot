@@ -25,6 +25,7 @@ module.exports.run = async function (client, message) {
     const config = client.configurations['ping-protection']['configuration'];
 
     if (message.author.bot) return;
+    if (!message.member) return;
 
     if (isWhitelistedChannel(config, message.channel)) return;
     if (config.ignoredUsers.includes(message.author.id)) return;
@@ -116,7 +117,7 @@ module.exports.run = async function (client, message) {
             const lastIndex = lastMemeMap.get(message.author.id);
 
             let possibleMemes = standardMemes.map((_, index) => index);
-            if (lastIndex !== undefined && lastIndex !== -1 && standardMemes.length > 1) {
+            if (typeof lastIndex === 'number' && lastIndex !== -1 && standardMemes.length > 1) {
                 possibleMemes = possibleMemes.filter(i => i !== lastIndex);
             }
 
@@ -136,7 +137,7 @@ module.exports.run = async function (client, message) {
     if (!memberToPunish) {
         try {
             memberToPunish = await message.guild.members.fetch(message.author.id);
-        } catch (e) {
+        } catch {
             return;
         }
     }
@@ -150,7 +151,7 @@ module.exports.run = async function (client, message) {
         isRole,
         message.url,
         message.channel,
-        message.member,
+        memberToPunish,
         pingType
     );
 };

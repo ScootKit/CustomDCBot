@@ -62,9 +62,12 @@ async function toggleUserProtection(client, member) {
     const isExplicitlyProtected = Array.isArray(config.protectedUsers) &&
         config.protectedUsers.map(String).includes(rawUserId);
 
-    const memberRoleIds = Array.isArray(member.roles)
-        ? member.roles.map(String)
-        : (member.roles?.cache ? [...member.roles.cache.keys()].map(String) : []);
+    let memberRoleIds = [];
+    if (Array.isArray(member.roles)) {
+        memberRoleIds = member.roles.map(String);
+    } else if (member.roles?.cache) {
+        memberRoleIds = [...member.roles.cache.keys()].map(String);
+    }
 
     const hasProtectedRole = Boolean(
         config.protectAllUsersWithProtectedRole &&

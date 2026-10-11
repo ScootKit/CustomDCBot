@@ -39,7 +39,7 @@ module.exports.run = async function (client, execution) {
             if (targetMember && targetMember.roles.cache.some(r => config.protectedRoles.includes(r.id))) {
                 isProtected = true;
             }
-        } catch (e) {
+        } catch {
         }
     }
 

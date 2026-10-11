@@ -18,14 +18,14 @@ const {isProtectionToggledOff} = require('./toggle');
 
 async function sendPingWarning(client, message, target, moduleConfig) {
     const warningMsg = moduleConfig.pingWarningMessage;
-    if (!warningMsg) return undefined;
+    if (!warningMsg) return;
 
     if (target.id && moduleConfig.allowProtectionToggle) {
         const isOff = await isProtectionToggledOff(client, target.id);
         if (isOff) return null;
     }
 
-    let warnMsg = {...warningMsg};
+    const warnMsg = {...warningMsg};
     const placeholders = {
         '%target-name%': target.name || target.tag || target.username || 'Unknown',
         '%target-mention%': target.toString(),
@@ -108,6 +108,7 @@ async function syncNativeAutoMod(client) {
 
         const protectedIdsSet = new Set(config.protectedUsers || []);
         if (config.protectAllUsersWithProtectedRole && config.protectedRoles && config.protectedRoles.length > 0) {
+            // eslint-disable-next-line no-underscore-dangle
             if ((guild.client._activeIntents || []).includes('GuildMembers')) {
                 guild.members.cache.forEach(member => {
                     if (member.roles.cache.some(r => config.protectedRoles.includes(r.id))) {
@@ -185,12 +186,12 @@ async function syncNativeAutoMod(client) {
 async function executeAction(client, member, rule, reason, storageConfig, originChannel = null, stats = {}) {
     const actionType = rule.actionType;
 
-    const sendActionLog = async () => {
+    async function sendActionLog() {
         if (!rule.enableActionLogging || !originChannel) return;
 
         const logMsgConfig = rule.actionLogMessage;
         if (!logMsgConfig) return;
-        let safeMsg = {...logMsgConfig};
+        const safeMsg = {...logMsgConfig};
 
         const placeholders = {
             '%pinger-mention%': member.toString(),
@@ -202,17 +203,17 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
         };
 
         try {
-            let messageOptions = await embedTypeV2(safeMsg, placeholders);
+            const messageOptions = await embedTypeV2(safeMsg, placeholders);
             await originChannel.send(messageOptions).catch(() => {});
         } catch (error) {
             client.logger.warn(localize('ping-protection', 'log-action-log-failed', {
                 e: error.message
             }));
         }
-    };
+    }
 
     // Sends the error message if punishment fails
-    const sendErrorLog = async (error) => {
+    async function sendErrorLog(error) {
         if (!originChannel) return;
 
         const errorEmbed = new EmbedBuilder()
@@ -241,7 +242,7 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
                 e: sendError.message
             }));
         });
-    };
+    }
 
     if (!member) {
         client.logger.debug(localize('ping-protection', 'log-not-a-member'));
@@ -261,7 +262,7 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
         return false;
     }
 
-    const logDb = async (type, duration = null) => {
+    async function logDb(type, duration = null) {
         try {
             await client.models['ping-protection']['ModerationLog'].create({
                 victimID: member.id,
@@ -275,7 +276,7 @@ async function executeAction(client, member, rule, reason, storageConfig, origin
                 e: dbError.message
             }));
         }
-    };
+    }
 
     if (actionType === 'MUTE') {
         const durationMs = rule.muteDuration * 60000;

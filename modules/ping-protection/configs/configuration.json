@@ -92,7 +92,7 @@
       "name": "allowProtectionToggle",
       "category": "rules",
       "humanName": "Allow protected members to toggle their protection status temporarily",
-      "desription": "Enabling this allows protected members to temporarily toggle their protection status via tje `/ping-protection toggle` command. Useful for protected members if they don't mind being pinged for a short period of time.",
+      "description": "Enabling this allows protected members to temporarily toggle their protection status via tje `/ping-protection toggle` command. Useful for protected members if they don't mind being pinged for a short period of time.",
       "type": "boolean",
       "default": true
     },

@@ -143,13 +143,13 @@ async function generateHistoryResponse(client, userOrId, page = 1, isPanel = fal
     if (leaverData) {
         const dateStr = formatDate(leaverData.leftAt);
         const warningKey = history.length > 0 ? 'leaver-warning-long' : 'leaver-warning-short';
-        description += `⚠️ ${localize('ping-protection', warningKey, {d: dateStr})}\n\n`;
+        description = description + `⚠️ ${localize('ping-protection', warningKey, {d: dateStr})}\n\n`;
     }
 
     if (!isEnabled) {
-        description += localize('ping-protection', 'history-disabled');
+        description = description + localize('ping-protection', 'history-disabled');
     } else if (history.length === 0) {
-        description += localize('ping-protection', 'no-data-found');
+        description = description + localize('ping-protection', 'no-data-found');
     } else {
         const lines = history.map((entry, index) => {
             const timeString = formatDate(entry.createdAt);
@@ -176,7 +176,7 @@ async function generateHistoryResponse(client, userOrId, page = 1, isPanel = fal
                 type: typeLine
             });
         });
-        description += lines.join('\n\n');
+        description = description + lines.join('\n\n');
     }
 
     // Switch customId prefixes depending on standalone vs panel origin
@@ -235,14 +235,14 @@ async function generateActionsResponse(client, userOrId, page = 1, isPanel = fal
 
     let description = '';
     if (history.length === 0) {
-        description += localize('ping-protection', 'no-data-found');
+        description = description + localize('ping-protection', 'no-data-found');
     } else {
         const lines = history.map((entry, index) => {
             const duration = entry.actionDuration ? ` (${entry.actionDuration}m)` : '';
             const reasonText = entry.reason || localize('ping-protection', 'no-reason') || 'No reason';
             return `${(page - 1) * limit + index + 1}. **${entry.type}${duration}** - ${formatDate(entry.createdAt)}\n${localize('ping-protection', 'label-reason')}: ${reasonText}`;
         });
-        description += lines.join('\n\n') + `\n\n-# ${localize('ping-protection', 'actions-retention-note')}`;
+        description = description + (lines.join('\n\n') + `\n\n-# ${localize('ping-protection', 'actions-retention-note')}`);
     }
 
     const btnPrefix = isPanel ? `ping-protection_panel-actions_${userId}` : `ping-protection_mod-page_${userId}`;
@@ -291,7 +291,7 @@ async function generatePanelDeletion(client, targetUser) {
     });
 
     if (cooldown) {
-        description += `\n\n⚠️ ${localize('ping-protection', 'panel-deletion-cooldown-active', {
+        description = description + `\n\n⚠️ ${localize('ping-protection', 'panel-deletion-cooldown-active', {
             time: formatDate(new Date(cooldown.blockedUntil)),
             type: localize('ping-protection', getDeletionTypeLocaleKey(cooldown.lastDeletionType))
         })}`;

@@ -55,7 +55,7 @@ module.exports.run = async function (client, interaction) {
 
         const selection = interaction.values[0];
         if (selection === 'deletion' && !isAdmin) { // Deletion panel is only for administrators, the rest of the panel
-            return interaction.reply({              // is broader and for managers
+            return interaction.reply({ // is broader and for managers
                 content: localize('ping-protection', 'no-permission'),
                 flags: MessageFlags.Ephemeral
             });
@@ -113,9 +113,9 @@ module.exports.run = async function (client, interaction) {
             });
         }
 
-        let modalTitle = localize('ping-protection', 'del-modal-title');
-        let modalLabel = localize('ping-protection', 'del-modal-label');
-        let confirmationPhrase = localize('ping-protection', 'del-conf-phrase');
+        const modalTitle = localize('ping-protection', 'del-modal-title');
+        const modalLabel = localize('ping-protection', 'del-modal-label');
+        const confirmationPhrase = localize('ping-protection', 'del-conf-phrase');
 
         const modal = new ModalBuilder()
             .setCustomId(`ping-protection_del-confirm_${targetId}_${selection}`)
@@ -155,7 +155,7 @@ module.exports.run = async function (client, interaction) {
         const targetId = parts[2];
         const selection = parts.slice(3).join('_');
 
-        let confirmPhrase = localize('ping-protection', 'del-conf-phrase');
+        const confirmPhrase = localize('ping-protection', 'del-conf-phrase');
 
         if (interaction.fields.getTextInputValue('confirm').trim() !== confirmPhrase) {
             return interaction.reply({

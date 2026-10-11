@@ -2,7 +2,8 @@
  * Some local utility helpers
  * @module ping-protection
  * @author itskevinnn
-**/
+ *
+ */
 
 const EXEMPT_THRESHOLD = 'exempt';
 const PARTIAL_DELETION_COOLDOWN_HOURS = 24;
@@ -10,31 +11,33 @@ const FULL_DELETION_COOLDOWN_HOURS = 168;
 
 // Converts human timeframes (7d etc) into ms
 function parseTimeframeToMs(input, defaultDays = 7) {
-    const fallbackMs = defaultDays * 86400000;
+    const fallbackMs = (typeof defaultDays === 'number' && Number.isFinite(defaultDays) && defaultDays > 0)
+        ? defaultDays * 86400000
+        : null;
 
     if (typeof input === 'number') {
-        return Number.isFinite(input) && input > 0 
-            ? input * 86400000 
+        return Number.isFinite(input) && input > 0
+            ? input * 86400000
             : fallbackMs;
     }
 
     const clean = String(input).trim().toLowerCase();
 
     // Fallback for old configs, plain numbers are treated as days
-    if (/^\d+$/.test(clean)) {
+    if ((/^\d+$/).test(clean)) {
         const parsedDays = parseInt(clean, 10);
-        return Number.isFinite(parsedDays) && parsedDays > 0 
-            ? parsedDays * 86400000 
+        return Number.isFinite(parsedDays) && parsedDays > 0
+            ? parsedDays * 86400000
             : fallbackMs;
     }
 
-    const match = clean.match(/^(\d+)\s*(s|m|h|d|w)$/);
-    if (!match) {
+    const match = clean.match(/^(?<value>\d+)\s*(?<unit>s|m|h|d|w)$/);
+    if (!match || !match.groups) {
         return fallbackMs;
     }
 
-    const value = parseInt(match[1], 10);
-    const unit = match[2];
+    const value = parseInt(match.groups.value, 10);
+    const unit = match.groups.unit;
 
     if (!Number.isFinite(value) || value <= 0) {
         return fallbackMs;
@@ -46,7 +49,7 @@ function parseTimeframeToMs(input, defaultDays = 7) {
         case 'h': return value * 3600000;
         case 'd': return value * 86400000;
         case 'w': return value * 7 * 86400000;
-        default:  return fallbackMs;
+        default: return fallbackMs;
     }
 }
 
@@ -59,15 +62,15 @@ function determinePingType(message, targetId, isRole = false) {
     if (!isReply) {
         return 'MENTION';
     }
-    
+
     const content = message.content || '';
     if (!content) {
         return 'REPLY'; // Fallback if MessageContent intent is disabled
     }
-    
+
     const hasExplicitMention = content.includes(`<@${targetId}>`) || content.includes(`<@!${targetId}>`);
-    return hasExplicitMention 
-        ? 'MENTION' 
+    return hasExplicitMention
+        ? 'MENTION'
         : 'REPLY';
 }
 
