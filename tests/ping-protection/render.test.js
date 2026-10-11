@@ -12,7 +12,12 @@
  * syncNativeAutoMod deletes the rule when automod is disabled and creates/edits
  * it with the protected keywords when enabled.
  */
-const pp = require('../../modules/ping-protection/ping-protection');
+const panels = require('../../modules/ping-protection/core/panels');
+const moderation = require('../../modules/ping-protection/core/moderation');
+const pp = {
+    ...panels,
+    ...moderation
+};
 
 function baseClient({
                         storage = {},

@@ -1,13 +1,14 @@
 /*
- * Tests for ping-protection/botReady: it runs retention enforcement and AutoMod
- * sync immediately, then schedules a daily 03:00 job that repeats both, pushing
- * the job onto client.jobs.
+ * Tests for ping-protection/botReady
  */
 const mockEnforce = jest.fn().mockResolvedValue();
 const mockSync = jest.fn().mockResolvedValue();
 const mockScheduleJob = jest.fn(() => 'job');
-jest.mock('../../modules/ping-protection/ping-protection', () => ({
-    enforceRetention: (...a) => mockEnforce(...a),
+
+jest.mock('../../modules/ping-protection/core/records', () => ({
+    enforceRetention: (...a) => mockEnforce(...a)
+}));
+jest.mock('../../modules/ping-protection/core/moderation', () => ({
     syncNativeAutoMod: (...a) => mockSync(...a)
 }));
 jest.mock('node-schedule', () => ({scheduleJob: (...a) => mockScheduleJob(...a)}));

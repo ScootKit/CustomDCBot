@@ -11,7 +11,7 @@
  *  - enforceRetention prunes ping history, mod logs, and leaver data per config.
  */
 jest.useFakeTimers();
-const pp = require('../../modules/ping-protection/ping-protection');
+const pp = require('../../modules/ping-protection/core/records');
 
 function makeClient({
                         storage = {},

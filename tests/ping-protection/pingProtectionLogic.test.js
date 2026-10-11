@@ -10,7 +10,12 @@
  *  - setDeletionCooldown: 24h (partial) vs 168h (full) window via upsert.
  *  - getDeletionCooldown: expiry cleanup vs active cooldown.
  */
-const pp = require('../../modules/ping-protection/ping-protection');
+const localHelpers = require('../../modules/ping-protection/core/localHelpers');
+const records = require('../../modules/ping-protection/core/records');
+const pp = {
+    ...localHelpers,
+    ...records
+};
 
 describe('isWhitelistedChannel', () => {
     const cfg = {ignoredChannels: ['100', '200']};

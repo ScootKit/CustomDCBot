@@ -3,19 +3,20 @@
  * generateHistoryResponse produces for /ping-protection user history and replies ephemerally,
  * so the output is identical for the targeted user. These tests verify the delegation.
  */
-jest.mock('../../modules/ping-protection/ping-protection', () => ({
-    generateHistoryResponse: jest.fn().mockResolvedValue({
-        embeds: ['E'],
-        components: ['C']
-    }),
+const mockGenerateHistoryResponse = jest.fn().mockResolvedValue({
+    embeds: ['E'],
+    components: ['C']
+});
+
+jest.mock('../../modules/ping-protection/core/panels', () => ({
+    generateHistoryResponse: (...a) => mockGenerateHistoryResponse(...a),
     generateActionsResponse: jest.fn()
 }));
 
 const {MessageFlags} = require('discord.js');
-const {generateHistoryResponse} = require('../../modules/ping-protection/ping-protection');
 const command = require('../../modules/ping-protection/commands/view-ping-history');
 
-beforeEach(() => generateHistoryResponse.mockClear());
+beforeEach(() => mockGenerateHistoryResponse.mockClear());
 
 describe('View Ping History context command', () => {
     test('config: USER context, staff-gated', () => {
@@ -32,7 +33,7 @@ describe('View Ping History context command', () => {
             reply
         };
         await command.run(interaction);
-        expect(generateHistoryResponse).toHaveBeenCalledWith(interaction.client, 'victim', 1);
+        expect(mockGenerateHistoryResponse).toHaveBeenCalledWith(interaction.client, 'victim', 1);
         expect(reply).toHaveBeenCalledWith({
             embeds: ['E'],
             components: ['C'],

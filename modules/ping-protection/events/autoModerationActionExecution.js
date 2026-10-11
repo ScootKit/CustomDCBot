@@ -1,7 +1,12 @@
 const {
-    processPing,
     isWhitelistedChannel
-} = require('../ping-protection');
+} = require('../core/localHelpers');
+const {
+    processPing
+} = require('../core/moderation');
+const {
+    isProtectionToggledOff
+} = require('../core/toggle');
 
 // Handles auto mod actions
 module.exports.run = async function (client, execution) {
@@ -12,6 +17,11 @@ module.exports.run = async function (client, execution) {
 
     const matchedKeyword = execution.matchedKeyword || '';
     const rawId = matchedKeyword.replace(/[^0-9]/g, '');
+
+    if (config.allowProtectionToggle && rawId) {
+        const isToggledOff = await isProtectionToggledOff(client, rawId);
+        if (isToggledOff) return;
+    }
 
     let isProtected = config.protectedRoles.includes(rawId) || config.protectedUsers.includes(rawId);
 
@@ -29,7 +39,7 @@ module.exports.run = async function (client, execution) {
             if (targetMember && targetMember.roles.cache.some(r => config.protectedRoles.includes(r.id))) {
                 isProtected = true;
             }
-        } catch (e) {
+        } catch {
         }
     }
 

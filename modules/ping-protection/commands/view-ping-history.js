@@ -1,5 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
-const {generateHistoryResponse} = require('../ping-protection');
+const {generateHistoryResponse} = require('../core/panels');
 const {MessageFlags} = require('discord.js');
 
 module.exports.config = {

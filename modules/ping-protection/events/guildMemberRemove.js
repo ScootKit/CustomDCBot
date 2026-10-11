@@ -5,7 +5,7 @@
 const {
     markUserAsLeft,
     deleteAllUserData
-} = require('../ping-protection');
+} = require('../core/records');
 
 module.exports.run = async function (client, member) {
     if (!client.botReadyAt) return;

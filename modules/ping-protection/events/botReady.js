@@ -1,7 +1,9 @@
 const {
-    enforceRetention,
+    enforceRetention
+} = require('../core/records');
+const {
     syncNativeAutoMod
-} = require('../ping-protection');
+} = require('../core/moderation');
 const schedule = require('node-schedule');
 
 module.exports.run = async function (client) {

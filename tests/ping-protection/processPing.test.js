@@ -8,7 +8,12 @@
  * dispatches MUTE/KICK. executeDataDeletion fans out destroy() calls based on
  * the requested data type.
  */
-const pp = require('../../modules/ping-protection/ping-protection');
+const moderation = require('../../modules/ping-protection/core/moderation');
+const records = require('../../modules/ping-protection/core/records');
+const pp = {
+    ...moderation,
+    ...records
+};
 
 function makeLogger() {
     return {
