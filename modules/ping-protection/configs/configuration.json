@@ -1,11 +1,6 @@
 {
   "filename": "configuration.json",
   "humanName": "General Configuration",
-  "commandsWarnings": {
-    "normal": [
-      "/ping-protection"
-    ]
-  },
   "description": "Configure protected users/roles, whitelisted roles/members, ignored channels and the notification message.",
   "categories": [
     {

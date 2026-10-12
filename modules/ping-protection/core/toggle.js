@@ -8,6 +8,51 @@ const {localize} = require('../../../src/functions/localize');
 
 const toggleLocks = new Set();
 
+const activeTimers = new Map();
+
+function schedulePauseExpiry(client, userId, disabledUntil) {
+    const rawUserId = String(userId);
+    if (activeTimers.has(rawUserId)) {
+        clearTimeout(activeTimers.get(rawUserId));
+        activeTimers.delete(rawUserId);
+    }
+
+    const delay = new Date(disabledUntil).getTime() - Date.now();
+    if (delay <= 0) {
+        return;
+    }
+
+    // Set a timer to clean up the preference and re-sync AutoMod as soon as it expires
+    const timer = setTimeout(async () => {
+        activeTimers.delete(rawUserId);
+        try {
+            const model = client.models['ping-protection']?.['UserPingPreference'];
+            if (model) {
+                await model.destroy({where: {userId: rawUserId}}).catch(() => {});
+            }
+            const config = client.configurations['ping-protection']?.['configuration'] || {};
+            if (config.enableAutomod) {
+                const {syncNativeAutoMod} = require('./moderation');
+                await syncNativeAutoMod(client).catch(() => {});
+            }
+        } catch {
+        }
+    }, delay);
+
+    if (typeof timer.unref === 'function') {
+        timer.unref();
+    }
+    activeTimers.set(rawUserId, timer);
+}
+
+function clearPauseExpiryTimer(userId) {
+    const rawUserId = String(userId);
+    if (activeTimers.has(rawUserId)) {
+        clearTimeout(activeTimers.get(rawUserId));
+        activeTimers.delete(rawUserId);
+    }
+}
+
 // Checks if a target user has currently paused their ping protection
 async function isProtectionToggledOff(client, userId) {
     if (!userId) return false;
@@ -29,8 +74,14 @@ async function isProtectionToggledOff(client, userId) {
             return true;
         }
 
-        // Cleanup for expired pause rows
+        // Cleanup for expired pause rows and re-sync native automod if needed
+        clearPauseExpiryTimer(rawUserId);
         await model.destroy({where: {userId: rawUserId}}).catch(() => {});
+        const config = client.configurations['ping-protection']?.['configuration'] || {};
+        if (config.enableAutomod) {
+            const {syncNativeAutoMod} = require('./moderation');
+            await syncNativeAutoMod(client).catch(() => {});
+        }
         return false;
     } catch (error) {
         client.logger.warn(localize('ping-protection', 'log-check-preference-failed', {
@@ -93,6 +144,7 @@ async function toggleUserProtection(client, member) {
         if (pref && pref.disabledUntil) {
             const expiryTime = new Date(pref.disabledUntil).getTime();
             if (Number.isFinite(expiryTime) && expiryTime > now) {
+                clearPauseExpiryTimer(rawUserId);
                 await model.destroy({where: {userId: rawUserId}});
                 if (config.enableAutomod) {
                     await syncNativeAutoMod(client).catch(() => {});
@@ -108,6 +160,8 @@ async function toggleUserProtection(client, member) {
             disabledUntil
         });
 
+        schedulePauseExpiry(client, rawUserId, disabledUntil);
+
         if (config.enableAutomod) {
             await syncNativeAutoMod(client).catch(() => {});
         }
@@ -122,7 +176,27 @@ async function toggleUserProtection(client, member) {
     }
 }
 
+async function scheduleActiveToggleExpirations(client) {
+    const model = client?.models?.['ping-protection']?.['UserPingPreference'];
+    if (!model) return;
+
+    try {
+        const preferences = await model.findAll();
+        for (const pref of preferences) {
+            if (pref.userId && pref.disabledUntil) {
+                if (new Date(pref.disabledUntil).getTime() <= Date.now()) {
+                    await model.destroy({where: {userId: pref.userId}}).catch(() => {});
+                } else {
+                    schedulePauseExpiry(client, pref.userId, pref.disabledUntil);
+                }
+            }
+        }
+    } catch {
+    }
+}
+
 module.exports = {
     isProtectionToggledOff,
-    toggleUserProtection
+    toggleUserProtection,
+    scheduleActiveToggleExpirations
 };

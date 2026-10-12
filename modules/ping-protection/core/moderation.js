@@ -74,7 +74,16 @@ async function sendPingWarning(client, message, target, moduleConfig) {
     }
 }
 
+let syncQueue = Promise.resolve();
+
 async function syncNativeAutoMod(client) {
+    syncQueue = syncQueue.then(async () => {
+        await executeSyncNativeAutoMod(client).catch(() => {});
+    });
+    return syncQueue;
+}
+
+async function executeSyncNativeAutoMod(client) {
     const config = client.configurations['ping-protection']['configuration'];
 
     try {
@@ -372,7 +381,7 @@ async function processPing(client, userId, targetId, isRole, messageUrl, originC
 
         const retentionWeeks = storageConfig?.pingHistoryRetention || 12;
         const timeframeRaw = rule.useCustomTimeframe
-            ? (rule.customTimeFrame || rule.timeframeDays || '7d')
+            ? (rule.customTimeFrame || (rule.timeframeDays ? `${rule.timeframeDays}d` : '7d'))
             : (retentionWeeks * 7);
 
         const timeframeDisplay = String(timeframeRaw);

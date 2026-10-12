@@ -60,7 +60,9 @@ function makeInteraction({
                 }
             }
         },
-        reply: jest.fn().mockResolvedValue()
+        reply: jest.fn().mockResolvedValue(),
+        deferReply: jest.fn().mockResolvedValue(),
+        editReply: jest.fn().mockResolvedValue()
     };
 }
 
@@ -189,7 +191,8 @@ describe('toggle subcommand', () => {
             config: {allowProtectionToggle: true}
         });
         await runCommand(interaction);
-        expect(interaction.reply.mock.calls[0][0].content).toContain('toggle-succ-disabled');
+        expect(interaction.deferReply).toHaveBeenCalled();
+        expect(interaction.editReply.mock.calls[0][0].content).toContain('toggle-succ-disabled');
     });
 });
 

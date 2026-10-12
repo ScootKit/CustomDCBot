@@ -278,6 +278,25 @@ describe('bot ping easter egg', () => {
         await handler.run(client, msg);
         expect(msg.reply).not.toHaveBeenCalled();
     });
+
+    test('still processes protected pings when bot is also pinged in the same message', async () => {
+        const client = makeClient(makeConfig({
+            protectedUsers: ['victim']
+        }));
+        client.user = {id: 'botId'};
+        const msg = makeMessage({
+            authorId: 'regularUser',
+            users: [
+                {id: 'botId', username: 'SecurityBot'},
+                {id: 'victim', username: 'Victim'}
+            ],
+            content: 'hello <@botId> and <@victim>'
+        });
+        await handler.run(client, msg);
+        expect(msg.reply).toHaveBeenCalled();
+        expect(mockProcessPing).toHaveBeenCalled();
+        expect(mockSendWarning).toHaveBeenCalled();
+    });
 });
 
 describe('reply pings', () => {

@@ -97,7 +97,6 @@ module.exports.run = async function (client, message) {
         ];
         const randomMeme = randomElementFromArray(botPingMemes);
         await message.reply({content: randomMeme}).catch(() => {});
-        return;
     }
 
     // Determines if any protected entities were pinged
