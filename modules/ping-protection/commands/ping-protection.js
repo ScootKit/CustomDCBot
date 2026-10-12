@@ -26,6 +26,12 @@ module.exports.subcommands = {
     'user': {
         'history': async function (interaction) {
             const user = interaction.options.getUser('user');
+            if (user.id === interaction.client.user?.id) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'meme-bot-history'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const payload = await generateHistoryResponse(interaction.client, user.id, 1);
             await interaction.reply({
                 ...payload,
@@ -34,6 +40,12 @@ module.exports.subcommands = {
         },
         'actions-history': async function (interaction) {
             const user = interaction.options.getUser('user');
+            if (user.id === interaction.client.user?.id) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'meme-bot-history'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const payload = await generateActionsResponse(interaction.client, user.id, 1);
             await interaction.reply({
                 ...payload,
@@ -49,6 +61,12 @@ module.exports.subcommands = {
                 });
             }
             const user = interaction.options.getUser('user');
+            if (user.id === interaction.client.user?.id) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'meme-bot-history'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const payload = await generateUserPanel(interaction.client, user);
             await interaction.reply({
                 ...payload,

@@ -117,6 +117,30 @@ describe('user subcommands', () => {
         expect(mockPanel).toHaveBeenCalledWith(interaction.client, user);
     });
 
+    test('triggers easter egg when checking the bot itself in user.history', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'history',
+            user: {id: 'botId'}
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockHistory).not.toHaveBeenCalled();
+        expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+
+    test('triggers easter egg when checking the bot itself in user.actions-history', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'actions-history',
+            user: {id: 'botId'}
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockActions).not.toHaveBeenCalled();
+        expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+
     test('blocks user.panel for users without ManageGuild or Admin', async () => {
         const interaction = makeInteraction({
             group: 'user',
@@ -127,6 +151,19 @@ describe('user subcommands', () => {
         await runCommand(interaction);
         expect(mockPanel).not.toHaveBeenCalled();
         expect(interaction.reply.mock.calls[0][0].content).toContain('no-permission');
+    });
+
+    test('triggers easter egg when checking the bot itself in user.panel', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'panel',
+            user: {id: 'botId'},
+            permissions: ['Administrator']
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockPanel).not.toHaveBeenCalled();
+        expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
     });
 });
 
