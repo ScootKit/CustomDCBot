@@ -18,7 +18,7 @@ module.exports.run = async function (interaction) {
         options: {
             value: {
                 ...interaction.options,
-                getMember: (name) => (name === 'user' ? interaction.targetMember : interaction.options.getMember(name))
+                getUser: (name) => (name === 'user' ? interaction.targetUser : interaction.options.getUser(name))
             }
         }
     });

@@ -28,7 +28,8 @@ function makeMember(id) {
         id,
         user: {
             id,
-            username: `user-${id}`
+            username: `user-${id}`,
+            toString: () => `<@${id}>`
         },
         toString: () => `<@${id}>`
     };
@@ -57,11 +58,19 @@ function makeRunContext({
             username: 'Author',
             toString: () => `<@${authorId}>`
         },
-        client: {},
+        client: {
+            users: {
+                fetch: jest.fn()
+            }
+        },
         guild: {members: {cache: {filter: () => ({random: () => makeMember('rnd')})}}},
-        options: {getMember: jest.fn(() => member)},
+        options: {
+            _hoistedOptions: [{name: 'user', value: member.user.id}],
+            getUser: jest.fn(() => member.user)
+        },
         reply: jest.fn().mockResolvedValue(rep)
     };
+    interaction.client.users.fetch.mockResolvedValue(member.user);
     return {
         interaction,
         member,
@@ -72,6 +81,30 @@ function makeRunContext({
 }
 
 describe('run', () => {
+    test('fetches the selected user by option ID if the resolver has no user object', async () => {
+        const {interaction, rep, member} = makeRunContext();
+        interaction.options = {
+            _hoistedOptions: [{name: 'user', value: member.user.id}]
+        };
+
+        await cmd.run(interaction);
+
+        expect(interaction.client.users.fetch).toHaveBeenCalledWith(member.user.id);
+        expect(rep.createMessageComponentCollector).toHaveBeenCalled();
+    });
+
+    test('replies with an explicit error if the opponent cannot be resolved', async () => {
+        const {interaction} = makeRunContext();
+        interaction.options = {_hoistedOptions: []};
+
+        await cmd.run(interaction);
+
+        expect(interaction.reply).toHaveBeenCalledWith(expect.objectContaining({
+            ephemeral: true,
+            content: expect.stringContaining('selected user could not be resolved')
+        }));
+    });
+
     test('rejects challenging yourself with a random suggestion', async () => {
         const {interaction} = makeRunContext({
             memberId: 'author',
