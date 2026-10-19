@@ -75,21 +75,20 @@ module.exports.run = async function (client, message) {
 
     // Easter egg when a user pings the bot
     const botId = client.user?.id;
-    const isBotPinged = Boolean(
+    let shouldSendBotMeme = Boolean(
         botId && (
             (typeof message.mentions.users.has === 'function' && message.mentions.users.has(botId)) ||
             (typeof message.mentions.users.get === 'function' && Boolean(message.mentions.users.get(botId))) ||
             (typeof message.mentions.users.some === 'function' && message.mentions.users.some(u => u.id === botId))
         )
     );
-    if (isBotPinged) {
-        if (config.allowReplyPings && message.mentions.repliedUser?.id === botId) {
-            const manualMentionRegex = new RegExp(`<@!?${botId}>`);
-            if (!manualMentionRegex.test(message.content)) {
-                // If it's a reply ping, it's ignored
-                return;
-            }
+    if (shouldSendBotMeme && config.allowReplyPings && message.mentions.repliedUser?.id === botId) {
+        const manualMentionRegex = new RegExp(`<@!?${botId}>`);
+        if (!manualMentionRegex.test(message.content)) {
+            shouldSendBotMeme = false;
         }
+    }
+    if (shouldSendBotMeme) {
         const botPingMemes = [
             localize('ping-protection', 'meme-bot-ping-1'),
             localize('ping-protection', 'meme-bot-ping-2'),

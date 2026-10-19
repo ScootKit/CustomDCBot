@@ -279,8 +279,9 @@ describe('bot ping easter egg', () => {
         expect(msg.reply).not.toHaveBeenCalled();
     });
 
-    test('still processes protected pings when bot is also pinged in the same message', async () => {
+    test('processes manual protected ping when replying to the bot with allowReplyPings enabled', async () => {
         const client = makeClient(makeConfig({
+            allowReplyPings: true,
             protectedUsers: ['victim']
         }));
         client.user = {id: 'botId'};
@@ -290,10 +291,13 @@ describe('bot ping easter egg', () => {
                 {id: 'botId', username: 'SecurityBot'},
                 {id: 'victim', username: 'Victim'}
             ],
-            content: 'hello <@botId> and <@victim>'
+            repliedUser: {id: 'botId'},
+            content: 'replying to bot and pinging <@victim>'
         });
         await handler.run(client, msg);
-        expect(msg.reply).toHaveBeenCalled();
+        // Bot easter egg meme is skipped because there is no manual <@botId>
+        expect(msg.reply).not.toHaveBeenCalled();
+        // But the protected user ping is processed
         expect(mockProcessPing).toHaveBeenCalled();
         expect(mockSendWarning).toHaveBeenCalled();
     });

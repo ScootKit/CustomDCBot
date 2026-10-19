@@ -67,7 +67,7 @@
       "humanName": "Custom timeframe",
       "description": "In how much time must these pings occur? (use formats like 10s for 10 seconds, 1h for 1 hour or 1d for 1 day)",
       "type": "string",
-      "default": "7d",
+      "default": "",
       "dependsOn": "useCustomTimeframe"
     },
     {
