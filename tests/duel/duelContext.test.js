@@ -1,6 +1,6 @@
 /*
  * The "Duel" USER context command is a thin adapter: it reuses the /duel run() unchanged by
- * handing it the interaction with options.getMember('user') overridden to return the right-clicked
+ * handing it the interaction with options.getUser('user') overridden to return the right-clicked
  * target, so the challenge -> duel flow is identical against that user.
  */
 jest.mock('../../modules/duel/commands/duel', () => ({
@@ -24,20 +24,19 @@ describe('Duel context command', () => {
     });
 
     test('delegates to run() with the target resolved as the opponent', async () => {
-        const targetMember = {user: {id: 'target'}};
+        const targetUser = {id: 'target'};
         const interaction = {
             client: {id: 'client'},
             member: {id: 'invoker'},
             channel: allowingChannel(),
-            targetMember,
-            targetUser: {id: 'target'},
-            options: {getMember: jest.fn().mockReturnValue({user: {id: 'other'}})}
+            targetUser,
+            options: {getUser: jest.fn().mockReturnValue({id: 'other'})}
         };
         await command.run(interaction);
 
         expect(duel.run).toHaveBeenCalledTimes(1);
         const proxy = duel.run.mock.calls[0][0];
-        expect(proxy.options.getMember('user')).toBe(targetMember);
+        expect(proxy.options.getUser('user')).toBe(targetUser);
         expect(proxy.client).toBe(interaction.client);
     });
 
@@ -46,14 +45,13 @@ describe('Duel context command', () => {
             client: {},
             member: {id: 'invoker'},
             channel: allowingChannel(),
-            targetMember: {user: {id: 'target'}},
             targetUser: {id: 'target'},
-            options: {getMember: jest.fn().mockReturnValue({user: {id: 'other'}})}
+            options: {getUser: jest.fn().mockReturnValue({id: 'other'})}
         };
         await command.run(interaction);
         const proxy = duel.run.mock.calls[0][0];
-        expect(proxy.options.getMember('somethingElse')).toEqual({user: {id: 'other'}});
-        expect(interaction.options.getMember).toHaveBeenCalledWith('somethingElse');
+        expect(proxy.options.getUser('somethingElse')).toEqual({id: 'other'});
+        expect(interaction.options.getUser).toHaveBeenCalledWith('somethingElse');
     });
 
     test('replies ephemerally and does NOT start the duel when the member cannot send', async () => {
@@ -61,9 +59,8 @@ describe('Duel context command', () => {
             client: {},
             member: {id: 'invoker'},
             channel: denyingChannel(),
-            targetMember: {user: {id: 'target'}},
             targetUser: {id: 'target'},
-            options: {getMember: jest.fn()},
+            options: {getUser: jest.fn()},
             reply: jest.fn().mockResolvedValue()
         };
         await command.run(interaction);
