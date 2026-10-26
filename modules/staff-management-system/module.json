@@ -24,7 +24,7 @@
     "administration"
   ],
   "humanReadableName": "Staff Management System",
-  "description": "A powerful, highly customizable staff management system designed to track activity, moderate personnel, and maintain detailed staff records seamlessly.",
+  "description": "The all-in-one tool to manage your staff - track duty shifts, staff activity, handle leave requests, receive reviews, promote and discipline your staff and protect your server against staff misuse.",
   "intents": [
     "GuildMembers",
     "GuildPresences"
