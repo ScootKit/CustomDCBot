@@ -1,11 +1,6 @@
 {
   "filename": "configuration.json",
   "humanName": "General Configuration",
-  "commandsWarnings": {
-    "normal": [
-      "/ping-protection"
-    ]
-  },
   "description": "Configure protected users/roles, whitelisted roles/members, ignored channels and the notification message.",
   "categories": [
     {
@@ -92,7 +87,7 @@
       "name": "allowProtectionToggle",
       "category": "rules",
       "humanName": "Allow protected members to toggle their protection status temporarily",
-      "description": "Enabling this allows protected members to temporarily toggle their protection status via tje `/ping-protection toggle` command. Useful for protected members if they don't mind being pinged for a short period of time.",
+      "description": "Enabling this allows protected members to temporarily toggle their protection status via the `/ping-protection toggle` command. Useful for protected members if they don't mind being pinged for a short period of time.",
       "type": "boolean",
       "default": true
     },

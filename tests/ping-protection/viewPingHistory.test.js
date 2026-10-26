@@ -40,4 +40,19 @@ describe('View Ping History context command', () => {
             flags: MessageFlags.Ephemeral
         });
     });
+
+    test('returns easter egg when targeting the bot itself', async () => {
+        const reply = jest.fn().mockResolvedValue('ok');
+        const interaction = {
+            client: {
+                id: 'client',
+                user: {id: 'botId'}
+            },
+            targetUser: {id: 'botId'},
+            reply
+        };
+        await command.run(interaction);
+        expect(mockGenerateHistoryResponse).not.toHaveBeenCalled();
+        expect(reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
 });

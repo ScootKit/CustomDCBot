@@ -846,7 +846,11 @@
     "log-check-preference-failed": "[Ping Protection] Failed to find ping preference for user %u: %e",
     "log-toggle-preference-failed": "[Ping Protection] Failed to toggle ping preference for user %u: %e",
     "toggle-err-cooldown": "You are changing your status too fast! You can toggle your protection again %time.",
-    "toggle-easter-egg": ":brain: Make up your mind! Flipping the light switch back and forth isn't going to fix your notifications. \n-# Please step away from the toggle for a minute."
+    "toggle-easter-egg": ":brain: Make up your mind! Flipping the light switch back and forth isn't going to fix your notifications. \n-# Please step away from the toggle for a minute.",
+    "meme-bot-history": "Nice try! My record is spotless. Why would the security guard ping themselves?",
+    "meme-bot-ping-1": "Why are you pinging the security guard? I live in the server walls.",
+    "meme-bot-ping-2": "I am literally code. Your ping does not vibrate my phone.",
+    "meme-bot-ping-3": "Ping protection is running smoothly, but why are you bothering me?"
   },
   "polls": {
     "what-have-i-votet": "What have I voted?",

@@ -16,6 +16,12 @@ module.exports.config = {
  * the output (embed + pagination buttons) is identical for the targeted user.
  */
 module.exports.run = async function (interaction) {
+    if (interaction.targetUser.id === interaction.client.user?.id) {
+        return interaction.reply({
+            content: localize('ping-protection', 'meme-bot-history'),
+            flags: MessageFlags.Ephemeral
+        });
+    }
     const payload = await generateActionsResponse(interaction.client, interaction.targetUser.id, 1);
     return interaction.reply({
         ...payload,

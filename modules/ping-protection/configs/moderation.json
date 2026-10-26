@@ -54,11 +54,20 @@
       "default": false
     },
     {
+      "name": "timeframeDays",
+      "humanName": "Timeframe (Days)",
+      "description": "In how many days must these pings occur?",
+      "type": "integer",
+      "default": 7,
+      "dependsOn": "useCustomTimeframe",
+      "hidden": true
+    },
+    {
       "name": "customTimeFrame",
       "humanName": "Custom timeframe",
       "description": "In how much time must these pings occur? (use formats like 10s for 10 seconds, 1h for 1 hour or 1d for 1 day)",
       "type": "string",
-      "default": "7d",
+      "default": "",
       "dependsOn": "useCustomTimeframe"
     },
     {

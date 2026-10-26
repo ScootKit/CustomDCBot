@@ -25,7 +25,20 @@ const TOGGLE_COOLDOWN_MS = 60 * 1000;
 module.exports.subcommands = {
     'user': {
         'history': async function (interaction) {
+            const hasPermission = interaction.member?.permissions.has('ModerateMembers') || interaction.member?.permissions.has('Administrator');
+            if (!hasPermission) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'no-permission'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const user = interaction.options.getUser('user');
+            if (user.id === interaction.client.user?.id) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'meme-bot-history'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const payload = await generateHistoryResponse(interaction.client, user.id, 1);
             await interaction.reply({
                 ...payload,
@@ -33,7 +46,20 @@ module.exports.subcommands = {
             });
         },
         'actions-history': async function (interaction) {
+            const hasPermission = interaction.member?.permissions.has('ModerateMembers') || interaction.member?.permissions.has('Administrator');
+            if (!hasPermission) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'no-permission'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const user = interaction.options.getUser('user');
+            if (user.id === interaction.client.user?.id) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'meme-bot-history'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const payload = await generateActionsResponse(interaction.client, user.id, 1);
             await interaction.reply({
                 ...payload,
@@ -49,6 +75,12 @@ module.exports.subcommands = {
                 });
             }
             const user = interaction.options.getUser('user');
+            if (user.id === interaction.client.user?.id) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'meme-bot-history'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
             const payload = await generateUserPanel(interaction.client, user);
             await interaction.reply({
                 ...payload,
@@ -90,21 +122,25 @@ module.exports.subcommands = {
             });
         }
 
+        await interaction.deferReply({flags: MessageFlags.Ephemeral});
+
         const result = await toggleUserProtection(interaction.client, targetMember);
 
         if (!result.success) {
             if (result.reason === 'locked') {
-                return;
-            }
-            if (result.reason === 'not-protected') {
-                return interaction.reply({
-                    content: localize('ping-protection', 'toggle-err-not-protected'),
-                    flags: MessageFlags.Ephemeral
+                return interaction.editReply({
+                    content: localize('ping-protection', 'toggle-err-cooldown', {
+                        time: dateToDiscordTimestamp(new Date(now + 2000), 'R')
+                    })
                 });
             }
-            return interaction.reply({
-                content: localize('ping-protection', 'toggle-err-failed'),
-                flags: MessageFlags.Ephemeral
+            if (result.reason === 'not-protected') {
+                return interaction.editReply({
+                    content: localize('ping-protection', 'toggle-err-not-protected')
+                });
+            }
+            return interaction.editReply({
+                content: localize('ping-protection', 'toggle-err-failed')
             });
         }
 
@@ -123,17 +159,15 @@ module.exports.subcommands = {
         }, TOGGLE_COOLDOWN_MS + 5000);
 
         if (result.state === 'disabled') {
-            return interaction.reply({
+            return interaction.editReply({
                 content: localize('ping-protection', 'toggle-succ-disabled', {
                     time: dateToDiscordTimestamp(result.disabledUntil, 'R')
-                }),
-                flags: MessageFlags.Ephemeral
+                })
             });
         }
 
-        return interaction.reply({
-            content: localize('ping-protection', 'toggle-succ-enabled'),
-            flags: MessageFlags.Ephemeral
+        return interaction.editReply({
+            content: localize('ping-protection', 'toggle-succ-enabled')
         });
     },
     'list': {

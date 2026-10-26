@@ -73,6 +73,31 @@ module.exports.run = async function (client, message) {
         }
     }
 
+    // Easter egg when a user pings the bot
+    const botId = client.user?.id;
+    let shouldSendBotMeme = Boolean(
+        botId && (
+            (typeof message.mentions.users.has === 'function' && message.mentions.users.has(botId)) ||
+            (typeof message.mentions.users.get === 'function' && Boolean(message.mentions.users.get(botId))) ||
+            (typeof message.mentions.users.some === 'function' && message.mentions.users.some(u => u.id === botId))
+        )
+    );
+    if (shouldSendBotMeme && config.allowReplyPings && message.mentions.repliedUser?.id === botId) {
+        const manualMentionRegex = new RegExp(`<@!?${botId}>`);
+        if (!manualMentionRegex.test(message.content)) {
+            shouldSendBotMeme = false;
+        }
+    }
+    if (shouldSendBotMeme) {
+        const botPingMemes = [
+            localize('ping-protection', 'meme-bot-ping-1'),
+            localize('ping-protection', 'meme-bot-ping-2'),
+            localize('ping-protection', 'meme-bot-ping-3')
+        ];
+        const randomMeme = randomElementFromArray(botPingMemes);
+        await message.reply({content: randomMeme}).catch(() => {});
+    }
+
     // Determines if any protected entities were pinged
     const pingedProtectedUser = protectedMentions.size > 0;
     if (!pingedProtectedRole && !pingedProtectedUser) return;

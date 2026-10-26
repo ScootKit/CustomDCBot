@@ -50,7 +50,10 @@ async function getPingCountInWindow(client, userId, timeframe, pingType = null) 
     };
 
     if (pingType === 'MENTION' || pingType === 'REPLY') {
-        whereClause.pingType = pingType;
+        whereClause[Op.or] = [
+            {pingType: pingType},
+            {pingType: null}
+        ];
     }
 
     return await client.models['ping-protection']['PingHistory'].count({

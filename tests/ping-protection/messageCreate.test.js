@@ -239,6 +239,70 @@ describe('self-ping', () => {
     });
 });
 
+describe('bot ping easter egg', () => {
+    test('replies with an easter egg when a user pings the bot', async () => {
+        const client = makeClient(makeConfig());
+        client.user = {id: 'botId'};
+        const msg = makeMessage({
+            authorId: 'regularUser',
+            users: [{
+                id: 'botId',
+                username: 'SecurityBot'
+            }],
+            content: 'hello <@botId>'
+        });
+        await handler.run(client, msg);
+        expect(msg.reply).toHaveBeenCalled();
+        const repliedContent = msg.reply.mock.calls[0][0].content;
+        expect([
+            'ping-protection.meme-bot-ping-1',
+            'ping-protection.meme-bot-ping-2',
+            'ping-protection.meme-bot-ping-3'
+        ]).toContain(repliedContent);
+        expect(mockProcessPing).not.toHaveBeenCalled();
+        expect(mockSendWarning).not.toHaveBeenCalled();
+    });
+
+    test('ignores automatic reply without manual ping when allowReplyPings is true', async () => {
+        const client = makeClient(makeConfig({allowReplyPings: true}));
+        client.user = {id: 'botId'};
+        const msg = makeMessage({
+            authorId: 'regularUser',
+            users: [{
+                id: 'botId',
+                username: 'SecurityBot'
+            }],
+            repliedUser: {id: 'botId'},
+            content: 'just replying without manual mention'
+        });
+        await handler.run(client, msg);
+        expect(msg.reply).not.toHaveBeenCalled();
+    });
+
+    test('processes manual protected ping when replying to the bot with allowReplyPings enabled', async () => {
+        const client = makeClient(makeConfig({
+            allowReplyPings: true,
+            protectedUsers: ['victim']
+        }));
+        client.user = {id: 'botId'};
+        const msg = makeMessage({
+            authorId: 'regularUser',
+            users: [
+                {id: 'botId', username: 'SecurityBot'},
+                {id: 'victim', username: 'Victim'}
+            ],
+            repliedUser: {id: 'botId'},
+            content: 'replying to bot and pinging <@victim>'
+        });
+        await handler.run(client, msg);
+        // Bot easter egg meme is skipped because there is no manual <@botId>
+        expect(msg.reply).not.toHaveBeenCalled();
+        // But the protected user ping is processed
+        expect(mockProcessPing).toHaveBeenCalled();
+        expect(mockSendWarning).toHaveBeenCalled();
+    });
+});
+
 describe('reply pings', () => {
     test('does not punish an auto reply-ping of a protected user when not manually typed', async () => {
         const client = makeClient(makeConfig({
