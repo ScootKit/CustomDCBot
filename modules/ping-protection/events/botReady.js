@@ -1,12 +1,18 @@
 const {
-    enforceRetention,
+    enforceRetention
+} = require('../core/records');
+const {
     syncNativeAutoMod
-} = require('../ping-protection');
+} = require('../core/moderation');
+const {
+    scheduleActiveToggleExpirations
+} = require('../core/toggle');
 const schedule = require('node-schedule');
 
 module.exports.run = async function (client) {
     await enforceRetention(client);
     await syncNativeAutoMod(client);
+    await scheduleActiveToggleExpirations(client);
 
     // Daily job
     const job = schedule.scheduleJob('0 3 * * *', async () => {

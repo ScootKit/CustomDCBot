@@ -2975,7 +2975,7 @@
   "ping-protection": {
     "_module": {
       "humanReadableName": "Ping-Protection",
-      "description": "Powerful and highly customizable ping-protection module to protect members/roles from unwanted mentions with moderation capabilities."
+      "description": "A powerful and highly customizable module to protect members and roles from unwanted mentions with moderation capabilities."
     },
     "configuration": {
       "description": "Configure protected users/roles, whitelisted roles/members, ignored channels and the notification message.",
@@ -3016,11 +3016,15 @@
         },
         "ignoredChannels": {
           "humanName": "Whitelisted Channels",
-          "description": "Pings in these channels are ignored."
+          "description": "Pings in these channels are ignored. Supported channels: Text- and news channels, categories, threads and voice channels. Note: If a category is selected, all channels in that category will be whitelisted, even newly made channels."
         },
         "ignoredUsers": {
           "humanName": "Whitelisted Users",
           "description": "Pings from these users are ignored."
+        },
+        "allowProtectionToggle": {
+          "humanName": "Allow protected members to toggle their protection status temporarily",
+          "description": "Enabling this allows protected members to temporarily toggle their protection status via tje `/ping-protection toggle` command. Useful for protected members if they don't mind being pinged for a short period of time."
         },
         "allowReplyPings": {
           "humanName": "Allow Reply Pings",
@@ -3066,6 +3070,33 @@
               "description": "ID of the user who pinged"
             }
           }
+        },
+        "kickPunishmentMessage": {
+          "humanName": "Kick punishment message",
+          "description": "The message that gets sent to the user's DM's when they are kicked for meeting a moderation action's treshold.'",
+          "default": "You have been kicked from **%guild-name%** for pinging protected users/roles %pings% times within %timeframe% days.",
+          "params": {
+            "reason": {
+              "description": "The reason why the user was kicked."
+            },
+            "pings": {
+              "description": "The amount of pings that triggered the moderation action."
+            },
+            "timeframe": {
+              "description": "The time frame in which the pings occurred."
+            },
+            "guild-name": {
+              "description": "The name of the server."
+            }
+          }
+        },
+        "autoDeleteWarningMessage": {
+          "humanName": "Automatically delete warning message",
+          "description": "If enabled, you can set a custom time after which the warning message will automatically be deleted to keep the channel clean."
+        },
+        "deleteWarningMessageTime": {
+          "humanName": "Automatic message deletion time",
+          "description": "The amount of time after which the warning message will automatically be deleted, in seconds."
         }
       }
     },
@@ -3080,6 +3111,10 @@
         "pingsCount": {
           "humanName": "Pings to trigger moderation",
           "description": "The amount of pings required to trigger a moderation action."
+        },
+        "pingsType": {
+          "humanName": "Type of ping",
+          "description": "The type of pings tht will trigger this moderation action"
         },
         "enableRolePingThresholds": {
           "humanName": "Enable role-based ping thresholds",
@@ -3096,6 +3131,11 @@
         "timeframeDays": {
           "humanName": "Timeframe (Days)",
           "description": "In how many days must these pings occur?"
+        },
+        "customTimeFrame": {
+          "humanName": "Custom timeframe",
+          "description": "In how much time must these pings occur? (use formats like 10s for 10 seconds, 1h for 1 hour or 1d for 1 day)",
+          "default": "7d"
         },
         "actionType": {
           "humanName": "Action",
@@ -3157,7 +3197,7 @@
       "content": {
         "enablePingHistory": {
           "humanName": "Enable Ping History",
-          "description": "If enabled, the bot will keep a history of pings to enforce moderation actions."
+          "description": "If enabled, the bot will keep a history of pings to enforce moderation actions. THIS IS REQUIRED TO USE MODERATION ACTIONS!"
         },
         "pingHistoryRetention": {
           "humanName": "Ping History Retention",
@@ -3177,7 +3217,7 @@
         },
         "leaverRetention": {
           "humanName": "Leaver Data Retention (Days)",
-          "description": "How long to keep data after a user leaves (1-7 Days)."
+          "description": "How long to keep data after a user left the server (1-60 Days)."
         }
       }
     }
@@ -4968,7 +5008,7 @@
           "default": "",
           "params": {
             "mention": {
-              "description": "Mention of the user who unboosted"
+              "description": "Mentions the user"
             },
             "memberProfilePictureUrl": {
               "description": "URL of the user's avatar"

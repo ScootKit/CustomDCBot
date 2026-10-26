@@ -1,15 +1,18 @@
 const {
-    generateHistoryResponse,
-    generateActionsResponse,
-    generateUserPanel,
-    generatePanelHistory,
-    generatePanelActions,
-    generatePanelDeletion,
+    parseTimeframeToMs,
+    getDeletionTypeLocaleKey
+} = require('../core/localHelpers');
+const {
     executeDataDeletion,
     getDeletionCooldown,
-    setDeletionCooldown,
-    getDeletionTypeLocaleKey
-} = require('../ping-protection');
+    setDeletionCooldown
+} = require('../core/records');
+const {
+    generateUserPanel,
+    generatePanelDeletion,
+    generateHistoryResponse,
+    generateActionsResponse
+} = require('../core/panels');
 const {localize} = require('../../../src/functions/localize');
 const {
     safeSetFooter,
@@ -31,9 +34,10 @@ const {
 module.exports.run = async function (client, interaction) {
     if (!client.botReadyAt) return;
     const isAdmin = interaction.member?.permissions?.has('Administrator');
+    const isManager = isAdmin || interaction.member?.permissions?.has('ManageGuild');
 
     if (interaction.isStringSelectMenu() && interaction.customId.startsWith('ping-protection_panel-menu_')) {
-        if (!isAdmin) {
+        if (!isManager) {
             return interaction.reply({
                 content: localize('ping-protection', 'no-permission'),
                 flags: MessageFlags.Ephemeral
@@ -50,11 +54,17 @@ module.exports.run = async function (client, interaction) {
         }
 
         const selection = interaction.values[0];
+        if (selection === 'deletion' && !isAdmin) { // Deletion panel is only for administrators, the rest of the panel
+            return interaction.reply({ // is broader and for managers
+                content: localize('ping-protection', 'no-permission'),
+                flags: MessageFlags.Ephemeral
+            });
+        }
 
         let payload;
         if (selection === 'overview') payload = await generateUserPanel(client, targetUser);
-        else if (selection === 'history') payload = await generatePanelHistory(client, targetUser, 1);
-        else if (selection === 'actions') payload = await generatePanelActions(client, targetUser, 1);
+        else if (selection === 'history') payload = await generateHistoryResponse(client, targetUser, 1, true);
+        else if (selection === 'actions') payload = await generateActionsResponse(client, targetUser, 1, true);
         else if (selection === 'deletion') payload = await generatePanelDeletion(client, targetUser);
 
         if (payload) return interaction.update(payload);
@@ -103,21 +113,9 @@ module.exports.run = async function (client, interaction) {
             });
         }
 
-        // Checks to ensure modal content fits Discord limits
-        let modalTitle = localize('ping-protection', 'modal-title');
-        if (modalTitle.length > 45) {
-            modalTitle = localize('ping-protection', 'fallback-modal-title');
-        }
-
-        let modalLabel = localize('ping-protection', 'modal-label');
-        if (modalLabel.length > 45) {
-            modalLabel = localize('ping-protection', 'fallback-modal-label');
-        }
-
-        let confirmationPhrase = localize('ping-protection', 'modal-phrase');
-        if (confirmationPhrase.length > 100) {
-            confirmationPhrase = localize('ping-protection', 'fallback-modal-phrase');
-        }
+        const modalTitle = localize('ping-protection', 'del-modal-title');
+        const modalLabel = localize('ping-protection', 'del-modal-label');
+        const confirmationPhrase = localize('ping-protection', 'del-conf-phrase');
 
         const modal = new ModalBuilder()
             .setCustomId(`ping-protection_del-confirm_${targetId}_${selection}`)
@@ -131,6 +129,14 @@ module.exports.run = async function (client, interaction) {
                     .setStyle(TextInputStyle.Paragraph)
                     .setPlaceholder(confirmationPhrase)
                     .setRequired(true)
+            ),
+            new ActionRowBuilder().addComponents(
+                new TextInputBuilder()
+                    .setCustomId('timeframe')
+                    .setLabel(localize('ping-protection', 'del-modal-timeframe-label'))
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder(localize('ping-protection', 'del-modal-timeframe-ph'))
+                    .setRequired(false)
             )
         );
 
@@ -149,16 +155,27 @@ module.exports.run = async function (client, interaction) {
         const targetId = parts[2];
         const selection = parts.slice(3).join('_');
 
-        let confirmPhrase = localize('ping-protection', 'modal-phrase');
-        if (confirmPhrase.length > 100) {
-            confirmPhrase = localize('ping-protection', 'fallback-modal-phrase');
-        }
+        const confirmPhrase = localize('ping-protection', 'del-conf-phrase');
 
         if (interaction.fields.getTextInputValue('confirm').trim() !== confirmPhrase) {
             return interaction.reply({
                 content: localize('ping-protection', 'modal-failed'),
                 flags: MessageFlags.Ephemeral
             });
+        }
+
+        const rawTimeframe = interaction.fields.getTextInputValue('timeframe')?.trim();
+        let olderThanMs = null;
+
+        if (rawTimeframe) {
+            const parsedMs = parseTimeframeToMs(rawTimeframe, null);
+            if (!parsedMs || parsedMs <= 0) {
+                return interaction.reply({
+                    content: localize('ping-protection', 'del-err-invalid-timeframe'),
+                    flags: MessageFlags.Ephemeral
+                });
+            }
+            olderThanMs = parsedMs;
         }
 
         const cooldown = await getDeletionCooldown(client, targetId);
@@ -242,8 +259,8 @@ module.exports.run = async function (client, interaction) {
                 }
 
                 if (btnInt.customId.includes('confirm')) {
-                    await executeDataDeletion(client, targetId, 'del_all');
-                    const blockedUntil = await setDeletionCooldown(client, targetId, 'del_all', btnInt.user.id);
+                    await executeDataDeletion(client, targetId, selection, olderThanMs);
+                    const blockedUntil = await setDeletionCooldown(client, targetId, selection, btnInt.user.id);
 
                     client.logger.info(localize('ping-protection', 'log-del-all', {
                         target: targetId,
@@ -281,7 +298,7 @@ module.exports.run = async function (client, interaction) {
             return;
         }
 
-        await executeDataDeletion(client, targetId, selection);
+        await executeDataDeletion(client, targetId, selection, olderThanMs);
         const blockedUntil = await setDeletionCooldown(client, targetId, selection, interaction.user.id);
 
         client.logger.info(localize('ping-protection', 'log-del-type', {
@@ -341,7 +358,7 @@ module.exports.run = async function (client, interaction) {
                 });
             }
 
-            const payload = await generatePanelHistory(client, targetUser, targetPage);
+            const payload = await generateHistoryResponse(client, targetUser, targetPage, true);
             return interaction.update(payload);
         }
 
@@ -358,7 +375,7 @@ module.exports.run = async function (client, interaction) {
                 });
             }
 
-            const payload = await generatePanelActions(client, targetUser, targetPage);
+            const payload = await generateActionsResponse(client, targetUser, targetPage, true);
             return interaction.update(payload);
         }
     }

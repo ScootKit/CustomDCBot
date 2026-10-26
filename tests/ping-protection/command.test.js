@@ -1,10 +1,5 @@
 /*
  * Tests for the /ping-protection command.
- *
- * run() routes to subcommands[group][sub] when a group is present, else to
- * subcommands[sub]. The user.* subcommands build a payload via the matching
- * generate* helper and reply ephemerally. listHandler renders the protected /
- * whitelisted config as an embed, using the "none" fallback for empty lists.
  */
 const mockHistory = jest.fn().mockResolvedValue({
     embeds: ['h'],
@@ -18,52 +13,86 @@ const mockPanel = jest.fn().mockResolvedValue({
     embeds: ['p'],
     components: []
 });
-jest.mock('../../modules/ping-protection/ping-protection', () => ({
+const mockToggle = jest.fn();
+const mockIsToggledOff = jest.fn().mockResolvedValue(false);
+
+jest.mock('../../modules/ping-protection/core/panels', () => ({
     generateHistoryResponse: (...a) => mockHistory(...a),
     generateActionsResponse: (...a) => mockActions(...a),
     generateUserPanel: (...a) => mockPanel(...a)
+}));
+jest.mock('../../modules/ping-protection/core/toggle', () => ({
+    toggleUserProtection: (...a) => mockToggle(...a),
+    isProtectionToggledOff: (...a) => mockIsToggledOff(...a)
 }));
 
 const command = require('../../modules/ping-protection/commands/ping-protection');
 
 function makeInteraction({
-                             group = null,
-                             sub,
-                             user,
-                             config
-                         } = {}) {
+    group = null,
+    sub,
+    user,
+    config = {},
+    permissions = ['Administrator']
+} = {}) {
     return {
         options: {
             getSubcommandGroup: jest.fn(() => group),
             getSubcommand: jest.fn(() => sub),
             getUser: jest.fn(() => user)
         },
+        member: {
+            id: 'm1',
+            permissions: {
+                has: jest.fn((perm) => permissions.includes(perm))
+            }
+        },
+        user: {id: 'm1'},
         client: {
             strings: {
                 disableFooterTimestamp: true,
                 footer: 'f',
                 footerImgUrl: ''
             },
-            configurations: {'ping-protection': {configuration: config}}
+            configurations: {
+                'ping-protection': {
+                    configuration: config
+                }
+            }
         },
-        reply: jest.fn().mockResolvedValue()
+        reply: jest.fn().mockResolvedValue(),
+        deferReply: jest.fn().mockResolvedValue(),
+        editReply: jest.fn().mockResolvedValue()
     };
+}
+
+async function runCommand(interaction) {
+    const group = interaction.options.getSubcommandGroup();
+    const sub = interaction.options.getSubcommand();
+
+    if (group) {
+        return command.subcommands[group][sub](interaction);
+    }
+    return command.subcommands[sub](interaction);
 }
 
 beforeEach(() => {
     mockHistory.mockClear();
     mockActions.mockClear();
     mockPanel.mockClear();
+    mockToggle.mockClear();
+    mockIsToggledOff.mockClear();
+    mockIsToggledOff.mockResolvedValue(false);
 });
 
-describe('routing', () => {
+describe('user subcommands', () => {
     test('routes user.history to generateHistoryResponse', async () => {
         const interaction = makeInteraction({
             group: 'user',
             sub: 'history',
             user: {id: 'u1'}
         });
-        await command.run(interaction);
+        await runCommand(interaction);
         expect(mockHistory).toHaveBeenCalledWith(interaction.client, 'u1', 1);
         expect(interaction.reply).toHaveBeenCalled();
     });
@@ -74,41 +103,118 @@ describe('routing', () => {
             sub: 'actions-history',
             user: {id: 'u1'}
         });
-        await command.run(interaction);
+        await runCommand(interaction);
         expect(mockActions).toHaveBeenCalledWith(interaction.client, 'u1', 1);
     });
 
-    test('routes user.panel to generateUserPanel', async () => {
+    test('routes user.panel to generateUserPanel for managers', async () => {
         const user = {id: 'u1'};
         const interaction = makeInteraction({
             group: 'user',
             sub: 'panel',
-            user
+            user,
+            permissions: ['ManageGuild']
         });
-        await command.run(interaction);
+        await runCommand(interaction);
         expect(mockPanel).toHaveBeenCalledWith(interaction.client, user);
+    });
+
+    test('triggers easter egg when checking the bot itself in user.history', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'history',
+            user: {id: 'botId'}
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockHistory).not.toHaveBeenCalled();
+        expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+
+    test('triggers easter egg when checking the bot itself in user.actions-history', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'actions-history',
+            user: {id: 'botId'}
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockActions).not.toHaveBeenCalled();
+        expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+
+    test('blocks user.panel for users without ManageGuild or Admin', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'panel',
+            user: {id: 'u1'},
+            permissions: []
+        });
+        await runCommand(interaction);
+        expect(mockPanel).not.toHaveBeenCalled();
+        expect(interaction.reply.mock.calls[0][0].content).toContain('no-permission');
+    });
+
+    test('triggers easter egg when checking the bot itself in user.panel', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'panel',
+            user: {id: 'botId'},
+            permissions: ['Administrator']
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockPanel).not.toHaveBeenCalled();
+        expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+});
+
+describe('toggle subcommand', () => {
+    test('blocks toggle if disabled in admin config', async () => {
+        const interaction = makeInteraction({
+            sub: 'toggle',
+            config: {allowProtectionToggle: false}
+        });
+        await runCommand(interaction);
+        expect(interaction.reply.mock.calls[0][0].content).toContain('toggle-disabled-by-admin');
+        expect(mockToggle).not.toHaveBeenCalled();
+    });
+
+    test('handles successful pause toggle', async () => {
+        mockToggle.mockResolvedValue({
+            success: true,
+            state: 'disabled',
+            disabledUntil: new Date(Date.now() + 86400000)
+        });
+        const interaction = makeInteraction({
+            sub: 'toggle',
+            config: {allowProtectionToggle: true}
+        });
+        await runCommand(interaction);
+        expect(interaction.deferReply).toHaveBeenCalled();
+        expect(interaction.editReply.mock.calls[0][0].content).toContain('toggle-succ-disabled');
     });
 });
 
 describe('list subcommands', () => {
-    test('protected list renders users and roles', async () => {
+    test('protected list renders paused indicator if user toggled off', async () => {
+        mockIsToggledOff.mockResolvedValue(true);
         const interaction = makeInteraction({
             group: 'list',
             sub: 'protected',
             config: {
+                allowProtectionToggle: true,
                 protectedUsers: ['u1'],
-                protectedRoles: ['r1']
+                protectedRoles: []
             }
         });
-        await command.run(interaction);
+        await runCommand(interaction);
         const embed = interaction.reply.mock.calls[0][0].embeds[0];
         const usersField = embed.fields.find(f => f.name.includes('field-protected-users'));
-        expect(usersField.value).toContain('<@u1>');
-        const rolesField = embed.fields.find(f => f.name.includes('field-protected-roles'));
-        expect(rolesField.value).toContain('<@&r1>');
+        expect(usersField.value).toContain('list-user-paused');
     });
 
-    test('protected list shows the "none" fallback for empty lists', async () => {
+    test('protected list shows the none fallback for empty lists', async () => {
         const interaction = makeInteraction({
             group: 'list',
             sub: 'protected',
@@ -117,9 +223,9 @@ describe('list subcommands', () => {
                 protectedRoles: []
             }
         });
-        await command.run(interaction);
+        await runCommand(interaction);
         const embed = interaction.reply.mock.calls[0][0].embeds[0];
-        expect(embed.fields[0].value).toContain('ping-protection.list-none');
+        expect(embed.fields[0].value).toContain('list-none');
     });
 
     test('whitelisted list renders roles, channels and users', async () => {
@@ -132,7 +238,7 @@ describe('list subcommands', () => {
                 ignoredUsers: ['u1']
             }
         });
-        await command.run(interaction);
+        await runCommand(interaction);
         const embed = interaction.reply.mock.calls[0][0].embeds[0];
         const values = embed.fields.map(f => f.value).join('|');
         expect(values).toContain('<@&r1>');

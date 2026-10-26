@@ -21,6 +21,11 @@ module.exports = class PingProtectionPingHistory extends Model {
             isRole: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
+            },
+            pingType: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                defaultValue: null
             }
         }, {
             tableName: 'ping_protection_history',

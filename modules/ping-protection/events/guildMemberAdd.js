@@ -2,7 +2,7 @@
  * Checks when a member rejoins the server and updates their leaver status
  */
 
-const {markUserAsRejoined} = require('../ping-protection');
+const {markUserAsRejoined} = require('../core/records');
 
 module.exports.run = async function (client, member) {
     if (!client.botReadyAt) return;

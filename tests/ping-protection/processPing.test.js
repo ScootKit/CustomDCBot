@@ -8,7 +8,12 @@
  * dispatches MUTE/KICK. executeDataDeletion fans out destroy() calls based on
  * the requested data type.
  */
-const pp = require('../../modules/ping-protection/ping-protection');
+const moderation = require('../../modules/ping-protection/core/moderation');
+const records = require('../../modules/ping-protection/core/records');
+const pp = {
+    ...moderation,
+    ...records
+};
 
 function makeLogger() {
     return {
@@ -145,6 +150,57 @@ describe('processPing', () => {
         });
         await pp.processPing(client, 'victim', 'target', false, 'url', null, makeMember());
         expect(client.models['ping-protection'].PingHistory.create).toHaveBeenCalled();
+    });
+
+    test('falls back to timeframeDays when customTimeFrame is empty string on upgrade', async () => {
+        const client = makeClient({
+            moderation: [{
+                actionType: 'MUTE',
+                muteDuration: 10,
+                pingsCount: 1,
+                useCustomTimeframe: true,
+                customTimeFrame: '',
+                timeframeDays: 30
+            }],
+            pingCount: 2
+        });
+        const member = makeMember();
+        await pp.processPing(client, 'victim', 'target', false, 'url', null, member);
+        expect(member.timeout).toHaveBeenCalled();
+        expect(client.models['ping-protection'].PingHistory.count).toHaveBeenCalledWith(
+            expect.objectContaining({
+                where: expect.objectContaining({
+                    userId: 'victim'
+                })
+            })
+        );
+        expect(client.models['ping-protection'].ModerationLog.create).toHaveBeenCalledWith(
+            expect.objectContaining({
+                reason: expect.stringContaining('30d')
+            })
+        );
+    });
+
+    test('uses customTimeFrame when provided', async () => {
+        const client = makeClient({
+            moderation: [{
+                actionType: 'MUTE',
+                muteDuration: 10,
+                pingsCount: 1,
+                useCustomTimeframe: true,
+                customTimeFrame: '14d',
+                timeframeDays: 30
+            }],
+            pingCount: 2
+        });
+        const member = makeMember();
+        await pp.processPing(client, 'victim', 'target', false, 'url', null, member);
+        expect(member.timeout).toHaveBeenCalled();
+        expect(client.models['ping-protection'].ModerationLog.create).toHaveBeenCalledWith(
+            expect.objectContaining({
+                reason: expect.stringContaining('14d')
+            })
+        );
     });
 });
 

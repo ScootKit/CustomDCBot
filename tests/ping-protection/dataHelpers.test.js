@@ -11,7 +11,7 @@
  *  - enforceRetention prunes ping history, mod logs, and leaver data per config.
  */
 jest.useFakeTimers();
-const pp = require('../../modules/ping-protection/ping-protection');
+const pp = require('../../modules/ping-protection/core/records');
 
 function makeClient({
                         storage = {},
@@ -113,6 +113,21 @@ describe('getPingCountInWindow', () => {
         const where = count.mock.calls[0][0].where;
         expect(where.userId).toBe('u1');
         expect(where.createdAt).toBeDefined();
+    });
+
+    test('includes both specific pingType and null (legacy) pings when filtering', async () => {
+        const count = jest.fn().mockResolvedValue(3);
+        const client = makeClient({models: {PingHistory: {count}}});
+        const result = await pp.getPingCountInWindow(client, 'u1', 7, 'MENTION');
+        expect(result).toBe(3);
+        const where = count.mock.calls[0][0].where;
+        const symbols = Object.getOwnPropertySymbols(where);
+        expect(symbols.length).toBeGreaterThan(0);
+        const orConditions = where[symbols[0]];
+        expect(orConditions).toEqual([
+            {pingType: 'MENTION'},
+            {pingType: null}
+        ]);
     });
 });
 

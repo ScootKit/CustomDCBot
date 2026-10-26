@@ -1,8 +1,14 @@
 const {
-    processPing,
+    isWhitelistedChannel,
+    determinePingType
+} = require('../core/localHelpers');
+const {
     sendPingWarning,
-    isWhitelistedChannel
-} = require('../ping-protection');
+    processPing
+} = require('../core/moderation');
+const {
+    isProtectionToggledOff
+} = require('../core/toggle');
 const {localize} = require('../../../src/functions/localize');
 const {randomElementFromArray} = require('../../../src/functions/helpers');
 
@@ -19,6 +25,7 @@ module.exports.run = async function (client, message) {
     const config = client.configurations['ping-protection']['configuration'];
 
     if (message.author.bot) return;
+    if (!message.member) return;
 
     if (isWhitelistedChannel(config, message.channel)) return;
     if (config.ignoredUsers.includes(message.author.id)) return;
@@ -56,9 +63,43 @@ module.exports.run = async function (client, message) {
         }
     }
 
+    // Filter out users who have temporarily toggled protection off
+    if (config.allowProtectionToggle && protectedMentions.size > 0) {
+        for (const userId of [...protectedMentions]) {
+            const isToggledOff = await isProtectionToggledOff(client, userId);
+            if (isToggledOff) {
+                protectedMentions.delete(userId);
+            }
+        }
+    }
+
+    // Easter egg when a user pings the bot
+    const botId = client.user?.id;
+    let shouldSendBotMeme = Boolean(
+        botId && (
+            (typeof message.mentions.users.has === 'function' && message.mentions.users.has(botId)) ||
+            (typeof message.mentions.users.get === 'function' && Boolean(message.mentions.users.get(botId))) ||
+            (typeof message.mentions.users.some === 'function' && message.mentions.users.some(u => u.id === botId))
+        )
+    );
+    if (shouldSendBotMeme && config.allowReplyPings && message.mentions.repliedUser?.id === botId) {
+        const manualMentionRegex = new RegExp(`<@!?${botId}>`);
+        if (!manualMentionRegex.test(message.content)) {
+            shouldSendBotMeme = false;
+        }
+    }
+    if (shouldSendBotMeme) {
+        const botPingMemes = [
+            localize('ping-protection', 'meme-bot-ping-1'),
+            localize('ping-protection', 'meme-bot-ping-2'),
+            localize('ping-protection', 'meme-bot-ping-3')
+        ];
+        const randomMeme = randomElementFromArray(botPingMemes);
+        await message.reply({content: randomMeme}).catch(() => {});
+    }
+
     // Determines if any protected entities were pinged
     const pingedProtectedUser = protectedMentions.size > 0;
-
     if (!pingedProtectedRole && !pingedProtectedUser) return;
 
     let target = null;
@@ -101,7 +142,7 @@ module.exports.run = async function (client, message) {
             const lastIndex = lastMemeMap.get(message.author.id);
 
             let possibleMemes = standardMemes.map((_, index) => index);
-            if (lastIndex !== undefined && lastIndex !== -1 && standardMemes.length > 1) {
+            if (typeof lastIndex === 'number' && lastIndex !== -1 && standardMemes.length > 1) {
                 possibleMemes = possibleMemes.filter(i => i !== lastIndex);
             }
 
@@ -121,10 +162,12 @@ module.exports.run = async function (client, message) {
     if (!memberToPunish) {
         try {
             memberToPunish = await message.guild.members.fetch(message.author.id);
-        } catch (e) {
+        } catch {
             return;
         }
     }
+
+    const pingType = determinePingType(message, target.id, isRole);
 
     await processPing(
         client,
@@ -133,6 +176,7 @@ module.exports.run = async function (client, message) {
         isRole,
         message.url,
         message.channel,
-        memberToPunish
+        memberToPunish,
+        pingType
     );
 };

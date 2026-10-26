@@ -3,19 +3,20 @@
  * payload generateActionsResponse produces for /ping-protection user actions-history and replies
  * ephemerally, so the output is identical for the targeted user. These tests verify the delegation.
  */
-jest.mock('../../modules/ping-protection/ping-protection', () => ({
+const mockGenerateActionsResponse = jest.fn().mockResolvedValue({
+    embeds: ['E'],
+    components: ['C']
+});
+
+jest.mock('../../modules/ping-protection/core/panels', () => ({
     generateHistoryResponse: jest.fn(),
-    generateActionsResponse: jest.fn().mockResolvedValue({
-        embeds: ['E'],
-        components: ['C']
-    })
+    generateActionsResponse: (...a) => mockGenerateActionsResponse(...a)
 }));
 
 const {MessageFlags} = require('discord.js');
-const {generateActionsResponse} = require('../../modules/ping-protection/ping-protection');
 const command = require('../../modules/ping-protection/commands/view-moderation-history');
 
-beforeEach(() => generateActionsResponse.mockClear());
+beforeEach(() => mockGenerateActionsResponse.mockClear());
 
 describe('View Moderation History context command', () => {
     test('config: USER context, staff-gated', () => {
@@ -32,11 +33,26 @@ describe('View Moderation History context command', () => {
             reply
         };
         await command.run(interaction);
-        expect(generateActionsResponse).toHaveBeenCalledWith(interaction.client, 'victim', 1);
+        expect(mockGenerateActionsResponse).toHaveBeenCalledWith(interaction.client, 'victim', 1);
         expect(reply).toHaveBeenCalledWith({
             embeds: ['E'],
             components: ['C'],
             flags: MessageFlags.Ephemeral
         });
+    });
+
+    test('returns easter egg when targeting the bot itself', async () => {
+        const reply = jest.fn().mockResolvedValue('ok');
+        const interaction = {
+            client: {
+                id: 'client',
+                user: {id: 'botId'}
+            },
+            targetUser: {id: 'botId'},
+            reply
+        };
+        await command.run(interaction);
+        expect(mockGenerateActionsResponse).not.toHaveBeenCalled();
+        expect(reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
     });
 });

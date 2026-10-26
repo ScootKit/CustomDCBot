@@ -1,5 +1,5 @@
 const {localize} = require('../../../src/functions/localize');
-const {generateHistoryResponse} = require('../ping-protection');
+const {generateHistoryResponse} = require('../core/panels');
 const {MessageFlags} = require('discord.js');
 
 module.exports.config = {
@@ -16,6 +16,12 @@ module.exports.config = {
  * (embed + pagination buttons) is identical for the targeted user.
  */
 module.exports.run = async function (interaction) {
+    if (interaction.targetUser.id === interaction.client.user?.id) {
+        return interaction.reply({
+            content: localize('ping-protection', 'meme-bot-history'),
+            flags: MessageFlags.Ephemeral
+        });
+    }
     const payload = await generateHistoryResponse(interaction.client, interaction.targetUser.id, 1);
     return interaction.reply({
         ...payload,

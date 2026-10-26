@@ -1,14 +1,18 @@
 /*
- * Tests for ping-protection's autoModerationActionExecution handler. It maps a
- * blocked AutoMod keyword back to a protected role/user, resolves the origin
- * channel, applies whitelist + ignored-user guards, and dispatches processPing
- * for protected targets only.
+ * Tests for ping-protection's autoModerationActionExecution handler.
  */
 const mockProcessPing = jest.fn().mockResolvedValue();
 const mockIsWhitelisted = jest.fn(() => false);
-jest.mock('../../modules/ping-protection/ping-protection', () => ({
-    processPing: (...a) => mockProcessPing(...a),
+const mockIsToggledOff = jest.fn(() => false);
+
+jest.mock('../../modules/ping-protection/core/moderation', () => ({
+    processPing: (...a) => mockProcessPing(...a)
+}));
+jest.mock('../../modules/ping-protection/core/localHelpers', () => ({
     isWhitelistedChannel: (...a) => mockIsWhitelisted(...a)
+}));
+jest.mock('../../modules/ping-protection/core/toggle', () => ({
+    isProtectionToggledOff: (...a) => mockIsToggledOff(...a)
 }));
 
 const handler = require('../../modules/ping-protection/events/autoModerationActionExecution');
@@ -22,6 +26,7 @@ function makeClient(configOverrides = {}) {
                     protectedRoles: [],
                     protectedUsers: [],
                     protectAllUsersWithProtectedRole: false,
+                    allowProtectionToggle: false,
                     ...configOverrides
                 }
             }
@@ -30,11 +35,11 @@ function makeClient(configOverrides = {}) {
 }
 
 function makeExecution({
-                           userId = 'pinger',
-                           matchedKeyword = '<@victim>',
-                           channel = {id: 'c1'},
-                           members = {}
-                       } = {}) {
+    userId = 'pinger',
+    matchedKeyword = '<@victim>',
+    channel = {id: 'c1'},
+    members = {}
+} = {}) {
     return {
         ruleTriggerType: 1,
         userId,
@@ -55,7 +60,9 @@ function makeExecution({
 beforeEach(() => {
     mockProcessPing.mockClear();
     mockIsWhitelisted.mockClear();
+    mockIsToggledOff.mockClear();
     mockIsWhitelisted.mockReturnValue(false);
+    mockIsToggledOff.mockReturnValue(false);
 });
 
 test('ignores non-keyword automod triggers', async () => {
@@ -68,6 +75,17 @@ test('ignores non-keyword automod triggers', async () => {
 test('ignores users on the ignore list', async () => {
     const client = makeClient({ignoredUsers: ['pinger']});
     await handler.run(client, makeExecution());
+    expect(mockProcessPing).not.toHaveBeenCalled();
+});
+
+test('bypasses processPing when targeted user has toggled protection off', async () => {
+    mockIsToggledOff.mockResolvedValue(true);
+    const client = makeClient({
+        protectedUsers: ['111222'],
+        allowProtectionToggle: true
+    });
+    const exec = makeExecution({matchedKeyword: '<@111222>'});
+    await handler.run(client, exec);
     expect(mockProcessPing).not.toHaveBeenCalled();
 });
 

@@ -27,7 +27,7 @@ module.exports = class PingProtectionModerationLog extends Model {
             actionDuration: {
                 type: DataTypes.INTEGER,
                 allowNull: true
-            },
+            }
         }, {
             tableName: 'ping_protection_mod_log',
             timestamps: true,

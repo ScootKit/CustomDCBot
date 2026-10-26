@@ -24,7 +24,7 @@
       "name": "enablePingHistory",
       "category": "pings",
       "humanName": "Enable Ping History",
-      "description": "If enabled, the bot will keep a history of pings to enforce moderation actions.",
+      "description": "If enabled, the bot will keep a history of pings to enforce moderation actions. THIS IS REQUIRED TO USE MODERATION ACTIONS!",
       "type": "boolean",
       "default": true
     },
@@ -69,11 +69,11 @@
       "name": "leaverRetention",
       "category": "leavers",
       "humanName": "Leaver Data Retention (Days)",
-      "description": "How long to keep data after a user leaves (1-7 Days).",
+      "description": "How long to keep data after a user left the server (1-60 Days).",
       "type": "integer",
-      "default": 1,
+      "default": 7,
       "minValue": "1",
-      "maxValue": "7",
+      "maxValue": "60",
       "dependsOn": "enableLeaverDataRetention"
     }
   ]
