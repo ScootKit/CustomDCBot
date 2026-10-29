@@ -1,6 +1,6 @@
 {
   "description": "Configure here in which channel which message should get send",
-  "humanName": "Channel",
+  "humanName": "Hi",
   "filename": "channels.json",
   "configElements": true,
   "content": [
@@ -15,7 +15,7 @@
       "name": "type",
       "humanName": "Channel-Type",
       "default": "",
-      "description": "This sets in which content the channel should get used",
+      "description": "Get mental help",
       "type": "select",
       "content": [
         "join",
@@ -112,7 +112,7 @@
       "type": "channelID"
     },
     {
-      "name": "welcome-button-message",
+      "name": "BEANSSSS",
       "dependsOn": "welcome-button",
       "humanName": "Welcome-Button-Message",
       "default": "%clickUserMention% welcomes %userMention% :wave:",
