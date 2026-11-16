@@ -1,0 +1,31 @@
+name: Dependency audit
+
+# Fails on HIGH/CRITICAL advisories in production dependencies. Dev-only advisories (eslint,
+# build tooling) are ignored via --omit=dev. Advisories with NO patched version can be listed in
+# .github/audit-ignore.json (see .github/scripts/audit-check.js). Reads package-lock.json only: no
+# install and no secrets, so it is safe on GitHub-hosted runners. Not a PR check on purpose: a
+# Dependabot PR that fixes only part of the findings must still be mergeable.
+on:
+  schedule:
+    - cron: '17 6 * * 1' # Mondays 06:17 UTC, so a new advisory fails the repo even with no pushes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: ["."]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Audit production dependencies
+        working-directory: ${{ matrix.dir }}
+        run: node "$GITHUB_WORKSPACE/.github/scripts/audit-check.js" "$GITHUB_WORKSPACE/.github/audit-ignore.json"
