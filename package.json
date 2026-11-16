@@ -28,7 +28,7 @@
     "age-calculator": "1.0.0",
     "centra": "2.7.0",
     "discord-api-types": "^0.38.47",
-    "discord.js": "14.26.4",
+    "discord.js": "14.28.1",
     "fparser": "^4.2.0",
     "is-equal": "^1.6.4",
     "jsonfile": "6.2.1",
