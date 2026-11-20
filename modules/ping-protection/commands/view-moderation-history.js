@@ -16,7 +16,8 @@ module.exports.config = {
  * the output (embed + pagination buttons) is identical for the targeted user.
  */
 module.exports.run = async function (interaction) {
-    if (interaction.targetUser.id === interaction.client.user?.id) {
+    const config = interaction.client.configurations?.['ping-protection']?.['configuration'] || {};
+    if (config.botHistoryEasterEgg && interaction.targetUser.id === interaction.client.user?.id) {
         return interaction.reply({
             content: localize('ping-protection', 'meme-bot-history'),
             flags: MessageFlags.Ephemeral

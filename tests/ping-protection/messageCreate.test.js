@@ -46,6 +46,8 @@ function makeConfig(over = {}) {
         protectAllUsersWithProtectedRole: false,
         allowReplyPings: false,
         selfPingConfiguration: 'Off',
+        selfPingEasterEgg: false,
+        botPingEasterEgg: false,
         ...over
     };
 }
@@ -59,15 +61,15 @@ function makeClient(config) {
 }
 
 function makeMessage({
-                         authorId = 'pinger',
-                         bot = false,
-                         users = [],
-                         roles = [],
-                         repliedUser = null,
-                         members = [],
-                         content = '',
-                         memberRoles = []
-                     } = {}) {
+    authorId = 'pinger',
+    bot = false,
+    users = [],
+    roles = [],
+    repliedUser = null,
+    members = [],
+    content = '',
+    memberRoles = []
+} = {}) {
     const memberCollection = makeCollection(members);
     return {
         guild: {
@@ -106,7 +108,7 @@ beforeEach(() => {
 describe('guards', () => {
     test('ignores messages before botReady', async () => {
         const client = makeClient(makeConfig());
-        client.botReadyAt = undefined;
+        delete client.botReadyAt;
         await handler.run(client, makeMessage());
         expect(mockProcessPing).not.toHaveBeenCalled();
     });
@@ -221,10 +223,11 @@ describe('protected ping dispatch', () => {
 });
 
 describe('self-ping', () => {
-    test('does nothing when selfPingConfiguration is Ignored', async () => {
+    test('does nothing when selfPingConfiguration is Ignored and easter egg is disabled', async () => {
         const client = makeClient(makeConfig({
             protectedUsers: ['pinger'],
-            selfPingConfiguration: 'Ignored'
+            selfPingConfiguration: 'Ignored',
+            selfPingEasterEgg: false
         }));
         const msg = makeMessage({
             authorId: 'pinger',
@@ -234,14 +237,52 @@ describe('self-ping', () => {
             }]
         });
         await handler.run(client, msg);
+        expect(msg.reply).not.toHaveBeenCalled();
+        expect(mockSendWarning).not.toHaveBeenCalled();
+        expect(mockProcessPing).not.toHaveBeenCalled();
+    });
+
+    test('punishes when selfPingConfiguration is "Get punished like normal members" and easter egg is disabled', async () => {
+        const client = makeClient(makeConfig({
+            protectedUsers: ['pinger'],
+            selfPingConfiguration: 'Get punished like normal members',
+            selfPingEasterEgg: false
+        }));
+        const msg = makeMessage({
+            authorId: 'pinger',
+            users: [{
+                id: 'pinger',
+                username: 'Me'
+            }]
+        });
+        await handler.run(client, msg);
+        expect(mockSendWarning).toHaveBeenCalled();
+        expect(mockProcessPing).toHaveBeenCalled();
+    });
+
+    test('replies with an easter egg when selfPingEasterEgg is true regardless of selfPingConfiguration', async () => {
+        const client = makeClient(makeConfig({
+            protectedUsers: ['pinger'],
+            selfPingConfiguration: 'Get punished like normal members',
+            selfPingEasterEgg: true
+        }));
+        const msg = makeMessage({
+            authorId: 'pinger',
+            users: [{
+                id: 'pinger',
+                username: 'Me'
+            }]
+        });
+        await handler.run(client, msg);
+        expect(msg.reply).toHaveBeenCalled();
         expect(mockSendWarning).not.toHaveBeenCalled();
         expect(mockProcessPing).not.toHaveBeenCalled();
     });
 });
 
 describe('bot ping easter egg', () => {
-    test('replies with an easter egg when a user pings the bot', async () => {
-        const client = makeClient(makeConfig());
+    test('replies with an easter egg when a user pings the bot and botPingEasterEgg is true', async () => {
+        const client = makeClient(makeConfig({botPingEasterEgg: true}));
         client.user = {id: 'botId'};
         const msg = makeMessage({
             authorId: 'regularUser',
@@ -261,6 +302,21 @@ describe('bot ping easter egg', () => {
         ]).toContain(repliedContent);
         expect(mockProcessPing).not.toHaveBeenCalled();
         expect(mockSendWarning).not.toHaveBeenCalled();
+    });
+
+    test('does not reply with an easter egg when botPingEasterEgg is false', async () => {
+        const client = makeClient(makeConfig({botPingEasterEgg: false}));
+        client.user = {id: 'botId'};
+        const msg = makeMessage({
+            authorId: 'regularUser',
+            users: [{
+                id: 'botId',
+                username: 'SecurityBot'
+            }],
+            content: 'hello <@botId>'
+        });
+        await handler.run(client, msg);
+        expect(msg.reply).not.toHaveBeenCalled();
     });
 
     test('ignores automatic reply without manual ping when allowReplyPings is true', async () => {

@@ -19,6 +19,11 @@
       "displayName": "Ping rules"
     },
     {
+      "id": "easterEggs",
+      "icon": "fa-solid fa-egg",
+      "displayName": "Easter eggs"
+    },
+    {
       "id": "automod",
       "icon": "far fa-robot",
       "displayName": "AutoMod settings"
@@ -107,10 +112,33 @@
       "type": "select",
       "content": [
         "Get punished like normal members",
-        "Ignored",
-        "Get fun easter eggs when pinging themselves"
+        "Ignored"
       ],
       "default": "Ignored"
+    },
+    {
+      "name": "selfPingEasterEgg",
+      "category": "easterEggs",
+      "humanName": "Enable self-ping easter egg",
+      "description": "Adds a fun twist to protected users. When enabled, protected users pinging themselves see a fun easter egg. Overrides self-ping configuration setting - if enabled, no logging is done.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "botPingEasterEgg",
+      "category": "easterEggs",
+      "humanName": "Enable bot-ping easter egg",
+      "description": "When enabled, users pinging the bot will see a fun easter egg.",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "botHistoryEasterEgg",
+      "category": "easterEggs",
+      "humanName": "Enable bot-history easter egg",
+      "description": "When enabled, checking the ping or moderation history of the bot will show a fun easter egg instead of an empty history.",
+      "type": "boolean",
+      "default": false
     },
     {
       "name": "enableAutomod",

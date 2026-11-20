@@ -119,11 +119,12 @@ describe('user subcommands', () => {
         expect(mockPanel).toHaveBeenCalledWith(interaction.client, user);
     });
 
-    test('triggers easter egg when checking the bot itself in user.history', async () => {
+    test('triggers easter egg when checking the bot itself in user.history with botHistoryEasterEgg enabled', async () => {
         const interaction = makeInteraction({
             group: 'user',
             sub: 'history',
-            user: {id: 'botId'}
+            user: {id: 'botId'},
+            config: {botHistoryEasterEgg: true}
         });
         interaction.client.user = {id: 'botId'};
         await runCommand(interaction);
@@ -131,16 +132,41 @@ describe('user subcommands', () => {
         expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
     });
 
-    test('triggers easter egg when checking the bot itself in user.actions-history', async () => {
+    test('generates history when checking the bot itself in user.history with botHistoryEasterEgg disabled', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'history',
+            user: {id: 'botId'},
+            config: {botHistoryEasterEgg: false}
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockHistory).toHaveBeenCalledWith(interaction.client, 'botId', 1);
+    });
+
+    test('triggers easter egg when checking the bot itself in user.actions-history with botHistoryEasterEgg enabled', async () => {
         const interaction = makeInteraction({
             group: 'user',
             sub: 'actions-history',
-            user: {id: 'botId'}
+            user: {id: 'botId'},
+            config: {botHistoryEasterEgg: true}
         });
         interaction.client.user = {id: 'botId'};
         await runCommand(interaction);
         expect(mockActions).not.toHaveBeenCalled();
         expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+
+    test('generates actions history when checking the bot itself in user.actions-history with botHistoryEasterEgg disabled', async () => {
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'actions-history',
+            user: {id: 'botId'},
+            config: {botHistoryEasterEgg: false}
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockActions).toHaveBeenCalledWith(interaction.client, 'botId', 1);
     });
 
     test('blocks user.panel for users without ManageGuild or Admin', async () => {
@@ -155,17 +181,32 @@ describe('user subcommands', () => {
         expect(interaction.reply.mock.calls[0][0].content).toContain('no-permission');
     });
 
-    test('triggers easter egg when checking the bot itself in user.panel', async () => {
+    test('triggers easter egg when checking the bot itself in user.panel with botHistoryEasterEgg enabled', async () => {
         const interaction = makeInteraction({
             group: 'user',
             sub: 'panel',
             user: {id: 'botId'},
-            permissions: ['Administrator']
+            permissions: ['Administrator'],
+            config: {botHistoryEasterEgg: true}
         });
         interaction.client.user = {id: 'botId'};
         await runCommand(interaction);
         expect(mockPanel).not.toHaveBeenCalled();
         expect(interaction.reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+
+    test('generates panel when checking the bot itself in user.panel with botHistoryEasterEgg disabled', async () => {
+        const user = {id: 'botId'};
+        const interaction = makeInteraction({
+            group: 'user',
+            sub: 'panel',
+            user,
+            permissions: ['Administrator'],
+            config: {botHistoryEasterEgg: false}
+        });
+        interaction.client.user = {id: 'botId'};
+        await runCommand(interaction);
+        expect(mockPanel).toHaveBeenCalledWith(interaction.client, user);
     });
 });
 

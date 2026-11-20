@@ -41,12 +41,17 @@ describe('View Ping History context command', () => {
         });
     });
 
-    test('returns easter egg when targeting the bot itself', async () => {
+    test('returns easter egg when targeting the bot itself with botHistoryEasterEgg enabled', async () => {
         const reply = jest.fn().mockResolvedValue('ok');
         const interaction = {
             client: {
                 id: 'client',
-                user: {id: 'botId'}
+                user: {id: 'botId'},
+                configurations: {
+                    'ping-protection': {
+                        configuration: {botHistoryEasterEgg: true}
+                    }
+                }
             },
             targetUser: {id: 'botId'},
             reply
@@ -54,5 +59,24 @@ describe('View Ping History context command', () => {
         await command.run(interaction);
         expect(mockGenerateHistoryResponse).not.toHaveBeenCalled();
         expect(reply.mock.calls[0][0].content).toContain('ping-protection.meme-bot-history');
+    });
+
+    test('generates history when targeting the bot itself with botHistoryEasterEgg disabled', async () => {
+        const reply = jest.fn().mockResolvedValue('ok');
+        const interaction = {
+            client: {
+                id: 'client',
+                user: {id: 'botId'},
+                configurations: {
+                    'ping-protection': {
+                        configuration: {botHistoryEasterEgg: false}
+                    }
+                }
+            },
+            targetUser: {id: 'botId'},
+            reply
+        };
+        await command.run(interaction);
+        expect(mockGenerateHistoryResponse).toHaveBeenCalledWith(interaction.client, 'botId', 1);
     });
 });
