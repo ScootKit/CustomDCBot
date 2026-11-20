@@ -76,6 +76,7 @@ module.exports.run = async function (client, message) {
     // Easter egg when a user pings the bot
     const botId = client.user?.id;
     let shouldSendBotMeme = Boolean(
+        config.botPingEasterEgg &&
         botId && (
             (typeof message.mentions.users.has === 'function' && message.mentions.users.has(botId)) ||
             (typeof message.mentions.users.get === 'function' && Boolean(message.mentions.users.get(botId))) ||
@@ -112,9 +113,8 @@ module.exports.run = async function (client, message) {
 
     if (!target) return;
 
-    // Funny easter egg when they ping themselves
-    if (target.id === message.author.id && config.selfPingConfiguration === 'Ignored') return;
-    if (target.id === message.author.id && config.selfPingConfiguration === 'Get fun easter eggs when pinging themselves') {
+    // Self-ping handling: easter egg overrides self-ping configuration and does no logging
+    if (target.id === message.author.id && config.selfPingEasterEgg) {
         const secretChance = 0.01; // Secret for a reason.. (1% chance)
         const standardMemes = [
             localize('ping-protection', 'meme-why'),
@@ -154,6 +154,8 @@ module.exports.run = async function (client, message) {
         });
         return;
     }
+
+    if (target.id === message.author.id && config.selfPingConfiguration === 'Ignored') return;
 
     await sendPingWarning(client, message, target, config);
 

@@ -33,7 +33,8 @@ module.exports.subcommands = {
                 });
             }
             const user = interaction.options.getUser('user');
-            if (user.id === interaction.client.user?.id) {
+            const config = interaction.client.configurations['ping-protection']?.['configuration'] || {};
+            if (config.botHistoryEasterEgg && user.id === interaction.client.user?.id) {
                 return interaction.reply({
                     content: localize('ping-protection', 'meme-bot-history'),
                     flags: MessageFlags.Ephemeral
@@ -54,7 +55,8 @@ module.exports.subcommands = {
                 });
             }
             const user = interaction.options.getUser('user');
-            if (user.id === interaction.client.user?.id) {
+            const config = interaction.client.configurations['ping-protection']?.['configuration'] || {};
+            if (config.botHistoryEasterEgg && user.id === interaction.client.user?.id) {
                 return interaction.reply({
                     content: localize('ping-protection', 'meme-bot-history'),
                     flags: MessageFlags.Ephemeral
@@ -75,7 +77,8 @@ module.exports.subcommands = {
                 });
             }
             const user = interaction.options.getUser('user');
-            if (user.id === interaction.client.user?.id) {
+            const config = interaction.client.configurations['ping-protection']?.['configuration'] || {};
+            if (config.botHistoryEasterEgg && user.id === interaction.client.user?.id) {
                 return interaction.reply({
                     content: localize('ping-protection', 'meme-bot-history'),
                     flags: MessageFlags.Ephemeral
